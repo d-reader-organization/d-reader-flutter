@@ -27,8 +27,9 @@ dependencies:
   http: ^0.13.5
   flutter_riverpod: ^2.0.2
   flutter_dotenv: ^5.0.2
-  solana_wallet_adapter: ^0.0.1
-  solana_web3: ^0.0.2+2
+  solana: ^0.26.1
+  solana_mobile_client: ^0.0.2
+  solana_mobile_wallet: ^0.0.2
 
 dev_dependencies:
   flutter_test:

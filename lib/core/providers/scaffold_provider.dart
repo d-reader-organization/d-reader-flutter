@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+@immutable // preferred to use immutable states
+class ScaffoldState {
+  const ScaffoldState({
+    required this.navigationIndex,
+  });
+  final int navigationIndex;
+
+  ScaffoldState copyWith({required int index}) {
+    return ScaffoldState(navigationIndex: index);
+  }
+}
+
+final scaffoldProvider = StateNotifierProvider<ScaffoldNotifier, ScaffoldState>(
+    (ref) => ScaffoldNotifier());
+
+class ScaffoldNotifier extends StateNotifier<ScaffoldState> {
+  ScaffoldNotifier() : super(const ScaffoldState(navigationIndex: 0));
+
+  setNavigationIndex(int index) {
+    state = state.copyWith(index: index);
+  }
+}

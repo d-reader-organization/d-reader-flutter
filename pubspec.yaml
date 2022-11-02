@@ -30,6 +30,7 @@ dependencies:
   solana: ^0.26.1
   solana_mobile_client: ^0.0.2
   solana_mobile_wallet: ^0.0.2
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -57,7 +58,6 @@ flutter:
   assets:
     - .env
     - assets/images/
-    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

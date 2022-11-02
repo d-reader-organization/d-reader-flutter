@@ -1,4 +1,9 @@
 {
 "@@locale": "en",
-"appTitle": "dReader App"
+"appTitle": "dReader App",
+"home": "Home",
+"comics": "Comics",
+"creators": "Creators",
+"library": "Library",
+"marketplace": "Marketplace"
 }

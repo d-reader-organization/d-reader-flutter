@@ -6,23 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const MaterialColor primaryBlack = MaterialColor(
-  _blackPrimaryValue,
-  <int, Color>{
-    50: Colors.black12,
-    100: Colors.black26,
-    200: Colors.black38,
-    300: Colors.black45,
-    400: Colors.black54,
-    500: Color(_blackPrimaryValue),
-    600: Colors.black87,
-    700: Colors.black87,
-    800: Colors.black87,
-    900: Colors.black87,
-  },
-);
-const int _blackPrimaryValue = 0xFF000000; // clean
-
 void main() async {
   await dotenv.load(fileName: '.env');
   await SolanaService.loadInstance();
@@ -38,7 +21,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'dReader',
       theme: ThemeData(
-        primarySwatch: primaryBlack,
         fontFamily: 'Urbanist',
         textTheme: const TextTheme(
           titleMedium: TextStyle(

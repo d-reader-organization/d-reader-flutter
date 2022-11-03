@@ -1,22 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:http/http.dart' as http;
-
-class ConnectWalletResponse {
-  String accessToken;
-  String refreshToken;
-
-  ConnectWalletResponse({
-    required this.accessToken,
-    required this.refreshToken,
-  });
-
-  factory ConnectWalletResponse.fromJson(json) {
-    return ConnectWalletResponse(
-        accessToken: json['accessToken'], refreshToken: json['refreshToken']);
-  }
-}
 
 class ApiService {
   static final String API_URL = Config.API_URL;
@@ -28,7 +15,7 @@ class ApiService {
     return response.statusCode == 200 ? response.body : 'An error occured';
   }
 
-  static Future<ConnectWalletResponse?> connectWallet(
+  static Future<AuthWallet?> connectWallet(
       String address, String encoding) async {
     Uri connectWalletUri =
         Uri.parse('$API_URL/auth/wallet/connect/$address/$encoding');
@@ -37,6 +24,18 @@ class ApiService {
       print(response.body);
       return null;
     }
-    return ConnectWalletResponse.fromJson(jsonDecode(response.body));
+    return AuthWallet.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<String?> getGenres() async {
+    Uri genreUri = Uri.parse('$API_URL/genre/get');
+    http.Response response = await http.get(genreUri, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${Config.jwtToken}'
+    });
+    if (response.statusCode != 200) {
+      print(response.body);
+      return null;
+    }
+    return response.body;
   }
 }

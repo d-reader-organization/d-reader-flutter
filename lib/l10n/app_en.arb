@@ -7,5 +7,10 @@
 "library": "Library",
 "marketplace": "Marketplace",
 "search": "Search",
-"seeAll": "See All"
+"seeAll": "See All",
+"genres": "Genres",
+"newComics": "New Comics",
+"popularIssues": "Popular Issues",
+"topCreators": "Top Creators",
+"freeIssues": "Free Issues"
 }

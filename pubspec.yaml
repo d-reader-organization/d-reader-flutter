@@ -31,6 +31,7 @@ dependencies:
   solana_mobile_client: ^0.0.2
   solana_mobile_wallet: ^0.0.2
   carousel_slider: ^4.1.1
+  skeleton_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

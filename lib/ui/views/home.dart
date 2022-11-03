@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/genre_card.dart';
 import 'package:d_reader_flutter/ui/widgets/search_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/section_heading.dart';
+import 'package:d_reader_flutter/ui/widgets/skeleton_genre_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -107,7 +108,25 @@ class HomeView extends ConsumerWidget {
                 );
               },
               error: (err, stack) => Text('Error: $err'),
-              loading: () => const SizedBox(),
+              loading: () => SizedBox(
+                height: 90,
+                child: ListView.builder(
+                  itemCount: 5,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => const SkeletonGenreCard(),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            // Genres section
+            SectionHeading(
+              title: AppLocalizations.of(context)?.newComics ?? 'New Comics',
+            ),
+            const SizedBox(
+              height: 16,
             ),
           ],
         ),

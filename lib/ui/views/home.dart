@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/genre_card.dart';
+import 'package:d_reader_flutter/ui/widgets/image_full_height_card.dart';
 import 'package:d_reader_flutter/ui/widgets/search_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/section_heading.dart';
 import 'package:d_reader_flutter/ui/widgets/skeleton_genre_card.dart';
@@ -71,7 +72,7 @@ class HomeView extends ConsumerWidget {
                                   Icons.verified,
                                   color: dReaderYellow,
                                   size: 16,
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -82,7 +83,7 @@ class HomeView extends ConsumerWidget {
                   .toList(),
             ),
             const SizedBox(
-              height: 24,
+              height: 32,
             ),
             // Genres section
             SectionHeading(
@@ -119,7 +120,7 @@ class HomeView extends ConsumerWidget {
               ),
             ),
             const SizedBox(
-              height: 24,
+              height: 32,
             ),
             // Genres section
             SectionHeading(
@@ -127,6 +128,20 @@ class HomeView extends ConsumerWidget {
             ),
             const SizedBox(
               height: 16,
+            ),
+            SizedBox(
+              height: 255,
+              child: ListView.builder(
+                itemCount: 5,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) => ImageFullHeightCard(
+                  title: 'Rise of the Gorecats',
+                  authorName: 'Studio NX',
+                  likesCount: 49,
+                  issuesCount: index + 2,
+                ),
+              ),
             ),
           ],
         ),

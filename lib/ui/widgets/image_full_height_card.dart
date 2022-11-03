@@ -21,7 +21,7 @@ class ImageFullHeightCard extends StatelessWidget {
       child: Container(
         height: 255,
         width: 180,
-        margin: const EdgeInsets.only(right: 6),
+        margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: const DecorationImage(

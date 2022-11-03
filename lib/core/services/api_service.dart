@@ -27,9 +27,9 @@ class ApiService {
     return AuthWallet.fromJson(jsonDecode(response.body));
   }
 
-  static Future<String?> getGenres() async {
-    Uri genreUri = Uri.parse('$API_URL/genre/get');
-    http.Response response = await http.get(genreUri, headers: {
+  static Future<String?> apiCallGet(String path) async {
+    Uri uri = Uri.parse('$API_URL$path');
+    http.Response response = await http.get(uri, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${Config.jwtToken}'
     });
     if (response.statusCode != 200) {

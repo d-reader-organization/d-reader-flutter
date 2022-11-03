@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/core/services/api_service.dart';
 class GenreRepositoryImpl implements GenreRepository {
   @override
   Future<List<GenreModel>> getGenres() async {
-    String? responseBody = await ApiService.getGenres();
+    String? responseBody = await ApiService.apiCallGet('/genre/get');
     if (responseBody == null) {
       return [];
     }

@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/genre.dart';
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
@@ -7,6 +9,7 @@ import 'package:d_reader_flutter/ui/widgets/genre_card.dart';
 import 'package:d_reader_flutter/ui/widgets/image_full_height_card.dart';
 import 'package:d_reader_flutter/ui/widgets/search_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/section_heading.dart';
+import 'package:d_reader_flutter/ui/widgets/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/skeleton_genre_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,6 +24,7 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<GenreModel>> genres = ref.watch(genreProvider);
+    AsyncValue<List<ComicModel>> comics = ref.watch(comicProvider);
     return DReaderScaffold(
       body: Center(
         child: ListView(
@@ -129,17 +133,34 @@ class HomeView extends ConsumerWidget {
             const SizedBox(
               height: 16,
             ),
-            SizedBox(
-              height: 255,
-              child: ListView.builder(
-                itemCount: 5,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => ImageFullHeightCard(
-                  title: 'Rise of the Gorecats',
-                  authorName: 'Studio NX',
-                  likesCount: 49,
-                  issuesCount: index + 2,
+            comics.when(
+              data: (data) {
+                return SizedBox(
+                  height: 255,
+                  child: ListView.builder(
+                    itemCount: data.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => ImageFullHeightCard(
+                      title: data[index].name,
+                      authorName: 'Studio NX',
+                      likesCount: 49,
+                      issuesCount: index + 2,
+                    ),
+                  ),
+                );
+              },
+              error: (err, stack) => Text(
+                'Error: $err',
+                style: TextStyle(color: Colors.red),
+              ),
+              loading: () => SizedBox(
+                height: 90,
+                child: ListView.builder(
+                  itemCount: 3,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => const SkeletonCard(),
                 ),
               ),
             ),

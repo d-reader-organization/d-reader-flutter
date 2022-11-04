@@ -9,9 +9,10 @@ class ApiService {
   static Future<String?> apiCallGet(String path,
       {bool includeAuthHeader = true}) async {
     Uri uri = Uri.parse('$API_URL$path');
-    http.Response response = await http.get(uri, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${Config.jwtToken}'
-    });
+    http.Response response = await http.get(uri,
+        headers: includeAuthHeader
+            ? {HttpHeaders.authorizationHeader: 'Bearer ${Config.jwtToken}'}
+            : {});
     if (response.statusCode != 200) {
       print(response.body);
       return null;

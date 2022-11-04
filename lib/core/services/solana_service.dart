@@ -1,6 +1,6 @@
 import 'dart:convert' show utf8;
 
-import 'package:d_reader_flutter/core/services/api_service.dart';
+import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
 
@@ -57,11 +57,11 @@ class SolanaService {
   }
 
   Future<String> connectWallet() async {
-    final oneTimePassword =
-        await ApiService.getOneTimePassword(_keyPair.address);
+    final authRepo = AuthRepositoryImpl();
+    final oneTimePassword = await authRepo.getOneTimePassword(_keyPair.address);
     try {
       final signedData = await _keyPair.sign(utf8.encode(oneTimePassword));
-      final connectWalletResponse = await ApiService.connectWallet(
+      final connectWalletResponse = await authRepo.connectWallet(
           _keyPair.address, base58encode(signedData.bytes));
       return connectWalletResponse?.accessToken ?? 'no-token';
     } catch (e) {

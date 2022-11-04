@@ -8,7 +8,7 @@ class SkeletonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SkeletonAnimation(
-      shimmerDuration: 500,
+      shimmerDuration: 1000,
       child: Container(
         margin: const EdgeInsets.only(right: 16),
         height: 255,

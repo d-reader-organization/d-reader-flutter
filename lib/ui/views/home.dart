@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/search_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/home/comic_card.dart';
 import 'package:d_reader_flutter/ui/widgets/home/comic_issues_grid.dart';
+import 'package:d_reader_flutter/ui/widgets/home/creators_grid.dart';
 import 'package:d_reader_flutter/ui/widgets/home/d_reader_scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/home/genre_card.dart';
 import 'package:d_reader_flutter/ui/widgets/home/section_heading.dart';
@@ -181,6 +182,10 @@ class HomeView extends ConsumerWidget {
               title:
                   AppLocalizations.of(context)?.topCreators ?? 'Top Creators',
             ),
+            const SizedBox(
+              height: 16,
+            ),
+            const CreatorsGrid(),
           ],
         ),
       ),

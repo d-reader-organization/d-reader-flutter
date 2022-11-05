@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class ComicIssueCard extends StatelessWidget {
   final String title;
   final String description;
-  final double price;
+  final double? price;
   const ComicIssueCard({
     Key? key,
     required this.title,
     required this.description,
-    required this.price,
+    this.price,
   }) : super(key: key);
 
   @override
@@ -102,7 +102,7 @@ class ComicIssueCard extends StatelessWidget {
                         width: 4,
                       ),
                       Text(
-                        price.toString(),
+                        price?.toString() ?? 'Free',
                         style:
                             Theme.of(context).textTheme.labelMedium?.copyWith(
                                   fontWeight: FontWeight.w700,

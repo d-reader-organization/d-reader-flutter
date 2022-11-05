@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ComicIssuesGrid extends ConsumerWidget {
-  const ComicIssuesGrid({Key? key}) : super(key: key);
+  final bool isFree;
+  const ComicIssuesGrid({Key? key, this.isFree = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +28,7 @@ class ComicIssuesGrid extends ConsumerWidget {
             return ComicIssueCard(
               title: data[index].title,
               description: data[index].description,
-              price: 0.865,
+              price: isFree ? null : 0.865,
             );
           },
           itemCount: data.length > 4 ? 4 : data.length,

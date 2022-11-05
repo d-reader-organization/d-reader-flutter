@@ -186,6 +186,21 @@ class HomeView extends ConsumerWidget {
               height: 16,
             ),
             const CreatorsGrid(),
+            const SizedBox(
+              height: 32,
+            ),
+            SectionHeading(
+              title: AppLocalizations.of(context)?.freeIssues ?? 'Free Issues',
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const ComicIssuesGrid(
+              isFree: true,
+            ),
+            const SizedBox(
+              height: 32,
+            ),
           ],
         ),
       ),

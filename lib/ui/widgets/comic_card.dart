@@ -1,13 +1,14 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/episode_circle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ImageFullHeightCard extends StatelessWidget {
+class ComicCard extends StatelessWidget {
   final String title;
   final String authorName;
   final int likesCount;
   final int issuesCount;
-  const ImageFullHeightCard({
+  const ComicCard({
     Key? key,
     required this.title,
     required this.authorName,
@@ -33,25 +34,7 @@ class ImageFullHeightCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Positioned(
-              left: 12,
-              top: 16,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(32),
-                ),
-                child: Text(
-                  '$issuesCount EPs',
-                  style: const TextStyle(
-                    fontSize: 8,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
+            EpisodeCircle(text: '$issuesCount EPs'),
             Positioned(
               left: 12,
               bottom: 40,

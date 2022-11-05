@@ -3,6 +3,7 @@ class ComicIssueModel {
   final int number;
   final String title;
   final String slug;
+  final String description;
   final String cover;
 
   ComicIssueModel({
@@ -10,6 +11,7 @@ class ComicIssueModel {
     required this.number,
     required this.title,
     required this.slug,
+    required this.description,
     required this.cover,
   });
 
@@ -19,6 +21,7 @@ class ComicIssueModel {
       number: json['number'],
       title: json['title'],
       slug: json['slug'],
+      description: json['description'],
       cover: json['cover'],
     );
   }

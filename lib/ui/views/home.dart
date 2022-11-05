@@ -1,14 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/genre.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_card.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_issues_grid.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/genre_card.dart';
-import 'package:d_reader_flutter/ui/widgets/image_full_height_card.dart';
 import 'package:d_reader_flutter/ui/widgets/search_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/section_heading.dart';
 import 'package:d_reader_flutter/ui/widgets/skeleton_card.dart';
@@ -27,8 +26,6 @@ class HomeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<GenreModel>> genres = ref.watch(genreProvider);
     AsyncValue<List<ComicModel>> comics = ref.watch(comicProvider);
-    AsyncValue<List<ComicIssueModel>> comicIssues =
-        ref.watch(comicIssueProvider);
     return DReaderScaffold(
       body: Center(
         child: ListView(
@@ -93,7 +90,6 @@ class HomeView extends ConsumerWidget {
             const SizedBox(
               height: 32,
             ),
-            // Genres section
             SectionHeading(
               title: AppLocalizations.of(context)?.genres ?? 'Genres',
             ),
@@ -130,7 +126,6 @@ class HomeView extends ConsumerWidget {
             const SizedBox(
               height: 32,
             ),
-            // Genres section
             SectionHeading(
               title: AppLocalizations.of(context)?.newComics ?? 'New Comics',
             ),
@@ -145,7 +140,7 @@ class HomeView extends ConsumerWidget {
                     itemCount: data.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => ImageFullHeightCard(
+                    itemBuilder: (context, index) => ComicCard(
                       title: data[index].name,
                       authorName: 'Studio NX',
                       likesCount: 49,
@@ -171,7 +166,6 @@ class HomeView extends ConsumerWidget {
             const SizedBox(
               height: 32,
             ),
-            // Genres section
             SectionHeading(
               title: AppLocalizations.of(context)?.popularIssues ??
                   'Popular Issues',
@@ -179,36 +173,9 @@ class HomeView extends ConsumerWidget {
             const SizedBox(
               height: 16,
             ),
-            comicIssues.when(
-              data: (data) {
-                return SizedBox(
-                  height: 255,
-                  child: ListView.builder(
-                    itemCount: data.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => ImageFullHeightCard(
-                      title: data[index].title,
-                      authorName: 'Studio NX',
-                      likesCount: 49,
-                      issuesCount: index + 2,
-                    ),
-                  ),
-                );
-              },
-              error: (err, stack) => Text(
-                'Error: $err',
-                style: const TextStyle(color: Colors.red),
-              ),
-              loading: () => SizedBox(
-                height: 90,
-                child: ListView.builder(
-                  itemCount: 3,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => const SkeletonCard(),
-                ),
-              ),
+            const ComicIssuesGrid(),
+            const SizedBox(
+              height: 32,
             ),
           ],
         ),

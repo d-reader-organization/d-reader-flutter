@@ -4,14 +4,14 @@ import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_card.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_issues_grid.dart';
-import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
-import 'package:d_reader_flutter/ui/widgets/genre_card.dart';
-import 'package:d_reader_flutter/ui/widgets/search_bar.dart';
-import 'package:d_reader_flutter/ui/widgets/section_heading.dart';
-import 'package:d_reader_flutter/ui/widgets/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/skeleton_genre_card.dart';
+import 'package:d_reader_flutter/ui/widgets/common/search_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/home/comic_card.dart';
+import 'package:d_reader_flutter/ui/widgets/home/comic_issues_grid.dart';
+import 'package:d_reader_flutter/ui/widgets/home/d_reader_scaffold.dart';
+import 'package:d_reader_flutter/ui/widgets/home/genre_card.dart';
+import 'package:d_reader_flutter/ui/widgets/home/section_heading.dart';
+import 'package:d_reader_flutter/ui/widgets/home/skeleton_card.dart';
+import 'package:d_reader_flutter/ui/widgets/home/skeleton_genre_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -176,6 +176,10 @@ class HomeView extends ConsumerWidget {
             const ComicIssuesGrid(),
             const SizedBox(
               height: 32,
+            ),
+            SectionHeading(
+              title:
+                  AppLocalizations.of(context)?.topCreators ?? 'Top Creators',
             ),
           ],
         ),

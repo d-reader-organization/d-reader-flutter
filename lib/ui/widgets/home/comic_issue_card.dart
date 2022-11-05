@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/episode_circle.dart';
+import 'package:d_reader_flutter/ui/widgets/home/episode_circle.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCard extends StatelessWidget {

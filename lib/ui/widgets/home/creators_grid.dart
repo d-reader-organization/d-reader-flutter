@@ -27,6 +27,7 @@ class CreatorsGrid extends ConsumerWidget {
           ),
           itemBuilder: (context, index) {
             return CreatorListTile(
+              avatar: data[index].avatar,
               name: data[index].name,
             );
           },

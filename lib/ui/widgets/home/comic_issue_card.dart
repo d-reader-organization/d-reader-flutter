@@ -4,13 +4,19 @@ import 'package:d_reader_flutter/ui/widgets/home/episode_circle.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCard extends StatelessWidget {
-  final String title;
-  final String description;
+  final String comicTitle;
+  final String issueTitle;
+  final String episode;
+  final String cover;
+  final String creatorName;
   final double? price;
   const ComicIssueCard({
     Key? key,
-    required this.title,
-    required this.description,
+    required this.comicTitle,
+    required this.issueTitle,
+    required this.episode,
+    required this.cover,
+    required this.creatorName,
     this.price,
   }) : super(key: key);
 
@@ -33,6 +39,7 @@ class ComicIssueCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image: NetworkImage(
+                        // cover
                         'https://images.unsplash.com/photo-1539651044670-315229da9d2f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHN0cmVldHxlbnwwfHwwfHw%3D&w=1000&q=80'),
                     fit: BoxFit.cover,
                   ),
@@ -44,7 +51,7 @@ class ComicIssueCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const EpisodeCircle(text: 'EP 3/13'),
+              EpisodeCircle(text: 'EP $episode'),
             ],
           ),
           Container(
@@ -53,14 +60,14 @@ class ComicIssueCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  comicTitle,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: dReaderYellow,
                         fontWeight: FontWeight.w700,
                       ),
                 ),
                 Text(
-                  description,
+                  issueTitle,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -74,7 +81,7 @@ class ComicIssueCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Studio NX',
+                      creatorName,
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     const SizedBox(

@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 
 class GenreCard extends StatelessWidget {
   final String title;
+  final String color;
   const GenreCard({
     Key? key,
     required this.title,
+    required this.color,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Color genreColor = Color(
+      int.parse('0xFF$color'),
+    );
     return Container(
       height: 90,
       width: 85,
@@ -23,15 +28,18 @@ class GenreCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const Icon(
+          Icon(
             Icons.star_outline,
-            color: Colors.white,
+            color: genreColor,
           ),
           Text(
             title,
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
-            style: Theme.of(context).textTheme.labelMedium,
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium
+                ?.copyWith(color: genreColor),
           ),
         ],
       ),

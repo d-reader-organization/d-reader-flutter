@@ -1,3 +1,5 @@
+import 'package:d_reader_flutter/core/models/comic.dart';
+
 class ComicIssueModel {
   final int id;
   final int number;
@@ -5,6 +7,8 @@ class ComicIssueModel {
   final String slug;
   final String description;
   final String cover;
+  final double floorPrice;
+  final ComicModel comic;
 
   ComicIssueModel({
     required this.id,
@@ -13,6 +17,8 @@ class ComicIssueModel {
     required this.slug,
     required this.description,
     required this.cover,
+    required this.floorPrice,
+    required this.comic,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -23,6 +29,8 @@ class ComicIssueModel {
       slug: json['slug'],
       description: json['description'],
       cover: json['cover'],
+      floorPrice: json['floorPrice'],
+      comic: json['comic'],
     );
   }
 }

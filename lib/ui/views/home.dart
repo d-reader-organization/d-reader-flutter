@@ -3,7 +3,6 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/search_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/home/comic_card.dart';
 import 'package:d_reader_flutter/ui/widgets/home/comic_issues_grid.dart';
@@ -25,6 +24,7 @@ class HomeView extends ConsumerWidget {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // carouselProvider
     AsyncValue<List<GenreModel>> genres = ref.watch(genreProvider);
     AsyncValue<List<ComicModel>> comics = ref.watch(comicProvider);
     return DReaderScaffold(
@@ -65,21 +65,9 @@ class HomeView extends ConsumerWidget {
                           Positioned(
                             left: 16.0,
                             bottom: 40,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Studio NX',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                const Icon(
-                                  Icons.verified,
-                                  color: dReaderYellow,
-                                  size: 16,
-                                ),
-                              ],
+                            child: Text(
+                              'Studio NX',
+                              style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
                         ],
@@ -108,6 +96,7 @@ class HomeView extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       return GenreCard(
                         title: data[index].name,
+                        color: data[index].color,
                       );
                     },
                   ),
@@ -143,9 +132,9 @@ class HomeView extends ConsumerWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => ComicCard(
                       title: data[index].name,
-                      authorName: 'Studio NX',
-                      likesCount: 49,
-                      issuesCount: index + 2,
+                      creatorName: data[index].creator.name,
+                      favouritesCount: data[index].favouritesCount,
+                      issuesCount: data[index].issues.length,
                     ),
                   ),
                 );

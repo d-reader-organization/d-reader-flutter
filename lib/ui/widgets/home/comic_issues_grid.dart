@@ -26,9 +26,13 @@ class ComicIssuesGrid extends ConsumerWidget {
           ),
           itemBuilder: (context, index) {
             return ComicIssueCard(
-              title: data[index].title,
-              description: data[index].description,
-              price: isFree ? null : 0.865,
+              comicTitle: data[index].comic.name,
+              issueTitle: data[index].title,
+              cover: data[index].cover,
+              creatorName: data[index].comic.creator.name,
+              episode:
+                  '${data[index].number}/${data[index].comic.issues.length}',
+              price: isFree ? null : data[index].floorPrice,
             );
           },
           itemCount: data.length > 4 ? 4 : data.length,

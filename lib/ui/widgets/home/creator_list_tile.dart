@@ -2,9 +2,11 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CreatorListTile extends StatelessWidget {
+  final String avatar;
   final String name;
   const CreatorListTile({
     Key? key,
+    required this.avatar,
     required this.name,
   }) : super(key: key);
 
@@ -18,7 +20,8 @@ class CreatorListTile extends StatelessWidget {
             radius: 30,
             backgroundColor: dReaderGreen,
             child: Icon(
-              Icons.person,
+              //https://stackoverflow.com/questions/65486933/flutter-custom-markers-image-icon-from-url
+              Icons.person, // avatar
               color: Colors.white,
             ),
           ),

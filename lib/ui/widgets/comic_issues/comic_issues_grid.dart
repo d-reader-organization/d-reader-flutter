@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/ui/widgets/home/comic_issue_card.dart';
-import 'package:d_reader_flutter/ui/widgets/home/skeleton_card.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issue_card.dart';
+import 'package:d_reader_flutter/ui/widgets/common/skeleton_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

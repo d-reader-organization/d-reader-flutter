@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/comics.dart';
-import 'package:d_reader_flutter/ui/views/creators.dart';
+import 'package:d_reader_flutter/ui/views/creators/creators.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';
 import 'package:d_reader_flutter/ui/views/marketplace.dart';

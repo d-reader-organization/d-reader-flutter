@@ -1,31 +1,17 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/models/genre.dart';
-import 'package:d_reader_flutter/core/providers/comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_grid.dart';
-import 'package:d_reader_flutter/ui/widgets/comics/comic_card.dart';
+import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
+import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
 import 'package:d_reader_flutter/ui/widgets/common/search_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_card.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/skeleton_genre_card.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final List<String> images = [
-  'assets/images/featured.png',
-];
-
-class HomeView extends ConsumerWidget {
+class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // carouselProvider
-    AsyncValue<List<GenreModel>> genres = ref.watch(genreProvider);
-    AsyncValue<List<ComicModel>> comics = ref.watch(comicProvider);
+  Widget build(BuildContext context) {
     return Center(
       child: ListView(
         children: <Widget>[
@@ -33,47 +19,7 @@ class HomeView extends ConsumerWidget {
           const SizedBox(
             height: 24,
           ),
-          CarouselSlider(
-            options: CarouselOptions(
-              height: 266.0,
-              viewportFraction: 1,
-              enlargeCenterPage: true,
-            ),
-            items: images
-                .map(
-                  (img) => ClipRRect(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(
-                        16.0,
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          img,
-                        ),
-                        Positioned(
-                          left: 16.0,
-                          bottom: 60.0,
-                          child: Text(
-                            'Rise Of The Gorecats',
-                            style: Theme.of(context).textTheme.headlineLarge,
-                          ),
-                        ),
-                        Positioned(
-                          left: 16.0,
-                          bottom: 40,
-                          child: Text(
-                            'Studio NX',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
+          const Carousel(),
           const SizedBox(
             height: 32,
           ),
@@ -83,34 +29,7 @@ class HomeView extends ConsumerWidget {
           const SizedBox(
             height: 16,
           ),
-          genres.when(
-            data: (data) {
-              return SizedBox(
-                height: 90,
-                child: ListView.builder(
-                  itemCount: data.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return GenreCard(
-                      title: data[index].name,
-                      color: data[index].color,
-                    );
-                  },
-                ),
-              );
-            },
-            error: (err, stack) => Text('Error: $err'),
-            loading: () => SizedBox(
-              height: 90,
-              child: ListView.builder(
-                itemCount: 5,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => const SkeletonGenreCard(),
-              ),
-            ),
-          ),
+          const GenreListView(),
           const SizedBox(
             height: 32,
           ),
@@ -120,37 +39,7 @@ class HomeView extends ConsumerWidget {
           const SizedBox(
             height: 16,
           ),
-          comics.when(
-            data: (data) {
-              return SizedBox(
-                height: 255,
-                child: ListView.builder(
-                  itemCount: data.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => ComicCard(
-                    title: data[index].name,
-                    creatorName: data[index].creator.name,
-                    favouritesCount: data[index].favouritesCount,
-                    issuesCount: data[index].issues.length,
-                  ),
-                ),
-              );
-            },
-            error: (err, stack) => Text(
-              'Error: $err',
-              style: const TextStyle(color: Colors.red),
-            ),
-            loading: () => SizedBox(
-              height: 90,
-              child: ListView.builder(
-                itemCount: 3,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => const SkeletonCard(),
-              ),
-            ),
-          ),
+          const ComicsListView(),
           const SizedBox(
             height: 32,
           ),

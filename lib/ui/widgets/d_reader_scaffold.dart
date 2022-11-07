@@ -10,8 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DReaderScaffold extends ConsumerWidget {
+  final Widget? body;
+  final bool showBottomNavigation;
   const DReaderScaffold({
     Key? key,
+    this.body,
+    this.showBottomNavigation = true,
   }) : super(key: key);
 
   @override
@@ -48,56 +52,60 @@ class DReaderScaffold extends ConsumerWidget {
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: PageView(
-            controller: ref.watch(scaffoldPageController),
-            children: const [
-              HomeView(),
-              ComicsView(),
-              CreatorsView(),
-              LibraryView(),
-              MarketplaceView(),
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (value) {
-            ref.read(scaffoldProvider.notifier).setNavigationIndex(value);
-            ref.read(scaffoldPageController).animateToPage(
-                  value,
-                  curve: Curves.easeIn,
-                  duration: const Duration(milliseconds: 250),
-                );
-          },
-          currentIndex: ref.watch(scaffoldProvider).navigationIndex,
-          selectedItemColor: dReaderYellow,
-          unselectedItemColor: Colors.white,
-          backgroundColor: dReaderBlack,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
+        body: body ??
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              child: PageView(
+                controller: ref.watch(scaffoldPageController),
+                children: const [
+                  HomeView(),
+                  ComicsView(),
+                  CreatorsView(),
+                  LibraryView(),
+                  MarketplaceView(),
+                ],
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star_outline),
-              label: 'Comics',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star_outline),
-              label: 'Creators',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star_outline),
-              label: 'Library',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.star_outline),
-              label: 'Marketplace',
-            ),
-          ],
-        ),
+        bottomNavigationBar: showBottomNavigation
+            ? BottomNavigationBar(
+                onTap: (value) {
+                  ref.read(scaffoldProvider.notifier).setNavigationIndex(value);
+                  ref.read(scaffoldPageController).animateToPage(
+                        value,
+                        curve: Curves.easeIn,
+                        duration: const Duration(milliseconds: 250),
+                      );
+                },
+                currentIndex: ref.watch(scaffoldProvider).navigationIndex,
+                selectedItemColor: dReaderYellow,
+                unselectedItemColor: Colors.white,
+                backgroundColor: dReaderBlack,
+                type: BottomNavigationBarType.fixed,
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.star_outline),
+                    label: 'Comics',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.star_outline),
+                    label: 'Creators',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.star_outline),
+                    label: 'Library',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.star_outline),
+                    label: 'Marketplace',
+                  ),
+                ],
+              )
+            : null,
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/services/solana_service.dart';
-import 'package:d_reader_flutter/ui/views/home.dart';
+import 'package:d_reader_flutter/ui/widgets/home/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      home: const HomeView(),
+      home: const DReaderScaffold(),
     );
   }
 }

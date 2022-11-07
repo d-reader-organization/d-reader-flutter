@@ -16,6 +16,15 @@ class ScaffoldState {
 final scaffoldProvider = StateNotifierProvider<ScaffoldNotifier, ScaffoldState>(
     (ref) => ScaffoldNotifier());
 
+final scaffoldPageController = Provider.autoDispose<PageController>((ref) {
+  final PageController pageController = PageController();
+  ref.onDispose(() {
+    pageController.dispose();
+  });
+
+  return pageController;
+});
+
 class ScaffoldNotifier extends StateNotifier<ScaffoldState> {
   ScaffoldNotifier() : super(const ScaffoldState(navigationIndex: 0));
 

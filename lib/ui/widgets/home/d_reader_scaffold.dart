@@ -1,14 +1,17 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/views/comics.dart';
+import 'package:d_reader_flutter/ui/views/creators.dart';
+import 'package:d_reader_flutter/ui/views/home.dart';
+import 'package:d_reader_flutter/ui/views/library.dart';
+import 'package:d_reader_flutter/ui/views/marketplace.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DReaderScaffold extends ConsumerWidget {
-  final Widget body;
   const DReaderScaffold({
     Key? key,
-    required this.body,
   }) : super(key: key);
 
   @override
@@ -47,11 +50,25 @@ class DReaderScaffold extends ConsumerWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: body,
+          child: PageView(
+            controller: ref.watch(scaffoldPageController),
+            children: const [
+              HomeView(),
+              ComicsView(),
+              CreatorsView(),
+              LibraryView(),
+              MarketplaceView(),
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: (value) {
             ref.read(scaffoldProvider.notifier).setNavigationIndex(value);
+            ref.read(scaffoldPageController).animateToPage(
+                  value,
+                  curve: Curves.easeIn,
+                  duration: const Duration(milliseconds: 250),
+                );
           },
           currentIndex: ref.watch(scaffoldProvider).navigationIndex,
           selectedItemColor: dReaderYellow,

@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/views/creators/creator_avatar.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/creator_avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creator_tabs.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/image_gradient_background.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';

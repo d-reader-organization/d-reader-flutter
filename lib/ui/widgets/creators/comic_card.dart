@@ -44,7 +44,7 @@ class CreatorComicCard extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Row(
-                children: [
+                children: const [
                   Text('Hello there'),
                 ],
               ),

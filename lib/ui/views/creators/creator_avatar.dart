@@ -7,7 +7,7 @@ class CreatorAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CircleAvatar(
-      radius: 48,
+      radius: 64,
       backgroundColor: dReaderDarkGrey,
       child: Icon(
         Icons.person,

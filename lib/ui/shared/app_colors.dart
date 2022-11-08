@@ -6,3 +6,5 @@ const Color dReaderYellow = Color(0xFFFCEB54);
 const Color dReaderDarkGrey = Color(0xFF1F222A);
 const Color dReaderRed = Color(0xFFE3635B);
 const Color dReaderGreen = Color(0xFF07BD74);
+const Color dReaderSome = Color(0xFF2F333E);
+const Color dReaderLightGrey = Color(0xFFBBBBBB);

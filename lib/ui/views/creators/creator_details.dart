@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/custom_sliver_app_bar.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/comics.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/creator_tab_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/header_sliver_list.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/tab_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/tabs/comics_tab.dart';
 import 'package:flutter/material.dart';
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

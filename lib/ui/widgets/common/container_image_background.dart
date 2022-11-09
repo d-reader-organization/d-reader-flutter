@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ImageGradientBackground extends StatelessWidget {
-  const ImageGradientBackground({Key? key}) : super(key: key);
+class ContainerWithImageBackground extends StatelessWidget {
+  const ContainerWithImageBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

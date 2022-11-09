@@ -5,8 +5,8 @@ import 'package:d_reader_flutter/ui/views/creators/creators.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';
 import 'package:d_reader_flutter/ui/views/marketplace.dart';
-import 'package:d_reader_flutter/ui/widgets/common/custom_app_bar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/custom_bottom_navigation_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/custom_app_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

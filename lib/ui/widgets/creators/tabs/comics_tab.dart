@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/ui/widgets/creators/comic_card.dart';
+import 'package:d_reader_flutter/ui/widgets/comics/comic_card_large.dart';
 import 'package:flutter/material.dart';
 
 class CreatorComicsTab extends StatelessWidget {
@@ -12,8 +12,9 @@ class CreatorComicsTab extends StatelessWidget {
       itemBuilder: (context, index) {
         return Container(
           margin: const EdgeInsets.only(top: 24),
-          child: CreatorComicCard(
+          child: ComicCardLarge(
             index: index,
+            isHot: index % 2 == 0,
           ),
         );
       },

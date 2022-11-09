@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class IconWithBackground extends StatelessWidget {
+class FilledIcon extends StatelessWidget {
   final IconData iconData;
   final Color backgroundColor;
-  const IconWithBackground({
+  const FilledIcon({
     Key? key,
     required this.iconData,
     this.backgroundColor = dReaderSome,

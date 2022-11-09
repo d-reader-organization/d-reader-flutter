@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/episode_circle.dart';
+import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCard extends StatelessWidget {
@@ -51,7 +51,11 @@ class ComicIssueCard extends StatelessWidget {
                   ),
                 ),
               ),
-              EpisodeCircle(text: 'EP $episode'),
+              Positioned(
+                left: 12,
+                top: 16,
+                child: EpisodeCircle(text: 'EP $episode'),
+              ),
             ],
           ),
           Container(

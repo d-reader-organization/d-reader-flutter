@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/creator_tab_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/tab_bar.dart';
 import 'package:flutter/material.dart';
 
-class CreatorsTab extends StatelessWidget {
-  const CreatorsTab({Key? key}) : super(key: key);
+class CreatorsTabNavigation extends StatelessWidget {
+  const CreatorsTabNavigation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +16,26 @@ class CreatorsTab extends StatelessWidget {
             Tab(
               child: Text(
                 'Comics',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
             Tab(
-              child: Text('Issues', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'Issues',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
             Tab(
-              child:
-                  Text('Collectables', style: TextStyle(color: Colors.white)),
+              child: Text(
+                'Collectables',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/creator_avatar.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/image_gradient_background.dart';
+import 'package:d_reader_flutter/ui/widgets/common/container_image_background.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/stats_box_row.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class HeaderSliverList extends StatelessWidget {
         [
           Stack(
             children: const [
-              ImageGradientBackground(),
+              ContainerWithImageBackground(),
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.bottomCenter,

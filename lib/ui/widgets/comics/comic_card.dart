@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/episode_circle.dart';
+import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +34,11 @@ class ComicCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          EpisodeCircle(text: '$issuesCount EPs'),
+          Positioned(
+            left: 12,
+            top: 16,
+            child: EpisodeCircle(text: '$issuesCount EPs'),
+          ),
           Positioned(
             left: 12,
             bottom: 40,

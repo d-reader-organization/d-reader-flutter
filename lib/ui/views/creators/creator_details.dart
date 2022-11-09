@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/custom_bottom_navigation_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/custom_sliver_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/comics.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creator_avatar.dart';
@@ -40,8 +39,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class MainSliverList extends StatelessWidget {
-  const MainSliverList({
+class HeaderSliverList extends StatelessWidget {
+  const HeaderSliverList({
     super.key,
   });
 
@@ -172,7 +171,6 @@ class CreatorDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: dReaderBlack,
-      bottomNavigationBar: const CustomBottomNavigationBar(),
       body: SafeArea(
         child: Stack(
           children: [
@@ -183,7 +181,7 @@ class CreatorDetailsView extends StatelessWidget {
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return [
                     const CustomSliverAppBar(),
-                    const MainSliverList(),
+                    const HeaderSliverList(),
                     SliverPersistentHeader(
                       pinned: true,
                       delegate: _SliverAppBarDelegate(

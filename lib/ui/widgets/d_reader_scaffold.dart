@@ -11,11 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DReaderScaffold extends ConsumerWidget {
-  final Widget? body;
   const DReaderScaffold({
-    Key? key,
-    this.body,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,21 +28,22 @@ class DReaderScaffold extends ConsumerWidget {
             child: CustomAppBar(),
           ),
         ),
-        body: body ??
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              child: PageView(
-                controller: ref.watch(scaffoldPageController),
-                children: const [
-                  HomeView(),
-                  ComicsView(),
-                  CreatorsView(),
-                  LibraryView(),
-                  MarketplaceView(),
-                ],
-              ),
-            ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          child: PageView(
+            controller: ref.watch(scaffoldPageController),
+            onPageChanged: (index) {
+              ref.read(scaffoldProvider.notifier).setNavigationIndex(index);
+            },
+            children: const [
+              HomeView(),
+              ComicsView(),
+              CreatorsView(),
+              LibraryView(),
+              MarketplaceView(),
+            ],
+          ),
+        ),
         bottomNavigationBar: const CustomBottomNavigationBar(),
       ),
     );

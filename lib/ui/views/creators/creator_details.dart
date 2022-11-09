@@ -1,20 +1,55 @@
+import 'dart:math' as math;
+
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/custom_bottom_navigation_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/custom_sliver_app_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/comics.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creator_avatar.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/creator_tabs.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/creator_tab_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/image_gradient_background.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/stats_box_row.dart';
-import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 
-class CreatorDetailsView extends StatelessWidget {
-  const CreatorDetailsView({Key? key}) : super(key: key);
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate({
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
+  });
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => math.max(maxHeight, minHeight);
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
+  }
+}
+
+class MainSliverList extends StatelessWidget {
+  const MainSliverList({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return DReaderScaffold(
-      body: ListView(
-        children: [
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
           Stack(
             children: const [
               ImageGradientBackground(),
@@ -124,13 +159,80 @@ class CreatorDetailsView extends StatelessWidget {
           const SizedBox(
             height: 24,
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: const CreatorsTab(),
-          ),
         ],
       ),
-      showBottomNavigation: false,
+    );
+  }
+}
+
+class CreatorDetailsView extends StatelessWidget {
+  const CreatorDetailsView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: dReaderBlack,
+      bottomNavigationBar: const CustomBottomNavigationBar(),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            DefaultTabController(
+              length: 3,
+              child: NestedScrollView(
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    const CustomSliverAppBar(),
+                    const MainSliverList(),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _SliverAppBarDelegate(
+                        minHeight: 50,
+                        maxHeight: 50,
+                        child: const CreatorTabBar(
+                          children: [
+                            Tab(
+                              child: Text(
+                                'Comics',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Tab(
+                              child: Text('Issues',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            Tab(
+                              child: Text('Collectables',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ];
+                },
+                body: const TabBarView(
+                  children: [
+                    CreatorComicsTab(),
+                    Center(
+                      child: Text(
+                        'Hey ya',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        'Hey ya',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

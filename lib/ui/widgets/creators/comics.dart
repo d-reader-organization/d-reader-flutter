@@ -9,7 +9,6 @@ class CreatorComicsTab extends StatelessWidget {
     return ListView.builder(
       itemCount: 8,
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return Container(
           margin: const EdgeInsets.only(top: 24),

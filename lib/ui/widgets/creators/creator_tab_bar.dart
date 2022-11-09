@@ -29,6 +29,7 @@ class CreatorTabBar extends StatelessWidget with PreferredSizeWidget {
           TabBar(
             tabs: children,
             indicatorWeight: 4,
+            // padding: const EdgeInsets.symmetric(horizontal: 4),
             indicatorColor: dReaderYellow,
             labelColor: dReaderYellow,
           ),

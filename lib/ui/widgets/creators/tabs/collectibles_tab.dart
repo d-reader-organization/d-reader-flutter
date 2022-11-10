@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/ui/widgets/collectible_card.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cards/collectible_card.dart';
 import 'package:flutter/material.dart';
 
 class CollectiblesTab extends StatelessWidget {

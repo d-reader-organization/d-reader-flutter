@@ -1,20 +1,20 @@
+import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/justifyColorString.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GenreCard extends StatelessWidget {
-  final String title;
-  final String color;
+  final GenreModel genre;
   const GenreCard({
     Key? key,
-    required this.title,
-    required this.color,
+    required this.genre,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Color genreColor = Color(
-      int.parse('0xFF${justifyColorString(color)}'),
+      int.parse('0xFF${justifyColorString(genre.color)}'),
     );
     return Container(
       height: 90,
@@ -29,12 +29,9 @@ class GenreCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Icon(
-            Icons.star_outline,
-            color: genreColor,
-          ),
+          SvgPicture.network(genre.icon, color: genreColor),
           Text(
-            title,
+            genre.name,
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             style: Theme.of(context)

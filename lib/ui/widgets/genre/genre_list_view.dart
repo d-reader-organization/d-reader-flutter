@@ -26,8 +26,7 @@ class GenreListView extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
               return GenreCard(
-                title: data[index].name,
-                color: data[index].color,
+                genre: data[index],
               );
             },
           ),

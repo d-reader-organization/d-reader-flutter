@@ -10,7 +10,7 @@ class SkeletonGenreCard extends StatelessWidget {
     return SkeletonAnimation(
       shimmerDuration: 1000,
       child: Container(
-        margin: const EdgeInsets.only(right: 6),
+        margin: const EdgeInsets.only(right: 8),
         height: 90,
         width: 85,
         decoration: BoxDecoration(

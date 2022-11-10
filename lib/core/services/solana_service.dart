@@ -5,38 +5,38 @@ import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
 
 final List<int> privateKey = [
-  147,
-  128,
-  131,
-  149,
-  98,
-  75,
-  218,
-  125,
-  69,
-  54,
-  146,
+  154,
+  214,
+  42,
+  221,
+  63,
+  25,
+  230,
+  24,
+  6,
+  38,
+  144,
+  67,
+  132,
+  121,
   152,
-  174,
-  153,
-  180,
-  30,
-  133,
-  11,
-  62,
-  196,
-  134,
-  30,
-  116,
+  149,
+  54,
+  160,
+  38,
+  24,
+  221,
   159,
-  129,
-  32,
-  58,
-  31,
-  201,
-  216,
-  249,
-  205
+  211,
+  82,
+  198,
+  47,
+  111,
+  53,
+  61,
+  16,
+  183,
+  142
 ];
 
 class SolanaService {
@@ -62,7 +62,9 @@ class SolanaService {
     try {
       final signedData = await _keyPair.sign(utf8.encode(oneTimePassword));
       final connectWalletResponse = await authRepo.connectWallet(
-          _keyPair.address, base58encode(signedData.bytes));
+        _keyPair.address,
+        base58encode(signedData.bytes),
+      );
       return connectWalletResponse?.accessToken ?? 'no-token';
     } catch (e) {
       print(e);

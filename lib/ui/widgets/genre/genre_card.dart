@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/justifyColorString.dart';
 import 'package:flutter/material.dart';
 
 class GenreCard extends StatelessWidget {
@@ -13,12 +14,12 @@ class GenreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color genreColor = Color(
-      int.parse('0xFF$color'),
+      int.parse('0xFF${justifyColorString(color)}'),
     );
     return Container(
       height: 90,
       width: 85,
-      margin: const EdgeInsets.only(right: 6),
+      margin: const EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
         color: dReaderDarkGrey,
         borderRadius: BorderRadius.circular(14),

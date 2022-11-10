@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/header_sliver_list.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tab_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/tabs/collectibles_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/comics_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/issues_tab.dart';
 import 'package:flutter/material.dart';
@@ -84,12 +85,7 @@ class CreatorDetailsView extends StatelessWidget {
                   children: [
                     CreatorComicsTab(),
                     CreatorIssuesTab(),
-                    Center(
-                      child: Text(
-                        'Hey ya',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+                    CollectiblesTab(),
                   ],
                 ),
               ),

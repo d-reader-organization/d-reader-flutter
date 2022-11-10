@@ -1,15 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:d_reader_flutter/core/models/carousel.dart';
+import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final List<String> images = [
-  'assets/images/featured.png',
-];
-
-class Carousel extends StatelessWidget {
+class Carousel extends ConsumerWidget {
   const Carousel({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    AsyncValue<List<CarouselModel>> carouselData = ref.watch(carouselProvider);
     return CarouselSlider(
       options: CarouselOptions(
         height: 266.0,

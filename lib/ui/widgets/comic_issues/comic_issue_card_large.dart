@@ -1,10 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCardLarge extends StatelessWidget {
-  const ComicIssueCardLarge({Key? key}) : super(key: key);
+  final ComicIssueModel issue;
+  const ComicIssueCardLarge({
+    Key? key,
+    required this.issue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +29,12 @@ class ComicIssueCardLarge extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/comic_card.png',
-                  ),
+                  image: CachedNetworkImageProvider(issue.cover),
                   fit: BoxFit.cover,
                 ),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(
                     16,
                   ),
@@ -60,7 +64,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'EPISODE 1 of 6',
+                        'EPISODE ${issue.number} of 6',
                         style:
                             Theme.of(context).textTheme.labelMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
@@ -69,9 +73,9 @@ class ComicIssueCardLarge extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      const Text(
-                        'The Barbabyans',
-                        style: TextStyle(
+                      Text(
+                        issue.comic?.name ?? 'Missing',
+                        style: const TextStyle(
                           fontSize: 18,
                           color: dReaderYellow,
                           fontWeight: FontWeight.w700,
@@ -80,9 +84,9 @@ class ComicIssueCardLarge extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      const Text(
-                        'The Barbabyans Ep 1',
-                        style: TextStyle(
+                      Text(
+                        issue.title,
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -91,16 +95,14 @@ class ComicIssueCardLarge extends StatelessWidget {
                       const SizedBox(
                         height: 8,
                       ),
-                      const DescriptionText(
-                          text:
-                              'Gorecats are an eclectic breed of treacherous little trouble makers, hell bent on using every single one of their glorious nine...'),
+                      DescriptionText(text: issue.description)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SolanaPrice(
-                        price: 0.965,
+                      SolanaPrice(
+                        price: issue.floorPrice,
                       ),
                       Row(
                         children: [

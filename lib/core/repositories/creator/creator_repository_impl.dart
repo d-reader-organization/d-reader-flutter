@@ -20,4 +20,12 @@ class CreatorRepositoryImpl implements CreatorRepository {
       ),
     );
   }
+
+  @override
+  Future<CreatorModel> getCreator(String slug) async {
+    final String? responseBody =
+        await ApiService.apiCallGet('/creator/get/$slug');
+    dynamic decodedData = jsonDecode(responseBody!);
+    return CreatorModel.fromJson(decodedData);
+  }
 }

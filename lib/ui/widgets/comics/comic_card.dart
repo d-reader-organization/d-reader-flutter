@@ -68,18 +68,19 @@ class ComicCard extends StatelessWidget {
             right: 16,
             bottom: 24,
             child: Row(
-              children: [
-                const Icon(
+              children: const [
+                Icon(
                   CupertinoIcons.heart,
                   color: dReaderGrey,
                   size: 16,
                 ),
-                const SizedBox(
+                SizedBox(
                   width: 4,
                 ),
                 Text(
-                  comic.stats.favouritesCount.toString(),
-                  style: const TextStyle(
+                  '11',
+                  // comic.stats.favouritesCount.toString(),
+                  style: TextStyle(
                     fontSize: 11,
                     color: Color(0xFFE0E0E0),
                   ),

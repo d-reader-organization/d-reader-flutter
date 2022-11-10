@@ -1,27 +1,32 @@
+import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/container_image_background.dart';
+import 'package:d_reader_flutter/ui/widgets/common/container_banner_background.dart';
+import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/stats_box_row.dart';
 import 'package:flutter/material.dart';
 
 class HeaderSliverList extends StatelessWidget {
+  final CreatorModel creator;
   const HeaderSliverList({
     super.key,
+    required this.creator,
   });
 
   @override
   Widget build(BuildContext context) {
+    print(creator.toString());
     return SliverList(
       delegate: SliverChildListDelegate(
         [
           Stack(
-            children: const [
-              ContainerWithImageBackground(),
+            children: [
+              ContainerBannerBackground(banner: creator.banner),
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: CreatorAvatar(),
+                  child: CreatorAvatar(avatar: creator.avatar),
                 ),
               ),
             ],
@@ -31,19 +36,19 @@ class HeaderSliverList extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text(
-                'Studio NX',
-                style: TextStyle(
+                creator.name,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              Icon(
+              const Icon(
                 Icons.verified,
                 color: dReaderYellow,
                 size: 16,
@@ -112,15 +117,14 @@ class HeaderSliverList extends StatelessWidget {
           const SizedBox(
             height: 32,
           ),
-          const StatsBoxRow(),
+          const StatsBoxRow(
+            totalVolume: 12,
+            issuesCount: 5,
+          ),
           const SizedBox(
             height: 24,
           ),
-          Text(
-            'StudioNX is an Emmy award winning visual development house that creates character driven IP for feature film, TV & games.',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          DescriptionText(text: creator.description),
           const SizedBox(
             height: 24,
           ),

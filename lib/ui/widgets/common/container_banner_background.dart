@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class ContainerWithImageBackground extends StatelessWidget {
-  const ContainerWithImageBackground({Key? key}) : super(key: key);
+class ContainerBannerBackground extends StatelessWidget {
+  final String banner;
+  const ContainerBannerBackground({super.key, required this.banner});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +21,9 @@ class ContainerWithImageBackground extends StatelessWidget {
           stops: [0, 1],
         ),
       ),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage(
-            'https://picsum.photos/250?image=15',
-          ),
+          image: CachedNetworkImageProvider(banner),
           fit: BoxFit.cover,
         ),
       ),

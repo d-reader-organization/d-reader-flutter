@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
@@ -7,13 +9,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ComicCardLarge extends StatelessWidget {
-  final bool isHot;
-  final int index;
+  final ComicModel comic;
   const ComicCardLarge({
-    Key? key,
-    this.isHot = false,
-    required this.index,
-  }) : super(key: key);
+    super.key,
+    required this.comic,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +42,9 @@ class ComicCardLarge extends StatelessWidget {
           ),
         ),
         decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage(
-              'assets/images/comic_card.png',
-            ),
-          ),
+          image: DecorationImage(
+              image: CachedNetworkImageProvider(comic.cover),
+              fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(
             16,
           ),
@@ -58,13 +56,13 @@ class ComicCardLarge extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const EpisodeCircle(
-                    text: '7EPs - ENDED',
+                children: const [
+                  EpisodeCircle(
+                    text: '7EPs - ToDO',
                     color: Color(0xFFC6E7C1),
                     fontSize: 12,
                   ),
-                  isHot ? const HotIcon() : const SizedBox(),
+                  HotIcon()
                 ],
               ),
             ),
@@ -78,7 +76,7 @@ class ComicCardLarge extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            'The Barbabyans',
+                            comic.name,
                             style: textTheme.headlineLarge,
                           ),
                           const SizedBox(
@@ -112,10 +110,7 @@ class ComicCardLarge extends StatelessWidget {
                       )
                     ],
                   ),
-                  const DescriptionText(
-                    text:
-                        'Gorecats are an eclectic breed of treacherous little trouble makers, hell bent on using every single one of their glorious nine...',
-                  ),
+                  DescriptionText(text: comic.description),
                   Row(
                     children: const [
                       GenreRectangle(title: 'Genre 1'),

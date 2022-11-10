@@ -7,7 +7,7 @@ class CollectiblesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 8,
+      itemCount: 1,
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return const Padding(

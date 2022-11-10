@@ -1,18 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CreatorAvatar extends StatelessWidget {
-  const CreatorAvatar({Key? key}) : super(key: key);
+  final String avatar;
+  const CreatorAvatar({
+    super.key,
+    required this.avatar,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const CircleAvatar(
+    return CircleAvatar(
       radius: 64,
       backgroundColor: dReaderDarkGrey,
-      child: Icon(
-        Icons.person,
-        color: dReaderYellow,
-        size: 48,
+      child: CachedNetworkImage(
+        imageUrl: avatar,
       ),
     );
   }

@@ -16,7 +16,7 @@ class CreatorListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        nextScreenPush(context, const CreatorDetailsView());
+        nextScreenPush(context, CreatorDetailsView(slug: creator.slug));
       },
       child: Padding(
         padding: const EdgeInsets.only(right: 8.0),

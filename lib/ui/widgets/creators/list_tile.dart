@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -23,10 +24,9 @@ class CreatorListTile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundColor: dReaderGreen,
-              child: Image.network(
-                //https://stackoverflow.com/questions/65486933/flutter-custom-markers-image-icon-from-url
-                creator.avatar, // avatar
+              backgroundColor: dReaderBlack,
+              child: CachedNetworkImage(
+                imageUrl: creator.avatar,
               ),
             ),
             const SizedBox(

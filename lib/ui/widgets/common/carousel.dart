@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:d_reader_flutter/core/models/carousel.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,9 +34,8 @@ class Carousel extends ConsumerWidget {
                       SizedBox(
                         height: 266,
                         width: double.infinity,
-                        child: Image.network(
-                          carouselItem.image,
-                          fit: BoxFit.cover,
+                        child: CoverCachedImage(
+                          imageUrl: carouselItem.image,
                         ),
                       ),
                       Positioned(

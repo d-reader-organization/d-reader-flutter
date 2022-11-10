@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
@@ -20,9 +21,7 @@ class ComicCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         image: DecorationImage(
-          image: NetworkImage(
-            comic.cover,
-          ),
+          image: CachedNetworkImageProvider(comic.cover),
           fit: BoxFit.cover,
         ),
       ),
@@ -71,8 +70,8 @@ class ComicCard extends StatelessWidget {
             child: Row(
               children: [
                 const Icon(
-                  CupertinoIcons.heart_fill,
-                  color: dReaderRed,
+                  CupertinoIcons.heart,
+                  color: dReaderGrey,
                   size: 16,
                 ),
                 const SizedBox(

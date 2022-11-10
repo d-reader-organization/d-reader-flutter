@@ -41,7 +41,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.star_outline),
-          label: 'Marketplace',
+          label: 'Market',
         ),
       ],
     );

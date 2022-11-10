@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
@@ -30,9 +31,7 @@ class ComicIssueCard extends StatelessWidget {
                 height: 130,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(
-                      issue.cover,
-                    ),
+                    image: CachedNetworkImageProvider(issue.cover),
                     fit: BoxFit.cover,
                   ),
                   border: Border.all(width: 1),

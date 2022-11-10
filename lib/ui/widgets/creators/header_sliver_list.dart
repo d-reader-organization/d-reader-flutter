@@ -1,6 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/container_banner_background.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
@@ -16,13 +16,32 @@ class HeaderSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(creator.toString());
     return SliverList(
       delegate: SliverChildListDelegate(
         [
           Stack(
             children: [
-              ContainerBannerBackground(banner: creator.banner),
+              Container(
+                height: 196,
+                padding: const EdgeInsets.only(bottom: 8),
+                foregroundDecoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black,
+                      Colors.transparent,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [0, 1],
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(creator.banner),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.bottomCenter,

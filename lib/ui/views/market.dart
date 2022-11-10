@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MarketplaceView extends StatelessWidget {
-  const MarketplaceView({Key? key}) : super(key: key);
+class MarketView extends StatelessWidget {
+  const MarketView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

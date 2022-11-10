@@ -24,6 +24,7 @@ class GenreListView extends ConsumerWidget {
                 : data.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return GenreCard(
                 genre: data[index],

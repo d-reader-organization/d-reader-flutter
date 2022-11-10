@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_app_bar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/header_sliver_list.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tab_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/collectibles_tab.dart';
@@ -49,7 +49,6 @@ class CreatorDetailsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print(slug);
     AsyncValue<CreatorModel> creator = ref.watch(creatorProvider(slug));
     return Scaffold(
       backgroundColor: dReaderBlack,
@@ -99,7 +98,7 @@ class CreatorDetailsView extends ConsumerWidget {
                         comics: data.comics,
                       ),
                       CreatorIssuesTab(issues: data.issues),
-                      CollectiblesTab(),
+                      const CollectiblesTab(),
                     ],
                   ),
                 ),

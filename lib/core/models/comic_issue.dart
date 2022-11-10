@@ -8,7 +8,7 @@ class ComicIssueModel {
   final String description;
   final String cover;
   final double floorPrice;
-  final ComicModel comic;
+  final ComicModel? comic;
 
   ComicIssueModel({
     required this.id,
@@ -29,7 +29,7 @@ class ComicIssueModel {
       slug: json['slug'],
       description: json['description'],
       cover: json['cover'],
-      floorPrice: json['floorPrice'],
+      floorPrice: json['floorPrice'] ?? 0,
       comic: json['comic'],
     );
   }

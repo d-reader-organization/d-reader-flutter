@@ -1,27 +1,19 @@
+import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCard extends StatelessWidget {
-  final String comicTitle;
-  final String issueTitle;
-  final String episode;
-  final String cover;
-  final String creatorName;
-  final double? price;
+  final ComicIssueModel issue;
   const ComicIssueCard({
     Key? key,
-    required this.comicTitle,
-    required this.issueTitle,
-    required this.episode,
-    required this.cover,
-    required this.creatorName,
-    this.price,
+    required this.issue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String episode = '${issue.number}/${issue.comic?.issues.length}';
     return Container(
       height: 255,
       width: 175,
@@ -37,10 +29,10 @@ class ComicIssueCard extends StatelessWidget {
               Container(
                 height: 130,
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     image: NetworkImage(
-                        // cover
-                        'https://images.unsplash.com/photo-1539651044670-315229da9d2f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHN0cmVldHxlbnwwfHwwfHw%3D&w=1000&q=80'),
+                      issue.cover,
+                    ),
                     fit: BoxFit.cover,
                   ),
                   border: Border.all(width: 1),
@@ -64,14 +56,14 @@ class ComicIssueCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  comicTitle,
+                  issue.comic?.name ?? 'Missing',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: dReaderYellow,
                         fontWeight: FontWeight.w700,
                       ),
                 ),
                 Text(
-                  issueTitle,
+                  issue.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -85,7 +77,7 @@ class ComicIssueCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      creatorName,
+                      issue.comic?.creator.name ?? 'Missing',
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     const SizedBox(
@@ -102,7 +94,7 @@ class ComicIssueCard extends StatelessWidget {
                   height: 8,
                 ),
                 SolanaPrice(
-                  price: price,
+                  price: issue.floorPrice,
                 ),
               ],
             ),

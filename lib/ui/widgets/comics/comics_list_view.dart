@@ -20,10 +20,7 @@ class ComicsListView extends ConsumerWidget {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => ComicCard(
-              title: data[index].name,
-              creatorName: data[index].creator.name,
-              favouritesCount: data[index].favouritesCount,
-              issuesCount: data[index].issues.length,
+              comic: data[index],
             ),
           ),
         );

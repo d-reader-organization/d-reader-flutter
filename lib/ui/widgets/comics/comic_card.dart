@@ -1,19 +1,14 @@
+import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ComicCard extends StatelessWidget {
-  final String title;
-  final String creatorName;
-  final int favouritesCount;
-  final int issuesCount;
+  final ComicModel comic;
   const ComicCard({
     Key? key,
-    required this.title,
-    required this.creatorName,
-    required this.favouritesCount,
-    required this.issuesCount,
+    required this.comic,
   }) : super(key: key);
 
   @override
@@ -24,10 +19,9 @@ class ComicCard extends StatelessWidget {
       margin: const EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        image: const DecorationImage(
+        image: DecorationImage(
           image: NetworkImage(
-            // comic.cover
-            'https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2FsbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80',
+            comic.cover,
           ),
           fit: BoxFit.cover,
         ),
@@ -37,7 +31,7 @@ class ComicCard extends StatelessWidget {
           Positioned(
             left: 12,
             top: 16,
-            child: EpisodeCircle(text: '$issuesCount EPs'),
+            child: EpisodeCircle(text: '${comic.issues.length} EPs'),
           ),
           Positioned(
             left: 12,
@@ -45,7 +39,7 @@ class ComicCard extends StatelessWidget {
             child: SizedBox(
               width: 140,
               child: Text(
-                title,
+                comic.name,
                 softWrap: true,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
@@ -57,7 +51,7 @@ class ComicCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  creatorName,
+                  comic.creator.name,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 const SizedBox(
@@ -85,7 +79,7 @@ class ComicCard extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  favouritesCount.toString(),
+                  comic.stats.favouritesCount.toString(),
                   style: const TextStyle(
                     fontSize: 11,
                     color: Color(0xFFE0E0E0),

@@ -1,15 +1,14 @@
+import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:flutter/material.dart';
 
 class CreatorListTile extends StatelessWidget {
-  final String avatar;
-  final String name;
+  final CreatorModel creator;
   const CreatorListTile({
     Key? key,
-    required this.avatar,
-    required this.name,
+    required this.creator,
   }) : super(key: key);
 
   @override
@@ -22,13 +21,12 @@ class CreatorListTile extends StatelessWidget {
         padding: const EdgeInsets.only(right: 8.0),
         child: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 30,
               backgroundColor: dReaderGreen,
-              child: Icon(
+              child: Image.network(
                 //https://stackoverflow.com/questions/65486933/flutter-custom-markers-image-icon-from-url
-                Icons.person, // avatar
-                color: Colors.white,
+                creator.avatar, // avatar
               ),
             ),
             const SizedBox(
@@ -41,7 +39,7 @@ class CreatorListTile extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      name,
+                      creator.name,
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     const SizedBox(

@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/core/services/api_service.dart';
 class CarouselRepositoryImpl implements CarouselRepository {
   @override
   Future<List<CarouselModel>> getCarouselData() async {
-    String? responseBody = await ApiService.apiCallGet('/slides/get');
+    String? responseBody = await ApiService.apiCallGet('/carousel/slides/get');
     if (responseBody == null) {
       return [];
     }

@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_app_bar.
 import 'package:d_reader_flutter/ui/widgets/creators/header_sliver_list.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tab_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/comics_tab.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/tabs/issues_tab.dart';
 import 'package:flutter/material.dart';
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
@@ -82,12 +83,7 @@ class CreatorDetailsView extends StatelessWidget {
                 body: const TabBarView(
                   children: [
                     CreatorComicsTab(),
-                    Center(
-                      child: Text(
-                        'Hey ya',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+                    CreatorIssuesTab(),
                     Center(
                       child: Text(
                         'Hey ya',

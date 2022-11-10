@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
+import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCard extends StatelessWidget {
@@ -101,23 +101,8 @@ class ComicIssueCard extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                Row(
-                  children: [
-                    Image.asset(
-                      Config.solanaLogoPath,
-                      width: 14,
-                      height: 10,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      price?.toString() ?? 'Free',
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                  ],
+                SolanaPrice(
+                  price: price,
                 ),
               ],
             ),

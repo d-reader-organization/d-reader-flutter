@@ -14,7 +14,7 @@ class ComicIssueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String episode = '${issue.number}/${issue.comic?.issues.length}';
+    String episode = '${issue.number}/12';
     return Container(
       height: 255,
       width: 175,
@@ -93,7 +93,7 @@ class ComicIssueCard extends StatelessWidget {
                   height: 8,
                 ),
                 SolanaPrice(
-                  price: issue.floorPrice,
+                  price: issue.stats.floorPrice,
                 ),
               ],
             ),

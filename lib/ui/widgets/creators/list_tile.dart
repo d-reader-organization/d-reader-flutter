@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -25,8 +24,8 @@ class CreatorListTile extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundColor: dReaderBlack,
-              child: CachedNetworkImage(
-                imageUrl: creator.avatar,
+              child: Image.network(
+                creator.avatar,
               ),
             ),
             const SizedBox(
@@ -56,7 +55,7 @@ class CreatorListTile extends StatelessWidget {
                   height: 6,
                 ),
                 Text(
-                  '945.38 %',
+                  '${creator.stats.totalVolume} %',
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge

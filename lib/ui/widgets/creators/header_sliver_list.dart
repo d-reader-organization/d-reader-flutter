@@ -136,9 +136,9 @@ class HeaderSliverList extends StatelessWidget {
           const SizedBox(
             height: 32,
           ),
-          const StatsBoxRow(
-            totalVolume: 12,
-            issuesCount: 5,
+          StatsBoxRow(
+            totalVolume: creator.stats.totalVolume,
+            issuesCount: creator.stats.comicIssuesCount,
           ),
           const SizedBox(
             height: 24,

@@ -11,7 +11,7 @@ class CreatorModel {
   final String description;
   final List<ComicModel> comics;
   final List<ComicIssueModel> issues;
-  // stats
+  final CreatorStats stats;
 
   CreatorModel({
     required this.id,
@@ -23,6 +23,7 @@ class CreatorModel {
     required this.description,
     required this.comics,
     required this.issues,
+    required this.stats,
   });
 
   factory CreatorModel.fromJson(dynamic json) {
@@ -52,6 +53,22 @@ class CreatorModel {
               ),
             )
           : [],
+      stats: CreatorStats.fromJson(json['stats']),
     );
   }
+}
+
+class CreatorStats {
+  final int comicIssuesCount;
+  final int totalVolume;
+
+  CreatorStats({
+    required this.comicIssuesCount,
+    required this.totalVolume,
+  });
+
+  factory CreatorStats.fromJson(dynamic json) => CreatorStats(
+        comicIssuesCount: json['comicIssuesCount'],
+        totalVolume: json['totalVolume'],
+      );
 }

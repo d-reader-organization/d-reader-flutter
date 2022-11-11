@@ -64,7 +64,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'EPISODE ${issue.number} of 6',
+                        'EPISODE ${issue.number} of ${issue.comic?.stats?.issuesCount}',
                         style:
                             Theme.of(context).textTheme.labelMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
@@ -102,7 +102,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SolanaPrice(
-                        price: issue.floorPrice,
+                        price: issue.stats.floorPrice,
                       ),
                       Row(
                         children: [

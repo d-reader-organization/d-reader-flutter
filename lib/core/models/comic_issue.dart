@@ -7,7 +7,7 @@ class ComicIssueModel {
   final String slug;
   final String description;
   final String cover;
-  final double floorPrice;
+  final ComicIssueStats stats;
   final ComicModel? comic;
 
   ComicIssueModel({
@@ -17,7 +17,7 @@ class ComicIssueModel {
     required this.slug,
     required this.description,
     required this.cover,
-    required this.floorPrice,
+    required this.stats,
     required this.comic,
   });
 
@@ -29,8 +29,26 @@ class ComicIssueModel {
       slug: json['slug'],
       description: json['description'],
       cover: json['cover'],
-      floorPrice: json['floorPrice'] ?? 0,
+      stats: ComicIssueStats.fromJson(json['stats']),
       comic: json['comic'],
     );
   }
+}
+
+class ComicIssueStats {
+  final double floorPrice;
+  final int totalSupply;
+  final double totalVolume;
+
+  ComicIssueStats({
+    required this.floorPrice,
+    required this.totalSupply,
+    required this.totalVolume,
+  });
+
+  factory ComicIssueStats.fromJson(dynamic json) => ComicIssueStats(
+        floorPrice: json['floorPrice'],
+        totalSupply: json['totalSupply'],
+        totalVolume: json['totalVolume'],
+      );
 }

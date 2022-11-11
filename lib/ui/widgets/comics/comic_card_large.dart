@@ -56,13 +56,13 @@ class ComicCardLarge extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   EpisodeCircle(
-                    text: '7EPs - ToDO',
-                    color: Color(0xFFC6E7C1),
+                    text: '${comic.stats?.issuesCount}EPs - ToDO',
+                    color: const Color(0xFFC6E7C1),
                     fontSize: 12,
                   ),
-                  HotIcon()
+                  const HotIcon()
                 ],
               ),
             ),
@@ -90,18 +90,18 @@ class ComicCardLarge extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             CupertinoIcons.heart,
                             color: Color(0xFFE0E0E0),
                             size: 16,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
                           Text(
-                            '19',
-                            style: TextStyle(
+                            comic.stats?.favouritesCount.toString() ?? '0',
+                            style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFFE0E0E0),
                             ),

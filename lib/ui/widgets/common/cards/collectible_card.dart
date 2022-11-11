@@ -38,7 +38,7 @@ class CollectibleCard extends StatelessWidget {
             ),
             image: DecorationImage(
               image: AssetImage(
-                'assets/images/comic_card.png',
+                'assets/images/d_reader_logo.png',
               ),
               fit: BoxFit.cover,
             ),

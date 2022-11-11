@@ -30,7 +30,7 @@ class ComicCard extends StatelessWidget {
           Positioned(
             left: 12,
             top: 16,
-            child: EpisodeCircle(text: '${comic.issues.length} EPs'),
+            child: EpisodeCircle(text: '${comic.stats?.issuesCount} EPs'),
           ),
           Positioned(
             left: 12,
@@ -68,19 +68,18 @@ class ComicCard extends StatelessWidget {
             right: 16,
             bottom: 24,
             child: Row(
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   CupertinoIcons.heart,
                   color: dReaderGrey,
                   size: 16,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 Text(
-                  '11',
-                  // comic.stats.favouritesCount.toString(),
-                  style: TextStyle(
+                  comic.stats?.favouritesCount.toString() ?? '0',
+                  style: const TextStyle(
                     fontSize: 11,
                     color: Color(0xFFE0E0E0),
                   ),

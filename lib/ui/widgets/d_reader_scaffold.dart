@@ -1,10 +1,9 @@
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/views/comics.dart';
-import 'package:d_reader_flutter/ui/views/creators/creators.dart';
+import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';
-import 'package:d_reader_flutter/ui/views/market.dart';
+import 'package:d_reader_flutter/ui/views/marketplace.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +36,9 @@ class DReaderScaffold extends ConsumerWidget {
             },
             children: const [
               HomeView(),
-              ComicsView(),
-              CreatorsView(),
+              DiscoverView(),
               LibraryView(),
-              MarketView(),
+              MarketPlaceView(),
             ],
           ),
         ),

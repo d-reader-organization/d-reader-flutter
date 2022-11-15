@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ComicsView extends StatelessWidget {
-  const ComicsView({Key? key}) : super(key: key);
+class DiscoverView extends StatelessWidget {
+  const DiscoverView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        'Comics View',
+        'Discover View',
         style: TextStyle(color: Colors.white),
       ),
     );

@@ -28,20 +28,16 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.star_outline),
-          label: 'Comics',
+          icon: Icon(Icons.explore_outlined),
+          label: 'Discover',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.star_outline),
-          label: 'Creators',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.star_outline),
+          icon: Icon(Icons.bookmark_add_outlined),
           label: 'Library',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.star_outline),
-          label: 'Market',
+          icon: Icon(Icons.shopping_cart),
+          label: 'Marketplace',
         ),
       ],
     );

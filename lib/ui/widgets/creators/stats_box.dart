@@ -12,7 +12,7 @@ class StatsBox extends StatelessWidget {
 
   final textStyle = const TextStyle(
     fontSize: 13,
-    color: ColorPalette.boxBackground300,
+    color: ColorPalette.dReaderGrey,
     fontWeight: FontWeight.w700,
   );
   @override

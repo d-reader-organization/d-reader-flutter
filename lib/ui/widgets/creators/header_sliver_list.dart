@@ -105,7 +105,7 @@ class HeaderSliverList extends StatelessWidget {
                     const Icon(
                       Icons.star_outline,
                       size: 20,
-                      color: ColorPalette.boxBackground300,
+                      color: ColorPalette.dReaderGrey,
                     ),
                     const SizedBox(
                       width: 6,
@@ -113,7 +113,7 @@ class HeaderSliverList extends StatelessWidget {
                     Text(
                       'Follow',
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: ColorPalette.boxBackground300,
+                            color: ColorPalette.dReaderGrey,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -133,7 +133,7 @@ class HeaderSliverList extends StatelessWidget {
                         '124',
                         style:
                             Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: ColorPalette.boxBackground300,
+                                  color: ColorPalette.dReaderGrey,
                                   fontWeight: FontWeight.w700,
                                 ),
                       ),

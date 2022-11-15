@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 class GenreRectangle extends StatelessWidget {
   final Color color;
   final String title;
-  const GenreRectangle(
-      {Key? key, required this.title, this.color = dReaderDarkGrey})
-      : super(key: key);
+  const GenreRectangle({
+    Key? key,
+    required this.title,
+    this.color = ColorPalette.boxBackground200,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

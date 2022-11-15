@@ -58,7 +58,7 @@ class ComicCard extends StatelessWidget {
                 ),
                 const Icon(
                   Icons.verified,
-                  color: dReaderYellow,
+                  color: ColorPalette.dReaderYellow100,
                   size: 16,
                 ),
               ],
@@ -71,7 +71,7 @@ class ComicCard extends StatelessWidget {
               children: [
                 const Icon(
                   CupertinoIcons.heart,
-                  color: dReaderGrey,
+                  color: ColorPalette.dReaderGrey,
                   size: 16,
                 ),
                 const SizedBox(

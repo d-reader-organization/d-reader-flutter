@@ -13,7 +13,7 @@ class CreatorAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: 64,
-      backgroundColor: dReaderDarkGrey,
+      backgroundColor: ColorPalette.boxBackground200,
       child: CommonCachedImage(
         imageUrl: avatar,
         fit: BoxFit.scaleDown,

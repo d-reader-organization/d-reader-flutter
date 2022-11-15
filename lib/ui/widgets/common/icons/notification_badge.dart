@@ -21,10 +21,11 @@ class NotificationBadge extends StatelessWidget {
               top: 0,
               child: CircleAvatar(
                 radius: 6,
-                backgroundColor: dReaderYellow,
+                backgroundColor: ColorPalette.dReaderYellow100,
                 child: Text(
                   '1',
-                  style: TextStyle(fontSize: 10, color: dReaderBlack),
+                  style: TextStyle(
+                      fontSize: 10, color: ColorPalette.appBackgroundColor),
                 ),
               ),
             ),

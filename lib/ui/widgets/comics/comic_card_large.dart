@@ -84,7 +84,7 @@ class ComicCardLarge extends StatelessWidget {
                           ),
                           const Icon(
                             Icons.verified,
-                            color: dReaderYellow,
+                            color: ColorPalette.dReaderYellow100,
                             size: 20,
                           ),
                         ],

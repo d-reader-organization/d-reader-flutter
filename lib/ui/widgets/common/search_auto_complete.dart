@@ -35,7 +35,7 @@ class SearchAutoComplete extends ConsumerWidget {
                 ),
               ),
               child: Container(
-                color: dReaderBlack,
+                color: ColorPalette.appBackgroundColor,
                 height: 64.0 * options.length,
                 padding: const EdgeInsets.only(right: 16),
                 child: ListView.builder(
@@ -57,7 +57,7 @@ class SearchAutoComplete extends ConsumerWidget {
               (context, textEditingController, focusNode, onFieldSubmitted) {
             return TextFormField(
               controller: textEditingController,
-              cursorColor: dReaderYellow,
+              cursorColor: ColorPalette.dReaderYellow100,
               focusNode: focusNode,
               onFieldSubmitted: (value) {
                 onFieldSubmitted();
@@ -65,7 +65,7 @@ class SearchAutoComplete extends ConsumerWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
-                color: dReaderYellow,
+                color: ColorPalette.dReaderYellow100,
               ),
               decoration: searchInputDecoration,
             );

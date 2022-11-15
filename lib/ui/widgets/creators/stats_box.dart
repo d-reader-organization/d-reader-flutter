@@ -12,7 +12,7 @@ class StatsBox extends StatelessWidget {
 
   final textStyle = const TextStyle(
     fontSize: 13,
-    color: dReaderLightGrey,
+    color: ColorPalette.boxBackground300,
     fontWeight: FontWeight.w700,
   );
   @override
@@ -23,7 +23,7 @@ class StatsBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        color: dReaderSome,
+        color: ColorPalette.boxBackground300,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

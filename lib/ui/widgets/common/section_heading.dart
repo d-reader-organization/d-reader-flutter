@@ -21,7 +21,7 @@ class SectionHeading extends StatelessWidget {
         Text(
           AppLocalizations.of(context)?.seeAll ?? 'See All',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: dReaderYellow,
+                color: ColorPalette.dReaderYellow100,
               ),
         ),
       ],

@@ -20,7 +20,7 @@ class DReaderScaffold extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: dReaderBlack,
+        backgroundColor: ColorPalette.appBackgroundColor,
         appBar: const PreferredSize(
           preferredSize: Size(0, 64),
           child: Padding(

@@ -9,7 +9,7 @@ class HotIcon extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
       decoration: BoxDecoration(
-        color: dReaderYellow,
+        color: ColorPalette.dReaderYellow100,
         borderRadius: BorderRadius.circular(
           30,
         ),
@@ -19,12 +19,12 @@ class HotIcon extends StatelessWidget {
         children: [
           const Icon(
             Icons.local_fire_department_rounded,
-            color: dReaderBlack,
+            color: ColorPalette.appBackgroundColor,
           ),
           Text(
             'HOT',
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: dReaderBlack,
+                  color: ColorPalette.appBackgroundColor,
                   fontWeight: FontWeight.w700,
                 ),
           ),

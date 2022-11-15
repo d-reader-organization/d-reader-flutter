@@ -22,7 +22,8 @@ class CreatorTabBar extends StatelessWidget with PreferredSizeWidget {
           Container(
             decoration: const BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: dReaderSome, width: 2.0),
+                bottom: BorderSide(
+                    color: ColorPalette.boxBackground300, width: 2.0),
               ),
             ),
           ),
@@ -30,8 +31,8 @@ class CreatorTabBar extends StatelessWidget with PreferredSizeWidget {
             tabs: children,
             indicatorWeight: 4,
             // padding: const EdgeInsets.symmetric(horizontal: 4),
-            indicatorColor: dReaderYellow,
-            labelColor: dReaderYellow,
+            indicatorColor: ColorPalette.dReaderYellow100,
+            labelColor: ColorPalette.dReaderYellow100,
           ),
         ],
       ),

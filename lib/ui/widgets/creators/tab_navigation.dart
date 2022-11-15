@@ -10,7 +10,7 @@ class CreatorsTabNavigation extends StatelessWidget {
     return const DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: dReaderBlack,
+        backgroundColor: ColorPalette.appBackgroundColor,
         appBar: CreatorTabBar(
           children: [
             Tab(

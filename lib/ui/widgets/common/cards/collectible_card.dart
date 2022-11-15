@@ -18,7 +18,7 @@ class CollectibleCard extends StatelessWidget {
           foregroundDecoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [
-                dReaderDarkGrey,
+                ColorPalette.boxBackground200,
                 Colors.transparent,
               ],
               begin: Alignment.bottomCenter,

@@ -80,7 +80,7 @@ class HeaderSliverList extends StatelessWidget {
               ),
               const Icon(
                 Icons.verified,
-                color: dReaderYellow,
+                color: ColorPalette.dReaderYellow100,
                 size: 16,
               ),
             ],
@@ -97,7 +97,7 @@ class HeaderSliverList extends StatelessWidget {
                   borderRadius: BorderRadius.circular(9),
                   border: Border.all(
                     width: 1,
-                    color: dReaderSome,
+                    color: ColorPalette.boxBackground300,
                   ),
                 ),
                 child: Row(
@@ -105,7 +105,7 @@ class HeaderSliverList extends StatelessWidget {
                     const Icon(
                       Icons.star_outline,
                       size: 20,
-                      color: dReaderLightGrey,
+                      color: ColorPalette.boxBackground300,
                     ),
                     const SizedBox(
                       width: 6,
@@ -113,7 +113,7 @@ class HeaderSliverList extends StatelessWidget {
                     Text(
                       'Follow',
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: dReaderLightGrey,
+                            color: ColorPalette.boxBackground300,
                             fontWeight: FontWeight.w700,
                           ),
                     ),
@@ -127,13 +127,13 @@ class HeaderSliverList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(
                           9,
                         ),
-                        color: dReaderSome,
+                        color: ColorPalette.boxBackground300,
                       ),
                       child: Text(
                         '124',
                         style:
                             Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: dReaderLightGrey,
+                                  color: ColorPalette.boxBackground300,
                                   fontWeight: FontWeight.w700,
                                 ),
                       ),

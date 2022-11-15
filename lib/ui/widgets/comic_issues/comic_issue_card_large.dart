@@ -50,7 +50,7 @@ class ComicIssueCardLarge extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
-                color: dReaderSome,
+                color: ColorPalette.boxBackground300,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(16),
                   bottomRight: Radius.circular(16),
@@ -77,7 +77,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                         issue.comic?.name ?? 'Missing',
                         style: const TextStyle(
                           fontSize: 18,
-                          color: dReaderYellow,
+                          color: ColorPalette.dReaderYellow100,
                           fontWeight: FontWeight.w700,
                         ),
                       ),

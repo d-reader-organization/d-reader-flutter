@@ -19,7 +19,7 @@ class ComicIssueCard extends StatelessWidget {
       height: 255,
       width: 175,
       decoration: BoxDecoration(
-        color: dReaderDarkGrey,
+        color: ColorPalette.boxBackground200,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -57,7 +57,7 @@ class ComicIssueCard extends StatelessWidget {
                 Text(
                   issue.comic?.name ?? 'Missing',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: dReaderYellow,
+                        color: ColorPalette.dReaderYellow100,
                         fontWeight: FontWeight.w700,
                       ),
                 ),
@@ -84,7 +84,7 @@ class ComicIssueCard extends StatelessWidget {
                     ),
                     const Icon(
                       Icons.verified,
-                      color: dReaderYellow,
+                      color: ColorPalette.dReaderYellow100,
                       size: 16,
                     ),
                   ],

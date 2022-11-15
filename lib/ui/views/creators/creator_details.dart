@@ -51,7 +51,7 @@ class CreatorDetailsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<CreatorModel> creator = ref.watch(creatorProvider(slug));
     return Scaffold(
-      backgroundColor: dReaderBlack,
+      backgroundColor: ColorPalette.appBackgroundColor,
       body: SafeArea(
           child: creator.when(
         data: (data) {

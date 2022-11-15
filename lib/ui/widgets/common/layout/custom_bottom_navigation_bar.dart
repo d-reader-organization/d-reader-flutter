@@ -18,9 +18,9 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             );
       },
       currentIndex: ref.watch(scaffoldProvider).navigationIndex,
-      selectedItemColor: dReaderYellow,
+      selectedItemColor: ColorPalette.dReaderYellow100,
       unselectedItemColor: Colors.white,
-      backgroundColor: dReaderBlack,
+      backgroundColor: ColorPalette.appBackgroundColor,
       type: BottomNavigationBarType.fixed,
       items: const [
         BottomNavigationBarItem(

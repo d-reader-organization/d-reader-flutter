@@ -7,7 +7,7 @@ class FilledIcon extends StatelessWidget {
   const FilledIcon({
     Key? key,
     required this.iconData,
-    this.backgroundColor = dReaderSome,
+    this.backgroundColor = ColorPalette.boxBackground300,
   }) : super(key: key);
 
   @override
@@ -15,7 +15,7 @@ class FilledIcon extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: dReaderSome,
+        color: ColorPalette.boxBackground300,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Icon(

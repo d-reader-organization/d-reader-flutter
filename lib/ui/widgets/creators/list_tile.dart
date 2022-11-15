@@ -24,7 +24,7 @@ class CreatorListTile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundColor: dReaderBlack,
+              backgroundColor: ColorPalette.appBackgroundColor,
               child: CommonCachedImage(
                 imageUrl: creator.avatar,
                 fit: BoxFit.scaleDown,
@@ -48,7 +48,7 @@ class CreatorListTile extends StatelessWidget {
                     ),
                     const Icon(
                       Icons.verified,
-                      color: dReaderYellow,
+                      color: ColorPalette.dReaderYellow100,
                       size: 16,
                     ),
                   ],
@@ -61,7 +61,7 @@ class CreatorListTile extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .labelLarge
-                      ?.copyWith(color: dReaderGreen),
+                      ?.copyWith(color: ColorPalette.dReaderGreen),
                 )
               ],
             ),

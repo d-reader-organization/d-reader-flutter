@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/ui/widgets/creators/stats_box.dart';
 import 'package:flutter/material.dart';
 
 class StatsBoxRow extends StatelessWidget {
-  final int totalVolume;
+  final double totalVolume;
   final int issuesCount;
   const StatsBoxRow({
     Key? key,

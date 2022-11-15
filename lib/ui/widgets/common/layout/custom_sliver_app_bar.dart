@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart';
 import 'package:flutter/material.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
@@ -25,9 +26,7 @@ class CustomSliverAppBar extends StatelessWidget {
           SizedBox(
             width: 8,
           ),
-          Icon(
-            Icons.notifications_none,
-          ),
+          NotificationBadge(),
           SizedBox(
             width: 8,
           ),

@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/justify_color_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +20,7 @@ class GenreCard extends StatelessWidget {
       width: 85,
       margin: const EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
-        color: dReaderDarkGrey,
+        color: genreColor,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(width: 0),
       ),
@@ -29,7 +28,7 @@ class GenreCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SvgPicture.network(genre.icon, color: genreColor),
+          SvgPicture.network(genre.icon, color: Colors.white),
           Text(
             genre.name,
             textAlign: TextAlign.center,
@@ -37,7 +36,7 @@ class GenreCard extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .labelMedium
-                ?.copyWith(color: genreColor),
+                ?.copyWith(color: Colors.white),
           ),
         ],
       ),

@@ -49,6 +49,6 @@ class ComicIssueStats {
   factory ComicIssueStats.fromJson(dynamic json) => ComicIssueStats(
         floorPrice: json['floorPrice'],
         totalSupply: json['totalSupply'],
-        totalVolume: json['totalVolume'],
+        totalVolume: double.tryParse(json['totalVolume'].toString()) ?? 0,
       );
 }

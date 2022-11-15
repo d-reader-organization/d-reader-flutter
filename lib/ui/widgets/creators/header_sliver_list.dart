@@ -21,25 +21,36 @@ class HeaderSliverList extends StatelessWidget {
         [
           Stack(
             children: [
-              Container(
-                height: 196,
-                padding: const EdgeInsets.only(bottom: 8),
-                foregroundDecoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black,
-                      Colors.transparent,
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    stops: [0, 1],
+              CachedNetworkImage(
+                imageUrl: creator.banner,
+                imageBuilder: (context, imageProvider) => Container(
+                  height: 196,
+                  padding: const EdgeInsets.only(bottom: 8),
+                  foregroundDecoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black,
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      stops: [0, 1],
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(creator.banner),
-                    fit: BoxFit.cover,
-                  ),
+                placeholder: (context, url) => Container(
+                  height: 196,
+                  color: Colors.grey,
+                ),
+                errorWidget: (context, url, error) => Container(
+                  height: 196,
+                  color: Colors.red,
                 ),
               ),
               Positioned.fill(

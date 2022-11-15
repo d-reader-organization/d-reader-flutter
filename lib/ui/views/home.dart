@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_grid.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
-import 'package:d_reader_flutter/ui/widgets/common/search_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/search_auto_complete.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_list_view.dart';
@@ -15,7 +15,7 @@ class HomeView extends StatelessWidget {
     return Center(
       child: ListView(
         children: <Widget>[
-          const SearchBar(),
+          const SearchAutoComplete(),
           const SizedBox(
             height: 24,
           ),

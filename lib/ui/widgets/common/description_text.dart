@@ -12,7 +12,7 @@ class DescriptionText extends StatelessWidget {
     return Text(
       text,
       style: Theme.of(context).textTheme.bodyMedium,
-      textAlign: TextAlign.start,
+      textAlign: TextAlign.center,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );

@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -17,9 +18,7 @@ class CustomAppBar extends StatelessWidget {
       backgroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
       actions: const [
-        Icon(
-          Icons.notifications_none,
-        ),
+        NotificationBadge(),
         SizedBox(
           width: 8,
         ),

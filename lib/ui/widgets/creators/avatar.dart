@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
 
 class CreatorAvatar extends StatelessWidget {
@@ -14,8 +14,9 @@ class CreatorAvatar extends StatelessWidget {
     return CircleAvatar(
       radius: 64,
       backgroundColor: dReaderDarkGrey,
-      child: CachedNetworkImage(
+      child: CommonCachedImage(
         imageUrl: avatar,
+        fit: BoxFit.scaleDown,
       ),
     );
   }

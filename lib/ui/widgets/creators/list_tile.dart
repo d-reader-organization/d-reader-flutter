@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
 
 class CreatorListTile extends StatelessWidget {
@@ -24,8 +25,9 @@ class CreatorListTile extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundColor: dReaderBlack,
-              child: Image.network(
-                creator.avatar,
+              child: CommonCachedImage(
+                imageUrl: creator.avatar,
+                fit: BoxFit.scaleDown,
               ),
             ),
             const SizedBox(

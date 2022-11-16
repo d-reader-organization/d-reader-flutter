@@ -19,8 +19,8 @@ class CarouselModel {
     return CarouselModel(
       id: data['id'],
       image: data['image'],
-      title: data['title'],
-      subtitle: data['subtitle'],
+      title: data['title'] ?? '',
+      subtitle: data['subtitle'] ?? '',
       priority: data['priority'],
       location: data['location'],
     );

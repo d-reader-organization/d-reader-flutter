@@ -33,10 +33,7 @@ class GenreCard extends StatelessWidget {
             genre.name,
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.copyWith(color: Colors.white),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),

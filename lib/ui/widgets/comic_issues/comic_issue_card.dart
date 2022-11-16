@@ -15,6 +15,7 @@ class ComicIssueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String episode = '${issue.number}/12';
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       height: 255,
       width: 175,
@@ -28,7 +29,7 @@ class ComicIssueCard extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: 130,
+                height: 142,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: CachedNetworkImageProvider(issue.cover),
@@ -56,28 +57,32 @@ class ComicIssueCard extends StatelessWidget {
               children: [
                 Text(
                   issue.comic?.name ?? 'Missing',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: ColorPalette.dReaderYellow100,
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: ColorPalette.dReaderYellow100,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 2,
                 ),
                 Text(
                   issue.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 4,
                 ),
                 Row(
                   children: [
                     Text(
                       issue.comic?.creator.name ?? 'Missing',
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const SizedBox(
                       width: 4,

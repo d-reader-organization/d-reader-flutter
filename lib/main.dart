@@ -23,23 +23,43 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Urbanist',
         textTheme: const TextTheme(
-          titleMedium: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-          headlineMedium: TextStyle(
+          titleSmall: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
-          headlineLarge: TextStyle(
+          titleMedium: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
+          headlineMedium: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+          headlineLarge: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
+          ),
           bodyMedium: TextStyle(
             fontSize: 14,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
+          ),
+          labelSmall: TextStyle(
+            fontSize: 10,
             fontWeight: FontWeight.normal,
             color: Colors.white,
           ),

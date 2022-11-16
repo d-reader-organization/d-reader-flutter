@@ -14,6 +14,7 @@ class CreatorListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, CreatorDetailsView(slug: creator.slug));
@@ -41,7 +42,7 @@ class CreatorListTile extends StatelessWidget {
                   children: [
                     Text(
                       creator.name,
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: textTheme.titleSmall,
                     ),
                     const SizedBox(
                       width: 4,
@@ -58,9 +59,7 @@ class CreatorListTile extends StatelessWidget {
                 ),
                 Text(
                   '${creator.stats.totalVolume} %',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge
+                  style: textTheme.labelLarge
                       ?.copyWith(color: ColorPalette.dReaderGreen),
                 )
               ],

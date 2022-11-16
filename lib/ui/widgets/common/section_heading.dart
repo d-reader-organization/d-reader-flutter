@@ -11,18 +11,19 @@ class SectionHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.titleMedium,
+          style: textTheme.headlineMedium,
         ),
         Text(
           AppLocalizations.of(context)?.seeAll ?? 'See All',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: ColorPalette.dReaderYellow100,
-              ),
+          style: textTheme.titleSmall?.copyWith(
+            color: ColorPalette.dReaderYellow100,
+          ),
         ),
       ],
     );

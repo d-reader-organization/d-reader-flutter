@@ -12,7 +12,7 @@ class Carousel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<CarouselModel>> carouselData = ref.watch(carouselProvider);
-
+    TextTheme textTheme = Theme.of(context).textTheme;
     return carouselData.when(
       data: (data) {
         return CarouselSlider(
@@ -47,7 +47,7 @@ class Carousel extends ConsumerWidget {
                         bottom: 60.0,
                         child: Text(
                           carouselItem.title,
-                          style: Theme.of(context).textTheme.headlineLarge,
+                          style: textTheme.titleMedium,
                         ),
                       ),
                       Positioned(
@@ -55,7 +55,7 @@ class Carousel extends ConsumerWidget {
                         bottom: 40,
                         child: Text(
                           carouselItem.title,
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: textTheme.labelMedium,
                         ),
                       ),
                     ],

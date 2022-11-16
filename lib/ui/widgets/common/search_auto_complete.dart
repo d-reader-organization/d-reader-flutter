@@ -95,6 +95,7 @@ class AutoCompleteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     return ListTile(
       onTap: () => onSelected(comic),
       leading: SizedBox(
@@ -112,10 +113,7 @@ class AutoCompleteListItem extends StatelessWidget {
             children: [
               Text(
                 comic.name,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                ),
+                style: textTheme.bodyMedium,
               ),
               const SizedBox(
                 width: 8,

@@ -14,6 +14,7 @@ class ComicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       height: 255,
       width: 180,
@@ -40,18 +41,20 @@ class ComicCard extends StatelessWidget {
               child: Text(
                 comic.name,
                 softWrap: true,
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: textTheme.titleSmall,
               ),
             ),
           ),
           Positioned(
             left: 12,
-            bottom: 24,
+            bottom: 16,
             child: Row(
               children: [
                 Text(
                   comic.creator.name,
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(
                   width: 4,
@@ -65,8 +68,8 @@ class ComicCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 16,
-            bottom: 24,
+            right: 8,
+            bottom: 16,
             child: Row(
               children: [
                 const Icon(
@@ -79,10 +82,7 @@ class ComicCard extends StatelessWidget {
                 ),
                 Text(
                   comic.stats?.favouritesCount.toString() ?? '0',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFFE0E0E0),
-                  ),
+                  style: textTheme.labelMedium,
                 ),
               ],
             ),

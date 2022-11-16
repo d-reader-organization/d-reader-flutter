@@ -29,10 +29,10 @@ class RoundedButton extends StatelessWidget {
           ),
         ),
         foregroundColor: textColor,
-        textStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-        ),
+        textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: ColorPalette.boxBackground200,
+              fontWeight: FontWeight.w700,
+            ),
       ),
       child: Text(text),
     );

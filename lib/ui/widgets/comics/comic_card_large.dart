@@ -92,7 +92,7 @@ class ComicCardLarge extends StatelessWidget {
                               children: [
                                 Text(
                                   comic.name,
-                                  style: textTheme.headlineLarge,
+                                  style: textTheme.titleMedium,
                                 ),
                                 const SizedBox(
                                   width: 8,

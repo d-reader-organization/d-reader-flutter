@@ -16,6 +16,7 @@ class HeaderSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     return SliverList(
       delegate: SliverChildListDelegate(
         [
@@ -69,11 +70,7 @@ class HeaderSliverList extends StatelessWidget {
             children: [
               Text(
                 creator.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: textTheme.headlineLarge,
               ),
               const SizedBox(
                 width: 10,
@@ -112,10 +109,10 @@ class HeaderSliverList extends StatelessWidget {
                     ),
                     Text(
                       'Follow',
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: ColorPalette.dReaderGrey,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      style: textTheme.labelMedium?.copyWith(
+                        color: ColorPalette.dReaderGrey,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(
                       width: 6,

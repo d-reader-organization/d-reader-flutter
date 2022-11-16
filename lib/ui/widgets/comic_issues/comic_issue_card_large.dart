@@ -14,6 +14,7 @@ class ComicIssueCardLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       constraints: const BoxConstraints(
         maxHeight: 254,
@@ -65,20 +66,17 @@ class ComicIssueCardLarge extends StatelessWidget {
                     children: [
                       Text(
                         'EPISODE ${issue.number} of ${issue.comic?.stats?.issuesCount}',
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
+                        style: textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(
                         height: 4,
                       ),
                       Text(
                         issue.comic?.name ?? 'Missing',
-                        style: const TextStyle(
-                          fontSize: 18,
+                        style: textTheme.titleMedium?.copyWith(
                           color: ColorPalette.dReaderYellow100,
-                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(
@@ -86,11 +84,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                       ),
                       Text(
                         issue.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: textTheme.titleMedium,
                       ),
                       const SizedBox(
                         height: 8,

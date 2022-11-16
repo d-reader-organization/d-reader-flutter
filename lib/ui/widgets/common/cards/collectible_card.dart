@@ -74,13 +74,14 @@ class CollectibleCard extends StatelessWidget {
                           children: [
                             Text(
                               'Caught in a Mugwhump\'s HypnoRay',
-                              style: textTheme.headlineLarge,
+                              style: textTheme.bodyMedium,
                             ),
                           ],
                         ),
                         const DescriptionText(
                           text:
                               'His people gone. His kingdom a smouldering ruin...\nFollow the perilous adventures of NIKO the mohawked warrior as...',
+                          textAlign: TextAlign.start,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

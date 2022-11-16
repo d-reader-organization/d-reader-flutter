@@ -113,9 +113,11 @@ class CreatorDetailsView extends ConsumerWidget {
             style: const TextStyle(color: Colors.red),
           );
         },
-        loading: () => const SizedBox(
-          height: 400,
-          child: SkeletonCard(),
+        loading: () => const Center(
+          child: SizedBox(
+            height: 400,
+            child: SkeletonCard(),
+          ),
         ),
       )),
     );

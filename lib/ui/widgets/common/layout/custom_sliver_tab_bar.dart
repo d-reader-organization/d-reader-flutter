@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class CreatorTabBar extends StatelessWidget with PreferredSizeWidget {
+class CustomSliverTabBar extends StatelessWidget with PreferredSizeWidget {
   final List<Widget> children;
-  const CreatorTabBar({
+  const CustomSliverTabBar({
     Key? key,
     required this.children,
   }) : super(key: key);
@@ -30,7 +30,6 @@ class CreatorTabBar extends StatelessWidget with PreferredSizeWidget {
           TabBar(
             tabs: children,
             indicatorWeight: 4,
-            // padding: const EdgeInsets.symmetric(horizontal: 4),
             indicatorColor: ColorPalette.dReaderYellow100,
             labelColor: ColorPalette.dReaderYellow100,
           ),

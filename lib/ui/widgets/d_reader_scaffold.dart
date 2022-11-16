@@ -20,13 +20,15 @@ class DReaderScaffold extends ConsumerWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         backgroundColor: ColorPalette.appBackgroundColor,
-        appBar: const PreferredSize(
-          preferredSize: Size(0, 64),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.0),
-            child: CustomAppBar(),
-          ),
-        ),
+        appBar: ref.watch(scaffoldProvider).navigationIndex != 1
+            ? const PreferredSize(
+                preferredSize: Size(0, 64),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0),
+                  child: CustomAppBar(),
+                ),
+              )
+            : null,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: PageView(

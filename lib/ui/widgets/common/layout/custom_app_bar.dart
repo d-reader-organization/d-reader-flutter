@@ -3,7 +3,11 @@ import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+  final bool showSearchIcon;
+  const CustomAppBar({
+    Key? key,
+    this.showSearchIcon = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +21,20 @@ class CustomAppBar extends StatelessWidget {
       leadingWidth: 164,
       backgroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
-      actions: const [
-        NotificationBadge(),
-        SizedBox(
+      actions: [
+        showSearchIcon
+            ? const Icon(
+                Icons.search,
+              )
+            : const SizedBox(),
+        const SizedBox(
           width: 8,
         ),
-        Icon(
+        const NotificationBadge(),
+        const SizedBox(
+          width: 8,
+        ),
+        const Icon(
           Icons.person_outline,
         ),
       ],

@@ -10,8 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DReaderScaffold extends ConsumerWidget {
+  final Widget? body;
+  final bool showBottomNavigation;
+  final bool showSearchIcon;
   const DReaderScaffold({
     super.key,
+    this.showBottomNavigation = true,
+    this.showSearchIcon = false,
+    this.body,
   });
 
   @override
@@ -21,30 +27,39 @@ class DReaderScaffold extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: ColorPalette.appBackgroundColor,
         appBar: ref.watch(scaffoldProvider).navigationIndex != 1
-            ? const PreferredSize(
-                preferredSize: Size(0, 64),
+            ? PreferredSize(
+                preferredSize: const Size(0, 64),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.0),
-                  child: CustomAppBar(),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: CustomAppBar(
+                    showSearchIcon: showSearchIcon,
+                  ),
                 ),
               )
             : null,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: PageView(
-            controller: ref.watch(scaffoldPageController),
-            onPageChanged: (index) {
-              ref.read(scaffoldProvider.notifier).setNavigationIndex(index);
-            },
-            children: const [
-              HomeView(),
-              DiscoverView(),
-              LibraryView(),
-              MarketPlaceView(),
-            ],
-          ),
+        body: SafeArea(
+          child: body ??
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                child: PageView(
+                  controller: ref.watch(scaffoldPageController),
+                  onPageChanged: (index) {
+                    ref
+                        .read(scaffoldProvider.notifier)
+                        .setNavigationIndex(index);
+                  },
+                  children: const [
+                    HomeView(),
+                    DiscoverView(),
+                    LibraryView(),
+                    MarketPlaceView(),
+                  ],
+                ),
+              ),
         ),
-        bottomNavigationBar: const CustomBottomNavigationBar(),
+        bottomNavigationBar:
+            showBottomNavigation ? const CustomBottomNavigationBar() : null,
       ),
     );
   }

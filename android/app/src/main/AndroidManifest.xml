@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.dreader.app.d_reader_flutter">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="dReader"
         android:name="${applicationName}"
@@ -31,4 +32,11 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 </manifest>

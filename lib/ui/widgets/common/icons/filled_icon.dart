@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:flutter/material.dart';
 
 class FilledIcon extends StatelessWidget {
@@ -18,10 +19,15 @@ class FilledIcon extends StatelessWidget {
         color: ColorPalette.boxBackground300,
         borderRadius: BorderRadius.circular(6),
       ),
-      child: Icon(
-        iconData,
-        color: Colors.white,
-        size: 20,
+      child: GestureDetector(
+        onTap: () {
+          openUrl('https://www.google.com/');
+        },
+        child: Icon(
+          iconData,
+          color: Colors.white,
+          size: 20,
+        ),
       ),
     );
   }

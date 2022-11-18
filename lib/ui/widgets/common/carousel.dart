@@ -40,6 +40,7 @@ class Carousel extends ConsumerWidget {
                         width: double.infinity,
                         child: CommonCachedImage(
                           imageUrl: carouselItem.image,
+                          slug: '${carouselItem.id}${carouselItem.title}',
                         ),
                       ),
                       Positioned(

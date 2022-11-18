@@ -57,7 +57,10 @@ class HeaderSliverList extends StatelessWidget {
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: CreatorAvatar(avatar: creator.avatar),
+                  child: CreatorAvatar(
+                    avatar: creator.avatar,
+                    slug: creator.slug,
+                  ),
                 ),
               ),
             ],

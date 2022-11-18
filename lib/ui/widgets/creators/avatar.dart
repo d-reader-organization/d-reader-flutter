@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 class CreatorAvatar extends StatelessWidget {
   final String avatar;
   final double radius;
-  const CreatorAvatar({super.key, required this.avatar, this.radius = 64});
+  final String slug;
+  const CreatorAvatar({
+    super.key,
+    required this.avatar,
+    required this.slug,
+    this.radius = 64,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +21,7 @@ class CreatorAvatar extends StatelessWidget {
       child: CommonCachedImage(
         imageUrl: avatar,
         fit: BoxFit.scaleDown,
+        slug: slug,
       ),
     );
   }

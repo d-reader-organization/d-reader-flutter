@@ -29,6 +29,7 @@ class CreatorListTile extends StatelessWidget {
               child: CommonCachedImage(
                 imageUrl: creator.avatar,
                 fit: BoxFit.scaleDown,
+                slug: creator.slug,
               ),
             ),
             const SizedBox(

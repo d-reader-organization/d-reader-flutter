@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 class AuthorVerified extends StatelessWidget {
   final String authorName;
+  final double fontSize;
   const AuthorVerified({
     Key? key,
     required this.authorName,
+    this.fontSize = 12,
   }) : super(key: key);
 
   @override
@@ -17,6 +19,7 @@ class AuthorVerified extends StatelessWidget {
           authorName,
           style: textTheme.bodySmall?.copyWith(
             fontWeight: FontWeight.w500,
+            fontSize: fontSize,
           ),
         ),
         const SizedBox(

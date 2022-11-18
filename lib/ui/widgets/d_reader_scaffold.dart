@@ -38,11 +38,11 @@ class DReaderScaffold extends ConsumerWidget {
               )
             : null,
         body: SafeArea(
-          child: body ??
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                child: PageView(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            child: body ??
+                PageView(
                   controller: ref.watch(scaffoldPageController),
                   onPageChanged: (index) {
                     ref
@@ -56,7 +56,7 @@ class DReaderScaffold extends ConsumerWidget {
                     MarketPlaceView(),
                   ],
                 ),
-              ),
+          ),
         ),
         bottomNavigationBar:
             showBottomNavigation ? const CustomBottomNavigationBar() : null,

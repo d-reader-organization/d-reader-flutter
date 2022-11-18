@@ -89,7 +89,9 @@ class ComicIssueCardLarge extends StatelessWidget {
                       const SizedBox(
                         height: 8,
                       ),
-                      DescriptionText(text: issue.description)
+                      DescriptionText(
+                        text: issue.description,
+                      ),
                     ],
                   ),
                   Row(

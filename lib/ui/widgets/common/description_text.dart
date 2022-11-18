@@ -6,7 +6,7 @@ class DescriptionText extends StatelessWidget {
   const DescriptionText({
     Key? key,
     required this.text,
-    this.textAlign = TextAlign.center,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   @override

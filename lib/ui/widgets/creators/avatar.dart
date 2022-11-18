@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 
 class CreatorAvatar extends StatelessWidget {
   final String avatar;
-  const CreatorAvatar({
-    super.key,
-    required this.avatar,
-  });
+  final double radius;
+  const CreatorAvatar({super.key, required this.avatar, this.radius = 64});
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 64,
-      backgroundColor: ColorPalette.boxBackground200,
+      radius: radius,
+      backgroundColor: ColorPalette.boxBackground300,
       child: CommonCachedImage(
         imageUrl: avatar,
         fit: BoxFit.scaleDown,

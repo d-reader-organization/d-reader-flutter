@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
+import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
 
@@ -33,28 +34,13 @@ class CreatorListTile extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              width: 8,
+              width: 16,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      creator.name,
-                      style: textTheme.titleSmall,
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    const Icon(
-                      Icons.verified,
-                      color: ColorPalette.dReaderYellow100,
-                      size: 16,
-                    ),
-                  ],
-                ),
+                AuthorVerified(authorName: creator.name),
                 const SizedBox(
                   height: 6,
                 ),

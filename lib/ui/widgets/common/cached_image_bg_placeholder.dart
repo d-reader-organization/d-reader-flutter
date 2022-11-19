@@ -3,32 +3,42 @@ import 'package:flutter/material.dart';
 
 class CachedImageBgPlaceholder extends StatelessWidget {
   final String imageUrl;
-  final Widget child;
+  final String cacheKey;
+  final Widget? child;
   final double? width;
   final double? height;
+  final double borderRadius;
+  final Decoration? foregroundDecoration;
+  final BorderRadiusGeometry? overrideBorderRadius;
   const CachedImageBgPlaceholder({
     Key? key,
     required this.imageUrl,
-    required this.child,
+    required this.cacheKey,
+    this.child,
     this.width,
     this.height,
+    this.borderRadius = 16,
+    this.foregroundDecoration,
+    this.overrideBorderRadius,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      cacheKey: imageUrl,
+      cacheKey: cacheKey,
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         height: height,
         width: width,
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        foregroundDecoration: foregroundDecoration,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: imageProvider,
             fit: BoxFit.cover,
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius:
+              overrideBorderRadius ?? BorderRadius.circular(borderRadius),
         ),
         child: child,
       ),

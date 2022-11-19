@@ -1,15 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/stats_box_row.dart';
 import 'package:flutter/material.dart';
 
-class HeaderSliverList extends StatelessWidget {
+class CreatorDetailsHeaderSliverList extends StatelessWidget {
   final CreatorModel creator;
-  const HeaderSliverList({
+  const CreatorDetailsHeaderSliverList({
     super.key,
     required this.creator,
   });
@@ -20,73 +20,40 @@ class HeaderSliverList extends StatelessWidget {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          Stack(
-            children: [
-              CachedNetworkImage(
-                imageUrl: creator.banner,
-                imageBuilder: (context, imageProvider) => Container(
-                  height: 196,
-                  padding: const EdgeInsets.only(bottom: 8),
-                  foregroundDecoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black,
-                        Colors.transparent,
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      stops: [0, 1],
+          CachedImageBgPlaceholder(
+            height: 250,
+            cacheKey: 'banner ${creator.slug}',
+            imageUrl: creator.banner,
+            borderRadius: 0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CreatorAvatar(
+                  avatar: creator.avatar,
+                  slug: creator.slug,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      creator.name,
+                      style: textTheme.headlineLarge,
                     ),
-                  ),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+                    const SizedBox(
+                      width: 10,
                     ),
-                  ),
+                    const Icon(
+                      Icons.verified,
+                      color: ColorPalette.dReaderYellow100,
+                      size: 16,
+                    ),
+                  ],
                 ),
-                placeholder: (context, url) => Container(
-                  height: 196,
-                  color: Colors.grey,
-                ),
-                errorWidget: (context, url, error) => Container(
-                  height: 196,
-                  color: Colors.red,
-                ),
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: CreatorAvatar(
-                    avatar: creator.avatar,
-                    slug: creator.slug,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                creator.name,
-                style: textTheme.headlineLarge,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              const Icon(
-                Icons.verified,
-                color: ColorPalette.dReaderYellow100,
-                size: 16,
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
+            height: 16,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -154,7 +121,10 @@ class HeaderSliverList extends StatelessWidget {
           const SizedBox(
             height: 24,
           ),
-          DescriptionText(text: creator.description),
+          DescriptionText(
+            text: creator.description,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(
             height: 24,
           ),

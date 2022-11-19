@@ -1,8 +1,11 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
+
+const String imageUrl =
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png';
 
 class CollectibleCard extends StatelessWidget {
   const CollectibleCard({Key? key}) : super(key: key);
@@ -12,35 +15,22 @@ class CollectibleCard extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Stack(
       children: [
-        Container(
+        CachedImageBgPlaceholder(
+          imageUrl: imageUrl,
+          cacheKey: imageUrl,
           height: 344,
-          margin: const EdgeInsets.only(top: 16),
           foregroundDecoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [
-                ColorPalette.boxBackground200,
+                Colors.black,
                 Colors.transparent,
               ],
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
-              stops: [
-                0.2,
-                0.4,
-              ],
+              stops: [0.05, 0.3],
             ),
             borderRadius: BorderRadius.circular(
               16,
-            ),
-          ),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16),
-            ),
-            image: DecorationImage(
-              image: AssetImage(
-                'assets/images/d_reader_logo.png',
-              ),
-              fit: BoxFit.cover,
             ),
           ),
         ),

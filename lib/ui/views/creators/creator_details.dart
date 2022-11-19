@@ -35,7 +35,7 @@ class CreatorDetailsView extends ConsumerWidget {
                       (BuildContext context, bool innerBoxIsScrolled) {
                     return [
                       const CustomSliverAppBar(),
-                      HeaderSliverList(creator: data),
+                      CreatorDetailsHeaderSliverList(creator: data),
                       const CustomSliverTabPersistentHeader(
                         tabs: [
                           Tab(

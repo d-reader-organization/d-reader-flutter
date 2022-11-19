@@ -21,7 +21,7 @@ class CreatorAvatar extends StatelessWidget {
       child: CommonCachedImage(
         imageUrl: avatar,
         fit: BoxFit.scaleDown,
-        slug: slug,
+        cacheKey: slug,
       ),
     );
   }

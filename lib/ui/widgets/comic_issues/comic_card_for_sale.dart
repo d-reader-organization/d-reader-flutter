@@ -18,6 +18,7 @@ class ComicCardForSale extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedImageBgPlaceholder(
       imageUrl: imageUrl,
+      cacheKey: 'comic-card-for-sale',
       width: 176,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,

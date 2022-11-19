@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class CommonCachedImage extends StatelessWidget {
   final String imageUrl;
-  final String? slug;
+  final String? cacheKey;
   final BoxFit fit;
   const CommonCachedImage({
     Key? key,
     required this.imageUrl,
-    this.slug,
+    this.cacheKey,
     this.fit = BoxFit.cover,
   }) : super(key: key);
 
@@ -27,7 +27,7 @@ class CommonCachedImage extends StatelessWidget {
         width: 200,
         color: Colors.red,
       ),
-      cacheKey: slug,
+      cacheKey: cacheKey,
     );
   }
 }

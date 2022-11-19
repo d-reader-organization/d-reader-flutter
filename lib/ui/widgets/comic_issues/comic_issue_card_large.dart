@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +16,7 @@ class ComicIssueCardLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 254,
-        minHeight: 220,
-        maxWidth: double.infinity,
-        minWidth: 350,
-      ),
+      height: 254,
       margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.all(12),
       child: Row(
@@ -29,21 +24,9 @@ class ComicIssueCardLarge extends StatelessWidget {
         children: [
           Expanded(
             flex: 5,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(issue.cover),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(
-                    16,
-                  ),
-                  bottomLeft: Radius.circular(
-                    16,
-                  ),
-                ),
-              ),
+            child: CachedImageBgPlaceholder(
+              imageUrl: issue.cover,
+              cacheKey: 'large-card${issue.slug}',
             ),
           ),
           Expanded(

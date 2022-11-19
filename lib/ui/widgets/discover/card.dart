@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
@@ -24,28 +24,19 @@ class DiscoverCard extends StatelessWidget {
         children: [
           Expanded(
             flex: 4,
-            child: CachedNetworkImage(
+            child: CachedImageBgPlaceholder(
               imageUrl:
                   'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
-              imageBuilder: (context, imageProvider) => Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
+              cacheKey:
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  EpisodeCircle(
+                    text: episodeText,
                   ),
-                ),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: EpisodeCircle(text: episodeText),
-                ),
-              ),
-              placeholder: (context, url) => Container(
-                color: Colors.grey,
-              ),
-              errorWidget: (context, url, error) => Container(
-                color: Colors.red,
+                ],
               ),
             ),
           ),

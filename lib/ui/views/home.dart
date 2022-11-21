@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_grid.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
@@ -25,6 +26,7 @@ class HomeView extends StatelessWidget {
           ),
           SectionHeading(
             title: AppLocalizations.of(context)?.genres ?? 'Genres',
+            initialTab: DiscoverTabViewEnum.comics,
           ),
           const SizedBox(
             height: 16,
@@ -35,6 +37,7 @@ class HomeView extends StatelessWidget {
           ),
           SectionHeading(
             title: AppLocalizations.of(context)?.newComics ?? 'New Comics',
+            initialTab: DiscoverTabViewEnum.comics,
           ),
           const SizedBox(
             height: 16,
@@ -46,6 +49,7 @@ class HomeView extends StatelessWidget {
           SectionHeading(
             title:
                 AppLocalizations.of(context)?.popularIssues ?? 'Popular Issues',
+            initialTab: DiscoverTabViewEnum.issues,
           ),
           const SizedBox(
             height: 16,
@@ -56,6 +60,7 @@ class HomeView extends StatelessWidget {
           ),
           SectionHeading(
             title: AppLocalizations.of(context)?.topCreators ?? 'Top Creators',
+            initialTab: DiscoverTabViewEnum.creators,
           ),
           const SizedBox(
             height: 16,
@@ -66,13 +71,12 @@ class HomeView extends StatelessWidget {
           ),
           SectionHeading(
             title: AppLocalizations.of(context)?.freeIssues ?? 'Free Issues',
+            initialTab: DiscoverTabViewEnum.issues,
           ),
           const SizedBox(
             height: 16,
           ),
-          const ComicIssuesGrid(
-            isFree: true,
-          ),
+          const ComicIssuesGrid(),
           const SizedBox(
             height: 32,
           ),

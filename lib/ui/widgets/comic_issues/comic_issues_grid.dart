@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ComicIssuesGrid extends ConsumerWidget {
-  final bool isFree;
-  const ComicIssuesGrid({Key? key, this.isFree = false}) : super(key: key);
+  const ComicIssuesGrid({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

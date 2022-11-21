@@ -15,6 +15,7 @@ class CustomSliverTabBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      margin: const EdgeInsets.only(bottom: 16),
       color: ColorPalette.appBackgroundColor,
       child: Stack(
         fit: StackFit.passthrough,

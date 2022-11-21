@@ -28,9 +28,19 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CreatorAvatar(
-                  avatar: creator.avatar,
-                  slug: creator.slug,
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(128),
+                    color: ColorPalette.boxBackground300,
+                  ),
+                  child: CreatorAvatar(
+                    avatar: creator.avatar,
+                    slug: creator.slug,
+                    height: 96,
+                    width: 96,
+                    radius: 16,
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -28,15 +28,16 @@ class ComicDetails extends StatelessWidget {
               description:
                   'Gorecats are an eclectic breed of treacherous little trouble makers, hell bent on using every single one of their glorious nine...',
               cover:
-              'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/comics/barbabyans/cover.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221118T154151Z&X-Amz-Expires=3600&X-Amz-Signature=4725f7d03661090726a4efcf82ddba0446b5d546d6e4a8ba32c7d0a4d6d49cd6&X-Amz-SignedHeaders=host&x-id=GetObject',
+                  'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/comics/barbabyans/cover.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221118T154151Z&X-Amz-Expires=3600&X-Amz-Signature=4725f7d03661090726a4efcf82ddba0446b5d546d6e4a8ba32c7d0a4d6d49cd6&X-Amz-SignedHeaders=host&x-id=GetObject',
               stats: ComicIssueStats(
                   floorPrice: 12, totalSupply: 12, totalVolume: 12),
               comic: ComicModel(
                 name: 'The Barbayans',
                 slug: 'slug',
                 cover:
-                'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/comics/barbabyans/cover.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221118T154151Z&X-Amz-Expires=3600&X-Amz-Signature=4725f7d03661090726a4efcf82ddba0446b5d546d6e4a8ba32c7d0a4d6d49cd6&X-Amz-SignedHeaders=host&x-id=GetObject',
+                    'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/comics/barbabyans/cover.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221118T154151Z&X-Amz-Expires=3600&X-Amz-Signature=4725f7d03661090726a4efcf82ddba0446b5d546d6e4a8ba32c7d0a4d6d49cd6&X-Amz-SignedHeaders=host&x-id=GetObject',
                 description: 'Desc',
+                isCompleted: false,
                 issues: [],
                 creator: CreatorModel(
                   id: 1,
@@ -46,8 +47,6 @@ class ComicDetails extends StatelessWidget {
                   avatar: '',
                   banner: '',
                   description: 'Desc',
-                  comics: [],
-                  issues: [],
                   stats: CreatorStats(comicIssuesCount: 5, totalVolume: 20),
                 ),
                 stats: ComicStats(

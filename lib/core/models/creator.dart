@@ -1,6 +1,3 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
-
 class CreatorModel {
   final int id;
   final String email;
@@ -9,8 +6,6 @@ class CreatorModel {
   final String avatar;
   final String banner;
   final String description;
-  final List<ComicModel> comics;
-  final List<ComicIssueModel> issues;
   final CreatorStats stats;
 
   CreatorModel({
@@ -21,8 +16,6 @@ class CreatorModel {
     required this.avatar,
     required this.banner,
     required this.description,
-    required this.comics,
-    required this.issues,
     required this.stats,
   });
 
@@ -35,24 +28,6 @@ class CreatorModel {
       avatar: json['avatar'],
       banner: json['banner'],
       description: json['description'],
-      comics: json['comics'] != null
-          ? List.from(
-              json['comics'].map(
-                (item) => ComicModel.fromJson(
-                  item,
-                ),
-              ),
-            )
-          : [],
-      issues: json['issues'] != null
-          ? List.from(
-              json['issues'].map(
-                (item) => ComicIssueModel.fromJson(
-                  item,
-                ),
-              ),
-            )
-          : [],
       stats: CreatorStats.fromJson(json['stats']),
     );
   }

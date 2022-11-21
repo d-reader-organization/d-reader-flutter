@@ -23,41 +23,60 @@ class ComicCard extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 16),
-        child: CachedImageBgPlaceholder(
-          imageUrl: comic.cover,
-          cacheKey: 'home${comic.cover}',
-          height: 255,
-          width: 180,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              EpisodeCircle(text: '${comic.stats?.issuesCount} EPs'),
-              Column(
+        child: Stack(
+          children: [
+            CachedImageBgPlaceholder(
+              imageUrl: comic.cover,
+              cacheKey: 'home${comic.cover}',
+              height: 255,
+              width: 180,
+              foregroundDecoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Colors.black,
+                    Colors.transparent,
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  stops: [0.05, 0.2],
+                ),
+                borderRadius: BorderRadius.circular(
+                  16,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  EpisodeCircle(text: '${comic.stats?.issuesCount} EPs'),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         comic.name,
                         softWrap: true,
+                        maxLines: 3,
                         style: textTheme.titleSmall,
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AuthorVerified(authorName: comic.creator.name),
-                      FavouriteIconCount(favouritesCount: 49),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AuthorVerified(authorName: comic.creator.name),
+                          const FavouriteIconCount(favouritesCount: 49),
+                        ],
+                      )
                     ],
                   )
                 ],
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );

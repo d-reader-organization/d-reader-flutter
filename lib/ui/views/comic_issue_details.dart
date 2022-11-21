@@ -44,6 +44,7 @@ class ComicIssueDetails extends StatelessWidget {
                     'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/comics/barbabyans/cover.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221118T084838Z&X-Amz-Expires=3600&X-Amz-Signature=9d10b1fd9d31ac5e62eba9accae29597a58ccef1fc1d075081d1c2878b217e88&X-Amz-SignedHeaders=host&x-id=GetObject',
                 description: 'Desc',
                 issues: [],
+                isCompleted: true,
                 creator: CreatorModel(
                   id: 1,
                   email: 'creator@gmail.com',
@@ -52,8 +53,6 @@ class ComicIssueDetails extends StatelessWidget {
                   avatar: '',
                   banner: '',
                   description: 'Desc',
-                  comics: [],
-                  issues: [],
                   stats: CreatorStats(comicIssuesCount: 5, totalVolume: 20),
                 ),
                 stats: ComicStats(

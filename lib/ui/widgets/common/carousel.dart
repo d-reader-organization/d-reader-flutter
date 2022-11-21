@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:d_reader_flutter/core/models/carousel.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,40 +27,49 @@ class Carousel extends ConsumerWidget {
           ),
           items: data
               .map(
-                (carouselItem) => ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(
-                      16.0,
+                (carouselItem) => Stack(
+                  children: [
+                    CachedImageBgPlaceholder(
+                      height: 266,
+                      imageUrl: carouselItem.image,
+                      cacheKey: '${carouselItem.id}${carouselItem.title}',
+                      foregroundDecoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Colors.black,
+                            Colors.transparent,
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          stops: [0.05, 0.3],
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          16,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: 266,
-                        width: double.infinity,
-                        child: CommonCachedImage(
-                          imageUrl: carouselItem.image,
-                          cacheKey: '${carouselItem.id}${carouselItem.title}',
-                        ),
+                    Positioned.fill(
+                      bottom: 20,
+                      left: 16,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            carouselItem.title,
+                            style: textTheme.titleMedium,
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            carouselItem.title,
+                            style: textTheme.labelMedium,
+                          ),
+                        ],
                       ),
-                      Positioned(
-                        left: 16.0,
-                        bottom: 60.0,
-                        child: Text(
-                          carouselItem.title,
-                          style: textTheme.titleMedium,
-                        ),
-                      ),
-                      Positioned(
-                        left: 16.0,
-                        bottom: 40,
-                        child: Text(
-                          carouselItem.title,
-                          style: textTheme.labelMedium,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               )
               .toList(),

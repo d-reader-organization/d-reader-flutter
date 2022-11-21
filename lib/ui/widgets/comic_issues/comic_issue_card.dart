@@ -55,6 +55,7 @@ class ComicIssueCard extends StatelessWidget {
               padding: const EdgeInsets.only(right: 4, left: 8, top: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
                     issue.comic?.name ?? 'Missing',

@@ -18,7 +18,7 @@ class GenreCard extends StatelessWidget {
     return Container(
       height: 90,
       width: 85,
-      margin: const EdgeInsets.only(right: 8),
+      margin: const EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
         color: genreColor,
         borderRadius: BorderRadius.circular(14),

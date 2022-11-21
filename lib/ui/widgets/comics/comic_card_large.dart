@@ -54,11 +54,12 @@ class ComicCardLarge extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       EpisodeCircle(
-                        text: '${comic.stats?.issuesCount}EPs - ToDO',
+                        text:
+                            '${comic.stats?.issuesCount}EPs ${comic.isCompleted ? '- ENDED' : ''}',
                         color: const Color(0xFFC6E7C1),
                         fontSize: 12,
                       ),
-                      const HotIcon()
+                      const HotIcon(),
                     ],
                   ),
                 ),

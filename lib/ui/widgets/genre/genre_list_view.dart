@@ -11,20 +11,14 @@ class GenreListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<GenreModel>> genres = ref.watch(genreProvider);
-    bool isTablet = MediaQuery.of(context).size.width > 600;
     return genres.when(
       data: (data) {
         return SizedBox(
           height: 90,
           child: ListView.builder(
-            itemCount: data.length > 4
-                ? isTablet
-                    ? 8
-                    : 4
-                : data.length,
+            itemCount: data.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return GenreCard(
                 genre: data[index],

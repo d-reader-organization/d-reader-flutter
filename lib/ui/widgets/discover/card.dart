@@ -19,7 +19,7 @@ class DiscoverCard extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       height: 145,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: Row(
         children: [
           Expanded(

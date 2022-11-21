@@ -13,8 +13,9 @@ class CustomSliverTabBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      color: ColorPalette.appBackgroundColor,
       child: Stack(
         fit: StackFit.passthrough,
         alignment: Alignment.bottomCenter,

@@ -10,6 +10,7 @@ class ComicModel {
   final CreatorModel creator;
   final ComicStats? stats;
   final bool isPopular;
+  final bool isCompleted;
 
   ComicModel({
     required this.name,
@@ -20,31 +21,40 @@ class ComicModel {
     required this.creator,
     required this.stats,
     required this.isPopular,
+    required this.isCompleted,
   });
 
-  factory ComicModel.fromJson(dynamic json) => ComicModel(
-        name: json['name'],
-        slug: json['slug'],
-        cover: json['cover'],
-        description: json['description'],
-        issues: json['issues'] ?? [],
-        creator: json['creator'] ??
-            CreatorModel(
-              id: 1,
-              email: 'creator@gmail.com',
-              slug: 'creator',
-              name: 'DefaultCreator',
-              avatar: '',
-              banner: '',
-              description: 'Desc',
-              comics: [],
-              issues: [],
-              stats: CreatorStats(comicIssuesCount: 5, totalVolume: 20),
-            ),
-        stats:
-            json['stats'] != null ? ComicStats.fromJson(json['stats']) : null,
-        isPopular: json['isPopular'],
-      );
+  factory ComicModel.fromJson(dynamic json) {
+    return ComicModel(
+      name: json['name'],
+      slug: json['slug'],
+      cover: json['cover'],
+      description: json['description'],
+      issues: json['issues'] != null
+          ? List<ComicIssueModel>.from(
+              json['issues'].map(
+                (item) => ComicIssueModel.fromJson(
+                  item,
+                ),
+              ),
+            )
+          : [],
+      creator: json['creator'] ??
+          CreatorModel(
+            id: 1,
+            email: 'creator@gmail.com',
+            slug: 'creator',
+            name: 'DefaultCreator',
+            avatar: '',
+            banner: '',
+            description: 'Desc',
+            stats: CreatorStats(comicIssuesCount: 5, totalVolume: 20),
+          ),
+      stats: json['stats'] != null ? ComicStats.fromJson(json['stats']) : null,
+      isPopular: json['isPopular'],
+      isCompleted: json['isCompleted'],
+    );
+  }
 }
 
 class ComicStats {
@@ -68,14 +78,16 @@ class ComicStats {
     required this.viewersCount,
   });
 
-  factory ComicStats.fromJson(dynamic json) => ComicStats(
-        favouritesCount: json['favouritesCount'],
-        subscribersCount: json['subscribersCount'],
-        ratersCount: json['ratersCount'],
-        averageRating: json['averageRating'],
-        issuesCount: json['issuesCount'],
-        totalVolume: json['totalVolume'],
-        readersCount: json['readersCount'],
-        viewersCount: json['viewersCount'],
-      );
+  factory ComicStats.fromJson(dynamic json) {
+    return ComicStats(
+      favouritesCount: json['favouritesCount'],
+      subscribersCount: json['subscribersCount'],
+      ratersCount: json['ratersCount'],
+      averageRating: json['averageRating'],
+      issuesCount: json['issuesCount'],
+      totalVolume: json['totalVolume'],
+      readersCount: json['readersCount'],
+      viewersCount: json['viewersCount'],
+    );
+  }
 }

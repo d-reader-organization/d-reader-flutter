@@ -80,7 +80,7 @@ class DiscoverComicCard extends StatelessWidget {
                   ],
                 ),
                 GenreTags(
-                  genres: [...comic.genres, ...comic.genres],
+                  genres: comic.genres,
                 ),
               ],
             ),

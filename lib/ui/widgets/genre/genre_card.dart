@@ -12,15 +12,12 @@ class GenreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color genreColor = Color(
-      int.parse('0xFF${justifyColorString(genre.color)}'),
-    );
     return Container(
       height: 90,
       width: 85,
       margin: const EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
-        color: genreColor,
+        color: getColorFromGenreString(genre.color),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(width: 0),
       ),

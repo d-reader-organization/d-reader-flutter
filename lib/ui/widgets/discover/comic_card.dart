@@ -1,40 +1,41 @@
+import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
 import 'package:flutter/material.dart';
 
-class DiscoverCard extends StatelessWidget {
-  final String episodeText;
-  const DiscoverCard({
+class DiscoverComicCard extends StatelessWidget {
+  final ComicModel comic;
+  const DiscoverComicCard({
     Key? key,
-    required this.episodeText,
+    required this.comic,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
-      height: 145,
+      height: 150,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: Row(
         children: [
           Expanded(
             flex: 4,
             child: CachedImageBgPlaceholder(
-              imageUrl:
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
-              cacheKey:
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
+              imageUrl: comic.cover,
+              cacheKey: 'discover-${comic.cover}',
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   EpisodeCircle(
-                    text: episodeText,
+                    text:
+                        '${comic.stats?.issuesCount} EPs ${comic.isCompleted ? 'ENDED' : ''}',
                   ),
                 ],
               ),
@@ -44,7 +45,7 @@ class DiscoverCard extends StatelessWidget {
             width: 16,
           ),
           Expanded(
-            flex: 7,
+            flex: 8,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,32 +53,35 @@ class DiscoverCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    episodeText.length > 5
-                        ? Text(
-                            'Rise of the gorecats',
-                            style: textTheme.titleSmall?.copyWith(
-                              color: ColorPalette.dReaderYellow100,
-                            ),
-                          )
-                        : const SizedBox(),
                     Text(
-                      'Gorecats',
-                      style: textTheme.titleSmall,
+                      comic.name,
+                      style: textTheme.titleSmall?.copyWith(
+                        color: ColorPalette.dReaderYellow100,
+                      ),
                     ),
+                    AuthorVerified(authorName: comic.creator?.name ?? ''),
                     const SizedBox(
-                      height: 4,
+                      height: 24,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        AuthorVerified(authorName: 'Studio NX'),
-                        FavouriteIconCount(favouritesCount: 49),
-                        ViewedIconCount(),
+                      children: [
+                        RatingIcon(rating: comic.stats?.averageRating ?? 0),
+                        FavouriteIconCount(
+                            favouritesCount: comic.stats?.favouritesCount ?? 0),
+                        ViewedIconCount(
+                            viewedCount: comic.stats?.viewersCount ?? 0),
                       ],
+                    ),
+                    const Divider(
+                      height: 2,
+                      color: ColorPalette.boxBackground300,
                     ),
                   ],
                 ),
-                const GenreTags(),
+                GenreTags(
+                  genres: [...comic.genres, ...comic.genres],
+                ),
               ],
             ),
           ),

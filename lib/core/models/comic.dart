@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/core/models/genre.dart';
 
 class ComicModel {
   final String name;
@@ -9,6 +10,7 @@ class ComicModel {
   final ComicStats? stats;
   final bool isPopular;
   final bool isCompleted;
+  final List<GenreModel> genres;
 
   ComicModel({
     required this.name,
@@ -19,6 +21,7 @@ class ComicModel {
     this.stats,
     required this.isPopular,
     required this.isCompleted,
+    required this.genres,
   });
 
   factory ComicModel.fromJson(dynamic json) {
@@ -33,6 +36,15 @@ class ComicModel {
       stats: json['stats'] != null ? ComicStats.fromJson(json['stats']) : null,
       isPopular: json['isPopular'],
       isCompleted: json['isCompleted'],
+      genres: json['genres'] != null
+          ? List<GenreModel>.from(
+              json['genres'].map(
+                (item) => GenreModel.fromJson(
+                  item,
+                ),
+              ),
+            )
+          : [],
     );
   }
 }
@@ -63,7 +75,9 @@ class ComicStats {
       favouritesCount: json['favouritesCount'],
       subscribersCount: json['subscribersCount'],
       ratersCount: json['ratersCount'],
-      averageRating: json['averageRating'],
+      averageRating: double.tryParse(json['averageRating'].toStringAsFixed(2))
+              ?.toDouble() ??
+          0,
       issuesCount: json['issuesCount'],
       totalVolume: json['totalVolume'],
       readersCount: json['readersCount'],

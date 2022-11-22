@@ -2,7 +2,11 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ViewedIconCount extends StatelessWidget {
-  const ViewedIconCount({Key? key}) : super(key: key);
+  final int viewedCount;
+  const ViewedIconCount({
+    Key? key,
+    required this.viewedCount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class ViewedIconCount extends StatelessWidget {
           width: 4,
         ),
         Text(
-          '349',
+          viewedCount.toString(),
           style: Theme.of(context)
               .textTheme
               .labelMedium

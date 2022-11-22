@@ -15,7 +15,7 @@ class GenreModel {
     return GenreModel(
       name: json['name'],
       slug: json['slug'],
-      icon: json['icon'],
+      icon: json['icon'] ?? '',
       color: json['color'],
     );
   }

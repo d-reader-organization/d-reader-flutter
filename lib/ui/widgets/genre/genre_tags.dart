@@ -1,39 +1,27 @@
+import 'package:d_reader_flutter/core/models/genre.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tag.dart';
 import 'package:flutter/material.dart';
 
 class GenreTags extends StatelessWidget {
-  const GenreTags({Key? key}) : super(key: key);
+  final List<GenreModel> genres;
+  const GenreTags({
+    Key? key,
+    required this.genres,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          height: 20,
-          width: 30,
-          color: Colors.red,
-        ),
-        Container(
-          height: 20,
-          width: 30,
-          color: Colors.blue,
-        ),
-        Container(
-          height: 20,
-          width: 30,
-          color: Colors.green,
-        ),
-        Container(
-          height: 20,
-          width: 30,
-          color: Colors.blue,
-        ),
-        Container(
-          height: 20,
-          width: 30,
-          color: Colors.green,
-        ),
-      ],
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
+      children: genres
+          .map(
+            (genre) => GenreTag(
+              color: genre.color,
+              name: genre.name,
+            ),
+          )
+          .toList(),
     );
   }
 }

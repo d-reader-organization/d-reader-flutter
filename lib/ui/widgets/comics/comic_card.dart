@@ -45,8 +45,9 @@ class ComicCard extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.all(12),
+              width: 180,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +69,9 @@ class ComicCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           AuthorVerified(authorName: comic.creator?.name ?? ''),
-                          const FavouriteIconCount(favouritesCount: 49),
+                          FavouriteIconCount(
+                            favouritesCount: comic.stats?.favouritesCount ?? 0,
+                          ),
                         ],
                       )
                     ],

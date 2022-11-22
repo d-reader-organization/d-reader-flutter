@@ -16,7 +16,7 @@ class ComicIssueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String episode = '${issue.number}/12';
+    String episode = '${issue.number}/${issue.stats?.totalIssuesCount}';
     TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: () {
@@ -81,7 +81,7 @@ class ComicIssueCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        issue.comic?.creator?.name ?? 'Missing',
+                        issue.creator?.name ?? 'Missing',
                         style: textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),

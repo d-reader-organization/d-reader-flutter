@@ -1,4 +1,21 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/models/creator.dart';
+
+class ComicType {
+  final String name;
+  final String slug;
+
+  ComicType({
+    required this.name,
+    required this.slug,
+  });
+
+  factory ComicType.fromJson(dynamic json) {
+    return ComicType(
+      name: json['name'],
+      slug: json['slug'],
+    );
+  }
+}
 
 class ComicIssueModel {
   final int id;
@@ -8,7 +25,8 @@ class ComicIssueModel {
   final String description;
   final String cover;
   final ComicIssueStats? stats;
-  final ComicModel? comic;
+  final ComicType? comic;
+  final CreatorModel? creator;
 
   ComicIssueModel({
     required this.id,
@@ -19,6 +37,7 @@ class ComicIssueModel {
     required this.cover,
     this.stats,
     required this.comic,
+    required this.creator,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -32,7 +51,8 @@ class ComicIssueModel {
       stats: json['stats'] != null
           ? ComicIssueStats.fromJson(json['stats'])
           : null,
-      comic: json['comic'],
+      comic: ComicType.fromJson(json['comic']),
+      creator: CreatorModel.fromJson(json['creator']),
     );
   }
 }
@@ -41,16 +61,23 @@ class ComicIssueStats {
   final double floorPrice;
   final int totalSupply;
   final double totalVolume;
+  final int totalIssuesCount;
 
   ComicIssueStats({
     required this.floorPrice,
     required this.totalSupply,
     required this.totalVolume,
+    required this.totalIssuesCount,
   });
 
   factory ComicIssueStats.fromJson(dynamic json) => ComicIssueStats(
-        floorPrice: json['floorPrice'],
+        floorPrice: double.tryParse(json['floorPrice'].toStringAsFixed(2))
+                ?.toDouble() ??
+            0,
         totalSupply: json['totalSupply'],
-        totalVolume: double.tryParse(json['totalVolume'].toString()) ?? 0,
+        totalVolume: double.tryParse(json['totalVolume'].toStringAsFixed(2))
+                ?.toDouble() ??
+            0,
+        totalIssuesCount: json['totalIssuesCount'],
       );
 }

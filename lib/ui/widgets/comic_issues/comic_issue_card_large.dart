@@ -48,7 +48,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'EPISODE ${issue.number} of ${issue.comic?.stats?.issuesCount}',
+                        'EPISODE ${issue.number} of ${issue.stats?.totalIssuesCount}',
                         style: textTheme.labelSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),

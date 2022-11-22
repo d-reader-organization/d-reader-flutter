@@ -31,7 +31,7 @@ class SectionHeading extends ConsumerWidget {
             ref.read(scaffoldProvider.notifier).setNavigationIndex(1);
             ref.read(scaffoldPageController).animateToPage(
                   1,
-                  curve: Curves.ease,
+                  curve: Curves.linear,
                   duration: const Duration(milliseconds: 350),
                 );
           },

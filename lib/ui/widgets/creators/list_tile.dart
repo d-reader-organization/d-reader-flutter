@@ -43,7 +43,7 @@ class CreatorListTile extends StatelessWidget {
                   height: 6,
                 ),
                 Text(
-                  '${creator.stats.totalVolume} %',
+                  '${creator.stats?.totalVolume} %',
                   style: textTheme.labelLarge
                       ?.copyWith(color: ColorPalette.dReaderGreen),
                 )

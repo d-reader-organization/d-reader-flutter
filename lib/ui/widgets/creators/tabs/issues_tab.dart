@@ -20,14 +20,13 @@ List<ComicIssueModel> comicIssues = [
       cover:
           'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/comics/gorecats/issues/rise-of-the-gorecats/cover.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221119%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221119T112630Z&X-Amz-Expires=3600&X-Amz-Signature=adab699e7bfcaf7b3b10026e3660d6767fdcdfae290db5445572efb98d45f6ca&X-Amz-SignedHeaders=host&x-id=GetObject',
       description: 'Desc',
-      issues: [],
       isCompleted: true,
       creator: CreatorModel(
           id: 1,
-          email: 'nane@gmail.com',
           slug: 'sluggaa2',
           name: 'nane',
           avatar: '',
+          isVerified: true,
           banner: '',
           description: '',
           stats: CreatorStats(comicIssuesCount: 5, totalVolume: 5)),

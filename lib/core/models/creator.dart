@@ -1,34 +1,35 @@
 class CreatorModel {
-  final int id;
-  final String email;
+  final int? id;
   final String slug;
   final String name;
   final String avatar;
   final String banner;
   final String description;
-  final CreatorStats stats;
+  final bool isVerified;
+  final CreatorStats? stats;
 
   CreatorModel({
-    required this.id,
-    required this.email,
+    this.id,
     required this.slug,
     required this.name,
     required this.avatar,
     required this.banner,
     required this.description,
-    required this.stats,
+    required this.isVerified,
+    this.stats,
   });
 
   factory CreatorModel.fromJson(dynamic json) {
     return CreatorModel(
       id: json['id'],
-      email: json['email'],
       slug: json['slug'],
       name: json['name'],
       avatar: json['avatar'],
-      banner: json['banner'],
-      description: json['description'],
-      stats: CreatorStats.fromJson(json['stats']),
+      banner: json['banner'] ?? '',
+      description: json['description'] ?? '',
+      isVerified: json['isVerified'],
+      stats:
+          json['stats'] != null ? CreatorStats.fromJson(json['stats']) : null,
     );
   }
 }

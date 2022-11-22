@@ -81,7 +81,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SolanaPrice(
-                        price: issue.stats.floorPrice,
+                        price: issue.stats!.floorPrice,
                       ),
                       Row(
                         children: [

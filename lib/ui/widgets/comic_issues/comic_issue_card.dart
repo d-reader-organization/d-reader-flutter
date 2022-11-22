@@ -81,7 +81,7 @@ class ComicIssueCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        issue.comic?.creator.name ?? 'Missing',
+                        issue.comic?.creator?.name ?? 'Missing',
                         style: textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),
@@ -100,7 +100,7 @@ class ComicIssueCard extends StatelessWidget {
                     height: 8,
                   ),
                   SolanaPrice(
-                    price: issue.stats.floorPrice,
+                    price: issue.stats!.floorPrice,
                   ),
                 ],
               ),

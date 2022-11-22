@@ -7,7 +7,7 @@ class ComicIssueModel {
   final String slug;
   final String description;
   final String cover;
-  final ComicIssueStats stats;
+  final ComicIssueStats? stats;
   final ComicModel? comic;
 
   ComicIssueModel({
@@ -17,7 +17,7 @@ class ComicIssueModel {
     required this.slug,
     required this.description,
     required this.cover,
-    required this.stats,
+    this.stats,
     required this.comic,
   });
 
@@ -29,7 +29,9 @@ class ComicIssueModel {
       slug: json['slug'],
       description: json['description'],
       cover: json['cover'],
-      stats: ComicIssueStats.fromJson(json['stats']),
+      stats: json['stats'] != null
+          ? ComicIssueStats.fromJson(json['stats'])
+          : null,
       comic: json['comic'],
     );
   }

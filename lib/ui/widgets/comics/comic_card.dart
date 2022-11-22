@@ -67,7 +67,7 @@ class ComicCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          AuthorVerified(authorName: comic.creator.name),
+                          AuthorVerified(authorName: comic.creator?.name ?? ''),
                           const FavouriteIconCount(favouritesCount: 49),
                         ],
                       )

@@ -125,8 +125,8 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
             height: 32,
           ),
           StatsBoxRow(
-            totalVolume: creator.stats.totalVolume,
-            issuesCount: creator.stats.comicIssuesCount,
+            totalVolume: creator.stats?.totalVolume ?? 0,
+            issuesCount: creator.stats?.comicIssuesCount ?? 0,
           ),
           const SizedBox(
             height: 24,

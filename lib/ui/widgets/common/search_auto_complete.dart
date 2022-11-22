@@ -120,7 +120,7 @@ class AutoCompleteListItem extends StatelessWidget {
                 width: 8,
               ),
               Text(
-                '${comic.issues.length} items',
+                '${comic.stats?.issuesCount} items',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.white,

@@ -64,7 +64,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                 const SizedBox(
                   height: 6,
                 ),
-                AuthorVerified(authorName: issue.creator?.name ?? ''),
+                AuthorVerified(authorName: issue.creator.name),
                 const SizedBox(
                   height: 4,
                 ),

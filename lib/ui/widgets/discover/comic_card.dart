@@ -59,7 +59,7 @@ class DiscoverComicCard extends StatelessWidget {
                         color: ColorPalette.dReaderYellow100,
                       ),
                     ),
-                    AuthorVerified(authorName: comic.creator?.name ?? ''),
+                    AuthorVerified(authorName: comic.creator.name),
                     const SizedBox(
                       height: 24,
                     ),

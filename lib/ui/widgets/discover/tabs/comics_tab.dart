@@ -11,7 +11,7 @@ class DiscoverComicsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> provider = ref.watch(comicProvider);
+    AsyncValue<List<ComicModel>> provider = ref.watch(comicsProvider);
     return provider.when(
       data: (comics) {
         return comics.isNotEmpty

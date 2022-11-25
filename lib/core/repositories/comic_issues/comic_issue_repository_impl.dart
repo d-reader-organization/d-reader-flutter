@@ -6,9 +6,9 @@ import 'package:d_reader_flutter/core/services/api_service.dart';
 
 class ComicIssueRepositoryImpl implements ComicIssueRepository {
   @override
-  Future<List<ComicIssueModel>> getComicIssues() async {
+  Future<List<ComicIssueModel>> getComicIssues([String? queryString]) async {
     final String? responseBody =
-        await ApiService.apiCallGet('/comic-issue/get');
+        await ApiService.apiCallGet('/comic-issue/get?$queryString');
     if (responseBody == null) {
       return [];
     }
@@ -20,5 +20,14 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<ComicIssueModel?> getComic(String slug) async {
+    final String? responseBody =
+        await ApiService.apiCallGet('/comic-issue/get/$slug');
+    return responseBody == null
+        ? null
+        : ComicIssueModel.fromJson(jsonDecode(responseBody));
   }
 }

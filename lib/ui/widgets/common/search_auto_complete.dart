@@ -13,8 +13,8 @@ class SearchAutoComplete extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> comicsProvider = ref.watch(comicProvider);
-    return comicsProvider.when(
+    AsyncValue<List<ComicModel>> provider = ref.watch(comicsProvider);
+    return provider.when(
       data: (comics) {
         return Autocomplete<ComicModel>(
           optionsBuilder: (TextEditingValue textEditingValue) {

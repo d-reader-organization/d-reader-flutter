@@ -6,7 +6,8 @@ class ComicModel {
   final String slug;
   final String cover;
   final String description;
-  final CreatorModel? creator;
+  final String flavorText;
+  final CreatorModel creator;
   final ComicStats? stats;
   final bool isPopular;
   final bool isCompleted;
@@ -19,7 +20,8 @@ class ComicModel {
     required this.slug,
     required this.cover,
     required this.description,
-    this.creator,
+    required this.flavorText,
+    required this.creator,
     this.stats,
     required this.isPopular,
     required this.isCompleted,
@@ -34,9 +36,8 @@ class ComicModel {
       slug: json['slug'],
       cover: json['cover'],
       description: json['description'],
-      creator: json['creator'] != null
-          ? CreatorModel.fromJson(json['creator'])
-          : null,
+      flavorText: json['flavorText'],
+      creator: CreatorModel.fromJson(json['creator']),
       stats: json['stats'] != null ? ComicStats.fromJson(json['stats']) : null,
       myStats:
           json['myStats'] != null ? MyStats.fromJson(json['myStats']) : null,

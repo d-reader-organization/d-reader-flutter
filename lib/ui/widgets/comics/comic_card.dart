@@ -28,7 +28,7 @@ class ComicCard extends ConsumerWidget {
           children: [
             CachedImageBgPlaceholder(
               imageUrl: comic.cover,
-              cacheKey: 'home${comic.cover}',
+              cacheKey: 'home${comic.slug}',
               height: 255,
               width: 180,
               foregroundDecoration: BoxDecoration(
@@ -69,7 +69,7 @@ class ComicCard extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          AuthorVerified(authorName: comic.creator?.name ?? ''),
+                          AuthorVerified(authorName: comic.creator.name),
                           FavouriteIconCount(
                             favouritesCount: comic.stats?.favouritesCount ?? 0,
                             isFavourite: comic.myStats?.isFavourite ?? false,

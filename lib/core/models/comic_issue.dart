@@ -10,7 +10,7 @@ class ComicIssueModel {
   final String cover;
   final ComicIssueStats? stats;
   final ComicType? comic;
-  final CreatorModel? creator;
+  final CreatorModel creator;
   final bool isPopular;
   final DateTime releaseDate;
 

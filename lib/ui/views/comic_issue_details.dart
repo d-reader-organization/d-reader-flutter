@@ -1,9 +1,12 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_card_for_sale.dart';
 import 'package:d_reader_flutter/ui/widgets/details_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ComicIssueDetails extends StatelessWidget {
+class ComicIssueDetails extends ConsumerWidget {
   final String slug;
   const ComicIssueDetails({
     Key? key,
@@ -11,21 +14,49 @@ class ComicIssueDetails extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return DetailsScaffold(
-      showAwardText: false,
-      body: GridView.builder(
-        itemCount: 5,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 24,
-          mainAxisSpacing: 24,
-          mainAxisExtent: 198,
-        ),
-        itemBuilder: (context, index) {
-          return ComicCardForSale(issue: ComicIssueModel.fromJson({}));
-        },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<ComicIssueModel?> provider =
+        ref.watch(comicIssueSlugProvider(slug));
+    return provider.when(
+      data: (issue) {
+        if (issue == null) {
+          return const SizedBox();
+        }
+        return DetailsScaffold(
+          isComicDetails: false,
+          detailsScaffoldModel: DetailsScaffoldModel(
+            slug: issue.slug,
+            imageUrl: issue.cover,
+            description: issue.description,
+            title: issue.comic?.name ?? '',
+            subtitle: issue.title,
+            avatarUrl: issue.creator.avatar,
+            creatorSlug: issue.creator.slug,
+            authorName: issue.creator.name,
+            favouriteStats: FavouriteStats(
+              count: 5,
+              isFavourite: true,
+            ),
+            generalStats: GeneralStats(
+                totalVolume: issue.stats!.totalVolume,
+                floorPrice: issue.stats!.floorPrice,
+                totalSupply: issue.stats!.totalSupply),
+          ),
+          body: ListView.builder(
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return ComicCardForSale(
+                issue: issue,
+              );
+            },
+          ),
+        );
+      },
+      error: (err, stack) => Text(
+        'Error: $err',
+        style: const TextStyle(color: Colors.red),
       ),
+      loading: () => const SizedBox(),
     );
   }
 }

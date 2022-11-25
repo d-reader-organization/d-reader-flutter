@@ -1,17 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
 import 'package:flutter/material.dart';
 
-String coverUrl =
-    'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/comics/barbabyans/cover.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221118T084838Z&X-Amz-Expires=3600&X-Amz-Signature=9d10b1fd9d31ac5e62eba9accae29597a58ccef1fc1d075081d1c2878b217e88&X-Amz-SignedHeaders=host&x-id=GetObject';
-
 class DetailsHeaderImage extends StatelessWidget {
-  final bool showAwardText;
+  final bool isComicDetails;
+  final DetailsScaffoldModel data;
   const DetailsHeaderImage({
     Key? key,
-    required this.showAwardText,
+    required this.isComicDetails,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -19,31 +20,21 @@ class DetailsHeaderImage extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Stack(
       children: [
-        Align(
-          child: Container(
-            height: 364,
-            padding: const EdgeInsets.all(16),
-            foregroundDecoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.black,
-                  Colors.transparent,
-                  Colors.black,
-                  Colors.transparent,
-                ],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                stops: [0.05, 0.3, 1, 0.7],
-              ),
-            ),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(coverUrl),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(
-                16,
-              ),
+        CachedImageBgPlaceholder(
+          height: 364,
+          imageUrl: data.imageUrl,
+          cacheKey: 'details-${data.slug}',
+          foregroundDecoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.black,
+                Colors.transparent,
+                Colors.black,
+                Colors.transparent,
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              stops: [0.05, 0.3, 1, 0.7],
             ),
           ),
         ),
@@ -52,21 +43,24 @@ class DetailsHeaderImage extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'The Barbayans',
+                      data.title,
                       style: textTheme.headlineLarge,
                     ),
-                    const HotIcon()
+                    data.generalStats.isPopular ?? false
+                        ? const HotIcon()
+                        : const SizedBox(),
                   ],
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                showAwardText
+                isComicDetails
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -82,7 +76,7 @@ class DetailsHeaderImage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'by Emmy winning dio Jim Bryson & Adam Jeffcoat',
+                            data.flavorText ?? '',
                             style: textTheme.bodyMedium?.copyWith(
                               fontStyle: FontStyle.italic,
                             ),
@@ -93,14 +87,14 @@ class DetailsHeaderImage extends StatelessWidget {
                 const SizedBox(
                   height: 12,
                 ),
-                const DescriptionText(
-                  text:
-                      '3 magical siblings must prove themselves as the worthy warriors they were destined to become and lead their horde to victory across the land… Or not.',
+                DescriptionText(
+                  text: data.description,
                   textAlign: TextAlign.start,
                 ),
                 const SizedBox(
                   height: 8,
                 ),
+                GenreTags(genres: data.genres ?? []),
               ],
             ),
           ),

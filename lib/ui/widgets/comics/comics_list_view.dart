@@ -10,7 +10,7 @@ class ComicsListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> comics = ref.watch(comicProvider);
+    AsyncValue<List<ComicModel>> comics = ref.watch(comicsProvider);
     return comics.when(
       data: (data) {
         return SizedBox(

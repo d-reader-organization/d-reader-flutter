@@ -12,9 +12,9 @@ class CreatorComicsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> comicsProvider = ref.watch(comicProvider);
+    AsyncValue<List<ComicModel>> provider = ref.watch(comicsProvider);
 
-    return comicsProvider.when(
+    return provider.when(
       data: (comics) {
         return ListView.builder(
           itemCount: comics.length,

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/details_header_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -6,14 +7,13 @@ import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/stats_box.dart';
 import 'package:flutter/material.dart';
 
-String avatarUrl =
-    'https://d-reader-dev.s3.us-east-1.amazonaws.com/creators/studio-nx/avatar.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA4DWH47RZXHCSECE5%2F20221118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221118T095153Z&X-Amz-Expires=3600&X-Amz-Signature=c35b7a4a16ed771ae51bf9ccc1f87aea1c96e940656166a68d401f00ef01cf96&X-Amz-SignedHeaders=host&x-id=GetObject';
-
-class DetailsScaffoldHeader extends StatelessWidget {
-  final bool showAwardText;
+class DetailsScaffoldHeader<T> extends StatelessWidget {
+  final bool isComicDetails;
+  final DetailsScaffoldModel detailsScaffoldModel;
   const DetailsScaffoldHeader({
     Key? key,
-    required this.showAwardText,
+    required this.isComicDetails,
+    required this.detailsScaffoldModel,
   }) : super(key: key);
 
   @override
@@ -22,7 +22,8 @@ class DetailsScaffoldHeader extends StatelessWidget {
       delegate: SliverChildListDelegate(
         [
           DetailsHeaderImage(
-            showAwardText: showAwardText,
+            isComicDetails: isComicDetails,
+            data: detailsScaffoldModel,
           ),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -34,27 +35,34 @@ class DetailsScaffoldHeader extends StatelessWidget {
                     Row(
                       children: [
                         CreatorAvatar(
-                          avatar: avatarUrl,
+                          avatar: detailsScaffoldModel.avatarUrl,
                           radius: 24,
-                          slug: 'my-slug',
+                          height: 32,
+                          width: 32,
+                          slug: detailsScaffoldModel.creatorSlug,
                         ),
                         const SizedBox(width: 12),
-                        const AuthorVerified(
-                          authorName: 'Studio NX',
+                        AuthorVerified(
+                          authorName: detailsScaffoldModel.authorName,
                           fontSize: 15,
                         ),
                       ],
                     ),
                     Row(
-                      children: const [
-                        RatingIcon(rating: 4.5),
-                        SizedBox(
+                      children: [
+                        RatingIcon(
+                          rating:
+                              detailsScaffoldModel.generalStats.averageRating!,
+                        ),
+                        const SizedBox(
                           width: 20,
                         ),
                         FavouriteIconCount(
-                          favouritesCount: 55,
-                          isFavourite: false,
-                          slug: 'slug',
+                          favouritesCount:
+                              detailsScaffoldModel.favouriteStats.count,
+                          isFavourite:
+                              detailsScaffoldModel.favouriteStats.isFavourite,
+                          slug: detailsScaffoldModel.slug,
                         ),
                       ],
                     ),
@@ -64,41 +72,54 @@ class DetailsScaffoldHeader extends StatelessWidget {
                   height: 32,
                 ),
                 // different for comic issues
-                showAwardText
+                isComicDetails
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           StatsBox(
                             title: 'TOTAL VOL',
-                            stats: '73.42 ',
+                            stats:
+                                '${detailsScaffoldModel.generalStats.totalVolume} ',
                             isSmall: true,
                           ),
-                          StatsBox(title: 'ISSUES', stats: '6', isSmall: true),
                           StatsBox(
-                              title: 'READERS', stats: '4221', isSmall: true),
+                            title: 'ISSUES',
+                            stats:
+                                '${detailsScaffoldModel.generalStats.totalIssuesCount}',
+                            isSmall: true,
+                          ),
+                          StatsBox(
+                            title: 'READERS',
+                            stats:
+                                '${detailsScaffoldModel.generalStats.readersCount}',
+                            isSmall: true,
+                          ),
                         ],
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           StatsBox(
                             title: 'VOL',
-                            stats: '73.42 ',
+                            stats:
+                                '${detailsScaffoldModel.generalStats.totalVolume} ',
                             isSmall: true,
                           ),
                           StatsBox(
                             title: 'SUPPLY',
-                            stats: '2K',
+                            stats:
+                                '${detailsScaffoldModel.generalStats.totalSupply}',
                             isSmall: true,
                           ),
-                          StatsBox(
+                          const StatsBox(
                             title: 'LISTED',
                             stats: '98',
                             isSmall: true,
                           ),
                           StatsBox(
                             title: 'FP',
-                            stats: '1.26',
+                            stats:
+                                '${detailsScaffoldModel.generalStats.floorPrice}',
                             isSmall: true,
                           ),
                         ],

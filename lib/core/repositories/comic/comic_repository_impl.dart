@@ -22,6 +22,14 @@ class ComicRepositoryImpl implements ComicRepository {
   }
 
   @override
+  Future<ComicModel?> getComic(String slug) async {
+    String? responseBody = await ApiService.apiCallGet('/comic/get/$slug');
+    return responseBody == null
+        ? null
+        : ComicModel.fromJson(jsonDecode(responseBody));
+  }
+
+  @override
   Future<void> updateComicFavourite(String slug) async {
     ApiService.apiCallPatch('/comic/favouritise/$slug');
   }

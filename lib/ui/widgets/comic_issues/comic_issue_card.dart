@@ -81,7 +81,7 @@ class ComicIssueCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        issue.creator?.name ?? 'Missing',
+                        issue.creator.name,
                         style: textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.w500,
                         ),

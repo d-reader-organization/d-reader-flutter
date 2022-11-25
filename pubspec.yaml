@@ -25,7 +25,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
   http: ^0.13.5
-  flutter_riverpod: ^2.1.1
   flutter_dotenv: ^5.0.2
   solana: ^0.26.3
   solana_mobile_client: ^0.0.2
@@ -37,6 +36,8 @@ dependencies:
   cached_network_image: ^3.2.2
   url_launcher: ^6.0.0-nullsafety.6
   intl: ^0.17.0
+  hooks_riverpod: ^2.1.1
+  flutter_hooks: ^0.18.5+1
 
 dev_dependencies:
   flutter_test:

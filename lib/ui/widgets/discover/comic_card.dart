@@ -68,9 +68,12 @@ class DiscoverComicCard extends StatelessWidget {
                       children: [
                         RatingIcon(rating: comic.stats?.averageRating ?? 0),
                         FavouriteIconCount(
-                            favouritesCount: comic.stats?.favouritesCount ?? 0),
+                          favouritesCount: comic.stats?.favouritesCount ?? 0,
+                          isFavourite: comic.myStats?.isFavourite ?? false,
+                        ),
                         ViewedIconCount(
-                            viewedCount: comic.stats?.viewersCount ?? 0),
+                          viewedCount: comic.stats?.viewersCount ?? 0,
+                        ),
                       ],
                     ),
                     const Divider(

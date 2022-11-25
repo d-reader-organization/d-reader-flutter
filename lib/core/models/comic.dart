@@ -11,6 +11,8 @@ class ComicModel {
   final bool isPopular;
   final bool isCompleted;
   final List<GenreModel> genres;
+  final MyStats? myStats;
+  final bool isMatureAudience;
 
   ComicModel({
     required this.name,
@@ -22,6 +24,8 @@ class ComicModel {
     required this.isPopular,
     required this.isCompleted,
     required this.genres,
+    this.myStats,
+    required this.isMatureAudience,
   });
 
   factory ComicModel.fromJson(dynamic json) {
@@ -34,6 +38,8 @@ class ComicModel {
           ? CreatorModel.fromJson(json['creator'])
           : null,
       stats: json['stats'] != null ? ComicStats.fromJson(json['stats']) : null,
+      myStats:
+          json['myStats'] != null ? MyStats.fromJson(json['myStats']) : null,
       isPopular: json['isPopular'],
       isCompleted: json['isCompleted'],
       genres: json['genres'] != null
@@ -45,6 +51,7 @@ class ComicModel {
               ),
             )
           : [],
+      isMatureAudience: json['isMatureAudience'],
     );
   }
 }
@@ -83,5 +90,17 @@ class ComicStats {
       readersCount: json['readersCount'],
       viewersCount: json['viewersCount'],
     );
+  }
+}
+
+class MyStats {
+  bool isFavourite;
+
+  MyStats({
+    required this.isFavourite,
+  });
+
+  factory MyStats.fromJson(dynamic json) {
+    return MyStats(isFavourite: json['isFavourite']);
   }
 }

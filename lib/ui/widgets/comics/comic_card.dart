@@ -71,6 +71,8 @@ class ComicCard extends StatelessWidget {
                           AuthorVerified(authorName: comic.creator?.name ?? ''),
                           FavouriteIconCount(
                             favouritesCount: comic.stats?.favouritesCount ?? 0,
+                            isFavourite: comic.myStats?.isFavourite ?? false,
+                            onTap: () {},
                           ),
                         ],
                       )

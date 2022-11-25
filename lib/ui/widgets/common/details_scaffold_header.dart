@@ -51,7 +51,10 @@ class DetailsScaffoldHeader extends StatelessWidget {
                         SizedBox(
                           width: 20,
                         ),
-                        FavouriteIconCount(favouritesCount: 55),
+                        FavouriteIconCount(
+                          favouritesCount: 55,
+                          isFavourite: false,
+                        ),
                       ],
                     ),
                   ],

@@ -19,4 +19,15 @@ class ApiService {
     }
     return response.body;
   }
+
+  static Future<void> apiCallPatch(String path) async {
+    Uri uri = Uri.parse('$API_URL$path');
+    http.Response response = await http.patch(
+      uri,
+      headers: {HttpHeaders.authorizationHeader: 'Bearer ${Config.jwtToken}'},
+    );
+    if (response.statusCode != 200) {
+      print(response.body);
+    }
+  }
 }

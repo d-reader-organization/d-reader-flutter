@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorsGrid extends ConsumerWidget {
   const CreatorsGrid({Key? key}) : super(key: key);

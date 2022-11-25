@@ -1,22 +1,23 @@
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/favourite_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FavouriteIconCount extends HookWidget {
+class FavouriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
   final bool isFavourite;
-  final Function? onTap;
+  final String slug;
   const FavouriteIconCount({
     Key? key,
     required this.favouritesCount,
     required this.isFavourite,
-    this.onTap,
+    required this.slug,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final favouriteHook = useFavouriteState(
       FavouriteState(
@@ -26,9 +27,7 @@ class FavouriteIconCount extends HookWidget {
     );
     return InkWell(
       onTap: () {
-        if (onTap != null) {
-          onTap!();
-        }
+        ref.read(updateComicFavouriteProvider(slug));
         favouriteHook.value = favouriteHook.value.copyWith(
             count: favouriteHook.value.isFavourite
                 ? favouriteHook.value.count - 1

@@ -9,7 +9,7 @@ import 'package:d_reader_flutter/ui/widgets/creators/tabs/collectibles_tab.dart'
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/comics_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/issues_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorDetailsView extends ConsumerWidget {
   final String slug;

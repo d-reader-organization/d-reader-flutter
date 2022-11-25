@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum DiscoverTabViewEnum { comics, issues, creators }
 

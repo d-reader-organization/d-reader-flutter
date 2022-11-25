@@ -20,4 +20,9 @@ class ComicRepositoryImpl implements ComicRepository {
       ),
     );
   }
+
+  @override
+  Future<void> updateComicFavourite(String slug) async {
+    ApiService.apiCallPatch('/comic/favouritise/$slug');
+  }
 }

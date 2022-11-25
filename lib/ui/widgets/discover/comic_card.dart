@@ -70,6 +70,7 @@ class DiscoverComicCard extends StatelessWidget {
                         FavouriteIconCount(
                           favouritesCount: comic.stats?.favouritesCount ?? 0,
                           isFavourite: comic.myStats?.isFavourite ?? false,
+                          slug: comic.slug,
                         ),
                         ViewedIconCount(
                           viewedCount: comic.stats?.viewersCount ?? 0,

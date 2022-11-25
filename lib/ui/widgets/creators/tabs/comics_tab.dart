@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comic_card_large.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorComicsTab extends ConsumerWidget {
   const CreatorComicsTab({
@@ -32,7 +32,7 @@ class CreatorComicsTab extends ConsumerWidget {
       error: (err, stack) {
         return Text(
           '$err',
-          style: TextStyle(color: Colors.red),
+          style: const TextStyle(color: Colors.red),
         );
       },
       loading: () => ListView.builder(

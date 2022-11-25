@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_card.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/skeleton_genre_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class GenreListView extends ConsumerWidget {
   const GenreListView({Key? key}) : super(key: key);

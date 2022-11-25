@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/ui/shared/styles.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchAutoComplete extends ConsumerWidget {
   const SearchAutoComplete({Key? key}) : super(key: key);

@@ -54,6 +54,7 @@ class DetailsScaffoldHeader extends StatelessWidget {
                         FavouriteIconCount(
                           favouritesCount: 55,
                           isFavourite: false,
+                          slug: 'slug',
                         ),
                       ],
                     ),

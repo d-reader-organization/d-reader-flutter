@@ -6,8 +6,9 @@ import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.d
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ComicCard extends StatelessWidget {
+class ComicCard extends ConsumerWidget {
   final ComicModel comic;
   const ComicCard({
     Key? key,
@@ -15,7 +16,7 @@ class ComicCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: () {
@@ -72,7 +73,7 @@ class ComicCard extends StatelessWidget {
                           FavouriteIconCount(
                             favouritesCount: comic.stats?.favouritesCount ?? 0,
                             isFavourite: comic.myStats?.isFavourite ?? false,
-                            onTap: () {},
+                            slug: comic.slug,
                           ),
                         ],
                       )

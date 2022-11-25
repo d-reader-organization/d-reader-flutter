@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/ui/views/marketplace.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DReaderScaffold extends ConsumerWidget {
   final Widget? body;

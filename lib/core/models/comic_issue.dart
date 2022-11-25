@@ -1,21 +1,5 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
-
-class ComicType {
-  final String name;
-  final String slug;
-
-  ComicType({
-    required this.name,
-    required this.slug,
-  });
-
-  factory ComicType.fromJson(dynamic json) {
-    return ComicType(
-      name: json['name'],
-      slug: json['slug'],
-    );
-  }
-}
+import 'package:intl/intl.dart' show DateFormat;
 
 class ComicIssueModel {
   final int id;
@@ -27,6 +11,8 @@ class ComicIssueModel {
   final ComicIssueStats? stats;
   final ComicType? comic;
   final CreatorModel? creator;
+  final bool isPopular;
+  final DateTime releaseDate;
 
   ComicIssueModel({
     required this.id,
@@ -38,6 +24,8 @@ class ComicIssueModel {
     this.stats,
     required this.comic,
     required this.creator,
+    required this.isPopular,
+    required this.releaseDate,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -53,6 +41,10 @@ class ComicIssueModel {
           : null,
       comic: ComicType.fromJson(json['comic']),
       creator: CreatorModel.fromJson(json['creator']),
+      isPopular: json['isPopular'],
+      releaseDate: DateFormat('dd-MM-yyyy').parse(
+        '15-03-2022',
+      ),
     );
   }
 }
@@ -80,4 +72,21 @@ class ComicIssueStats {
             0,
         totalIssuesCount: json['totalIssuesCount'],
       );
+}
+
+class ComicType {
+  final String name;
+  final String slug;
+
+  ComicType({
+    required this.name,
+    required this.slug,
+  });
+
+  factory ComicType.fromJson(dynamic json) {
+    return ComicType(
+      name: json['name'],
+      slug: json['slug'],
+    );
+  }
 }

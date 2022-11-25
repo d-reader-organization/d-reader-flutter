@@ -10,6 +10,8 @@ List<ComicIssueModel> comicIssues = [
       title: 'Title',
       slug: 'my-issue-slug',
       description: 'Hey this is an overall issue',
+      isPopular: true,
+      releaseDate: DateTime.now(),
       creator: CreatorModel(
           id: 1,
           slug: 'sluggaa2',

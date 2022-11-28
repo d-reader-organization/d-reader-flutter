@@ -76,16 +76,19 @@ class ComicIssueStats {
 class ComicType {
   final String name;
   final String slug;
+  final bool isMatureAudience;
 
   ComicType({
     required this.name,
     required this.slug,
+    required this.isMatureAudience,
   });
 
   factory ComicType.fromJson(dynamic json) {
     return ComicType(
       name: json['name'],
       slug: json['slug'],
+      isMatureAudience: json['isMatureAudience'],
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
+import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
@@ -28,7 +29,7 @@ class DiscoverComicCard extends StatelessWidget {
             flex: 4,
             child: CachedImageBgPlaceholder(
               imageUrl: comic.cover,
-              cacheKey: 'discover-${comic.cover}',
+              cacheKey: 'discover-${comic.slug}',
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,6 +76,9 @@ class DiscoverComicCard extends StatelessWidget {
                         ViewedIconCount(
                           viewedCount: comic.stats?.viewersCount ?? 0,
                         ),
+                        comic.isMatureAudience
+                            ? const MatureAudience()
+                            : const SizedBox()
                       ],
                     ),
                     const Divider(

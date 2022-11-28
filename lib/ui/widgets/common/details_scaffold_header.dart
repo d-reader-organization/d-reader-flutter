@@ -52,7 +52,8 @@ class DetailsScaffoldHeader<T> extends StatelessWidget {
                       children: [
                         RatingIcon(
                           rating:
-                              detailsScaffoldModel.generalStats.averageRating!,
+                              detailsScaffoldModel.generalStats.averageRating ??
+                                  0,
                         ),
                         const SizedBox(
                           width: 20,

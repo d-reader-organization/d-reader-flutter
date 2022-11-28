@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 class ComicIssueModel {
   final int id;
@@ -39,11 +38,11 @@ class ComicIssueModel {
       stats: json['stats'] != null
           ? ComicIssueStats.fromJson(json['stats'])
           : null,
-      comic: ComicType.fromJson(json['comic']),
+      comic: json['comic'] != null ? ComicType.fromJson(json['comic']) : null,
       creator: CreatorModel.fromJson(json['creator']),
       isPopular: json['isPopular'],
-      releaseDate: DateFormat('dd-MM-yyyy').parse(
-        '15-03-2022',
+      releaseDate: DateTime.parse(
+        json['releaseDate'],
       ),
     );
   }

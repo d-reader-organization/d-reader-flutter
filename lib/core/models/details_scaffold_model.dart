@@ -13,6 +13,8 @@ class DetailsScaffoldModel {
   final GeneralStats generalStats;
   final List<GenreModel>? genres;
   final String? flavorText;
+  final int? episodeNumber;
+  final DateTime? releaseDate;
 
   DetailsScaffoldModel({
     required this.slug,
@@ -27,6 +29,8 @@ class DetailsScaffoldModel {
     required this.generalStats,
     this.genres,
     this.flavorText,
+    this.episodeNumber,
+    this.releaseDate,
   });
 }
 

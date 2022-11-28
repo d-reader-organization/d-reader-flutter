@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
@@ -45,18 +46,79 @@ class DetailsHeaderImage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      data.title,
-                      style: textTheme.headlineLarge,
-                    ),
-                    data.generalStats.isPopular ?? false
-                        ? const HotIcon()
-                        : const SizedBox(),
-                  ],
-                ),
+                isComicDetails
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            data.title,
+                            style: textTheme.headlineLarge,
+                          ),
+                          data.generalStats.isPopular ?? false
+                              ? const HotIcon()
+                              : const SizedBox(),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'EPISODE',
+                                style: textTheme.bodyMedium,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data.episodeNumber ?? 0}',
+                                    style: textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    '/${data.generalStats.totalIssuesCount}',
+                                    style: textTheme.bodyLarge?.copyWith(
+                                      color: ColorPalette.dReaderGrey
+                                          .withOpacity(0.5),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                data.title,
+                                style: textTheme.titleSmall?.copyWith(
+                                  color: ColorPalette.dReaderYellow100,
+                                ),
+                              ),
+                              Text(
+                                data.subtitle,
+                                style: textTheme.headlineLarge,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.calendar_month,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                formatDate(data.releaseDate!),
+                                style: textTheme.labelMedium,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                 const SizedBox(
                   height: 8,
                 ),
@@ -70,8 +132,9 @@ class DetailsHeaderImage extends StatelessWidget {
                             decoration: const BoxDecoration(
                               border: Border(
                                 left: BorderSide(
-                                    width: 3,
-                                    color: ColorPalette.dReaderYellow100),
+                                  width: 3,
+                                  color: ColorPalette.dReaderYellow100,
+                                ),
                               ),
                             ),
                           ),

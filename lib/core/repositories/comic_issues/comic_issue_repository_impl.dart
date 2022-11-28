@@ -23,9 +23,9 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
   }
 
   @override
-  Future<ComicIssueModel?> getComic(String slug) async {
+  Future<ComicIssueModel?> getComic(int id) async {
     final String? responseBody =
-        await ApiService.apiCallGet('/comic-issue/get/$slug');
+        await ApiService.apiCallGet('/comic-issue/get/$id');
     return responseBody == null
         ? null
         : ComicIssueModel.fromJson(jsonDecode(responseBody));

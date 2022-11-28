@@ -7,10 +7,10 @@ final comicIssuesProvider = FutureProvider<List<ComicIssueModel>>((ref) async {
   return await comicIssueRepository.getComicIssues();
 });
 
-final comicIssueSlugProvider =
-    FutureProvider.family<ComicIssueModel?, String>((ref, slug) async {
+final comicIssueDetailsProvider =
+    FutureProvider.family<ComicIssueModel?, int>((ref, id) async {
   ComicIssueRepositoryImpl comicIssueRepository = ComicIssueRepositoryImpl();
-  return await comicIssueRepository.getComic(slug);
+  return await comicIssueRepository.getComic(id);
 });
 
 final comicIssuesByComicSlugProvider =

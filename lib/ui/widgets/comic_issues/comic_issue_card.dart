@@ -20,7 +20,7 @@ class ComicIssueCard extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: () {
-        nextScreenPush(context, ComicIssueDetails(slug: issue.slug));
+        nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
       child: Container(
         height: 260,
@@ -34,7 +34,7 @@ class ComicIssueCard extends StatelessWidget {
           children: [
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
-              cacheKey: 'home${issue.cover}',
+              cacheKey: 'home${issue.slug}',
               height: 130,
               overrideBorderRadius: const BorderRadius.vertical(
                 top: Radius.circular(

@@ -13,7 +13,7 @@ final comicIssueDetailsProvider =
   return await comicIssueRepository.getComic(id);
 });
 
-final comicIssuesByComicSlugProvider =
+final comicIssuesByQueryParam =
     FutureProvider.family<List<ComicIssueModel>, String>(
         (ref, queryString) async {
   ComicIssueRepositoryImpl comicIssueRepository = ComicIssueRepositoryImpl();

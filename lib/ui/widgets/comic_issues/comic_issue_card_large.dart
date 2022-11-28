@@ -93,7 +93,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                             width: 4,
                           ),
                           Text(
-                            '349',
+                            'DATA',
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium

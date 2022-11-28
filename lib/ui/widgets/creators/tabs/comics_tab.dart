@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorComicsTab extends ConsumerWidget {
+  final String creatorSlug;
   const CreatorComicsTab({
     super.key,
+    required this.creatorSlug,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> provider = ref.watch(comicsProvider);
+    AsyncValue<List<ComicModel>> provider =
+        ref.watch(comicQueryStringProvider('creatorSlug=$creatorSlug'));
 
     return provider.when(
       data: (comics) {

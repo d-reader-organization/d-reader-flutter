@@ -19,7 +19,7 @@ class ComicDetails extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<ComicModel?> provider = ref.watch(comicSlugProvider(slug));
     final AsyncValue<List<ComicIssueModel>> issuesProvider = ref.watch(
-      comicIssuesByComicSlugProvider(
+      comicIssuesByQueryParam(
         'comicSlug=$slug',
       ),
     );

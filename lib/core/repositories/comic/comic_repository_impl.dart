@@ -6,8 +6,9 @@ import 'package:d_reader_flutter/core/services/api_service.dart';
 
 class ComicRepositoryImpl implements ComicRepository {
   @override
-  Future<List<ComicModel>> getComics() async {
-    String? responseBody = await ApiService.apiCallGet('/comic/get');
+  Future<List<ComicModel>> getComics({String? queryString}) async {
+    String? responseBody =
+        await ApiService.apiCallGet('/comic/get?$queryString');
     if (responseBody == null) {
       return [];
     }

@@ -13,6 +13,12 @@ final comicSlugProvider =
   return await comicRepositoryImpl.getComic(slug);
 });
 
+final comicQueryStringProvider =
+    FutureProvider.family<List<ComicModel>, String>((ref, queryString) async {
+  ComicRepositoryImpl comicRepositoryImpl = ComicRepositoryImpl();
+  return await comicRepositoryImpl.getComics(queryString: queryString);
+});
+
 final updateComicFavouriteProvider =
     FutureProvider.family<void, String>((ref, slug) {
   ComicRepositoryImpl comicRepository = ComicRepositoryImpl();

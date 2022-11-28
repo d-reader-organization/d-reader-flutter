@@ -3,9 +3,9 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
-import 'package:d_reader_flutter/ui/widgets/common/figures/genre_rectangle.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
 import 'package:flutter/material.dart';
 
 class ComicCardLarge extends StatelessWidget {
@@ -66,6 +66,7 @@ class ComicCardLarge extends StatelessWidget {
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,24 +87,10 @@ class ComicCardLarge extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              const Icon(
-                                CupertinoIcons.heart,
-                                color: Color(0xFFE0E0E0),
-                                size: 16,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                comic.stats?.favouritesCount.toString() ?? '0',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFFE0E0E0),
-                                ),
-                              ),
-                            ],
+                          FavouriteIconCount(
+                            favouritesCount: comic.stats?.favouritesCount ?? 0,
+                            isFavourite: comic.myStats?.isFavourite ?? false,
+                            slug: comic.slug,
                           )
                         ],
                       ),
@@ -111,12 +98,7 @@ class ComicCardLarge extends StatelessWidget {
                         text: comic.description,
                         textAlign: TextAlign.start,
                       ),
-                      Row(
-                        children: const [
-                          GenreRectangle(title: 'Genre 1'),
-                          GenreRectangle(title: 'Genre 2'),
-                        ],
-                      ),
+                      GenreTags(genres: comic.genres),
                     ],
                   ),
                 ),

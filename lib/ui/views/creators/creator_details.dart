@@ -56,11 +56,15 @@ class CreatorDetailsView extends ConsumerWidget {
                       ),
                     ];
                   },
-                  body: const TabBarView(
+                  body: TabBarView(
                     children: [
-                      CreatorComicsTab(),
-                      CreatorIssuesTab(),
-                      CollectiblesTab(),
+                      CreatorComicsTab(
+                        creatorSlug: data.slug,
+                      ),
+                      CreatorIssuesTab(
+                        creatorSlug: data.slug,
+                      ),
+                      const CollectiblesTab(),
                     ],
                   ),
                 ),

@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 void nextScreenPush(BuildContext context, Widget page) {
-  Navigator.push(context, CupertinoPageRoute(builder: (context) => page));
+  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
 }
 
 void nextScreenCloseOthers(BuildContext context, Widget page) {
-  Navigator.pushAndRemoveUntil(context,
-      CupertinoPageRoute(builder: (context) => page), (route) => false);
+  Navigator.pushAndRemoveUntil(
+      context, MaterialPageRoute(builder: (context) => page), (route) => false);
 }
 
 void nextScreenReplace(BuildContext context, Widget page) {
   Navigator.pushReplacement(
-      context, CupertinoPageRoute(builder: (context) => page));
+      context, MaterialPageRoute(builder: (context) => page));
 }

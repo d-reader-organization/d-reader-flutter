@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
       title: 'dReader',
       theme: ThemeData(
         fontFamily: 'Urbanist',
+        pageTransitionsTheme: const PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
         textTheme: const TextTheme(
           titleSmall: TextStyle(
             fontSize: 16,

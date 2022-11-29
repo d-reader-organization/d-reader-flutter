@@ -3,11 +3,20 @@ import 'package:flutter/material.dart';
 
 class SolanaPrice extends StatelessWidget {
   final double? price;
-  const SolanaPrice({Key? key, this.price}) : super(key: key);
+  final MainAxisAlignment mainAxisAlignment;
+  final TextDirection? textDirection;
+  const SolanaPrice({
+    Key? key,
+    this.price,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.textDirection,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: mainAxisAlignment,
+      textDirection: textDirection,
       children: [
         Image.asset(
           Config.solanaLogoPath,

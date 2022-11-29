@@ -1,8 +1,10 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/list_tile.dart';
+import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
+import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,11 +18,14 @@ class DiscoverCreatorsTab extends ConsumerWidget {
       data: (creators) {
         return creators.isNotEmpty
             ? ListView.separated(
-                itemCount: creators.length,
+                itemCount: creators.isNotEmpty ? creators.length + 1 : 0,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return CreatorListTile(creator: creators[index]);
+                  if (index == 0) {
+                    return const CreatorListHeader();
+                  }
+                  return CreatorListItem(creator: creators[index - 1]);
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const Divider(
@@ -60,14 +65,136 @@ class CreatorListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      leading: const CircleAvatar(
-        backgroundColor: ColorPalette.dReaderGrey,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      leading: CreatorAvatar(
         radius: 32,
+        avatar: creator.avatar,
+        slug: 'discover-${creator.slug}',
+        height: 40,
+        width: 40,
       ),
-      title: Text(
-        'NAME',
-        style: Theme.of(context).textTheme.bodyLarge,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 2,
+            child: AuthorVerified(
+              authorName: creator.name,
+              fontSize: 14,
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: SolanaPrice(
+              price: creator.stats?.totalVolume,
+              mainAxisAlignment: MainAxisAlignment.end,
+              textDirection: TextDirection.rtl,
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Text(
+              '${creator.stats?.totalVolume}%',
+              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: ColorPalette.dReaderGreen,
+                  ),
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: SolanaPrice(
+              price: creator.stats?.totalVolume,
+              textDirection: TextDirection.rtl,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CreatorListHeader extends StatelessWidget {
+  const CreatorListHeader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      leading: const CircleAvatar(
+        radius: 24,
+        backgroundColor: Colors.transparent,
+        child: Icon(
+          Icons.soap,
+          size: 16,
+          color: Colors.white,
+        ),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 2,
+            child: Row(
+              children: [
+                Text(
+                  'Artists',
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                const Icon(
+                  Icons.verified,
+                  color: Colors.transparent,
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Row(
+              children: [
+                Text(
+                  'Total\nVol',
+                  textAlign: TextAlign.end,
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Text(
+              '24h %\nVol',
+              softWrap: true,
+              textAlign: TextAlign.end,
+              style: textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '24h\nVol',
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

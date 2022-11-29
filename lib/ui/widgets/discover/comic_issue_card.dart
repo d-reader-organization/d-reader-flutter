@@ -63,11 +63,11 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 6,
+                  height: 8,
                 ),
                 AuthorVerified(authorName: issue.creator.name),
                 const SizedBox(
-                  height: 4,
+                  height: 6,
                 ),
                 Container(
                   padding: const EdgeInsets.all(4),
@@ -84,7 +84,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 2,
+                  height: 4,
                 ),
                 const Divider(
                   color: ColorPalette.boxBackground300,

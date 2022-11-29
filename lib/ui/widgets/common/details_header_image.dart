@@ -138,10 +138,13 @@ class DetailsHeaderImage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Text(
-                            data.flavorText ?? '',
-                            style: textTheme.bodyMedium?.copyWith(
-                              fontStyle: FontStyle.italic,
+                          Expanded(
+                            child: Text(
+                              data.flavorText ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.bodyMedium?.copyWith(
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                           ),
                         ],

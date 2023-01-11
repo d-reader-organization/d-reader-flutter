@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/user_icon_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart';
 import 'package:flutter/material.dart';
 
@@ -34,9 +35,7 @@ class CustomAppBar extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        const Icon(
-          Icons.person_outline,
-        ),
+        const UserIconButton(),
       ],
     );
   }

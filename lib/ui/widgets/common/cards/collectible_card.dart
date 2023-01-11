@@ -96,8 +96,9 @@ class CollectibleCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const RoundedButton(
+                            RoundedButton(
                               text: 'MAKE OFFER',
+                              onPressed: () {},
                             ),
                           ],
                         ),

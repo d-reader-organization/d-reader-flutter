@@ -2,16 +2,19 @@ import 'dart:io';
 
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   static final String apiUrl = Config.apiUrl;
+  String? _token;
 
-  static Future<String?> apiCallGet(String path,
+  Future<String?> apiCallGet(String path,
       {bool includeAuthHeader = true}) async {
+    await _setTokenIfNeeded();
     Uri uri = Uri.parse('$apiUrl$path');
     http.Response response = await http.get(uri,
         headers: includeAuthHeader
-            ? {HttpHeaders.authorizationHeader: 'Bearer ${Config.jwtToken}'}
+            ? {HttpHeaders.authorizationHeader: '$_token'}
             : {});
     if (response.statusCode != 200) {
       print(response.body);
@@ -20,14 +23,35 @@ class ApiService {
     return response.body;
   }
 
-  static Future<void> apiCallPatch(String path) async {
+  Future<String?> apiCallPost(String path) async {
     Uri uri = Uri.parse('$apiUrl$path');
-    http.Response response = await http.patch(
+    await _setTokenIfNeeded();
+    http.Response response = await http.post(
       uri,
-      headers: {HttpHeaders.authorizationHeader: 'Bearer ${Config.jwtToken}'},
+      headers: {HttpHeaders.authorizationHeader: '$_token'},
     );
     if (response.statusCode != 200) {
       print(response.body);
+    }
+    return response.body;
+  }
+
+  Future<void> apiCallPatch(String path) async {
+    Uri uri = Uri.parse('$apiUrl$path');
+    await _setTokenIfNeeded();
+    http.Response response = await http.patch(
+      uri,
+      headers: {HttpHeaders.authorizationHeader: '$_token'},
+    );
+    if (response.statusCode != 200) {
+      print(response.body);
+    }
+  }
+
+  Future<void> _setTokenIfNeeded() async {
+    if (_token == null) {
+      final sp = await SharedPreferences.getInstance();
+      _token ??= sp.getString(Config.tokenKey);
     }
   }
 }

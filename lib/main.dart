@@ -1,23 +1,42 @@
-import 'package:d_reader_flutter/core/services/solana_service.dart';
+import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/providers/auth_provider.dart';
+import 'package:d_reader_flutter/ioc.dart';
+import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
-  await SolanaService.loadInstance();
+  final sp = await SharedPreferences.getInstance();
+  final String? token = sp.getString(Config.tokenKey);
+  IoCContainer.register();
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    ProviderScope(
+      overrides: [
+        authProvider.overrideWith(
+          (ref) => AuthNotifier(
+            token,
+          ),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends ConsumerWidget {
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'dReader',
       theme: ThemeData(
@@ -89,7 +108,9 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      home: const DReaderScaffold(),
+      home: ref.watch(authProvider).isAuthorized
+          ? const DReaderScaffold()
+          : const WelcomeView(),
     );
   }
 }

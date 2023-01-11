@@ -27,8 +27,8 @@ dependencies:
   http: ^0.13.5
   flutter_dotenv: ^5.0.2
   solana: ^0.26.3
-  solana_mobile_client: ^0.0.2
-  solana_mobile_wallet: ^0.0.2
+  solana_mobile_client: ^0.0.3
+  solana_mobile_wallet: ^0.0.3
   carousel_slider: ^4.1.1
   skeleton_text: ^3.0.0
   font_awesome_flutter: ^10.2.1
@@ -38,6 +38,9 @@ dependencies:
   intl: ^0.17.0
   hooks_riverpod: ^2.1.1
   flutter_hooks: ^0.18.5+1
+  shared_preferences: ^2.0.15
+  lottie: ^2.1.0
+  kiwi: ^4.0.3
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +72,7 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/animation_files/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

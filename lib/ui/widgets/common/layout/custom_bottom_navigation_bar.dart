@@ -17,7 +17,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         ),
       ),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
         child: BottomNavigationBar(
           onTap: (value) {
             ref.read(scaffoldProvider.notifier).setNavigationIndex(value);
@@ -32,6 +32,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           unselectedItemColor: Colors.white,
           backgroundColor: Colors.transparent,
           type: BottomNavigationBarType.fixed,
+          elevation: 0,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),

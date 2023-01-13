@@ -57,7 +57,7 @@ class SearchAutoComplete extends ConsumerWidget {
               (context, textEditingController, focusNode, onFieldSubmitted) {
             return TextFormField(
               controller: textEditingController,
-              cursorColor: ColorPalette.dReaderYellow100,
+              cursorColor: Colors.white,
               focusNode: focusNode,
               onFieldSubmitted: (value) {
                 onFieldSubmitted();
@@ -65,7 +65,7 @@ class SearchAutoComplete extends ConsumerWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
-                color: ColorPalette.dReaderYellow100,
+                color: Colors.white,
               ),
               decoration: searchInputDecoration,
             );

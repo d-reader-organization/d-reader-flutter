@@ -28,9 +28,9 @@ class DetailsHeaderImage extends StatelessWidget {
           foregroundDecoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Colors.black,
+                ColorPalette.appBackgroundColor,
                 Colors.transparent,
-                Colors.black,
+                ColorPalette.appBackgroundColor,
                 Colors.transparent,
               ],
               begin: Alignment.bottomCenter,

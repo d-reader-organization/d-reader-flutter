@@ -17,7 +17,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         ),
       ),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+        filter: ImageFilter.blur(sigmaY: 32, sigmaX: 32),
         child: BottomNavigationBar(
           onTap: (value) {
             ref.read(scaffoldProvider.notifier).setNavigationIndex(value);

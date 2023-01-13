@@ -19,6 +19,7 @@ class CustomSliverAppBar extends StatelessWidget {
         ),
         leadingWidth: 164,
         backgroundColor: Colors.transparent,
+        elevation: 0,
         shadowColor: Colors.transparent,
         actions: const [
           Icon(

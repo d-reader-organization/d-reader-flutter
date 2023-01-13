@@ -24,28 +24,13 @@ class DiscoverView extends ConsumerWidget {
             const CustomSliverTabPersistentHeader(
               tabs: [
                 Tab(
-                  child: Text(
-                    'Comics',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  text: 'Comics',
                 ),
                 Tab(
-                  child: Text(
-                    'Issues',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  text: 'Issues',
                 ),
                 Tab(
-                  child: Text(
-                    'Creators',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                  text: 'Creators',
                 ),
               ],
             ),

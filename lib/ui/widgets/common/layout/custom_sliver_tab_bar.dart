@@ -34,6 +34,7 @@ class CustomSliverTabBar extends StatelessWidget with PreferredSizeWidget {
             indicatorWeight: 4,
             indicatorColor: ColorPalette.dReaderYellow100,
             labelColor: ColorPalette.dReaderYellow100,
+            unselectedLabelColor: ColorPalette.dReaderGrey,
           ),
         ],
       ),

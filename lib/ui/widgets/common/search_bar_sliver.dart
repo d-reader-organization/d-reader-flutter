@@ -12,11 +12,11 @@ class SearchBarSliver extends StatelessWidget {
       sliver: SliverAppBar(
         backgroundColor: ColorPalette.appBackgroundColor,
         title: TextField(
-          cursorColor: ColorPalette.dReaderYellow100,
+          cursorColor: Colors.white,
           style: const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 16,
-            color: ColorPalette.dReaderYellow100,
+            color: Colors.white,
           ),
           decoration: searchInputDecoration,
         ),

@@ -9,19 +9,23 @@ class GenreTags extends StatelessWidget {
     required this.genres,
   }) : super(key: key);
 
+  List<GenreModel> _genresWithMore() => genres.sublist(0, 6)
+    ..add(
+      GenreModel(color: '', name: '', slug: 'dots', icon: ''),
+    ); // needs better approach?
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 4,
-      runSpacing: 4,
-      children: genres
-          .map(
-            (genre) => GenreTag(
-              color: genre.color,
-              name: genre.name,
-            ),
-          )
-          .toList(),
-    );
+        spacing: 4,
+        runSpacing: 4,
+        children: (genres.length >= 6 ? _genresWithMore() : genres)
+            .map(
+              (genre) => GenreTag(
+                color: genre.color,
+                name: genre.name,
+              ),
+            )
+            .toList());
   }
 }

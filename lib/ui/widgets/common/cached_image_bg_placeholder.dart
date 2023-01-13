@@ -45,7 +45,11 @@ class CachedImageBgPlaceholder extends StatelessWidget {
       placeholder: (context, url) => Container(
         height: height,
         width: width,
-        color: Colors.grey,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius:
+              overrideBorderRadius ?? BorderRadius.circular(borderRadius),
+        ),
       ),
       errorWidget: (context, url, error) {
         print(error);

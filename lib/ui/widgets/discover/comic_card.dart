@@ -37,6 +37,9 @@ class DiscoverComicCard extends StatelessWidget {
                   EpisodeCircle(
                     text:
                         '${comic.stats?.issuesCount} EPs ${comic.isCompleted ? 'ENDED' : ''}',
+                    color: comic.isCompleted
+                        ? ColorPalette.dReaderGreen
+                        : Colors.white,
                   ),
                 ],
               ),
@@ -56,9 +59,7 @@ class DiscoverComicCard extends StatelessWidget {
                   children: [
                     Text(
                       comic.name,
-                      style: textTheme.titleSmall?.copyWith(
-                        color: ColorPalette.dReaderYellow100,
-                      ),
+                      style: textTheme.titleSmall,
                     ),
                     AuthorVerified(authorName: comic.creator.name),
                     const SizedBox(

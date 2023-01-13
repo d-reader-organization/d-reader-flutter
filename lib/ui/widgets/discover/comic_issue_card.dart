@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
@@ -69,19 +70,8 @@ class DiscoverComicIssueCard extends StatelessWidget {
                 const SizedBox(
                   height: 6,
                 ),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
-                    ),
-                  ),
-                  child: Text(
-                    '${issue.releaseDate.day}-${issue.releaseDate.month}-${issue.releaseDate.year}',
-                    style: textTheme.labelSmall,
-                  ),
+                DateWidget(
+                  date: issue.releaseDate,
                 ),
                 const SizedBox(
                   height: 4,
@@ -97,13 +87,14 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'FLOOR',
                           style: textTheme.labelSmall,
                         ),
                         Text(
-                          issue.stats?.floorPrice.toString() ?? '',
+                          '${issue.stats?.floorPrice.toString()}◎',
                           style: textTheme.labelSmall?.copyWith(
                             color: ColorPalette.dReaderYellow100,
                           ),
@@ -111,13 +102,14 @@ class DiscoverComicIssueCard extends StatelessWidget {
                       ],
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'TOTAL VOL',
                           style: textTheme.labelSmall,
                         ),
                         Text(
-                          issue.stats?.totalVolume.toString() ?? '',
+                          '${issue.stats?.totalVolume.toString()}◎',
                           style: textTheme.labelSmall,
                         ),
                       ],

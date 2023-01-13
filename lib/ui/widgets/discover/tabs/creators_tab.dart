@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DiscoverCreatorsTab extends ConsumerWidget {
@@ -122,13 +124,13 @@ class CreatorListHeader extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      leading: const CircleAvatar(
+      leading: CircleAvatar(
         radius: 24,
         backgroundColor: Colors.transparent,
-        child: Icon(
-          Icons.soap,
-          size: 16,
-          color: Colors.white,
+        child: SvgPicture.asset(
+          Config.creatorSvg,
+          width: 24,
+          height: 24,
         ),
       ),
       title: Row(

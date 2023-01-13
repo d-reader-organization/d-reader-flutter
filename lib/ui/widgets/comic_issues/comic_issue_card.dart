@@ -51,58 +51,59 @@ class ComicIssueCard extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(right: 4, left: 8, top: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    issue.comic?.name ?? 'Missing',
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: ColorPalette.dReaderYellow100,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  Text(
-                    issue.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        issue.creator.name,
-                        style: textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(
+                    right: 4, left: 8, top: 12, bottom: 14),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          issue.comic?.name ?? 'Missing',
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: ColorPalette.dReaderYellow100,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      const Icon(
-                        Icons.verified,
-                        color: ColorPalette.dReaderYellow100,
-                        size: 16,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  SolanaPrice(
-                    price: issue.stats!.floorPrice,
-                  ),
-                ],
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        Text(
+                          issue.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              issue.creator.name,
+                              style: textTheme.bodySmall?.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const Icon(
+                              Icons.verified,
+                              color: ColorPalette.dReaderYellow100,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SolanaPrice(
+                      price: issue.stats!.floorPrice,
+                    ),
+                  ],
+                ),
               ),
             )
           ],

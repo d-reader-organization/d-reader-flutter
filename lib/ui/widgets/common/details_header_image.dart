@@ -25,17 +25,17 @@ class DetailsHeaderImage extends StatelessWidget {
           height: 364,
           imageUrl: data.imageUrl,
           cacheKey: 'details-${data.slug}',
+          overrideBorderRadius: BorderRadius.circular(0),
           foregroundDecoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 ColorPalette.appBackgroundColor,
                 Colors.transparent,
                 ColorPalette.appBackgroundColor,
-                Colors.transparent,
               ],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              stops: [0.05, 0.3, 1, 0.7],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.128, .6406, 1],
             ),
           ),
         ),

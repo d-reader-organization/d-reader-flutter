@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/details_scaffold_header.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_app_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScaffold extends StatelessWidget {
@@ -19,24 +19,29 @@ class DetailsScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              const CustomSliverAppBar(),
-              DetailsScaffoldHeader(
-                isComicDetails: isComicDetails,
-                detailsScaffoldModel: detailsScaffoldModel,
-              ),
-            ];
-          },
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-            child: body,
+      appBar: const PreferredSize(
+        preferredSize: Size(0, 64),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.0),
+          child: CustomAppBar(
+            showSearchIcon: true,
           ),
         ),
       ),
+      body: ListView(
+        padding: const EdgeInsets.only(top: 0),
+        children: [
+          DetailsScaffoldHeader(
+            isComicDetails: isComicDetails,
+            detailsScaffoldModel: detailsScaffoldModel,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+            child: body,
+          )
+        ],
+      ),
+      extendBodyBehindAppBar: true,
     );
   }
 }

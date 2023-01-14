@@ -55,6 +55,8 @@ class ComicDetails extends ConsumerWidget {
           ),
           body: ListView.builder(
             itemCount: issuesProvider.value?.length,
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
               return ComicIssueCardLarge(
                 issue: issuesProvider.value![index],

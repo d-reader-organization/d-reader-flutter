@@ -41,7 +41,7 @@ class ComicIssueDetails extends ConsumerWidget {
                 totalIssuesCount: issue.stats!.totalIssuesCount,
                 totalVolume: issue.stats!.totalVolume,
                 floorPrice: issue.stats!.floorPrice,
-                totalSupply: issue.stats!.totalSupply,
+                totalSupply: issue.totalSupply,
               ),
               releaseDate: issue.releaseDate),
           body: const SizedBox(), // TO DO READ ISSUE BUTTON PLUS CARDS

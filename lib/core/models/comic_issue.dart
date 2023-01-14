@@ -12,6 +12,7 @@ class ComicIssueModel {
   final CreatorModel creator;
   final bool isPopular;
   final DateTime releaseDate;
+  final int totalSupply;
 
   ComicIssueModel({
     required this.id,
@@ -25,6 +26,7 @@ class ComicIssueModel {
     required this.creator,
     required this.isPopular,
     required this.releaseDate,
+    required this.totalSupply,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -44,19 +46,18 @@ class ComicIssueModel {
       releaseDate: DateTime.parse(
         json['releaseDate'],
       ),
+      totalSupply: json['supply'],
     );
   }
 }
 
 class ComicIssueStats {
   final double floorPrice;
-  final int totalSupply;
   final double totalVolume;
   final int totalIssuesCount;
 
   ComicIssueStats({
     required this.floorPrice,
-    required this.totalSupply,
     required this.totalVolume,
     required this.totalIssuesCount,
   });
@@ -65,7 +66,6 @@ class ComicIssueStats {
         floorPrice: double.tryParse(json['floorPrice'].toStringAsFixed(2))
                 ?.toDouble() ??
             0,
-        totalSupply: json['totalSupply'],
         totalVolume: double.tryParse(json['totalVolume'].toStringAsFixed(2))
                 ?.toDouble() ??
             0,

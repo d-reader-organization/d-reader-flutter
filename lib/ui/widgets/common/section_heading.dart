@@ -8,11 +8,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SectionHeading extends ConsumerWidget {
   final String title;
-  final DiscoverTabViewEnum initialTab;
+  final DiscoverTabViewEnum? initialTab;
   const SectionHeading({
     Key? key,
     required this.title,
-    required this.initialTab,
+    this.initialTab,
   }) : super(key: key);
 
   @override
@@ -26,15 +26,19 @@ class SectionHeading extends ConsumerWidget {
           style: textTheme.headlineMedium,
         ),
         GestureDetector(
-          onTap: () {
-            ref.read(tabBarProvider.notifier).setInitialIndex(initialTab.index);
-            ref.read(scaffoldProvider.notifier).setNavigationIndex(1);
-            ref.read(scaffoldPageController).animateToPage(
-                  1,
-                  curve: Curves.linear,
-                  duration: const Duration(milliseconds: 350),
-                );
-          },
+          onTap: initialTab != null
+              ? () {
+                  ref
+                      .read(tabBarProvider.notifier)
+                      .setTabIndex(initialTab!.index);
+                  ref.read(scaffoldProvider.notifier).setNavigationIndex(1);
+                  ref.read(scaffoldPageController).animateToPage(
+                        1,
+                        curve: Curves.linear,
+                        duration: const Duration(milliseconds: 350),
+                      );
+                }
+              : null,
           child: Text(
             AppLocalizations.of(context)?.seeAll ?? 'See All',
             style: textTheme.titleSmall?.copyWith(

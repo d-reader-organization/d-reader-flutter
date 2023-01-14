@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/comic_issue_card.dart';
@@ -11,7 +12,9 @@ class DiscoverIssuesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicIssueModel>> provider = ref.watch(comicIssuesProvider);
+    String search = ref.watch(searchProvider).search;
+    AsyncValue<List<ComicIssueModel>> provider =
+        ref.watch(comicIssuesProvider('titleSubstring=$search'));
     return provider.when(
       data: (issues) {
         return issues.isNotEmpty

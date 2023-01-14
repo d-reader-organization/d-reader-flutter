@@ -3,20 +3,15 @@ import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repo
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final comicIssuesProvider = FutureProvider<List<ComicIssueModel>>((ref) async {
+final comicIssuesProvider =
+    FutureProvider.family<List<ComicIssueModel>, String>(
+        (ref, queryString) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
-      .getComicIssues();
+      .getComicIssues(queryString);
 });
 
 final comicIssueDetailsProvider =
     FutureProvider.family<ComicIssueModel?, int>((ref, id) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
       .getComic(id);
-});
-
-final comicIssuesByQueryParam =
-    FutureProvider.family<List<ComicIssueModel>, String>(
-        (ref, queryString) async {
-  return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
-      .getComicIssues(queryString);
 });

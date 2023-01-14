@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
+import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
@@ -15,7 +16,9 @@ class DiscoverCreatorsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<CreatorModel>> providerData = ref.watch(creatorsProvider);
+    String search = ref.watch(searchProvider).search;
+    AsyncValue<List<CreatorModel>> providerData =
+        ref.watch(creatorsProvider('nameSubstring=$search'));
     return providerData.when(
       data: (creators) {
         return creators.isNotEmpty

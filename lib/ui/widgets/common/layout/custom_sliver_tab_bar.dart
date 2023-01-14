@@ -1,7 +1,9 @@
+import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CustomSliverTabBar extends StatelessWidget with PreferredSizeWidget {
+class CustomSliverTabBar extends ConsumerWidget with PreferredSizeWidget {
   final List<Widget> children;
   const CustomSliverTabBar({
     Key? key,
@@ -12,7 +14,7 @@ class CustomSliverTabBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       margin: const EdgeInsets.only(bottom: 16),
@@ -30,6 +32,9 @@ class CustomSliverTabBar extends StatelessWidget with PreferredSizeWidget {
             ),
           ),
           TabBar(
+            onTap: (int index) {
+              ref.read(searchProvider.notifier).updateSearchValue('');
+            },
             tabs: children,
             indicatorWeight: 4,
             indicatorColor: ColorPalette.dReaderYellow100,

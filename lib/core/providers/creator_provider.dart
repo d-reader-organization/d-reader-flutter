@@ -3,9 +3,10 @@ import 'package:d_reader_flutter/core/repositories/creator/creator_repository_im
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final creatorsProvider = FutureProvider<List<CreatorModel>>((ref) async {
+final creatorsProvider =
+    FutureProvider.family<List<CreatorModel>, String>((ref, queryString) async {
   return await IoCContainer.resolveContainer<CreatorRepositoryImpl>()
-      .getCreators();
+      .getCreators(queryString);
 });
 
 final creatorProvider =

@@ -13,7 +13,7 @@ class ComicIssuesGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<ComicIssueModel>> comicIssues =
-        ref.watch(comicIssuesProvider);
+        ref.watch(comicIssuesProvider(''));
     return comicIssues.when(
       data: (data) {
         return GridView.builder(

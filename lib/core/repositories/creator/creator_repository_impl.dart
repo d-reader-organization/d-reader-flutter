@@ -7,10 +7,10 @@ import 'package:d_reader_flutter/ioc.dart';
 
 class CreatorRepositoryImpl implements CreatorRepository {
   @override
-  Future<List<CreatorModel>> getCreators() async {
+  Future<List<CreatorModel>> getCreators([String? queryString]) async {
     final String? responseBody =
         await IoCContainer.resolveContainer<ApiService>()
-            .apiCallGet('/creator/get');
+            .apiCallGet('/creator/get?$queryString');
     if (responseBody == null) {
       return [];
     }

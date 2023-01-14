@@ -26,7 +26,6 @@ class HomeView extends StatelessWidget {
           ),
           SectionHeading(
             title: AppLocalizations.of(context)?.genres ?? 'Genres',
-            initialTab: DiscoverTabViewEnum.comics,
           ),
           const SizedBox(
             height: 16,

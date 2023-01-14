@@ -16,7 +16,7 @@ class DiscoverView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: 3,
-      initialIndex: ref.read(tabBarProvider).initialIndex,
+      initialIndex: ref.read(tabBarProvider).selectedTabIndex,
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [

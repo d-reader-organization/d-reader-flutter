@@ -15,7 +15,7 @@ class CreatorIssuesTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<ComicIssueModel>> provider =
-        ref.watch(comicIssuesByQueryParam('creatorSlug=$creatorSlug'));
+        ref.watch(comicIssuesProvider('creatorSlug=$creatorSlug'));
 
     return provider.when(
       data: (issues) {

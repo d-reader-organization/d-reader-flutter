@@ -13,7 +13,7 @@ class SearchAutoComplete extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> provider = ref.watch(comicsProvider);
+    AsyncValue<List<ComicModel>> provider = ref.watch(comicsProvider(''));
     return provider.when(
       data: (comics) {
         return Autocomplete<ComicModel>(
@@ -67,7 +67,12 @@ class SearchAutoComplete extends ConsumerWidget {
                 fontSize: 16,
                 color: Colors.white,
               ),
-              decoration: searchInputDecoration,
+              decoration: searchInputDecoration(
+                const Icon(
+                  Icons.search,
+                  color: ColorPalette.dReaderGrey,
+                ),
+              ),
             );
           },
         );

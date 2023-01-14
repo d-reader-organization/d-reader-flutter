@@ -3,13 +3,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 @immutable // preferred to use immutable states
 class SearchState {
-  const SearchState({
-    required this.counter,
-  });
+  const SearchState({required this.search, required this.searchController});
+  final TextEditingController searchController;
+  final String search;
 
-  final int counter;
-  SearchState copyWith({required int counter}) {
-    return SearchState(counter: counter);
+  SearchState copyWith({required String search}) {
+    return SearchState(search: search, searchController: searchController);
   }
 }
 
@@ -17,10 +16,17 @@ final searchProvider = StateNotifierProvider<SearchNotifier, SearchState>(
     (ref) => SearchNotifier());
 
 class SearchNotifier extends StateNotifier<SearchState> {
-  SearchNotifier() : super(const SearchState(counter: 0));
+  SearchNotifier()
+      : super(
+            SearchState(search: '', searchController: TextEditingController()));
 
-  triggerSearch() async {
-    // TODO - add api call, update data etc.
-    state = state.copyWith(counter: state.counter + 1);
+  @override
+  void dispose() {
+    state.searchController.dispose();
+    super.dispose();
+  }
+
+  updateSearchValue(String newValue) async {
+    state = state.copyWith(search: newValue);
   }
 }

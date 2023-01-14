@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CachedImageBgPlaceholder extends StatelessWidget {
@@ -56,7 +57,11 @@ class CachedImageBgPlaceholder extends StatelessWidget {
         return Container(
           height: height,
           width: width,
-          color: Colors.red,
+          decoration: BoxDecoration(
+            color: ColorPalette.dReaderRed,
+            borderRadius:
+                overrideBorderRadius ?? BorderRadius.circular(borderRadius),
+          ),
         );
       },
     );

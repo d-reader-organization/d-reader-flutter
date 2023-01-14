@@ -11,7 +11,7 @@ class SkeletonRow extends StatelessWidget {
       shimmerDuration: 1000,
       child: Container(
         height: 64,
-        margin: const EdgeInsets.only(top: 6),
+        margin: const EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
           color: ColorPalette.dReaderGrey,
           borderRadius: BorderRadius.circular(

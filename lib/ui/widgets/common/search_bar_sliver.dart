@@ -10,7 +10,6 @@ class SearchBarSliver extends ConsumerWidget {
   void _submitHandler(WidgetRef ref) {
     String search = ref.read(searchProvider).searchController.text.trim();
     ref.read(searchProvider.notifier).updateSearchValue(search);
-    ref.read(searchProvider).searchController.clear();
   }
 
   @override

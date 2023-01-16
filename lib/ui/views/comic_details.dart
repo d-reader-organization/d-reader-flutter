@@ -38,7 +38,7 @@ class ComicDetails extends ConsumerWidget {
             subtitle: comic.flavorText,
             avatarUrl: comic.creator.avatar,
             creatorSlug: comic.creator.slug,
-            authorName: comic.creator.name,
+            creatorName: comic.creator.name,
             genres: comic.genres,
             flavorText: comic.flavorText,
             favouriteStats: FavouriteStats(

@@ -31,7 +31,7 @@ class ComicIssueDetails extends ConsumerWidget {
               subtitle: issue.title,
               avatarUrl: issue.creator.avatar,
               creatorSlug: issue.creator.slug,
-              authorName: issue.creator.name,
+              creatorName: issue.creator.name,
               favouriteStats: FavouriteStats(
                 count: 5,
                 isFavourite: true,

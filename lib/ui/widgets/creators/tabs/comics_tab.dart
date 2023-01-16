@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comic_card_large.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +36,15 @@ class CreatorComicsTab extends ConsumerWidget {
       error: (err, stack) {
         return Text(
           '$err',
-          style: const TextStyle(color: Colors.red),
+          style: const TextStyle(color: ColorPalette.dReaderRed),
         );
       },
       loading: () => ListView.builder(
         itemCount: 3,
-        itemBuilder: (context, index) => const SkeletonCard(),
+        itemBuilder: (context, index) => const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          child: SkeletonCard(),
+        ),
       ),
     );
   }

@@ -51,7 +51,10 @@ class DiscoverIssuesTab extends ConsumerWidget {
         child: ListView.builder(
           itemCount: 3,
           shrinkWrap: true,
-          itemBuilder: (context, index) => const SkeletonCard(),
+          itemBuilder: (context, index) => const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: SkeletonCard(),
+          ),
         ),
       ),
     );

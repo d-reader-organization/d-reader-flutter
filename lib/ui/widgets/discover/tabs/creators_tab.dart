@@ -3,6 +3,8 @@ import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
@@ -70,6 +72,9 @@ class CreatorListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        nextScreenPush(context, CreatorDetailsView(slug: creator.slug));
+      },
       contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       leading: CreatorAvatar(
         radius: 32,

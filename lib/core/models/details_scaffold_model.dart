@@ -8,7 +8,7 @@ class DetailsScaffoldModel {
   final String subtitle;
   final String description;
   final String creatorSlug;
-  final String authorName;
+  final String creatorName;
   final FavouriteStats favouriteStats;
   final GeneralStats generalStats;
   final List<GenreModel>? genres;
@@ -24,7 +24,7 @@ class DetailsScaffoldModel {
     required this.subtitle,
     required this.description,
     required this.creatorSlug,
-    required this.authorName,
+    required this.creatorName,
     required this.favouriteStats,
     required this.generalStats,
     this.genres,

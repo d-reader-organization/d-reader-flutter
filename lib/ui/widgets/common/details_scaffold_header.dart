@@ -1,4 +1,6 @@
 import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/details_header_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -31,21 +33,29 @@ class DetailsScaffoldHeader<T> extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      CreatorAvatar(
-                        avatar: detailsScaffoldModel.avatarUrl,
-                        radius: 24,
-                        height: 32,
-                        width: 32,
+                  InkWell(
+                    onTap: () => nextScreenPush(
+                      context,
+                      CreatorDetailsView(
                         slug: detailsScaffoldModel.creatorSlug,
                       ),
-                      const SizedBox(width: 12),
-                      AuthorVerified(
-                        authorName: detailsScaffoldModel.authorName,
-                        fontSize: 15,
-                      ),
-                    ],
+                    ),
+                    child: Row(
+                      children: [
+                        CreatorAvatar(
+                          avatar: detailsScaffoldModel.avatarUrl,
+                          radius: 24,
+                          height: 32,
+                          width: 32,
+                          slug: detailsScaffoldModel.creatorSlug,
+                        ),
+                        const SizedBox(width: 12),
+                        AuthorVerified(
+                          authorName: detailsScaffoldModel.creatorName,
+                          fontSize: 15,
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     children: [

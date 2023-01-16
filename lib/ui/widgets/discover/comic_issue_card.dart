@@ -1,5 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
@@ -19,112 +21,118 @@ class DiscoverComicIssueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Container(
-      height: 145,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 4,
-            child: CachedImageBgPlaceholder(
-              imageUrl: issue.cover,
-              height: 145,
-              cacheKey: 'discover-${issue.slug}',
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return InkWell(
+      onTap: () {
+        nextScreenPush(context, ComicIssueDetails(id: issue.id));
+      },
+      child: Container(
+        height: 145,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: CachedImageBgPlaceholder(
+                imageUrl: issue.cover,
+                height: 145,
+                cacheKey: 'discover-${issue.slug}',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    EpisodeCircle(
+                      text:
+                          'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
+                    ),
+                    issue.isPopular ? const HotIconSmall() : const SizedBox()
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              flex: 7,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  EpisodeCircle(
-                    text: 'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
+                  Text(
+                    issue.comic?.name ?? '',
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: ColorPalette.dReaderYellow100,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  issue.isPopular ? const HotIconSmall() : const SizedBox()
+                  Text(
+                    issue.title,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  AuthorVerified(authorName: issue.creator.name),
+                  const SizedBox(
+                    height: 6,
+                  ),
+                  DateWidget(
+                    date: issue.releaseDate,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  const Divider(
+                    color: ColorPalette.boxBackground300,
+                    height: 2,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'FLOOR',
+                            style: textTheme.labelSmall,
+                          ),
+                          Text(
+                            '${issue.stats?.floorPrice.toString()}◎',
+                            style: textTheme.labelSmall?.copyWith(
+                              color: ColorPalette.dReaderYellow100,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'TOTAL VOL',
+                            style: textTheme.labelSmall,
+                          ),
+                          Text(
+                            '${issue.stats?.totalVolume.toString()}◎',
+                            style: textTheme.labelSmall,
+                          ),
+                        ],
+                      ),
+                      const ViewedIconCount(viewedCount: 1234),
+                      issue.comic?.isMatureAudience != null &&
+                              issue.comic!.isMatureAudience
+                          ? const MatureAudience()
+                          : const SizedBox()
+                    ],
+                  ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(
-            width: 16,
-          ),
-          Expanded(
-            flex: 7,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  issue.comic?.name ?? '',
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: ColorPalette.dReaderYellow100,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  issue.title,
-                  style: textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                AuthorVerified(authorName: issue.creator.name),
-                const SizedBox(
-                  height: 6,
-                ),
-                DateWidget(
-                  date: issue.releaseDate,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const Divider(
-                  color: ColorPalette.boxBackground300,
-                  height: 2,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'FLOOR',
-                          style: textTheme.labelSmall,
-                        ),
-                        Text(
-                          '${issue.stats?.floorPrice.toString()}◎',
-                          style: textTheme.labelSmall?.copyWith(
-                            color: ColorPalette.dReaderYellow100,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'TOTAL VOL',
-                          style: textTheme.labelSmall,
-                        ),
-                        Text(
-                          '${issue.stats?.totalVolume.toString()}◎',
-                          style: textTheme.labelSmall,
-                        ),
-                      ],
-                    ),
-                    const ViewedIconCount(viewedCount: 1234),
-                    issue.comic?.isMatureAudience != null &&
-                            issue.comic!.isMatureAudience
-                        ? const MatureAudience()
-                        : const SizedBox()
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

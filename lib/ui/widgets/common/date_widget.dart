@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:flutter/material.dart';
 
 class DateWidget extends StatelessWidget {
@@ -6,8 +7,6 @@ class DateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String day = '0${date.day}'.substring(0, 2);
-    String month = '0${date.month}'.substring(0, 2);
     return Row(
       children: [
         const Icon(
@@ -19,7 +18,7 @@ class DateWidget extends StatelessWidget {
           width: 4,
         ),
         Text(
-          '$day/$month/${date.year}',
+          formatDate(date),
           style: Theme.of(context).textTheme.labelSmall,
         )
       ],

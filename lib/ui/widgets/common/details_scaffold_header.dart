@@ -5,8 +5,9 @@ import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/details_header_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/stats_box.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScaffoldHeader<T> extends StatelessWidget {
@@ -30,6 +31,10 @@ class DetailsScaffoldHeader<T> extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              GenreTagsDefault(genres: detailsScaffoldModel.genres ?? []),
+              const SizedBox(
+                height: 16,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -79,58 +84,64 @@ class DetailsScaffoldHeader<T> extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 32,
+                height: 24,
               ),
               // different for comic issues
               isComicDetails
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        StatsBox(
+                        StatsInfo(
                           title: 'TOTAL VOL',
                           stats:
-                              '${detailsScaffoldModel.generalStats.totalVolume} ',
-                          isSmall: true,
+                              '${detailsScaffoldModel.generalStats.totalVolume}◎',
                         ),
-                        StatsBox(
+                        StatsInfo(
                           title: 'ISSUES',
                           stats:
                               '${detailsScaffoldModel.generalStats.totalIssuesCount}',
-                          isSmall: true,
                         ),
-                        StatsBox(
+                        StatsInfo(
                           title: 'READERS',
                           stats:
                               '${detailsScaffoldModel.generalStats.readersCount}',
-                          isSmall: true,
+                        ),
+                        StatsInfo(
+                          title: detailsScaffoldModel.generalStats.isCompleted
+                              ? 'COMPLETED'
+                              : 'ONGOING',
+                          stats: '',
+                          statsWidget: const Icon(
+                            Icons.arrow_right_alt_outlined,
+                            color: Colors.white,
+                          ),
+                          isLastItem: true,
                         ),
                       ],
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        StatsBox(
-                          title: 'VOL',
+                        StatsInfo(
+                          title: 'TOTAL VOL',
                           stats:
-                              '${detailsScaffoldModel.generalStats.totalVolume} ',
-                          isSmall: true,
+                              '${detailsScaffoldModel.generalStats.totalVolume}◎',
                         ),
-                        StatsBox(
+                        StatsInfo(
                           title: 'SUPPLY',
                           stats:
                               '${detailsScaffoldModel.generalStats.totalSupply}',
-                          isSmall: true,
                         ),
-                        const StatsBox(
+                        StatsInfo(
                           title: 'LISTED',
-                          stats: '98',
-                          isSmall: true,
-                        ),
-                        StatsBox(
-                          title: 'FP',
                           stats:
-                              '${detailsScaffoldModel.generalStats.floorPrice}',
-                          isSmall: true,
+                              '${detailsScaffoldModel.generalStats.totalListedCount}',
+                        ),
+                        StatsInfo(
+                          title: 'FLOOR PRICE',
+                          stats:
+                              '${detailsScaffoldModel.generalStats.floorPrice}◎',
+                          isLastItem: true,
                         ),
                       ],
                     ),

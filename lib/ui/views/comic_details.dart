@@ -51,6 +51,7 @@ class ComicDetails extends ConsumerWidget {
               totalIssuesCount: comic.stats!.issuesCount,
               averageRating: comic.stats!.averageRating,
               isPopular: comic.isPopular,
+              isCompleted: comic.isCompleted,
             ),
           ),
           body: ListView.builder(

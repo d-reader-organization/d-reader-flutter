@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
+import 'package:d_reader_flutter/core/models/page_model.dart';
 
 class DetailsScaffoldModel {
   final String slug;
@@ -15,6 +16,7 @@ class DetailsScaffoldModel {
   final String? flavorText;
   final int? episodeNumber;
   final DateTime? releaseDate;
+  final List<PageModel>? issuePages;
 
   DetailsScaffoldModel({
     required this.slug,
@@ -31,6 +33,7 @@ class DetailsScaffoldModel {
     this.flavorText,
     this.episodeNumber,
     this.releaseDate,
+    this.issuePages,
   });
 }
 
@@ -47,8 +50,9 @@ class FavouriteStats {
 class GeneralStats {
   final double totalVolume;
   final double? floorPrice, averageRating;
-  final int? readersCount, totalSupply, totalIssuesCount;
+  final int? readersCount, totalSupply, totalIssuesCount, totalListedCount;
   final bool? isPopular;
+  final bool isCompleted;
 
   GeneralStats({
     required this.totalVolume,
@@ -58,5 +62,7 @@ class GeneralStats {
     this.totalSupply,
     this.totalIssuesCount,
     this.isPopular,
+    this.isCompleted = false,
+    this.totalListedCount,
   });
 }

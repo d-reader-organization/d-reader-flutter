@@ -26,17 +26,25 @@ class GenreTag extends StatelessWidget {
               style: Theme.of(context).textTheme.labelSmall,
             ),
           )
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(32),
-                border:
-                    Border.all(color: ColorPalette.boxBackground400, width: 1)),
-            child: const Icon(
-              Icons.more_horiz_outlined,
-              color: ColorPalette.boxBackground400,
-              size: 15,
-            ),
-          );
+        : const EmptyGenreTag();
+  }
+}
+
+class EmptyGenreTag extends StatelessWidget {
+  const EmptyGenreTag({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(32),
+          border: Border.all(color: ColorPalette.boxBackground400, width: 1)),
+      child: const Icon(
+        Icons.more_horiz_outlined,
+        color: ColorPalette.boxBackground400,
+        size: 15,
+      ),
+    );
   }
 }

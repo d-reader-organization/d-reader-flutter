@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
@@ -41,6 +42,23 @@ class ComicIssueCardLarge extends StatelessWidget {
                     16,
                   ),
                 ),
+                child: Container(
+                  alignment: Alignment.bottomLeft,
+                  padding: const EdgeInsets.all(4),
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        border: Border.all(color: Colors.white)),
+                    child: Text(
+                      formatDate(issue.releaseDate),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -68,16 +86,13 @@ class ComicIssueCardLarge extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 4,
+                          height: 2,
                         ),
                         Text(
                           issue.comic?.name ?? 'Missing',
                           style: textTheme.titleMedium?.copyWith(
                             color: ColorPalette.dReaderYellow100,
                           ),
-                        ),
-                        const SizedBox(
-                          height: 4,
                         ),
                         Text(
                           issue.title,
@@ -88,6 +103,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                         ),
                         DescriptionText(
                           text: issue.description,
+                          maxLines: 4,
                         ),
                       ],
                     ),
@@ -107,7 +123,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                               width: 4,
                             ),
                             Text(
-                              'DATA',
+                              '${issue.stats!.viewersCount}',
                               style: Theme.of(context)
                                   .textTheme
                                   .labelMedium

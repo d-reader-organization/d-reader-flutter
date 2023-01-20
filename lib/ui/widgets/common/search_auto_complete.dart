@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -113,29 +112,20 @@ class AutoCompleteListItem extends StatelessWidget {
         ),
       ),
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Text(
-                comic.name,
-                style: textTheme.bodyMedium,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                '${comic.stats?.issuesCount} items',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+          Text(
+            comic.name,
+            style: textTheme.bodyMedium,
           ),
-          Image.asset(
-            Config.solanaLogoPath,
-            width: 24,
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            '${comic.stats?.issuesCount} items',
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+            ),
           ),
         ],
       ),

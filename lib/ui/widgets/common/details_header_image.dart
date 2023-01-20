@@ -2,9 +2,8 @@ import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
+import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:flutter/material.dart';
 
 class DetailsHeaderImage extends StatelessWidget {
@@ -73,14 +72,16 @@ class DetailsHeaderImage extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    '${data.episodeNumber ?? 0}',
-                                    style: textTheme.bodyLarge,
+                                    '0${data.episodeNumber}'.substring(0, 2),
+                                    style: textTheme.bodyLarge
+                                        ?.copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   Text(
                                     '/${data.generalStats.totalIssuesCount}',
                                     style: textTheme.bodyLarge?.copyWith(
                                       color: ColorPalette.dReaderGrey
                                           .withOpacity(0.5),
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ],
@@ -88,6 +89,7 @@ class DetailsHeaderImage extends StatelessWidget {
                             ],
                           ),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 data.title,
@@ -97,6 +99,8 @@ class DetailsHeaderImage extends StatelessWidget {
                               ),
                               Text(
                                 data.subtitle,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: textTheme.headlineLarge,
                               ),
                             ],
@@ -126,24 +130,24 @@ class DetailsHeaderImage extends StatelessWidget {
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Container(
-                            width: 18,
-                            height: 18,
-                            decoration: const BoxDecoration(
-                              border: Border(
-                                left: BorderSide(
-                                  width: 3,
-                                  color: ColorPalette.dReaderYellow100,
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.only(left: 8),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  left: BorderSide(
+                                    width: 3,
+                                    color: ColorPalette.dReaderYellow100,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              data.flavorText ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              style: textTheme.bodyMedium?.copyWith(
-                                fontStyle: FontStyle.italic,
+                              child: Text(
+                                data.flavorText ?? '',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.bodyMedium?.copyWith(
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
                             ),
                           ),
@@ -153,14 +157,10 @@ class DetailsHeaderImage extends StatelessWidget {
                 const SizedBox(
                   height: 12,
                 ),
-                DescriptionText(
+                TextWithViewMore(
                   text: data.description,
                   textAlign: TextAlign.start,
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                GenreTags(genres: data.genres ?? []),
               ],
             ),
           ),

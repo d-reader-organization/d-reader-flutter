@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicIssuesGrid extends ConsumerWidget {
+  final bool onlyFree;
   const ComicIssuesGrid({
     Key? key,
+    this.onlyFree = false,
   }) : super(key: key);
 
   @override
@@ -16,22 +18,27 @@ class ComicIssuesGrid extends ConsumerWidget {
         ref.watch(comicIssuesProvider(''));
     return comicIssues.when(
       data: (data) {
-        return GridView.builder(
-          primary: false,
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 16,
-            mainAxisExtent: 255,
-          ),
-          itemBuilder: (context, index) {
-            return ComicIssueCard(
-              issue: data[index],
-            );
-          },
-          itemCount: data.length > 4 ? 4 : data.length,
-        );
+        if (onlyFree) {
+          data = data.where((element) => element.supply == 0).toList();
+        }
+        return data.isNotEmpty
+            ? GridView.builder(
+                primary: false,
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 16,
+                  mainAxisExtent: 255,
+                ),
+                itemBuilder: (context, index) {
+                  return ComicIssueCard(
+                    issue: data[index],
+                  );
+                },
+                itemCount: data.length > 4 ? 4 : data.length,
+              )
+            : Text('No ${onlyFree ? 'free' : 'popular'} issues');
       },
       error: (err, stack) => Text(
         'Error: $err',

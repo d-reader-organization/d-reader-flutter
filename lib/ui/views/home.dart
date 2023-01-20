@@ -75,7 +75,9 @@ class HomeView extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          const ComicIssuesGrid(),
+          const ComicIssuesGrid(
+            onlyFree: true,
+          ),
           const SizedBox(
             height: 32,
           ),

@@ -57,7 +57,7 @@ class IntroView extends HookConsumerWidget {
                     .authorizeAndSignMessage();
                 if (result == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text(
                         'Failed to sign a message.',
                       ),

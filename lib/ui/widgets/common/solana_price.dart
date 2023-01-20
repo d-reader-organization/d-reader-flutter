@@ -5,11 +5,13 @@ class SolanaPrice extends StatelessWidget {
   final double? price;
   final MainAxisAlignment mainAxisAlignment;
   final TextDirection? textDirection;
+  final Color? textColor;
   const SolanaPrice({
     Key? key,
     this.price,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.textDirection,
+    this.textColor,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class SolanaPrice extends StatelessWidget {
           price?.toString() ?? 'Free',
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontWeight: FontWeight.w700,
+                color: textColor,
               ),
         ),
       ],

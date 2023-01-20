@@ -15,3 +15,31 @@ final comicIssueDetailsProvider =
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
       .getComic(id);
 });
+
+class ComicIssueDetailState {
+  const ComicIssueDetailState({
+    required this.selectedNftsCount,
+  });
+  final int selectedNftsCount;
+
+  ComicIssueDetailState copyWith({required int selectedNftsCount}) {
+    return ComicIssueDetailState(selectedNftsCount: selectedNftsCount);
+  }
+}
+
+final comicIssueStateNotifier =
+    StateNotifierProvider<ComicIssueDetailNotifier, ComicIssueDetailState>(
+        (ref) => ComicIssueDetailNotifier());
+
+class ComicIssueDetailNotifier extends StateNotifier<ComicIssueDetailState> {
+  ComicIssueDetailNotifier()
+      : super(const ComicIssueDetailState(selectedNftsCount: 0));
+
+  update(bool isIncrement) async {
+    state = state.copyWith(
+      selectedNftsCount: isIncrement
+          ? state.selectedNftsCount + 1
+          : state.selectedNftsCount - 1,
+    );
+  }
+}

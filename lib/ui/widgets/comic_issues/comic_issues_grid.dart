@@ -15,7 +15,7 @@ class ComicIssuesGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<ComicIssueModel>> comicIssues =
-        ref.watch(comicIssuesProvider(''));
+        ref.watch(comicIssuesProvider(null));
     return comicIssues.when(
       data: (data) {
         if (onlyFree) {

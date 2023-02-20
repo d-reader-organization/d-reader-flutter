@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
-import 'package:d_reader_flutter/core/models/page_model.dart';
 
 class ComicIssueModel {
   final int id;
@@ -14,8 +13,6 @@ class ComicIssueModel {
   final bool isPopular, isFree;
   final DateTime releaseDate;
   final int supply;
-  final int? totalPagesCount;
-  final List<PageModel>? pages;
 
   ComicIssueModel({
     required this.id,
@@ -31,8 +28,6 @@ class ComicIssueModel {
     required this.releaseDate,
     required this.supply,
     required this.isFree,
-    this.totalPagesCount,
-    this.pages,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -54,16 +49,6 @@ class ComicIssueModel {
       ),
       supply: json['supply'],
       isFree: json['isFree'],
-      totalPagesCount: json['totalPagesCount'],
-      pages: json['pages'] != null
-          ? List<PageModel>.from(
-              json['pages'].map(
-                (item) => PageModel.fromJson(
-                  item,
-                ),
-              ),
-            )
-          : null,
     );
   }
 }
@@ -73,10 +58,10 @@ class ComicIssueStats {
   final double? averageRating;
   final int totalIssuesCount,
       favouritesCount,
-      subscribersCount,
       totalListedCount,
       readersCount,
-      viewersCount;
+      viewersCount,
+      totalPagesCount;
 
   ComicIssueStats({
     required this.floorPrice,
@@ -84,10 +69,10 @@ class ComicIssueStats {
     this.averageRating,
     required this.totalIssuesCount,
     required this.favouritesCount,
-    required this.subscribersCount,
     required this.totalListedCount,
     required this.readersCount,
     required this.viewersCount,
+    required this.totalPagesCount,
   });
 
   factory ComicIssueStats.fromJson(dynamic json) => ComicIssueStats(
@@ -97,15 +82,17 @@ class ComicIssueStats {
         totalVolume: double.tryParse(json['totalVolume'].toStringAsFixed(2))
                 ?.toDouble() ??
             0,
-        averageRating: double.tryParse(json['averageRating'].toStringAsFixed(2))
-                ?.toDouble() ??
-            0,
+        averageRating: json['averageRating'] != null
+            ? double.tryParse(json['averageRating'].toStringAsFixed(2))
+                ?.toDouble()
+            : null,
         totalIssuesCount: json['totalIssuesCount'],
         favouritesCount: json['favouritesCount'],
-        subscribersCount: json['subscribersCount'],
+        // subscribersCount: json['subscribersCount'],
         totalListedCount: json['totalListedCount'],
         readersCount: json['readersCount'],
         viewersCount: json['viewersCount'],
+        totalPagesCount: json['totalPagesCount'],
       );
 }
 

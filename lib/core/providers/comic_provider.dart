@@ -1,12 +1,13 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/repositories/comic/comic_repository_impl.dart';
 import 'package:d_reader_flutter/ioc.dart';
+import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final comicsProvider =
-    FutureProvider.family<List<ComicModel>, String>((ref, queryString) async {
+    FutureProvider.family<List<ComicModel>, String?>((ref, queryString) async {
   return await IoCContainer.resolveContainer<ComicRepositoryImpl>()
-      .getComics(queryString: queryString);
+      .getComics(queryString: appendDefaultQuery(queryString));
 });
 
 final comicSlugProvider =

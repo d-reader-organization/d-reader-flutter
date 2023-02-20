@@ -100,7 +100,7 @@ class ComicIssueCard extends StatelessWidget {
                       ],
                     ),
                     SolanaPrice(
-                      price: issue.stats!.floorPrice,
+                      price: issue.stats?.floorPrice ?? 0,
                     ),
                   ],
                 ),

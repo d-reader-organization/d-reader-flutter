@@ -97,6 +97,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (await _doReauthorize(client)) {
       final finalTransaction = decodedTX.resign(_signature!);
       try {
+        // here athar
         final response = await client.signAndSendTransactions(
             transactions: [base64Decode(finalTransaction.encode())]);
         print(response);

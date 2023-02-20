@@ -1,7 +1,9 @@
 import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/details_header_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
@@ -9,8 +11,9 @@ import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DetailsScaffoldHeader<T> extends StatelessWidget {
+class DetailsScaffoldHeader<T> extends ConsumerWidget {
   final bool isComicDetails;
   final DetailsScaffoldModel detailsScaffoldModel;
   const DetailsScaffoldHeader({
@@ -20,7 +23,7 @@ class DetailsScaffoldHeader<T> extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         DetailsHeaderImage(
@@ -119,29 +122,42 @@ class DetailsScaffoldHeader<T> extends StatelessWidget {
                         ),
                       ],
                     )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  : Column(
                       children: [
-                        StatsInfo(
-                          title: 'TOTAL VOL',
-                          stats:
-                              '${detailsScaffoldModel.generalStats.totalVolume}◎',
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            StatsInfo(
+                              title: 'TOTAL VOL',
+                              stats:
+                                  '${detailsScaffoldModel.generalStats.totalVolume}◎',
+                            ),
+                            StatsInfo(
+                              title: 'SUPPLY',
+                              stats:
+                                  '${detailsScaffoldModel.generalStats.totalSupply}',
+                            ),
+                            StatsInfo(
+                              title: 'LISTED',
+                              stats:
+                                  '${detailsScaffoldModel.generalStats.totalListedCount}',
+                            ),
+                            StatsInfo(
+                              title: 'FLOOR PRICE',
+                              stats:
+                                  '${detailsScaffoldModel.generalStats.floorPrice}◎',
+                              isLastItem: true,
+                            ),
+                          ],
                         ),
-                        StatsInfo(
-                          title: 'SUPPLY',
-                          stats:
-                              '${detailsScaffoldModel.generalStats.totalSupply}',
-                        ),
-                        StatsInfo(
-                          title: 'LISTED',
-                          stats:
-                              '${detailsScaffoldModel.generalStats.totalListedCount}',
-                        ),
-                        StatsInfo(
-                          title: 'FLOOR PRICE',
-                          stats:
-                              '${detailsScaffoldModel.generalStats.floorPrice}◎',
-                          isLastItem: true,
+                        RoundedButton(
+                          text: 'MINT',
+                          size: const Size(double.infinity, 50),
+                          onPressed: () async {
+                            bool response =
+                                await ref.read(solanaProvider.notifier).mint();
+                            print('boolean: $response');
+                          },
                         ),
                       ],
                     ),

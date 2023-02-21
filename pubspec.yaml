@@ -26,9 +26,9 @@ dependencies:
   cupertino_icons: ^1.0.5
   http: ^0.13.5
   flutter_dotenv: ^5.0.2
-  solana: ^0.26.3
-  solana_mobile_client: ^0.0.3
-  solana_mobile_wallet: ^0.0.3
+  solana: ^0.29.0
+  solana_mobile_client: ^0.1.0+1
+  solana_mobile_wallet: ^0.1.0+1
   carousel_slider: ^4.1.1
   skeleton_text: ^3.0.0
   font_awesome_flutter: ^10.2.1

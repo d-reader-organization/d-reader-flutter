@@ -33,7 +33,7 @@ extension ResignTx on SignedTx {
         signatures: signatures.toList()
           ..removeAt(0)
           ..insert(0, newSignature),
-        messageBytes: messageBytes,
+        compiledMessage: compiledMessage,
       );
 }
 
@@ -54,11 +54,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       cluster: 'devnet',
     );
     state = state.copyWith(authorizationResult: result);
+    final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
 
     final signMessageResult = await _signMessage(client);
     _signature = Signature(
       signMessageResult.first.sublist(0, 64),
-      publicKey: Ed25519HDPublicKey(result?.publicKey ?? []),
+      publicKey: publicKey,
     );
     await session.close();
     return signMessageResult.isNotEmpty ? signMessageResult.first : null;
@@ -97,9 +98,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (await _doReauthorize(client)) {
       final finalTransaction = decodedTX.resign(_signature!);
       try {
-        // here athar
         final response = await client.signAndSendTransactions(
-            transactions: [base64Decode(finalTransaction.encode())]);
+          transactions: [
+            base64Decode(
+              finalTransaction.encode(),
+            ),
+          ],
+        );
         print(response);
       } catch (e) {
         print(e);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -51,7 +52,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final result = await client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
-      cluster: 'devnet',
+      cluster: Config.solanaCluster,
     );
     state = state.copyWith(authorizationResult: result);
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
@@ -126,7 +127,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             messages: [messageToBeSigned], addresses: [addresses]);
         return result.signedPayloads;
       } catch (e) {
-        print('Error $e');
+        print('Error - Sign message:  ${e.toString()}');
       }
     }
     return [];

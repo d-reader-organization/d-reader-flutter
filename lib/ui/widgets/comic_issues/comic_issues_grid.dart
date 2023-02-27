@@ -28,7 +28,7 @@ class ComicIssuesGrid extends ConsumerWidget {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
-                  mainAxisSpacing: 16,
+                  mainAxisSpacing: 24,
                   mainAxisExtent: 255,
                 ),
                 itemBuilder: (context, index) {

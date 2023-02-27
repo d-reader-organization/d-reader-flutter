@@ -23,7 +23,7 @@ class ComicIssueCard extends StatelessWidget {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
       child: Container(
-        height: 260,
+        height: 270,
         width: 178,
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,
@@ -35,7 +35,7 @@ class ComicIssueCard extends StatelessWidget {
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               cacheKey: 'home${issue.slug}',
-              height: 130,
+              height: 135,
               overrideBorderRadius: const BorderRadius.vertical(
                 top: Radius.circular(
                   16,

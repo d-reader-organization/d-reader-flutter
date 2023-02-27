@@ -23,14 +23,14 @@ class ComicCard extends ConsumerWidget {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
       child: Container(
-        margin: const EdgeInsets.only(right: 16),
+        margin: const EdgeInsets.only(right: 24),
+        width: 155,
+        height: 255,
         child: Stack(
           children: [
             CachedImageBgPlaceholder(
               imageUrl: comic.cover,
               cacheKey: 'home${comic.slug}',
-              height: 255,
-              width: 180,
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
@@ -48,7 +48,6 @@ class ComicCard extends ConsumerWidget {
             ),
             Container(
               padding: const EdgeInsets.all(12),
-              width: 180,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,

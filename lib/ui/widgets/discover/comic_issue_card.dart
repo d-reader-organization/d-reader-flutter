@@ -124,7 +124,10 @@ class DiscoverComicIssueCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const ViewedIconCount(viewedCount: 1234),
+                      ViewedIconCount(
+                        viewedCount: issue.stats?.viewersCount ?? 0,
+                        isViewed: issue.myStats?.viewedAt != null,
+                      ),
                       issue.comic?.isMatureAudience != null &&
                               issue.comic!.isMatureAudience
                           ? const MatureAudience()

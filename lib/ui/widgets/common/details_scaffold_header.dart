@@ -96,7 +96,7 @@ class DetailsScaffoldHeader<T> extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StatsInfo(
-                          title: 'TOTAL VOL',
+                          title: 'VOLUME',
                           stats:
                               '${detailsScaffoldModel.generalStats.totalVolume}◎',
                         ),

@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/favourite_provider.dart';
+import 'package:d_reader_flutter/core/providers/count_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,24 +23,20 @@ class FavouriteIconCount extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final favouriteHook = useFavouriteState(
-      FavouriteState(
+    final favouriteHook = useCountState(
+      CountState(
         count: favouritesCount,
-        isFavourite: isFavourite,
+        isSelected: isFavourite,
       ),
     );
     return InkWell(
       onTap: () {
-        if (variant == Variant.filled) {
-          ref.read(updateComicFavouriteProvider(slug));
-        } else {
-          // ref.read(updateComicIssueFavouriteProvider(id));
-        }
+        ref.read(updateComicFavouriteProvider(slug));
         favouriteHook.value = favouriteHook.value.copyWith(
-            count: favouriteHook.value.isFavourite
+            count: favouriteHook.value.isSelected
                 ? favouriteHook.value.count - 1
                 : favouriteHook.value.count + 1,
-            isFavourite: !favouriteHook.value.isFavourite);
+            isSelected: !favouriteHook.value.isSelected);
       },
       child: variant == Variant.filled
           ? Container(
@@ -52,10 +48,10 @@ class FavouriteIconCount extends HookConsumerWidget {
                 ),
               ),
               child: Icon(
-                favouriteHook.value.isFavourite
+                favouriteHook.value.isSelected
                     ? CupertinoIcons.heart_fill
                     : CupertinoIcons.heart,
-                color: favouriteHook.value.isFavourite
+                color: favouriteHook.value.isSelected
                     ? ColorPalette.dReaderRed
                     : ColorPalette.dReaderGrey,
                 size: 16,
@@ -64,10 +60,10 @@ class FavouriteIconCount extends HookConsumerWidget {
           : Row(
               children: [
                 Icon(
-                  favouriteHook.value.isFavourite
+                  favouriteHook.value.isSelected
                       ? CupertinoIcons.heart_fill
                       : CupertinoIcons.heart,
-                  color: favouriteHook.value.isFavourite
+                  color: favouriteHook.value.isSelected
                       ? ColorPalette.dReaderRed
                       : ColorPalette.dReaderGrey,
                   size: 16,

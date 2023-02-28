@@ -60,9 +60,11 @@ class ComicDetails extends ConsumerWidget {
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
-              return ComicIssueCardLarge(
-                issue: issuesProvider.value![index],
-              );
+              return issuesProvider.value?[index] != null
+                  ? ComicIssueCardLarge(
+                      issue: issuesProvider.value![index],
+                    )
+                  : const SizedBox();
             },
           ),
         );

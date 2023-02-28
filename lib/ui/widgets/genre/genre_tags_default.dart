@@ -22,6 +22,7 @@ class GenreTagsDefault extends StatelessWidget {
         children: (genres.length >= 4 ? _genresWithMore() : genres)
             .map((genre) => Container(
                   padding: const EdgeInsets.all(4),
+                  margin: const EdgeInsets.only(right: 6),
                   child: genre.name.isNotEmpty
                       ? Row(
                           children: [

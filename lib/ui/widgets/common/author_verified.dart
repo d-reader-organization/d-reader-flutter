@@ -5,11 +5,13 @@ class AuthorVerified extends StatelessWidget {
   final String authorName;
   final double fontSize;
   final bool isVerified;
+  final Color textColor;
   const AuthorVerified({
     Key? key,
     required this.authorName,
     required this.isVerified,
     this.fontSize = 12,
+    this.textColor = Colors.white,
   }) : super(key: key);
 
   @override
@@ -22,7 +24,7 @@ class AuthorVerified extends StatelessWidget {
           style: textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.w600,
             fontSize: fontSize,
-            color: const Color(0xFFb9b9b9),
+            color: textColor,
           ),
         ),
         const SizedBox(

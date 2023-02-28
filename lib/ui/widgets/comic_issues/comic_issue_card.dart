@@ -85,6 +85,7 @@ class ComicIssueCard extends StatelessWidget {
                         AuthorVerified(
                           authorName: issue.creator.name,
                           isVerified: issue.creator.isVerified,
+                          textColor: const Color(0xFFb9b9b9),
                         ),
                       ],
                     ),

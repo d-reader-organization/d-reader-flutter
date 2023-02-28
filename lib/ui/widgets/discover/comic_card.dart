@@ -85,6 +85,7 @@ class DiscoverComicCard extends StatelessWidget {
                           ),
                           ViewedIconCount(
                             viewedCount: comic.stats?.viewersCount ?? 0,
+                            isViewed: true,
                           ),
                           comic.isMatureAudience
                               ? const MatureAudience()

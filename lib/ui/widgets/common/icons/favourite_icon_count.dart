@@ -33,10 +33,11 @@ class FavouriteIconCount extends HookConsumerWidget {
       onTap: () {
         ref.read(updateComicFavouriteProvider(slug));
         favouriteHook.value = favouriteHook.value.copyWith(
-            count: favouriteHook.value.isSelected
-                ? favouriteHook.value.count - 1
-                : favouriteHook.value.count + 1,
-            isSelected: !favouriteHook.value.isSelected);
+          count: favouriteHook.value.isSelected
+              ? favouriteHook.value.count - 1
+              : favouriteHook.value.count + 1,
+          isSelected: !favouriteHook.value.isSelected,
+        );
       },
       child: variant == Variant.filled
           ? Container(

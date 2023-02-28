@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
+import 'package:d_reader_flutter/ui/widgets/common/app_bar_without_logo.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/buy_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/details_scaffold_header.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_app_bar.dart';
@@ -33,24 +34,8 @@ class DetailsScaffold extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: isComicDetails
               ? const CustomAppBar()
-              : AppBar(
-                  title: Text(
-                    detailsScaffoldModel.title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  centerTitle: true,
-                  actions: const [
-                    Icon(
-                      Icons.more_horiz_outlined,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  ],
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
+              : AppBarWithoutLogo(
+                  title: detailsScaffoldModel.title,
                 ),
         ),
       ),

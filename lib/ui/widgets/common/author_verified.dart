@@ -6,18 +6,21 @@ class AuthorVerified extends StatelessWidget {
   final double fontSize;
   final bool isVerified;
   final Color textColor;
+  final MainAxisAlignment mainAxisAlignment;
   const AuthorVerified({
     Key? key,
     required this.authorName,
     required this.isVerified,
     this.fontSize = 12,
     this.textColor = Colors.white,
+    this.mainAxisAlignment = MainAxisAlignment.start,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Row(
+      mainAxisAlignment: mainAxisAlignment,
       children: [
         Text(
           authorName,

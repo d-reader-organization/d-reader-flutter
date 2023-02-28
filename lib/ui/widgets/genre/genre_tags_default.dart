@@ -34,6 +34,9 @@ class GenreTagsDefault extends StatelessWidget {
                               ),
                               height: 16,
                             ),
+                            const SizedBox(
+                              width: 4,
+                            ),
                             Text(
                               genre.name,
                               style: Theme.of(context)

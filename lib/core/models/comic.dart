@@ -101,11 +101,13 @@ class ComicStats {
 class MyStats {
   final bool? isFavourite, isSubscribed;
   final double? rating;
+  final DateTime? viewedAt;
 
   MyStats({
     this.isFavourite,
     this.isSubscribed,
     this.rating,
+    this.viewedAt,
   });
 
   factory MyStats.fromJson(dynamic json) {
@@ -113,6 +115,8 @@ class MyStats {
       isFavourite: json['isFavourite'],
       isSubscribed: json['isSubscribed'],
       rating: json['rating'],
+      viewedAt:
+          json['viewedAt'] != null ? DateTime.parse(json['viewedAt']) : null,
     );
   }
 }

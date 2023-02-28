@@ -53,7 +53,9 @@ class DiscoverComicsTab extends ConsumerWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) => const Padding(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            child: SkeletonCard(),
+            child: SkeletonCard(
+              height: 150,
+            ),
           ),
         ),
       ),

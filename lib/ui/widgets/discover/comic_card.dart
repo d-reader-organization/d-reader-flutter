@@ -67,6 +67,9 @@ class DiscoverComicCard extends StatelessWidget {
                         comic.name,
                         style: textTheme.titleSmall,
                       ),
+                      const SizedBox(
+                        height: 4,
+                      ),
                       AuthorVerified(
                         authorName: comic.creator.name,
                         isVerified: comic.creator.isVerified,
@@ -85,7 +88,7 @@ class DiscoverComicCard extends StatelessWidget {
                           ),
                           ViewedIconCount(
                             viewedCount: comic.stats?.viewersCount ?? 0,
-                            isViewed: true,
+                            isViewed: comic.myStats?.viewedAt != null,
                           ),
                           comic.isMatureAudience
                               ? const MatureAudience()

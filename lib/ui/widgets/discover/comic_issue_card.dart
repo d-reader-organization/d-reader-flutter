@@ -76,6 +76,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   AuthorVerified(
                     authorName: issue.creator.name,
                     isVerified: issue.creator.isVerified,
+                    textColor: const Color(0xFFb9b9b9),
                   ),
                   const SizedBox(
                     height: 6,
@@ -115,7 +116,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'TOTAL VOL',
+                            'VOLUME',
                             style: textTheme.labelSmall,
                           ),
                           Text(

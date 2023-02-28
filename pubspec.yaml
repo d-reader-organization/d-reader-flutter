@@ -28,21 +28,19 @@ dependencies:
   flutter_dotenv: ^5.0.2
   solana: ^0.29.0
   solana_mobile_client: ^0.1.0+1
-  solana_mobile_wallet: ^0.1.0+1
-  carousel_slider: ^4.1.1
+  carousel_slider: ^4.2.1
   skeleton_text: ^3.0.0
-  font_awesome_flutter: ^10.2.1
-  flutter_svg: ^1.1.6
-  cached_network_image: ^3.2.2
+  font_awesome_flutter: ^10.4.0
+  flutter_svg: ^2.0.2
+  cached_network_image: ^3.2.3
   url_launcher: ^6.1.10
   intl: ^0.17.0
-  hooks_riverpod: ^2.1.1
-  flutter_hooks: ^0.18.5+1
-  shared_preferences: ^2.0.15
-  lottie: ^2.1.0
-  kiwi: ^4.0.3
-  introduction_screen: ^3.1.4
-  dropdown_button2: ^1.9.2
+  hooks_riverpod: ^2.2.0
+  flutter_hooks: ^0.18.6
+  shared_preferences: ^2.0.18
+  kiwi: ^4.1.0
+  introduction_screen: ^3.1.6
+  dropdown_button2: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +52,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.12.0
+  dart_code_metrics: ^5.6.0
 
 flutter_icons:
   android: "launcher_icon"

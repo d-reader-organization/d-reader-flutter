@@ -25,8 +25,14 @@ class GenreTagsDefault extends StatelessWidget {
                   child: genre.name.isNotEmpty
                       ? Row(
                           children: [
-                            SvgPicture.network(genre.icon,
-                                color: Colors.white, height: 16),
+                            SvgPicture.network(
+                              genre.icon,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.color,
+                              ),
+                              height: 16,
+                            ),
                             Text(
                               genre.name,
                               style: Theme.of(context)

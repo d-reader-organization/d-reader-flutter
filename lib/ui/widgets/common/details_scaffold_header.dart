@@ -60,6 +60,7 @@ class DetailsScaffoldHeader<T> extends ConsumerWidget {
                         const SizedBox(width: 12),
                         AuthorVerified(
                           authorName: detailsScaffoldModel.creatorName,
+                          isVerified: detailsScaffoldModel.isVerifiedCreator,
                           fontSize: 15,
                         ),
                       ],

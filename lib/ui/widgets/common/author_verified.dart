@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 class AuthorVerified extends StatelessWidget {
   final String authorName;
   final double fontSize;
+  final bool isVerified;
   const AuthorVerified({
     Key? key,
     required this.authorName,
+    required this.isVerified,
     this.fontSize = 12,
   }) : super(key: key);
 
@@ -25,11 +27,13 @@ class AuthorVerified extends StatelessWidget {
         const SizedBox(
           width: 4,
         ),
-        const Icon(
-          Icons.verified,
-          color: ColorPalette.dReaderYellow100,
-          size: 16,
-        ),
+        isVerified
+            ? const Icon(
+                Icons.verified,
+                color: ColorPalette.dReaderYellow100,
+                size: 16,
+              )
+            : const SizedBox(),
       ],
     );
   }

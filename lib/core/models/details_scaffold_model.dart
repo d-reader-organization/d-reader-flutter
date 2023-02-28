@@ -10,6 +10,7 @@ class DetailsScaffoldModel {
   final String description;
   final String creatorSlug;
   final String creatorName;
+  final bool isVerifiedCreator;
   final FavouriteStats favouriteStats;
   final GeneralStats generalStats;
   final List<GenreModel>? genres;
@@ -27,6 +28,7 @@ class DetailsScaffoldModel {
     required this.description,
     required this.creatorSlug,
     required this.creatorName,
+    required this.isVerifiedCreator,
     required this.favouriteStats,
     required this.generalStats,
     this.genres,

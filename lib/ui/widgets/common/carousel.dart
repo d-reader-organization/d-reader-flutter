@@ -57,14 +57,14 @@ class Carousel extends ConsumerWidget {
                         children: [
                           Text(
                             carouselItem.title,
-                            style: textTheme.titleMedium,
+                            style: textTheme.bodySmall,
                           ),
                           const SizedBox(
                             height: 8,
                           ),
                           Text(
                             carouselItem.title,
-                            style: textTheme.labelMedium,
+                            style: textTheme.headlineLarge,
                           ),
                         ],
                       ),

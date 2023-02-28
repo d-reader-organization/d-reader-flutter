@@ -67,7 +67,10 @@ class DiscoverComicCard extends StatelessWidget {
                         comic.name,
                         style: textTheme.titleSmall,
                       ),
-                      AuthorVerified(authorName: comic.creator.name),
+                      AuthorVerified(
+                        authorName: comic.creator.name,
+                        isVerified: comic.creator.isVerified,
+                      ),
                       const SizedBox(
                         height: 24,
                       ),

@@ -90,6 +90,7 @@ class CreatorListItem extends StatelessWidget {
             flex: 2,
             child: AuthorVerified(
               authorName: creator.name,
+              isVerified: creator.isVerified,
               fontSize: 14,
             ),
           ),

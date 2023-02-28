@@ -72,7 +72,7 @@ class DetailsHeaderImage extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    '0${data.episodeNumber}'.substring(0, 2),
+                                    '${data.episodeNumber}',
                                     style: textTheme.bodyLarge
                                         ?.copyWith(fontWeight: FontWeight.w700),
                                   ),
@@ -91,11 +91,16 @@ class DetailsHeaderImage extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                data.title,
-                                style: textTheme.titleSmall?.copyWith(
-                                  color: ColorPalette.dReaderYellow100,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${data.generalStats.totalPagesCount.toString()} pages',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
                               ),
                               Text(
                                 data.subtitle,

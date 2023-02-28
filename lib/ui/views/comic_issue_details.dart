@@ -42,11 +42,13 @@ class ComicIssueDetails extends ConsumerWidget {
               ),
               episodeNumber: issue.number,
               generalStats: GeneralStats(
-                  totalIssuesCount: issue.stats!.totalIssuesCount,
-                  totalVolume: issue.stats!.totalVolume,
-                  floorPrice: issue.stats!.floorPrice,
-                  totalSupply: issue.supply,
-                  totalListedCount: issue.stats!.totalListedCount),
+                totalIssuesCount: issue.stats?.totalIssuesCount,
+                totalVolume: issue.stats?.totalVolume ?? 0,
+                floorPrice: issue.stats?.floorPrice,
+                totalSupply: issue.supply,
+                totalListedCount: issue.stats?.totalListedCount,
+                totalPagesCount: issue.stats?.totalPagesCount,
+              ),
               releaseDate: issue.releaseDate),
           body: Column(
             children: [

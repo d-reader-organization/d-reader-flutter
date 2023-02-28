@@ -52,7 +52,11 @@ class FavouriteStats {
 class GeneralStats {
   final double totalVolume;
   final double? floorPrice, averageRating;
-  final int? readersCount, totalSupply, totalIssuesCount, totalListedCount;
+  final int? readersCount,
+      totalSupply,
+      totalIssuesCount,
+      totalListedCount,
+      totalPagesCount;
   final bool? isPopular;
   final bool isCompleted;
 
@@ -66,5 +70,6 @@ class GeneralStats {
     this.isPopular,
     this.isCompleted = false,
     this.totalListedCount,
+    this.totalPagesCount,
   });
 }

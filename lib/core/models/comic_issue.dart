@@ -123,7 +123,11 @@ class ComicIssueMyStats {
         isFavourite: json['isFavourite'],
         canRead: json['canRead'],
         readAt: json['readAt'],
-        viewedAt: json['viewedAt'],
+        viewedAt: json['viewedAt'] != null
+            ? DateTime.parse(
+                json['viewedAt'],
+              )
+            : null,
       );
 }
 

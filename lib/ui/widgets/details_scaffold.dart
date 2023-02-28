@@ -27,13 +27,31 @@ class DetailsScaffold extends ConsumerWidget {
         ref.watch(comicIssueStateNotifier).selectedNftsCount;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
-      appBar: const PreferredSize(
-        preferredSize: Size(0, 64),
+      appBar: PreferredSize(
+        preferredSize: const Size(0, 64),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.0),
-          child: CustomAppBar(
-            showSearchIcon: true,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: isComicDetails
+              ? const CustomAppBar()
+              : AppBar(
+                  title: Text(
+                    detailsScaffoldModel.title,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  centerTitle: true,
+                  actions: const [
+                    Icon(
+                      Icons.more_horiz_outlined,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ],
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                ),
         ),
       ),
       body: ListView(

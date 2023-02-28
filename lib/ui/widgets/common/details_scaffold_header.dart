@@ -129,7 +129,7 @@ class DetailsScaffoldHeader<T> extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             StatsInfo(
-                              title: 'TOTAL VOL',
+                              title: 'VOLUME',
                               stats:
                                   '${detailsScaffoldModel.generalStats.totalVolume}◎',
                             ),
@@ -144,22 +144,22 @@ class DetailsScaffoldHeader<T> extends ConsumerWidget {
                                   '${detailsScaffoldModel.generalStats.totalListedCount}',
                             ),
                             StatsInfo(
-                              title: 'FLOOR PRICE',
+                              title: 'FLOOR',
                               stats:
-                                  '${detailsScaffoldModel.generalStats.floorPrice}◎',
+                                  '${detailsScaffoldModel.generalStats.floorPrice ?? '-.--'}◎',
                               isLastItem: true,
                             ),
                           ],
                         ),
-                        RoundedButton(
-                          text: 'MINT',
-                          size: const Size(double.infinity, 50),
-                          onPressed: () async {
-                            bool response =
-                                await ref.read(solanaProvider.notifier).mint();
-                            print('boolean: $response');
-                          },
-                        ),
+                        // RoundedButton(
+                        //   text: 'MINT',
+                        //   size: const Size(double.infinity, 50),
+                        //   onPressed: () async {
+                        //     bool response =
+                        //         await ref.read(solanaProvider.notifier).mint();
+                        //     print('boolean: $response');
+                        //   },
+                        // ),
                       ],
                     ),
             ],

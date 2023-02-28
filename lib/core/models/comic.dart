@@ -83,9 +83,11 @@ class ComicStats {
       favouritesCount: json['favouritesCount'],
       subscribersCount: json['subscribersCount'],
       ratersCount: json['ratersCount'],
-      averageRating: double.tryParse(json['averageRating'].toStringAsFixed(2))
-              ?.toDouble() ??
-          0,
+      averageRating: json['averageRating'] != null
+          ? double.tryParse(json['averageRating'].toStringAsFixed(2))
+                  ?.toDouble() ??
+              0
+          : 0,
       issuesCount: json['issuesCount'],
       totalVolume:
           double.tryParse(json['totalVolume'].toStringAsFixed(2))?.toDouble() ??

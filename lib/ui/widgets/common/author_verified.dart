@@ -19,9 +19,10 @@ class AuthorVerified extends StatelessWidget {
       children: [
         Text(
           authorName,
-          style: textTheme.bodySmall?.copyWith(
-            fontWeight: FontWeight.w500,
+          style: textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
             fontSize: fontSize,
+            color: const Color(0xFFb9b9b9),
           ),
         ),
         const SizedBox(

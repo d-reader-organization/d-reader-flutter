@@ -30,7 +30,7 @@ class SolanaPrice extends StatelessWidget {
         ),
         Text(
           price?.toString() ?? 'Free',
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: textColor,
               ),

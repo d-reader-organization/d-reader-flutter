@@ -87,7 +87,9 @@ class ComicStats {
               ?.toDouble() ??
           0,
       issuesCount: json['issuesCount'],
-      totalVolume: json['totalVolume'],
+      totalVolume:
+          double.tryParse(json['totalVolume'].toStringAsFixed(2))?.toDouble() ??
+              0,
       readersCount: json['readersCount'],
       viewersCount: json['viewersCount'],
     );

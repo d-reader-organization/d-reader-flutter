@@ -7,6 +7,7 @@ class CreatorModel {
   final String description;
   final bool isVerified;
   final CreatorStats? stats;
+  final CreatorMyStats? myStats;
 
   CreatorModel({
     this.id,
@@ -17,6 +18,7 @@ class CreatorModel {
     required this.description,
     required this.isVerified,
     this.stats,
+    this.myStats,
   });
 
   factory CreatorModel.fromJson(dynamic json) {
@@ -30,6 +32,9 @@ class CreatorModel {
       isVerified: json['isVerified'],
       stats:
           json['stats'] != null ? CreatorStats.fromJson(json['stats']) : null,
+      myStats: json['myStats'] != null
+          ? CreatorMyStats.fromJson(json['myStats'])
+          : null,
     );
   }
 }
@@ -48,5 +53,15 @@ class CreatorStats {
         totalVolume: double.tryParse(json['totalVolume'].toStringAsFixed(2))
                 ?.toDouble() ??
             0,
+      );
+}
+
+class CreatorMyStats {
+  final bool? isFollowing;
+
+  CreatorMyStats({this.isFollowing});
+
+  factory CreatorMyStats.fromJson(dynamic json) => CreatorMyStats(
+        isFollowing: json['isFollowing'],
       );
 }

@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum Variant { comic, comicIssue }
+enum Variant { filled, blank }
 
 class FavouriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
@@ -17,7 +17,7 @@ class FavouriteIconCount extends HookConsumerWidget {
     required this.favouritesCount,
     required this.isFavourite,
     required this.slug,
-    this.variant = Variant.comic,
+    this.variant = Variant.blank,
   }) : super(key: key);
 
   @override
@@ -31,7 +31,7 @@ class FavouriteIconCount extends HookConsumerWidget {
     );
     return InkWell(
       onTap: () {
-        if (variant == Variant.comic) {
+        if (variant == Variant.filled) {
           ref.read(updateComicFavouriteProvider(slug));
         } else {
           // ref.read(updateComicIssueFavouriteProvider(id));
@@ -42,7 +42,7 @@ class FavouriteIconCount extends HookConsumerWidget {
                 : favouriteHook.value.count + 1,
             isFavourite: !favouriteHook.value.isFavourite);
       },
-      child: variant == Variant.comic
+      child: variant == Variant.filled
           ? Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(

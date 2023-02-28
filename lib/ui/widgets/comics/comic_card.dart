@@ -60,6 +60,7 @@ class ComicCard extends ConsumerWidget {
                         favouritesCount: comic.stats?.favouritesCount ?? 0,
                         isFavourite: comic.myStats?.isFavourite ?? false,
                         slug: comic.slug,
+                        variant: Variant.filled,
                       ),
                     ],
                   ),

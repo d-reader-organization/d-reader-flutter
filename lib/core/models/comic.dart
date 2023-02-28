@@ -97,13 +97,20 @@ class ComicStats {
 }
 
 class MyStats {
-  bool isFavourite;
+  final bool? isFavourite, isSubscribed;
+  final double? rating;
 
   MyStats({
-    required this.isFavourite,
+    this.isFavourite,
+    this.isSubscribed,
+    this.rating,
   });
 
   factory MyStats.fromJson(dynamic json) {
-    return MyStats(isFavourite: json['isFavourite']);
+    return MyStats(
+      isFavourite: json['isFavourite'],
+      isSubscribed: json['isSubscribed'],
+      rating: json['rating'],
+    );
   }
 }

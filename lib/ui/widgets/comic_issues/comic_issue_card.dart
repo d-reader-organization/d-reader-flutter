@@ -91,7 +91,7 @@ class ComicIssueCard extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(right: 8),
                       child: SolanaPrice(
-                        price: issue.stats?.floorPrice ?? 0,
+                        price: issue.stats?.floorPrice,
                         mainAxisAlignment: MainAxisAlignment.end,
                       ),
                     ),

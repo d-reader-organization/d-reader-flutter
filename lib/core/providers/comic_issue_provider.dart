@@ -14,7 +14,7 @@ final comicIssuesProvider =
 final comicIssueDetailsProvider =
     FutureProvider.family<ComicIssueModel?, int>((ref, id) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
-      .getComic(id);
+      .getComicIssue(id);
 });
 
 class ComicIssueDetailState {

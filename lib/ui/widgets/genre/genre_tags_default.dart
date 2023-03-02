@@ -18,11 +18,10 @@ class GenreTagsDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: (genres.length >= 4 ? _genresWithMore() : genres)
             .map((genre) => Container(
-                  padding: const EdgeInsets.all(4),
-                  margin: const EdgeInsets.only(right: 6),
+                  padding: const EdgeInsets.all(2),
+                  margin: const EdgeInsets.only(right: 4),
                   child: genre.name.isNotEmpty
                       ? Row(
                           children: [
@@ -33,9 +32,10 @@ class GenreTagsDefault extends StatelessWidget {
                                 BlendMode.srcIn,
                               ),
                               height: 16,
+                              width: 16,
                             ),
                             const SizedBox(
-                              width: 4,
+                              width: 2,
                             ),
                             Text(
                               genre.name,

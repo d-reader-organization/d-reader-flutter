@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/comic_card.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/results_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -17,30 +18,24 @@ class DiscoverComicsTab extends ConsumerWidget {
         ref.watch(comicsProvider('nameSubstring=$search'));
     return provider.when(
       data: (comics) {
-        return comics.isNotEmpty
-            ? ListView.separated(
-                itemCount: comics.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return DiscoverComicCard(
-                    comic: comics[index],
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    color: ColorPalette.boxBackground300,
-                  );
-                },
-              )
-            : Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: Text(
-                  'No results found',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
+        return ResultsWrapper(
+          resultsCount: comics.length,
+          body: ListView.separated(
+            itemCount: comics.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return DiscoverComicCard(
+                comic: comics[index],
               );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider(
+                color: ColorPalette.boxBackground300,
+              );
+            },
+          ),
+        );
       },
       error: (err, stack) => Text(
         'Error: $err',

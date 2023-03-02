@@ -31,6 +31,8 @@ class GenreCard extends StatelessWidget {
               Colors.white,
               BlendMode.srcIn,
             ),
+            width: 24,
+            height: 24,
           ),
           Text(
             genre.name,

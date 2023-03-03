@@ -1,8 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/receipt.dart';
+import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
+import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,31 +30,14 @@ class ComicIssueDetails extends ConsumerWidget {
           return const SizedBox();
         }
         return ComicIssueDetailsScaffold(
-            body: Column(
-              children: [
-                // const BodyHeader(),
-                ListView.separated(
-                  itemCount: 5,
-                  padding: const EdgeInsets.only(
-                    right: 4,
-                    left: 4,
-                    top: 12,
-                    bottom: 4,
-                  ),
-                  shrinkWrap: true,
-                  primary: false,
-                  itemBuilder: (context, index) {
-                    return const ListingRow();
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(
-                      color: ColorPalette.boxBackground400,
-                    );
-                  },
-                )
-              ],
-            ),
-            issue: issue);
+          body: Column(
+            children: [
+              // const BodyHeader(),
+              ListedItems(address: issue.candyMachineAddress ?? ''),
+            ],
+          ),
+          issue: issue,
+        );
       },
       error: (err, stack) {
         print(stack);
@@ -63,28 +51,81 @@ class ComicIssueDetails extends ConsumerWidget {
   }
 }
 
+class ListedItems extends ConsumerWidget {
+  final String address;
+  const ListedItems({
+    super.key,
+    required this.address,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<List<Receipt>> provider =
+        ref.watch(receiptsProvider(address));
+    return provider.when(
+      data: (receipts) {
+        if (receipts.isEmpty) {
+          return const Text('No items');
+        }
+        return ListView.separated(
+          itemCount: receipts.length,
+          padding: const EdgeInsets.only(
+            right: 4,
+            left: 4,
+            top: 12,
+            bottom: 4,
+          ),
+          shrinkWrap: true,
+          primary: false,
+          itemBuilder: (context, index) {
+            return ListingRow(
+              receipt: receipts[index],
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              color: ColorPalette.boxBackground400,
+            );
+          },
+        );
+      },
+      error: (error, stackTrace) {
+        print('Listed items error: ${error.toString()}');
+        return const Text('Something went wrong');
+      },
+      loading: () => const SkeletonRow(),
+    );
+  }
+}
+
 class ListingRow extends StatelessWidget {
+  final Receipt receipt;
   const ListingRow({
     super.key,
+    required this.receipt,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 4),
-      leading: const CircleAvatar(
-        backgroundColor: ColorPalette.dReaderGreen,
+      leading: CircleAvatar(
+        // backgroundColor: ColorPalette.dReaderGreen,
         maxRadius: 24,
+        backgroundImage: CachedNetworkImageProvider(
+          receipt.buyer.avatar,
+          cacheKey: receipt.buyer.avatar,
+        ),
       ),
       title: SizedBox(
-        height: 48,
+        height: 64,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '7aLBCr...S7eKPD',
-              style: TextStyle(
+            Text(
+              formatAddress(receipt.buyer.address),
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
@@ -92,32 +133,29 @@ class ListingRow extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    const Text(
-                      '#9692',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      timeago.format(DateTime.parse('2023-03-02 16:35:16.743')),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: ColorPalette.dReaderGreen,
-                      ),
-                    ),
-                  ],
+                Text(
+                  receipt.nft.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                const SolanaPrice(
-                  price: 0.965,
+                SolanaPrice(
+                  price: receipt.price,
                 ),
               ],
+            ),
+            Text(
+              timeago.format(
+                DateTime.parse(
+                  receipt.timestamp,
+                ),
+              ),
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: ColorPalette.dReaderGreen,
+              ),
             ),
           ],
         ),

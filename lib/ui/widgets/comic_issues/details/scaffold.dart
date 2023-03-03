@@ -1,6 +1,8 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
@@ -10,12 +12,15 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/buy_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ComicIssueDetailsScaffold extends StatelessWidget {
   final Widget body;
@@ -209,28 +214,9 @@ class ComicIssueDetailsScaffold extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                issue.candyMachineAddress == null
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          StatsInfo(
-                            title: 'ENDS IN',
-                            stats: '${issue.stats?.totalVolume}◎',
-                          ),
-                          StatsInfo(
-                            title: 'SUPPLY',
-                            stats: '${issue.supply}',
-                          ),
-                          StatsInfo(
-                            title: 'MINTED',
-                            stats: '${issue.stats?.totalListedCount}',
-                          ),
-                          StatsInfo(
-                            title: 'PRICE',
-                            stats: '${issue.stats?.floorPrice ?? '-.--'}◎',
-                            isLastItem: true,
-                          ),
-                        ],
+                issue.candyMachineAddress != null
+                    ? CandyMachineStats(
+                        address: issue.candyMachineAddress ?? '',
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -331,5 +317,54 @@ class ComicIssueDetailsScaffold extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CandyMachineStats extends ConsumerWidget {
+  final String address;
+  const CandyMachineStats({
+    super.key,
+    required this.address,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = ref.watch(candyMachineProvider(address));
+
+    return provider.when(data: (candyMachine) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          candyMachine?.endsAt != null
+              ? StatsInfo(
+                  title: 'ENDS IN',
+                  stats: timeago.format(
+                    DateTime.parse(candyMachine?.endsAt ?? ''),
+                  ),
+                )
+              : const SizedBox(),
+          StatsInfo(
+            title: 'SUPPLY',
+            stats: '${candyMachine?.supply}K',
+          ),
+          StatsInfo(
+            title: 'MINTED',
+            stats: '${candyMachine?.itemsMinted}',
+          ),
+          StatsInfo(
+            title: 'PRICE',
+            stats: candyMachine?.baseMintPrice != null
+                ? '${formatPrice(candyMachine?.baseMintPrice ?? 0)}◎'
+                : '-.--◎',
+            isLastItem: true,
+          ),
+        ],
+      );
+    }, error: (Object error, StackTrace stackTrace) {
+      print('Error in candy machine stats ${error.toString()}');
+      return const Text('Something went wrong in candy machine stats');
+    }, loading: () {
+      return const SkeletonRow();
+    });
   }
 }

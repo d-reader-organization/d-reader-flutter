@@ -295,10 +295,11 @@ class ComicIssueDetailsScaffold extends StatelessWidget {
             backgroundColor: ColorPalette.dReaderGreen,
             onPressed: () {
               nextScreenPush(
-                  context,
-                  const EReaderView(
-                    pages: [],
-                  ));
+                context,
+                EReaderView(
+                  issueId: issue.id,
+                ),
+              );
             },
             child: issue.myStats?.canRead != null && issue.myStats!.canRead
                 ? Row(

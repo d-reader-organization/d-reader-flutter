@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ComicIssueDetails extends ConsumerWidget {
   final int id;
@@ -90,23 +91,30 @@ class ListingRow extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  '#9692',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      '#9692',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      timeago.format(DateTime.parse('2023-03-02 16:35:16.743')),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: ColorPalette.dReaderGreen,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Rare',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: ColorPalette.dReaderGreen,
-                  ),
-                ),
-                SolanaPrice(
+                const SolanaPrice(
                   price: 0.965,
                 ),
               ],

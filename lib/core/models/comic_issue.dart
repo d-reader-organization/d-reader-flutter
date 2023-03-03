@@ -14,6 +14,7 @@ class ComicIssueModel {
   final bool isPopular, isFree;
   final DateTime releaseDate;
   final int supply;
+  final String? candyMachineAddress;
 
   ComicIssueModel({
     required this.id,
@@ -30,6 +31,7 @@ class ComicIssueModel {
     required this.releaseDate,
     required this.supply,
     required this.isFree,
+    this.candyMachineAddress,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -54,6 +56,7 @@ class ComicIssueModel {
       ),
       supply: json['supply'],
       isFree: json['isFree'],
+      candyMachineAddress: json['candyMachineAddress'],
     );
   }
 }

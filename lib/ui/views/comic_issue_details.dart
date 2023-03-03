@@ -26,7 +26,7 @@ class ComicIssueDetails extends ConsumerWidget {
         return ComicIssueDetailsScaffold(
             body: Column(
               children: [
-                const BodyHeader(),
+                // const BodyHeader(),
                 ListView.separated(
                   itemCount: 5,
                   padding: const EdgeInsets.only(

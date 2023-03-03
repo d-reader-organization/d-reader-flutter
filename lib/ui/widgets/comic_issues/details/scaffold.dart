@@ -209,41 +209,51 @@ class ComicIssueDetailsScaffold extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        StatsInfo(
-                          title: 'VOLUME',
-                          stats: '${issue.stats?.totalVolume}◎',
-                        ),
-                        StatsInfo(
-                          title: 'SUPPLY',
-                          stats: '${issue.supply}',
-                        ),
-                        StatsInfo(
-                          title: 'LISTED',
-                          stats: '${issue.stats?.totalListedCount}',
-                        ),
-                        StatsInfo(
-                          title: 'FLOOR',
-                          stats: '${issue.stats?.floorPrice ?? '-.--'}◎',
-                          isLastItem: true,
-                        ),
-                      ],
-                    ),
-                    // RoundedButton(
-                    //   text: 'MINT',
-                    //   size: const Size(double.infinity, 50),
-                    //   onPressed: () async {
-                    //     bool response =
-                    //         await ref.read(solanaProvider.notifier).mint();
-                    //     print('boolean: $response');
-                    //   },
-                    // ),
-                  ],
-                ),
+                issue.candyMachineAddress == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          StatsInfo(
+                            title: 'ENDS IN',
+                            stats: '${issue.stats?.totalVolume}◎',
+                          ),
+                          StatsInfo(
+                            title: 'SUPPLY',
+                            stats: '${issue.supply}',
+                          ),
+                          StatsInfo(
+                            title: 'MINTED',
+                            stats: '${issue.stats?.totalListedCount}',
+                          ),
+                          StatsInfo(
+                            title: 'PRICE',
+                            stats: '${issue.stats?.floorPrice ?? '-.--'}◎',
+                            isLastItem: true,
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          StatsInfo(
+                            title: 'VOLUME',
+                            stats: '${issue.stats?.totalVolume}◎',
+                          ),
+                          StatsInfo(
+                            title: 'SUPPLY',
+                            stats: '${issue.supply}',
+                          ),
+                          StatsInfo(
+                            title: 'LISTED',
+                            stats: '${issue.stats?.totalListedCount}',
+                          ),
+                          StatsInfo(
+                            title: 'FLOOR',
+                            stats: '${issue.stats?.floorPrice ?? '-.--'}◎',
+                            isLastItem: true,
+                          ),
+                        ],
+                      ),
               ],
             ),
           ),

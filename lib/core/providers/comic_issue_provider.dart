@@ -27,20 +27,3 @@ class ComicIssueDetailState {
     return ComicIssueDetailState(selectedNftsCount: selectedNftsCount);
   }
 }
-
-final comicIssueStateNotifier =
-    StateNotifierProvider<ComicIssueDetailNotifier, ComicIssueDetailState>(
-        (ref) => ComicIssueDetailNotifier());
-
-class ComicIssueDetailNotifier extends StateNotifier<ComicIssueDetailState> {
-  ComicIssueDetailNotifier()
-      : super(const ComicIssueDetailState(selectedNftsCount: 0));
-
-  update(bool isIncrement) async {
-    state = state.copyWith(
-      selectedNftsCount: isIncrement
-          ? state.selectedNftsCount + 1
-          : state.selectedNftsCount - 1,
-    );
-  }
-}

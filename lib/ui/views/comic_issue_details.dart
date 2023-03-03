@@ -56,7 +56,11 @@ class ComicIssueDetails extends ConsumerWidget {
               ListView.separated(
                 itemCount: 5,
                 padding: const EdgeInsets.only(
-                    right: 4, left: 4, top: 12, bottom: 4),
+                  right: 4,
+                  left: 4,
+                  top: 12,
+                  bottom: 4,
+                ),
                 shrinkWrap: true,
                 primary: false,
                 itemBuilder: (context, index) {
@@ -84,85 +88,56 @@ class ComicIssueDetails extends ConsumerWidget {
   }
 }
 
-class ListingRow extends ConsumerStatefulWidget {
+class ListingRow extends StatelessWidget {
   const ListingRow({
     super.key,
   });
 
   @override
-  ConsumerState<ListingRow> createState() => _ListingRowState();
-}
-
-class _ListingRowState extends ConsumerState<ListingRow> {
-  bool isSelected = false;
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: isSelected
-          ? const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 1,
-                  color: ColorPalette.dReaderYellow100,
-                ),
-                top: BorderSide(
-                  width: 1,
-                  color: ColorPalette.dReaderYellow100,
-                ),
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+      leading: const CircleAvatar(
+        backgroundColor: ColorPalette.dReaderGreen,
+        maxRadius: 24,
+      ),
+      title: SizedBox(
+        height: 48,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '7aLBCr...S7eKPD',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
-            )
-          : const BoxDecoration(),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(vertical: 4),
-        tileColor: isSelected ? ColorPalette.boxBackground300 : null,
-        leading: const CircleAvatar(
-          backgroundColor: ColorPalette.dReaderGreen,
-          maxRadius: 24,
-        ),
-        onTap: () {
-          setState(() {
-            isSelected = !isSelected;
-            ref.read(comicIssueStateNotifier.notifier).update(isSelected);
-          });
-        },
-        title: SizedBox(
-          height: 48,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '7aLBCr...S7eKPD',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  '#9692',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    '#9692',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                Text(
+                  'Rare',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: ColorPalette.dReaderGreen,
                   ),
-                  Text(
-                    'Rare',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: ColorPalette.dReaderGreen,
-                    ),
-                  ),
-                  SolanaPrice(
-                    price: 0.965,
-                  ),
-                ],
-              ),
-            ],
-          ),
+                ),
+                SolanaPrice(
+                  price: 0.965,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

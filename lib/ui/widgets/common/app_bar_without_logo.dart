@@ -2,9 +2,20 @@ import 'package:flutter/material.dart';
 
 class AppBarWithoutLogo extends StatelessWidget {
   final String? title;
+  final List<Widget> actions;
   final Color backgroundColor;
-  const AppBarWithoutLogo(
-      {super.key, this.title, this.backgroundColor = Colors.transparent});
+  const AppBarWithoutLogo({
+    super.key,
+    this.title,
+    this.backgroundColor = Colors.transparent,
+    this.actions = const [
+      Icon(
+        Icons.more_horiz_outlined,
+        size: 16,
+        color: Colors.white,
+      ),
+    ],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +30,7 @@ class AppBarWithoutLogo extends StatelessWidget {
             )
           : null,
       centerTitle: true,
-      actions: const [
-        Icon(
-          Icons.more_horiz_outlined,
-          size: 16,
-          color: Colors.white,
-        ),
-      ],
+      actions: actions,
       backgroundColor: backgroundColor,
       shadowColor: Colors.transparent,
     );

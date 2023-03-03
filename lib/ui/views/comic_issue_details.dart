@@ -1,10 +1,9 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_issues/details/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
-import 'package:d_reader_flutter/ui/widgets/details_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -24,57 +23,32 @@ class ComicIssueDetails extends ConsumerWidget {
         if (issue == null) {
           return const SizedBox();
         }
-        return DetailsScaffold(
-          isComicDetails: false,
-          detailsScaffoldModel: DetailsScaffoldModel(
-              slug: issue.slug,
-              imageUrl: issue.cover,
-              description: issue.description,
-              title: issue.comic?.name ?? '',
-              subtitle: issue.title,
-              avatarUrl: issue.creator.avatar,
-              creatorSlug: issue.creator.slug,
-              isVerifiedCreator: issue.creator.isVerified,
-              creatorName: issue.creator.name,
-              favouriteStats: FavouriteStats(
-                count: 5,
-                isFavourite: true,
-              ),
-              episodeNumber: issue.number,
-              generalStats: GeneralStats(
-                totalIssuesCount: issue.stats?.totalIssuesCount,
-                totalVolume: issue.stats?.totalVolume ?? 0,
-                floorPrice: issue.stats?.floorPrice,
-                totalSupply: issue.supply,
-                totalListedCount: issue.stats?.totalListedCount,
-                totalPagesCount: issue.stats?.totalPagesCount,
-              ),
-              releaseDate: issue.releaseDate),
-          body: Column(
-            children: [
-              const BodyHeader(),
-              ListView.separated(
-                itemCount: 5,
-                padding: const EdgeInsets.only(
-                  right: 4,
-                  left: 4,
-                  top: 12,
-                  bottom: 4,
-                ),
-                shrinkWrap: true,
-                primary: false,
-                itemBuilder: (context, index) {
-                  return const ListingRow();
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    color: ColorPalette.boxBackground400,
-                  );
-                },
-              )
-            ],
-          ),
-        );
+        return ComicIssueDetailsScaffold(
+            body: Column(
+              children: [
+                const BodyHeader(),
+                ListView.separated(
+                  itemCount: 5,
+                  padding: const EdgeInsets.only(
+                    right: 4,
+                    left: 4,
+                    top: 12,
+                    bottom: 4,
+                  ),
+                  shrinkWrap: true,
+                  primary: false,
+                  itemBuilder: (context, index) {
+                    return const ListingRow();
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      color: ColorPalette.boxBackground400,
+                    );
+                  },
+                )
+              ],
+            ),
+            issue: issue);
       },
       error: (err, stack) {
         print(stack);

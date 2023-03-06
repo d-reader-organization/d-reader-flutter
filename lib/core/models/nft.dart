@@ -4,6 +4,7 @@ class NftModel {
   final String uri;
   final String image;
   final String name;
+  final String description;
   final String owner;
   final int royalties;
   final bool isMintCondition;
@@ -17,6 +18,7 @@ class NftModel {
     required this.uri,
     required this.image,
     required this.name,
+    required this.description,
     required this.owner,
     required this.royalties,
     required this.isMintCondition,
@@ -40,6 +42,7 @@ class NftModel {
       uri: json['uri'],
       image: json['image'],
       name: json['name'],
+      description: json['description'],
       owner: json['owner'],
       royalties: json['royalties'],
       isMintCondition: json['isMintCondition'],
@@ -63,6 +66,26 @@ class NftAttribute {
     return NftAttribute(
       trait: json['trait'],
       value: json['value'],
+    );
+  }
+}
+
+class WalletAsset {
+  final String address;
+  final String image;
+  final String name;
+
+  WalletAsset({
+    required this.address,
+    required this.image,
+    required this.name,
+  });
+
+  factory WalletAsset.fromJson(dynamic json) {
+    return WalletAsset(
+      address: json['address'],
+      image: json['image'],
+      name: json['name'],
     );
   }
 }

@@ -5,16 +5,16 @@ import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.d
 import 'package:flutter/material.dart';
 
 class NftItemCard extends StatelessWidget {
-  final NftModel nft;
+  final WalletAsset nftAsset;
   const NftItemCard({
     super.key,
-    required this.nft,
+    required this.nftAsset,
   });
 
   @override
   Widget build(BuildContext context) {
     return CachedImageBgPlaceholder(
-      imageUrl: nft.image,
+      imageUrl: nftAsset.image,
       cacheKey: '#-124',
       height: 190,
       overrideBorderRadius: BorderRadius.circular(12),
@@ -29,7 +29,7 @@ class NftItemCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            shortenNftName(nft.name),
+            shortenNftName(nftAsset.name),
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,

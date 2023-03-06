@@ -12,8 +12,7 @@ final comicsProvider =
 
 final comicSlugProvider =
     FutureProvider.family<ComicModel?, String>((ref, slug) async {
-  return await IoCContainer.resolveContainer<ComicRepositoryImpl>()
-      .getComic(slug);
+  return IoCContainer.resolveContainer<ComicRepositoryImpl>().getComic(slug);
 });
 
 final updateComicFavouriteProvider =

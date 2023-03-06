@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_item_card.dart';
 import 'package:flutter/material.dart';
 
-final nfts = List<NftModel>.from([
+final walletAssets = List<WalletAsset>.from([
   {
     "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
     "uri":
@@ -59,7 +59,7 @@ final nfts = List<NftModel>.from([
       {"trait": "signed", "value": "false"}
     ]
   }
-].map((item) => NftModel.fromJson(item)));
+].map((item) => WalletAsset.fromJson(item)));
 
 class LibraryView extends StatelessWidget {
   const LibraryView({Key? key}) : super(key: key);
@@ -67,7 +67,7 @@ class LibraryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      itemCount: nfts.length,
+      itemCount: walletAssets.length,
       primary: false,
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -82,12 +82,12 @@ class LibraryView extends StatelessWidget {
             nextScreenPush(
               context,
               NftDetails(
-                nft: nfts.elementAt(index),
+                address: walletAssets.elementAt(index).address,
               ),
             );
           },
           child: NftItemCard(
-            nft: nfts.elementAt(index),
+            nftAsset: walletAssets.elementAt(index),
           ),
         );
       },

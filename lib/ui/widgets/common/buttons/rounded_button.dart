@@ -9,6 +9,7 @@ class RoundedButton extends StatelessWidget {
   final Size size;
   final double fontSize;
   final bool isLoading;
+  final Color borderColor;
 
   const RoundedButton({
     Key? key,
@@ -19,6 +20,7 @@ class RoundedButton extends StatelessWidget {
     this.size = const Size(120, 27),
     this.fontSize = 14,
     this.isLoading = false,
+    this.borderColor = Colors.transparent,
   }) : super(key: key);
 
   @override
@@ -31,11 +33,14 @@ class RoundedButton extends StatelessWidget {
           minimumSize: size,
           backgroundColor: backgroundColor,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(
               Radius.circular(
                 8,
               ),
+            ),
+            side: BorderSide(
+              color: borderColor,
             ),
           ),
           foregroundColor: textColor,

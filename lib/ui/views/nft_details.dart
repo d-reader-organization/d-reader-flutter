@@ -43,6 +43,9 @@ class NftDetails extends StatelessWidget {
               imageUrl: nft.image,
               issueName: nft.comicIssueName,
             ),
+            const SizedBox(
+              height: 8,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

@@ -32,4 +32,11 @@ class CreatorRepositoryImpl implements CreatorRepository {
     dynamic decodedData = jsonDecode(responseBody!);
     return CreatorModel.fromJson(decodedData);
   }
+
+  @override
+  Future<bool> followCreator(String slug) async {
+    await IoCContainer.resolveContainer<ApiService>()
+        .apiCallPost('/creator/follow/$slug');
+    return true;
+  }
 }

@@ -15,3 +15,9 @@ final creatorProvider =
   return await IoCContainer.resolveContainer<CreatorRepositoryImpl>()
       .getCreator(slug);
 });
+
+final followCreatorProvider =
+    FutureProvider.family<bool, String>((ref, slug) async {
+  return await IoCContainer.resolveContainer<CreatorRepositoryImpl>()
+      .followCreator(slug);
+});

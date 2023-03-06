@@ -29,8 +29,10 @@ class GenreCard extends StatelessWidget {
             genre.icon,
             colorFilter: const ColorFilter.mode(
               Colors.white,
-              BlendMode.color,
+              BlendMode.srcIn,
             ),
+            width: 24,
+            height: 24,
           ),
           Text(
             genre.name,

@@ -1,7 +1,9 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
+import 'package:d_reader_flutter/ui/widgets/common/figures/follow_box.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/stats_box_row.dart';
@@ -16,15 +18,27 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
+    return SliverToBoxAdapter(
+      child: Stack(
+        children: [
           CachedImageBgPlaceholder(
             height: 250,
             cacheKey: 'banner ${creator.slug}',
             imageUrl: creator.banner,
             borderRadius: 0,
+            foregroundDecoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  ColorPalette.appBackgroundColor,
+                  Colors.transparent,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.center,
+                stops: [.0162, 1.03],
+              ),
+            ),
+          ),
+          Positioned.fill(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -42,87 +56,49 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
                     radius: 16,
                   ),
                 ),
-                Row(
+                AuthorVerified(
+                  authorName: creator.name,
+                  isVerified: creator.isVerified,
+                  fontSize: 24,
                   mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      creator.name,
-                      style: textTheme.headlineLarge,
+                    FollowBox(
+                      followersCount: creator.stats?.followersCount ?? 0,
+                      isFollowing: creator.myStats?.isFollowing ?? false,
+                      slug: creator.slug,
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Icon(
-                      Icons.verified,
-                      color: ColorPalette.dReaderYellow100,
-                      size: 16,
-                    ),
+                    const SocialRow(),
                   ],
                 ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class StatsDescriptionWidget extends StatelessWidget {
+  final CreatorModel creator;
+  const StatsDescriptionWidget({
+    super.key,
+    required this.creator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
           const SizedBox(
-            height: 16,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  border: Border.all(
-                    width: 1,
-                    color: ColorPalette.boxBackground300,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.star_outline,
-                      size: 20,
-                      color: ColorPalette.dReaderGrey,
-                    ),
-                    const SizedBox(
-                      width: 6,
-                    ),
-                    Text(
-                      'Follow',
-                      style: textTheme.labelMedium?.copyWith(
-                        color: ColorPalette.dReaderGrey,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 6,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 9),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          9,
-                        ),
-                        color: ColorPalette.boxBackground300,
-                      ),
-                      child: Text(
-                        '124',
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: ColorPalette.dReaderGrey,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SocialRow(),
-            ],
-          ),
-          const SizedBox(
-            height: 32,
+            height: 24,
           ),
           StatsBoxRow(
             totalVolume: creator.stats?.totalVolume ?? 0,
@@ -131,9 +107,12 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
           const SizedBox(
             height: 24,
           ),
-          DescriptionText(
-            text: creator.description,
-            textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: DescriptionText(
+              text: creator.description,
+              textAlign: TextAlign.center,
+            ),
           ),
           const SizedBox(
             height: 24,

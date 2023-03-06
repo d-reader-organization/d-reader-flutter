@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
+import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:d_reader_flutter/core/repositories/carousel/carousel_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/comic/comic_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository_impl.dart';
@@ -19,6 +20,7 @@ abstract class IoCContainer {
     container.registerSingleton((container) => GenreRepositoryImpl());
     container.registerSingleton((container) => PlaygroundRepositoryImpl());
     container.registerSingleton((container) => ApiService());
+    container.registerSingleton((container) => CandyMachineRepositoryImpl());
   }
 
   static T resolveContainer<T>() {

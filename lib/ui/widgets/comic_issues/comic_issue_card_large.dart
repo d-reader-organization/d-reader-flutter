@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 
@@ -81,8 +82,9 @@ class ComicIssueCardLarge extends StatelessWidget {
                       children: [
                         Text(
                           'EPISODE ${issue.number} of ${issue.stats?.totalIssuesCount}',
-                          style: textTheme.labelSmall?.copyWith(
+                          style: textTheme.labelMedium?.copyWith(
                             fontWeight: FontWeight.w700,
+                            color: const Color(0xFFBBBBBB),
                           ),
                         ),
                         const SizedBox(
@@ -99,7 +101,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                           style: textTheme.titleMedium,
                         ),
                         const SizedBox(
-                          height: 8,
+                          height: 12,
                         ),
                         DescriptionText(
                           text: issue.description,
@@ -113,23 +115,9 @@ class ComicIssueCardLarge extends StatelessWidget {
                         SolanaPrice(
                           price: issue.stats!.floorPrice,
                         ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.remove_red_eye,
-                              color: Color(0xFFE0e0e0),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              '${issue.stats!.viewersCount}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(color: const Color(0xFFE0e0e0)),
-                            )
-                          ],
+                        ViewedIconCount(
+                          viewedCount: issue.stats?.viewersCount ?? 0,
+                          isViewed: issue.myStats?.viewedAt != null,
                         ),
                       ],
                     ),

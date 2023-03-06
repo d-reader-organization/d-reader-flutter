@@ -52,7 +52,18 @@ class ComicCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  EpisodeCircle(text: '${comic.stats?.issuesCount} EPs'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      EpisodeCircle(text: '${comic.stats?.issuesCount} EPs'),
+                      FavouriteIconCount(
+                        favouritesCount: comic.stats?.favouritesCount ?? 0,
+                        isFavourite: comic.myStats?.isFavourite ?? false,
+                        slug: comic.slug,
+                        variant: Variant.filled,
+                      ),
+                    ],
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -63,19 +74,16 @@ class ComicCard extends ConsumerWidget {
                         style: textTheme.titleSmall,
                       ),
                       const SizedBox(
-                        height: 16,
+                        height: 4,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AuthorVerified(authorName: comic.creator.name),
-                          FavouriteIconCount(
-                            favouritesCount: comic.stats?.favouritesCount ?? 0,
-                            isFavourite: comic.myStats?.isFavourite ?? false,
-                            slug: comic.slug,
-                          ),
-                        ],
-                      )
+                      AuthorVerified(
+                        authorName: comic.creator.name,
+                        isVerified: comic.creator.isVerified,
+                        textColor: const Color(0xFFb9b9b9),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
                     ],
                   )
                 ],

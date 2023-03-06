@@ -36,7 +36,7 @@ class EmptyGenreTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
           border: Border.all(color: ColorPalette.boxBackground400, width: 1)),

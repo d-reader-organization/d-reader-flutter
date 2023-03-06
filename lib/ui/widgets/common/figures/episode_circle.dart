@@ -8,7 +8,7 @@ class EpisodeCircle extends StatelessWidget {
     Key? key,
     required this.text,
     this.color = Colors.white,
-    this.fontSize = 8,
+    this.fontSize = 12,
   }) : super(key: key);
 
   @override

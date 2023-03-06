@@ -1,10 +1,9 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issue_card_large.dart';
-import 'package:d_reader_flutter/ui/widgets/details_scaffold.dart';
+import 'package:d_reader_flutter/ui/widgets/comics/details/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -28,42 +27,20 @@ class ComicDetails extends ConsumerWidget {
         if (comic == null) {
           return const SizedBox();
         }
-        return DetailsScaffold(
-          isComicDetails: true,
-          detailsScaffoldModel: DetailsScaffoldModel(
-            slug: comic.slug,
-            imageUrl: comic.cover,
-            description: comic.description,
-            title: comic.name,
-            subtitle: comic.flavorText,
-            avatarUrl: comic.creator.avatar,
-            creatorSlug: comic.creator.slug,
-            creatorName: comic.creator.name,
-            genres: comic.genres,
-            flavorText: comic.flavorText,
-            favouriteStats: FavouriteStats(
-              count: comic.stats?.favouritesCount ?? 0,
-              isFavourite: comic.myStats?.isFavourite ?? false,
-            ),
-            generalStats: GeneralStats(
-              totalVolume: comic.stats!.totalVolume,
-              readersCount: comic.stats!.readersCount,
-              totalIssuesCount: comic.stats!.issuesCount,
-              averageRating: comic.stats!.averageRating,
-              isPopular: comic.isPopular,
-              isCompleted: comic.isCompleted,
-            ),
-          ),
+        return ComicDetailsScaffold(
           body: ListView.builder(
             itemCount: issuesProvider.value?.length,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             itemBuilder: (context, index) {
-              return ComicIssueCardLarge(
-                issue: issuesProvider.value![index],
-              );
+              return issuesProvider.value?[index] != null
+                  ? ComicIssueCardLarge(
+                      issue: issuesProvider.value![index],
+                    )
+                  : const SizedBox();
             },
           ),
+          comic: comic,
         );
       },
       error: (err, stack) => Text(

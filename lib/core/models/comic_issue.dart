@@ -8,11 +8,13 @@ class ComicIssueModel {
   final String description;
   final String cover;
   final ComicIssueStats? stats;
+  final ComicIssueMyStats? myStats;
   final ComicType? comic;
   final CreatorModel creator;
   final bool isPopular, isFree;
   final DateTime releaseDate;
   final int supply;
+  final String? candyMachineAddress;
 
   ComicIssueModel({
     required this.id,
@@ -22,12 +24,14 @@ class ComicIssueModel {
     required this.description,
     required this.cover,
     this.stats,
+    this.myStats,
     required this.comic,
     required this.creator,
     required this.isPopular,
     required this.releaseDate,
     required this.supply,
     required this.isFree,
+    this.candyMachineAddress,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -41,6 +45,9 @@ class ComicIssueModel {
       stats: json['stats'] != null
           ? ComicIssueStats.fromJson(json['stats'])
           : null,
+      myStats: json['myStats'] != null
+          ? ComicIssueMyStats.fromJson(json['myStats'])
+          : null,
       comic: json['comic'] != null ? ComicType.fromJson(json['comic']) : null,
       creator: CreatorModel.fromJson(json['creator']),
       isPopular: json['isPopular'],
@@ -49,30 +56,33 @@ class ComicIssueModel {
       ),
       supply: json['supply'],
       isFree: json['isFree'],
+      candyMachineAddress: json['candyMachineAddress'],
     );
   }
 }
 
 class ComicIssueStats {
-  final double floorPrice, totalVolume;
-  final double? averageRating;
-  final int totalIssuesCount,
-      favouritesCount,
+  final int favouritesCount,
+      ratersCount,
+      totalIssuesCount,
       totalListedCount,
       readersCount,
       viewersCount,
       totalPagesCount;
+  final double floorPrice, totalVolume;
+  final double? averageRating;
 
   ComicIssueStats({
-    required this.floorPrice,
-    required this.totalVolume,
-    this.averageRating,
-    required this.totalIssuesCount,
     required this.favouritesCount,
+    required this.ratersCount,
+    required this.totalIssuesCount,
     required this.totalListedCount,
     required this.readersCount,
     required this.viewersCount,
     required this.totalPagesCount,
+    required this.floorPrice,
+    required this.totalVolume,
+    this.averageRating,
   });
 
   factory ComicIssueStats.fromJson(dynamic json) => ComicIssueStats(
@@ -93,6 +103,34 @@ class ComicIssueStats {
         readersCount: json['readersCount'],
         viewersCount: json['viewersCount'],
         totalPagesCount: json['totalPagesCount'],
+        ratersCount: json['ratersCount'] ?? 0,
+      );
+}
+
+class ComicIssueMyStats {
+  final int? rating;
+  final bool? isFavourite;
+  final bool canRead;
+  final DateTime? readAt, viewedAt;
+
+  ComicIssueMyStats({
+    this.rating,
+    this.isFavourite,
+    required this.canRead,
+    this.readAt,
+    this.viewedAt,
+  });
+
+  factory ComicIssueMyStats.fromJson(dynamic json) => ComicIssueMyStats(
+        rating: json['rating'],
+        isFavourite: json['isFavourite'],
+        canRead: json['canRead'],
+        readAt: json['readAt'],
+        viewedAt: json['viewedAt'] != null
+            ? DateTime.parse(
+                json['viewedAt'],
+              )
+            : null,
       );
 }
 

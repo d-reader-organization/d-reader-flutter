@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/page_model.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository_impl.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
@@ -14,7 +15,13 @@ final comicIssuesProvider =
 final comicIssueDetailsProvider =
     FutureProvider.family<ComicIssueModel?, int>((ref, id) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
-      .getComic(id);
+      .getComicIssue(id);
+});
+
+final comicIssuePagesProvider =
+    FutureProvider.family<List<PageModel>, int>((ref, id) async {
+  return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
+      .getComicIssuePages(id);
 });
 
 class ComicIssueDetailState {
@@ -25,22 +32,5 @@ class ComicIssueDetailState {
 
   ComicIssueDetailState copyWith({required int selectedNftsCount}) {
     return ComicIssueDetailState(selectedNftsCount: selectedNftsCount);
-  }
-}
-
-final comicIssueStateNotifier =
-    StateNotifierProvider<ComicIssueDetailNotifier, ComicIssueDetailState>(
-        (ref) => ComicIssueDetailNotifier());
-
-class ComicIssueDetailNotifier extends StateNotifier<ComicIssueDetailState> {
-  ComicIssueDetailNotifier()
-      : super(const ComicIssueDetailState(selectedNftsCount: 0));
-
-  update(bool isIncrement) async {
-    state = state.copyWith(
-      selectedNftsCount: isIncrement
-          ? state.selectedNftsCount + 1
-          : state.selectedNftsCount - 1,
-    );
   }
 }

@@ -34,7 +34,7 @@ class BuyButton extends StatelessWidget {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(
-                8,
+                32,
               ),
             ),
           ),

@@ -9,6 +9,8 @@ class AuthWallet {
 
   factory AuthWallet.fromJson(json) {
     return AuthWallet(
-        accessToken: json['accessToken'], refreshToken: json['refreshToken']);
+      accessToken: json['accessToken'],
+      refreshToken: json['refreshToken'],
+    );
   }
 }

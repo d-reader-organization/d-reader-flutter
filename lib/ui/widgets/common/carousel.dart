@@ -56,15 +56,15 @@ class Carousel extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            carouselItem.title,
-                            style: textTheme.titleMedium,
+                            carouselItem.subtitle,
+                            style: textTheme.bodySmall,
                           ),
                           const SizedBox(
                             height: 8,
                           ),
                           Text(
                             carouselItem.title,
-                            style: textTheme.labelMedium,
+                            style: textTheme.headlineLarge,
                           ),
                         ],
                       ),

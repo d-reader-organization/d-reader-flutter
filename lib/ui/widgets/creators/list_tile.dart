@@ -38,9 +38,13 @@ class CreatorListTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AuthorVerified(authorName: creator.name),
+                AuthorVerified(
+                  authorName: creator.name,
+                  isVerified: creator.isVerified,
+                  fontSize: 14,
+                ),
                 const SizedBox(
-                  height: 6,
+                  height: 4,
                 ),
                 Text(
                   '${creator.stats?.totalVolume} %',

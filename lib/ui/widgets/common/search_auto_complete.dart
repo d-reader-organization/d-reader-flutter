@@ -2,6 +2,8 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/styles.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +103,10 @@ class AutoCompleteListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return ListTile(
-      onTap: () => onSelected(comic),
+      onTap: () {
+        onSelected(comic);
+        nextScreenPush(context, ComicDetails(slug: comic.slug));
+      },
       leading: SizedBox(
         height: 32,
         width: 32,

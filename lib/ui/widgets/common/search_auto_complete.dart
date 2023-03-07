@@ -112,7 +112,7 @@ class AutoCompleteListItem extends StatelessWidget {
         width: 32,
         child: CommonCachedImage(
           imageUrl: comic.cover,
-          fit: BoxFit.scaleDown,
+          fit: BoxFit.fill,
           cacheKey: 'search${comic.slug}',
         ),
       ),

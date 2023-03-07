@@ -209,8 +209,10 @@ class ComicDetailsScaffold extends StatelessWidget {
                         StatsInfo(
                           title: comic.isCompleted ? 'COMPLETED' : 'ONGOING',
                           stats: '',
-                          statsWidget: const Icon(
-                            Icons.arrow_right_alt_outlined,
+                          statsWidget: Icon(
+                            comic.isCompleted
+                                ? Icons.check
+                                : Icons.arrow_right_alt_outlined,
                             color: Colors.white,
                           ),
                           isLastItem: true,

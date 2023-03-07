@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
@@ -18,12 +19,12 @@ class ComicCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
       child: Container(
-        margin: const EdgeInsets.only(right: 24),
+        margin: const EdgeInsets.only(right: 16),
         width: 155,
         height: 255,
         child: Stack(
@@ -34,12 +35,12 @@ class ComicCard extends ConsumerWidget {
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    Colors.black,
+                    ColorPalette.appBackgroundColor,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.05, 0.2],
+                  stops: [0.0, 0.5],
                 ),
                 borderRadius: BorderRadius.circular(
                   16,

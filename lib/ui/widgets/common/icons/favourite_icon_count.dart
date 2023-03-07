@@ -29,7 +29,7 @@ class FavouriteIconCount extends HookConsumerWidget {
         isSelected: isFavourite,
       ),
     );
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         ref.read(updateComicFavouriteProvider(slug));
         favouriteHook.value = favouriteHook.value.copyWith(

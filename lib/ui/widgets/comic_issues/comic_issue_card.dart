@@ -18,7 +18,7 @@ class ComicIssueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
@@ -54,9 +54,13 @@ class ComicIssueCard extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.only(
-                    right: 4, left: 8, top: 12, bottom: 14),
+                  right: 4,
+                  left: 8,
+                  top: 12,
+                  bottom: 12,
+                ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +79,7 @@ class ComicIssueCard extends StatelessWidget {
                         ),
                         Text(
                           issue.title,
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,

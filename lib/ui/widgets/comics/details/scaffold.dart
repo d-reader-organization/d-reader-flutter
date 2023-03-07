@@ -145,7 +145,7 @@ class ComicDetailsScaffold extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
+                        GestureDetector(
                           onTap: () => nextScreenPush(
                             context,
                             CreatorDetailsView(

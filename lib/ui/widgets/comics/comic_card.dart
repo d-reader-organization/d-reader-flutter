@@ -35,12 +35,12 @@ class ComicCard extends ConsumerWidget {
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    ColorPalette.appBackgroundColor,
+                    ColorPalette.boxBackground200,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.0, 0.5],
+                  stops: [0.0, 0.32],
                 ),
                 borderRadius: BorderRadius.circular(
                   16,
@@ -70,8 +70,8 @@ class ComicCard extends ConsumerWidget {
                     children: [
                       Text(
                         comic.name,
-                        softWrap: true,
-                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                         style: textTheme.titleSmall,
                       ),
                       const SizedBox(

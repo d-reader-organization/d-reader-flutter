@@ -171,7 +171,7 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
+                    GestureDetector(
                       onTap: () => nextScreenPush(
                         context,
                         CreatorDetailsView(

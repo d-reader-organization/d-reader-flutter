@@ -19,7 +19,7 @@ class ComicIssueCardLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },

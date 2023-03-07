@@ -77,7 +77,7 @@ class LibraryView extends StatelessWidget {
         mainAxisExtent: 190,
       ),
       itemBuilder: (context, index) {
-        return InkWell(
+        return GestureDetector(
           onTap: () {
             nextScreenPush(
               context,

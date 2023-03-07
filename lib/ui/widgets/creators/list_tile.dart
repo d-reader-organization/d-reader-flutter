@@ -16,7 +16,7 @@ class CreatorListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, CreatorDetailsView(slug: creator.slug));
       },
@@ -32,7 +32,7 @@ class CreatorListTile extends StatelessWidget {
               height: 48,
             ),
             const SizedBox(
-              width: 16,
+              width: 8,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,

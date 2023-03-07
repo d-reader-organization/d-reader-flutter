@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
@@ -133,29 +134,36 @@ class ListingRow extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  receipt.nft.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      shortenNftName(receipt.nft.name),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      timeago.format(
+                        DateTime.parse(
+                          receipt.timestamp,
+                        ),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: ColorPalette.dReaderGreen,
+                      ),
+                    ),
+                  ],
                 ),
                 SolanaPrice(
                   price: receipt.price,
                 ),
               ],
-            ),
-            Text(
-              timeago.format(
-                DateTime.parse(
-                  receipt.timestamp,
-                ),
-              ),
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: ColorPalette.dReaderGreen,
-              ),
             ),
           ],
         ),

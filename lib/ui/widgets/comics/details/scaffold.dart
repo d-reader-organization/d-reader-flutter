@@ -66,8 +66,8 @@ class ComicDetailsScaffold extends StatelessWidget {
                           Colors.transparent,
                           ColorPalette.appBackgroundColor,
                         ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                         stops: [0.128, .6406, 1],
                       ),
                     ),
@@ -191,36 +191,36 @@ class ComicDetailsScaffold extends StatelessWidget {
                     const SizedBox(
                       height: 24,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        StatsInfo(
-                          title: 'VOLUME',
-                          stats: '${comic.stats?.totalVolume}◎',
-                        ),
-                        StatsInfo(
-                          title: 'ISSUES',
-                          stats: '${comic.stats?.issuesCount}',
-                        ),
-                        StatsInfo(
-                          title: 'READERS',
-                          stats: '${comic.stats?.readersCount}',
-                        ),
-                        StatsInfo(
-                          title: comic.isCompleted ? 'COMPLETED' : 'ONGOING',
-                          stats: '',
-                          statsWidget: Icon(
-                            comic.isCompleted
-                                ? Icons.check
-                                : Icons.arrow_right_alt_outlined,
-                            color: Colors.white,
-                          ),
-                          isLastItem: true,
-                        ),
-                      ],
-                    ),
                   ],
                 ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              StatsInfo(
+                title: 'VOLUME',
+                stats: '${comic.stats?.totalVolume}◎',
+              ),
+              StatsInfo(
+                title: 'ISSUES',
+                stats: '${comic.stats?.issuesCount}',
+              ),
+              StatsInfo(
+                title: 'READERS',
+                stats: '${comic.stats?.readersCount}',
+              ),
+              StatsInfo(
+                title: comic.isCompleted ? 'COMPLETED' : 'ONGOING',
+                stats: '',
+                statsWidget: Icon(
+                  comic.isCompleted
+                      ? Icons.check
+                      : Icons.arrow_right_alt_outlined,
+                  color: Colors.white,
+                ),
+                isLastItem: true,
               ),
             ],
           ),

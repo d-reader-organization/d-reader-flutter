@@ -160,7 +160,7 @@ class NftDetails extends ConsumerWidget {
                                       child: Row(
                                         children: [
                                           SvgPicture.asset(
-                                              'assets/images/mint_icon.svg'),
+                                              'assets/icons/mint_icon.svg'),
                                           Text(
                                             'Mint',
                                             style: Theme.of(context)
@@ -184,7 +184,7 @@ class NftDetails extends ConsumerWidget {
                                       child: Row(
                                         children: [
                                           SvgPicture.asset(
-                                              'assets/images/signed_icon.svg'),
+                                              'assets/icons/signed_icon.svg'),
                                           Text(
                                             'Signed',
                                             style: Theme.of(context)

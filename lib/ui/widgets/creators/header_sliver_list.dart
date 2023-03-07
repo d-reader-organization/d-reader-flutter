@@ -33,8 +33,8 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
                   Colors.transparent,
                 ],
                 begin: Alignment.bottomCenter,
-                end: Alignment.center,
-                stops: [.0162, 1.03],
+                end: Alignment.topCenter,
+                stops: [0, 1.05],
               ),
             ),
           ),
@@ -42,19 +42,12 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(128),
-                    color: ColorPalette.boxBackground300,
-                  ),
-                  child: CreatorAvatar(
-                    avatar: creator.avatar,
-                    slug: creator.slug,
-                    height: 96,
-                    width: 96,
-                    radius: 16,
-                  ),
+                CreatorAvatar(
+                  avatar: creator.avatar,
+                  slug: creator.slug,
+                  height: 96,
+                  width: 96,
+                  radius: 64,
                 ),
                 AuthorVerified(
                   authorName: creator.name,

@@ -10,15 +10,20 @@ class GenreTagsDefault extends StatelessWidget {
     required this.genres,
   }) : super(key: key);
 
-  List<GenreModel> _genresWithMore() => genres.sublist(0, 4)
-    ..add(
-      GenreModel(color: '', name: '', slug: 'dots', icon: ''),
-    );
+  List<GenreModel> _genresWithMore(int sublistLimit) =>
+      genres.sublist(0, sublistLimit)
+        ..add(
+          GenreModel(color: '', name: '', slug: 'dots', icon: ''),
+        );
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final sublistLimit = screenWidth > 360 ? 4 : 3;
     return Row(
-        children: (genres.length >= 4 ? _genresWithMore() : genres)
+        children: (genres.length >= sublistLimit
+                ? _genresWithMore(sublistLimit)
+                : genres)
             .map((genre) => Container(
                   padding: const EdgeInsets.all(2),
                   margin: const EdgeInsets.only(right: 4),

@@ -35,12 +35,12 @@ class ComicCardLarge extends StatelessWidget {
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    Colors.black,
+                    ColorPalette.appBackgroundColor,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.05, 0.3],
+                  stops: [0, 2],
                 ),
                 borderRadius: BorderRadius.circular(
                   16,
@@ -61,11 +61,12 @@ class ComicCardLarge extends StatelessWidget {
                       children: [
                         EpisodeCircle(
                           text:
-                              '${comic.stats?.issuesCount}EPs ${comic.isCompleted ? '- ENDED' : ''}',
+                              '${comic.stats?.issuesCount} EPs${comic.isCompleted ? ' - ENDED' : ''}',
                           color: comic.isCompleted
                               ? const Color(0xFFC6E7C1)
                               : Colors.white,
                           fontSize: 14,
+                          height: 32,
                         ),
                         const HotIcon(),
                       ],

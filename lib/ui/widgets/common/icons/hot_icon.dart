@@ -7,11 +7,11 @@ class HotIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
         color: ColorPalette.dReaderYellow100,
         borderRadius: BorderRadius.circular(
-          30,
+          32,
         ),
       ),
       child: Row(

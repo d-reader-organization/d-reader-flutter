@@ -64,8 +64,8 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
                       Colors.transparent,
                       ColorPalette.appBackgroundColor,
                     ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
                     stops: [0.128, .6406, 1],
                   ),
                 ),
@@ -75,7 +75,6 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,6 +111,11 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
                             children: [
                               Row(
                                 children: [
+                                  const Icon(
+                                    Icons.menu_book,
+                                    color: Colors.white,
+                                    size: 16,
+                                  ),
                                   Text(
                                     '${issue.stats?.totalPagesCount.toString()} pages',
                                     style: const TextStyle(
@@ -120,12 +124,6 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
                                     ),
                                   ),
                                 ],
-                              ),
-                              Text(
-                                issue.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.headlineLarge,
                               ),
                             ],
                           ),
@@ -147,8 +145,11 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 8,
+                      Text(
+                        issue.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.headlineLarge,
                       ),
                       const SizedBox(
                         height: 12,
@@ -212,37 +213,37 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 24,
-                ),
-                issue.candyMachineAddress != null
-                    ? CandyMachineStats(
-                        address: issue.candyMachineAddress ?? '',
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          StatsInfo(
-                            title: 'VOLUME',
-                            stats: '${issue.stats?.totalVolume}◎',
-                          ),
-                          StatsInfo(
-                            title: 'SUPPLY',
-                            stats: '${issue.supply}',
-                          ),
-                          StatsInfo(
-                            title: 'LISTED',
-                            stats: '${issue.stats?.totalListedCount}',
-                          ),
-                          StatsInfo(
-                            title: 'FLOOR',
-                            stats: '${issue.stats?.floorPrice ?? '-.--'}◎',
-                            isLastItem: true,
-                          ),
-                        ],
-                      ),
               ],
             ),
+          ),
+          issue.candyMachineAddress != null
+              ? CandyMachineStats(
+                  address: issue.candyMachineAddress ?? '',
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StatsInfo(
+                      title: 'VOLUME',
+                      stats: '${issue.stats?.totalVolume}◎',
+                    ),
+                    StatsInfo(
+                      title: 'SUPPLY',
+                      stats: '${issue.supply}',
+                    ),
+                    StatsInfo(
+                      title: 'LISTED',
+                      stats: '${issue.stats?.totalListedCount}',
+                    ),
+                    StatsInfo(
+                      title: 'FLOOR',
+                      stats: '${issue.stats?.floorPrice ?? '-.--'}◎',
+                      isLastItem: true,
+                    ),
+                  ],
+                ),
+          const SizedBox(
+            height: 24,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
@@ -255,7 +256,7 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           BuyButton(
-            size: const Size(180, 50),
+            size: const Size(150, 50),
             onPressed: () async {
               await ref.read(solanaProvider.notifier).mint();
             },
@@ -280,7 +281,7 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
             ),
           ),
           BuyButton(
-            size: const Size(180, 50),
+            size: const Size(150, 50),
             backgroundColor: ColorPalette.dReaderGreen,
             onPressed: () {
               nextScreenPush(
@@ -345,7 +346,13 @@ class CandyMachineStats extends ConsumerWidget {
                     DateTime.parse(candyMachine?.endsAt ?? ''),
                   ),
                 )
-              : const SizedBox(),
+              : const Text(
+                  '∞',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
           StatsInfo(
             title: 'SUPPLY',
             stats: '${candyMachine?.supply}K',

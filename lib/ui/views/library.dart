@@ -58,6 +58,42 @@ final walletAssets = List<WalletAsset>.from([
       {"trait": "used", "value": "false"},
       {"trait": "signed", "value": "false"}
     ]
+  },
+  {
+    "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
+    "uri":
+        "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
+    "image":
+        "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
+    "name": "Rise of the Gorecats #8",
+    "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
+    "royalties": 8,
+    "isMintCondition": false,
+    "isSigned": false,
+    "comicName": "Gorecats",
+    "comicIssueName": "Rise of the Gorecats",
+    "attributes": [
+      {"trait": "used", "value": "false"},
+      {"trait": "signed", "value": "false"}
+    ]
+  },
+  {
+    "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
+    "uri":
+        "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
+    "image":
+        "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
+    "name": "Rise of the Gorecats #8",
+    "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
+    "royalties": 8,
+    "isMintCondition": false,
+    "isSigned": false,
+    "comicName": "Gorecats",
+    "comicIssueName": "Rise of the Gorecats",
+    "attributes": [
+      {"trait": "used", "value": "false"},
+      {"trait": "signed", "value": "false"}
+    ]
   }
 ].map((item) => WalletAsset.fromJson(item)));
 

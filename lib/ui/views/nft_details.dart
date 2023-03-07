@@ -1,7 +1,11 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
+import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/buy_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
@@ -9,6 +13,7 @@ import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -48,12 +53,16 @@ class NftDetails extends ConsumerWidget {
             "isSigned": false,
             "comicName": "Gorecats",
             "comicIssueName": "Rise of the Gorecats",
+            "comicIssueId": 5,
             "attributes": [
               {"trait": "used", "value": "false"},
               {"trait": "signed", "value": "false"}
             ]
           },
         );
+        if (nft == null) {
+          return const Text('No item');
+        }
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -105,7 +114,14 @@ class NftDetails extends ConsumerWidget {
                           )
                         ],
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        nextScreenPush(
+                          context,
+                          EReaderView(
+                            issueId: nft!.comicIssueId,
+                          ),
+                        );
+                      },
                     ),
                     BuyButton(
                       size: Size(MediaQuery.of(context).size.width / 2.4, 50),
@@ -133,7 +149,7 @@ class NftDetails extends ConsumerWidget {
                   text: nft.description,
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 16,
                 ),
                 nft.isMintCondition || nft.isSigned
                     ? Column(
@@ -198,7 +214,7 @@ class NftDetails extends ConsumerWidget {
                             ],
                           ),
                           const SizedBox(
-                            height: 8,
+                            height: 16,
                           ),
                         ],
                       )
@@ -210,12 +226,41 @@ class NftDetails extends ConsumerWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                Text(
-                  nft.owner,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                Row(
+                  children: [
+                    Text(
+                      formatAddress(nft.owner, 12),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    GestureDetector(
+                      child: const Icon(
+                        Icons.copy,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                      onTap: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: nft?.owner,
+                          ),
+                        ).then(
+                          (value) => ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Owner address copied to clipboard",
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 16,
                 ),
                 const Text(
                   'NFT Address',
@@ -224,9 +269,38 @@ class NftDetails extends ConsumerWidget {
                 const SizedBox(
                   height: 4,
                 ),
-                Text(
-                  nft.address,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                Row(
+                  children: [
+                    Text(
+                      formatAddress(nft.address, 12),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    GestureDetector(
+                      child: const Icon(
+                        Icons.copy,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                      onTap: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: nft?.address,
+                          ),
+                        ).then(
+                          (value) => ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "NFT address copied to clipboard",
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 32,
@@ -237,7 +311,14 @@ class NftDetails extends ConsumerWidget {
                   borderColor: Colors.white,
                   backgroundColor: Colors.transparent,
                   textColor: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    nextScreenPush(
+                      context,
+                      ComicIssueDetails(
+                        id: nft!.comicIssueId,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

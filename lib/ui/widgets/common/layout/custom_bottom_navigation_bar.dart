@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
@@ -33,22 +34,22 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           type: BottomNavigationBarType.fixed,
           elevation: 0,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
+              icon: SvgPicture.asset('assets/icons/home.svg'),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.explore_outlined),
+              icon: SvgPicture.asset('assets/icons/discovery.svg'),
               label: 'Discover',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_add_outlined),
+              icon: SvgPicture.asset('assets/icons/bookmark.svg'),
               label: 'Library',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart),
-              label: 'Marketplace',
+              icon: SvgPicture.asset('assets/icons/profile.svg'),
+              label: 'Profile',
             ),
           ],
         ),

@@ -3,8 +3,8 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserIconButton extends ConsumerWidget {
-  const UserIconButton({Key? key}) : super(key: key);
+class LogoutButton extends ConsumerWidget {
+  const LogoutButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,7 +14,7 @@ class UserIconButton extends ConsumerWidget {
         await ref.read(authProvider.notifier).clearToken();
       },
       icon: const Icon(
-        Icons.person_outline,
+        Icons.logout,
       ),
     );
   }

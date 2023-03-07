@@ -9,6 +9,7 @@ class BuyButton extends StatelessWidget {
   final Size size;
   final double fontSize;
   final bool isLoading;
+  final BorderRadiusGeometry borderRadius;
 
   const BuyButton({
     Key? key,
@@ -19,6 +20,11 @@ class BuyButton extends StatelessWidget {
     this.size = const Size(120, 27),
     this.fontSize = 14,
     this.isLoading = false,
+    this.borderRadius = const BorderRadius.all(
+      Radius.circular(
+        32,
+      ),
+    ),
   }) : super(key: key);
 
   @override
@@ -31,12 +37,8 @@ class BuyButton extends StatelessWidget {
           minimumSize: size,
           backgroundColor: backgroundColor,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                32,
-              ),
-            ),
+          shape: RoundedRectangleBorder(
+            borderRadius: borderRadius,
           ),
           foregroundColor: textColor,
           textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(

@@ -31,14 +31,17 @@ class GenreCard extends StatelessWidget {
               Colors.white,
               BlendMode.srcIn,
             ),
-            width: 24,
-            height: 24,
+            width: 32,
+            height: 32,
           ),
           Text(
             genre.name,
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
         ],
       ),

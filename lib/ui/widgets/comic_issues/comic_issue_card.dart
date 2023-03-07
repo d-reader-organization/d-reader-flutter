@@ -63,6 +63,8 @@ class ComicIssueCard extends StatelessWidget {
                       children: [
                         Text(
                           issue.comic?.name ?? 'Missing',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: textTheme.bodyMedium?.copyWith(
                             color: ColorPalette.dReaderYellow100,
                             fontWeight: FontWeight.w700,

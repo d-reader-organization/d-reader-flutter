@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -22,7 +23,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class ComicIssueDetailsScaffold extends StatelessWidget {
+class ComicIssueDetailsScaffold extends ConsumerWidget {
   final Widget body;
   final ComicIssueModel issue;
   const ComicIssueDetailsScaffold({
@@ -32,7 +33,7 @@ class ComicIssueDetailsScaffold extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
@@ -255,7 +256,9 @@ class ComicIssueDetailsScaffold extends StatelessWidget {
         children: [
           BuyButton(
             size: const Size(180, 50),
-            onPressed: () {},
+            onPressed: () async {
+              await ref.read(solanaProvider.notifier).mint();
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

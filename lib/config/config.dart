@@ -8,6 +8,8 @@ abstract class Config {
   static final String solanaCluster =
       dotenv.get('solanaCluster', fallback: 'devnet');
   static const String logoTextPath = 'assets/images/d_reader_logo_text.png';
+  static const String logoTextBlackPath =
+      'assets/images/d_reader_logo_text_black.png';
   static const String logoPath = 'assets/images/d_reader_logo.png';
   static const String solanaLogoPath = 'assets/images/solana_logo.png';
   static const String digitalWalletImgPath = 'assets/images/digital_wallet.png';

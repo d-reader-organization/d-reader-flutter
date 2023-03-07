@@ -22,6 +22,7 @@ class IntroView extends HookConsumerWidget {
         color: ColorPalette.dReaderYellow100,
       ),
       bodyAlignment: Alignment.center,
+      pageColor: ColorPalette.appBackgroundColor,
     );
   }
 

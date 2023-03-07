@@ -48,7 +48,7 @@ class CreatorDetailsView extends ConsumerWidget {
                             text: 'Issues',
                           ),
                           Tab(
-                            text: 'Collectables',
+                            text: 'Collectibles',
                           ),
                         ],
                       ),
@@ -78,10 +78,7 @@ class CreatorDetailsView extends ConsumerWidget {
           );
         },
         loading: () => const Center(
-          child: SizedBox(
-            height: 400,
-            child: SkeletonCard(),
-          ),
+          child: SizedBox(),
         ),
       )),
     );

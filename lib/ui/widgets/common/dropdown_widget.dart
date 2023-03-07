@@ -23,16 +23,20 @@ class _DropdownWidgetState extends State<DropdownWidget> {
           });
         },
         isExpanded: false,
-        icon: const Icon(Icons.arrow_downward_outlined),
-        iconSize: 12,
-        iconDisabledColor: Colors.white,
-        iconEnabledColor: Colors.white,
-        buttonHeight: 37,
-        buttonPadding: const EdgeInsets.only(right: 8),
-        buttonDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: ColorPalette.boxBackground400,
+        iconStyleData: const IconStyleData(
+          icon: Icon(Icons.arrow_downward_outlined),
+          iconSize: 12,
+          iconDisabledColor: Colors.white,
+          iconEnabledColor: Colors.white,
+        ),
+        buttonStyleData: ButtonStyleData(
+          height: 37,
+          padding: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: ColorPalette.boxBackground400,
+            ),
           ),
         ),
         selectedItemBuilder: (context) {
@@ -61,11 +65,13 @@ class _DropdownWidgetState extends State<DropdownWidget> {
             ),
           ];
         },
-        dropdownDecoration: const BoxDecoration(
-          color: ColorPalette.boxBackground400,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(
-              6,
+        dropdownStyleData: const DropdownStyleData(
+          decoration: BoxDecoration(
+            color: ColorPalette.boxBackground400,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(
+                6,
+              ),
             ),
           ),
         ),

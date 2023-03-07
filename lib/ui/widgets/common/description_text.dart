@@ -15,7 +15,7 @@ class DescriptionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.bodyMedium,
+      style: Theme.of(context).textTheme.bodyLarge,
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,

@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
+import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
@@ -16,14 +17,13 @@ class ComicIssueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String episode = '${issue.number}/${issue.stats?.totalIssuesCount}';
     TextTheme textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
       child: Container(
-        height: 260,
+        height: 270,
         width: 178,
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,
@@ -35,7 +35,7 @@ class ComicIssueCard extends StatelessWidget {
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               cacheKey: 'home${issue.slug}',
-              height: 130,
+              height: 135,
               overrideBorderRadius: const BorderRadius.vertical(
                 top: Radius.circular(
                   16,
@@ -46,7 +46,7 @@ class ComicIssueCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   EpisodeCircle(
-                    text: 'EP $episode',
+                    text: 'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
                   ),
                 ],
               ),
@@ -63,13 +63,15 @@ class ComicIssueCard extends StatelessWidget {
                       children: [
                         Text(
                           issue.comic?.name ?? 'Missing',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: textTheme.bodyMedium?.copyWith(
                             color: ColorPalette.dReaderYellow100,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(
-                          height: 2,
+                          height: 4,
                         ),
                         Text(
                           issue.title,
@@ -80,27 +82,21 @@ class ComicIssueCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 2,
+                          height: 4,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              issue.creator.name,
-                              style: textTheme.bodySmall?.copyWith(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.verified,
-                              color: ColorPalette.dReaderYellow100,
-                              size: 16,
-                            ),
-                          ],
+                        AuthorVerified(
+                          authorName: issue.creator.name,
+                          isVerified: issue.creator.isVerified,
+                          textColor: const Color(0xFFb9b9b9),
                         ),
                       ],
                     ),
-                    SolanaPrice(
-                      price: issue.stats!.floorPrice,
+                    Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      child: SolanaPrice(
+                        price: issue.stats?.floorPrice,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                      ),
                     ),
                   ],
                 ),

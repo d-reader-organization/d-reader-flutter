@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
@@ -18,28 +19,28 @@ class ComicCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
       child: Container(
         margin: const EdgeInsets.only(right: 16),
+        width: 155,
+        height: 255,
         child: Stack(
           children: [
             CachedImageBgPlaceholder(
               imageUrl: comic.cover,
               cacheKey: 'home${comic.slug}',
-              height: 255,
-              width: 180,
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    Colors.black,
+                    ColorPalette.appBackgroundColor,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.05, 0.2],
+                  stops: [0.0, 0.5],
                 ),
                 borderRadius: BorderRadius.circular(
                   16,
@@ -48,12 +49,22 @@ class ComicCard extends ConsumerWidget {
             ),
             Container(
               padding: const EdgeInsets.all(12),
-              width: 180,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  EpisodeCircle(text: '${comic.stats?.issuesCount} EPs'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      EpisodeCircle(text: '${comic.stats?.issuesCount} EPs'),
+                      FavouriteIconCount(
+                        favouritesCount: comic.stats?.favouritesCount ?? 0,
+                        isFavourite: comic.myStats?.isFavourite ?? false,
+                        slug: comic.slug,
+                        variant: Variant.filled,
+                      ),
+                    ],
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -64,19 +75,16 @@ class ComicCard extends ConsumerWidget {
                         style: textTheme.titleSmall,
                       ),
                       const SizedBox(
-                        height: 16,
+                        height: 4,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AuthorVerified(authorName: comic.creator.name),
-                          FavouriteIconCount(
-                            favouritesCount: comic.stats?.favouritesCount ?? 0,
-                            isFavourite: comic.myStats?.isFavourite ?? false,
-                            slug: comic.slug,
-                          ),
-                        ],
-                      )
+                      AuthorVerified(
+                        authorName: comic.creator.name,
+                        isVerified: comic.creator.isVerified,
+                        textColor: const Color(0xFFb9b9b9),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
                     ],
                   )
                 ],

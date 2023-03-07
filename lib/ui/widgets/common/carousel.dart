@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:d_reader_flutter/core/models/carousel.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
@@ -36,12 +37,12 @@ class Carousel extends ConsumerWidget {
                       foregroundDecoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
-                            Colors.black,
+                            ColorPalette.appBackgroundColor,
                             Colors.transparent,
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
-                          stops: [0.05, 0.3],
+                          stops: [0, 0.8],
                         ),
                         borderRadius: BorderRadius.circular(
                           16,
@@ -56,15 +57,15 @@ class Carousel extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            carouselItem.title,
-                            style: textTheme.titleMedium,
+                            carouselItem.subtitle,
+                            style: textTheme.bodySmall,
                           ),
                           const SizedBox(
                             height: 8,
                           ),
                           Text(
                             carouselItem.title,
-                            style: textTheme.labelMedium,
+                            style: textTheme.headlineLarge,
                           ),
                         ],
                       ),

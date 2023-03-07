@@ -15,7 +15,7 @@ class ComicIssuesGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<ComicIssueModel>> comicIssues =
-        ref.watch(comicIssuesProvider(''));
+        ref.watch(comicIssuesProvider(null));
     return comicIssues.when(
       data: (data) {
         if (onlyFree) {
@@ -27,7 +27,7 @@ class ComicIssuesGrid extends ConsumerWidget {
                 shrinkWrap: true,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 12,
+                  crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   mainAxisExtent: 255,
                 ),

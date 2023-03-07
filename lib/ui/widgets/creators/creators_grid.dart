@@ -11,7 +11,7 @@ class CreatorsGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isTablet = MediaQuery.of(context).size.width > 600;
-    AsyncValue<List<CreatorModel>> creators = ref.watch(creatorsProvider(''));
+    AsyncValue<List<CreatorModel>> creators = ref.watch(creatorsProvider(null));
 
     return creators.when(
       data: (data) {

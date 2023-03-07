@@ -34,8 +34,11 @@ class CreatorDetailsView extends ConsumerWidget {
                   headerSliverBuilder:
                       (BuildContext context, bool innerBoxIsScrolled) {
                     return [
-                      const CustomSliverAppBar(),
+                      const CustomSliverAppBar(
+                        displayLogo: false,
+                      ),
                       CreatorDetailsHeaderSliverList(creator: data),
+                      StatsDescriptionWidget(creator: data),
                       const CustomSliverTabPersistentHeader(
                         tabs: [
                           Tab(
@@ -45,7 +48,7 @@ class CreatorDetailsView extends ConsumerWidget {
                             text: 'Issues',
                           ),
                           Tab(
-                            text: 'Collectables',
+                            text: 'Collectibles',
                           ),
                         ],
                       ),
@@ -75,10 +78,7 @@ class CreatorDetailsView extends ConsumerWidget {
           );
         },
         loading: () => const Center(
-          child: SizedBox(
-            height: 400,
-            child: SkeletonCard(),
-          ),
+          child: SizedBox(),
         ),
       )),
     );

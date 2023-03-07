@@ -22,6 +22,7 @@ class IntroView extends HookConsumerWidget {
         color: ColorPalette.dReaderYellow100,
       ),
       bodyAlignment: Alignment.center,
+      pageColor: ColorPalette.appBackgroundColor,
     );
   }
 
@@ -55,7 +56,7 @@ class IntroView extends HookConsumerWidget {
                 final result = await ref
                     .read(solanaProvider.notifier)
                     .authorizeAndSignMessage();
-                if (result == null) {
+                if (result == null && context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
@@ -69,10 +70,12 @@ class IntroView extends HookConsumerWidget {
                 }
                 final String token = await ref
                     .read(solanaProvider.notifier)
-                    .getTokenAfterSigning(result);
+                    .getTokenAfterSigning(result!);
                 await ref.read(authProvider.notifier).storeToken(token);
                 globalHook.value = globalHook.value.copyWith(isLoading: false);
-                nextScreenReplace(context, const DReaderScaffold());
+                if (context.mounted) {
+                  nextScreenReplace(context, const DReaderScaffold());
+                }
               }
             },
             isLoading: globalHook.value.isLoading,

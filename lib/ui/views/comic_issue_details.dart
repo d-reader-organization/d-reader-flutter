@@ -1,12 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/details_scaffold_model.dart';
+import 'package:d_reader_flutter/core/models/receipt.dart';
+import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_issues/details/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
+import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
-import 'package:d_reader_flutter/ui/widgets/details_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ComicIssueDetails extends ConsumerWidget {
   final int id;
@@ -24,50 +29,14 @@ class ComicIssueDetails extends ConsumerWidget {
         if (issue == null) {
           return const SizedBox();
         }
-        return DetailsScaffold(
-          isComicDetails: false,
-          detailsScaffoldModel: DetailsScaffoldModel(
-              slug: issue.slug,
-              imageUrl: issue.cover,
-              description: issue.description,
-              title: issue.comic?.name ?? '',
-              subtitle: issue.title,
-              avatarUrl: issue.creator.avatar,
-              creatorSlug: issue.creator.slug,
-              creatorName: issue.creator.name,
-              issuePages: issue.pages,
-              favouriteStats: FavouriteStats(
-                count: 5,
-                isFavourite: true,
-              ),
-              episodeNumber: issue.number,
-              generalStats: GeneralStats(
-                  totalIssuesCount: issue.stats!.totalIssuesCount,
-                  totalVolume: issue.stats!.totalVolume,
-                  floorPrice: issue.stats!.floorPrice,
-                  totalSupply: issue.supply,
-                  totalListedCount: issue.stats!.totalListedCount),
-              releaseDate: issue.releaseDate),
+        return ComicIssueDetailsScaffold(
           body: Column(
             children: [
-              const BodyHeader(),
-              ListView.separated(
-                itemCount: 5,
-                padding: const EdgeInsets.only(
-                    right: 4, left: 4, top: 12, bottom: 4),
-                shrinkWrap: true,
-                primary: false,
-                itemBuilder: (context, index) {
-                  return const ListingRow();
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    color: ColorPalette.boxBackground400,
-                  );
-                },
-              )
+              // const BodyHeader(),
+              ListedItems(address: issue.candyMachineAddress ?? ''),
             ],
           ),
+          issue: issue,
         );
       },
       error: (err, stack) {
@@ -82,85 +51,113 @@ class ComicIssueDetails extends ConsumerWidget {
   }
 }
 
-class ListingRow extends ConsumerStatefulWidget {
-  const ListingRow({
+class ListedItems extends ConsumerWidget {
+  final String address;
+  const ListedItems({
     super.key,
+    required this.address,
   });
 
   @override
-  ConsumerState<ListingRow> createState() => _ListingRowState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<List<Receipt>> provider =
+        ref.watch(receiptsProvider(address));
+    return provider.when(
+      data: (receipts) {
+        if (receipts.isEmpty) {
+          return const Text('No items');
+        }
+        return ListView.separated(
+          itemCount: receipts.length,
+          padding: const EdgeInsets.only(
+            right: 4,
+            left: 4,
+            top: 12,
+            bottom: 4,
+          ),
+          shrinkWrap: true,
+          primary: false,
+          itemBuilder: (context, index) {
+            return ListingRow(
+              receipt: receipts[index],
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              color: ColorPalette.boxBackground400,
+            );
+          },
+        );
+      },
+      error: (error, stackTrace) {
+        print('Listed items error: ${error.toString()}');
+        return const Text('Something went wrong');
+      },
+      loading: () => const SkeletonRow(),
+    );
+  }
 }
 
-class _ListingRowState extends ConsumerState<ListingRow> {
-  bool isSelected = false;
+class ListingRow extends StatelessWidget {
+  final Receipt receipt;
+  const ListingRow({
+    super.key,
+    required this.receipt,
+  });
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: isSelected
-          ? const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 1,
-                  color: ColorPalette.dReaderYellow100,
-                ),
-                top: BorderSide(
-                  width: 1,
-                  color: ColorPalette.dReaderYellow100,
-                ),
-              ),
-            )
-          : const BoxDecoration(),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(vertical: 4),
-        tileColor: isSelected ? ColorPalette.boxBackground300 : null,
-        leading: const CircleAvatar(
-          backgroundColor: ColorPalette.dReaderGreen,
-          maxRadius: 24,
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+      leading: CircleAvatar(
+        // backgroundColor: ColorPalette.dReaderGreen,
+        maxRadius: 24,
+        backgroundImage: CachedNetworkImageProvider(
+          receipt.buyer.avatar,
+          cacheKey: receipt.buyer.avatar,
         ),
-        onTap: () {
-          setState(() {
-            isSelected = !isSelected;
-            ref.read(comicIssueStateNotifier.notifier).update(isSelected);
-          });
-        },
-        title: SizedBox(
-          height: 48,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '7aLBCr...S7eKPD',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
+      ),
+      title: SizedBox(
+        height: 64,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              formatAddress(receipt.buyer.address),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  receipt.nft.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SolanaPrice(
+                  price: receipt.price,
+                ),
+              ],
+            ),
+            Text(
+              timeago.format(
+                DateTime.parse(
+                  receipt.timestamp,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    '#9692',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Text(
-                    'Rare',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: ColorPalette.dReaderGreen,
-                    ),
-                  ),
-                  SolanaPrice(
-                    price: 0.965,
-                  ),
-                ],
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: ColorPalette.dReaderGreen,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

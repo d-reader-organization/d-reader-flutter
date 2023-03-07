@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -33,7 +34,7 @@ extension ResignTx on SignedTx {
         signatures: signatures.toList()
           ..removeAt(0)
           ..insert(0, newSignature),
-        messageBytes: messageBytes,
+        compiledMessage: compiledMessage,
       );
 }
 
@@ -51,14 +52,15 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final result = await client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
-      cluster: 'devnet',
+      cluster: Config.solanaCluster,
     );
     state = state.copyWith(authorizationResult: result);
+    final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
 
     final signMessageResult = await _signMessage(client);
     _signature = Signature(
       signMessageResult.first.sublist(0, 64),
-      publicKey: Ed25519HDPublicKey(result?.publicKey ?? []),
+      publicKey: publicKey,
     );
     await session.close();
     return signMessageResult.isNotEmpty ? signMessageResult.first : null;
@@ -98,7 +100,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       final finalTransaction = decodedTX.resign(_signature!);
       try {
         final response = await client.signAndSendTransactions(
-            transactions: [base64Decode(finalTransaction.encode())]);
+          transactions: [
+            base64Decode(
+              finalTransaction.encode(),
+            ),
+          ],
+        );
         print(response);
       } catch (e) {
         print(e);
@@ -120,7 +127,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             messages: [messageToBeSigned], addresses: [addresses]);
         return result.signedPayloads;
       } catch (e) {
-        print('Error $e');
+        print('Error - Sign message:  ${e.toString()}');
       }
     }
     return [];

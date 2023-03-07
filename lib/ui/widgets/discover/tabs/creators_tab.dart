@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/results_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,31 +24,25 @@ class DiscoverCreatorsTab extends ConsumerWidget {
         ref.watch(creatorsProvider('nameSubstring=$search'));
     return providerData.when(
       data: (creators) {
-        return creators.isNotEmpty
-            ? ListView.separated(
-                itemCount: creators.isNotEmpty ? creators.length + 1 : 0,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return const CreatorListHeader();
-                  }
-                  return CreatorListItem(creator: creators[index - 1]);
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(
-                    color: ColorPalette.boxBackground300,
-                  );
-                },
-              )
-            : Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: Text(
-                  'No results found',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
+        return ResultsWrapper(
+          resultsCount: creators.isNotEmpty ? creators.length + 1 : 0,
+          body: ListView.separated(
+            itemCount: creators.isNotEmpty ? creators.length + 1 : 0,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return const CreatorListHeader();
+              }
+              return CreatorListItem(creator: creators[index - 1]);
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider(
+                color: ColorPalette.boxBackground300,
               );
+            },
+          ),
+        );
       },
       error: (error, stackTrace) {
         return Text('error $error');
@@ -90,6 +85,7 @@ class CreatorListItem extends StatelessWidget {
             flex: 2,
             child: AuthorVerified(
               authorName: creator.name,
+              isVerified: creator.isVerified,
               fontSize: 14,
             ),
           ),

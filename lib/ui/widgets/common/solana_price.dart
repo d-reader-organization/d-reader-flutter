@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:flutter/material.dart';
 
 class SolanaPrice extends StatelessWidget {
@@ -29,8 +30,8 @@ class SolanaPrice extends StatelessWidget {
           width: 4,
         ),
         Text(
-          price?.toString() ?? 'Free',
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          price != null ? formatPrice(price ?? 0) : 'Free',
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: textColor,
               ),

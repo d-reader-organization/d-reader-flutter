@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 
 class ComicCardLarge extends StatelessWidget {
@@ -62,8 +62,10 @@ class ComicCardLarge extends StatelessWidget {
                         EpisodeCircle(
                           text:
                               '${comic.stats?.issuesCount}EPs ${comic.isCompleted ? '- ENDED' : ''}',
-                          color: const Color(0xFFC6E7C1),
-                          fontSize: 12,
+                          color: comic.isCompleted
+                              ? const Color(0xFFC6E7C1)
+                              : Colors.white,
+                          fontSize: 14,
                         ),
                         const HotIcon(),
                       ],
@@ -81,7 +83,8 @@ class ComicCardLarge extends StatelessWidget {
                               children: [
                                 Text(
                                   comic.name,
-                                  style: textTheme.titleMedium,
+                                  style: textTheme.titleMedium
+                                      ?.copyWith(fontSize: 24),
                                 ),
                                 const SizedBox(
                                   width: 8,
@@ -105,7 +108,7 @@ class ComicCardLarge extends StatelessWidget {
                           text: comic.description,
                           textAlign: TextAlign.start,
                         ),
-                        GenreTags(genres: comic.genres),
+                        GenreTagsDefault(genres: comic.genres),
                       ],
                     ),
                   ),

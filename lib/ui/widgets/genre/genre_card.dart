@@ -25,12 +25,23 @@ class GenreCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SvgPicture.network(genre.icon, color: Colors.white),
+          SvgPicture.network(
+            genre.icon,
+            colorFilter: const ColorFilter.mode(
+              Colors.white,
+              BlendMode.srcIn,
+            ),
+            width: 32,
+            height: 32,
+          ),
           Text(
             genre.name,
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
         ],
       ),

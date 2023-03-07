@@ -11,6 +11,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
   final double borderRadius;
   final Decoration? foregroundDecoration;
   final BorderRadiusGeometry? overrideBorderRadius;
+  final BoxFit bgImageFit;
   const CachedImageBgPlaceholder({
     Key? key,
     required this.imageUrl,
@@ -21,6 +22,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
     this.borderRadius = 16,
     this.foregroundDecoration,
     this.overrideBorderRadius,
+    this.bgImageFit = BoxFit.cover,
   }) : super(key: key);
 
   @override
@@ -36,7 +38,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             image: imageProvider,
-            fit: BoxFit.cover,
+            fit: bgImageFit,
           ),
           borderRadius:
               overrideBorderRadius ?? BorderRadius.circular(borderRadius),

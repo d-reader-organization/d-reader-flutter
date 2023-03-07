@@ -83,11 +83,15 @@ class ComicStats {
       favouritesCount: json['favouritesCount'],
       subscribersCount: json['subscribersCount'],
       ratersCount: json['ratersCount'],
-      averageRating: double.tryParse(json['averageRating'].toStringAsFixed(2))
-              ?.toDouble() ??
-          0,
+      averageRating: json['averageRating'] != null
+          ? double.tryParse(json['averageRating'].toStringAsFixed(2))
+                  ?.toDouble() ??
+              0
+          : 0,
       issuesCount: json['issuesCount'],
-      totalVolume: json['totalVolume'],
+      totalVolume:
+          double.tryParse(json['totalVolume'].toStringAsFixed(2))?.toDouble() ??
+              0,
       readersCount: json['readersCount'],
       viewersCount: json['viewersCount'],
     );
@@ -95,13 +99,24 @@ class ComicStats {
 }
 
 class MyStats {
-  bool isFavourite;
+  final bool? isFavourite, isSubscribed;
+  final double? rating;
+  final DateTime? viewedAt;
 
   MyStats({
-    required this.isFavourite,
+    this.isFavourite,
+    this.isSubscribed,
+    this.rating,
+    this.viewedAt,
   });
 
   factory MyStats.fromJson(dynamic json) {
-    return MyStats(isFavourite: json['isFavourite']);
+    return MyStats(
+      isFavourite: json['isFavourite'],
+      isSubscribed: json['isSubscribed'],
+      rating: json['rating'],
+      viewedAt:
+          json['viewedAt'] != null ? DateTime.parse(json['viewedAt']) : null,
+    );
   }
 }

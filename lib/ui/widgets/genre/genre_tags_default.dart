@@ -18,15 +18,25 @@ class GenreTagsDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: (genres.length >= 4 ? _genresWithMore() : genres)
             .map((genre) => Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(2),
+                  margin: const EdgeInsets.only(right: 4),
                   child: genre.name.isNotEmpty
                       ? Row(
                           children: [
-                            SvgPicture.network(genre.icon,
-                                color: Colors.white, height: 16),
+                            SvgPicture.network(
+                              genre.icon,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                              height: 16,
+                              width: 16,
+                            ),
+                            const SizedBox(
+                              width: 2,
+                            ),
                             Text(
                               genre.name,
                               style: Theme.of(context)

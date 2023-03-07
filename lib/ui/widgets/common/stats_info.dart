@@ -36,6 +36,7 @@ class StatsInfo extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
+                color: Color(0xffb9b9b9),
               ),
             ),
             statsWidget != null

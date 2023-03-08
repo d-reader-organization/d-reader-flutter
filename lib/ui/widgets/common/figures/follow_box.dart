@@ -35,7 +35,7 @@ class FollowBox extends HookConsumerWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(4),
-        constraints: const BoxConstraints(minWidth: 144),
+        constraints: const BoxConstraints(minWidth: 148),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(

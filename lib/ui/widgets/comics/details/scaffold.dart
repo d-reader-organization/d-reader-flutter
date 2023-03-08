@@ -135,7 +135,11 @@ class ComicDetailsScaffold extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    right: 16, left: 16, top: 16, bottom: 4),
+                  right: 16,
+                  left: 16,
+                  top: 4,
+                  bottom: 4,
+                ),
                 child: Column(
                   children: [
                     GenreTagsDefault(genres: comic.genres),

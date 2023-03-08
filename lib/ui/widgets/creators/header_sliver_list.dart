@@ -58,17 +58,6 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    FollowBox(
-                      followersCount: creator.stats?.followersCount ?? 0,
-                      isFollowing: creator.myStats?.isFollowing ?? false,
-                      slug: creator.slug,
-                    ),
-                    const SocialRow(),
-                  ],
-                ),
               ],
             ),
           ),
@@ -90,6 +79,20 @@ class StatsDescriptionWidget extends StatelessWidget {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
+          const SizedBox(
+            height: 16,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FollowBox(
+                followersCount: creator.stats?.followersCount ?? 0,
+                isFollowing: creator.myStats?.isFollowing ?? false,
+                slug: creator.slug,
+              ),
+              const SocialRow(),
+            ],
+          ),
           const SizedBox(
             height: 24,
           ),

@@ -100,6 +100,8 @@ class ComicIssueCardLarge extends StatelessWidget {
                         ),
                         Text(
                           issue.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: textTheme.titleMedium,
                         ),
                         const SizedBox(

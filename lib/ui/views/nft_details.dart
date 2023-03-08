@@ -60,9 +60,6 @@ class NftDetails extends ConsumerWidget {
             ]
           },
         );
-        if (nft == null) {
-          return const Text('No item');
-        }
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,

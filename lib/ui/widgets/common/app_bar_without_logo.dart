@@ -46,23 +46,31 @@ class AnimatedAppBar extends StatelessWidget {
     required this.animation,
     this.title,
     this.actions = const [
-      Icon(
-        Icons.more_horiz_outlined,
-        size: 16,
-        color: Colors.white,
+      Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 12,
+        ),
+        child: Icon(
+          Icons.more_horiz_outlined,
+          size: 16,
+          color: Colors.white,
+        ),
       ),
     ],
   });
 
   @override
   Widget build(BuildContext context) {
+    final convertedTitle = title != null && title!.length > 20
+        ? '${title!.substring(0, 20)}...'
+        : title;
     return AnimatedBuilder(
         animation: animation,
         builder: (context, child) {
           return AppBar(
             title: title != null
                 ? Text(
-                    '$title',
+                    '$convertedTitle',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,

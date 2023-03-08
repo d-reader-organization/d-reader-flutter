@@ -22,6 +22,17 @@ class SkeletonCard extends StatelessWidget {
             16,
           ),
         ),
+        foregroundDecoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              ColorPalette.boxBackground200,
+              Colors.transparent,
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            stops: [0, 0.8],
+          ),
+        ),
       ),
     );
   }

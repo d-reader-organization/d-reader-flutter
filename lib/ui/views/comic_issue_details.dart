@@ -119,9 +119,9 @@ class ListingRow extends StatelessWidget {
         ),
       ),
       title: SizedBox(
-        height: 64,
+        height: 50,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -144,7 +144,7 @@ class ListingRow extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      width: 4,
+                      width: 6,
                     ),
                     Text(
                       timeago.format(

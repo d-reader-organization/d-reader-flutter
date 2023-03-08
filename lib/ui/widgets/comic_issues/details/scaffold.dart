@@ -23,7 +23,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class ComicIssueDetailsScaffold extends ConsumerWidget {
+class ComicIssueDetailsScaffold extends ConsumerStatefulWidget {
   final Widget body;
   final ComicIssueModel issue;
   const ComicIssueDetailsScaffold({
@@ -33,292 +33,336 @@ class ComicIssueDetailsScaffold extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ComicIssueDetailsScaffold> createState() =>
+      _ComicIssueDetailsScaffoldState();
+}
+
+class _ComicIssueDetailsScaffoldState
+    extends ConsumerState<ComicIssueDetailsScaffold>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _animation = ColorTween(
+      begin: Colors.transparent,
+      end: ColorPalette.appBackgroundColor,
+    ).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      backgroundColor: ColorPalette.appBackgroundColor,
-      appBar: PreferredSize(
-        preferredSize: const Size(0, 64),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: AppBarWithoutLogo(
-            title: issue.comic?.name,
+    return NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollNotification) {
+          if (notification.metrics.pixels > 70) {
+            _controller.forward();
+          } else if (notification.metrics.pixels < 70) {
+            _controller.reverse();
+          }
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: ColorPalette.appBackgroundColor,
+        appBar: PreferredSize(
+          preferredSize: const Size(0, 64),
+          child: AnimatedAppBar(
+            animation: _animation,
+            title: widget.issue.comic?.name,
           ),
         ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.only(top: 0),
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        children: [
-          Stack(
-            children: [
-              CachedImageBgPlaceholder(
-                height: 364,
-                imageUrl: issue.cover,
-                cacheKey: 'details-${issue.slug}',
-                overrideBorderRadius: BorderRadius.circular(0),
-                foregroundDecoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorPalette.appBackgroundColor,
-                      Colors.transparent,
-                      ColorPalette.appBackgroundColor,
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    stops: [0.128, .6406, 1],
-                  ),
-                ),
-              ),
-              Positioned.fill(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'EPISODE',
-                                style: textTheme.bodyMedium,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    '${issue.number}',
-                                    style: textTheme.bodyLarge
-                                        ?.copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  Text(
-                                    '/${issue.stats?.totalIssuesCount}',
-                                    style: textTheme.bodyLarge?.copyWith(
-                                      color: ColorPalette.dReaderGrey
-                                          .withOpacity(0.5),
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.menu_book,
-                                    color: Colors.white,
-                                    size: 16,
-                                  ),
-                                  Text(
-                                    '${issue.stats?.totalPagesCount.toString()} pages',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.calendar_month,
-                                size: 16,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                formatDate(issue.releaseDate),
-                                style: textTheme.labelMedium,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Text(
-                        issue.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headlineLarge,
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      TextWithViewMore(
-                        text: issue.description,
-                        textAlign: TextAlign.start,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
+        extendBodyBehindAppBar: true,
+        body: ListView(
+          padding: const EdgeInsets.only(top: 0),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          children: [
+            Stack(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => nextScreenPush(
-                        context,
-                        CreatorDetailsView(
-                          slug: issue.creator.slug,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          CreatorAvatar(
-                            avatar: issue.creator.avatar,
-                            radius: 24,
-                            height: 32,
-                            width: 32,
-                            slug: issue.creator.slug,
-                          ),
-                          const SizedBox(width: 12),
-                          AuthorVerified(
-                            authorName: issue.creator.name,
-                            isVerified: issue.creator.isVerified,
-                            fontSize: 15,
-                          ),
-                        ],
-                      ),
+                CachedImageBgPlaceholder(
+                  height: 364,
+                  imageUrl: widget.issue.cover,
+                  cacheKey: 'details-${widget.issue.slug}',
+                  overrideBorderRadius: BorderRadius.circular(0),
+                  foregroundDecoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        ColorPalette.appBackgroundColor,
+                        Colors.transparent,
+                        ColorPalette.appBackgroundColor,
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      stops: [0.128, .6406, 1],
                     ),
-                    Row(
+                  ),
+                ),
+                Positioned.fill(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        RatingIcon(
-                          rating: issue.stats?.averageRating ?? 0,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'EPISODE',
+                                  style: textTheme.bodyMedium,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      '${widget.issue.number}',
+                                      style: textTheme.bodyLarge?.copyWith(
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    Text(
+                                      '/${widget.issue.stats?.totalIssuesCount}',
+                                      style: textTheme.bodyLarge?.copyWith(
+                                        color: ColorPalette.dReaderGrey
+                                            .withOpacity(0.5),
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.menu_book,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                    Text(
+                                      '${widget.issue.stats?.totalPagesCount.toString()} pages',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  formatDate(widget.issue.releaseDate),
+                                  style: textTheme.labelMedium,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Text(
+                          widget.issue.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.headlineLarge,
                         ),
                         const SizedBox(
-                          width: 20,
+                          height: 12,
                         ),
-                        FavouriteIconCount(
-                          favouritesCount: issue.stats?.favouritesCount ?? 0,
-                          isFavourite: issue.myStats?.isFavourite ?? false,
-                          slug: issue.slug,
+                        TextWithViewMore(
+                          text: widget.issue.description,
+                          textAlign: TextAlign.start,
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          issue.candyMachineAddress != null
-              ? CandyMachineStats(
-                  address: issue.candyMachineAddress ?? '',
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    StatsInfo(
-                      title: 'VOLUME',
-                      stats: '${issue.stats?.totalVolume}◎',
-                    ),
-                    StatsInfo(
-                      title: 'SUPPLY',
-                      stats: '${issue.supply}',
-                    ),
-                    StatsInfo(
-                      title: 'LISTED',
-                      stats: '${issue.stats?.totalListedCount}',
-                    ),
-                    StatsInfo(
-                      title: 'FLOOR',
-                      stats: '${issue.stats?.floorPrice ?? '-.--'}◎',
-                      isLastItem: true,
-                    ),
-                  ],
-                ),
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-            child: body,
-          )
-        ],
-      ),
-      extendBodyBehindAppBar: true,
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BuyButton(
-            size: const Size(150, 50),
-            onPressed: () async {
-              await ref.read(solanaProvider.notifier).mint();
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'MINT',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
-                SolanaPrice(
-                  price: issue.stats?.floorPrice,
-                  textColor: Colors.black,
-                )
               ],
             ),
-          ),
-          BuyButton(
-            size: const Size(150, 50),
-            backgroundColor: ColorPalette.dReaderGreen,
-            onPressed: () {
-              nextScreenPush(
-                context,
-                EReaderView(
-                  issueId: issue.id,
-                ),
-              );
-            },
-            child: issue.myStats?.canRead != null && issue.myStats!.canRead
-                ? Row(
-                    children: const [
-                      Icon(
-                        FontAwesomeIcons.glasses,
-                        size: 14,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        'READ',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => nextScreenPush(
+                          context,
+                          CreatorDetailsView(
+                            slug: widget.issue.creator.slug,
+                          ),
                         ),
-                      )
+                        child: Row(
+                          children: [
+                            CreatorAvatar(
+                              avatar: widget.issue.creator.avatar,
+                              radius: 24,
+                              height: 32,
+                              width: 32,
+                              slug: widget.issue.creator.slug,
+                            ),
+                            const SizedBox(width: 12),
+                            AuthorVerified(
+                              authorName: widget.issue.creator.name,
+                              isVerified: widget.issue.creator.isVerified,
+                              fontSize: 15,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          RatingIcon(
+                            rating: widget.issue.stats?.averageRating ?? 0,
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          FavouriteIconCount(
+                            favouritesCount:
+                                widget.issue.stats?.favouritesCount ?? 0,
+                            isFavourite:
+                                widget.issue.myStats?.isFavourite ?? false,
+                            slug: widget.issue.slug,
+                          ),
+                        ],
+                      ),
                     ],
+                  ),
+                ],
+              ),
+            ),
+            widget.issue.candyMachineAddress != null
+                ? CandyMachineStats(
+                    address: widget.issue.candyMachineAddress ?? '',
                   )
-                : const Text(
-                    'PREVIEW',
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      StatsInfo(
+                        title: 'VOLUME',
+                        stats: '${widget.issue.stats?.totalVolume}◎',
+                      ),
+                      StatsInfo(
+                        title: 'SUPPLY',
+                        stats: '${widget.issue.supply}',
+                      ),
+                      StatsInfo(
+                        title: 'LISTED',
+                        stats: '${widget.issue.stats?.totalListedCount}',
+                      ),
+                      StatsInfo(
+                        title: 'FLOOR',
+                        stats: '${widget.issue.stats?.floorPrice ?? '-.--'}◎',
+                        isLastItem: true,
+                      ),
+                    ],
+                  ),
+            const SizedBox(
+              height: 24,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+              child: widget.body,
+            )
+          ],
+        ),
+        bottomNavigationBar: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BuyButton(
+              size: const Size(150, 50),
+              onPressed: () async {
+                await ref.read(solanaProvider.notifier).mint();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'MINT',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-          ),
-        ],
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  SolanaPrice(
+                    price: widget.issue.stats?.floorPrice,
+                    textColor: Colors.black,
+                  )
+                ],
+              ),
+            ),
+            BuyButton(
+              size: const Size(150, 50),
+              backgroundColor: ColorPalette.dReaderGreen,
+              onPressed: () {
+                nextScreenPush(
+                  context,
+                  EReaderView(
+                    issueId: widget.issue.id,
+                  ),
+                );
+              },
+              child: widget.issue.myStats?.canRead != null &&
+                      widget.issue.myStats!.canRead
+                  ? Row(
+                      children: const [
+                        Icon(
+                          FontAwesomeIcons.glasses,
+                          size: 14,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          'READ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        )
+                      ],
+                    )
+                  : const Text(
+                      'PREVIEW',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

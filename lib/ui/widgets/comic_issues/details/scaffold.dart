@@ -1,5 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
@@ -65,6 +67,8 @@ class _ComicIssueDetailsScaffoldState
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+
+    print('WHOLE WIDGET');
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {
@@ -294,76 +298,97 @@ class _ComicIssueDetailsScaffoldState
             )
           ],
         ),
-        bottomNavigationBar: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BuyButton(
-              size: const Size(150, 50),
-              onPressed: () async {
-                await ref.read(solanaProvider.notifier).mint();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'MINT',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  SolanaPrice(
-                    price: widget.issue.stats?.floorPrice,
-                    textColor: Colors.black,
-                  )
-                ],
+        bottomNavigationBar: BottomNavigation(
+          issue: widget.issue,
+        ),
+      ),
+    );
+  }
+}
+
+class BottomNavigation extends HookConsumerWidget {
+  final ComicIssueModel issue;
+  const BottomNavigation({
+    super.key,
+    required this.issue,
+  });
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final globalHook = useGlobalState();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        BuyButton(
+          size: const Size(150, 50),
+          isLoading: globalHook.value.isLoading,
+          onPressed: () async {
+            try {
+              globalHook.value = globalHook.value.copyWith(isLoading: true);
+              await ref.read(solanaProvider.notifier).mint();
+              globalHook.value = globalHook.value.copyWith(isLoading: false);
+            } catch (error) {
+              globalHook.value = globalHook.value.copyWith(isLoading: false);
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'MINT',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            BuyButton(
-              size: const Size(150, 50),
-              backgroundColor: ColorPalette.dReaderGreen,
-              onPressed: () {
-                nextScreenPush(
-                  context,
-                  EReaderView(
-                    issueId: widget.issue.id,
-                  ),
-                );
-              },
-              child: widget.issue.myStats?.canRead != null &&
-                      widget.issue.myStats!.canRead
-                  ? Row(
-                      children: const [
-                        Icon(
-                          FontAwesomeIcons.glasses,
-                          size: 14,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          'READ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        )
-                      ],
-                    )
-                  : const Text(
-                      'PREVIEW',
+              const SizedBox(
+                width: 4,
+              ),
+              SolanaPrice(
+                price: issue.stats?.floorPrice,
+                textColor: Colors.black,
+              )
+            ],
+          ),
+        ),
+        BuyButton(
+          size: const Size(150, 50),
+          backgroundColor: ColorPalette.dReaderGreen,
+          onPressed: () {
+            nextScreenPush(
+              context,
+              EReaderView(
+                issueId: issue.id,
+              ),
+            );
+          },
+          child: issue.myStats?.canRead != null && issue.myStats!.canRead
+              ? Row(
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.glasses,
+                      size: 14,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'READ',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
-                    ),
-            ),
-          ],
+                    )
+                  ],
+                )
+              : const Text(
+                  'PREVIEW',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
         ),
-      ),
+      ],
     );
   }
 }

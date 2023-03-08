@@ -111,7 +111,6 @@ class ListingRow extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 4),
       leading: CircleAvatar(
-        // backgroundColor: ColorPalette.dReaderGreen,
         maxRadius: 24,
         backgroundImage: CachedNetworkImageProvider(
           receipt.buyer.avatar,

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -184,7 +185,63 @@ class Body extends StatelessWidget {
                   ),
                 ),
                 child: const Text('List'),
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height / 2.2,
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: const BoxDecoration(
+                          color: ColorPalette.boxBackground300,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                          ),
+                        ),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ListTile(
+                                title: Text(nft.name),
+                                subtitle: Text(nft.comicName),
+                                leading: Container(
+                                  width: 64,
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: CachedNetworkImageProvider(
+                                        nft.image,
+                                        cacheKey: nft.image,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const TextField(
+                                keyboardType: TextInputType.numberWithOptions(),
+                                decoration: InputDecoration(
+                                  labelText: 'Enter List price',
+                                  labelStyle: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              RoundedButton(
+                                text: 'Next',
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                size: const Size(double.infinity, 32),
+                              ),
+                            ]),
+                      );
+                    },
+                  );
+                },
               ),
             ],
           ),

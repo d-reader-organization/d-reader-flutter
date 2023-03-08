@@ -21,7 +21,11 @@ class EReaderView extends ConsumerWidget {
           return ListView.builder(
             itemCount: pages.length,
             itemBuilder: (context, index) {
-              return CommonCachedImage(imageUrl: pages[index].image);
+              return InteractiveViewer(
+                child: CommonCachedImage(
+                  imageUrl: pages[index].image,
+                ),
+              );
             },
           );
         },

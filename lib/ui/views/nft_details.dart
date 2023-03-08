@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -13,6 +12,7 @@ import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
+import 'package:d_reader_flutter/ui/widgets/nft/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -189,55 +189,13 @@ class Body extends StatelessWidget {
                   showModalBottomSheet(
                     context: context,
                     backgroundColor: Colors.transparent,
+                    isScrollControlled: true,
                     builder: (context) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height / 2.2,
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        decoration: const BoxDecoration(
-                          color: ColorPalette.boxBackground300,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
-                          ),
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
                         ),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ListTile(
-                                title: Text(nft.name),
-                                subtitle: Text(nft.comicName),
-                                leading: Container(
-                                  width: 64,
-                                  height: 64,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: CachedNetworkImageProvider(
-                                        nft.image,
-                                        cacheKey: nft.image,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const TextField(
-                                keyboardType: TextInputType.numberWithOptions(),
-                                decoration: InputDecoration(
-                                  labelText: 'Enter List price',
-                                  labelStyle: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              RoundedButton(
-                                text: 'Next',
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                size: const Size(double.infinity, 32),
-                              ),
-                            ]),
+                        child: NftModalBottomSheet(nft: nft),
                       );
                     },
                   );

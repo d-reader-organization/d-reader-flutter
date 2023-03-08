@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
@@ -324,7 +323,9 @@ class BottomNavigation extends HookConsumerWidget {
           onPressed: () async {
             try {
               globalHook.value = globalHook.value.copyWith(isLoading: true);
-              await ref.read(solanaProvider.notifier).mint();
+              await ref
+                  .read(solanaProvider.notifier)
+                  .mint(issue.candyMachineAddress);
               globalHook.value = globalHook.value.copyWith(isLoading: false);
             } catch (error) {
               globalHook.value = globalHook.value.copyWith(isLoading: false);

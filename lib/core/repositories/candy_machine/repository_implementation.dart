@@ -2,7 +2,7 @@ import 'dart:convert' show jsonDecode;
 
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
-import 'package:d_reader_flutter/core/repositories/candy_machine/candy_machine_repository.dart';
+import 'package:d_reader_flutter/core/repositories/candy_machine/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
 import 'package:d_reader_flutter/ioc.dart';
 
@@ -34,5 +34,11 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<String?> constructNftTransaction(String candyMachineAddress) async {
+    return await IoCContainer.resolveContainer<ApiService>().apiCallGet(
+        '/candy-machine/transactions/construct/mint-one?candyMachineAddress=$candyMachineAddress');
   }
 }

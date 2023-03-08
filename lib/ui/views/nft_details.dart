@@ -60,265 +60,33 @@ class NftDetails extends ConsumerWidget {
             ]
           },
         );
+
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(
-              shortenNftName(nft.name),
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-          ),
-          extendBodyBehindAppBar: true,
           backgroundColor: ColorPalette.appBackgroundColor,
-          body: Padding(
-            padding: const EdgeInsets.only(left: 12.0, right: 12, top: 8.0),
-            child: ListView(
-              children: [
-                NfTCard(
-                  comicName: nft.comicName,
-                  imageUrl: nft.image,
-                  issueName: nft.comicIssueName,
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor: Colors.transparent,
+                title: Text(
+                  shortenNftName(nft.name),
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
-                const SizedBox(
-                  height: 8,
+              ),
+              SliverPadding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                sliver: SliverToBoxAdapter(
+                  child: NfTCard(
+                    comicName: nft.comicName,
+                    imageUrl: nft.image,
+                    issueName: nft.comicIssueName,
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BuyButton(
-                      backgroundColor: ColorPalette.dReaderGreen,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          8,
-                        ),
-                      ),
-                      size: Size(MediaQuery.of(context).size.width / 2.4, 50),
-                      child: Row(
-                        children: const [
-                          Icon(
-                            FontAwesomeIcons.glasses,
-                            size: 14,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Read',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        nextScreenPush(
-                          context,
-                          EReaderView(
-                            issueId: nft!.comicIssueId,
-                          ),
-                        );
-                      },
-                    ),
-                    BuyButton(
-                      size: Size(MediaQuery.of(context).size.width / 2.4, 50),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          8,
-                        ),
-                      ),
-                      child: const Text('List'),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text(
-                  'Description',
-                  style: sectionHeadingStyle,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                TextWithViewMore(
-                  text: nft.description,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                nft.isMintCondition || nft.isSigned
-                    ? Column(
-                        children: [
-                          const Text(
-                            'Properties',
-                            style: sectionHeadingStyle,
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Row(
-                            children: [
-                              nft.isMintCondition
-                                  ? Container(
-                                      padding: const EdgeInsets.all(8),
-                                      margin: const EdgeInsets.only(right: 8),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: ColorPalette.dReaderGreen,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                              'assets/icons/mint_icon.svg'),
-                                          Text(
-                                            'Mint',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              nft.isSigned
-                                  ? Container(
-                                      padding: const EdgeInsets.all(8),
-                                      margin: const EdgeInsets.only(right: 8),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: ColorPalette.dReaderOrange,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                              'assets/icons/signed_icon.svg'),
-                                          Text(
-                                            'Signed',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                        ],
-                      )
-                    : const SizedBox(),
-                const Text(
-                  'Owner',
-                  style: sectionHeadingStyle,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      formatAddress(nft.owner, 12),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    GestureDetector(
-                      child: const Icon(
-                        Icons.copy,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                      onTap: () {
-                        Clipboard.setData(
-                          ClipboardData(
-                            text: nft?.owner,
-                          ),
-                        ).then(
-                          (value) => ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                "Owner address copied to clipboard",
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text(
-                  'NFT Address',
-                  style: sectionHeadingStyle,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      formatAddress(nft.address, 12),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    GestureDetector(
-                      child: const Icon(
-                        Icons.copy,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                      onTap: () {
-                        Clipboard.setData(
-                          ClipboardData(
-                            text: nft?.address,
-                          ),
-                        ).then(
-                          (value) => ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                "NFT address copied to clipboard",
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                RoundedButton(
-                  text: 'View Issue Details',
-                  size: const Size(120, 50),
-                  borderColor: Colors.white,
-                  backgroundColor: Colors.transparent,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    nextScreenPush(
-                      context,
-                      ComicIssueDetails(
-                        id: nft!.comicIssueId,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+              ),
+              SliverToBoxAdapter(
+                child: Body(nft: nft),
+              ),
+            ],
           ),
         );
       },
@@ -351,6 +119,260 @@ class NftDetails extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class Body extends StatelessWidget {
+  final NftModel nft;
+  const Body({
+    super.key,
+    required this.nft,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: ListView(
+        shrinkWrap: true,
+        physics: const PageScrollPhysics(),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BuyButton(
+                backgroundColor: ColorPalette.dReaderGreen,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(
+                    8,
+                  ),
+                ),
+                size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                child: Row(
+                  children: const [
+                    Icon(
+                      FontAwesomeIcons.glasses,
+                      size: 14,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'Read',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
+                  ],
+                ),
+                onPressed: () {
+                  nextScreenPush(
+                    context,
+                    EReaderView(
+                      issueId: nft.comicIssueId,
+                    ),
+                  );
+                },
+              ),
+              BuyButton(
+                size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(
+                    8,
+                  ),
+                ),
+                child: const Text('List'),
+                onPressed: () {},
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const Text(
+            'Description',
+            style: sectionHeadingStyle,
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          TextWithViewMore(
+            text: nft.description,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          nft.isMintCondition || nft.isSigned
+              ? Column(
+                  children: [
+                    const Text(
+                      'Properties',
+                      style: sectionHeadingStyle,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      children: [
+                        nft.isMintCondition
+                            ? Container(
+                                padding: const EdgeInsets.all(8),
+                                margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: ColorPalette.dReaderGreen,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/icons/mint_icon.svg'),
+                                    Text(
+                                      'Mint',
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                        nft.isSigned
+                            ? Container(
+                                padding: const EdgeInsets.all(8),
+                                margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: ColorPalette.dReaderOrange,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                        'assets/icons/signed_icon.svg'),
+                                    Text(
+                                      'Signed',
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                )
+              : const SizedBox(),
+          const Text(
+            'Owner',
+            style: sectionHeadingStyle,
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Row(
+            children: [
+              Text(
+                formatAddress(nft.owner, 12),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              GestureDetector(
+                child: const Icon(
+                  Icons.copy,
+                  color: Colors.white,
+                  size: 16,
+                ),
+                onTap: () {
+                  Clipboard.setData(
+                    ClipboardData(
+                      text: nft.owner,
+                    ),
+                  ).then(
+                    (value) => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "Owner address copied to clipboard",
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const Text(
+            'NFT Address',
+            style: sectionHeadingStyle,
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Row(
+            children: [
+              Text(
+                formatAddress(nft.address, 12),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              GestureDetector(
+                child: const Icon(
+                  Icons.copy,
+                  color: Colors.white,
+                  size: 16,
+                ),
+                onTap: () {
+                  Clipboard.setData(
+                    ClipboardData(
+                      text: nft.address,
+                    ),
+                  ).then(
+                    (value) => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "NFT address copied to clipboard",
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 32,
+          ),
+          RoundedButton(
+            text: 'View Issue Details',
+            size: const Size(120, 50),
+            borderColor: Colors.white,
+            backgroundColor: Colors.transparent,
+            textColor: Colors.white,
+            onPressed: () {
+              nextScreenPush(
+                context,
+                ComicIssueDetails(
+                  id: nft.comicIssueId,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

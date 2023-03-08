@@ -20,6 +20,8 @@ class ComicCardLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    final nameCharacterLimit =
+        MediaQuery.of(context).size.width > 360 ? 22 : 19;
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
@@ -83,18 +85,24 @@ class ComicCardLarge extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  comic.name,
+                                  comic.name.length > nameCharacterLimit
+                                      ? '${comic.name.substring(0, nameCharacterLimit)}...'
+                                      : comic.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: textTheme.titleMedium
                                       ?.copyWith(fontSize: 24),
                                 ),
                                 const SizedBox(
                                   width: 8,
                                 ),
-                                const Icon(
-                                  Icons.verified,
-                                  color: ColorPalette.dReaderYellow100,
-                                  size: 20,
-                                ),
+                                comic.isVerified
+                                    ? const Icon(
+                                        Icons.verified,
+                                        color: ColorPalette.dReaderYellow100,
+                                        size: 20,
+                                      )
+                                    : const SizedBox(),
                               ],
                             ),
                             FavouriteIconCount(

@@ -5,3 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final walletAssetsProvider = FutureProvider((_) {
   return IoCContainer.resolveContainer<WalletRepositoryImpl>().myAssets();
 });
+
+final myWalletProvider = FutureProvider((_) {
+  return IoCContainer.resolveContainer<WalletRepositoryImpl>().myWallet();
+});

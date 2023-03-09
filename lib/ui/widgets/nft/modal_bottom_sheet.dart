@@ -126,7 +126,9 @@ class SubmitButton extends HookConsumerWidget {
             );
         globalHook.value = globalHook.value.copyWith(isLoading: false);
         print('List response: $response');
-        Navigator.pop(context);
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
       },
       size: const Size(double.infinity, 50),
     );

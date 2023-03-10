@@ -52,9 +52,7 @@ class CreatorStats {
   factory CreatorStats.fromJson(dynamic json) => CreatorStats(
         comicIssuesCount: json['comicIssuesCount'],
         followersCount: json['followersCount'],
-        totalVolume: double.tryParse(json['totalVolume'].toStringAsFixed(2))
-                ?.toDouble() ??
-            0,
+        totalVolume: 122.4,
       );
 }
 

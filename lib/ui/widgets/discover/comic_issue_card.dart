@@ -108,7 +108,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                             style: textTheme.labelSmall,
                           ),
                           Text(
-                            '${formatPrice(issue.stats?.floorPrice ?? 0)}◎',
+                            '${formatPrice(issue.stats?.price ?? 0)}◎',
                             style: textTheme.labelSmall?.copyWith(
                               color: ColorPalette.dReaderYellow100,
                             ),

@@ -66,8 +66,6 @@ class _ComicIssueDetailsScaffoldState
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-
-    print('WHOLE WIDGET');
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {
@@ -282,7 +280,7 @@ class _ComicIssueDetailsScaffoldState
                       ),
                       StatsInfo(
                         title: 'FLOOR',
-                        stats: '${widget.issue.stats?.floorPrice ?? '-.--'}◎',
+                        stats: '${widget.issue.stats?.price ?? '-.--'}◎',
                         isLastItem: true,
                       ),
                     ],
@@ -345,7 +343,7 @@ class BottomNavigation extends HookConsumerWidget {
                 width: 4,
               ),
               SolanaPrice(
-                price: issue.stats?.floorPrice,
+                price: issue.stats?.price,
                 textColor: Colors.black,
               )
             ],

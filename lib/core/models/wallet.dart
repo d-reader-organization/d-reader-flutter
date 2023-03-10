@@ -1,3 +1,5 @@
+import 'package:http/http.dart' show MultipartFile;
+
 class WalletModel {
   final String role;
   final String address;
@@ -19,4 +21,16 @@ class WalletModel {
       avatar: json['avatar'],
     );
   }
+}
+
+class UpdateWalletPayload {
+  final String address;
+  final MultipartFile? avatar;
+  final String? label;
+
+  UpdateWalletPayload({
+    required this.address,
+    this.avatar,
+    this.label,
+  });
 }

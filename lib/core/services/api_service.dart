@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/core/models/wallet.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,14 +54,17 @@ class ApiService {
   }
 
   Future<String?> apiMultipartRequest(
-      String path, UpdateAvatarPayload payload) async {
+      String path, UpdateWalletPayload payload) async {
     try {
+      if (payload.avatar == null) {
+        return null;
+      }
       Uri uri = Uri.parse('$apiUrl$path');
       final sp = await SharedPreferences.getInstance();
       final _token = sp.getString(Config.tokenKey);
       var request = http.MultipartRequest('PATCH', uri)
         ..headers.addAll({HttpHeaders.authorizationHeader: '$_token'})
-        ..files.add(payload.avatar);
+        ..files.add(payload.avatar!);
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
       return responseBody;

@@ -20,47 +20,41 @@ class ProfileView extends ConsumerWidget {
 
     return provider.when(
       data: (wallet) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              flex: 2,
-              child: AvatarName(
+        return Container(
+          margin: const EdgeInsets.only(bottom: 32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AvatarName(
                 wallet: wallet!,
                 ref: ref,
               ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorPalette.dReaderYellow100,
-                        ),
-                      ),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: ColorPalette.dReaderYellow100,
-                        ),
-                      ),
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 2,
-                      ),
-                      contentPadding: const EdgeInsets.all(8),
-                      labelText: '${wallet.label} label',
-                      labelStyle: const TextStyle(
-                        color: Colors.white,
-                      ),
+              TextField(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: ColorPalette.dReaderYellow100,
                     ),
                   ),
-                ],
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: ColorPalette.dReaderYellow100,
+                    ),
+                  ),
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width / 2,
+                  ),
+                  contentPadding: const EdgeInsets.all(8),
+                  labelText: '${wallet.label} label',
+                  labelStyle: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(),
+              const SizedBox(),
+            ],
+          ),
         );
       },
       error: (Object error, StackTrace stackTrace) {
@@ -101,7 +95,6 @@ class AvatarName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
           onTap: () async {
@@ -152,6 +145,9 @@ class AvatarName extends StatelessWidget {
                   )
                 : const SizedBox(),
           ),
+        ),
+        const SizedBox(
+          height: 8,
         ),
         Text(formatAddress(wallet.address)),
       ],

@@ -24,6 +24,13 @@ final comicIssuePagesProvider =
       .getComicIssuePages(id);
 });
 
+final favouriteComicIssueProvider = FutureProvider.family<void, int>(
+  (ref, id) {
+    return IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
+        .favouritiseIssue(id);
+  },
+);
+
 class ComicIssueDetailState {
   const ComicIssueDetailState({
     required this.selectedNftsCount,

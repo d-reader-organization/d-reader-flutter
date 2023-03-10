@@ -251,6 +251,7 @@ class _ComicIssueDetailsScaffoldState
                             isFavourite:
                                 widget.issue.myStats?.isFavourite ?? false,
                             slug: widget.issue.slug,
+                            id: widget.issue.id,
                           ),
                         ],
                       ),

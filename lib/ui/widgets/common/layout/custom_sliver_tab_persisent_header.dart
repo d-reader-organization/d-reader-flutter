@@ -14,8 +14,8 @@ class CustomSliverTabPersistentHeader extends StatelessWidget {
     return SliverPersistentHeader(
       pinned: true,
       delegate: CustomSliverAppBarDelegate(
-        minHeight: 50,
-        maxHeight: 50,
+        minHeight: 60,
+        maxHeight: 60,
         child: CustomSliverTabBar(
           children: tabs,
         ),

@@ -1,5 +1,6 @@
+import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
-import 'package:d_reader_flutter/core/repositories/playground/playground_repository_impl.dart';
+import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
@@ -31,8 +32,17 @@ class DReaderWalletService {
     }
   }
 
-  Future<String?> getNftTransaction() async {
-    return await IoCContainer.resolveContainer<PlaygroundRepositoryImpl>()
-        .constructNftTransaction();
+  Future<String?> getNftTransaction(String candyMachineAddress) async {
+    return await IoCContainer.resolveContainer<CandyMachineRepositoryImpl>()
+        .constructNftTransaction(candyMachineAddress);
+  }
+
+  Future<String?> listItem({
+    required String mintAccount,
+    required double price,
+    String? printReceipt,
+  }) async {
+    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().listItem(
+        mintAccount: mintAccount, price: price, printReceipt: printReceipt);
   }
 }

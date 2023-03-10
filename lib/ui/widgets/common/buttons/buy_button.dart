@@ -48,8 +48,12 @@ class BuyButton extends StatelessWidget {
               ),
         ),
         child: isLoading
-            ? const CircularProgressIndicator(
-                color: ColorPalette.appBackgroundColor,
+            ? const SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: ColorPalette.appBackgroundColor,
+                ),
               )
             : child,
       ),

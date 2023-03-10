@@ -28,7 +28,9 @@ class _TextWithViewMoreState extends State<TextWithViewMore> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.text.length > 165
+    final int charactersLimit =
+        MediaQuery.of(context).size.width > 360 ? 165 : 140;
+    return widget.text.length > charactersLimit
         ? Wrap(
             children: [
               RichText(
@@ -40,7 +42,9 @@ class _TextWithViewMoreState extends State<TextWithViewMore> {
                     TextSpan(
                       text: isReadMore
                           ? widget.text
-                          : widget.text.substring(0, 165).padRight(168, '.'),
+                          : widget.text
+                              .substring(0, charactersLimit)
+                              .padRight(charactersLimit + 3, '.'),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     TextSpan(

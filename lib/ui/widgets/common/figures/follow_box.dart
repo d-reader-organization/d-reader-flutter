@@ -23,7 +23,7 @@ class FollowBox extends HookConsumerWidget {
         isSelected: isFollowing,
       ),
     );
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         ref.read(followCreatorProvider(slug));
         followingHook.value = followingHook.value.copyWith(
@@ -35,6 +35,7 @@ class FollowBox extends HookConsumerWidget {
       },
       child: Container(
         padding: const EdgeInsets.all(4),
+        constraints: const BoxConstraints(minWidth: 148),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
@@ -43,25 +44,30 @@ class FollowBox extends HookConsumerWidget {
           ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(
-              Icons.person_add,
-              size: 20,
-              color: ColorPalette.dReaderGrey,
-            ),
-            const SizedBox(
-              width: 6,
-            ),
-            Text(
-              followingHook.value.isSelected ? 'Unfollow' : 'Follow',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: ColorPalette.dReaderGrey,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  ),
-            ),
-            const SizedBox(
-              width: 6,
+            Row(
+              children: [
+                const Icon(
+                  Icons.person_add,
+                  size: 20,
+                  color: ColorPalette.dReaderGrey,
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                Text(
+                  followingHook.value.isSelected ? 'Unfollow' : 'Follow',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: ColorPalette.dReaderGrey,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+              ],
             ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),

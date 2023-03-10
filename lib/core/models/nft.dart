@@ -11,6 +11,7 @@ class NftModel {
   final bool isSigned;
   final String comicName;
   final String comicIssueName;
+  final int comicIssueId;
 
   NftModel({
     required this.attributes,
@@ -25,6 +26,7 @@ class NftModel {
     required this.isSigned,
     required this.comicName,
     required this.comicIssueName,
+    required this.comicIssueId,
   });
 
   factory NftModel.fromJson(dynamic json) {
@@ -49,6 +51,7 @@ class NftModel {
       isSigned: json['isSigned'],
       comicName: json['comicName'],
       comicIssueName: json['comicIssueName'],
+      comicIssueId: json['comicIssueId'],
     );
   }
 }

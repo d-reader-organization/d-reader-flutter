@@ -9,23 +9,27 @@ class GenreTags extends StatelessWidget {
     required this.genres,
   }) : super(key: key);
 
-  List<GenreModel> _genresWithMore() => genres.sublist(0, 6)
-    ..add(
-      GenreModel(color: '', name: '', slug: 'dots', icon: ''),
-    ); // needs better approach?
+  List<GenreModel> _genresWithMore(int sublistEnd) =>
+      genres.sublist(0, sublistEnd)
+        ..add(
+          GenreModel(color: '', name: '', slug: 'dots', icon: ''),
+        ); // needs better approach?
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final genreLimit = screenWidth > 360 ? 6 : 4;
     return Wrap(
         spacing: 4,
         runSpacing: 4,
-        children: (genres.length >= 6 ? _genresWithMore() : genres)
-            .map(
-              (genre) => GenreTag(
-                color: genre.color,
-                name: genre.name,
-              ),
-            )
-            .toList());
+        children:
+            (genres.length >= genreLimit ? _genresWithMore(genreLimit) : genres)
+                .map(
+                  (genre) => GenreTag(
+                    color: genre.color,
+                    name: genre.name,
+                  ),
+                )
+                .toList());
   }
 }

@@ -88,10 +88,33 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     await session.close();
   }
 
-  Future<bool> mint() async {
-    final String encodedNftTransaction =
-        await _walletService.getNftTransaction() ?? '';
-    final decodedTX = SignedTx.decode(encodedNftTransaction);
+  Future<bool> mint(String? candyMachineAddress) async {
+    if (candyMachineAddress == null) {
+      return false;
+    }
+    final String? encodedNftTransaction =
+        await _walletService.getNftTransaction(candyMachineAddress);
+    if (encodedNftTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedNftTransaction);
+  }
+
+  Future<bool> list({
+    required String mintAccount,
+    required double price,
+    String printReceipt = 'false',
+  }) async {
+    final String? encodedTransaction = await _walletService.listItem(
+        mintAccount: mintAccount, price: price, printReceipt: printReceipt);
+    if (encodedTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedTransaction);
+  }
+
+  Future<bool> _signAndSendTransaction(String encodedTransaction) async {
+    final decodedTX = SignedTx.decode(encodedTransaction);
 
     final session = await _getSession();
     final client = await session.start();

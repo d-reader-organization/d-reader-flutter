@@ -4,16 +4,19 @@ class EpisodeCircle extends StatelessWidget {
   final String text;
   final Color color;
   final double fontSize;
+  final double? height;
   const EpisodeCircle({
     Key? key,
     required this.text,
     this.color = Colors.white,
     this.fontSize = 12,
+    this.height,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
         color: color,

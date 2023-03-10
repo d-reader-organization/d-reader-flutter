@@ -22,7 +22,7 @@ class DiscoverComicCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
@@ -41,8 +41,7 @@ class DiscoverComicCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     EpisodeCircle(
-                      text:
-                          '${comic.stats?.issuesCount} EPs ${comic.isCompleted ? 'ENDED' : ''}',
+                      text: '${comic.stats?.issuesCount} EPs',
                       color: comic.isCompleted
                           ? ColorPalette.dReaderGreen
                           : Colors.white,
@@ -65,6 +64,8 @@ class DiscoverComicCard extends StatelessWidget {
                     children: [
                       Text(
                         comic.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: textTheme.titleSmall,
                       ),
                       const SizedBox(
@@ -80,7 +81,9 @@ class DiscoverComicCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          RatingIcon(rating: comic.stats?.averageRating ?? 0),
+                          RatingIcon(
+                            rating: comic.stats?.averageRating ?? 0,
+                          ),
                           FavouriteIconCount(
                             favouritesCount: comic.stats?.favouritesCount ?? 0,
                             isFavourite: comic.myStats?.isFavourite ?? false,
@@ -92,7 +95,10 @@ class DiscoverComicCard extends StatelessWidget {
                           ),
                           comic.isMatureAudience
                               ? const MatureAudience()
-                              : const SizedBox()
+                              : const SizedBox(
+                                  width: 22,
+                                  height: 16,
+                                ),
                         ],
                       ),
                       const Divider(

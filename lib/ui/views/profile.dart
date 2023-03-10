@@ -1,10 +1,15 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileView extends ConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -22,6 +27,7 @@ class ProfileView extends ConsumerWidget {
               flex: 2,
               child: AvatarName(
                 wallet: wallet!,
+                ref: ref,
               ),
             ),
             Expanded(
@@ -85,9 +91,11 @@ class WalletSkeleton extends StatelessWidget {
 
 class AvatarName extends StatelessWidget {
   final WalletModel wallet;
+  final WidgetRef ref;
   const AvatarName({
     super.key,
     required this.wallet,
+    required this.ref,
   });
 
   @override
@@ -95,9 +103,55 @@ class AvatarName extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const CircleAvatar(
-          radius: 64,
-          backgroundColor: ColorPalette.dReaderYellow100,
+        GestureDetector(
+          onTap: () async {
+            FilePickerResult? result = await FilePicker.platform.pickFiles();
+            if (result != null) {
+              File file = File(result.files.single.path ?? '');
+              final bytes = await file.readAsBytes();
+              await ref.read(
+                updateWalletAvatarProvider(
+                  UpdateAvatarPayload(
+                    address: wallet.address,
+                    avatar: http.MultipartFile.fromBytes(
+                      'avatar',
+                      bytes,
+                      filename: 'avatar.jpg',
+                    ),
+                  ),
+                ).future,
+              );
+              ref.invalidate(myWalletProvider);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Your avatar has been uploaded.'),
+                    duration: Duration(milliseconds: 500),
+                  ),
+                );
+              }
+            }
+          },
+          child: CircleAvatar(
+            radius: 64,
+            backgroundColor: Colors.transparent,
+            child: wallet.avatar.isNotEmpty
+                ? CachedNetworkImage(
+                    imageUrl: wallet.avatar,
+                    cacheKey: wallet.avatar,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(64),
+                          image: DecorationImage(
+                            image: imageProvider,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : const SizedBox(),
+          ),
         ),
         Text(formatAddress(wallet.address)),
       ],

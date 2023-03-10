@@ -18,11 +18,15 @@ class EReaderView extends ConsumerWidget {
       backgroundColor: ColorPalette.appBackgroundColor,
       body: pagesProvider.when(
         data: (pages) {
-          return ListView.builder(
-            itemCount: pages.length,
-            itemBuilder: (context, index) {
-              return CommonCachedImage(imageUrl: pages[index].image);
-            },
+          return InteractiveViewer(
+            child: ListView.builder(
+              itemCount: pages.length,
+              itemBuilder: (context, index) {
+                return CommonCachedImage(
+                  imageUrl: pages[index].image,
+                );
+              },
+            ),
           );
         },
         error: (Object error, StackTrace stackTrace) {

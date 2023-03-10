@@ -21,7 +21,7 @@ class CreatorsGrid extends ConsumerWidget {
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: isTablet ? 3 : 2,
-            crossAxisSpacing: 12,
+            crossAxisSpacing: 4,
             mainAxisSpacing: 16,
             mainAxisExtent: 60,
           ),

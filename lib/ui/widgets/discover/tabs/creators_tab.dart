@@ -92,7 +92,7 @@ class CreatorListItem extends StatelessWidget {
           Flexible(
             flex: 1,
             child: SolanaPrice(
-              price: creator.stats?.totalVolume,
+              price: (creator.stats?.totalVolume ?? 0) / 100,
               mainAxisAlignment: MainAxisAlignment.end,
               textDirection: TextDirection.rtl,
             ),
@@ -100,7 +100,7 @@ class CreatorListItem extends StatelessWidget {
           Flexible(
             flex: 1,
             child: Text(
-              '${creator.stats?.totalVolume}%',
+              '${creator.stats?.totalVolume.toStringAsFixed(1)}%',
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorPalette.dReaderGreen,
@@ -110,7 +110,7 @@ class CreatorListItem extends StatelessWidget {
           Flexible(
             flex: 1,
             child: SolanaPrice(
-              price: creator.stats?.totalVolume,
+              price: (creator.stats?.totalVolume ?? 0) / 100,
               textDirection: TextDirection.rtl,
             ),
           ),

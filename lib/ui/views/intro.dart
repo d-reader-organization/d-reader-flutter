@@ -21,8 +21,10 @@ class IntroView extends HookConsumerWidget {
       titleTextStyle: textTheme.headlineLarge!.copyWith(
         color: ColorPalette.dReaderYellow100,
       ),
-      bodyAlignment: Alignment.center,
+      titlePadding: const EdgeInsets.only(bottom: 16),
       pageColor: ColorPalette.appBackgroundColor,
+      imagePadding: const EdgeInsets.only(top: 16),
+      imageFlex: 2,
     );
   }
 
@@ -108,7 +110,7 @@ class IntroView extends HookConsumerWidget {
                 ),
               ],
             ),
-            image: Image.asset(Config.digitalWalletImgPath),
+            image: Image.asset('assets/images/splash_screen_1.png'),
             decoration: _pageDecoration(textTheme),
           ),
           PageViewModel(

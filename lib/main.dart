@@ -1,9 +1,11 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/auth_provider.dart';
 import 'package:d_reader_flutter/ioc.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -40,6 +42,10 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'dReader',
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle(
+          systemNavigationBarColor: ColorPalette.appBackgroundColor,
+        )),
         fontFamily: 'Urbanist',
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),

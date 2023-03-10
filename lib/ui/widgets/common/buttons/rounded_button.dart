@@ -5,7 +5,7 @@ class RoundedButton extends StatelessWidget {
   final String text;
   final Color backgroundColor;
   final Color textColor;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Size size;
   final double fontSize;
   final bool isLoading;
@@ -31,6 +31,7 @@ class RoundedButton extends StatelessWidget {
         onPressed: isLoading ? null : onPressed,
         style: TextButton.styleFrom(
           minimumSize: size,
+          disabledBackgroundColor: ColorPalette.dReaderGrey,
           backgroundColor: backgroundColor,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           shape: RoundedRectangleBorder(
@@ -51,8 +52,12 @@ class RoundedButton extends StatelessWidget {
               ),
         ),
         child: isLoading
-            ? const CircularProgressIndicator(
-                color: ColorPalette.appBackgroundColor,
+            ? const SizedBox(
+                height: 32,
+                width: 32,
+                child: CircularProgressIndicator(
+                  color: ColorPalette.appBackgroundColor,
+                ),
               )
             : Text(
                 text,

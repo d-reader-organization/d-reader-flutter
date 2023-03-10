@@ -37,7 +37,7 @@ class Carousel extends ConsumerWidget {
                       foregroundDecoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [
-                            ColorPalette.appBackgroundColor,
+                            ColorPalette.boxBackground200,
                             Colors.transparent,
                           ],
                           begin: Alignment.bottomCenter,

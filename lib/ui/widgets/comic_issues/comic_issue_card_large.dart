@@ -4,9 +4,9 @@ import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
+import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCardLarge extends StatelessWidget {
@@ -19,7 +19,7 @@ class ComicIssueCardLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
@@ -92,20 +92,24 @@ class ComicIssueCardLarge extends StatelessWidget {
                         ),
                         Text(
                           issue.comic?.name ?? 'Missing',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: textTheme.titleMedium?.copyWith(
                             color: ColorPalette.dReaderYellow100,
                           ),
                         ),
                         Text(
                           issue.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: textTheme.titleMedium,
                         ),
                         const SizedBox(
                           height: 12,
                         ),
-                        DescriptionText(
+                        TextWithViewMore(
                           text: issue.description,
-                          maxLines: 4,
+                          maxLines: 2,
                         ),
                       ],
                     ),
@@ -113,7 +117,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SolanaPrice(
-                          price: issue.stats!.floorPrice,
+                          price: issue.stats!.price,
                         ),
                         ViewedIconCount(
                           viewedCount: issue.stats?.viewersCount ?? 0,

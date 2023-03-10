@@ -22,7 +22,7 @@ class RatingIcon extends StatelessWidget {
           width: 4,
         ),
         Text(
-          rating.toString(),
+          rating > 0.0 ? rating.toString() : '--',
           style: textTheme.labelMedium,
         ),
       ],

@@ -20,7 +20,9 @@ class ComicCardLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    final nameCharacterLimit =
+        MediaQuery.of(context).size.width > 360 ? 22 : 19;
+    return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
@@ -35,12 +37,12 @@ class ComicCardLarge extends StatelessWidget {
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    Colors.black,
+                    ColorPalette.appBackgroundColor,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.05, 0.3],
+                  stops: [0, 2],
                 ),
                 borderRadius: BorderRadius.circular(
                   16,
@@ -61,11 +63,12 @@ class ComicCardLarge extends StatelessWidget {
                       children: [
                         EpisodeCircle(
                           text:
-                              '${comic.stats?.issuesCount}EPs ${comic.isCompleted ? '- ENDED' : ''}',
+                              '${comic.stats?.issuesCount} EPs${comic.isCompleted ? ' - ENDED' : ''}',
                           color: comic.isCompleted
                               ? const Color(0xFFC6E7C1)
                               : Colors.white,
                           fontSize: 14,
+                          height: 32,
                         ),
                         const HotIcon(),
                       ],
@@ -82,18 +85,24 @@ class ComicCardLarge extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  comic.name,
+                                  comic.name.length > nameCharacterLimit
+                                      ? '${comic.name.substring(0, nameCharacterLimit)}...'
+                                      : comic.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: textTheme.titleMedium
                                       ?.copyWith(fontSize: 24),
                                 ),
                                 const SizedBox(
                                   width: 8,
                                 ),
-                                const Icon(
-                                  Icons.verified,
-                                  color: ColorPalette.dReaderYellow100,
-                                  size: 20,
-                                ),
+                                comic.isVerified
+                                    ? const Icon(
+                                        Icons.verified,
+                                        color: ColorPalette.dReaderYellow100,
+                                        size: 20,
+                                      )
+                                    : const SizedBox(),
                               ],
                             ),
                             FavouriteIconCount(

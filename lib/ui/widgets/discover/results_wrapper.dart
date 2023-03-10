@@ -17,7 +17,7 @@ class ResultsWrapper extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Padding(
-            padding: const EdgeInsets.only(top: 24, bottom: 8),
+            padding: const EdgeInsets.only(top: 16, bottom: 24),
             child: Text(
               resultsCount > 0 ? 'No more results' : 'No results found',
               textAlign: TextAlign.center,

@@ -1,2 +1,2 @@
-String formatAddress(String address) =>
-    '${address.substring(0, 6)}...${address.substring(address.length - 6, address.length)}';
+String formatAddress(String address, [int end = 6]) =>
+    '${address.substring(0, end)}...${address.substring(address.length - end, address.length)}';

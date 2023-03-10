@@ -53,6 +53,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
           borderRadius:
               overrideBorderRadius ?? BorderRadius.circular(borderRadius),
         ),
+        foregroundDecoration: foregroundDecoration,
       ),
       errorWidget: (context, url, error) {
         print(error);

@@ -19,7 +19,7 @@ class ComicIssuesGrid extends ConsumerWidget {
     return comicIssues.when(
       data: (data) {
         if (onlyFree) {
-          data = data.where((element) => element.supply == 0).toList();
+          data = data.where((element) => element.isFree).toList();
         }
         return data.isNotEmpty
             ? GridView.builder(

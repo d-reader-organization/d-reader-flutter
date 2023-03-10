@@ -14,6 +14,7 @@ class ComicModel {
   final List<GenreModel> genres;
   final MyStats? myStats;
   final bool isMatureAudience;
+  final bool isVerified;
 
   ComicModel({
     required this.name,
@@ -28,6 +29,7 @@ class ComicModel {
     required this.genres,
     this.myStats,
     required this.isMatureAudience,
+    required this.isVerified,
   });
 
   factory ComicModel.fromJson(dynamic json) {
@@ -53,6 +55,7 @@ class ComicModel {
             )
           : [],
       isMatureAudience: json['isMatureAudience'],
+      isVerified: json['isVerified'],
     );
   }
 }
@@ -89,9 +92,7 @@ class ComicStats {
               0
           : 0,
       issuesCount: json['issuesCount'],
-      totalVolume:
-          double.tryParse(json['totalVolume'].toStringAsFixed(2))?.toDouble() ??
-              0,
+      totalVolume: 122.4,
       readersCount: json['readersCount'],
       viewersCount: json['viewersCount'],
     );

@@ -4,14 +4,12 @@ import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
-import 'package:d_reader_flutter/ioc.dart';
 
 class CandyMachineRepositoryImpl implements CandyMachineRepository {
   @override
   Future<CandyMachineModel?> getCandyMachine(String address) async {
     final String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>()
-            .apiCallGet('/candy-machine/get/$address');
+        await ApiService.instance.apiCallGet('/candy-machine/get/$address');
     return responseBody == null
         ? null
         : CandyMachineModel.fromJson(jsonDecode(responseBody));
@@ -19,9 +17,8 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
 
   @override
   Future<List<Receipt>> getReceipts({String? queryString}) async {
-    final String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>()
-            .apiCallGet('/candy-machine/get/receipts?$queryString');
+    final String? responseBody = await ApiService.instance
+        .apiCallGet('/candy-machine/get/receipts?$queryString');
 
     if (responseBody == null) {
       return [];
@@ -38,7 +35,7 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
 
   @override
   Future<String?> constructNftTransaction(String candyMachineAddress) async {
-    return await IoCContainer.resolveContainer<ApiService>().apiCallGet(
+    return await ApiService.instance.apiCallGet(
         '/candy-machine/transactions/construct/mint-one?candyMachineAddress=$candyMachineAddress');
   }
 }

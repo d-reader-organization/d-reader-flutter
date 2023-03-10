@@ -8,8 +8,8 @@ import 'package:d_reader_flutter/ioc.dart';
 class ComicRepositoryImpl implements ComicRepository {
   @override
   Future<List<ComicModel>> getComics({String? queryString}) async {
-    String? responseBody = await IoCContainer.resolveContainer<ApiService>()
-        .apiCallGet('/comic/get?$queryString');
+    String? responseBody =
+        await ApiService.instance.apiCallGet('/comic/get?$queryString');
     if (responseBody == null) {
       return [];
     }

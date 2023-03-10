@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/core/repositories/auction_house/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
-import 'package:d_reader_flutter/ioc.dart';
 
 class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   @override
@@ -9,7 +8,7 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
     required double price,
     String? printReceipt,
   }) {
-    return IoCContainer.resolveContainer<ApiService>().apiCallGet(
+    return ApiService.instance.apiCallGet(
         '/auction-house/transactions/construct/list?mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt');
   }
 }

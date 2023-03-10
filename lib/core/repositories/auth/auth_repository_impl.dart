@@ -3,21 +3,19 @@ import 'dart:convert' show jsonDecode;
 import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
-import 'package:d_reader_flutter/ioc.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<String> getOneTimePassword(String address) async {
-    String? responseBody = await IoCContainer.resolveContainer<ApiService>()
-        .apiCallGet('/auth/wallet/request-password/$address',
-            includeAuthHeader: false);
+    String? responseBody = await ApiService.instance.apiCallGet(
+        '/auth/wallet/request-password/$address',
+        includeAuthHeader: false);
     return responseBody ?? 'An error occured';
   }
 
   @override
   Future<AuthWallet?> connectWallet(String address, String encoding) async {
-    String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>().apiCallGet(
+    String? responseBody = await ApiService.instance.apiCallGet(
       '/auth/wallet/connect/$address/$encoding',
       includeAuthHeader: false,
     );

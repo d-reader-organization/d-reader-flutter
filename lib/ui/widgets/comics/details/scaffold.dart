@@ -162,6 +162,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                             ),
                             TextWithViewMore(
                               text: widget.comic.description,
+                              maxLines: 2,
                               textAlign: TextAlign.start,
                             ),
                           ],

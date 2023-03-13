@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/ui/views/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchAutoComplete extends ConsumerWidget {
@@ -69,9 +70,15 @@ class SearchAutoComplete extends ConsumerWidget {
                 color: Colors.white,
               ),
               decoration: searchInputDecoration(
-                const Icon(
-                  Icons.search,
-                  color: ColorPalette.dReaderGrey,
+                IconButton(
+                  onPressed: () {},
+                  icon: SvgPicture.asset(
+                    'assets/icons/search.svg',
+                    colorFilter: const ColorFilter.mode(
+                      ColorPalette.dReaderGrey,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             );

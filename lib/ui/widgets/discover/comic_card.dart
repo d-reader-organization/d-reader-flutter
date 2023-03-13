@@ -54,7 +54,7 @@ class DiscoverComicCard extends StatelessWidget {
               width: 16,
             ),
             Expanded(
-              flex: 8,
+              flex: 7,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,

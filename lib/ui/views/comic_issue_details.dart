@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -215,9 +216,12 @@ class BodyHeader extends StatelessWidget {
                 fontSize: 12, color: ColorPalette.boxBackground400),
             constraints: const BoxConstraints(
                 maxHeight: 37, minHeight: 37, maxWidth: 150, minWidth: 150),
-            prefixIcon: const Icon(
-              Icons.search,
-              color: Colors.white,
+            prefixIcon: SvgPicture.asset(
+              'assets/icons/search.svg',
+              colorFilter: const ColorFilter.mode(
+                ColorPalette.dReaderGrey,
+                BlendMode.srcIn,
+              ),
             ),
           ),
         ),

@@ -40,7 +40,7 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
           ),
           Positioned.fill(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CreatorAvatar(
                   avatar: creator.avatar,

@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/logout_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +26,14 @@ class CustomAppBar extends StatelessWidget {
       shadowColor: Colors.transparent,
       actions: [
         showSearchIcon
-            ? const Icon(
-                Icons.search,
+            ? SvgPicture.asset(
+                'assets/icons/search.svg',
+                width: 16,
+                height: 16,
+                colorFilter: const ColorFilter.mode(
+                  ColorPalette.dReaderGrey,
+                  BlendMode.srcIn,
+                ),
               )
             : const SizedBox(),
         const SizedBox(

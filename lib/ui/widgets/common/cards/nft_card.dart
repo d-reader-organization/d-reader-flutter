@@ -20,10 +20,12 @@ class NfTCard extends StatelessWidget {
       imageUrl: imageUrl,
       cacheKey: '$comicName-$issueName',
       height: 396,
+      bgImageFit: BoxFit.fill,
       child: Align(
         alignment: Alignment.topLeft,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          margin: const EdgeInsets.only(top: 8),
           decoration: BoxDecoration(
             color: ColorPalette.appBackgroundColor,
             borderRadius: BorderRadius.circular(8),

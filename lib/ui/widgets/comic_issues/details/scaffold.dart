@@ -271,19 +271,27 @@ class _ComicIssueDetailsScaffoldState
                     children: [
                       StatsInfo(
                         title: 'VOLUME',
-                        stats: '${widget.issue.stats?.totalVolume}◎',
+                        stats: widget.issue.isFree
+                            ? '--'
+                            : '${widget.issue.stats?.totalVolume}◎',
                       ),
                       StatsInfo(
                         title: 'SUPPLY',
-                        stats: '${widget.issue.supply}',
+                        stats: widget.issue.isFree
+                            ? '--'
+                            : '${widget.issue.supply}',
                       ),
                       StatsInfo(
                         title: 'LISTED',
-                        stats: '${widget.issue.stats?.totalListedCount}',
+                        stats: widget.issue.isFree
+                            ? '--'
+                            : '${widget.issue.stats?.totalListedCount}',
                       ),
                       StatsInfo(
-                        title: 'FLOOR',
-                        stats: '${widget.issue.stats?.price ?? '-.--'}◎',
+                        title: 'PRICE',
+                        stats: widget.issue.isFree
+                            ? 'FREE'
+                            : '${widget.issue.stats?.price ?? '-.--'}◎',
                         isLastItem: true,
                       ),
                     ],
@@ -312,85 +320,105 @@ class BottomNavigation extends HookConsumerWidget {
     super.key,
     required this.issue,
   });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final globalHook = useGlobalState();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        BuyButton(
-          size: const Size(150, 50),
-          isLoading: globalHook.value.isLoading,
-          onPressed: () async {
-            try {
-              globalHook.value = globalHook.value.copyWith(isLoading: true);
-              await ref
-                  .read(solanaProvider.notifier)
-                  .mint(issue.candyMachineAddress);
-              globalHook.value = globalHook.value.copyWith(isLoading: false);
-            } catch (error) {
-              globalHook.value = globalHook.value.copyWith(isLoading: false);
-            }
-          },
-          child: Row(
+    return issue.isFree
+        ? ReadButton(issue: issue)
+        : Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'MINT',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(
-                width: 4,
-              ),
-              SolanaPrice(
-                price: issue.stats?.price,
-                textColor: Colors.black,
-              )
-            ],
-          ),
-        ),
-        BuyButton(
-          size: const Size(150, 50),
-          backgroundColor: ColorPalette.dReaderGreen,
-          onPressed: () {
-            nextScreenPush(
-              context,
-              EReaderView(
-                issueId: issue.id,
-              ),
-            );
-          },
-          child: issue.myStats?.canRead != null && issue.myStats!.canRead
-              ? Row(
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.glasses,
-                      size: 14,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      'READ',
+              BuyButton(
+                size: const Size(150, 50),
+                isLoading: globalHook.value.isLoading,
+                onPressed: () async {
+                  try {
+                    globalHook.value =
+                        globalHook.value.copyWith(isLoading: true);
+                    await ref
+                        .read(solanaProvider.notifier)
+                        .mint(issue.candyMachineAddress);
+                    globalHook.value =
+                        globalHook.value.copyWith(isLoading: false);
+                  } catch (error) {
+                    globalHook.value =
+                        globalHook.value.copyWith(isLoading: false);
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'MINT',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    SolanaPrice(
+                      price: issue.stats?.price,
+                      textColor: Colors.black,
                     )
                   ],
-                )
-              : const Text(
-                  'PREVIEW',
+                ),
+              ),
+              ReadButton(issue: issue),
+            ],
+          );
+  }
+}
+
+class ReadButton extends StatelessWidget {
+  final ComicIssueModel issue;
+  const ReadButton({
+    super.key,
+    required this.issue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BuyButton(
+      size: const Size(150, 50),
+      backgroundColor: ColorPalette.dReaderGreen,
+      onPressed: () {
+        nextScreenPush(
+          context,
+          EReaderView(
+            issueId: issue.id,
+          ),
+        );
+      },
+      child: issue.myStats?.canRead != null && issue.myStats!.canRead
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  FontAwesomeIcons.glasses,
+                  size: 14,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'READ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-        ),
-      ],
+                )
+              ],
+            )
+          : const Text(
+              'PREVIEW',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
     );
   }
 }

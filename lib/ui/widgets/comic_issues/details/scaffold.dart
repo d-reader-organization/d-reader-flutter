@@ -119,52 +119,30 @@ class _ComicIssueDetailsScaffoldState
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'EPISODE',
-                                  style: textTheme.bodyMedium,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${widget.issue.number}',
-                                      style: textTheme.bodyLarge?.copyWith(
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      '/${widget.issue.stats?.totalIssuesCount}',
-                                      style: textTheme.bodyLarge?.copyWith(
-                                        color: ColorPalette.dReaderGrey
-                                            .withOpacity(0.5),
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                            const Text(
+                              'EPISODE',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.menu_book,
-                                      color: Colors.white,
-                                      size: 16,
-                                    ),
-                                    Text(
-                                      '${widget.issue.stats?.totalPagesCount.toString()} pages',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
+                                const Icon(
+                                  Icons.menu_book,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  '${widget.issue.stats?.totalPagesCount.toString()} pages',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ],
                             ),
@@ -186,14 +164,38 @@ class _ComicIssueDetailsScaffoldState
                             ),
                           ],
                         ),
-                        Text(
-                          widget.issue.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.headlineLarge,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '${widget.issue.number}',
+                                    style: textTheme.headlineLarge,
+                                  ),
+                                  Text(
+                                    '/${widget.issue.stats?.totalIssuesCount}',
+                                    style: textTheme.headlineLarge,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: Text(
+                                widget.issue.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.headlineLarge,
+                              ),
+                            ),
+                            const SizedBox(),
+                          ],
                         ),
                         const SizedBox(
-                          height: 12,
+                          height: 24,
                         ),
                         TextWithViewMore(
                           text: widget.issue.description,

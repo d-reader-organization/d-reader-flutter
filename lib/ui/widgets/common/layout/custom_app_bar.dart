@@ -15,7 +15,7 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12),
         child: SvgPicture.asset(
           Config.logoTextPath,
         ),

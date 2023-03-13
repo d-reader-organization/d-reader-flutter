@@ -180,7 +180,10 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                   ),
                   child: Column(
                     children: [
-                      GenreTagsDefault(genres: widget.comic.genres),
+                      GenreTagsDefault(
+                        genres: widget.comic.genres,
+                        withHorizontalScroll: true,
+                      ),
                       const SizedBox(
                         height: 16,
                       ),

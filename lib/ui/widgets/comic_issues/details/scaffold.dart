@@ -329,44 +329,51 @@ class BottomNavigation extends HookConsumerWidget {
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              BuyButton(
-                size: const Size(150, 50),
-                isLoading: globalHook.value.isLoading,
-                onPressed: () async {
-                  try {
-                    globalHook.value =
-                        globalHook.value.copyWith(isLoading: true);
-                    await ref
-                        .read(solanaProvider.notifier)
-                        .mint(issue.candyMachineAddress);
-                    globalHook.value =
-                        globalHook.value.copyWith(isLoading: false);
-                  } catch (error) {
-                    globalHook.value =
-                        globalHook.value.copyWith(isLoading: false);
-                  }
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'MINT',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+              Expanded(
+                child: BuyButton(
+                  size: const Size(150, 50),
+                  isLoading: globalHook.value.isLoading,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      8,
+                    ),
+                  ),
+                  onPressed: () async {
+                    try {
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: true);
+                      await ref
+                          .read(solanaProvider.notifier)
+                          .mint(issue.candyMachineAddress);
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: false);
+                    } catch (error) {
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: false);
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'MINT',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    SolanaPrice(
-                      price: issue.stats?.price,
-                      textColor: Colors.black,
-                    )
-                  ],
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      SolanaPrice(
+                        price: issue.stats?.price,
+                        textColor: Colors.black,
+                      )
+                    ],
+                  ),
                 ),
               ),
-              ReadButton(issue: issue),
+              Expanded(child: ReadButton(issue: issue)),
             ],
           );
   }
@@ -384,6 +391,11 @@ class ReadButton extends StatelessWidget {
     return BuyButton(
       size: const Size(150, 50),
       backgroundColor: ColorPalette.dReaderGreen,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(
+          8,
+        ),
+      ),
       onPressed: () {
         nextScreenPush(
           context,

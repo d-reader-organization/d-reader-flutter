@@ -29,7 +29,7 @@ class _TextWithViewMoreState extends State<TextWithViewMore> {
   @override
   Widget build(BuildContext context) {
     final int charactersLimit =
-        MediaQuery.of(context).size.width > 360 ? 110 : 88;
+        MediaQuery.of(context).size.width > 360 ? 80 : 70;
     return widget.text.length > charactersLimit
         ? Wrap(
             children: [
@@ -46,12 +46,16 @@ class _TextWithViewMoreState extends State<TextWithViewMore> {
                           : widget.text
                               .substring(0, charactersLimit)
                               .padRight(charactersLimit + 3, '.'),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 18),
                     ),
                     TextSpan(
                       text: isReadMore ? 'view less' : 'view more',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: ColorPalette.dReaderYellow100,
+                            fontSize: 16,
                           ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {

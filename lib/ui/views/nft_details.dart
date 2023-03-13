@@ -147,6 +147,12 @@ class Body extends StatelessWidget {
                 child: BuyButton(
                   backgroundColor: ColorPalette.dReaderGreen,
                   size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      8,
+                    ),
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
@@ -176,9 +182,18 @@ class Body extends StatelessWidget {
                   },
                 ),
               ),
+              const SizedBox(
+                width: 8,
+              ),
               Expanded(
                 child: BuyButton(
                   size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      8,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: const Text('List'),
                   onPressed: () {
                     showModalBottomSheet(

@@ -36,12 +36,8 @@ class FavouriteIconCount extends HookConsumerWidget {
       onTap: () async {
         if (id != null) {
           ref.read(favouriteComicIssueProvider(id!));
-          ref.invalidate(comicIssuesProvider(null));
-          ref.invalidate(comicIssueDetailsProvider(id!));
         } else {
           ref.read(updateComicFavouriteProvider(slug));
-          ref.invalidate(comicsProvider(null));
-          ref.invalidate(comicSlugProvider(slug));
         }
         favouriteHook.value = favouriteHook.value.copyWith(
           count: favouriteHook.value.isSelected

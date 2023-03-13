@@ -32,12 +32,14 @@ class ComicIssueDetails extends ConsumerWidget {
           return const SizedBox();
         }
         return ComicIssueDetailsScaffold(
-          body: Column(
-            children: [
-              // const BodyHeader(),
-              ListedItems(address: issue.candyMachineAddress ?? ''),
-            ],
-          ),
+          body: issue.isFree
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    // const BodyHeader(),
+                    ListedItems(address: issue.candyMachineAddress ?? ''),
+                  ],
+                ),
           issue: issue,
         );
       },
@@ -67,7 +69,7 @@ class ListedItems extends ConsumerWidget {
     return provider.when(
       data: (receipts) {
         if (receipts.isEmpty) {
-          return const Text('No items');
+          return const Text('No listed items.');
         }
         return ListView.separated(
           itemCount: receipts.length,

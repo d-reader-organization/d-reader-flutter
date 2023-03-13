@@ -10,27 +10,29 @@ class BuyButton extends StatelessWidget {
   final double fontSize;
   final bool isLoading;
   final BorderRadiusGeometry borderRadius;
+  final EdgeInsetsGeometry padding;
 
-  const BuyButton({
-    Key? key,
-    required this.child,
-    required this.onPressed,
-    this.backgroundColor = ColorPalette.dReaderYellow100,
-    this.textColor = ColorPalette.appBackgroundColor,
-    this.size = const Size(120, 27),
-    this.fontSize = 14,
-    this.isLoading = false,
-    this.borderRadius = const BorderRadius.all(
-      Radius.circular(
-        32,
+  const BuyButton(
+      {Key? key,
+      required this.child,
+      required this.onPressed,
+      this.backgroundColor = ColorPalette.dReaderYellow100,
+      this.textColor = ColorPalette.appBackgroundColor,
+      this.size = const Size(120, 27),
+      this.fontSize = 14,
+      this.isLoading = false,
+      this.borderRadius = const BorderRadius.all(
+        Radius.circular(
+          32,
+        ),
       ),
-    ),
-  }) : super(key: key);
+      this.padding = const EdgeInsets.all(8)})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: padding,
       child: TextButton(
         onPressed: isLoading ? null : onPressed,
         style: TextButton.styleFrom(

@@ -5,9 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class GenreTagsDefault extends StatelessWidget {
   final List<GenreModel> genres;
+  final bool withHorizontalScroll;
   const GenreTagsDefault({
     Key? key,
     required this.genres,
+    this.withHorizontalScroll = false,
   }) : super(key: key);
 
   List<GenreModel> _genresWithMore(int sublistLimit) =>
@@ -20,39 +22,67 @@ class GenreTagsDefault extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final sublistLimit = screenWidth > 360 ? 4 : 3;
-    return Row(
-        children: (genres.length >= sublistLimit
-                ? _genresWithMore(sublistLimit)
-                : genres)
-            .map((genre) => Container(
-                  padding: const EdgeInsets.all(2),
-                  margin: const EdgeInsets.only(right: 4),
-                  child: genre.name.isNotEmpty
-                      ? Row(
-                          children: [
-                            SvgPicture.network(
-                              genre.icon,
-                              colorFilter: const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                              height: 16,
-                              width: 16,
-                            ),
-                            const SizedBox(
-                              width: 2,
-                            ),
-                            Text(
-                              genre.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        )
-                      : const EmptyGenreTag(),
-                ))
-            .toList());
+    return withHorizontalScroll
+        ? SizedBox(
+            height: 21,
+            child: ListView.builder(
+              itemCount: genres.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                GenreModel genre = genres[index];
+                return TagContainer(genre: genre);
+              },
+            ),
+          )
+        : Row(
+            children: (genres.length >= sublistLimit
+                    ? _genresWithMore(sublistLimit)
+                    : genres)
+                .map(
+                  (genre) => TagContainer(genre: genre),
+                )
+                .toList());
+  }
+}
+
+class TagContainer extends StatelessWidget {
+  final GenreModel genre;
+  const TagContainer({
+    super.key,
+    required this.genre,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      margin: const EdgeInsets.only(right: 4),
+      child: genre.name.isNotEmpty
+          ? Row(
+              children: [
+                SvgPicture.network(
+                  genre.icon,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                  height: 16,
+                  width: 16,
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+                Text(
+                  genre.name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w500),
+                ),
+              ],
+            )
+          : const EmptyGenreTag(),
+    );
   }
 }

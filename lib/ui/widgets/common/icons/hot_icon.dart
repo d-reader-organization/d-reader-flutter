@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HotIcon extends StatelessWidget {
   const HotIcon({Key? key}) : super(key: key);
@@ -17,9 +18,18 @@ class HotIcon extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.local_fire_department_rounded,
-            color: ColorPalette.appBackgroundColor,
+          // const Icon(
+          //   Icons.local_fire_department_rounded,
+          //   color: ColorPalette.appBackgroundColor,
+          // ),
+          SvgPicture.asset(
+            'assets/icons/Hot.svg',
+            colorFilter: const ColorFilter.mode(
+              Colors.black,
+              BlendMode.srcIn,
+            ),
+            width: 20,
+            height: 20,
           ),
           Text(
             'HOT',

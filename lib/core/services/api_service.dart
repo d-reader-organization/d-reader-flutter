@@ -44,6 +44,7 @@ class ApiService {
   Future<String?> apiCallPatch(String path, [Object? body]) async {
     Uri uri = Uri.parse('$apiUrl$path');
     await _setTokenIfNeeded();
+    print('Update COMIC $path');
     http.Response response = await http.patch(
       uri,
       headers: {HttpHeaders.authorizationHeader: '$_token'},
@@ -64,9 +65,9 @@ class ApiService {
       }
       Uri uri = Uri.parse('$apiUrl$path');
       final sp = await SharedPreferences.getInstance();
-      final _token = sp.getString(Config.tokenKey);
+      final token = sp.getString(Config.tokenKey);
       var request = http.MultipartRequest('PATCH', uri)
-        ..headers.addAll({HttpHeaders.authorizationHeader: '$_token'})
+        ..headers.addAll({HttpHeaders.authorizationHeader: '$token'})
         ..files.add(payload.avatar!);
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();

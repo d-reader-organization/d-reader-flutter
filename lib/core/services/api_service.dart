@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/ioc.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   static final String apiUrl = Config.apiUrl;
   String? _token;
+
+  static ApiService get instance => IoCContainer.resolveContainer<ApiService>();
 
   Future<String?> apiCallGet(String path,
       {bool includeAuthHeader = true}) async {

@@ -38,7 +38,7 @@ class NftDetails extends ConsumerWidget {
 
     return provider.when(
       data: (nft) {
-        nft = NftModel.fromJson(
+        nft ??= NftModel.fromJson(
           {
             "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
             "uri":

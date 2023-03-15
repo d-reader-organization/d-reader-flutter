@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -179,11 +180,18 @@ class _ComicIssueDetailsScaffoldState
                                 ),
                               ],
                             ),
-                            Text(
-                              widget.issue.title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: textTheme.headlineLarge,
+                            Expanded(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 24.0),
+                                  child: Text(
+                                    widget.issue.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headlineLarge,
+                                  ),
+                                ),
+                              ),
                             ),
                             const SizedBox(),
                           ],
@@ -336,9 +344,13 @@ class BottomNavigation extends HookConsumerWidget {
                     try {
                       globalHook.value =
                           globalHook.value.copyWith(isLoading: true);
-                      await ref
+                      final isSuccessful = await ref
                           .read(solanaProvider.notifier)
                           .mint(issue.candyMachineAddress);
+                      if (isSuccessful) {
+                        ref.invalidate(receiptsProvider);
+                        ref.invalidate(walletAssetsProvider);
+                      }
                       globalHook.value =
                           globalHook.value.copyWith(isLoading: false);
                     } catch (error) {

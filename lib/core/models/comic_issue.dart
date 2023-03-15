@@ -69,8 +69,8 @@ class ComicIssueStats {
       readersCount,
       viewersCount,
       totalPagesCount;
-  final double price, totalVolume;
-  final double? averageRating;
+  final double totalVolume;
+  final double? price, averageRating;
 
   ComicIssueStats({
     required this.favouritesCount,
@@ -86,8 +86,7 @@ class ComicIssueStats {
   });
 
   factory ComicIssueStats.fromJson(dynamic json) => ComicIssueStats(
-        price:
-            double.tryParse(json['price'].toStringAsFixed(2))?.toDouble() ?? 0,
+        price: double.tryParse(json['price'].toStringAsFixed(2))?.toDouble(),
         totalVolume: 122.4,
         averageRating: json['averageRating'] != null
             ? double.tryParse(json['averageRating'].toStringAsFixed(2))

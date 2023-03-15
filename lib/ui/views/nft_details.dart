@@ -38,7 +38,7 @@ class NftDetails extends ConsumerWidget {
 
     return provider.when(
       data: (nft) {
-        nft = NftModel.fromJson(
+        nft ??= NftModel.fromJson(
           {
             "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
             "uri":
@@ -137,69 +137,80 @@ class Body extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: ListView(
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const PageScrollPhysics(),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BuyButton(
-                backgroundColor: ColorPalette.dReaderGreen,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(
-                    8,
+              Expanded(
+                child: BuyButton(
+                  backgroundColor: ColorPalette.dReaderGreen,
+                  size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      8,
+                    ),
                   ),
-                ),
-                size: Size(MediaQuery.of(context).size.width / 2.4, 50),
-                child: Row(
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.glasses,
-                      size: 14,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      'Read',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        FontAwesomeIcons.glasses,
+                        size: 14,
                       ),
-                    )
-                  ],
-                ),
-                onPressed: () {
-                  nextScreenPush(
-                    context,
-                    EReaderView(
-                      issueId: nft.comicIssueId,
-                    ),
-                  );
-                },
-              ),
-              BuyButton(
-                size: Size(MediaQuery.of(context).size.width / 2.4, 50),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(
-                    8,
-                  ),
-                ),
-                child: const Text('List'),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'Read',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
                         ),
-                        child: NftModalBottomSheet(nft: nft),
-                      );
-                    },
-                  );
-                },
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    nextScreenPush(
+                      context,
+                      EReaderView(
+                        issueId: nft.comicIssueId,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: BuyButton(
+                  size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      8,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const Text('List'),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                          ),
+                          child: NftModalBottomSheet(nft: nft),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),

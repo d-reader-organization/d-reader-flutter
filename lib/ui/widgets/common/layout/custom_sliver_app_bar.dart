@@ -18,7 +18,7 @@ class CustomSliverAppBar extends StatelessWidget {
       sliver: SliverAppBar(
         leading: displayLogo
             ? Container(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12),
                 child: SvgPicture.asset(
                   Config.logoTextPath,
                 ),

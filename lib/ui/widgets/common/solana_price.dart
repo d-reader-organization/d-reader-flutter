@@ -30,7 +30,7 @@ class SolanaPrice extends StatelessWidget {
           width: 4,
         ),
         Text(
-          price != null ? formatPrice(price ?? 0) : 'Free',
+          price != null && price != 0.0 ? formatPrice(price ?? 0) : 'Free',
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: textColor,

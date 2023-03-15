@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ViewedIconCount extends StatelessWidget {
   final int viewedCount;
@@ -14,9 +15,14 @@ class ViewedIconCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          isViewed ? Icons.remove_red_eye : Icons.remove_red_eye_outlined,
-          color: const Color(0xFFE0e0e0),
+        SvgPicture.asset(
+          'assets/icons/view_icon.svg',
+          width: 18,
+          height: 18,
+          colorFilter: const ColorFilter.mode(
+            Color(0xFFE0e0e0),
+            BlendMode.srcIn,
+          ),
         ),
         const SizedBox(
           width: 4,

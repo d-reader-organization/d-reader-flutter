@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/comic_card.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/results_wrapper.dart';
@@ -15,7 +16,7 @@ class DiscoverComicsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String search = ref.watch(searchProvider).search;
     AsyncValue<List<ComicModel>> provider =
-        ref.watch(comicsProvider('nameSubstring=$search'));
+        ref.watch(comicsProvider(appendDefaultQuery('nameSubstring=$search')));
     return provider.when(
       data: (comics) {
         return ResultsWrapper(

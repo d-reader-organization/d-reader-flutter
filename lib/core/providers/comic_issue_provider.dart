@@ -9,11 +9,11 @@ final comicIssuesProvider =
     FutureProvider.family<List<ComicIssueModel>, String?>(
         (ref, queryString) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
-      .getComicIssues(appendDefaultQuery(queryString));
+      .getComicIssues(queryString ?? appendDefaultQuery(queryString));
 });
 
 final comicIssueDetailsProvider =
-    FutureProvider.family<ComicIssueModel?, int>((ref, id) async {
+    FutureProvider.autoDispose.family<ComicIssueModel?, int>((ref, id) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
       .getComicIssue(id);
 });
@@ -24,7 +24,8 @@ final comicIssuePagesProvider =
       .getComicIssuePages(id);
 });
 
-final favouriteComicIssueProvider = FutureProvider.family<void, int>(
+final favouriteComicIssueProvider =
+    FutureProvider.autoDispose.family<void, int>(
   (ref, id) {
     return IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
         .favouritiseIssue(id);

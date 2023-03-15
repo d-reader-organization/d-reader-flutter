@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final creatorsProvider = FutureProvider.family<List<CreatorModel>, String?>(
     (ref, queryString) async {
   return await IoCContainer.resolveContainer<CreatorRepositoryImpl>()
-      .getCreators(appendDefaultQuery(queryString));
+      .getCreators(queryString ?? appendDefaultQuery(queryString));
 });
 
 final creatorProvider =

@@ -23,7 +23,7 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
         children: [
           CachedImageBgPlaceholder(
             height: 250,
-            cacheKey: 'banner ${creator.slug}',
+            cacheKey: creator.slug,
             imageUrl: creator.banner,
             borderRadius: 0,
             foregroundDecoration: const BoxDecoration(
@@ -40,7 +40,7 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
           ),
           Positioned.fill(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CreatorAvatar(
                   avatar: creator.avatar,

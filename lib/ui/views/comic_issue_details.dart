@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -31,12 +32,14 @@ class ComicIssueDetails extends ConsumerWidget {
           return const SizedBox();
         }
         return ComicIssueDetailsScaffold(
-          body: Column(
-            children: [
-              // const BodyHeader(),
-              ListedItems(address: issue.candyMachineAddress ?? ''),
-            ],
-          ),
+          body: issue.isFree
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    // const BodyHeader(),
+                    ListedItems(address: issue.candyMachineAddress ?? ''),
+                  ],
+                ),
           issue: issue,
         );
       },
@@ -66,7 +69,7 @@ class ListedItems extends ConsumerWidget {
     return provider.when(
       data: (receipts) {
         if (receipts.isEmpty) {
-          return const Text('No items');
+          return const Text('No items minted.');
         }
         return ListView.separated(
           itemCount: receipts.length,
@@ -92,6 +95,7 @@ class ListedItems extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         print('Listed items error: ${error.toString()}');
+        print(stackTrace);
         return const Text('Something went wrong');
       },
       loading: () => const SkeletonRow(),
@@ -112,10 +116,12 @@ class ListingRow extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(vertical: 4),
       leading: CircleAvatar(
         maxRadius: 24,
-        backgroundImage: CachedNetworkImageProvider(
-          receipt.buyer.avatar,
-          cacheKey: receipt.buyer.avatar,
-        ),
+        backgroundImage: receipt.buyer.avatar.isNotEmpty
+            ? CachedNetworkImageProvider(
+                receipt.buyer.avatar,
+                cacheKey: receipt.buyer.avatar,
+              )
+            : null,
       ),
       title: SizedBox(
         height: 50,
@@ -215,9 +221,12 @@ class BodyHeader extends StatelessWidget {
                 fontSize: 12, color: ColorPalette.boxBackground400),
             constraints: const BoxConstraints(
                 maxHeight: 37, minHeight: 37, maxWidth: 150, minWidth: 150),
-            prefixIcon: const Icon(
-              Icons.search,
-              color: Colors.white,
+            prefixIcon: SvgPicture.asset(
+              'assets/icons/search.svg',
+              colorFilter: const ColorFilter.mode(
+                ColorPalette.dReaderGrey,
+                BlendMode.srcIn,
+              ),
             ),
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -96,7 +97,7 @@ class _ComicIssueDetailsScaffoldState
                 CachedImageBgPlaceholder(
                   height: 364,
                   imageUrl: widget.issue.cover,
-                  cacheKey: 'details-${widget.issue.slug}',
+                  cacheKey: '${widget.issue.id}',
                   overrideBorderRadius: BorderRadius.circular(0),
                   foregroundDecoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -107,7 +108,7 @@ class _ComicIssueDetailsScaffoldState
                       ],
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      stops: [0.128, .6406, 1],
+                      stops: [0.0, .6406, 1],
                     ),
                   ),
                 ),
@@ -119,52 +120,30 @@ class _ComicIssueDetailsScaffoldState
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'EPISODE',
-                                  style: textTheme.bodyMedium,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${widget.issue.number}',
-                                      style: textTheme.bodyLarge?.copyWith(
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      '/${widget.issue.stats?.totalIssuesCount}',
-                                      style: textTheme.bodyLarge?.copyWith(
-                                        color: ColorPalette.dReaderGrey
-                                            .withOpacity(0.5),
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                            const Text(
+                              'EPISODE',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.menu_book,
-                                      color: Colors.white,
-                                      size: 16,
-                                    ),
-                                    Text(
-                                      '${widget.issue.stats?.totalPagesCount.toString()} pages',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
+                                const Icon(
+                                  Icons.menu_book,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  '${widget.issue.stats?.totalPagesCount.toString()} pages',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ],
                             ),
@@ -186,14 +165,39 @@ class _ComicIssueDetailsScaffoldState
                             ),
                           ],
                         ),
-                        Text(
-                          widget.issue.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.headlineLarge,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '${widget.issue.number}',
+                                  style: textTheme.headlineLarge,
+                                ),
+                                Text(
+                                  '/${widget.issue.stats?.totalIssuesCount}',
+                                  style: textTheme.headlineLarge,
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 24.0),
+                                  child: Text(
+                                    widget.issue.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headlineLarge,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(),
+                          ],
                         ),
                         const SizedBox(
-                          height: 12,
+                          height: 24,
                         ),
                         TextWithViewMore(
                           text: widget.issue.description,
@@ -269,19 +273,27 @@ class _ComicIssueDetailsScaffoldState
                     children: [
                       StatsInfo(
                         title: 'VOLUME',
-                        stats: '${widget.issue.stats?.totalVolume}◎',
+                        stats: widget.issue.isFree
+                            ? '--'
+                            : '${widget.issue.stats?.totalVolume}◎',
                       ),
                       StatsInfo(
                         title: 'SUPPLY',
-                        stats: '${widget.issue.supply}',
+                        stats: widget.issue.isFree
+                            ? '--'
+                            : '${widget.issue.supply}',
                       ),
                       StatsInfo(
                         title: 'LISTED',
-                        stats: '${widget.issue.stats?.totalListedCount}',
+                        stats: widget.issue.isFree
+                            ? '--'
+                            : '${widget.issue.stats?.totalListedCount}',
                       ),
                       StatsInfo(
-                        title: 'FLOOR',
-                        stats: '${widget.issue.stats?.price ?? '-.--'}◎',
+                        title: 'PRICE',
+                        stats: widget.issue.isFree
+                            ? 'FREE'
+                            : '${widget.issue.stats?.price ?? '-.--'}◎',
                         isLastItem: true,
                       ),
                     ],
@@ -310,85 +322,121 @@ class BottomNavigation extends HookConsumerWidget {
     super.key,
     required this.issue,
   });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final globalHook = useGlobalState();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        BuyButton(
-          size: const Size(150, 50),
-          isLoading: globalHook.value.isLoading,
-          onPressed: () async {
-            try {
-              globalHook.value = globalHook.value.copyWith(isLoading: true);
-              await ref
-                  .read(solanaProvider.notifier)
-                  .mint(issue.candyMachineAddress);
-              globalHook.value = globalHook.value.copyWith(isLoading: false);
-            } catch (error) {
-              globalHook.value = globalHook.value.copyWith(isLoading: false);
-            }
-          },
-          child: Row(
+    return issue.isFree
+        ? ReadButton(issue: issue)
+        : Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'MINT',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: BuyButton(
+                  size: const Size(150, 50),
+                  isLoading: globalHook.value.isLoading,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      8,
+                    ),
+                  ),
+                  onPressed: () async {
+                    try {
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: true);
+                      final isSuccessful = await ref
+                          .read(solanaProvider.notifier)
+                          .mint(issue.candyMachineAddress);
+                      if (isSuccessful) {
+                        ref.invalidate(receiptsProvider);
+                        ref.invalidate(walletAssetsProvider);
+                      }
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: false);
+                    } catch (error) {
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: false);
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'MINT',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      SolanaPrice(
+                        price: issue.stats?.price,
+                        textColor: Colors.black,
+                      )
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(
-                width: 4,
-              ),
-              SolanaPrice(
-                price: issue.stats?.price,
-                textColor: Colors.black,
-              )
+              Expanded(child: ReadButton(issue: issue)),
             ],
-          ),
+          );
+  }
+}
+
+class ReadButton extends StatelessWidget {
+  final ComicIssueModel issue;
+  const ReadButton({
+    super.key,
+    required this.issue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BuyButton(
+      size: const Size(150, 50),
+      backgroundColor: ColorPalette.dReaderGreen,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(
+          8,
         ),
-        BuyButton(
-          size: const Size(150, 50),
-          backgroundColor: ColorPalette.dReaderGreen,
-          onPressed: () {
-            nextScreenPush(
-              context,
-              EReaderView(
-                issueId: issue.id,
-              ),
-            );
-          },
-          child: issue.myStats?.canRead != null && issue.myStats!.canRead
-              ? Row(
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.glasses,
-                      size: 14,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      'READ',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    )
-                  ],
-                )
-              : const Text(
-                  'PREVIEW',
+      ),
+      onPressed: () {
+        nextScreenPush(
+          context,
+          EReaderView(
+            issueId: issue.id,
+          ),
+        );
+      },
+      child: issue.myStats?.canRead != null && issue.myStats!.canRead
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  FontAwesomeIcons.glasses,
+                  size: 14,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'READ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-        ),
-      ],
+                )
+              ],
+            )
+          : const Text(
+              'PREVIEW',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
     );
   }
 }
@@ -408,20 +456,14 @@ class CandyMachineStats extends ConsumerWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          candyMachine?.endsAt != null
-              ? StatsInfo(
-                  title: 'ENDS IN',
-                  stats: timeago.format(
+          StatsInfo(
+            title: 'ENDS IN',
+            stats: candyMachine?.endsAt != null
+                ? timeago.format(
                     DateTime.parse(candyMachine?.endsAt ?? ''),
-                  ),
-                )
-              : const Text(
-                  '∞',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                  )
+                : '∞',
+          ),
           StatsInfo(
             title: 'SUPPLY',
             stats: '${candyMachine?.supply}K',

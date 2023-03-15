@@ -34,7 +34,7 @@ class ComicIssueCard extends StatelessWidget {
           children: [
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
-              cacheKey: 'home${issue.slug}',
+              cacheKey: '${issue.id}',
               height: 135,
               overrideBorderRadius: const BorderRadius.vertical(
                 top: Radius.circular(
@@ -61,6 +61,7 @@ class ComicIssueCard extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -94,7 +94,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                     CachedImageBgPlaceholder(
                       height: 364,
                       imageUrl: widget.comic.cover,
-                      cacheKey: 'details-${widget.comic.slug}',
+                      cacheKey: widget.comic.slug,
                       overrideBorderRadius: BorderRadius.circular(0),
                       foregroundDecoration: const BoxDecoration(
                         gradient: LinearGradient(
@@ -105,7 +105,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
-                          stops: [0.128, .6406, 1],
+                          stops: [0.0, .6406, 1],
                         ),
                       ),
                     ),
@@ -179,6 +179,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                     bottom: 4,
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GenreTagsDefault(
                         genres: widget.comic.genres,

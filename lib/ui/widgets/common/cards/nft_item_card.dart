@@ -15,7 +15,7 @@ class NftItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedImageBgPlaceholder(
       imageUrl: nftAsset.image,
-      cacheKey: '#-124',
+      cacheKey: nftAsset.address,
       height: 190,
       overrideBorderRadius: BorderRadius.circular(12),
       bgImageFit: BoxFit.fill,

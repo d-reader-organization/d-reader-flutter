@@ -96,7 +96,7 @@ class _ComicIssueDetailsScaffoldState
                 CachedImageBgPlaceholder(
                   height: 364,
                   imageUrl: widget.issue.cover,
-                  cacheKey: 'details-${widget.issue.slug}',
+                  cacheKey: '${widget.issue.id}',
                   overrideBorderRadius: BorderRadius.circular(0),
                   foregroundDecoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -107,7 +107,7 @@ class _ComicIssueDetailsScaffoldState
                       ],
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      stops: [0.128, .6406, 1],
+                      stops: [0.0, .6406, 1],
                     ),
                   ),
                 ),
@@ -167,29 +167,23 @@ class _ComicIssueDetailsScaffoldState
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '${widget.issue.number}',
-                                    style: textTheme.headlineLarge,
-                                  ),
-                                  Text(
-                                    '/${widget.issue.stats?.totalIssuesCount}',
-                                    style: textTheme.headlineLarge,
-                                  ),
-                                ],
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${widget.issue.number}',
+                                  style: textTheme.headlineLarge,
+                                ),
+                                Text(
+                                  '/${widget.issue.stats?.totalIssuesCount}',
+                                  style: textTheme.headlineLarge,
+                                ),
+                              ],
                             ),
-                            Expanded(
-                              flex: 4,
-                              child: Text(
-                                widget.issue.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.headlineLarge,
-                              ),
+                            Text(
+                              widget.issue.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.headlineLarge,
                             ),
                             const SizedBox(),
                           ],
@@ -450,20 +444,14 @@ class CandyMachineStats extends ConsumerWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          candyMachine?.endsAt != null
-              ? StatsInfo(
-                  title: 'ENDS IN',
-                  stats: timeago.format(
+          StatsInfo(
+            title: 'ENDS IN',
+            stats: candyMachine?.endsAt != null
+                ? timeago.format(
                     DateTime.parse(candyMachine?.endsAt ?? ''),
-                  ),
-                )
-              : const Text(
-                  '∞',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                  )
+                : '∞',
+          ),
           StatsInfo(
             title: 'SUPPLY',
             stats: '${candyMachine?.supply}K',

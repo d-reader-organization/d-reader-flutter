@@ -31,7 +31,7 @@ class ComicCard extends ConsumerWidget {
           children: [
             CachedImageBgPlaceholder(
               imageUrl: comic.cover,
-              cacheKey: 'home${comic.slug}',
+              cacheKey: comic.slug,
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [

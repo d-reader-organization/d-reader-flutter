@@ -34,49 +34,65 @@ class HomeView extends StatelessWidget {
           const SizedBox(
             height: 32,
           ),
-          SectionHeading(
-            title: AppLocalizations.of(context)?.newComics ?? 'New Comics',
+          const SectionHeading(
+            title: 'Popular Comics',
             initialTab: DiscoverTabViewEnum.comics,
           ),
           const SizedBox(
             height: 16,
           ),
-          const ComicsListView(),
+          const ComicsListView(
+            query: 'skip=0&take=4',
+          ),
           const SizedBox(
             height: 32,
           ),
-          SectionHeading(
-            title:
-                AppLocalizations.of(context)?.popularIssues ?? 'Popular Issues',
-            initialTab: DiscoverTabViewEnum.issues,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const ComicIssuesGrid(),
-          const SizedBox(
-            height: 32,
-          ),
-          SectionHeading(
-            title: AppLocalizations.of(context)?.topCreators ?? 'Top Creators',
-            initialTab: DiscoverTabViewEnum.creators,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const CreatorsGrid(),
-          const SizedBox(
-            height: 32,
-          ),
-          SectionHeading(
-            title: AppLocalizations.of(context)?.freeIssues ?? 'Free Issues',
+          const SectionHeading(
+            title: 'New Episodes',
             initialTab: DiscoverTabViewEnum.issues,
           ),
           const SizedBox(
             height: 16,
           ),
           const ComicIssuesGrid(
-            onlyFree: true,
+            query: 'skip=0&take=4',
+          ),
+          const SizedBox(
+            height: 32,
+          ),
+          const SectionHeading(
+            title: 'Top Creators',
+            initialTab: DiscoverTabViewEnum.creators,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const CreatorsGrid(query: 'skip=0&take=4'),
+          const SizedBox(
+            height: 32,
+          ),
+          const SectionHeading(
+            title: 'New Comics',
+            initialTab: DiscoverTabViewEnum.comics,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const ComicsListView(
+            query: 'skip=4&take=4',
+          ),
+          const SizedBox(
+            height: 32,
+          ),
+          const SectionHeading(
+            title: 'Free Episodes',
+            initialTab: DiscoverTabViewEnum.issues,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const ComicIssuesGrid(
+            query: 'skip=4&take=4',
           ),
           const SizedBox(
             height: 32,

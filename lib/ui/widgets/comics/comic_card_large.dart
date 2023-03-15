@@ -31,7 +31,7 @@ class ComicCardLarge extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8),
             child: CachedImageBgPlaceholder(
               imageUrl: comic.cover,
-              cacheKey: 'large ${comic.slug}',
+              cacheKey: comic.slug,
               height: 330,
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(

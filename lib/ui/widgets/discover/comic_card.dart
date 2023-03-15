@@ -35,7 +35,7 @@ class DiscoverComicCard extends StatelessWidget {
               flex: 4,
               child: CachedImageBgPlaceholder(
                 imageUrl: comic.cover,
-                cacheKey: 'discover-${comic.slug}',
+                cacheKey: comic.slug,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

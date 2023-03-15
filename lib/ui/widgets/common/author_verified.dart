@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AuthorVerified extends StatelessWidget {
@@ -19,28 +18,15 @@ class AuthorVerified extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Row(
-      mainAxisAlignment: mainAxisAlignment,
-      children: [
-        Text(
-          authorName,
-          style: textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            fontSize: fontSize,
-            color: textColor,
-          ),
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-        isVerified
-            ? const Icon(
-                Icons.verified,
-                color: ColorPalette.dReaderYellow100,
-                size: 16,
-              )
-            : const SizedBox(),
-      ],
+    return Text(
+      authorName,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: textTheme.bodyMedium?.copyWith(
+        fontWeight: FontWeight.w600,
+        fontSize: fontSize,
+        color: textColor,
+      ),
     );
   }
 }

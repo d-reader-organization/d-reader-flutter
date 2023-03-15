@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issue_card_large.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/details/scaffold.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class ComicDetails extends ConsumerWidget {
     final AsyncValue<ComicModel?> provider = ref.watch(comicSlugProvider(slug));
     final AsyncValue<List<ComicIssueModel>> issuesProvider = ref.watch(
       comicIssuesProvider(
-        'comicSlug=$slug',
+        appendDefaultQuery('comicSlug=$slug'),
       ),
     );
     return provider.when(
@@ -32,6 +33,7 @@ class ComicDetails extends ConsumerWidget {
             itemCount: issuesProvider.value?.length,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
+            physics: const PageScrollPhysics(),
             itemBuilder: (context, index) {
               return issuesProvider.value?[index] != null
                   ? ComicIssueCardLarge(

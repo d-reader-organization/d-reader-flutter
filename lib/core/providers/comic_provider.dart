@@ -7,8 +7,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final comicsProvider =
     FutureProvider.autoDispose.family<List<ComicModel>, String?>(
   (ref, queryString) async {
-    return IoCContainer.resolveContainer<ComicRepositoryImpl>()
-        .getComics(queryString: appendDefaultQuery(queryString));
+    return IoCContainer.resolveContainer<ComicRepositoryImpl>().getComics(
+        queryString: queryString != null && queryString.isNotEmpty
+            ? queryString
+            : appendDefaultQuery(queryString));
   },
 );
 

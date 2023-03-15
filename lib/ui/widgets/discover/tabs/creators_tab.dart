@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
@@ -20,8 +21,8 @@ class DiscoverCreatorsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String search = ref.watch(searchProvider).search;
-    AsyncValue<List<CreatorModel>> providerData =
-        ref.watch(creatorsProvider('nameSubstring=$search'));
+    AsyncValue<List<CreatorModel>> providerData = ref
+        .watch(creatorsProvider(appendDefaultQuery('nameSubstring=$search')));
     return providerData.when(
       data: (creators) {
         return ResultsWrapper(
@@ -81,7 +82,7 @@ class CreatorListItem extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
+          Expanded(
             flex: 2,
             child: AuthorVerified(
               authorName: creator.name,
@@ -89,7 +90,7 @@ class CreatorListItem extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          Flexible(
+          Expanded(
             flex: 1,
             child: SolanaPrice(
               price: (creator.stats?.totalVolume ?? 0) / 100,
@@ -97,7 +98,7 @@ class CreatorListItem extends StatelessWidget {
               textDirection: TextDirection.rtl,
             ),
           ),
-          Flexible(
+          Expanded(
             flex: 1,
             child: Text(
               '${creator.stats?.totalVolume.toStringAsFixed(1)}%',
@@ -107,7 +108,7 @@ class CreatorListItem extends StatelessWidget {
                   ),
             ),
           ),
-          Flexible(
+          Expanded(
             flex: 1,
             child: SolanaPrice(
               price: (creator.stats?.totalVolume ?? 0) / 100,
@@ -140,7 +141,7 @@ class CreatorListHeader extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
+          Expanded(
             flex: 2,
             child: Row(
               children: [
@@ -150,18 +151,10 @@ class CreatorListHeader extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
-                const Icon(
-                  Icons.verified,
-                  color: Colors.transparent,
-                  size: 16,
-                ),
               ],
             ),
           ),
-          Flexible(
+          Expanded(
             flex: 1,
             child: Row(
               children: [
@@ -175,7 +168,7 @@ class CreatorListHeader extends StatelessWidget {
               ],
             ),
           ),
-          Flexible(
+          Expanded(
             flex: 1,
             child: Text(
               '24h %\nVol',
@@ -186,7 +179,7 @@ class CreatorListHeader extends StatelessWidget {
               ),
             ),
           ),
-          Flexible(
+          Expanded(
             flex: 1,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,

@@ -9,7 +9,7 @@ final comicIssuesProvider =
     FutureProvider.family<List<ComicIssueModel>, String?>(
         (ref, queryString) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
-      .getComicIssues(appendDefaultQuery(queryString));
+      .getComicIssues(queryString ?? appendDefaultQuery(queryString));
 });
 
 final comicIssueDetailsProvider =

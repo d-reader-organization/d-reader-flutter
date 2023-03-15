@@ -36,7 +36,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
               child: CachedImageBgPlaceholder(
                 imageUrl: issue.cover,
                 height: 145,
-                cacheKey: 'discover-${issue.slug}',
+                cacheKey: '${issue.id}',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,

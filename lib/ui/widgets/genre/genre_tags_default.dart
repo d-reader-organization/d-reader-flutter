@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tag.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -21,7 +22,7 @@ class GenreTagsDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final sublistLimit = screenWidth > 360 ? 4 : 3;
+    final sublistLimit = getGenreLimit(screenWidth);
     return withHorizontalScroll
         ? SizedBox(
             height: 21,
@@ -35,7 +36,9 @@ class GenreTagsDefault extends StatelessWidget {
               },
             ),
           )
-        : Row(
+        : Wrap(
+            spacing: 4,
+            runSpacing: 4,
             children: (genres.length >= sublistLimit
                     ? _genresWithMore(sublistLimit)
                     : genres)
@@ -60,6 +63,7 @@ class TagContainer extends StatelessWidget {
       margin: const EdgeInsets.only(right: 4),
       child: genre.name.isNotEmpty
           ? Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SvgPicture.network(
                   genre.icon,

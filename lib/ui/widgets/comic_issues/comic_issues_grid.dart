@@ -6,16 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicIssuesGrid extends ConsumerWidget {
+  final String? query;
   final bool onlyFree;
   const ComicIssuesGrid({
     Key? key,
+    this.query,
     this.onlyFree = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<ComicIssueModel>> comicIssues =
-        ref.watch(comicIssuesProvider(null));
+        ref.watch(comicIssuesProvider(query));
     return comicIssues.when(
       data: (data) {
         if (onlyFree) {

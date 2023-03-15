@@ -69,7 +69,7 @@ class ListedItems extends ConsumerWidget {
     return provider.when(
       data: (receipts) {
         if (receipts.isEmpty) {
-          return const Text('No listed items.');
+          return const Text('No items minted.');
         }
         return ListView.separated(
           itemCount: receipts.length,
@@ -95,6 +95,7 @@ class ListedItems extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         print('Listed items error: ${error.toString()}');
+        print(stackTrace);
         return const Text('Something went wrong');
       },
       loading: () => const SkeletonRow(),
@@ -115,10 +116,12 @@ class ListingRow extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(vertical: 4),
       leading: CircleAvatar(
         maxRadius: 24,
-        backgroundImage: CachedNetworkImageProvider(
-          receipt.buyer.avatar,
-          cacheKey: receipt.buyer.avatar,
-        ),
+        backgroundImage: receipt.buyer.avatar.isNotEmpty
+            ? CachedNetworkImageProvider(
+                receipt.buyer.avatar,
+                cacheKey: receipt.buyer.avatar,
+              )
+            : null,
       ),
       title: SizedBox(
         height: 50,

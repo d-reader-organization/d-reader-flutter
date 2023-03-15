@@ -38,10 +38,13 @@ class CreatorListTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AuthorVerified(
-                  authorName: creator.name,
-                  isVerified: creator.isVerified,
-                  fontSize: 14,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 3.6,
+                  child: AuthorVerified(
+                    authorName: creator.name,
+                    isVerified: creator.isVerified,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(
                   height: 4,

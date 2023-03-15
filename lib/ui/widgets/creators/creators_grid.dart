@@ -6,12 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorsGrid extends ConsumerWidget {
-  const CreatorsGrid({Key? key}) : super(key: key);
+  final String? query;
+  const CreatorsGrid({
+    Key? key,
+    this.query,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isTablet = MediaQuery.of(context).size.width > 600;
-    AsyncValue<List<CreatorModel>> creators = ref.watch(creatorsProvider(null));
+    AsyncValue<List<CreatorModel>> creators =
+        ref.watch(creatorsProvider(query));
 
     return creators.when(
       data: (data) {

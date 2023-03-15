@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comic_card_large.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,13 @@ class CreatorComicsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> provider =
-        ref.watch(comicsProvider('creatorSlug=$creatorSlug'));
+    AsyncValue<List<ComicModel>> provider = ref.watch(
+      comicsProvider(
+        appendDefaultQuery(
+          'creatorSlug=$creatorSlug',
+        ),
+      ),
+    );
 
     return provider.when(
       data: (comics) {

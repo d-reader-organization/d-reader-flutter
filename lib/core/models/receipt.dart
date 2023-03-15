@@ -15,7 +15,9 @@ class Receipt {
     return Receipt(
       nft: ReceiptNft.fromJson(json['nft']),
       buyer: ReceiptBuyer.fromJson(json['buyer']),
-      price: json['price'],
+      price: json['price'] is int
+          ? json['price'].toDouble()
+          : double.parse(json['price']),
       timestamp: json['timestamp'],
     );
   }

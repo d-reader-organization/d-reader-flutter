@@ -44,7 +44,6 @@ class ApiService {
   Future<String?> apiCallPatch(String path, [Object? body]) async {
     Uri uri = Uri.parse('$apiUrl$path');
     await _setTokenIfNeeded();
-    print('Update COMIC $path');
     http.Response response = await http.patch(
       uri,
       headers: {HttpHeaders.authorizationHeader: '$_token'},

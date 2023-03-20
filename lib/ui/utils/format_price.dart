@@ -1,1 +1,2 @@
-String formatPrice(double price) => price.toStringAsFixed(2);
+String formatPrice(double price, [int decimals = 2]) =>
+    price.toStringAsFixed(decimals);

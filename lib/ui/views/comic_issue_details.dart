@@ -13,6 +13,7 @@ import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:solana/solana.dart' show lamportsPerSol;
 import 'package:timeago/timeago.dart' as timeago;
 
 class ComicIssueDetails extends ConsumerWidget {
@@ -166,7 +167,8 @@ class ListingRow extends StatelessWidget {
                   ],
                 ),
                 SolanaPrice(
-                  price: receipt.price,
+                  price: receipt.price / lamportsPerSol,
+                  priceDecimals: 4,
                 ),
               ],
             ),

@@ -14,90 +14,93 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ListView(
-        children: <Widget>[
-          const SearchAutoComplete(),
-          const SizedBox(
-            height: 24,
-          ),
-          const Carousel(),
-          const SizedBox(
-            height: 32,
-          ),
-          SectionHeading(
-            title: AppLocalizations.of(context)?.genres ?? 'Genres',
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const GenreListView(),
-          const SizedBox(
-            height: 32,
-          ),
-          const SectionHeading(
-            title: 'Popular Comics',
-            initialTab: DiscoverTabViewEnum.comics,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const ComicsListView(
-            query: 'skip=0&take=4',
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          const SectionHeading(
-            title: 'New Episodes',
-            initialTab: DiscoverTabViewEnum.issues,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const ComicIssuesGrid(
-            query: 'skip=0&take=4',
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          const SectionHeading(
-            title: 'Top Creators',
-            initialTab: DiscoverTabViewEnum.creators,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const CreatorsGrid(query: 'skip=0&take=4'),
-          const SizedBox(
-            height: 32,
-          ),
-          const SectionHeading(
-            title: 'New Comics',
-            initialTab: DiscoverTabViewEnum.comics,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const ComicsListView(
-            query: 'skip=4&take=4',
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-          const SectionHeading(
-            title: 'Free Episodes',
-            initialTab: DiscoverTabViewEnum.issues,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const ComicIssuesGrid(
-            query: 'skip=4&take=4',
-          ),
-          const SizedBox(
-            height: 32,
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const SearchAutoComplete(),
+            const SizedBox(
+              height: 24,
+            ),
+            const Carousel(),
+            const SizedBox(
+              height: 32,
+            ),
+            SectionHeading(
+              title: AppLocalizations.of(context)?.genres ?? 'Genres',
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const GenreListView(),
+            const SizedBox(
+              height: 32,
+            ),
+            const SectionHeading(
+              title: 'Popular Comics',
+              initialTab: DiscoverTabViewEnum.comics,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const ComicsListView(
+              query: 'skip=0&take=4',
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            const SectionHeading(
+              title: 'New Episodes',
+              initialTab: DiscoverTabViewEnum.issues,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const ComicIssuesGrid(
+              query: 'skip=0&take=4',
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            const SectionHeading(
+              title: 'Top Creators',
+              initialTab: DiscoverTabViewEnum.creators,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const CreatorsGrid(query: 'skip=0&take=4'),
+            const SizedBox(
+              height: 32,
+            ),
+            const SectionHeading(
+              title: 'New Comics',
+              initialTab: DiscoverTabViewEnum.comics,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const ComicsListView(
+              query: 'skip=4&take=4',
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            const SectionHeading(
+              title: 'Free Episodes',
+              initialTab: DiscoverTabViewEnum.issues,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const ComicIssuesGrid(
+              query: 'skip=4&take=4',
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+          ],
+        ),
       ),
     );
   }

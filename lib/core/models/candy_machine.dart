@@ -17,7 +17,9 @@ class CandyMachineModel {
       address: json['address'],
       supply: json['supply'],
       itemsMinted: json['itemsMinted'],
-      baseMintPrice: json['baseMintPrice'],
+      baseMintPrice: json['baseMintPrice'] is int
+          ? json['baseMintPrice'].toDouble()
+          : json['baseMintPrice'],
       endsAt: json['endsAt'],
     );
   }

@@ -65,8 +65,9 @@ class ListedItems extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Receipt>> provider =
-        ref.watch(receiptsProvider(address));
+    // final AsyncValue<List<Receipt>> provider =
+    //     ref.watch(receiptsProvider(address));
+    final provider = ref.watch(mintedItemsProvider(address));
     return provider.when(
       data: (receipts) {
         if (receipts.isEmpty) {

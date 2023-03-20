@@ -3,9 +3,7 @@ import 'package:d_reader_flutter/ui/widgets/genre/genre_tag.dart';
 import 'package:flutter/material.dart';
 
 int getGenreLimit(double screenWidth) {
-  if (screenWidth > 400) {
-    return 6;
-  } else if (screenWidth > 360 && screenWidth < 400) {
+  if (screenWidth > 360) {
     return 5;
   }
   return 4;

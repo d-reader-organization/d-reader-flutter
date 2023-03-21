@@ -104,11 +104,14 @@ class DiscoverComicIssueCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'FLOOR',
+                            'PRICE',
                             style: textTheme.labelSmall,
                           ),
                           Text(
-                            '${formatPrice(issue.stats?.price ?? 0)}◎',
+                            issue.stats?.price != null &&
+                                    issue.stats!.price! > 0
+                                ? '${formatPrice(issue.stats?.price ?? 0)}◎'
+                                : 'FREE',
                             style: textTheme.labelSmall?.copyWith(
                               color: ColorPalette.dReaderYellow100,
                             ),

@@ -466,7 +466,9 @@ class CandyMachineStats extends ConsumerWidget {
           ),
           StatsInfo(
             title: 'SUPPLY',
-            stats: '${candyMachine?.supply}K',
+            stats: candyMachine?.supply != null && candyMachine!.supply > 1000
+                ? '${candyMachine.supply / 1000}K'
+                : '${candyMachine?.supply}',
           ),
           StatsInfo(
             title: 'MINTED',

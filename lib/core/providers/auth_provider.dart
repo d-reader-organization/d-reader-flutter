@@ -33,7 +33,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> clearToken() async {
     final sp = await SharedPreferences.getInstance();
-    await sp.remove(Config.tokenKey);
+    await sp.clear();
     state = state.copyWith(token: null);
   }
 }

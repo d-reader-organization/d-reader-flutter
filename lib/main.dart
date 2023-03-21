@@ -1,5 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/auth_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
@@ -24,6 +26,14 @@ void main() async {
         authProvider.overrideWith(
           (ref) => AuthNotifier(
             token,
+          ),
+        ),
+        solanaProvider.overrideWith(
+          (ref) => SolanaClientNotifier(
+            // temp fix
+            DReaderWalletService.instance,
+            sp.getString('wallet-auth'),
+            sp.getString('signature-bytes')?.codeUnits,
           ),
         ),
       ],

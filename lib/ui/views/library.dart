@@ -106,77 +106,84 @@ class LibraryView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(walletAssetsProvider);
 
-    return provider.when(
-      data: (walletAssets) {
-        if (walletAssets.isEmpty) {
-          return const Center(
-            child: Text(
-              'Nothing in your library',
-              style: TextStyle(fontSize: 18),
-            ),
-          );
-        }
-        return GridView.builder(
-          itemCount: walletAssets.length,
-          primary: false,
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            mainAxisExtent: 190,
-          ),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                nextScreenPush(
-                  context,
-                  NftDetails(
-                    address: walletAssets.elementAt(index).address,
-                  ),
-                );
-              },
-              child: NftItemCard(
-                nftAsset: walletAssets.elementAt(index),
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(walletAssetsProvider);
+      },
+      child: provider.when(
+        data: (walletAssets) {
+          if (walletAssets.isEmpty) {
+            return const Center(
+              child: Text(
+                'Nothing in your library',
+                style: TextStyle(fontSize: 18),
               ),
             );
-          },
-        );
-      },
-      error: (error, stackTrace) {
-        print('error in wallet assets ${error.toString()}');
-        return const Text('Something went wrong');
-      },
-      loading: () {
-        return GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            mainAxisExtent: 190,
-          ),
-          children: const [
-            SkeletonCard(
-              height: 190,
+          }
+          walletAssets = [...walletAssets, ...walletAssets, ...walletAssets];
+          return GridView.builder(
+            itemCount: walletAssets.length,
+            primary: false,
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(top: 12, bottom: 24),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              mainAxisExtent: 220,
             ),
-            SkeletonCard(
-              height: 190,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  nextScreenPush(
+                    context,
+                    NftDetails(
+                      address: walletAssets.elementAt(index).address,
+                    ),
+                  );
+                },
+                child: NftItemCard(
+                  nftAsset: walletAssets.elementAt(index),
+                ),
+              );
+            },
+          );
+        },
+        error: (error, stackTrace) {
+          print('error in wallet assets ${error.toString()}');
+          return const Text('Something went wrong');
+        },
+        loading: () {
+          return GridView(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              mainAxisExtent: 190,
             ),
-            SkeletonCard(
-              height: 190,
-            ),
-            SkeletonCard(
-              height: 190,
-            ),
-            SkeletonCard(
-              height: 190,
-            ),
-            SkeletonCard(
-              height: 190,
-            ),
-          ],
-        );
-      },
+            children: const [
+              SkeletonCard(
+                height: 190,
+              ),
+              SkeletonCard(
+                height: 190,
+              ),
+              SkeletonCard(
+                height: 190,
+              ),
+              SkeletonCard(
+                height: 190,
+              ),
+              SkeletonCard(
+                height: 190,
+              ),
+              SkeletonCard(
+                height: 190,
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

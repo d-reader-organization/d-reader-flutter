@@ -44,6 +44,7 @@ dependencies:
   timeago: ^3.3.0
   file_picker: ^5.2.5
   socket_io_client: ^2.0.1
+  flutter_cache_manager: ^3.3.0
 
 dev_dependencies:
   flutter_test:

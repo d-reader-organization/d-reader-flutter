@@ -35,7 +35,7 @@ class ComicIssueCard extends StatelessWidget {
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               cacheKey: '${issue.id}',
-              height: 135,
+              height: 150,
               overrideBorderRadius: const BorderRadius.vertical(
                 top: Radius.circular(
                   16,

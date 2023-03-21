@@ -89,7 +89,7 @@ class ComicIssueStats {
         price: double.tryParse(json['price'].toStringAsFixed(2))?.toDouble(),
         totalVolume: 122.4,
         averageRating: json['averageRating'] != null
-            ? double.tryParse(json['averageRating'].toStringAsFixed(2))
+            ? double.tryParse(json['averageRating'].toStringAsFixed(1))
                 ?.toDouble()
             : null,
         totalIssuesCount: json['totalIssuesCount'],

@@ -38,7 +38,8 @@ class ComicIssueDetails extends ConsumerWidget {
               : Column(
                   children: [
                     // const BodyHeader(),
-                    ListedItems(address: issue.candyMachineAddress ?? ''),
+                    ListedItems(
+                        candyMachineAddress: issue.candyMachineAddress ?? ''),
                   ],
                 ),
           issue: issue,
@@ -57,17 +58,17 @@ class ComicIssueDetails extends ConsumerWidget {
 }
 
 class ListedItems extends ConsumerWidget {
-  final String address;
+  final String candyMachineAddress;
   const ListedItems({
     super.key,
-    required this.address,
+    required this.candyMachineAddress,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final AsyncValue<List<Receipt>> provider =
     //     ref.watch(receiptsProvider(address));
-    final provider = ref.watch(mintedItemsProvider(address));
+    final provider = ref.watch(mintedItemsProvider(candyMachineAddress));
     return provider.when(
       data: (receipts) {
         if (receipts.isEmpty) {

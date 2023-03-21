@@ -1,8 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
-import 'package:d_reader_flutter/core/models/receipt.dart';
-import 'package:d_reader_flutter/core/notifiers/socket_client_notifier.dart';
-import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository_impl.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
@@ -34,23 +31,6 @@ final favouriteComicIssueProvider =
         .favouritiseIssue(id);
   },
 );
-
-final mintedItemsProvider =
-    StreamProvider.family<List<Receipt>, String>((ref, address) async* {
-  final socket = ref.read(socketProvider).socket;
-  var mintedItems = await ref.read(receiptsProvider(address).future);
-
-  ref.onDispose(() {
-    socket.dispose();
-  });
-
-  socket.on('candyMachineReceiptCreated', (data) sync* {
-    mintedItems = [Receipt.fromJson(data), ...mintedItems];
-    yield mintedItems;
-  });
-
-  yield mintedItems;
-});
 
 class ComicIssueDetailState {
   const ComicIssueDetailState({

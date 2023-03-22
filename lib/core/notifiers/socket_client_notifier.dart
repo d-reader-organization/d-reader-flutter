@@ -14,15 +14,10 @@ class SocketState {
   }
 }
 
-final socketProvider =
-    StateNotifierProvider<SocketNotifier, SocketState>((ref) {
+final socketProvider = StateProvider<SocketState>((ref) {
   Socket socket = io(
     Config.apiUrl,
     OptionBuilder().setTransports(['websocket']).build(),
   );
-  return SocketNotifier(socket);
+  return SocketState(socket: socket);
 });
-
-class SocketNotifier extends StateNotifier<SocketState> {
-  SocketNotifier(Socket socket) : super(SocketState(socket: socket));
-}

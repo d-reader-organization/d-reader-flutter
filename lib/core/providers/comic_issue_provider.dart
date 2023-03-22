@@ -13,8 +13,8 @@ final comicIssuesProvider =
 });
 
 final comicIssueDetailsProvider =
-    FutureProvider.autoDispose.family<ComicIssueModel?, int>((ref, id) async {
-  return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
+    FutureProvider.autoDispose.family<ComicIssueModel?, int>((ref, id) {
+  return IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
       .getComicIssue(id);
 });
 

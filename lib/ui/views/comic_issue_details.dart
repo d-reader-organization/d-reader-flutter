@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
-import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
+import 'package:d_reader_flutter/core/notifiers/receipts_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
@@ -66,9 +66,7 @@ class ListedItems extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final AsyncValue<List<Receipt>> provider =
-    //     ref.watch(receiptsProvider(address));
-    final provider = ref.watch(mintedItemsProvider(candyMachineAddress));
+    final provider = ref.watch(receiptsAsyncProvider(candyMachineAddress));
     return provider.when(
       data: (receipts) {
         if (receipts.isEmpty) {

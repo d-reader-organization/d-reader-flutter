@@ -10,7 +10,8 @@ import 'package:solana/solana.dart';
 
 final receiptsAsyncProvider = AsyncNotifierProvider.autoDispose
     .family<ReceiptsAsyncNotifier, List<Receipt>, String>(
-        ReceiptsAsyncNotifier.new);
+  ReceiptsAsyncNotifier.new,
+);
 
 class ReceiptsAsyncNotifier
     extends AutoDisposeFamilyAsyncNotifier<List<Receipt>, String> {
@@ -18,8 +19,9 @@ class ReceiptsAsyncNotifier
   FutureOr<List<Receipt>> build(String arg) async {
     final receipts = await ref.read(receiptsProvider(arg).future);
     final socket = ref.read(socketProvider).socket;
+    socket.connect();
     ref.onDispose(() {
-      socket.dispose();
+      socket.close();
     });
 
     socket.on('candyMachineReceiptCreated', (data) {

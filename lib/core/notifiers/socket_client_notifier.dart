@@ -17,7 +17,10 @@ class SocketState {
 final socketProvider = StateProvider<SocketState>((ref) {
   Socket socket = io(
     Config.apiUrl,
-    OptionBuilder().setTransports(['websocket']).build(),
+    OptionBuilder().setTransports(['websocket']).disableAutoConnect().build(),
   );
+  ref.onDispose(() {
+    socket.dispose();
+  });
   return SocketState(socket: socket);
 });

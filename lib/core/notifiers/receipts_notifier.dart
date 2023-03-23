@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/models/receipt.dart';
-import 'package:d_reader_flutter/core/notifiers/socket_client_notifier.dart';
+import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';

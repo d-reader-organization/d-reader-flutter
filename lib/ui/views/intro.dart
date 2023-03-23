@@ -33,7 +33,7 @@ class IntroView extends HookConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final globalHook = useGlobalState();
     final currentIndex = useState<int>(0);
-    final bool isFirstScreen = currentIndex.value == 0;
+    final bool isLastScreen = currentIndex.value == 2;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: IntroductionScreen(
@@ -48,10 +48,10 @@ class IntroView extends HookConsumerWidget {
         globalFooter: Padding(
           padding: const EdgeInsets.all(8.0),
           child: RoundedButton(
-            text: isFirstScreen ? 'NEXT' : 'CONNECT WALLET',
+            text: isLastScreen ? 'CONNECT WALLET' : 'NEXT',
             size: const Size(double.infinity, 52),
             onPressed: () async {
-              if (isFirstScreen) {
+              if (!isLastScreen) {
                 _introScreenKey.currentState?.next();
               } else {
                 globalHook.value = globalHook.value.copyWith(isLoading: true);
@@ -112,6 +112,101 @@ class IntroView extends HookConsumerWidget {
             ),
             image: Image.asset('assets/images/splash_screen_1.png'),
             decoration: _pageDecoration(textTheme),
+          ),
+          PageViewModel(
+            title: "Caution",
+            bodyWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: ColorPalette.boxBackground300,
+                    gradient: LinearGradient(
+                      stops: [0.02, 0.02],
+                      colors: [
+                        ColorPalette.dReaderOrange,
+                        ColorPalette.boxBackground300,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      bottomLeft: Radius.circular(4),
+                    ),
+                  ),
+                  child: Row(
+                    children: const [
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Icon(
+                        Icons.warning,
+                        color: ColorPalette.dReaderOrange,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: Text(
+                            'Please use Solflare wallet for this environment',
+                            style: TextStyle(
+                              color: Colors.white,
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: ColorPalette.boxBackground300,
+                    gradient: LinearGradient(
+                      stops: [0.02, 0.02],
+                      colors: [
+                        Colors.blue,
+                        ColorPalette.boxBackground300,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      bottomLeft: Radius.circular(4),
+                    ),
+                  ),
+                  child: Row(
+                    children: const [
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Icon(
+                        Icons.info_outline_rounded,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: Text(
+                            'Make sure to switch your wallet app to devnet',
+                            style: TextStyle(
+                              color: Colors.white,
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            decoration: PageDecoration(
+              titleTextStyle: textTheme.headlineLarge!.copyWith(
+                color: ColorPalette.dReaderYellow100,
+              ),
+              titlePadding: const EdgeInsets.only(bottom: 16),
+              pageColor: ColorPalette.appBackgroundColor,
+              bodyAlignment: Alignment.center,
+            ),
           ),
           PageViewModel(
             title: "Connect with your wallet",

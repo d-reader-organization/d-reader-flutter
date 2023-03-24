@@ -36,11 +36,11 @@ class DiscoverView extends ConsumerWidget {
             ),
           ];
         },
-        body: const TabBarView(
+        body: TabBarView(
           children: [
             DiscoverComicsTab(),
-            DiscoverIssuesTab(),
-            DiscoverCreatorsTab(),
+            const DiscoverIssuesTab(),
+            const DiscoverCreatorsTab(),
           ],
         ),
       ),

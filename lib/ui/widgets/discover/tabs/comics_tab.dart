@@ -1,60 +1,51 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:flutter/material.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
-import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/comic_card.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/results_wrapper.dart';
-import 'package:flutter/material.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_list.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DiscoverComicsTab extends ConsumerWidget {
-  const DiscoverComicsTab({Key? key}) : super(key: key);
+  DiscoverComicsTab({Key? key}) : super(key: key);
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String search = ref.watch(searchProvider).search;
-    AsyncValue<List<ComicModel>> provider =
-        ref.watch(comicsProvider(appendDefaultQuery('nameSubstring=$search')));
-    return provider.when(
-      data: (comics) {
-        return ResultsWrapper(
-          resultsCount: comics.length,
-          body: ListView.separated(
-            itemCount: comics.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return DiscoverComicCard(
-                comic: comics[index],
-              );
+    final String query = 'nameSubstring=$search';
+    final provider = ref.watch(
+      paginatedComicsProvider(query),
+    );
+
+    scrollController.addListener(() {
+      double maxScroll = scrollController.position.maxScrollExtent;
+      double currentScroll = scrollController.position.pixels;
+      double delta = MediaQuery.of(context).size.width * 0.2;
+
+      if (maxScroll - currentScroll <= delta) {
+        ref.read(paginatedComicsProvider(query).notifier).fetchNext();
+      }
+    });
+
+    return CustomScrollView(
+      controller: scrollController,
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            childCount: 1,
+            (context, index) {
+              return ComicList(provider: provider);
             },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                color: ColorPalette.boxBackground300,
-              );
-            },
-          ),
-        );
-      },
-      error: (err, stack) => Text(
-        'Error: $err',
-        style: const TextStyle(color: Colors.red),
-      ),
-      loading: () => SizedBox(
-        height: 90,
-        child: ListView.builder(
-          itemCount: 3,
-          shrinkWrap: true,
-          itemBuilder: (context, index) => const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            child: SkeletonCard(
-              height: 150,
-            ),
           ),
         ),
-      ),
+        OnGoingBottomWidget(provider: provider),
+        NoMoreItemsWidget(
+          listenableProvider: paginatedComicsProvider,
+          query: query,
+        ),
+      ],
     );
   }
 }

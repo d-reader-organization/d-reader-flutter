@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/styles.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
-import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -89,9 +88,26 @@ class SearchAutoComplete extends ConsumerWidget {
         'Error: $err',
         style: const TextStyle(color: Colors.red),
       ),
-      loading: () => const SizedBox(
-        height: 58,
-        child: SkeletonCard(),
+      loading: () => TextFormField(
+        cursorColor: Colors.white,
+        onFieldSubmitted: (value) {},
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 16,
+          color: Colors.white,
+        ),
+        decoration: searchInputDecoration(
+          IconButton(
+            onPressed: () {},
+            icon: SvgPicture.asset(
+              'assets/icons/search.svg',
+              colorFilter: const ColorFilter.mode(
+                ColorPalette.dReaderGrey,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

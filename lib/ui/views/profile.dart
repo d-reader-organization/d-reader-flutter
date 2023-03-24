@@ -51,7 +51,7 @@ class ProfileView extends ConsumerWidget {
         return const Text('Something went wrong');
       },
       loading: () {
-        return const WalletSkeleton();
+        return const SizedBox();
       },
     );
   }

@@ -80,14 +80,9 @@ class Carousel extends ConsumerWidget {
         'Error: $err',
         style: const TextStyle(color: Colors.red),
       ),
-      loading: () => SizedBox(
-        height: 90,
-        child: ListView.builder(
-          itemCount: 3,
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) => const SkeletonCard(),
-        ),
+      loading: () => const SkeletonCard(
+        height: 266,
+        width: double.infinity,
       ),
     );
   }

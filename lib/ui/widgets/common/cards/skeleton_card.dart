@@ -13,7 +13,6 @@ class SkeletonCard extends StatelessWidget {
     return SkeletonAnimation(
       shimmerDuration: 1000,
       child: Container(
-        margin: const EdgeInsets.only(right: 16),
         height: height,
         width: width,
         decoration: BoxDecoration(

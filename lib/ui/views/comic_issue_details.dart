@@ -121,10 +121,10 @@ class ListingRow extends StatelessWidget {
         backgroundImage: receipt.buyer.avatar.isNotEmpty
             ? CachedNetworkImageProvider(
                 receipt.buyer.avatar,
-                cacheKey: receipt.buyer.address,
+                cacheKey: receipt.buyer.avatar,
                 cacheManager: CacheManager(
                   Config(
-                    receipt.buyer.address,
+                    receipt.buyer.avatar,
                     stalePeriod: const Duration(days: 1),
                   ),
                 ),

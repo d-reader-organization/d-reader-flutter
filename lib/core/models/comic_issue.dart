@@ -15,6 +15,7 @@ class ComicIssueModel {
   final DateTime releaseDate;
   final int supply;
   final String? candyMachineAddress;
+  final double sellerFee;
 
   ComicIssueModel({
     required this.id,
@@ -31,6 +32,7 @@ class ComicIssueModel {
     required this.releaseDate,
     required this.supply,
     required this.isFree,
+    required this.sellerFee,
     this.candyMachineAddress,
   });
 
@@ -57,6 +59,8 @@ class ComicIssueModel {
       supply: json['supply'],
       isFree: json['isFree'],
       candyMachineAddress: json['candyMachineAddress'],
+      sellerFee:
+          json['sellerFee'] is int ? json['sellerFee'] + .0 : json['sellerFee'],
     );
   }
 }
@@ -133,19 +137,19 @@ class ComicIssueMyStats {
 class ComicType {
   final String name;
   final String slug;
-  final bool isMatureAudience;
+  final String audienceType;
 
   ComicType({
     required this.name,
     required this.slug,
-    required this.isMatureAudience,
+    required this.audienceType,
   });
 
   factory ComicType.fromJson(dynamic json) {
     return ComicType(
       name: json['name'],
       slug: json['slug'],
-      isMatureAudience: json['isMatureAudience'],
+      audienceType: json['audienceType'],
     );
   }
 }

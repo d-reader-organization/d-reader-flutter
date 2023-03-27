@@ -120,7 +120,6 @@ class LibraryView extends ConsumerWidget {
               ),
             );
           }
-          walletAssets = [...walletAssets, ...walletAssets, ...walletAssets];
           return GridView.builder(
             itemCount: walletAssets.length,
             primary: false,

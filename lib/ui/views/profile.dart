@@ -140,6 +140,7 @@ class AvatarName extends StatelessWidget {
                           borderRadius: BorderRadius.circular(64),
                           image: DecorationImage(
                             image: imageProvider,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       );

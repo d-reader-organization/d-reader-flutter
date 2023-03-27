@@ -4,8 +4,6 @@ abstract class Config {
   static final apiUrl = dotenv.get('API_URL',
       fallback:
           'https://d-reader-backend-dev.herokuapp.com'); //'http://10.0.2.2:3005'
-  static final jwtToken = dotenv.get('JWT'); // testing purpose
-  static final String candyMachineAddress = dotenv.get('candyMachineAddress');
   static final String solanaCluster =
       dotenv.get('solanaCluster', fallback: 'devnet');
   static const String logoTextPath = 'assets/images/logo-white-yellow.svg';

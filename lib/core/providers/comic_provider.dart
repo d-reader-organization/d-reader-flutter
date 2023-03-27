@@ -1,5 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/repositories/comic/comic_repository_impl.dart';
+import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,6 +15,17 @@ final comicsProvider =
             : appendDefaultQuery(queryString));
   },
 );
+
+final paginatedComicsProvider = StateNotifierProvider.family<
+    PaginationNotifier<ComicModel>,
+    PaginationState<ComicModel>,
+    String?>((ref, query) {
+  final fetch = IoCContainer.resolveContainer<ComicRepositoryImpl>().getComics;
+  return PaginationNotifier<ComicModel>(
+    fetch: fetch,
+    query: query,
+  )..init();
+});
 
 final comicSlugProvider =
     FutureProvider.autoDispose.family<ComicModel?, String>((ref, slug) async {

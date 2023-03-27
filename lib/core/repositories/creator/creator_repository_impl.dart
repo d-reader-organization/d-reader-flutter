@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/core/services/api_service.dart';
 
 class CreatorRepositoryImpl implements CreatorRepository {
   @override
-  Future<List<CreatorModel>> getCreators([String? queryString]) async {
+  Future<List<CreatorModel>> getCreators({String? queryString}) async {
     final String? responseBody =
         await ApiService.instance.apiCallGet('/creator/get?$queryString');
     if (responseBody == null) {

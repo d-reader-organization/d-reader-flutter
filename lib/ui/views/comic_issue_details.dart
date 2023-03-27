@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
@@ -121,6 +122,12 @@ class ListingRow extends StatelessWidget {
             ? CachedNetworkImageProvider(
                 receipt.buyer.avatar,
                 cacheKey: receipt.buyer.avatar,
+                cacheManager: CacheManager(
+                  Config(
+                    receipt.buyer.avatar,
+                    stalePeriod: const Duration(days: 1),
+                  ),
+                ),
               )
             : null,
       ),

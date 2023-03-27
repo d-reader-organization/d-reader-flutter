@@ -3,12 +3,14 @@ class Receipt {
   final ReceiptBuyer buyer;
   final double price;
   final String timestamp;
+  final String candyMachineAddress;
 
   Receipt({
     required this.nft,
     required this.buyer,
     required this.price,
     required this.timestamp,
+    required this.candyMachineAddress,
   });
 
   factory Receipt.fromJson(dynamic json) {
@@ -19,6 +21,7 @@ class Receipt {
           ? json['price'].toDouble()
           : double.parse(json['price']),
       timestamp: json['timestamp'],
+      candyMachineAddress: json['candyMachineAddress'],
     );
   }
 }

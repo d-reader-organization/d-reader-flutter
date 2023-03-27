@@ -36,6 +36,6 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
   @override
   Future<String?> constructNftTransaction(String candyMachineAddress) async {
     return await ApiService.instance.apiCallGet(
-        '/candy-machine/transactions/construct/mint-one?candyMachineAddress=$candyMachineAddress');
+        '/candy-machine/transactions/mint-one?candyMachineAddress=$candyMachineAddress');
   }
 }

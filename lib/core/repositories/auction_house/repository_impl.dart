@@ -9,6 +9,6 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
     String? printReceipt,
   }) {
     return ApiService.instance.apiCallGet(
-        '/auction-house/transactions/construct/list?mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt');
+        '/auction-house/transactions/list?mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt');
   }
 }

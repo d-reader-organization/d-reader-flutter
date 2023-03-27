@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
+import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_results_builder.dart';
 import 'package:flutter/material.dart';
 
@@ -22,9 +23,10 @@ class CreatorsList extends StatelessWidget {
         style: const TextStyle(color: Colors.red),
       ),
       loading: () => ListView.builder(
-        itemCount: 3,
-        shrinkWrap: true,
-        itemBuilder: (context, index) => const ComicListItemSkeleton(),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return const SkeletonRow();
+        },
       ),
       onGoingError: (List<CreatorModel> items, Object? e, StackTrace? stk) {
         return CreatorsListBuilder(

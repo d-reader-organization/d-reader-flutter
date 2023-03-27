@@ -1,12 +1,12 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_results_builder.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_results_builder.dart';
 import 'package:flutter/material.dart';
 
-class ComicList extends StatelessWidget {
-  final PaginationState<ComicModel> provider;
-  const ComicList({
+class CreatorsList extends StatelessWidget {
+  final PaginationState<CreatorModel> provider;
+  const CreatorsList({
     super.key,
     required this.provider,
   });
@@ -14,8 +14,8 @@ class ComicList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return provider.when(
-      data: (comics) {
-        return ComicsResultsBuilder(comics: comics);
+      data: (creators) {
+        return CreatorsListBuilder(creators: creators);
       },
       error: (err, stack) => Text(
         'Error: $err',
@@ -26,14 +26,14 @@ class ComicList extends StatelessWidget {
         shrinkWrap: true,
         itemBuilder: (context, index) => const ComicListItemSkeleton(),
       ),
-      onGoingError: (List<ComicModel> items, Object? e, StackTrace? stk) {
-        return ComicsResultsBuilder(
-          comics: items,
+      onGoingError: (List<CreatorModel> items, Object? e, StackTrace? stk) {
+        return CreatorsListBuilder(
+          creators: items,
         );
       },
-      onGoingLoading: (List<ComicModel> items) {
-        return ComicsResultsBuilder(
-          comics: items,
+      onGoingLoading: (List<CreatorModel> items) {
+        return CreatorsListBuilder(
+          creators: items,
         );
       },
     );

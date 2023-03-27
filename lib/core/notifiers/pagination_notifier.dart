@@ -31,7 +31,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
   }) : super(const PaginationState.loading());
 
   final List<T> _items = [];
-  PaginationArgs args = PaginationArgs(skip: 0, take: 5);
+  PaginationArgs args = PaginationArgs(skip: 0, take: 8);
   bool isEnd = false;
 
   void init() {
@@ -48,7 +48,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
       final result = await fetch(queryString: _buildyQueryString());
       if (result.length < args.take) {
         isEnd = true;
-        state = PaginationState.data(_items);
+        state = PaginationState.data(_items..addAll(result));
         return;
       }
       args = PaginationArgs.copyWith(

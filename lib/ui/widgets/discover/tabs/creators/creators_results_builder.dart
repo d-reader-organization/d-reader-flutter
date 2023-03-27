@@ -1,59 +1,38 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
-import 'package:d_reader_flutter/core/providers/creator_provider.dart';
-import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/results_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DiscoverCreatorsTab extends ConsumerWidget {
-  const DiscoverCreatorsTab({Key? key}) : super(key: key);
+class CreatorsListBuilder extends StatelessWidget {
+  final List<CreatorModel> creators;
+  const CreatorsListBuilder({
+    super.key,
+    required this.creators,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    String search = ref.watch(searchProvider).search;
-    AsyncValue<List<CreatorModel>> providerData = ref
-        .watch(creatorsProvider(appendDefaultQuery('nameSubstring=$search')));
-    return providerData.when(
-      data: (creators) {
-        return ResultsWrapper(
-          resultsCount: creators.isNotEmpty ? creators.length + 1 : 0,
-          body: ListView.separated(
-            itemCount: creators.isNotEmpty ? creators.length + 1 : 0,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const CreatorListHeader();
-              }
-              return CreatorListItem(creator: creators[index - 1]);
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                color: ColorPalette.boxBackground300,
-              );
-            },
-          ),
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: creators.isNotEmpty ? creators.length + 1 : 0,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return const CreatorListHeader();
+        }
+        return CreatorListItem(creator: creators[index - 1]);
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider(
+          color: ColorPalette.boxBackground300,
         );
       },
-      error: (error, stackTrace) {
-        return Text('error $error');
-      },
-      loading: () => ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return const SkeletonRow();
-        },
-      ),
     );
   }
 }

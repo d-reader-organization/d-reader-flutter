@@ -1,10 +1,20 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/models/genre.dart';
+
+enum AudienceType {
+  Everyone,
+  Teen,
+  TeenPlus,
+  Mature,
+}
 
 class ComicModel {
   final String name;
   final String slug;
   final String cover;
+  final String banner;
   final String description;
   final String flavorText;
   final CreatorModel creator;
@@ -13,13 +23,14 @@ class ComicModel {
   final bool isCompleted;
   final List<GenreModel> genres;
   final MyStats? myStats;
-  final bool isMatureAudience;
+  final String audienceType;
   final bool isVerified;
 
   ComicModel({
     required this.name,
     required this.slug,
     required this.cover,
+    required this.banner,
     required this.description,
     required this.flavorText,
     required this.creator,
@@ -28,7 +39,7 @@ class ComicModel {
     required this.isCompleted,
     required this.genres,
     this.myStats,
-    required this.isMatureAudience,
+    required this.audienceType,
     required this.isVerified,
   });
 
@@ -37,6 +48,7 @@ class ComicModel {
       name: json['name'],
       slug: json['slug'],
       cover: json['cover'],
+      banner: json['banner'],
       description: json['description'],
       flavorText: json['flavorText'],
       creator: CreatorModel.fromJson(json['creator']),
@@ -54,8 +66,8 @@ class ComicModel {
               ),
             )
           : [],
-      isMatureAudience: json['isMatureAudience'],
       isVerified: json['isVerified'],
+      audienceType: json['audienceType'],
     );
   }
 }

@@ -29,12 +29,14 @@ class ReceiptsAsyncNotifier
       final publicKey = Ed25519HDPublicKey(
           ref.read(solanaProvider).authorizationResult?.publicKey.toList() ??
               []);
-      ref.invalidate(comicIssueDetailsProvider);
-      ref.invalidate(candyMachineProvider);
       if (newReceipt.buyer.address == publicKey.toBase58()) {
         ref.invalidate(walletAssetsProvider);
       }
-      state = AsyncValue.data([newReceipt, ...?state.value]);
+      if (newReceipt.candyMachineAddress == arg) {
+        ref.invalidate(comicIssueDetailsProvider);
+        ref.invalidate(candyMachineProvider);
+        state = AsyncValue.data([newReceipt, ...?state.value]);
+      }
     });
 
     return receipts;

@@ -93,7 +93,7 @@ class DiscoverComicCard extends StatelessWidget {
                             viewedCount: comic.stats?.viewersCount ?? 0,
                             isViewed: comic.myStats?.viewedAt != null,
                           ),
-                          comic.isMatureAudience
+                          comic.audienceType == AudienceType.Mature.name
                               ? const MatureAudience()
                               : const SizedBox(
                                   width: 22,

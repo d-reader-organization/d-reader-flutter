@@ -24,6 +24,8 @@ class CreatorsList extends StatelessWidget {
       ),
       loading: () => ListView.builder(
         itemCount: 5,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return const SkeletonRow();
         },

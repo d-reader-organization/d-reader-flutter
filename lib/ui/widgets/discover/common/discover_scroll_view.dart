@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
+import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_list.dart';
@@ -11,12 +12,6 @@ import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_list
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_list.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-enum ScrollListType {
-  comicList,
-  issueList,
-  creatorList,
-}
 
 class DiscoverScrollView extends ConsumerStatefulWidget {
   final StateNotifierProviderFamily<PaginationNotifier, PaginationState,
@@ -69,13 +64,23 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
             ),
           ),
         );
+      case ScrollListType.collectiblesList:
+        return ComicList(
+          provider: ref.read(
+            paginatedComicsProvider(
+              query,
+            ),
+          ),
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     String search = ref.watch(searchProvider).search;
-    final String query = 'nameSubstring=$search';
+    final String query = widget.scrollListType == ScrollListType.issueList
+        ? 'titleSubstring=$search'
+        : 'nameSubstring=$search';
     final provider = ref.watch(
       widget.listenableProvider(query),
     );

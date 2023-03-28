@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/ui/widgets/common/cards/collectible_card.dart';
 import 'package:flutter/material.dart';
 
-class CollectiblesTab extends StatelessWidget {
-  const CollectiblesTab({Key? key}) : super(key: key);
+class CreatorCollectiblesTab extends StatelessWidget {
+  const CreatorCollectiblesTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

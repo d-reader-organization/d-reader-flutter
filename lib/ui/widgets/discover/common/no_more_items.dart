@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
+import 'package:d_reader_flutter/ui/utils/pluralize_string.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -25,7 +26,7 @@ class NoMoreItemsWidget extends ConsumerWidget {
                       child: Text(
                         items.isEmpty
                             ? 'No results found'
-                            : '${items.length} results found',
+                            : '${items.length} ${pluralizeString(items.length, 'result')} found',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),

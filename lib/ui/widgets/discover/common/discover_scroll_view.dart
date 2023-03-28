@@ -75,7 +75,9 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
   @override
   Widget build(BuildContext context) {
     String search = ref.watch(searchProvider).search;
-    final String query = 'nameSubstring=$search';
+    final String query = widget.scrollListType == ScrollListType.issueList
+        ? 'titleSubstring=$search'
+        : 'nameSubstring=$search';
     final provider = ref.watch(
       widget.listenableProvider(query),
     );

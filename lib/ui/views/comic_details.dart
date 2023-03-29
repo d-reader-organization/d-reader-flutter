@@ -19,7 +19,8 @@ class ComicDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<ComicModel?> provider = ref.watch(comicSlugProvider(slug));
-    final provider1 = ref.watch(paginatedIssuesProvider('comicSlug=$slug'));
+    final issuesProvider =
+        ref.watch(paginatedIssuesProvider('comicSlug=$slug'));
 
     return provider.when(
       data: (comic) {
@@ -41,7 +42,7 @@ class ComicDetails extends ConsumerWidget {
                 delegate: SliverChildBuilderDelegate(
                   childCount: 1,
                   (context, index) {
-                    return provider1.when(
+                    return issuesProvider.when(
                       data: (List<ComicIssueModel> issues) {
                         return _IssuesList(issues: issues);
                       },
@@ -63,7 +64,7 @@ class ComicDetails extends ConsumerWidget {
                   },
                 ),
               ),
-              OnGoingBottomWidget(provider: provider1),
+              OnGoingBottomWidget(provider: issuesProvider),
               NoMoreItemsWidget(
                 listenableProvider: paginatedIssuesProvider,
                 query: 'comicSlug=$slug',

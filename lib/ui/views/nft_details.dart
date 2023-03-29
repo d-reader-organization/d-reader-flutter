@@ -230,7 +230,7 @@ class Body extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          nft.isMintCondition || nft.isSigned
+          !nft.isUsed || nft.isSigned
               ? Column(
                   children: [
                     const Text(
@@ -242,7 +242,7 @@ class Body extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        nft.isMintCondition
+                        !nft.isUsed
                             ? Container(
                                 padding: const EdgeInsets.all(8),
                                 margin: const EdgeInsets.only(right: 8),

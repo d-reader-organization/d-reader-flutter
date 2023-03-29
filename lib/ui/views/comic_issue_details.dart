@@ -39,8 +39,9 @@ class ComicIssueDetails extends ConsumerWidget {
               : Column(
                   children: [
                     // const BodyHeader(),
-                    ListedItems(
-                        candyMachineAddress: issue.candyMachineAddress ?? ''),
+                    MintedItems(
+                      candyMachineAddress: issue.candyMachineAddress ?? '',
+                    ),
                   ],
                 ),
           issue: issue,
@@ -58,9 +59,9 @@ class ComicIssueDetails extends ConsumerWidget {
   }
 }
 
-class ListedItems extends ConsumerWidget {
+class MintedItems extends ConsumerWidget {
   final String candyMachineAddress;
-  const ListedItems({
+  const MintedItems({
     super.key,
     required this.candyMachineAddress,
   });

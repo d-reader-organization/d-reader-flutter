@@ -7,7 +7,7 @@ class NftModel {
   final String description;
   final String owner;
   final int royalties;
-  final bool isMintCondition;
+  final bool isUsed;
   final bool isSigned;
   final String comicName;
   final String comicIssueName;
@@ -22,7 +22,7 @@ class NftModel {
     required this.description,
     required this.owner,
     required this.royalties,
-    required this.isMintCondition,
+    required this.isUsed,
     required this.isSigned,
     required this.comicName,
     required this.comicIssueName,
@@ -47,7 +47,7 @@ class NftModel {
       description: json['description'],
       owner: json['owner'],
       royalties: json['royalties'],
-      isMintCondition: json['isMintCondition'],
+      isUsed: json['isMintCondition'],
       isSigned: json['isSigned'],
       comicName: json['comicName'],
       comicIssueName: json['comicIssueName'],

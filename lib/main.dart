@@ -57,10 +57,6 @@ class MyApp extends ConsumerWidget {
           systemNavigationBarColor: ColorPalette.appBackgroundColor,
         )),
         fontFamily: 'Urbanist',
-        pageTransitionsTheme: const PageTransitionsTheme(builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-        }),
         textTheme: const TextTheme(
           titleSmall: TextStyle(
             fontSize: 16,

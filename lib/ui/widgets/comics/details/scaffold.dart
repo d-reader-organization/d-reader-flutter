@@ -19,10 +19,12 @@ import 'package:flutter/material.dart';
 class ComicDetailsScaffold extends StatefulWidget {
   final Widget body;
   final ComicModel comic;
+  final Function() loadMore;
   const ComicDetailsScaffold({
     Key? key,
     required this.body,
     required this.comic,
+    required this.loadMore,
   }) : super(key: key);
 
   @override
@@ -59,6 +61,13 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.of(context).size.width * 0.1;
+
+          if (maxScroll - currentScroll <= delta) {
+            widget.loadMore();
+          }
           if (notification.metrics.pixels > 70) {
             _controller.forward();
           } else if (notification.metrics.pixels < 70) {

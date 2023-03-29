@@ -2,9 +2,10 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
-import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issue_card_large.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/details/scaffold.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -18,31 +19,57 @@ class ComicDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<ComicModel?> provider = ref.watch(comicSlugProvider(slug));
-    final AsyncValue<List<ComicIssueModel>> issuesProvider = ref.watch(
-      comicIssuesProvider(
-        appendDefaultQuery('comicSlug=$slug'),
-      ),
-    );
+    final provider1 = ref.watch(paginatedIssuesProvider('comicSlug=$slug'));
+
     return provider.when(
       data: (comic) {
         if (comic == null) {
           return const SizedBox();
         }
         return ComicDetailsScaffold(
-          body: ListView.builder(
-            itemCount: issuesProvider.value?.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            physics: const PageScrollPhysics(),
-            itemBuilder: (context, index) {
-              return issuesProvider.value?[index] != null
-                  ? ComicIssueCardLarge(
-                      issue: issuesProvider.value![index],
-                    )
-                  : const SizedBox();
-            },
-          ),
           comic: comic,
+          loadMore: ref
+              .read(
+                paginatedIssuesProvider('comicSlug=$slug').notifier,
+              )
+              .fetchNext,
+          body: CustomScrollView(
+            shrinkWrap: true,
+            physics: const PageScrollPhysics(),
+            slivers: [
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: 1,
+                  (context, index) {
+                    return provider1.when(
+                      data: (List<ComicIssueModel> issues) {
+                        return _IssuesList(issues: issues);
+                      },
+                      error: (Object? e, StackTrace? stk) {
+                        print(stk);
+                        return const Text('Something Went Wrong.');
+                      },
+                      loading: () {
+                        return const SizedBox();
+                      },
+                      onGoingError: (List<ComicIssueModel> items, Object? e,
+                          StackTrace? stk) {
+                        return _IssuesList(issues: items);
+                      },
+                      onGoingLoading: (List<ComicIssueModel> items) {
+                        return _IssuesList(issues: items);
+                      },
+                    );
+                  },
+                ),
+              ),
+              OnGoingBottomWidget(provider: provider1),
+              NoMoreItemsWidget(
+                listenableProvider: paginatedIssuesProvider,
+                query: 'comicSlug=$slug',
+              ),
+            ],
+          ),
         );
       },
       error: (err, stack) => Text(
@@ -50,6 +77,27 @@ class ComicDetails extends ConsumerWidget {
         style: const TextStyle(color: Colors.red),
       ),
       loading: () => const SizedBox(),
+    );
+  }
+}
+
+class _IssuesList extends StatelessWidget {
+  final List<ComicIssueModel> issues;
+  const _IssuesList({
+    required this.issues,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: issues.length,
+      shrinkWrap: true,
+      physics: const PageScrollPhysics(),
+      padding: EdgeInsets.zero,
+      itemBuilder: (context, index) {
+        return ComicIssueCardLarge(
+          issue: issues[index],
+        );
+      },
     );
   }
 }

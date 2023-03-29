@@ -120,7 +120,7 @@ class ListingRow extends StatelessWidget {
         maxRadius: 24,
         backgroundImage: receipt.buyer.avatar.isNotEmpty
             ? CachedNetworkImageProvider(
-                receipt.buyer.address,
+                receipt.buyer.avatar,
                 cacheKey: receipt.buyer.address,
                 cacheManager: CacheManager(
                   Config(

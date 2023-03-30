@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issue_card_large.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/details/scaffold.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -65,10 +64,6 @@ class ComicDetails extends ConsumerWidget {
                 ),
               ),
               OnGoingBottomWidget(provider: issuesProvider),
-              NoMoreItemsWidget(
-                listenableProvider: paginatedIssuesProvider,
-                query: 'comicSlug=$slug',
-              ),
             ],
           ),
         );

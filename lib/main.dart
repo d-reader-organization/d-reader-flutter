@@ -53,9 +53,14 @@ class MyApp extends ConsumerWidget {
       title: 'dReader',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-            systemOverlayStyle: SystemUiOverlayStyle(
-          systemNavigationBarColor: ColorPalette.appBackgroundColor,
-        )),
+          systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: ColorPalette.appBackgroundColor,
+          ),
+        ),
+        pageTransitionsTheme: const PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
         fontFamily: 'Urbanist',
         textTheme: const TextTheme(
           titleSmall: TextStyle(

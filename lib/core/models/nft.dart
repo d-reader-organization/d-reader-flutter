@@ -47,7 +47,7 @@ class NftModel {
       description: json['description'],
       owner: json['owner'],
       royalties: json['royalties'],
-      isUsed: json['isMintCondition'],
+      isUsed: json['isUsed'],
       isSigned: json['isSigned'],
       comicName: json['comicName'],
       comicIssueName: json['comicIssueName'],

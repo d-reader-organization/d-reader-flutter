@@ -6,7 +6,6 @@ import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/collectibles/wrapper.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/comics/wrapper.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/issues/wrapper.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -86,10 +85,6 @@ class CreatorNotificationListener extends ConsumerWidget {
             ),
           ),
           OnGoingBottomWidget(provider: provider),
-          NoMoreItemsWidget(
-            listenableProvider: listenableProvider,
-            query: query,
-          ),
         ],
       ),
     );

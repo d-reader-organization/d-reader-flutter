@@ -1,7 +1,8 @@
+
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class BuyButton extends StatelessWidget {
+class CustomTextButton extends StatelessWidget {
   final Widget child;
   final Color backgroundColor;
   final Color textColor;
@@ -12,7 +13,7 @@ class BuyButton extends StatelessWidget {
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
 
-  const BuyButton(
+  const CustomTextButton(
       {Key? key,
       required this.child,
       required this.onPressed,
@@ -38,6 +39,7 @@ class BuyButton extends StatelessWidget {
         style: TextButton.styleFrom(
           minimumSize: size,
           backgroundColor: backgroundColor,
+          disabledBackgroundColor: ColorPalette.dReaderGrey,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius,

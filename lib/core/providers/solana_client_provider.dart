@@ -163,6 +163,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             ),
           ],
         );
+        print('Sign and send response');
         print(response);
       } catch (e) {
         print(e);

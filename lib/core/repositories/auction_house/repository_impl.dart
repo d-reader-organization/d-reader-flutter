@@ -1,5 +1,10 @@
+import 'dart:convert' show jsonDecode;
+
+import 'package:d_reader_flutter/core/models/collection_stats.dart';
+import 'package:d_reader_flutter/core/models/listing_item.dart';
 import 'package:d_reader_flutter/core/repositories/auction_house/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
+import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 
 class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   @override
@@ -10,5 +15,46 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   }) {
     return ApiService.instance.apiCallGet(
         '/auction-house/transactions/list?mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt');
+  }
+
+  @override
+  Future<List<ListingItemModel>> getListedItems({required int issueId}) async {
+    final String? responseBody = await ApiService.instance.apiCallGet(
+        '/auction-house/get/listings/$issueId?${appendDefaultQuery(null)}');
+
+    if (responseBody == null) {
+      return [];
+    }
+    Iterable decodedData = jsonDecode(responseBody);
+    return List<ListingItemModel>.from(
+      decodedData.map(
+        (item) => ListingItemModel.fromJson(
+          item,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<CollectionStatsModel?> getCollectionStatus(
+      {required int issueId}) async {
+    final String? responseBody = await ApiService.instance
+        .apiCallGet('/auction-house/get/collection-stats/$issueId');
+    return responseBody == null
+        ? null
+        : CollectionStatsModel.fromJson(jsonDecode(responseBody));
+  }
+
+  @override
+  Future<String?> executeSale({required String query}) async {
+    final String? responseBody = await ApiService.instance
+        .apiCallGet('/auction-house/transactions/execute-sale?$query');
+    return responseBody;
+  }
+
+  @override
+  Future<String?> delistItem({required String query}) {
+    return ApiService.instance
+        .apiCallGet('/auction-house/transactions/cancel-listing?$query');
   }
 }

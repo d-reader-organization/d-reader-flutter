@@ -1,4 +1,6 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
@@ -11,7 +13,7 @@ import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/common/app_bar_without_logo.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/buy_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
@@ -268,42 +270,12 @@ class _ComicIssueDetailsScaffoldState
                 ? CandyMachineStats(
                     address: widget.issue.candyMachineAddress ?? '',
                   )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      StatsInfo(
-                        title: 'VOLUME',
-                        stats: widget.issue.isFree
-                            ? '--'
-                            : '${widget.issue.stats?.totalVolume}◎',
-                      ),
-                      StatsInfo(
-                        title: 'SUPPLY',
-                        stats: widget.issue.isFree
-                            ? '--'
-                            : '${widget.issue.supply}',
-                      ),
-                      StatsInfo(
-                        title: 'LISTED',
-                        stats: widget.issue.isFree
-                            ? '--'
-                            : '${widget.issue.stats?.totalListedCount}',
-                      ),
-                      StatsInfo(
-                        title: 'PRICE',
-                        stats: widget.issue.isFree
-                            ? 'FREE'
-                            : '${widget.issue.stats?.price ?? '-.--'}◎',
-                        isLastItem: true,
-                      ),
-                    ],
-                  ),
+                : ListingStats(issue: widget.issue),
             const SizedBox(
               height: 24,
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
               child: widget.body,
             )
           ],
@@ -331,57 +303,99 @@ class BottomNavigation extends HookConsumerWidget {
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: BuyButton(
-                  size: const Size(150, 50),
-                  isLoading: globalHook.value.isLoading,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(
-                      8,
-                    ),
-                  ),
-                  onPressed: () async {
-                    try {
-                      globalHook.value =
-                          globalHook.value.copyWith(isLoading: true);
-                      final isSuccessful = await ref
-                          .read(solanaProvider.notifier)
-                          .mint(issue.candyMachineAddress);
-                      if (isSuccessful) {
-                        ref.invalidate(receiptsProvider);
-                        ref.invalidate(walletAssetsProvider);
-                      }
-                      globalHook.value =
-                          globalHook.value.copyWith(isLoading: false);
-                    } catch (error) {
-                      globalHook.value =
-                          globalHook.value.copyWith(isLoading: false);
-                    }
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'MINT',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      SolanaPrice(
+              issue.candyMachineAddress != null
+                  ? Expanded(
+                      child: TransactionButton(
+                        isLoading: globalHook.value.isLoading,
+                        onPressed: () async {
+                          try {
+                            globalHook.value =
+                                globalHook.value.copyWith(isLoading: true);
+                            final isSuccessful = await ref
+                                .read(solanaProvider.notifier)
+                                .mint(issue.candyMachineAddress);
+                            if (isSuccessful) {
+                              ref.invalidate(receiptsProvider);
+                              ref.invalidate(walletAssetsProvider);
+                            }
+                            globalHook.value =
+                                globalHook.value.copyWith(isLoading: false);
+                          } catch (error) {
+                            globalHook.value =
+                                globalHook.value.copyWith(isLoading: false);
+                          }
+                        },
+                        text: 'MINT',
                         price: issue.stats?.price,
-                        textColor: Colors.black,
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                      ),
+                    )
+                  : Expanded(
+                      child: TransactionButton(
+                        isLoading: globalHook.value.isLoading,
+                        onPressed: () {},
+                        text: 'BUY',
+                        price: ref.watch(selectedItemsPrice),
+                        isListing: true,
+                      ),
+                    ),
               Expanded(child: ReadButton(issue: issue)),
             ],
           );
+  }
+}
+
+class TransactionButton extends StatelessWidget {
+  final bool isLoading;
+  final Function() onPressed;
+  final String text;
+  final double? price;
+  final bool isListing;
+  const TransactionButton({
+    super.key,
+    required this.isLoading,
+    required this.onPressed,
+    required this.text,
+    this.price,
+    this.isListing = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextButton(
+      size: const Size(150, 50),
+      isLoading: isLoading,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(
+          8,
+        ),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          isListing && price == null
+              ? Image.asset(
+                  Config.solanaLogoPath,
+                  width: 14,
+                  height: 10,
+                )
+              : SolanaPrice(
+                  price: price,
+                  textColor: Colors.black,
+                ),
+        ],
+      ),
+    );
   }
 }
 
@@ -394,7 +408,7 @@ class ReadButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BuyButton(
+    return CustomTextButton(
       size: const Size(150, 50),
       backgroundColor: ColorPalette.dReaderGreen,
       borderRadius: const BorderRadius.all(
@@ -479,6 +493,52 @@ class CandyMachineStats extends ConsumerWidget {
             stats: candyMachine?.baseMintPrice != null
                 ? '${formatPrice(candyMachine?.baseMintPrice ?? 0)}◎'
                 : '-.--◎',
+            isLastItem: true,
+          ),
+        ],
+      );
+    }, error: (Object error, StackTrace stackTrace) {
+      print('Error in candy machine stats ${error.toString()}');
+      return const Text('Something went wrong in candy machine stats');
+    }, loading: () {
+      return const SkeletonRow();
+    });
+  }
+}
+
+class ListingStats extends ConsumerWidget {
+  final ComicIssueModel issue;
+  const ListingStats({
+    super.key,
+    required this.issue,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = ref.watch(collectionStatsProvider(issue.id));
+
+    return provider.when(data: (collectionStats) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          StatsInfo(
+            title: 'VOLUME',
+            stats:
+                issue.isFree ? '--' : '${collectionStats?.totalVolume ?? 0}◎',
+          ),
+          StatsInfo(
+            title: 'SUPPLY',
+            stats: issue.isFree ? '--' : '${issue.supply}',
+          ),
+          StatsInfo(
+            title: 'LISTED',
+            stats: issue.isFree ? '--' : '${collectionStats?.itemsListed ?? 0}',
+          ),
+          StatsInfo(
+            title: 'PRICE',
+            stats: issue.isFree
+                ? 'FREE'
+                : '${collectionStats?.floorPrice ?? '--'}◎',
             isLastItem: true,
           ),
         ],

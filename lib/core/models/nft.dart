@@ -12,6 +12,7 @@ class NftModel {
   final String comicName;
   final String comicIssueName;
   final int comicIssueId;
+  final bool isListed;
 
   NftModel({
     required this.attributes,
@@ -27,6 +28,7 @@ class NftModel {
     required this.comicName,
     required this.comicIssueName,
     required this.comicIssueId,
+    required this.isListed,
   });
 
   factory NftModel.fromJson(dynamic json) {
@@ -52,6 +54,7 @@ class NftModel {
       comicName: json['comicName'],
       comicIssueName: json['comicIssueName'],
       comicIssueId: json['comicIssueId'],
+      isListed: json['isListed'],
     );
   }
 }
@@ -70,6 +73,13 @@ class NftAttribute {
       trait: json['trait'],
       value: json['value'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['trait'] = trait;
+    data['value'] = value;
+    return data;
   }
 }
 

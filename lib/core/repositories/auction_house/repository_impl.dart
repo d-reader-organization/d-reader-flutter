@@ -53,8 +53,18 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   }
 
   @override
-  Future<String?> delistItem({required String query}) {
+  Future<String?> delistItem({required String mint}) {
     return ApiService.instance
-        .apiCallGet('/auction-house/transactions/cancel-listing?$query');
+        .apiCallGet('/auction-house/transactions/cancel-listing?mint=$mint');
+  }
+
+  @override
+  Future<String?> buyItem({
+    required String mint,
+    required double price,
+    required String sellerAddress,
+  }) {
+    return ApiService.instance.apiCallGet(
+        '/auction-house/transactions/instant-buy?mint=$mint&price=$price&seller=$sellerAddress');
   }
 }

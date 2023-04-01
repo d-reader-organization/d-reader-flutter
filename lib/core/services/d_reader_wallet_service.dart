@@ -46,8 +46,17 @@ class DReaderWalletService {
         mintAccount: mintAccount, price: price, printReceipt: printReceipt);
   }
 
-  Future<String?> delistItem({required String query}) {
+  Future<String?> delistItem({required String mint}) {
     return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
-        .delistItem(query: query);
+        .delistItem(mint: mint);
+  }
+
+  Future<String?> buyItem({
+    required String mint,
+    required double price,
+    required String sellerAddress,
+  }) {
+    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+        .buyItem(mint: mint, price: price, sellerAddress: sellerAddress);
   }
 }

@@ -113,11 +113,13 @@ class ListingItemRow extends ConsumerWidget {
       selectedTileColor: ColorPalette.boxBackground300,
       splashColor: Colors.transparent,
       onTap: () {
-        final items = [...selectedItems];
+        List<ListingItemModel> items = [...selectedItems];
         if (selectedItems.contains(listing)) {
-          items.remove(listing);
+          items = [];
+          // items.remove(listing);
         } else {
-          items.add(listing);
+          items = [listing];
+          // items.add(listing);
         }
         ref.read(selectedItemsProvider.notifier).state = items;
       },

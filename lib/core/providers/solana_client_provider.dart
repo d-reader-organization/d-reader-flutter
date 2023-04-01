@@ -148,10 +148,23 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> delist({
-    required String query,
+    required String mint,
   }) async {
     final String? encodedTransaction =
-        await _walletService.delistItem(query: query);
+        await _walletService.delistItem(mint: mint);
+    if (encodedTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedTransaction);
+  }
+
+  Future<bool> buy({
+    required String mint,
+    required double price,
+    required String sellerAddress,
+  }) async {
+    final String? encodedTransaction = await _walletService.buyItem(
+        mint: mint, price: price, sellerAddress: sellerAddress);
     if (encodedTransaction == null) {
       return false;
     }

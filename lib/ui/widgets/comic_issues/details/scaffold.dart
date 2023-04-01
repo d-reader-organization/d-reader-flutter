@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/listing_item.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -315,7 +316,8 @@ class BottomNavigation extends HookConsumerWidget {
                                 .read(solanaProvider.notifier)
                                 .mint(issue.candyMachineAddress);
                             if (isSuccessful) {
-                              ref.invalidate(receiptsProvider);
+                              ref.invalidate(
+                                  receiptsProvider); // think we can remove this, needs to be tested
                               ref.invalidate(walletAssetsProvider);
                             }
                             globalHook.value =
@@ -332,7 +334,28 @@ class BottomNavigation extends HookConsumerWidget {
                   : Expanded(
                       child: TransactionButton(
                         isLoading: globalHook.value.isLoading,
-                        onPressed: () {},
+                        onPressed: ref.read(selectedItemsProvider).isNotEmpty
+                            ? () async {
+                                globalHook.value =
+                                    globalHook.value.copyWith(isLoading: true);
+                                final ListingItemModel selectedListing = ref
+                                    .read(selectedItemsProvider)
+                                    .elementAt(0);
+                                final isSuccessful =
+                                    await ref.read(solanaProvider.notifier).buy(
+                                          mint: selectedListing.nftAddress,
+                                          price: selectedListing.price,
+                                          sellerAddress:
+                                              selectedListing.seller.address,
+                                        );
+                                if (isSuccessful) {
+                                  ref.invalidate(listedItemsProvider);
+                                  ref.invalidate(walletAssetsProvider);
+                                }
+                                globalHook.value =
+                                    globalHook.value.copyWith(isLoading: false);
+                              }
+                            : () {},
                         text: 'BUY',
                         price: ref.watch(selectedItemsPrice),
                         isListing: true,

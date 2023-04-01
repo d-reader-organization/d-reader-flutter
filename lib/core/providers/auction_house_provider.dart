@@ -23,12 +23,6 @@ final buyListedItemProvider =
       .executeSale(query: query);
 });
 
-final delistItemProvider =
-    FutureProvider.autoDispose.family<String?, String>((ref, query) async {
-  return await IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
-      .delistItem(query: query);
-});
-
 final selectedItemsProvider =
     StateProvider<List<ListingItemModel>>((ref) => []);
 

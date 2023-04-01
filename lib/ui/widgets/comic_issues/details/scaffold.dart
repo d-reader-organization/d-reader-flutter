@@ -390,7 +390,7 @@ class TransactionButton extends StatelessWidget {
                   height: 10,
                 )
               : SolanaPrice(
-                  price: price,
+                  price: double.tryParse(formatLamportPrice(price!)),
                   textColor: Colors.black,
                 ),
         ],
@@ -538,7 +538,7 @@ class ListingStats extends ConsumerWidget {
             title: 'PRICE',
             stats: issue.isFree
                 ? 'FREE'
-                : '${collectionStats?.floorPrice ?? '--'}◎',
+                : '${collectionStats?.floorPrice != null ? formatLamportPrice(collectionStats!.floorPrice) : '--'}◎',
             isLastItem: true,
           ),
         ],

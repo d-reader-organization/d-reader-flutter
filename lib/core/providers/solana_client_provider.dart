@@ -147,6 +147,17 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return await _signAndSendTransaction(encodedTransaction);
   }
 
+  Future<bool> delist({
+    required String query,
+  }) async {
+    final String? encodedTransaction =
+        await _walletService.delistItem(query: query);
+    if (encodedTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedTransaction);
+  }
+
   Future<bool> _signAndSendTransaction(String encodedTransaction) async {
     final decodedTX = SignedTx.decode(encodedTransaction);
 

@@ -46,7 +46,9 @@ class ReceiptListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              formatAddress(receipt.buyer.address),
+              receipt.buyer.label.isNotEmpty
+                  ? receipt.buyer.label
+                  : formatAddress(receipt.buyer.address),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -141,7 +143,7 @@ class ListingItemRow extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              formatAddress(listing.seller.address),
+              '${formatAddress(listing.seller.address)} ${formatWalletLabel(listing.seller.label)}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -165,37 +167,13 @@ class ListingItemRow extends ConsumerWidget {
                     Row(
                       children: [
                         !listing.isUsed
-                            ? Container(
-                                padding: const EdgeInsets.all(4),
-                                margin: const EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: ColorPalette.dReaderGreen,
-                                  ),
-                                ),
-                                child: SvgPicture.asset(
-                                  'assets/icons/mint_icon.svg',
-                                  height: 16,
-                                  width: 16,
-                                ),
+                            ? SvgPicture.asset(
+                                'assets/icons/mint_issue.svg',
                               )
                             : const SizedBox(),
                         listing.isSigned
-                            ? Container(
-                                padding: const EdgeInsets.all(4),
-                                margin: const EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: ColorPalette.dReaderOrange,
-                                  ),
-                                ),
-                                child: SvgPicture.asset(
-                                  'assets/icons/signed_icon.svg',
-                                  height: 16,
-                                  width: 16,
-                                ),
+                            ? SvgPicture.asset(
+                                'assets/icons/signed_issue.svg',
                               )
                             : const SizedBox(),
                       ],

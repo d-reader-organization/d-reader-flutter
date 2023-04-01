@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final listedItemsProvider = FutureProvider.autoDispose
     .family<List<ListingItemModel>, int>((ref, issueId) async {
+  ref.invalidate(selectedItemsProvider);
   return await IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
       .getListedItems(issueId: issueId);
 });

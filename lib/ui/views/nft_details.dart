@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -207,9 +207,9 @@ class Body extends StatelessWidget {
                         if (nft.isListed) {
                           ref.read(globalStateProvider.notifier).state =
                               const GlobalState(isLoading: true);
-                          await ref.read(
-                            delistItemProvider('mint=${nft.address}').future,
-                          );
+                          await ref.read(solanaProvider.notifier).delist(
+                                query: ('mint=${nft.address}'),
+                              );
                           ref.invalidate(nftProvider);
                           ref.read(globalStateProvider.notifier).state =
                               const GlobalState(isLoading: false);

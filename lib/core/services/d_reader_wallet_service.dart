@@ -45,4 +45,9 @@ class DReaderWalletService {
     return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().listItem(
         mintAccount: mintAccount, price: price, printReceipt: printReceipt);
   }
+
+  Future<String?> delistItem({required String query}) {
+    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+        .delistItem(query: query);
+  }
 }

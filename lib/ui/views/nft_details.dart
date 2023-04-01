@@ -254,6 +254,7 @@ class Body extends StatelessWidget {
           ),
           !nft.isUsed || nft.isSigned
               ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Properties',

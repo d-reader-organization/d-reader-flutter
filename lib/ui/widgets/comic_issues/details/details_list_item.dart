@@ -23,7 +23,7 @@ class ReceiptListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       leading: CircleAvatar(
         maxRadius: 24,
         backgroundImage: receipt.buyer.avatar.isNotEmpty
@@ -46,9 +46,7 @@ class ReceiptListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              receipt.buyer.label.isNotEmpty
-                  ? receipt.buyer.label
-                  : formatAddress(receipt.buyer.address),
+              '${formatAddress(receipt.buyer.address, 4)} ${formatWalletLabel(receipt.buyer.label)}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -107,7 +105,7 @@ class ListingItemRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedItems = ref.watch(selectedItemsProvider);
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       selected: selectedItems.contains(listing),
       selectedColor: ColorPalette.dReaderYellow100,
       selectedTileColor: ColorPalette.boxBackground300,
@@ -145,7 +143,7 @@ class ListingItemRow extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${formatAddress(listing.seller.address)} ${formatWalletLabel(listing.seller.label)}',
+              '${formatAddress(listing.seller.address, 4)} ${formatWalletLabel(listing.seller.label)}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

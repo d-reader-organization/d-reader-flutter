@@ -26,6 +26,7 @@ import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:solana/solana.dart' show lamportsPerSol;
 import 'package:timeago/timeago.dart' as timeago;
 
 class ComicIssueDetailsScaffold extends ConsumerStatefulWidget {
@@ -281,8 +282,11 @@ class _ComicIssueDetailsScaffoldState
             )
           ],
         ),
-        bottomNavigationBar: BottomNavigation(
-          issue: widget.issue,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: BottomNavigation(
+            issue: widget.issue,
+          ),
         ),
       ),
     );
@@ -328,7 +332,9 @@ class BottomNavigation extends HookConsumerWidget {
                           }
                         },
                         text: 'MINT',
-                        price: issue.stats?.price,
+                        price: issue.stats?.price != null
+                            ? (issue.stats!.price! * lamportsPerSol)
+                            : null,
                       ),
                     )
                   : Expanded(

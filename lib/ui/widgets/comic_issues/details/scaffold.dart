@@ -92,195 +92,195 @@ class _ComicIssueDetailsScaffoldState
           ),
         ),
         extendBodyBehindAppBar: true,
-        body: ListView(
-          padding: const EdgeInsets.only(top: 0),
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          children: [
-            Stack(
-              children: [
-                CachedImageBgPlaceholder(
-                  height: 364,
-                  imageUrl: widget.issue.cover,
-                  cacheKey: '${widget.issue.id}',
-                  overrideBorderRadius: BorderRadius.circular(0),
-                  foregroundDecoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        ColorPalette.appBackgroundColor,
-                        Colors.transparent,
-                        ColorPalette.appBackgroundColor,
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      stops: [0.0, .6406, 1],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  CachedImageBgPlaceholder(
+                    height: 364,
+                    imageUrl: widget.issue.cover,
+                    cacheKey: '${widget.issue.id}',
+                    overrideBorderRadius: BorderRadius.circular(0),
+                    foregroundDecoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          ColorPalette.appBackgroundColor,
+                          Colors.transparent,
+                          ColorPalette.appBackgroundColor,
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        stops: [0.0, .6406, 1],
+                      ),
                     ),
                   ),
-                ),
-                Positioned.fill(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'EPISODE',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
+                  Positioned.fill(
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'EPISODE',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.menu_book,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  '${widget.issue.stats?.totalPagesCount.toString()} pages',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.menu_book,
+                                    color: Colors.white,
+                                    size: 16,
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.calendar_month,
-                                  size: 16,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  formatDate(widget.issue.releaseDate),
-                                  style: textTheme.labelMedium,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '${widget.issue.number}',
-                                  style: textTheme.headlineLarge,
-                                ),
-                                Text(
-                                  '/${widget.issue.stats?.totalIssuesCount}',
-                                  style: textTheme.headlineLarge,
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 24.0),
-                                  child: Text(
-                                    widget.issue.title,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    '${widget.issue.stats?.totalPagesCount.toString()} pages',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.calendar_month,
+                                    size: 16,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Text(
+                                    formatDate(widget.issue.releaseDate),
+                                    style: textTheme.labelMedium,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '${widget.issue.number}',
                                     style: textTheme.headlineLarge,
                                   ),
+                                  Text(
+                                    '/${widget.issue.stats?.totalIssuesCount}',
+                                    style: textTheme.headlineLarge,
+                                  ),
+                                ],
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 24.0),
+                                    child: Text(
+                                      widget.issue.title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.headlineLarge,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        TextWithViewMore(
-                          text: widget.issue.description,
-                          textAlign: TextAlign.start,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () => nextScreenPush(
-                          context,
-                          CreatorDetailsView(
-                            slug: widget.issue.creator.slug,
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            CreatorAvatar(
-                              avatar: widget.issue.creator.avatar,
-                              radius: 24,
-                              height: 32,
-                              width: 32,
-                              slug: widget.issue.creator.slug,
-                            ),
-                            const SizedBox(width: 12),
-                            AuthorVerified(
-                              authorName: widget.issue.creator.name,
-                              isVerified: widget.issue.creator.isVerified,
-                              fontSize: 15,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          RatingIcon(
-                            rating: widget.issue.stats?.averageRating ?? 0,
+                              const SizedBox(),
+                            ],
                           ),
                           const SizedBox(
-                            width: 20,
+                            height: 24,
                           ),
-                          FavouriteIconCount(
-                            favouritesCount:
-                                widget.issue.stats?.favouritesCount ?? 0,
-                            isFavourite:
-                                widget.issue.myStats?.isFavourite ?? false,
-                            slug: widget.issue.slug,
-                            id: widget.issue.id,
+                          TextWithViewMore(
+                            text: widget.issue.description,
+                            textAlign: TextAlign.start,
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
-            ),
-            widget.issue.candyMachineAddress != null
-                ? CandyMachineStats(
-                    address: widget.issue.candyMachineAddress ?? '',
-                  )
-                : ListingStats(issue: widget.issue),
-            const SizedBox(
-              height: 24,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-              child: widget.body,
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () => nextScreenPush(
+                            context,
+                            CreatorDetailsView(
+                              slug: widget.issue.creator.slug,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              CreatorAvatar(
+                                avatar: widget.issue.creator.avatar,
+                                radius: 24,
+                                height: 32,
+                                width: 32,
+                                slug: widget.issue.creator.slug,
+                              ),
+                              const SizedBox(width: 12),
+                              AuthorVerified(
+                                authorName: widget.issue.creator.name,
+                                isVerified: widget.issue.creator.isVerified,
+                                fontSize: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            RatingIcon(
+                              rating: widget.issue.stats?.averageRating ?? 0,
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            FavouriteIconCount(
+                              favouritesCount:
+                                  widget.issue.stats?.favouritesCount ?? 0,
+                              isFavourite:
+                                  widget.issue.myStats?.isFavourite ?? false,
+                              slug: widget.issue.slug,
+                              id: widget.issue.id,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              widget.issue.candyMachineAddress != null
+                  ? CandyMachineStats(
+                      address: widget.issue.candyMachineAddress ?? '',
+                    )
+                  : ListingStats(issue: widget.issue),
+              const SizedBox(
+                height: 24,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+                child: widget.body,
+              )
+            ],
+          ),
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -492,7 +492,6 @@ class CandyMachineStats extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(candyMachineProvider(address));
-
     return provider.when(data: (candyMachine) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

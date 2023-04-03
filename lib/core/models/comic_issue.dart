@@ -72,9 +72,10 @@ class ComicIssueStats {
       totalListedCount,
       readersCount,
       viewersCount,
-      totalPagesCount;
-  final double totalVolume;
-  final double? price, averageRating;
+      totalPagesCount,
+      totalVolume;
+  final int? price;
+  final double? averageRating;
 
   ComicIssueStats({
     required this.favouritesCount,
@@ -89,22 +90,24 @@ class ComicIssueStats {
     this.averageRating,
   });
 
-  factory ComicIssueStats.fromJson(dynamic json) => ComicIssueStats(
-        price: double.tryParse(json['price'].toStringAsFixed(2))?.toDouble(),
-        totalVolume: 122.4,
-        averageRating: json['averageRating'] != null
-            ? double.tryParse(json['averageRating'].toStringAsFixed(1))
-                ?.toDouble()
-            : null,
-        totalIssuesCount: json['totalIssuesCount'],
-        favouritesCount: json['favouritesCount'],
-        // subscribersCount: json['subscribersCount'],
-        totalListedCount: json['totalListedCount'] ?? 15,
-        readersCount: json['readersCount'],
-        viewersCount: json['viewersCount'],
-        totalPagesCount: json['totalPagesCount'],
-        ratersCount: json['ratersCount'] ?? 0,
-      );
+  factory ComicIssueStats.fromJson(dynamic json) {
+    return ComicIssueStats(
+      price: json['price'],
+      totalVolume: 1220000000,
+      averageRating: json['averageRating'] != null
+          ? double.tryParse(json['averageRating'].toStringAsFixed(1))
+              ?.toDouble()
+          : null,
+      totalIssuesCount: json['totalIssuesCount'],
+      favouritesCount: json['favouritesCount'],
+      // subscribersCount: json['subscribersCount'],
+      totalListedCount: json['totalListedCount'] ?? 15,
+      readersCount: json['readersCount'],
+      viewersCount: json['viewersCount'],
+      totalPagesCount: json['totalPagesCount'],
+      ratersCount: json['ratersCount'] ?? 0,
+    );
+  }
 }
 
 class ComicIssueMyStats {

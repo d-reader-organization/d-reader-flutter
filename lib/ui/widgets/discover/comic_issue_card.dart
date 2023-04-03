@@ -111,7 +111,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                           Text(
                             issue.stats?.price != null &&
                                     issue.stats!.price! > 0
-                                ? '${formatPrice(issue.stats?.price ?? 0)}◎'
+                                ? '${formatLamportPrice(issue.stats?.price ?? 0)}◎'
                                 : 'FREE',
                             style: textTheme.labelSmall?.copyWith(
                               color: ColorPalette.dReaderYellow100,
@@ -127,7 +127,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                             style: textTheme.labelSmall,
                           ),
                           Text(
-                            '${issue.stats?.totalVolume.toStringAsFixed(1)}◎',
+                            '${formatLamportPrice(issue.stats?.totalVolume)}◎',
                             style: textTheme.labelSmall,
                           ),
                         ],

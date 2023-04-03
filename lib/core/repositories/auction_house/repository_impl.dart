@@ -10,7 +10,7 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   @override
   Future<String?> listItem({
     required String mintAccount,
-    required double price,
+    required int price,
     String? printReceipt,
   }) {
     return ApiService.instance.apiCallGet(
@@ -61,7 +61,7 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   @override
   Future<String?> buyItem({
     required String mint,
-    required double price,
+    required int price,
     required String sellerAddress,
   }) {
     return ApiService.instance.apiCallGet(

@@ -6,7 +6,7 @@ class NftModel {
   final String name;
   final String description;
   final String owner;
-  final int royalties;
+  final double royalties;
   final bool isUsed;
   final bool isSigned;
   final String comicName;
@@ -48,7 +48,9 @@ class NftModel {
       name: json['name'],
       description: json['description'],
       owner: json['owner'],
-      royalties: json['royalties'],
+      royalties: json['royalties'] is int
+          ? json['royalties'].toDouble()
+          : json['royalties'],
       isUsed: json['isUsed'],
       isSigned: json['isSigned'],
       comicName: json['comicName'],

@@ -97,7 +97,7 @@ class StatsDescriptionWidget extends StatelessWidget {
             height: 24,
           ),
           StatsBoxRow(
-            totalVolume: creator.stats?.totalVolume ?? 0,
+            totalVolume: double.parse('${creator.stats?.totalVolume ?? 0}'),
             issuesCount: creator.stats?.comicIssuesCount ?? 0,
           ),
           const SizedBox(

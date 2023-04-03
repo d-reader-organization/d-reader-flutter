@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/core/models/listing_item.dart';
 abstract class AuctionHouseRepository {
   Future<String?> listItem({
     required String mintAccount,
-    required double price,
+    required int price,
     String? printReceipt,
   });
   Future<List<ListingItemModel>> getListedItems({required int issueId});
@@ -13,7 +13,7 @@ abstract class AuctionHouseRepository {
   Future<String?> delistItem({required String mint});
   Future<String?> buyItem({
     required String mint,
-    required double price,
+    required int price,
     required String sellerAddress,
   });
 }

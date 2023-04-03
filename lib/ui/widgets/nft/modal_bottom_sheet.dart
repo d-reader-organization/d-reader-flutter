@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:solana/solana.dart' show lamportsPerSol;
 
 class NftModalBottomSheet extends ConsumerStatefulWidget {
   final NftModel nft;
@@ -124,7 +125,7 @@ class SubmitButton extends HookConsumerWidget {
               globalHook.value = globalHook.value.copyWith(isLoading: true);
               final response = await ref.read(solanaProvider.notifier).list(
                     mintAccount: mintAccount,
-                    price: price!,
+                    price: int.parse((price! * lamportsPerSol).toString()),
                   );
               globalHook.value = globalHook.value.copyWith(isLoading: false);
               print('List response: $response');

@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
@@ -117,7 +118,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SolanaPrice(
-                          price: issue.stats!.price,
+                          price: formatLamportPrice(issue.stats?.price),
                         ),
                         ViewedIconCount(
                           viewedCount: issue.stats?.viewersCount ?? 0,

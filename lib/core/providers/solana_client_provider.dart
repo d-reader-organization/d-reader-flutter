@@ -136,7 +136,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<bool> list({
     required String mintAccount,
-    required double price,
+    required int price,
     String printReceipt = 'false',
   }) async {
     final String? encodedTransaction = await _walletService.listItem(
@@ -160,7 +160,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<bool> buy({
     required String mint,
-    required double price,
+    required int price,
     required String sellerAddress,
   }) async {
     final String? encodedTransaction = await _walletService.buyItem(

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/listing_item.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
@@ -104,23 +105,26 @@ class ListingItemRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedItems = ref.watch(selectedItemsProvider);
+    final myWallet = ref.watch(myWalletProvider);
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       selected: selectedItems.contains(listing),
       selectedColor: ColorPalette.dReaderYellow100,
       selectedTileColor: ColorPalette.boxBackground300,
       splashColor: Colors.transparent,
-      onTap: () {
-        List<ListingItemModel> items = [...selectedItems];
-        if (selectedItems.contains(listing)) {
-          items = [];
-          // items.remove(listing);
-        } else {
-          items = [listing];
-          // items.add(listing);
-        }
-        ref.read(selectedItemsProvider.notifier).state = items;
-      },
+      onTap: myWallet.value?.address != listing.seller.address
+          ? () {
+              List<ListingItemModel> items = [...selectedItems];
+              if (selectedItems.contains(listing)) {
+                items = [];
+                // items.remove(listing);
+              } else {
+                items = [listing];
+                // items.add(listing);
+              }
+              ref.read(selectedItemsProvider.notifier).state = items;
+            }
+          : null,
       leading: CircleAvatar(
         maxRadius: 24,
         backgroundImage: listing.seller.avatar.isNotEmpty

@@ -350,7 +350,8 @@ class BottomNavigation extends HookConsumerWidget {
                                 final isSuccessful =
                                     await ref.read(solanaProvider.notifier).buy(
                                           mint: selectedListing.nftAddress,
-                                          price: selectedListing.price,
+                                          price: selectedListing.price /
+                                              lamportsPerSol,
                                           sellerAddress:
                                               selectedListing.seller.address,
                                         );
@@ -552,8 +553,9 @@ class ListingStats extends ConsumerWidget {
         children: [
           StatsInfo(
             title: 'VOLUME',
-            stats:
-                issue.isFree ? '--' : '${collectionStats?.totalVolume ?? 0}◎',
+            stats: issue.isFree
+                ? '--'
+                : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol) : 0}◎',
           ),
           StatsInfo(
             title: 'SUPPLY',

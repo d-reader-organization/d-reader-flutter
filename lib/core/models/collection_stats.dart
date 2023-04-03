@@ -1,7 +1,5 @@
 class CollectionStatsModel {
-  final int totalVolume;
-  final int itemsListed;
-  final double floorPrice;
+  final int floorPrice, itemsListed, totalVolume;
 
   CollectionStatsModel({
     required this.totalVolume,
@@ -13,7 +11,7 @@ class CollectionStatsModel {
     return CollectionStatsModel(
       totalVolume: json['totalVolume'],
       itemsListed: json['itemsListed'],
-      floorPrice: json['floorPrice'].toDouble(),
+      floorPrice: json['floorPrice'],
     );
   }
 

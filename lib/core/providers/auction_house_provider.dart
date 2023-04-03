@@ -26,8 +26,8 @@ final buyListedItemProvider =
 final selectedItemsProvider =
     StateProvider<List<ListingItemModel>>((ref) => []);
 
-final selectedItemsPrice = StateProvider<double?>((ref) {
-  double? sum;
+final selectedItemsPrice = StateProvider<int?>((ref) {
+  int? sum;
   ref.watch(selectedItemsProvider).forEach((listing) {
     sum ??= 0;
     sum = sum! + listing.price;

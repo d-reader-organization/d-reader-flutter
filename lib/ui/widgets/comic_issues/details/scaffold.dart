@@ -332,9 +332,7 @@ class BottomNavigation extends HookConsumerWidget {
                           }
                         },
                         text: 'MINT',
-                        price: issue.stats?.price != null
-                            ? (issue.stats!.price! * lamportsPerSol)
-                            : null,
+                        price: issue.stats?.price,
                       ),
                     )
                   : Expanded(
@@ -350,8 +348,7 @@ class BottomNavigation extends HookConsumerWidget {
                                 final isSuccessful =
                                     await ref.read(solanaProvider.notifier).buy(
                                           mint: selectedListing.nftAddress,
-                                          price: selectedListing.price /
-                                              lamportsPerSol,
+                                          price: selectedListing.price,
                                           sellerAddress:
                                               selectedListing.seller.address,
                                         );
@@ -378,7 +375,7 @@ class TransactionButton extends StatelessWidget {
   final bool isLoading;
   final Function() onPressed;
   final String text;
-  final double? price;
+  final int? price;
   final bool isListing;
   const TransactionButton({
     super.key,
@@ -420,7 +417,7 @@ class TransactionButton extends StatelessWidget {
                   height: 10,
                 )
               : SolanaPrice(
-                  price: double.tryParse(formatLamportPrice(price!)),
+                  price: formatLamportPrice(price),
                   textColor: Colors.black,
                 ),
         ],
@@ -521,7 +518,7 @@ class CandyMachineStats extends ConsumerWidget {
           StatsInfo(
             title: 'PRICE',
             stats: candyMachine?.baseMintPrice != null
-                ? '${formatPrice(candyMachine?.baseMintPrice ?? 0)}◎'
+                ? '${formatPrice(formatLamportPrice(candyMachine?.baseMintPrice) ?? 0)}◎'
                 : '-.--◎',
             isLastItem: true,
           ),

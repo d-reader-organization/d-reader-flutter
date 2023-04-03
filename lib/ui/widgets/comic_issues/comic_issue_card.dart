@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
@@ -99,7 +100,7 @@ class ComicIssueCard extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(right: 8),
                       child: SolanaPrice(
-                        price: issue.stats?.price,
+                        price: formatLamportPrice(issue.stats?.price),
                         mainAxisAlignment: MainAxisAlignment.end,
                       ),
                     ),

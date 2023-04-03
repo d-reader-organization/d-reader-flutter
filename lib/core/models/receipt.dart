@@ -1,7 +1,7 @@
 class Receipt {
   final ReceiptNft nft;
   final ReceiptBuyer buyer;
-  final double price;
+  final int price;
   final String timestamp;
   final String candyMachineAddress;
 
@@ -17,9 +17,7 @@ class Receipt {
     return Receipt(
       nft: ReceiptNft.fromJson(json['nft']),
       buyer: ReceiptBuyer.fromJson(json['buyer']),
-      price: json['price'] is int
-          ? json['price'].toDouble()
-          : double.parse(json['price']),
+      price: json['price'],
       timestamp: json['timestamp'],
       candyMachineAddress: json['candyMachineAddress'],
     );

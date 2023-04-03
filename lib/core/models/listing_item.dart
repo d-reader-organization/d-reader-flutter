@@ -8,7 +8,7 @@ class ListingItemModel {
   final List<NftAttribute> attributes;
   final Seller seller;
   final String tokenAddress;
-  final double price;
+  final int price;
   final bool isUsed;
   final bool isSigned;
 
@@ -36,7 +36,7 @@ class ListingItemModel {
       ),
       seller: Seller.fromJson(json['seller']),
       tokenAddress: json['tokenAddress'],
-      price: json['price'].toDouble(),
+      price: json['price'],
       isUsed: json['isUsed'],
       isSigned: json['isSigned'],
     );
@@ -127,7 +127,7 @@ List<ListingItemModel> dummyData = [
       label: "Custom",
     ),
     tokenAddress: "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
-    price: 1.23,
+    price: 1000000000,
     isUsed: true,
     isSigned: true,
   ),
@@ -147,7 +147,7 @@ List<ListingItemModel> dummyData = [
       label: "Custom",
     ),
     tokenAddress: "dsadasdasdsa323131",
-    price: 1.23,
+    price: 1230000000,
     isUsed: false,
     isSigned: true,
   ),
@@ -167,7 +167,7 @@ List<ListingItemModel> dummyData = [
       label: "Custom",
     ),
     tokenAddress: "12321321xcxc",
-    price: 1.23,
+    price: 1230000000,
     isUsed: true,
     isSigned: false,
   )

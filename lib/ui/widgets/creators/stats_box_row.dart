@@ -17,7 +17,9 @@ class StatsBoxRow extends StatelessWidget {
       children: [
         StatsBox(
           title: 'TOTAL VOLUME',
-          stats: '${totalVolume.toString()}K ◎',
+          stats: totalVolume > 1000
+              ? '${int.parse('${totalVolume / 1000}')}K ◎'
+              : '${totalVolume.toString()} ◎',
         ),
         StatsBox(
           title: 'COMIC ISSUES',

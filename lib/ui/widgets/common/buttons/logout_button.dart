@@ -10,8 +10,8 @@ class LogoutButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       onPressed: () async {
-        await ref.read(solanaProvider.notifier).deauthorize();
         await ref.read(authProvider.notifier).clearToken();
+        await ref.read(solanaProvider.notifier).deauthorize();
       },
       icon: const Icon(
         Icons.logout,

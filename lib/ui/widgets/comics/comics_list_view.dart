@@ -36,14 +36,15 @@ class ComicsListView extends ConsumerWidget {
         'Error: $err',
         style: const TextStyle(color: Colors.red),
       ),
-      loading: () => Container(
+      loading: () => SizedBox(
         height: 90,
-        margin: const EdgeInsets.only(right: 16),
         child: ListView.builder(
           itemCount: 3,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) => const SkeletonCard(),
+          itemBuilder: (context, index) => const SkeletonCard(
+            margin: EdgeInsets.only(right: 16),
+          ),
         ),
       ),
     );

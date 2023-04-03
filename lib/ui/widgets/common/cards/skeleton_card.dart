@@ -5,8 +5,13 @@ import 'package:skeleton_text/skeleton_text.dart';
 class SkeletonCard extends StatelessWidget {
   final double height;
   final double width;
-  const SkeletonCard({Key? key, this.height = 255, this.width = 180})
-      : super(key: key);
+  final EdgeInsets? margin;
+  const SkeletonCard({
+    Key? key,
+    this.height = 255,
+    this.width = 180,
+    this.margin,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +20,7 @@ class SkeletonCard extends StatelessWidget {
       child: Container(
         height: height,
         width: width,
+        margin: margin,
         decoration: BoxDecoration(
           color: ColorPalette.dReaderGrey,
           borderRadius: BorderRadius.circular(

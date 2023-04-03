@@ -78,7 +78,7 @@ class ComicStats {
   final int ratersCount;
   final double averageRating;
   final int issuesCount;
-  final double totalVolume;
+  final int totalVolume;
   final int readersCount;
   final int viewersCount;
 
@@ -104,7 +104,7 @@ class ComicStats {
               0
           : 0,
       issuesCount: json['issuesCount'],
-      totalVolume: 122.4,
+      totalVolume: 1000000000,
       readersCount: json['readersCount'],
       viewersCount: json['viewersCount'],
     );

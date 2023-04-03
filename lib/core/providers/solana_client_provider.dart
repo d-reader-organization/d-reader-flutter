@@ -136,11 +136,35 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<bool> list({
     required String mintAccount,
-    required double price,
+    required int price,
     String printReceipt = 'false',
   }) async {
     final String? encodedTransaction = await _walletService.listItem(
         mintAccount: mintAccount, price: price, printReceipt: printReceipt);
+    if (encodedTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedTransaction);
+  }
+
+  Future<bool> delist({
+    required String mint,
+  }) async {
+    final String? encodedTransaction =
+        await _walletService.delistItem(mint: mint);
+    if (encodedTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedTransaction);
+  }
+
+  Future<bool> buy({
+    required String mint,
+    required int price,
+    required String sellerAddress,
+  }) async {
+    final String? encodedTransaction = await _walletService.buyItem(
+        mint: mint, price: price, sellerAddress: sellerAddress);
     if (encodedTransaction == null) {
       return false;
     }
@@ -163,6 +187,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             ),
           ],
         );
+        print('Sign and send response');
         print(response);
       } catch (e) {
         print(e);

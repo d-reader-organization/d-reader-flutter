@@ -1,7 +1,7 @@
 class CandyMachineModel {
   String address;
   int supply, itemsMinted;
-  double baseMintPrice;
+  int baseMintPrice;
   String? endsAt;
 
   CandyMachineModel({
@@ -17,9 +17,7 @@ class CandyMachineModel {
       address: json['address'],
       supply: json['supply'],
       itemsMinted: json['itemsMinted'],
-      baseMintPrice: json['baseMintPrice'] is int
-          ? json['baseMintPrice'].toDouble()
-          : json['baseMintPrice'],
+      baseMintPrice: json['baseMintPrice'],
       endsAt: json['endsAt'],
     );
   }

@@ -72,7 +72,7 @@ class CreatorListItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: SolanaPrice(
-              price: (creator.stats?.totalVolume ?? 0) / 100,
+              price: ((creator.stats?.totalVolume) ?? 0) / 100,
               mainAxisAlignment: MainAxisAlignment.end,
               textDirection: TextDirection.rtl,
             ),
@@ -80,7 +80,7 @@ class CreatorListItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              '${creator.stats?.totalVolume.toStringAsFixed(1)}%',
+              '${((creator.stats?.totalVolume) ?? 0).toStringAsFixed(1)}%',
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorPalette.dReaderGreen,
@@ -90,7 +90,7 @@ class CreatorListItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: SolanaPrice(
-              price: (creator.stats?.totalVolume ?? 0) / 100,
+              price: ((creator.stats?.totalVolume) ?? 0) / 100,
               textDirection: TextDirection.rtl,
             ),
           ),

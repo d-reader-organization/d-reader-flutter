@@ -30,7 +30,8 @@ class OnGoingBottomWidget extends StatelessWidget {
             );
           },
           onGoingError: (items, e, stk) {
-            // add log
+            print('error in on going bottom widget :${e.toString()}');
+            print(stk.toString());
             return const Center(
               child: Text('Something went wrong.'),
             );

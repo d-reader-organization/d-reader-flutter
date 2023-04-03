@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/notifiers/receipts_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_issues/details/details_list_item.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_issues/details/minted_item_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,7 +31,7 @@ class MintedItems extends ConsumerWidget {
           shrinkWrap: true,
           primary: false,
           itemBuilder: (context, index) {
-            return ReceiptListItem(
+            return MintedItemRow(
               receipt: receipts[index],
             );
           },

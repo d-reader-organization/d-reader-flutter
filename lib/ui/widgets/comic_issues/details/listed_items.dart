@@ -26,7 +26,7 @@ class ListedItems extends ConsumerWidget {
           shrinkWrap: true,
           primary: false,
           itemBuilder: (context, index) {
-            return ListingItemRow(
+            return ListedItemRow(
               listing: listings[index],
             );
           },

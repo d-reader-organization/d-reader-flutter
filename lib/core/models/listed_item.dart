@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
 
-class ListingItemModel {
+class ListedItemModel {
   final int id;
   final String nftAddress;
   final String name;
@@ -12,7 +12,7 @@ class ListingItemModel {
   final bool isUsed;
   final bool isSigned;
 
-  ListingItemModel({
+  ListedItemModel({
     required this.id,
     required this.nftAddress,
     required this.name,
@@ -25,8 +25,8 @@ class ListingItemModel {
     required this.isSigned,
   });
 
-  factory ListingItemModel.fromJson(Map<String, dynamic> json) {
-    return ListingItemModel(
+  factory ListedItemModel.fromJson(Map<String, dynamic> json) {
+    return ListedItemModel(
       id: json['id'],
       nftAddress: json['nftAddress'],
       name: json['name'],
@@ -109,66 +109,3 @@ class Seller {
     return data;
   }
 }
-
-List<ListingItemModel> dummyData = [
-  ListingItemModel(
-    id: 123,
-    nftAddress: "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
-    name: "My NFT",
-    cover:
-        "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
-    attributes: [
-      NftAttribute(trait: "used", value: "true"),
-      NftAttribute(trait: "signed", value: "true"),
-    ],
-    seller: Seller(
-      address: "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
-      avatar: "",
-      label: "Custom",
-    ),
-    tokenAddress: "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
-    price: 1000000000,
-    isUsed: true,
-    isSigned: true,
-  ),
-  ListingItemModel(
-    id: 123,
-    nftAddress: "dsadasdasdsa323131",
-    name: "My NFT",
-    cover:
-        "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
-    attributes: [
-      NftAttribute(trait: "used", value: "false"),
-      NftAttribute(trait: "signed", value: "true"),
-    ],
-    seller: Seller(
-      address: "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
-      avatar: "",
-      label: "Custom",
-    ),
-    tokenAddress: "dsadasdasdsa323131",
-    price: 1230000000,
-    isUsed: false,
-    isSigned: true,
-  ),
-  ListingItemModel(
-    id: 123,
-    nftAddress: "12321321xcxc",
-    name: "My NFT",
-    cover:
-        "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
-    attributes: [
-      NftAttribute(trait: "used", value: "true"),
-      NftAttribute(trait: "signed", value: "false"),
-    ],
-    seller: Seller(
-      address: "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
-      avatar: "",
-      label: "Custom",
-    ),
-    tokenAddress: "12321321xcxc",
-    price: 1230000000,
-    isUsed: true,
-    isSigned: false,
-  )
-];

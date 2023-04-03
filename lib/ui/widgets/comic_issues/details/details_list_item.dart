@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:d_reader_flutter/core/models/listing_item.dart';
+import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
@@ -95,9 +95,9 @@ class ReceiptListItem extends StatelessWidget {
   }
 }
 
-class ListingItemRow extends ConsumerWidget {
-  final ListingItemModel listing;
-  const ListingItemRow({
+class ListedItemRow extends ConsumerWidget {
+  final ListedItemModel listing;
+  const ListedItemRow({
     super.key,
     required this.listing,
   });
@@ -114,7 +114,7 @@ class ListingItemRow extends ConsumerWidget {
       splashColor: Colors.transparent,
       onTap: myWallet.value?.address != listing.seller.address
           ? () {
-              List<ListingItemModel> items = [...selectedItems];
+              List<ListedItemModel> items = [...selectedItems];
               if (selectedItems.contains(listing)) {
                 items = [];
                 // items.remove(listing);

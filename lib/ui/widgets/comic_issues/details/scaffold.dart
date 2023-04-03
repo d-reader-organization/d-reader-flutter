@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/listing_item.dart';
+import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -342,7 +342,7 @@ class BottomNavigation extends HookConsumerWidget {
                             ? () async {
                                 globalHook.value =
                                     globalHook.value.copyWith(isLoading: true);
-                                final ListingItemModel selectedListing = ref
+                                final ListedItemModel selectedListing = ref
                                     .read(selectedItemsProvider)
                                     .elementAt(0);
                                 final isSuccessful =

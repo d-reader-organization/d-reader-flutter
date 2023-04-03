@@ -1,11 +1,11 @@
 import 'package:d_reader_flutter/core/models/collection_stats.dart';
-import 'package:d_reader_flutter/core/models/listing_item.dart';
+import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final listedItemsProvider = FutureProvider.autoDispose
-    .family<List<ListingItemModel>, int>((ref, issueId) async {
+    .family<List<ListedItemModel>, int>((ref, issueId) async {
   ref.invalidate(selectedItemsProvider);
   return await IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
       .getListedItems(issueId: issueId);
@@ -23,8 +23,7 @@ final buyListedItemProvider =
       .executeSale(query: query);
 });
 
-final selectedItemsProvider =
-    StateProvider<List<ListingItemModel>>((ref) => []);
+final selectedItemsProvider = StateProvider<List<ListedItemModel>>((ref) => []);
 
 final selectedItemsPrice = StateProvider<int?>((ref) {
   int? sum;

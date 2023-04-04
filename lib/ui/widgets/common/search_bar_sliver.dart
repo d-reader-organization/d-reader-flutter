@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchBarSliver extends ConsumerWidget {
@@ -33,9 +34,12 @@ class SearchBarSliver extends ConsumerWidget {
                 FocusManager.instance.primaryFocus?.unfocus();
                 _submitHandler(ref);
               },
-              icon: const Icon(
-                Icons.search,
-                color: ColorPalette.dReaderGrey,
+              icon: SvgPicture.asset(
+                'assets/icons/search.svg',
+                colorFilter: const ColorFilter.mode(
+                  ColorPalette.dReaderGrey,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ),

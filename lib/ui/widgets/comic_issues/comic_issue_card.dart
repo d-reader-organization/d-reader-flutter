@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
@@ -34,8 +35,8 @@ class ComicIssueCard extends StatelessWidget {
           children: [
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
-              cacheKey: 'home${issue.slug}',
-              height: 135,
+              cacheKey: '${issue.id}',
+              height: 150,
               overrideBorderRadius: const BorderRadius.vertical(
                 top: Radius.circular(
                   16,
@@ -61,6 +62,7 @@ class ComicIssueCard extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +100,7 @@ class ComicIssueCard extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(right: 8),
                       child: SolanaPrice(
-                        price: issue.stats?.price,
+                        price: formatLamportPrice(issue.stats?.price),
                         mainAxisAlignment: MainAxisAlignment.end,
                       ),
                     ),

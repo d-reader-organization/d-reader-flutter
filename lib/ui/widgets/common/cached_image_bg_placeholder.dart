@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class CachedImageBgPlaceholder extends StatelessWidget {
   final String imageUrl;
@@ -29,6 +30,12 @@ class CachedImageBgPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       cacheKey: cacheKey,
+      cacheManager: CacheManager(
+        Config(
+          cacheKey,
+          stalePeriod: const Duration(days: 1),
+        ),
+      ),
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         height: height,

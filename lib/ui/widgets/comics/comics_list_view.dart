@@ -6,13 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicsListView extends ConsumerWidget {
-  const ComicsListView({Key? key}) : super(key: key);
+  final String? query;
+  const ComicsListView({
+    Key? key,
+    this.query,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<List<ComicModel>> comics = ref.watch(comicsProvider(null));
+    AsyncValue<List<ComicModel>> comics = ref.watch(comicsProvider(query));
     return comics.when(
       data: (data) {
+        if (data.isEmpty) {
+          return const SizedBox();
+        }
         return SizedBox(
           height: 255,
           child: ListView.builder(
@@ -35,7 +42,9 @@ class ComicsListView extends ConsumerWidget {
           itemCount: 3,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) => const SkeletonCard(),
+          itemBuilder: (context, index) => const SkeletonCard(
+            margin: EdgeInsets.only(right: 16),
+          ),
         ),
       ),
     );

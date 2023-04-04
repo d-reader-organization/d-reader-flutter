@@ -5,13 +5,17 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
-        (ref) => SolanaClientNotifier(DReaderWalletService.instance));
+  (ref) {
+    return SolanaClientNotifier(DReaderWalletService.instance, null, null);
+  },
+);
 
 @immutable // preferred to use immutable states
 class SolanaClientState {
@@ -38,12 +42,41 @@ extension ResignTx on SignedTx {
       );
 }
 
-class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
-  SolanaClientNotifier(this._walletService)
-      : super(const SolanaClientState(authorizationResult: null));
-  final DReaderWalletService _walletService;
+AuthorizationResult? authResultFromDynamic(String? json) {
+  if (json == null) {
+    return null;
+  }
+  final decoded = jsonDecode(json);
 
+  return AuthorizationResult(
+    authToken: decoded['authToken'],
+    publicKey: Uint8List.fromList(decoded['publicKey'].codeUnits),
+    accountLabel: null,
+    walletUriBase: null,
+  );
+}
+
+class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
+  late DReaderWalletService _walletService;
+  String? authResultOverride;
   Signature? _signature;
+
+  SolanaClientNotifier(DReaderWalletService walletService,
+      String? authResultOverride, List<int>? signatureBytes)
+      : super(
+          SolanaClientState(
+            authorizationResult: authResultFromDynamic(authResultOverride),
+          ),
+        ) {
+    AuthorizationResult? authResult = authResultFromDynamic(authResultOverride);
+    _walletService = walletService;
+    if (signatureBytes != null) {
+      _signature = Signature(
+        signatureBytes,
+        publicKey: Ed25519HDPublicKey(authResult?.publicKey ?? []),
+      );
+    }
+  }
 
   Future<Uint8List?> authorizeAndSignMessage() async {
     final session = await _getSession();
@@ -56,12 +89,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     );
     state = state.copyWith(authorizationResult: result);
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
-
+    _storeAuthResult(result);
     final signMessageResult = await _signMessage(client);
     _signature = Signature(
       signMessageResult.first.sublist(0, 64),
       publicKey: publicKey,
     );
+    _storeSignature(_signature?.bytes);
     await session.close();
     return signMessageResult.isNotEmpty ? signMessageResult.first : null;
   }
@@ -102,11 +136,35 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<bool> list({
     required String mintAccount,
-    required double price,
+    required int price,
     String printReceipt = 'false',
   }) async {
     final String? encodedTransaction = await _walletService.listItem(
         mintAccount: mintAccount, price: price, printReceipt: printReceipt);
+    if (encodedTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedTransaction);
+  }
+
+  Future<bool> delist({
+    required String mint,
+  }) async {
+    final String? encodedTransaction =
+        await _walletService.delistItem(mint: mint);
+    if (encodedTransaction == null) {
+      return false;
+    }
+    return await _signAndSendTransaction(encodedTransaction);
+  }
+
+  Future<bool> buy({
+    required String mint,
+    required int price,
+    required String sellerAddress,
+  }) async {
+    final String? encodedTransaction = await _walletService.buyItem(
+        mint: mint, price: price, sellerAddress: sellerAddress);
     if (encodedTransaction == null) {
       return false;
     }
@@ -129,6 +187,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             ),
           ],
         );
+        print('Sign and send response');
         print(response);
       } catch (e) {
         print(e);
@@ -158,13 +217,16 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<bool> _doReauthorize(MobileWalletAdapterClient client) async {
     final authToken = state.authorizationResult?.authToken;
-    if (authToken == null) return false;
+    if (authToken == null) {
+      return false;
+    }
     final result = await client.reauthorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       authToken: authToken,
     );
     state = state.copyWith(authorizationResult: result);
+    _storeAuthResult(result);
     return result != null;
   }
 
@@ -172,5 +234,26 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final session = await LocalAssociationScenario.create();
     session.startActivityForResult(null).ignore();
     return session;
+  }
+
+  _storeAuthResult(AuthorizationResult? result) async {
+    final sp = await SharedPreferences.getInstance();
+    sp.setString(
+      'wallet-auth',
+      jsonEncode(
+        {
+          'authToken': result?.authToken,
+          'publicKey': result?.publicKey.toString(),
+        },
+      ),
+    );
+  }
+
+  _storeSignature(List<int>? bytes) async {
+    final sp = await SharedPreferences.getInstance();
+    sp.setString(
+      'signature-bytes',
+      String.fromCharCodes(bytes ?? []),
+    );
   }
 }

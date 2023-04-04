@@ -4,14 +4,12 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
-import 'package:d_reader_flutter/ioc.dart';
 
 class ComicIssueRepositoryImpl implements ComicIssueRepository {
   @override
-  Future<List<ComicIssueModel>> getComicIssues([String? queryString]) async {
+  Future<List<ComicIssueModel>> getComicIssues({String? queryString}) async {
     final String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>()
-            .apiCallGet('/comic-issue/get?$queryString');
+        await ApiService.instance.apiCallGet('/comic-issue/get?$queryString');
     if (responseBody == null) {
       return [];
     }
@@ -28,8 +26,7 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
   @override
   Future<ComicIssueModel?> getComicIssue(int id) async {
     final String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>()
-            .apiCallGet('/comic-issue/get/$id');
+        await ApiService.instance.apiCallGet('/comic-issue/get/$id');
     return responseBody == null
         ? null
         : ComicIssueModel.fromJson(jsonDecode(responseBody));
@@ -38,8 +35,7 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
   @override
   Future<List<PageModel>> getComicIssuePages(int id) async {
     final String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>()
-            .apiCallGet('/comic-issue/get/$id/pages');
+        await ApiService.instance.apiCallGet('/comic-issue/get/$id/pages');
     if (responseBody == null) {
       return [];
     }
@@ -51,5 +47,10 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> favouritiseIssue(int id) {
+    return ApiService.instance.apiCallPatch('/comic-issue/favouritise/$id');
   }
 }

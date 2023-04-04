@@ -10,6 +10,7 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,7 +52,7 @@ class ProfileView extends ConsumerWidget {
         return const Text('Something went wrong');
       },
       loading: () {
-        return const WalletSkeleton();
+        return const SizedBox();
       },
     );
   }
@@ -126,13 +127,20 @@ class AvatarName extends StatelessWidget {
             child: wallet.avatar.isNotEmpty
                 ? CachedNetworkImage(
                     imageUrl: wallet.avatar,
-                    cacheKey: wallet.avatar,
+                    cacheKey: wallet.address,
+                    cacheManager: CacheManager(
+                      Config(
+                        wallet.address,
+                        stalePeriod: const Duration(days: 1),
+                      ),
+                    ),
                     imageBuilder: (context, imageProvider) {
                       return Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(64),
                           image: DecorationImage(
                             image: imageProvider,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       );

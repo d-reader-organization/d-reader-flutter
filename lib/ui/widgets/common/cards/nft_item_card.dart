@@ -15,10 +15,10 @@ class NftItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedImageBgPlaceholder(
       imageUrl: nftAsset.image,
-      cacheKey: '#-124',
-      height: 190,
+      cacheKey: nftAsset.address,
+      height: 220,
       overrideBorderRadius: BorderRadius.circular(12),
-      bgImageFit: BoxFit.fill,
+      bgImageFit: BoxFit.cover,
       child: Align(
         alignment: Alignment.bottomLeft,
         child: Container(

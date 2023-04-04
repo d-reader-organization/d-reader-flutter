@@ -8,7 +8,7 @@ class DescriptionText extends StatelessWidget {
     Key? key,
     required this.text,
     this.textAlign = TextAlign.start,
-    this.maxLines = 3,
+    this.maxLines = 2,
   }) : super(key: key);
 
   @override

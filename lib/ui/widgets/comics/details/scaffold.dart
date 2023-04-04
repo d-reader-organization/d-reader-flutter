@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/app_bar_without_logo.dart';
@@ -19,10 +20,12 @@ import 'package:flutter/material.dart';
 class ComicDetailsScaffold extends StatefulWidget {
   final Widget body;
   final ComicModel comic;
+  final Function() loadMore;
   const ComicDetailsScaffold({
     Key? key,
     required this.body,
     required this.comic,
+    required this.loadMore,
   }) : super(key: key);
 
   @override
@@ -59,6 +62,13 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.of(context).size.width * 0.1;
+
+          if (maxScroll - currentScroll <= delta) {
+            widget.loadMore();
+          }
           if (notification.metrics.pixels > 70) {
             _controller.forward();
           } else if (notification.metrics.pixels < 70) {
@@ -94,7 +104,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                     CachedImageBgPlaceholder(
                       height: 364,
                       imageUrl: widget.comic.cover,
-                      cacheKey: 'details-${widget.comic.slug}',
+                      cacheKey: widget.comic.slug,
                       overrideBorderRadius: BorderRadius.circular(0),
                       foregroundDecoration: const BoxDecoration(
                         gradient: LinearGradient(
@@ -105,7 +115,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
-                          stops: [0.128, .6406, 1],
+                          stops: [0.0, .6406, 1],
                         ),
                       ),
                     ),
@@ -162,6 +172,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                             ),
                             TextWithViewMore(
                               text: widget.comic.description,
+                              maxLines: 2,
                               textAlign: TextAlign.start,
                             ),
                           ],
@@ -178,8 +189,12 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                     bottom: 4,
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GenreTagsDefault(genres: widget.comic.genres),
+                      GenreTagsDefault(
+                        genres: widget.comic.genres,
+                        withHorizontalScroll: true,
+                      ),
                       const SizedBox(
                         height: 16,
                       ),
@@ -243,7 +258,8 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
               children: [
                 StatsInfo(
                   title: 'VOLUME',
-                  stats: '${widget.comic.stats?.totalVolume}◎',
+                  stats:
+                      '${formatLamportPrice(widget.comic.stats?.totalVolume) ?? 0}◎',
                 ),
                 StatsInfo(
                   title: 'ISSUES',

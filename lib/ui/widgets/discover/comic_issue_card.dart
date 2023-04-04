@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -36,7 +37,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
               child: CachedImageBgPlaceholder(
                 imageUrl: issue.cover,
                 height: 145,
-                cacheKey: 'discover-${issue.slug}',
+                cacheKey: '${issue.id}',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,11 +105,14 @@ class DiscoverComicIssueCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'FLOOR',
+                            'PRICE',
                             style: textTheme.labelSmall,
                           ),
                           Text(
-                            '${formatPrice(issue.stats?.price ?? 0)}◎',
+                            issue.stats?.price != null &&
+                                    issue.stats!.price! > 0
+                                ? '${formatLamportPrice(issue.stats?.price ?? 0)}◎'
+                                : 'FREE',
                             style: textTheme.labelSmall?.copyWith(
                               color: ColorPalette.dReaderYellow100,
                             ),
@@ -123,7 +127,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                             style: textTheme.labelSmall,
                           ),
                           Text(
-                            '${issue.stats?.totalVolume.toStringAsFixed(1)}◎',
+                            '${formatLamportPrice(issue.stats?.totalVolume)}◎',
                             style: textTheme.labelSmall,
                           ),
                         ],
@@ -132,8 +136,9 @@ class DiscoverComicIssueCard extends StatelessWidget {
                         viewedCount: issue.stats?.viewersCount ?? 0,
                         isViewed: issue.myStats?.viewedAt != null,
                       ),
-                      issue.comic?.isMatureAudience != null &&
-                              issue.comic!.isMatureAudience
+                      issue.comic?.audienceType != null &&
+                              issue.comic!.audienceType ==
+                                  AudienceType.Mature.name
                           ? const MatureAudience()
                           : const SizedBox(
                               width: 22,

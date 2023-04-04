@@ -1,14 +1,16 @@
 class Receipt {
   final ReceiptNft nft;
   final ReceiptBuyer buyer;
-  final double price;
+  final int price;
   final String timestamp;
+  final String candyMachineAddress;
 
   Receipt({
     required this.nft,
     required this.buyer,
     required this.price,
     required this.timestamp,
+    required this.candyMachineAddress,
   });
 
   factory Receipt.fromJson(dynamic json) {
@@ -17,6 +19,7 @@ class Receipt {
       buyer: ReceiptBuyer.fromJson(json['buyer']),
       price: json['price'],
       timestamp: json['timestamp'],
+      candyMachineAddress: json['candyMachineAddress'],
     );
   }
 }

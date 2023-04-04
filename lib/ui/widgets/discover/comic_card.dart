@@ -35,7 +35,7 @@ class DiscoverComicCard extends StatelessWidget {
               flex: 4,
               child: CachedImageBgPlaceholder(
                 imageUrl: comic.cover,
-                cacheKey: 'discover-${comic.slug}',
+                cacheKey: comic.slug,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +54,7 @@ class DiscoverComicCard extends StatelessWidget {
               width: 16,
             ),
             Expanded(
-              flex: 8,
+              flex: 7,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class DiscoverComicCard extends StatelessWidget {
                             viewedCount: comic.stats?.viewersCount ?? 0,
                             isViewed: comic.myStats?.viewedAt != null,
                           ),
-                          comic.isMatureAudience
+                          comic.audienceType == AudienceType.Mature.name
                               ? const MatureAudience()
                               : const SizedBox(
                                   width: 22,

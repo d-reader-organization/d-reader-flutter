@@ -1,7 +1,7 @@
 class CandyMachineModel {
   String address;
   int supply, itemsMinted;
-  double baseMintPrice;
+  int baseMintPrice;
   String? endsAt;
 
   CandyMachineModel({

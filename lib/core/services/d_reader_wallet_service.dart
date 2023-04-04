@@ -39,10 +39,24 @@ class DReaderWalletService {
 
   Future<String?> listItem({
     required String mintAccount,
-    required double price,
+    required int price,
     String? printReceipt,
   }) async {
     return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().listItem(
         mintAccount: mintAccount, price: price, printReceipt: printReceipt);
+  }
+
+  Future<String?> delistItem({required String mint}) {
+    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+        .delistItem(mint: mint);
+  }
+
+  Future<String?> buyItem({
+    required String mint,
+    required int price,
+    required String sellerAddress,
+  }) {
+    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+        .buyItem(mint: mint, price: price, sellerAddress: sellerAddress);
   }
 }

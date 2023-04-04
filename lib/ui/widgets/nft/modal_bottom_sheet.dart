@@ -1,11 +1,13 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:solana/solana.dart' show lamportsPerSol;
 
 class NftModalBottomSheet extends ConsumerStatefulWidget {
   final NftModel nft;
@@ -101,15 +103,15 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
   }
 }
 
-double _safeParse(String input) => double.tryParse(input) ?? 0;
+double? _safeParse(String input) => double.tryParse(input);
 
 class SubmitButton extends HookConsumerWidget {
   final String mintAccount;
-  final double price;
+  final double? price;
   const SubmitButton({
     super.key,
     required this.mintAccount,
-    required this.price,
+    this.price,
   });
 
   @override
@@ -118,18 +120,21 @@ class SubmitButton extends HookConsumerWidget {
     return RoundedButton(
       text: 'Next',
       isLoading: globalHook.value.isLoading,
-      onPressed: () async {
-        globalHook.value = globalHook.value.copyWith(isLoading: true);
-        final response = await ref.read(solanaProvider.notifier).list(
-              mintAccount: mintAccount,
-              price: price,
-            );
-        globalHook.value = globalHook.value.copyWith(isLoading: false);
-        print('List response: $response');
-        if (context.mounted) {
-          Navigator.pop(context);
-        }
-      },
+      onPressed: price != null
+          ? () async {
+              globalHook.value = globalHook.value.copyWith(isLoading: true);
+              final response = await ref.read(solanaProvider.notifier).list(
+                    mintAccount: mintAccount,
+                    price: int.parse((price! * lamportsPerSol).toString()),
+                  );
+              globalHook.value = globalHook.value.copyWith(isLoading: false);
+              print('List response: $response');
+              if (context.mounted) {
+                ref.invalidate(nftProvider);
+                Navigator.pop(context);
+              }
+            }
+          : null,
       size: const Size(double.infinity, 50),
     );
   }

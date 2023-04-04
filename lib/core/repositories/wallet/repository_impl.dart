@@ -4,13 +4,12 @@ import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
-import 'package:d_reader_flutter/ioc.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
   @override
   Future<List<WalletAsset>> myAssets() async {
-    String? responseBody = await IoCContainer.resolveContainer<ApiService>()
-        .apiCallGet('/wallet/get/my-assets');
+    String? responseBody =
+        await ApiService.instance.apiCallGet('/wallet/get/my-assets');
     if (responseBody == null) {
       return [];
     }
@@ -25,8 +24,8 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<WalletModel?> myWallet() async {
-    String? responseBody = await IoCContainer.resolveContainer<ApiService>()
-        .apiCallGet('/wallet/get/me');
+    String? responseBody =
+        await ApiService.instance.apiCallGet('/wallet/get/me');
     return responseBody == null
         ? null
         : WalletModel.fromJson(jsonDecode(responseBody));
@@ -34,8 +33,7 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<WalletModel?> updateAvatar(UpdateWalletPayload payload) async {
-    String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>().apiMultipartRequest(
+    String? responseBody = await ApiService.instance.apiMultipartRequest(
       '/wallet/update/${payload.address}/avatar',
       payload,
     );
@@ -48,8 +46,7 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<WalletModel?> updateWallet(
     UpdateWalletPayload payload,
   ) async {
-    String? responseBody =
-        await IoCContainer.resolveContainer<ApiService>().apiCallPatch(
+    String? responseBody = await ApiService.instance.apiCallPatch(
       '/wallet/update/${payload.address}',
       {
         "label": payload.label,

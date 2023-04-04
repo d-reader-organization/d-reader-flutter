@@ -1,5 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/auth_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
@@ -26,6 +28,14 @@ void main() async {
             token,
           ),
         ),
+        solanaProvider.overrideWith(
+          (ref) => SolanaClientNotifier(
+            // temp fix
+            DReaderWalletService.instance,
+            sp.getString('wallet-auth'),
+            sp.getString('signature-bytes')?.codeUnits,
+          ),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -43,14 +53,15 @@ class MyApp extends ConsumerWidget {
       title: 'dReader',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-            systemOverlayStyle: SystemUiOverlayStyle(
-          systemNavigationBarColor: ColorPalette.appBackgroundColor,
-        )),
-        fontFamily: 'Urbanist',
+          systemOverlayStyle: SystemUiOverlayStyle(
+            systemNavigationBarColor: ColorPalette.appBackgroundColor,
+          ),
+        ),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
+        fontFamily: 'Urbanist',
         textTheme: const TextTheme(
           titleSmall: TextStyle(
             fontSize: 16,

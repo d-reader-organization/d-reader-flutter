@@ -19,6 +19,11 @@ class EReaderView extends ConsumerWidget {
       body: pagesProvider.when(
         data: (pages) {
           return InteractiveViewer(
+            minScale: 0.1, // Minimum scale allowed
+            maxScale: 10, // Maximum scale allowed
+            panEnabled: true,
+            scaleEnabled: true,
+            constrained: true,
             child: ListView.builder(
               itemCount: pages.length,
               itemBuilder: (context, index) {

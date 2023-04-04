@@ -12,7 +12,7 @@ class TextWithViewMore extends StatefulWidget {
     Key? key,
     required this.text,
     this.textAlign = TextAlign.start,
-    this.maxLines = 3,
+    this.maxLines = 2,
   }) : super(key: key);
 
   @override
@@ -29,36 +29,46 @@ class _TextWithViewMoreState extends State<TextWithViewMore> {
   @override
   Widget build(BuildContext context) {
     final int charactersLimit =
-        MediaQuery.of(context).size.width > 360 ? 165 : 140;
+        MediaQuery.of(context).size.width > 360 ? 80 : 70;
     return widget.text.length > charactersLimit
         ? Wrap(
             children: [
               RichText(
-                  textAlign: widget.textAlign,
-                  maxLines: isReadMore ? null : widget.maxLines,
-                  overflow:
-                      isReadMore ? TextOverflow.visible : TextOverflow.ellipsis,
-                  text: TextSpan(children: [
+                textAlign: widget.textAlign,
+                maxLines: isReadMore ? null : widget.maxLines,
+                overflow:
+                    isReadMore ? TextOverflow.visible : TextOverflow.ellipsis,
+                text: TextSpan(
+                  children: [
                     TextSpan(
                       text: isReadMore
                           ? widget.text
                           : widget.text
                               .substring(0, charactersLimit)
                               .padRight(charactersLimit + 3, '.'),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 18),
                     ),
                     TextSpan(
-                        text: isReadMore ? 'view less' : 'view more',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: ColorPalette.dReaderYellow100,
-                            ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            setState(() {
+                      text: isReadMore ? 'view less' : 'view more',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: ColorPalette.dReaderYellow100,
+                            fontSize: 16,
+                          ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          setState(
+                            () {
                               isReadMore = !isReadMore;
-                            });
-                          }),
-                  ])),
+                            },
+                          );
+                        },
+                    ),
+                  ],
+                ),
+              ),
             ],
           )
         : DescriptionText(

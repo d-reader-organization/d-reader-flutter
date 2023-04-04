@@ -1,12 +1,14 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/buy_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
@@ -38,7 +40,7 @@ class NftDetails extends ConsumerWidget {
 
     return provider.when(
       data: (nft) {
-        nft = NftModel.fromJson(
+        nft ??= NftModel.fromJson(
           {
             "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
             "uri":
@@ -50,7 +52,7 @@ class NftDetails extends ConsumerWidget {
                 'Fearless siblings come across a red hawk that has been injured. They work together to help nurse the hawk but...someone.....is knocking on the doors. Who was it? Is it Charlie?',
             "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
             "royalties": 8,
-            "isMintCondition": false,
+            "isUsed": false,
             "isSigned": false,
             "comicName": "Gorecats",
             "comicIssueName": "Rise of the Gorecats",
@@ -58,7 +60,8 @@ class NftDetails extends ConsumerWidget {
             "attributes": [
               {"trait": "used", "value": "false"},
               {"trait": "signed", "value": "false"}
-            ]
+            ],
+            "isListed": true,
           },
         );
 
@@ -137,67 +140,97 @@ class Body extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: ListView(
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const PageScrollPhysics(),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BuyButton(
-                backgroundColor: ColorPalette.dReaderGreen,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(
-                    8,
+              Expanded(
+                child: CustomTextButton(
+                  backgroundColor: ColorPalette.dReaderGreen,
+                  size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(
+                      8,
+                    ),
                   ),
-                ),
-                size: Size(MediaQuery.of(context).size.width / 2.4, 50),
-                child: Row(
-                  children: const [
-                    Icon(
-                      FontAwesomeIcons.glasses,
-                      size: 14,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      'Read',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        FontAwesomeIcons.glasses,
+                        size: 14,
                       ),
-                    )
-                  ],
-                ),
-                onPressed: () {
-                  nextScreenPush(
-                    context,
-                    EReaderView(
-                      issueId: nft.comicIssueId,
-                    ),
-                  );
-                },
-              ),
-              BuyButton(
-                size: Size(MediaQuery.of(context).size.width / 2.4, 50),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(
-                    8,
-                  ),
-                ),
-                child: const Text('List'),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'Read',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
                         ),
-                        child: NftModalBottomSheet(nft: nft),
-                      );
-                    },
+                      )
+                    ],
+                  ),
+                  onPressed: () {
+                    nextScreenPush(
+                      context,
+                      EReaderView(
+                        issueId: nft.comicIssueId,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  return Expanded(
+                    child: CustomTextButton(
+                      size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(
+                          8,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      isLoading: ref.watch(globalStateProvider).isLoading,
+                      child: nft.isListed
+                          ? const Text('Delist')
+                          : const Text('List'),
+                      onPressed: () async {
+                        if (nft.isListed) {
+                          ref.read(globalStateProvider.notifier).state =
+                              const GlobalState(isLoading: true);
+                          await ref
+                              .read(solanaProvider.notifier)
+                              .delist(mint: nft.address);
+                          ref.invalidate(nftProvider);
+                          ref.read(globalStateProvider.notifier).state =
+                              const GlobalState(isLoading: false);
+                          return;
+                        }
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: NftModalBottomSheet(nft: nft),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   );
                 },
               ),
@@ -219,8 +252,9 @@ class Body extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          nft.isMintCondition || nft.isSigned
+          !nft.isUsed || nft.isSigned
               ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Properties',
@@ -231,7 +265,7 @@ class Body extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        nft.isMintCondition
+                        !nft.isUsed
                             ? Container(
                                 padding: const EdgeInsets.all(8),
                                 margin: const EdgeInsets.only(right: 8),

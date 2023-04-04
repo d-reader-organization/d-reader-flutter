@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
-import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
@@ -32,12 +31,12 @@ class ComicCardLarge extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8),
             child: CachedImageBgPlaceholder(
               imageUrl: comic.cover,
-              cacheKey: 'large ${comic.slug}',
+              cacheKey: comic.slug,
               height: 330,
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    ColorPalette.appBackgroundColor,
+                    ColorPalette.boxBackground200,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
@@ -61,14 +60,28 @@ class ComicCardLarge extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        EpisodeCircle(
-                          text:
+                        Container(
+                          height: 28,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: comic.isCompleted
+                                ? const Color(0xFFC6E7C1)
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          child: Center(
+                            child: Text(
                               '${comic.stats?.issuesCount} EPs${comic.isCompleted ? ' - ENDED' : ''}',
-                          color: comic.isCompleted
-                              ? const Color(0xFFC6E7C1)
-                              : Colors.white,
-                          fontSize: 14,
-                          height: 32,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
                         ),
                         const HotIcon(),
                       ],

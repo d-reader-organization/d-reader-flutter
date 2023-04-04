@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
@@ -277,8 +278,13 @@ class Body extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(
-                                '${nft.royalties}%',
-                                style: Theme.of(context).textTheme.bodyMedium,
+                                '${formatPrice(nft.royalties)}%',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: ColorPalette.dReaderBlue,
+                                    ),
                               ),
                               const SizedBox(
                                 width: 4,

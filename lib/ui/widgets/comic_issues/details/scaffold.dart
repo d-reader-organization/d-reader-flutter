@@ -121,15 +121,40 @@ class _ComicIssueDetailsScaffoldState
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          Text(
+                            widget.issue.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: textTheme.headlineLarge,
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                'EPISODE',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'EP',
+                                    style: textTheme.headlineLarge,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${widget.issue.number}',
+                                        style: textTheme.headlineLarge,
+                                      ),
+                                      Text(
+                                        '/${widget.issue.stats?.totalIssuesCount}',
+                                        style: textTheme.headlineLarge,
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                               Row(
                                 children: [
@@ -166,37 +191,6 @@ class _ComicIssueDetailsScaffoldState
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '${widget.issue.number}',
-                                    style: textTheme.headlineLarge,
-                                  ),
-                                  Text(
-                                    '/${widget.issue.stats?.totalIssuesCount}',
-                                    style: textTheme.headlineLarge,
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 24.0),
-                                    child: Text(
-                                      widget.issue.title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headlineLarge,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(),
                             ],
                           ),
                           const SizedBox(

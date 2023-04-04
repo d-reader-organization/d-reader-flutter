@@ -16,6 +16,7 @@ abstract class ColorPalette {
   static const Color dReaderRed = Color(0xFFE3635B);
   static const Color dReaderGreen = Color(0xFF07BD74);
   static const Color dReaderOrange = Color(0xFFE9A860);
+  static const Color dReaderBlue = Color(0xFF0079BF);
 
   static const Color someGreyColor = Color(0xFFB9B9B9);
 }

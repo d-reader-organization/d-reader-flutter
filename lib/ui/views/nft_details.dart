@@ -265,6 +265,31 @@ class Body extends StatelessWidget {
                     ),
                     Row(
                       children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: ColorPalette.dReaderBlue,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                '${nft.royalties}%',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                'royalty',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
                         !nft.isUsed
                             ? Container(
                                 padding: const EdgeInsets.all(8),
@@ -278,11 +303,17 @@ class Body extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/icons/mint_icon.svg'),
+                                      'assets/icons/mint_icon.svg',
+                                      height: 16,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
                                     Text(
                                       'Mint',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                   ],
                                 ),
@@ -301,11 +332,17 @@ class Body extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/icons/signed_icon.svg'),
+                                      'assets/icons/signed_icon.svg',
+                                      height: 16,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
                                     Text(
                                       'Signed',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                   ],
                                 ),

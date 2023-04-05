@@ -5,7 +5,6 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/app_bar_without_logo.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/logout_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';

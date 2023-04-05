@@ -70,15 +70,14 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                   ),
                 ),
               ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset('assets/icons/profile.svg'),
+              const BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.settings,
+                ),
                 label: 'Settings',
-                activeIcon: SvgPicture.asset(
-                  'assets/icons/profile_bold.svg',
-                  colorFilter: const ColorFilter.mode(
-                    ColorPalette.dReaderYellow100,
-                    BlendMode.srcIn,
-                  ),
+                activeIcon: Icon(
+                  Icons.settings,
+                  color: ColorPalette.dReaderYellow100,
                 ),
               ),
             ],

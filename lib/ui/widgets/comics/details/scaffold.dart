@@ -85,10 +85,6 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
             animation: _animation,
             actions: const [
               NotificationBadge(),
-              SizedBox(
-                width: 8,
-              ),
-              LogoutButton(),
             ],
           ),
         ),

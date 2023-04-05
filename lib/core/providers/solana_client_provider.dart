@@ -206,7 +206,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       final messageToBeSigned = Uint8List.fromList(utf8.encode(message));
       try {
         final result = await client.signMessages(
-            messages: [messageToBeSigned], addresses: [addresses]);
+          messages: [messageToBeSigned],
+          addresses: [addresses],
+        );
         return result.signedPayloads;
       } catch (e) {
         print('Error - Sign message:  ${e.toString()}');

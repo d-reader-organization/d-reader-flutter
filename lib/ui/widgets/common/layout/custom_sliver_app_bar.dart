@@ -30,10 +30,6 @@ class CustomSliverAppBar extends StatelessWidget {
         shadowColor: Colors.transparent,
         actions: const [
           NotificationBadge(),
-          SizedBox(
-            width: 8,
-          ),
-          LogoutButton(),
         ],
       ),
     );

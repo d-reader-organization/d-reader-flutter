@@ -23,11 +23,10 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 2),
           child: BottomNavigationBar(
             onTap: (value) {
-              ref.read(scaffoldProvider.notifier).setNavigationIndex(value);
               ref.read(scaffoldPageController).animateToPage(
                     value,
                     curve: Curves.easeIn,
-                    duration: const Duration(milliseconds: 250),
+                    duration: const Duration(milliseconds: 5),
                   );
             },
             currentIndex: ref.watch(scaffoldProvider).navigationIndex,
@@ -73,7 +72,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               ),
               BottomNavigationBarItem(
                 icon: SvgPicture.asset('assets/icons/profile.svg'),
-                label: 'Profile',
+                label: 'Settings',
                 activeIcon: SvgPicture.asset(
                   'assets/icons/profile_bold.svg',
                   colorFilter: const ColorFilter.mode(

@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
+import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/container.dart';
 import 'package:flutter/material.dart';
 
@@ -41,9 +42,28 @@ class SettingsRootView extends StatelessWidget {
             height: 8,
           ),
           SettingsContainer(
+            onPressed: () {
+              nextScreenPush(context, const ChangeNetworkView());
+            },
             leftWidget: Text(
               'Change Network',
-              style: textStyle.copyWith(color: Colors.grey),
+              style: textStyle,
+            ),
+            rightWidget: Row(
+              children: const [
+                Text(
+                  'Mainnet',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_right,
+                  color: Colors.white,
+                ),
+              ],
             ),
           ),
           const SizedBox(

@@ -72,7 +72,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               ),
               const BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.settings,
+                  Icons.settings_outlined,
                 ),
                 label: 'Settings',
                 activeIcon: Icon(

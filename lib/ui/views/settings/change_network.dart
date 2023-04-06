@@ -10,66 +10,40 @@ class ChangeNetworkView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SettingsScaffold(
       body: Column(
-        children: [
+        children: const [
           SettingsContainer(
-            leftWidget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Mainnet',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  'Main dReader Network',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+            leftWidget: Text(
+              'Mainnet',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            rightWidget: const Icon(
+            rightWidget: Icon(
               Icons.check_circle,
               color: ColorPalette.dReaderYellow100,
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 2,
           ),
           SettingsContainer(
-            leftWidget: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Devnet',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  'Dev dReader Network',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+            leftWidget: Text(
+              'Devnet',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            rightWidget: const Icon(
+            rightWidget: Icon(
               Icons.check_circle,
               color: ColorPalette.boxBackground400,
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 2,
           ),
-          const SettingsContainer(
+          SettingsContainer(
             leftWidget: Text(
               'Testnet',
               style: TextStyle(

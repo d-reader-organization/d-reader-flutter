@@ -2,10 +2,7 @@ import 'dart:io' show File;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
-import 'package:d_reader_flutter/core/providers/auth_provider.dart';
-import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
+import 'package:d_reader_flutter/core/providers/logout_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
@@ -120,11 +117,7 @@ class ProfileView extends ConsumerWidget {
                 ),
                 SettingsContainer(
                   onPressed: () async {
-                    await ref.read(solanaProvider.notifier).deauthorize();
-                    await ref.read(authProvider.notifier).clearToken();
-                    ref.invalidate(tabBarProvider);
-                    ref.invalidate(scaffoldProvider);
-                    ref.invalidate(myWalletProvider);
+                    await ref.read(logoutProvider.future);
                     if (context.mounted) {
                       nextScreenCloseOthers(context, const WelcomeView());
                     }

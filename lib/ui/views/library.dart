@@ -105,7 +105,6 @@ class LibraryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(walletAssetsProvider);
-
     return RefreshIndicator(
       onRefresh: () async {
         ref.invalidate(walletAssetsProvider);

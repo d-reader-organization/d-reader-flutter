@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static final String apiUrl = Config.apiUrl;
+  static const String apiUrl = Config.devApiUrl;
   String? _token;
 
   static ApiService get instance => IoCContainer.resolveContainer<ApiService>();

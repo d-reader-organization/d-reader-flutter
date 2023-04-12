@@ -21,7 +21,7 @@ class ChangeNetworkView extends StatelessWidget {
             ),
             rightWidget: Icon(
               Icons.check_circle,
-              color: ColorPalette.dReaderYellow100,
+              color: ColorPalette.boxBackground400,
             ),
           ),
           SizedBox(
@@ -37,7 +37,7 @@ class ChangeNetworkView extends StatelessWidget {
             ),
             rightWidget: Icon(
               Icons.check_circle,
-              color: ColorPalette.boxBackground400,
+              color: ColorPalette.dReaderYellow100,
             ),
           ),
           SizedBox(

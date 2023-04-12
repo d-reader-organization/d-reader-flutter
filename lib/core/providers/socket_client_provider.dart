@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -16,7 +16,7 @@ class SocketState {
 
 final socketProvider = StateProvider<SocketState>((ref) {
   Socket socket = io(
-    Config.apiUrl,
+    ref.read(environmentProvider).apiUrl,
     OptionBuilder().setTransports(['websocket']).disableAutoConnect().build(),
   );
   ref.onDispose(() {

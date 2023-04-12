@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
@@ -8,18 +9,16 @@ import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  await dotenv.load(fileName: '.env');
+  WidgetsFlutterBinding.ensureInitialized();
   final sp = await SharedPreferences.getInstance();
   final String? token = sp.getString(Config.tokenKey);
   IoCContainer.register();
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ProviderScope(
       overrides: [
@@ -32,8 +31,8 @@ void main() async {
           (ref) => SolanaClientNotifier(
             // temp fix
             DReaderWalletService.instance,
-            sp.getString('wallet-auth'),
             sp.getString('signature-bytes')?.codeUnits,
+            ref,
           ),
         ),
       ],
@@ -125,7 +124,8 @@ class MyApp extends ConsumerWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      home: ref.watch(authProvider).isAuthorized
+      home: ref.watch(environmentProvider).authToken != null &&
+              ref.watch(environmentProvider).jwtToken != null
           ? const DReaderScaffold()
           : const WelcomeView(),
     );

@@ -1,11 +1,21 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+extension SolanaClusterValue on SolanaCluster {
+  static const clusterValues = {
+    SolanaCluster.devnet: 'devnet',
+    SolanaCluster.mainnet: 'mainnet-beta'
+  };
+
+  String get value => clusterValues[this] ?? 'mainnet-beta';
+}
+
+enum SolanaCluster {
+  devnet,
+  mainnet,
+}
 
 abstract class Config {
-  static final apiUrl = dotenv.get('API_URL',
-      fallback:
-          'https://d-reader-backend-dev.herokuapp.com'); //'http://10.0.2.2:3005'
-  static final String solanaCluster =
-      dotenv.get('solanaCluster', fallback: 'devnet');
+  static const devApiUrl =
+      'https://d-reader-backend-dev.herokuapp.com'; //'http://10.0.2.2:3005'
+  static const prodApiUrl = 'https://d-reader-backend.herokuapp.com';
   static const String logoTextPath = 'assets/images/logo-white-yellow.svg';
   static const String logoTextBlackPath =
       'assets/images/d_reader_logo_text_black.png';

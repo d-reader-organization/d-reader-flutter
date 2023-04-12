@@ -1,58 +1,48 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/container.dart';
+import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/providers/selected_network_provider.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/network_list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ChangeNetworkView extends StatelessWidget {
+class ChangeNetworkView extends ConsumerWidget {
   const ChangeNetworkView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String selectedNetwork = ref.watch(selectedNetworkProvider);
     return SettingsScaffold(
       body: Column(
-        children: const [
-          SettingsContainer(
-            leftWidget: Text(
-              'Mainnet',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            rightWidget: Icon(
-              Icons.check_circle,
-              color: ColorPalette.boxBackground400,
-            ),
+        children: [
+          NetworkListTile(
+            title: 'Mainnet-beta',
+            isSelected: selectedNetwork == SolanaCluster.mainnet.value,
+            onTap: () {
+              if (selectedNetwork != SolanaCluster.mainnet.value) {
+                ref.read(selectedNetworkProvider.notifier).state =
+                    SolanaCluster.mainnet.value;
+              }
+            },
           ),
-          SizedBox(
+          const SizedBox(
             height: 2,
           ),
-          SettingsContainer(
-            leftWidget: Text(
-              'Devnet',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            rightWidget: Icon(
-              Icons.check_circle,
-              color: ColorPalette.dReaderYellow100,
-            ),
+          NetworkListTile(
+            title: 'Devnet',
+            isSelected: selectedNetwork == SolanaCluster.devnet.value,
+            onTap: () {
+              if (selectedNetwork != SolanaCluster.devnet.value) {
+                ref.read(selectedNetworkProvider.notifier).state =
+                    SolanaCluster.devnet.value;
+              }
+            },
           ),
-          SizedBox(
+          const SizedBox(
             height: 2,
           ),
-          SettingsContainer(
-            leftWidget: Text(
-              'Testnet',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey,
-              ),
-            ),
-            rightWidget: SizedBox(),
+          const NetworkListTile(
+            title: 'Testnet',
+            isSelected: false,
           ),
         ],
       ),

@@ -1,9 +1,12 @@
+import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
 import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/container.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsRootView extends StatelessWidget {
   const SettingsRootView({super.key});
@@ -49,21 +52,30 @@ class SettingsRootView extends StatelessWidget {
               'Change Network',
               style: textStyle,
             ),
-            rightWidget: Row(
-              children: const [
-                Text(
-                  'Mainnet',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_right,
-                  color: Colors.white,
-                ),
-              ],
+            rightWidget: Consumer(
+              builder: (context, ref, child) {
+                final clusterText =
+                    ref.watch(environmentProvider).solanaCluster ==
+                            SolanaCluster.mainnet.value
+                        ? 'Mainnet'
+                        : 'Devnet';
+                return Row(
+                  children: [
+                    Text(
+                      clusterText,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.arrow_right,
+                      color: Colors.white,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           const SizedBox(

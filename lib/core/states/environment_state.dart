@@ -1,35 +1,35 @@
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
 class EnvironmentState {
-  final String apiUrl, selectedNetwork, solanaCluster;
-  final String? authToken, jwtToken, refreshToken;
+  final String solanaCluster;
+  final String? authToken, jwtToken, refreshToken, signature;
   Ed25519HDPublicKey? publicKey;
 
   EnvironmentState({
-    required this.apiUrl,
     required this.solanaCluster,
-    required this.selectedNetwork,
     this.authToken,
     this.jwtToken,
     this.refreshToken,
     this.publicKey,
+    this.signature,
   });
 
   EnvironmentState copyWith({
     String? authToken,
     String? jwtToken,
     String? refreshToken,
-    String? apiUrl,
     String? solanaCluster,
-    String? selectedNetwork,
+    List<int>? signature,
+    Ed25519HDPublicKey? publicKey,
   }) {
     return EnvironmentState(
       authToken: authToken ?? this.authToken,
       jwtToken: jwtToken ?? this.jwtToken,
       refreshToken: refreshToken ?? this.refreshToken,
-      apiUrl: apiUrl ?? this.apiUrl,
       solanaCluster: solanaCluster ?? this.solanaCluster,
-      selectedNetwork: selectedNetwork ?? this.selectedNetwork,
+      publicKey: publicKey ?? this.publicKey,
+      signature:
+          signature != null ? String.fromCharCodes(signature) : this.signature,
     );
   }
 
@@ -38,30 +38,25 @@ class EnvironmentState {
     data['authToken'] = authToken;
     data['jwtToken'] = jwtToken;
     data['refreshToken'] = refreshToken;
-    data['apiUrl'] = apiUrl;
     data['solanaCluster'] = solanaCluster;
-    data['selectedNetwork'] = selectedNetwork;
+    data['publicKey'] = publicKey?.toBase58();
+    data['signature'] = signature;
 
     return data;
   }
 }
 
 class EnvironmentStateUpdateInput {
-  final String? authToken,
-      apiUrl,
-      jwtToken,
-      refreshToken,
-      selectedNetwork,
-      solanaCluster;
+  final String? authToken, jwtToken, refreshToken, solanaCluster;
   final Ed25519HDPublicKey? publicKey;
+  final List<int>? signature;
 
   EnvironmentStateUpdateInput({
     this.authToken,
     this.jwtToken,
     this.refreshToken,
-    this.apiUrl,
     this.solanaCluster,
-    this.selectedNetwork,
     this.publicKey,
+    this.signature,
   });
 }

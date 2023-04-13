@@ -14,7 +14,7 @@ import 'package:solana_mobile_client/solana_mobile_client.dart';
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
   (ref) {
-    return SolanaClientNotifier(DReaderWalletService.instance, null, ref);
+    return SolanaClientNotifier(DReaderWalletService.instance, ref);
   },
 );
 
@@ -48,53 +48,55 @@ AuthorizationResult? authResultFromDynamic(String? json) {
 
 class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   late DReaderWalletService _walletService;
-  Signature? _signature;
   final StateNotifierProviderRef ref;
 
   SolanaClientNotifier(
     DReaderWalletService walletService,
-    List<int>? signatureBytes,
     this.ref,
   ) : super(
           const SolanaClientState(),
         ) {
     _walletService = walletService;
-    if (signatureBytes != null &&
-        ref.read(environmentProvider).publicKey != null) {
-      _signature = Signature(
-        signatureBytes,
-        publicKey: ref.read(environmentProvider).publicKey!,
-      );
-    }
   }
 
-  Future<bool> authorizeAndSignMessage() async {
+  Future<bool> authorizeAndSignMessage([String? overrideCluster]) async {
     final session = await _getSession();
     final client = await session.start();
     final result = await client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
-      cluster: ref.read(environmentProvider).solanaCluster,
+      cluster: overrideCluster ?? ref.read(environmentProvider).solanaCluster,
     );
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
-          EnvironmentStateUpdateInput(
-            authToken: result?.authToken,
-            publicKey: publicKey,
-          ),
-        );
+    final envNotifier = ref.read(environmentProvider.notifier);
+    final previousAuthToken = ref.read(environmentProvider).authToken;
+    envNotifier.updateEnvironmentState(
+      EnvironmentStateUpdateInput(
+        authToken: result?.authToken,
+      ),
+    );
 
     final signMessageResult = await _signMessage(client, publicKey);
-    _signature = Signature(
-      signMessageResult.first.sublist(0, 64),
-      publicKey: publicKey,
-    );
-    _storeSignature(_signature?.bytes);
-    await session.close();
-
     if (signMessageResult.isEmpty) {
+      envNotifier.updateEnvironmentState(
+        EnvironmentStateUpdateInput(
+          authToken: previousAuthToken,
+        ),
+      );
       return false;
     }
+    envNotifier.updateEnvironmentState(
+      EnvironmentStateUpdateInput(
+        publicKey: publicKey,
+        solanaCluster:
+            overrideCluster ?? ref.read(environmentProvider).solanaCluster,
+        signature: Signature(
+          signMessageResult.first.sublist(0, 64),
+          publicKey: publicKey,
+        ).bytes,
+      ),
+    );
+    await session.close();
 
     await _getAndStoreToken(signMessageResult.first, publicKey);
     return true;
@@ -182,9 +184,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
     final session = await _getSession();
     final client = await session.start();
+    final signature = _getSignature();
 
-    if (await _doReauthorize(client)) {
-      final finalTransaction = decodedTX.resign(_signature!);
+    if (await _doReauthorize(client) && signature != null) {
+      final finalTransaction = decodedTX.resign(signature);
       try {
         final response = await client.signAndSendTransactions(
           transactions: [
@@ -201,6 +204,14 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
     await session.close();
     return true;
+  }
+
+  Signature? _getSignature() {
+    final envState = ref.read(environmentProvider);
+    return envState.signature != null && envState.publicKey != null
+        ? Signature(envState.signature?.codeUnits ?? [],
+            publicKey: envState.publicKey!)
+        : null;
   }
 
   Future<List<Uint8List>> _signMessage(
@@ -247,13 +258,5 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final session = await LocalAssociationScenario.create();
     session.startActivityForResult(null).ignore();
     return session;
-  }
-
-  _storeSignature(List<int>? bytes) async {
-    final sp = await SharedPreferences.getInstance();
-    sp.setString(
-      'signature-bytes',
-      String.fromCharCodes(bytes ?? []),
-    );
   }
 }

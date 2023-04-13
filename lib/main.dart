@@ -29,9 +29,7 @@ void main() async {
         ),
         solanaProvider.overrideWith(
           (ref) => SolanaClientNotifier(
-            // temp fix
             DReaderWalletService.instance,
-            sp.getString('signature-bytes')?.codeUnits,
             ref,
           ),
         ),

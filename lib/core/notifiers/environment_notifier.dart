@@ -1,16 +1,48 @@
-import 'dart:convert';
+import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:solana/solana.dart';
+
+final environmentChangeProvider =
+    FutureProvider.autoDispose.family<bool, String>((ref, cluster) async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  final envNotifier = ref.read(environmentProvider.notifier);
+
+  bool isMainCluster = cluster == SolanaCluster.mainnet.value;
+  String? sharedPrefData = sharedPreferences
+      .getString(isMainCluster ? 'prod-network' : 'dev-network');
+
+  if (sharedPrefData != null) {
+    var networkData = jsonDecode(sharedPrefData);
+    final String? signature = networkData['signature'];
+    envNotifier.updateLastSelectedNetwork(cluster);
+    envNotifier.updateEnvironmentState(
+      EnvironmentStateUpdateInput(
+        authToken: networkData['authToken'],
+        jwtToken: networkData['jwtToken'],
+        refreshToken: networkData['refreshToken'],
+        publicKey: Ed25519HDPublicKey.fromBase58(networkData['publicKey']),
+        solanaCluster: cluster,
+        signature: signature?.codeUnits,
+      ),
+    );
+  } else {
+    final response = await ref
+        .read(solanaProvider.notifier)
+        .authorizeAndSignMessage(cluster);
+    return response;
+  }
+  return true;
+});
 
 final environmentProvider =
     StateNotifierProvider<EnvironmentNotifier, EnvironmentState>((ref) {
   return EnvironmentNotifier(
     EnvironmentState(
-      apiUrl: Config.prodApiUrl,
-      selectedNetwork: 'mainnet-beta',
       solanaCluster: SolanaCluster.mainnet.value,
     ),
   )..init();
@@ -22,71 +54,62 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
 
   void init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
-
     String selectedNetwork = _sharedPreferences?.getString(
-          'selected-network',
+          'last-network',
         ) ??
         SolanaCluster.mainnet.value;
 
-    if (selectedNetwork == SolanaCluster.devnet.value) {
-      var devNetwork = jsonDecode(
-        _sharedPreferences?.getString('dev-network') ?? '{}',
+    String? sharedPrefData = _sharedPreferences?.getString(
+      selectedNetwork == SolanaCluster.mainnet.value
+          ? 'prod-network'
+          : 'dev-network',
+    );
+
+    if (sharedPrefData != null) {
+      var networkData = jsonDecode(sharedPrefData);
+      final String? signature = networkData['signature'];
+      state = state.copyWith(
+        authToken: networkData['authToken'],
+        jwtToken: networkData['jwtToken'],
+        refreshToken: networkData['refreshToken'],
+        publicKey: Ed25519HDPublicKey.fromBase58(networkData['publicKey']),
+        solanaCluster: selectedNetwork,
+        signature: signature?.codeUnits,
       );
-      if (devNetwork != null) {
-        state = state.copyWith(
-          apiUrl: Config.devApiUrl,
-          authToken: devNetwork['authToken'],
-          jwtToken: devNetwork['jwtToken'],
-          refreshToken: devNetwork['refreshToken'],
-          solanaCluster: SolanaCluster.devnet.value,
-        );
-      }
-    } else {
-      var prodNetwork = jsonDecode(
-        _sharedPreferences?.getString('prod-network') ?? '{}',
-      );
-      if (prodNetwork != null) {
-        state = state.copyWith(
-          apiUrl: Config.prodApiUrl,
-          authToken: prodNetwork['authToken'],
-          jwtToken: prodNetwork['jwtToken'],
-          refreshToken: prodNetwork['refreshToken'],
-          solanaCluster: SolanaCluster.mainnet.value,
-        );
-      }
     }
   }
 
   void updateEnvironmentState(EnvironmentStateUpdateInput input) {
     state = state.copyWith(
       authToken: input.authToken,
-      apiUrl: input.apiUrl,
       jwtToken: input.jwtToken,
       refreshToken: input.refreshToken,
       solanaCluster: input.solanaCluster,
+      publicKey: input.publicKey,
+      signature: input.signature,
     );
-
+    final bool isDevnet = input.solanaCluster == SolanaCluster.devnet.value ||
+        state.solanaCluster == SolanaCluster.devnet.value;
     _sharedPreferences?.setString(
-      input.solanaCluster == SolanaCluster.devnet.value
-          ? 'dev-network'
-          : 'prod-network',
+      isDevnet ? 'dev-network' : 'prod-network',
       jsonEncode(
         state.toJson(),
       ),
     );
+
     if (input.jwtToken != null) {
       _sharedPreferences?.setString(Config.tokenKey, input.jwtToken ?? '');
     }
   }
 
-  void updateSelectedNetwork(String selectedNetwork) {
-    _sharedPreferences?.setString('selected-network', selectedNetwork);
-    state = state.copyWith(selectedNetwork: selectedNetwork);
+  void updateLastSelectedNetwork(String selectedNetwork) {
+    _sharedPreferences?.setString('last-network', selectedNetwork);
   }
 
   Future<bool> clearDataFromSharedPref() async {
     _sharedPreferences ??= await SharedPreferences.getInstance();
     _sharedPreferences?.remove(Config.tokenKey);
+
     return await _sharedPreferences?.remove(
           state.solanaCluster == SolanaCluster.devnet.value
               ? 'dev-network'

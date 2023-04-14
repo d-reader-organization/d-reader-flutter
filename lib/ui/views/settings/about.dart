@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/container.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class AboutView extends StatelessWidget {
             width: 64,
           ),
           const SizedBox(
-            height: 4,
+            height: 12,
           ),
           const Text(
             'dReader',
@@ -37,10 +38,10 @@ class AboutView extends StatelessWidget {
             height: 4,
           ),
           const Text(
-            'Version 1.0.0',
+            'Version 1.0',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.grey,
+              color: ColorPalette.greyscale100,
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
@@ -48,54 +49,21 @@ class AboutView extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          const SettingsContainer(
-            leftWidget: Text(
-              'Help & Support',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey,
-              ),
-            ),
+          const Divider(
+            thickness: 1,
+            color: Color(0xFF35383F),
           ),
-          const SizedBox(
-            height: 8,
+          const SettingsCommonListTile(
+            title: 'Help Center',
+            leadingPath: '${Config.settingsAssetsPath}/light/info_square.svg',
           ),
-          const SettingsContainer(
-            leftWidget: Text(
-              'Terms of Service',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey,
-              ),
-            ),
+          const SettingsCommonListTile(
+            title: 'Privacy Policy',
+            leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          const SettingsContainer(
-            leftWidget: Text(
-              'Privacy Policy',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          const SettingsContainer(
-            leftWidget: Text(
-              'Report an issue',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey,
-              ),
-            ),
+          const SettingsCommonListTile(
+            title: 'Terms of Services',
+            leadingPath: '${Config.settingsAssetsPath}/light/password.svg',
           ),
         ],
       ),

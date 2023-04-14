@@ -1,12 +1,10 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
 import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/container.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsRootView extends StatelessWidget {
   const SettingsRootView({super.key});
@@ -19,96 +17,51 @@ class SettingsRootView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SettingsContainer(
-            onPressed: () {
-              nextScreenPush(context, const ProfileView());
-            },
-            leftWidget: Text(
-              'Wallet',
-              style: textStyle,
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          SettingsContainer(
-            leftWidget: Text(
-              'Address Book',
-              style: textStyle.copyWith(color: Colors.grey),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          SettingsContainer(
-            onPressed: () {
-              nextScreenPush(context, const ChangeNetworkView());
-            },
-            leftWidget: Text(
-              'Change Network',
-              style: textStyle,
-            ),
-            rightWidget: Consumer(
-              builder: (context, ref, child) {
-                final clusterText =
-                    ref.watch(environmentProvider).solanaCluster ==
-                            SolanaCluster.mainnet.value
-                        ? 'Mainnet'
-                        : 'Devnet';
-                return Row(
-                  children: [
-                    Text(
-                      clusterText,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Icon(
-                      Icons.arrow_right,
-                      color: Colors.white,
-                    ),
-                  ],
-                );
+      padding: const EdgeInsets.only(right: 8, bottom: 4),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
+              title: 'Wallet',
+              onTap: () {
+                nextScreenPush(context, const ProfileView());
               },
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          SettingsContainer(
-            leftWidget: Text(
-              'Redeem referral code',
-              style: textStyle.copyWith(color: Colors.grey),
+            const SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/document.svg',
+              title: 'Address Book',
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          SettingsContainer(
-            leftWidget: Text(
-              'Notifications',
-              style: textStyle.copyWith(color: Colors.grey),
+            const SettingsCommonListTile(
+              leadingPath:
+                  '${Config.settingsAssetsPath}/light/notification.svg',
+              title: 'Notifications',
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          SettingsContainer(
-            onPressed: () {
-              nextScreenPush(context, const AboutView());
-            },
-            leftWidget: Text(
-              'About dReader',
-              style: textStyle,
+            const SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
+              title: 'Security & Privacy',
             ),
-          ),
-        ],
+            const SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/3_user.svg',
+              title: 'Referrals',
+            ),
+            SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/network.svg',
+              title: 'Change Network',
+              onTap: () {
+                nextScreenPush(context, const ChangeNetworkView());
+              },
+            ),
+            SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/bun_bun.svg',
+              title: 'About dReader',
+              onTap: () {
+                nextScreenPush(context, const AboutView());
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

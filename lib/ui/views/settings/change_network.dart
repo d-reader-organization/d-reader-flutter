@@ -70,7 +70,7 @@ class ChangeNetworkView extends ConsumerWidget {
             },
           ),
           const SizedBox(
-            height: 2,
+            height: 4,
           ),
           NetworkListTile(
             title: 'Devnet',
@@ -111,7 +111,7 @@ class ChangeNetworkView extends ConsumerWidget {
             },
           ),
           const SizedBox(
-            height: 2,
+            height: 4,
           ),
           const NetworkListTile(
             title: 'Testnet',

@@ -29,4 +29,5 @@ abstract class Config {
   static const String creatorSvg = 'assets/images/creator_header.svg';
   static const String tokenKey = 'dReader-token';
   static const String successAuthAsset = 'assets/animation_files/done.json';
+  static const String settingsAssetsPath = 'assets/icons/settings_screen/';
 }

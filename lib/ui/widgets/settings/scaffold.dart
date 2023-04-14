@@ -15,6 +15,7 @@ class SettingsScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       appBar: AppBar(
+        shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         title: Text(
           appBarTitle,

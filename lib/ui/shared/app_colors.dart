@@ -19,4 +19,6 @@ abstract class ColorPalette {
   static const Color dReaderBlue = Color(0xFF0079BF);
 
   static const Color someGreyColor = Color(0xFFB9B9B9);
+  static const Color greyscale100 = Color(0xFFC2C5CE);
+  static const Color greyscale200 = Color(0xFF777D8C);
 }

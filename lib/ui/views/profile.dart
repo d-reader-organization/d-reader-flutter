@@ -3,9 +3,12 @@ import 'dart:io' show File;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -29,29 +32,86 @@ class ProfileView extends ConsumerWidget {
     final provider = ref.watch(myWalletProvider);
     return SettingsScaffold(
       appBarTitle: 'Edit Wallet',
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: CustomTextButton(
-                onPressed: () {},
-                borderRadius: BorderRadius.circular(8),
-                backgroundColor: Colors.transparent,
-                textColor: const Color(0xFFEBEDF3),
-                borderColor: const Color(0xFFEBEDF3),
-                child: const Text('Cancel'),
+      bottomNavigationBar: Consumer(
+        builder: (context, ref, child) {
+          final String walletName = ref.watch(walletNameProvider);
+          return AnimatedOpacity(
+            opacity: walletName.isNotEmpty &&
+                    walletName.trim() != provider.value?.label
+                ? 1.0
+                : 0.0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomTextButton(
+                      size: const Size(double.infinity, 40),
+                      onPressed: () {
+                        final String walletName = ref.read(walletNameProvider);
+                        if (walletName.isNotEmpty) {
+                          ref.read(walletNameProvider.notifier).state = '';
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      backgroundColor: Colors.transparent,
+                      textColor: const Color(0xFFEBEDF3),
+                      borderColor: const Color(0xFFEBEDF3),
+                      child: const Text('Cancel'),
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomTextButton(
+                      isLoading: ref.watch(globalStateProvider).isLoading,
+                      size: const Size(double.infinity, 40),
+                      onPressed: () async {
+                        final String walletName = ref.read(walletNameProvider);
+                        if (walletName.isNotEmpty) {
+                          final notifier =
+                              ref.read(globalStateProvider.notifier);
+                          notifier.update(
+                            (state) => state.copyWith(
+                              isLoading: true,
+                            ),
+                          );
+                          await ref.read(
+                            updateWalletProvider(
+                              UpdateWalletPayload(
+                                address: provider.value?.address ?? '',
+                                label: walletName,
+                              ),
+                            ).future,
+                          );
+                          notifier.update(
+                            (state) => state.copyWith(
+                              isLoading: false,
+                            ),
+                          );
+                          ref
+                              .read(walletNameProvider.notifier)
+                              .update((state) => '');
+                          ref.invalidate(myWalletProvider);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Your wallet has been updated.'),
+                                duration: Duration(milliseconds: 500),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: const Text('Save'),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: CustomTextButton(
-                onPressed: () {},
-                borderRadius: BorderRadius.circular(8),
-                child: const Text('Save'),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
       body: provider.when(
         data: (wallet) {
@@ -90,15 +150,24 @@ class ProfileView extends ConsumerWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  const SettingsTextField(
-                    labelText: 'Account name',
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return SettingsTextField(
+                        labelText: 'Account name',
+                        defaultValue:
+                            wallet.label.isNotEmpty ? wallet.label : null,
+                        onChange: (String value) {
+                          ref.read(walletNameProvider.notifier).state = value;
+                        },
+                      );
+                    },
                   ),
                   const SizedBox(
                     height: 24,
                   ),
                   SettingsTextField(
                     labelText: 'Wallet address',
-                    defaultValue: wallet.address,
+                    defaultValue: formatAddress(wallet.address, 4),
                     isReadOnly: true,
                     suffix: SvgPicture.asset(
                       '${Config.settingsAssetsPath}/bold/copy.svg',

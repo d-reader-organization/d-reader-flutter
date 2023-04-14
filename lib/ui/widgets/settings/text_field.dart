@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:flutter/material.dart';
 
 class SettingsTextField extends StatelessWidget {
@@ -8,6 +7,7 @@ class SettingsTextField extends StatelessWidget {
   final bool isReadOnly;
   final Widget? suffix;
   final Function()? onTap;
+  final Function(String value)? onChange;
 
   const SettingsTextField({
     super.key,
@@ -16,6 +16,7 @@ class SettingsTextField extends StatelessWidget {
     this.isReadOnly = false,
     this.suffix,
     this.onTap,
+    this.onChange,
   });
 
   @override
@@ -33,18 +34,21 @@ class SettingsTextField extends StatelessWidget {
         const SizedBox(
           height: 8,
         ),
-        TextField(
+        TextFormField(
           onTap: onTap,
+          initialValue: defaultValue,
           readOnly: isReadOnly,
           cursorColor: ColorPalette.dReaderYellow100,
           onTapOutside: (event) {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          onChanged: (value) {},
+          onChanged: (value) {
+            if (onChange != null) {
+              onChange!(value);
+            }
+          },
           decoration: InputDecoration(
-            hintText: defaultValue != null
-                ? formatAddress(defaultValue!, 4)
-                : 'Wallet name',
+            hintText: 'Wallet name',
             constraints: const BoxConstraints(
               minHeight: 56,
               maxHeight: 56,

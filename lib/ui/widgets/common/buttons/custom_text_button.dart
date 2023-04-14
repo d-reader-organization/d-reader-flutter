@@ -11,6 +11,7 @@ class CustomTextButton extends StatelessWidget {
   final bool isLoading;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
+  final Color borderColor;
 
   const CustomTextButton({
     Key? key,
@@ -27,6 +28,7 @@ class CustomTextButton extends StatelessWidget {
       ),
     ),
     this.padding = const EdgeInsets.all(8),
+    this.borderColor = Colors.transparent,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,9 @@ class CustomTextButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius,
+            side: BorderSide(
+              color: borderColor,
+            ),
           ),
           foregroundColor: textColor,
           textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(

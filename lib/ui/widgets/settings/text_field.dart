@@ -40,6 +40,7 @@ class SettingsTextField extends StatelessWidget {
           onTapOutside: (event) {
             FocusManager.instance.primaryFocus?.unfocus();
           },
+          onChanged: (value) {},
           decoration: InputDecoration(
             hintText: defaultValue != null
                 ? formatAddress(defaultValue!, 4)

@@ -8,6 +8,7 @@ import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
@@ -28,6 +29,30 @@ class ProfileView extends ConsumerWidget {
     final provider = ref.watch(myWalletProvider);
     return SettingsScaffold(
       appBarTitle: 'Edit Wallet',
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomTextButton(
+                onPressed: () {},
+                borderRadius: BorderRadius.circular(8),
+                backgroundColor: Colors.transparent,
+                textColor: const Color(0xFFEBEDF3),
+                borderColor: const Color(0xFFEBEDF3),
+                child: const Text('Cancel'),
+              ),
+            ),
+            Expanded(
+              child: CustomTextButton(
+                onPressed: () {},
+                borderRadius: BorderRadius.circular(8),
+                child: const Text('Save'),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: provider.when(
         data: (wallet) {
           return Padding(

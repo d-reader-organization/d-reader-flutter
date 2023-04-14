@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class SettingsScaffold extends StatelessWidget {
   final Widget body;
   final String appBarTitle;
+  final Widget? bottomNavigationBar;
   const SettingsScaffold({
     super.key,
     required this.body,
     required this.appBarTitle,
+    this.bottomNavigationBar,
   });
 
   @override
@@ -29,6 +31,7 @@ class SettingsScaffold extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
         child: body,
       ),
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.da
 import 'package:flutter/material.dart';
 
 class ConfirmationDialog extends StatelessWidget {
-  final String title;
+  final dynamic title;
   const ConfirmationDialog({
     super.key,
     required this.title,
@@ -13,14 +13,16 @@ class ConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: ColorPalette.boxBackground300,
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          color: Colors.white,
-        ),
-      ),
+      title: title is Widget
+          ? title
+          : Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
       actionsAlignment: MainAxisAlignment.end,
       actions: <Widget>[
         CustomTextButton(

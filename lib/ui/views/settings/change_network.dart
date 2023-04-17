@@ -12,7 +12,7 @@ class ChangeNetworkView extends ConsumerWidget {
 
   Future<bool?> _showDialog(
     BuildContext context,
-    String title,
+    dynamic title,
   ) {
     return showDialog<bool>(
       context: context,
@@ -37,7 +37,28 @@ class ChangeNetworkView extends ConsumerWidget {
               if (selectedCluster != SolanaCluster.mainnet.value) {
                 final isConfirmed = await _showDialog(
                       context,
-                      'Are you sure you want switch to mainnet?',
+                      RichText(
+                        text: const TextSpan(
+                          text: 'Are you sure you want switch to ',
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'mainnet?\n',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            TextSpan(
+                                text: 'Make sure to switch your wallet to '),
+                            TextSpan(
+                              text: 'mainnet.',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ) ??
                     false;
                 if (isConfirmed) {
@@ -79,7 +100,28 @@ class ChangeNetworkView extends ConsumerWidget {
               if (selectedCluster != SolanaCluster.devnet.value) {
                 final isConfirmed = await _showDialog(
                       context,
-                      'Are you sure you want switch to devnet? Make sure to switch your wallet to devnet.',
+                      RichText(
+                        text: const TextSpan(
+                          text: 'Are you sure you want switch to ',
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'devnet?\n',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            TextSpan(
+                                text: 'Make sure to switch your wallet to '),
+                            TextSpan(
+                              text: 'devnet.',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ) ??
                     false;
                 if (isConfirmed) {

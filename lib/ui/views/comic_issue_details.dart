@@ -36,7 +36,7 @@ class ComicIssueDetails extends ConsumerWidget {
                             issue: issue,
                           )
                         : ListedItems(
-                            issueId: issue.id,
+                            issue: issue,
                           ),
                   ],
                 ),

@@ -345,7 +345,7 @@ class BottomNavigation extends HookConsumerWidget {
                             ? () async {
                                 globalHook.value =
                                     globalHook.value.copyWith(isLoading: true);
-                                final ListedItemModel selectedListing = ref
+                                final ListingModel selectedListing = ref
                                     .read(selectedItemsProvider)
                                     .elementAt(0);
                                 final isSuccessful =

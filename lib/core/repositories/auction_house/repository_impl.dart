@@ -18,7 +18,7 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   }
 
   @override
-  Future<List<ListedItemModel>> getListedItems({required int issueId}) async {
+  Future<List<ListingModel>> getListedItems({required int issueId}) async {
     final String? responseBody = await ApiService.instance.apiCallGet(
         '/auction-house/get/listings/$issueId?${appendDefaultQuery(null)}');
 
@@ -26,9 +26,9 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
       return [];
     }
     Iterable decodedData = jsonDecode(responseBody);
-    return List<ListedItemModel>.from(
+    return List<ListingModel>.from(
       decodedData.map(
-        (item) => ListedItemModel.fromJson(
+        (item) => ListingModel.fromJson(
           item,
         ),
       ),

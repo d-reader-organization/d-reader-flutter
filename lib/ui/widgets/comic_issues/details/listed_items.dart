@@ -1,4 +1,5 @@
-import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
+import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_item_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
@@ -6,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ListedItems extends ConsumerWidget {
-  final int issueId;
+  final ComicIssueModel issue;
   const ListedItems({
     super.key,
-    required this.issueId,
+    required this.issue,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(listedItemsProvider(issueId));
+    final provider = ref.watch(listingsAsyncProvider(issue));
     return provider.when(
       data: (listings) {
         if (listings.isEmpty) {

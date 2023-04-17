@@ -7,7 +7,7 @@ abstract class AuctionHouseRepository {
     required int price,
     String? printReceipt,
   });
-  Future<List<ListedItemModel>> getListedItems({required int issueId});
+  Future<List<ListingModel>> getListedItems({required int issueId});
   Future<CollectionStatsModel?> getCollectionStatus({required int issueId});
   Future<String?> executeSale({required String query});
   Future<String?> delistItem({required String mint});

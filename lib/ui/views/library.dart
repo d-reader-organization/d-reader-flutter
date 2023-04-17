@@ -104,6 +104,9 @@ class LibraryView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(
+      registerWalletToSocketEvents,
+    );
     final provider = ref.watch(walletAssetsProvider);
     return RefreshIndicator(
       onRefresh: () async {

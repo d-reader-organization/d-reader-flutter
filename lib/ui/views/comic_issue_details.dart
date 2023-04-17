@@ -33,8 +33,7 @@ class ComicIssueDetails extends ConsumerWidget {
                     // const BodyHeader(),
                     issue.candyMachineAddress != null
                         ? MintedItems(
-                            candyMachineAddress:
-                                issue.candyMachineAddress ?? '',
+                            issue: issue,
                           )
                         : ListedItems(
                             issueId: issue.id,

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/notifiers/receipts_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/minted_item_row.dart';
@@ -6,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MintedItems extends ConsumerWidget {
-  final String candyMachineAddress;
+  final ComicIssueModel issue;
   const MintedItems({
     super.key,
-    required this.candyMachineAddress,
+    required this.issue,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(receiptsAsyncProvider(candyMachineAddress));
+    final provider = ref.watch(receiptsAsyncProvider(issue));
     return provider.when(
       data: (receipts) {
         if (receipts.isEmpty) {

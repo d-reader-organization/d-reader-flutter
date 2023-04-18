@@ -21,26 +21,43 @@ class MintedItems extends ConsumerWidget {
         if (receipts.isEmpty) {
           return const Text('No items minted.');
         }
-        return ListView.separated(
-          itemCount: receipts.length,
-          padding: const EdgeInsets.only(
-            right: 4,
-            left: 4,
-            top: 12,
-            bottom: 4,
+        return SizedBox(
+          height: receipts.length < 5 ? receipts.length * 70 : 300,
+          child: NotificationListener(
+            onNotification: (notification) {
+              if (notification is ScrollNotification) {
+                double maxScroll = notification.metrics.maxScrollExtent;
+                double currentScroll = notification.metrics.pixels;
+                double delta = MediaQuery.of(context).size.width * 0.1;
+                if (maxScroll - currentScroll <= delta) {
+                  ref.read(receiptsAsyncProvider(issue).notifier).fetchNext();
+                }
+              }
+              return true;
+            },
+            child: ListView.separated(
+              itemCount: receipts.length,
+              physics: const PageScrollPhysics(),
+              padding: const EdgeInsets.only(
+                right: 4,
+                left: 4,
+                top: 12,
+                bottom: 4,
+              ),
+              shrinkWrap: true,
+              primary: false,
+              itemBuilder: (context, index) {
+                return MintedItemRow(
+                  receipt: receipts[index],
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(
+                  color: ColorPalette.boxBackground400,
+                );
+              },
+            ),
           ),
-          shrinkWrap: true,
-          primary: false,
-          itemBuilder: (context, index) {
-            return MintedItemRow(
-              receipt: receipts[index],
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              color: ColorPalette.boxBackground400,
-            );
-          },
         );
       },
       error: (error, stackTrace) {

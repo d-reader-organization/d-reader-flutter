@@ -26,20 +26,18 @@ class ComicIssueDetails extends ConsumerWidget {
           return const SizedBox();
         }
         return ComicIssueDetailsScaffold(
-          body: issue.isFree
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    // const BodyHeader(),
-                    issue.candyMachineAddress != null
-                        ? MintedItems(
-                            issue: issue,
-                          )
-                        : ListedItems(
-                            issue: issue,
-                          ),
-                  ],
-                ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+            child: issue.isFree
+                ? const SizedBox()
+                : issue.candyMachineAddress != null
+                    ? MintedItems(
+                        issue: issue,
+                      )
+                    : ListedItems(
+                        issue: issue,
+                      ),
+          ),
           issue: issue,
         );
       },

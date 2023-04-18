@@ -60,3 +60,13 @@ class ReceiptBuyer {
     );
   }
 }
+
+class ReceiptsProviderArg {
+  final String address;
+  final String? query;
+
+  ReceiptsProviderArg({
+    required this.address,
+    this.query = 'skip=0&take=10',
+  });
+}

@@ -12,10 +12,14 @@ final receiptsAsyncProvider = AsyncNotifierProvider.autoDispose
 
 class ReceiptsAsyncNotifier
     extends AutoDisposeFamilyAsyncNotifier<List<Receipt>, ComicIssueModel> {
+  bool isEnd = false;
   @override
   FutureOr<List<Receipt>> build(ComicIssueModel arg) async {
-    final receipts =
-        await ref.read(receiptsProvider(arg.candyMachineAddress ?? '').future);
+    final receipts = await ref.read(
+      receiptsProvider(ReceiptsProviderArg(
+        address: arg.candyMachineAddress ?? '',
+      )).future,
+    );
     final socket = ref.read(socketProvider).socket;
     socket.connect();
     ref.onDispose(() {
@@ -29,5 +33,24 @@ class ReceiptsAsyncNotifier
     });
 
     return receipts;
+  }
+
+  fetchNext() async {
+    if (isEnd) {
+      return;
+    }
+    final newReceipts = await ref.read(
+      receiptsProvider(
+        ReceiptsProviderArg(
+          address: arg.candyMachineAddress ?? '',
+          query: 'skip=${state.value?.length}&take=10',
+        ),
+      ).future,
+    );
+    if (newReceipts.isEmpty) {
+      isEnd = true;
+      return;
+    }
+    state = AsyncValue.data([...?state.value, ...newReceipts]);
   }
 }

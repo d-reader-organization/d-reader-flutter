@@ -98,7 +98,7 @@ class _ComicIssueDetailsScaffoldState
               Stack(
                 children: [
                   CachedImageBgPlaceholder(
-                    height: 384,
+                    height: 375,
                     imageUrl: widget.issue.cover,
                     cacheKey: '${widget.issue.id}',
                     overrideBorderRadius: BorderRadius.circular(0),
@@ -278,10 +278,7 @@ class _ComicIssueDetailsScaffoldState
               const SizedBox(
                 height: 24,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-                child: widget.body,
-              )
+              widget.body,
             ],
           ),
         ),

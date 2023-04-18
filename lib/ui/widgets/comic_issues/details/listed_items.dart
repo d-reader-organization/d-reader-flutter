@@ -21,21 +21,37 @@ class ListedItems extends ConsumerWidget {
         if (listings.isEmpty) {
           return const Text('No items listed.');
         }
-        return ListView.separated(
-          itemCount: listings.length,
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          primary: false,
-          itemBuilder: (context, index) {
-            return ListedItemRow(
-              listing: listings[index],
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              color: ColorPalette.boxBackground400,
-            );
-          },
+        return SizedBox(
+          height: listings.length < 4 ? listings.length * 70 : 300,
+          child: NotificationListener(
+            onNotification: (notification) {
+              if (notification is ScrollNotification) {
+                double maxScroll = notification.metrics.maxScrollExtent;
+                double currentScroll = notification.metrics.pixels;
+                double delta = MediaQuery.of(context).size.width * 0.1;
+                if (maxScroll - currentScroll <= delta) {
+                  ref.read(listingsAsyncProvider(issue).notifier).fetchNext();
+                }
+              }
+              return true;
+            },
+            child: ListView.separated(
+              itemCount: listings.length,
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              primary: false,
+              itemBuilder: (context, index) {
+                return ListedItemRow(
+                  listing: listings[index],
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(
+                  color: ColorPalette.boxBackground400,
+                );
+              },
+            ),
+          ),
         );
       },
       error: (error, stackTrace) {

@@ -109,3 +109,13 @@ class Seller {
     return data;
   }
 }
+
+class ListingsProviderArg {
+  final int issueId;
+  final String query;
+
+  ListingsProviderArg({
+    required this.issueId,
+    this.query = 'skip=0&take=10',
+  });
+}

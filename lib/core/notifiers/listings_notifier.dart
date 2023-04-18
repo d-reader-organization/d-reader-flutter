@@ -12,10 +12,17 @@ final listingsAsyncProvider = AsyncNotifierProvider.autoDispose
 
 class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
     List<ListingModel>, ComicIssueModel> {
+  bool isEnd = false;
   @override
   FutureOr<List<ListingModel>> build(ComicIssueModel arg) async {
-    final listings = await ref.read(listedItemsProvider(arg.id).future);
-
+    final listings = await ref.read(
+      listedItemsProvider(
+        ListingsProviderArg(
+          issueId: arg.id,
+          query: 'skip=0&take=10',
+        ),
+      ).future,
+    );
     final socket = ref.read(socketProvider).socket;
     socket.connect();
     ref.onDispose(() {
@@ -41,5 +48,24 @@ class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
     });
 
     return listings;
+  }
+
+  fetchNext() async {
+    if (isEnd) {
+      return;
+    }
+    final newListings = await ref.read(
+      listedItemsProvider(
+        ListingsProviderArg(
+          issueId: arg.id,
+          query: 'skip=${state.value?.length}&take=10',
+        ),
+      ).future,
+    );
+    if (newListings.isEmpty) {
+      isEnd = true;
+      return;
+    }
+    state = AsyncValue.data([...?state.value, ...newListings]);
   }
 }

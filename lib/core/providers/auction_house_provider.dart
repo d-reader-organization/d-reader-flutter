@@ -5,10 +5,10 @@ import 'package:d_reader_flutter/ioc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final listedItemsProvider = FutureProvider.autoDispose
-    .family<List<ListingModel>, int>((ref, issueId) async {
+    .family<List<ListingModel>, ListingsProviderArg>((ref, arg) async {
   ref.invalidate(selectedItemsProvider);
   return await IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
-      .getListedItems(issueId: issueId);
+      .getListedItems(issueId: arg.issueId, query: arg.query);
 });
 
 final collectionStatsProvider = FutureProvider.autoDispose

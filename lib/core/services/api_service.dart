@@ -8,15 +8,17 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String apiUrl = Config.devApiUrl;
+  String _apiUrl = Config.devApiUrl;
   String? _token;
-
+  SharedPreferences? _sharedPreferences;
   static ApiService get instance => IoCContainer.resolveContainer<ApiService>();
 
-  Future<String?> apiCallGet(String path,
-      {bool includeAuthHeader = true}) async {
-    await _setTokenIfNeeded();
-    Uri uri = Uri.parse('$apiUrl$path');
+  Future<String?> apiCallGet(
+    String path, {
+    bool includeAuthHeader = true,
+  }) async {
+    await _setters();
+    Uri uri = Uri.parse('$_apiUrl$path');
     http.Response response = await http.get(uri,
         headers: includeAuthHeader
             ? {HttpHeaders.authorizationHeader: '$_token'}
@@ -29,8 +31,8 @@ class ApiService {
   }
 
   Future<String?> apiCallPost(String path) async {
-    Uri uri = Uri.parse('$apiUrl$path');
-    await _setTokenIfNeeded();
+    Uri uri = Uri.parse('$_apiUrl$path');
+    await _setters();
     http.Response response = await http.post(
       uri,
       headers: {HttpHeaders.authorizationHeader: '$_token'},
@@ -42,8 +44,8 @@ class ApiService {
   }
 
   Future<String?> apiCallPatch(String path, [Object? body]) async {
-    Uri uri = Uri.parse('$apiUrl$path');
-    await _setTokenIfNeeded();
+    Uri uri = Uri.parse('$_apiUrl$path');
+    await _setters();
     http.Response response = await http.patch(
       uri,
       headers: {HttpHeaders.authorizationHeader: '$_token'},
@@ -62,7 +64,7 @@ class ApiService {
       if (payload.avatar == null) {
         return null;
       }
-      Uri uri = Uri.parse('$apiUrl$path');
+      Uri uri = Uri.parse('$_apiUrl$path');
       final sp = await SharedPreferences.getInstance();
       final token = sp.getString(Config.tokenKey);
       var request = http.MultipartRequest('PATCH', uri)
@@ -77,10 +79,21 @@ class ApiService {
     return null;
   }
 
-  Future<void> _setTokenIfNeeded() async {
-    if (_token == null) {
-      final sp = await SharedPreferences.getInstance();
-      _token ??= sp.getString(Config.tokenKey);
-    }
+  _setters() async {
+    _sharedPreferences ??= await SharedPreferences.getInstance();
+    _setToken();
+    _setApiUrl();
+  }
+
+  _setToken() {
+    _token = _sharedPreferences?.getString(Config.tokenKey);
+  }
+
+  _setApiUrl() {
+    final lastNetwork = _sharedPreferences?.getString('temp-network') ??
+        _sharedPreferences?.getString('last-network');
+    _apiUrl = lastNetwork == SolanaCluster.devnet.value
+        ? Config.devApiUrlDevnet
+        : Config.devApiUrl;
   }
 }

@@ -8,8 +8,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<String> getOneTimePassword(String address) async {
     String? responseBody = await ApiService.instance.apiCallGet(
-        '/auth/wallet/request-password/$address',
-        includeAuthHeader: false);
+      '/auth/wallet/request-password/$address',
+      includeAuthHeader: false,
+    );
     return responseBody ?? 'An error occured';
   }
 

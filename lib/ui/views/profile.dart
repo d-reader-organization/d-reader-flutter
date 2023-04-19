@@ -281,7 +281,7 @@ class Avatar extends StatelessWidget {
       child: wallet.avatar.isNotEmpty
           ? CircleAvatar(
               radius: 48,
-              backgroundColor: Colors.transparent,
+              backgroundColor: ColorPalette.boxBackground300,
               child: CachedNetworkImage(
                 imageUrl: wallet.avatar,
                 cacheKey: wallet.address,

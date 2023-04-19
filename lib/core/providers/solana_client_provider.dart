@@ -61,40 +61,33 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   Future<bool> authorizeAndSignMessage([String? overrideCluster]) async {
     final session = await _getSession();
     final client = await session.start();
+    final String cluster =
+        overrideCluster ?? ref.read(environmentProvider).solanaCluster;
     final result = await client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
-      cluster: overrideCluster ?? ref.read(environmentProvider).solanaCluster,
+      cluster: cluster,
     );
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
     final envNotifier = ref.read(environmentProvider.notifier);
-    final previousAuthToken = ref.read(environmentProvider).authToken;
-    envNotifier.updateEnvironmentState(
-      EnvironmentStateUpdateInput(
-        authToken: result?.authToken,
-      ),
-    );
 
-    final signMessageResult = await _signMessage(client, publicKey);
+    final signMessageResult =
+        await _signMessage(client, publicKey, result?.authToken ?? '', cluster);
     if (signMessageResult.isEmpty) {
-      envNotifier.updateEnvironmentState(
-        EnvironmentStateUpdateInput(
-          authToken: previousAuthToken,
-        ),
-      );
       return false;
     }
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
-        solanaCluster:
-            overrideCluster ?? ref.read(environmentProvider).solanaCluster,
+        authToken: result?.authToken,
+        solanaCluster: cluster,
         signature: Signature(
           signMessageResult.first.sublist(0, 64),
           publicKey: publicKey,
         ).bytes,
       ),
     );
+    envNotifier.updateLastSelectedNetwork(cluster);
     await session.close();
 
     await _getAndStoreToken(signMessageResult.first, publicKey);
@@ -216,9 +209,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   Future<List<Uint8List>> _signMessage(
     MobileWalletAdapterClient client,
     Ed25519HDPublicKey signer,
+    String overrideAuthToken,
+    String tempNetwork,
   ) async {
-    if (await _doReauthorize(client)) {
+    if (await _doReauthorize(client, overrideAuthToken)) {
+      ref.read(environmentProvider.notifier).updateTempNetwork(tempNetwork);
       final message = await _walletService.getOneTimePassword(signer);
+      ref.read(environmentProvider.notifier).clearTempNetwork();
       final addresses = Uint8List.fromList(signer.bytes);
 
       final messageToBeSigned = Uint8List.fromList(utf8.encode(message));
@@ -235,8 +232,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return [];
   }
 
-  Future<bool> _doReauthorize(MobileWalletAdapterClient client) async {
-    final authToken = ref.read(environmentProvider).authToken;
+  Future<bool> _doReauthorize(MobileWalletAdapterClient client,
+      [String? overrideAuthToken]) async {
+    final authToken =
+        overrideAuthToken ?? ref.read(environmentProvider).authToken;
     if (authToken == null) {
       return false;
     }

@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DiscoverScrollView extends ConsumerStatefulWidget {
-  final StateNotifierProviderFamily<PaginationNotifier, PaginationState,
-      String?> listenableProvider;
+  final AutoDisposeStateNotifierProviderFamily<PaginationNotifier,
+      PaginationState, String?> listenableProvider;
   final ScrollListType scrollListType;
 
   const DiscoverScrollView({

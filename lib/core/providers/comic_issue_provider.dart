@@ -35,7 +35,7 @@ final favouriteComicIssueProvider =
   },
 );
 
-final paginatedIssuesProvider = StateNotifierProvider.family<
+final paginatedIssuesProvider = StateNotifierProvider.autoDispose.family<
     PaginationNotifier<ComicIssueModel>,
     PaginationState<ComicIssueModel>,
     String?>((ref, query) {

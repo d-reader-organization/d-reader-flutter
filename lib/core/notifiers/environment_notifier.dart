@@ -106,6 +106,15 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     _sharedPreferences?.setString('last-network', selectedNetwork);
   }
 
+// this is added just to get OTP from proper apiUrl
+  void updateTempNetwork(String tempNetwork) {
+    _sharedPreferences?.setString('temp-network', tempNetwork);
+  }
+
+  void clearTempNetwork() {
+    _sharedPreferences?.remove('temp-network');
+  }
+
   Future<bool> clearDataFromSharedPref() async {
     _sharedPreferences ??= await SharedPreferences.getInstance();
     _sharedPreferences?.remove(Config.tokenKey);

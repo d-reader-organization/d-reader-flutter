@@ -24,7 +24,7 @@ final followCreatorProvider =
       .followCreator(slug);
 });
 
-final paginatedCreatorsProvider = StateNotifierProvider.family<
+final paginatedCreatorsProvider = StateNotifierProvider.autoDispose.family<
     PaginationNotifier<CreatorModel>,
     PaginationState<CreatorModel>,
     String?>((ref, query) {

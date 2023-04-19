@@ -1,11 +1,13 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
 class EnvironmentState {
-  final String solanaCluster;
+  final String apiUrl, solanaCluster;
   final String? authToken, jwtToken, refreshToken, signature;
   Ed25519HDPublicKey? publicKey;
 
   EnvironmentState({
+    this.apiUrl = Config.devApiUrl,
     required this.solanaCluster,
     this.authToken,
     this.jwtToken,
@@ -15,6 +17,7 @@ class EnvironmentState {
   });
 
   EnvironmentState copyWith({
+    String? apiUrl,
     String? authToken,
     String? jwtToken,
     String? refreshToken,
@@ -23,6 +26,7 @@ class EnvironmentState {
     Ed25519HDPublicKey? publicKey,
   }) {
     return EnvironmentState(
+      apiUrl: apiUrl ?? this.apiUrl,
       authToken: authToken ?? this.authToken,
       jwtToken: jwtToken ?? this.jwtToken,
       refreshToken: refreshToken ?? this.refreshToken,
@@ -35,6 +39,7 @@ class EnvironmentState {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['apiUrl'] = apiUrl;
     data['authToken'] = authToken;
     data['jwtToken'] = jwtToken;
     data['refreshToken'] = refreshToken;

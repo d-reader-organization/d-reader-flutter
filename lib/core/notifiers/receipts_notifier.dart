@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -20,7 +21,13 @@ class ReceiptsAsyncNotifier
         address: arg.candyMachineAddress ?? '',
       )).future,
     );
-    final socket = ref.read(socketProvider).socket;
+    final socket = ref
+        .read(
+          socketProvider(
+            ref.read(environmentProvider).apiUrl,
+          ),
+        )
+        .socket;
     socket.connect();
     ref.onDispose(() {
       socket.close();

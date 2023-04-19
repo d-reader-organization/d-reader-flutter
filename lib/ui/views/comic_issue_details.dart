@@ -1,4 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
+import 'package:d_reader_flutter/core/notifiers/receipts_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_items.dart';
@@ -26,17 +28,38 @@ class ComicIssueDetails extends ConsumerWidget {
           return const SizedBox();
         }
         return ComicIssueDetailsScaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
-            child: issue.isFree
-                ? const SizedBox()
-                : issue.candyMachineAddress != null
-                    ? MintedItems(
-                        issue: issue,
-                      )
-                    : ListedItems(
-                        issue: issue,
+          loadMore: issue.isFree
+              ? null
+              : issue.candyMachineAddress != null
+                  ? ref.read(receiptsAsyncProvider(issue).notifier).fetchNext
+                  : ref.read(listingsAsyncProvider(issue).notifier).fetchNext,
+          body: CustomScrollView(
+            shrinkWrap: true,
+            physics: const PageScrollPhysics(),
+            slivers: [
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  childCount: 1,
+                  (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 0,
                       ),
+                      child: issue.isFree
+                          ? const SizedBox()
+                          : issue.candyMachineAddress != null
+                              ? MintedItems(
+                                  issue: issue,
+                                )
+                              : ListedItems(
+                                  issue: issue,
+                                ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
           issue: issue,
         );

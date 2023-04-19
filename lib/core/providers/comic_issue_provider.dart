@@ -7,9 +7,8 @@ import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final comicIssuesProvider =
-    FutureProvider.family<List<ComicIssueModel>, String?>(
-        (ref, queryString) async {
+final comicIssuesProvider = FutureProvider.autoDispose
+    .family<List<ComicIssueModel>, String?>((ref, queryString) async {
   return await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
       .getComicIssues(
           queryString: queryString ?? appendDefaultQuery(queryString));

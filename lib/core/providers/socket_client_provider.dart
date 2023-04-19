@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -14,9 +13,10 @@ class SocketState {
   }
 }
 
-final socketProvider = StateProvider<SocketState>((ref) {
+final socketProvider =
+    StateProvider.family<SocketState, String>((ref, socketUri) {
   Socket socket = io(
-    Config.devApiUrl,
+    socketUri,
     OptionBuilder().setTransports(['websocket']).disableAutoConnect().build(),
   );
   ref.onDispose(() {

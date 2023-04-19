@@ -69,6 +69,9 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       var networkData = jsonDecode(sharedPrefData);
       final String? signature = networkData['signature'];
       state = state.copyWith(
+        apiUrl: selectedNetwork == SolanaCluster.devnet.value
+            ? Config.devApiUrlDevnet
+            : Config.devApiUrl,
         authToken: networkData['authToken'],
         jwtToken: networkData['jwtToken'],
         refreshToken: networkData['refreshToken'],
@@ -80,7 +83,10 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
   }
 
   void updateEnvironmentState(EnvironmentStateUpdateInput input) {
+    final bool isDevnet = input.solanaCluster == SolanaCluster.devnet.value ||
+        state.solanaCluster == SolanaCluster.devnet.value;
     state = state.copyWith(
+      apiUrl: isDevnet ? Config.devApiUrlDevnet : Config.devApiUrl,
       authToken: input.authToken,
       jwtToken: input.jwtToken,
       refreshToken: input.refreshToken,
@@ -88,8 +94,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       publicKey: input.publicKey,
       signature: input.signature,
     );
-    final bool isDevnet = input.solanaCluster == SolanaCluster.devnet.value ||
-        state.solanaCluster == SolanaCluster.devnet.value;
+
     _sharedPreferences?.setString(
       isDevnet ? 'dev-network' : 'prod-network',
       jsonEncode(

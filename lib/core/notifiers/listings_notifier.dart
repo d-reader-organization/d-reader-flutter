@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,7 +24,8 @@ class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
         ),
       ).future,
     );
-    final socket = ref.read(socketProvider).socket;
+    final socket =
+        ref.read(socketProvider(ref.read(environmentProvider).apiUrl)).socket;
     socket.connect();
     ref.onDispose(() {
       socket.close();

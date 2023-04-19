@@ -7,7 +7,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final registerWalletToSocketEvents = Provider(
   (ref) {
-    final socket = ref.read(socketProvider).socket;
+    final socket = ref
+        .read(
+          socketProvider(
+            ref.read(environmentProvider).apiUrl,
+          ),
+        )
+        .socket;
     ref.onDispose(() {
       socket.close();
     });

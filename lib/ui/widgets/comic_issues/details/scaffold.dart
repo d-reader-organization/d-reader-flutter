@@ -32,10 +32,12 @@ import 'package:timeago/timeago.dart' as timeago;
 class ComicIssueDetailsScaffold extends ConsumerStatefulWidget {
   final Widget body;
   final ComicIssueModel issue;
+  final Function()? loadMore;
   const ComicIssueDetailsScaffold({
     Key? key,
     required this.body,
     required this.issue,
+    this.loadMore,
   }) : super(key: key);
 
   @override
@@ -74,6 +76,15 @@ class _ComicIssueDetailsScaffoldState
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.of(context).size.width * 0.1;
+          if (maxScroll - currentScroll <= delta) {
+            if (widget.loadMore != null) {
+              widget.loadMore!();
+            }
+          }
+
           if (notification.metrics.pixels > 70) {
             _controller.forward();
           } else if (notification.metrics.pixels < 70) {
@@ -527,7 +538,10 @@ class CandyMachineStats extends ConsumerWidget {
       print('Error in candy machine stats ${error.toString()}');
       return const Text('Something went wrong in candy machine stats');
     }, loading: () {
-      return const SkeletonRow();
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: SkeletonRow(),
+      );
     });
   }
 }
@@ -574,7 +588,10 @@ class ListingStats extends ConsumerWidget {
       print('Error in candy machine stats ${error.toString()}');
       return const Text('Something went wrong in candy machine stats');
     }, loading: () {
-      return const SkeletonRow();
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: SkeletonRow(),
+      );
     });
   }
 }

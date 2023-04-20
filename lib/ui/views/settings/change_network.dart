@@ -66,6 +66,9 @@ class ChangeNetworkView extends ConsumerWidget {
                       environmentChangeProvider(SolanaCluster.mainnet.value)
                           .future);
                   if (context.mounted) {
+                    final snackbarText = response
+                        ? 'Network changed successfully'
+                        : 'Network change failed.';
                     if (!response) {
                       ref
                           .read(environmentProvider.notifier)
@@ -75,14 +78,9 @@ class ChangeNetworkView extends ConsumerWidget {
                             ),
                           );
                     }
-
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          response
-                              ? 'Network changed successfully'
-                              : 'Network change failed.',
-                        ),
+                        content: Text(snackbarText),
                       ),
                     );
                   }
@@ -129,6 +127,9 @@ class ChangeNetworkView extends ConsumerWidget {
                       environmentChangeProvider(SolanaCluster.devnet.value)
                           .future);
                   if (context.mounted) {
+                    final snackbarText = response
+                        ? 'Network changed successfully'
+                        : 'Network change failed.';
                     if (!response) {
                       ref
                           .read(environmentProvider.notifier)
@@ -140,11 +141,7 @@ class ChangeNetworkView extends ConsumerWidget {
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          response
-                              ? 'Network changed successfully'
-                              : 'Network change failed.',
-                        ),
+                        content: Text(snackbarText),
                       ),
                     );
                   }

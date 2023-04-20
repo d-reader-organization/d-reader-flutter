@@ -125,7 +125,7 @@ class SubmitButton extends HookConsumerWidget {
               globalHook.value = globalHook.value.copyWith(isLoading: true);
               final response = await ref.read(solanaProvider.notifier).list(
                     mintAccount: mintAccount,
-                    price: int.parse((price! * lamportsPerSol).toString()),
+                    price: (price! * lamportsPerSol).round(),
                   );
               globalHook.value = globalHook.value.copyWith(isLoading: false);
               print('List response: $response');

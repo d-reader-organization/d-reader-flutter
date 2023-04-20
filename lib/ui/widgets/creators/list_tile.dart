@@ -50,7 +50,7 @@ class CreatorListTile extends StatelessWidget {
                   height: 4,
                 ),
                 Text(
-                  '${(creator.stats?.totalVolume ?? 0) / 100} %',
+                  '${((creator.stats?.totalVolume ?? 0) / 100).toStringAsFixed(1)} %',
                   style: textTheme.labelLarge
                       ?.copyWith(color: ColorPalette.dReaderGreen),
                 )

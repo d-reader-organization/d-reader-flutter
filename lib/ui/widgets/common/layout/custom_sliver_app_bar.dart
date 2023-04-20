@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/logout_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,10 +29,6 @@ class CustomSliverAppBar extends StatelessWidget {
         shadowColor: Colors.transparent,
         actions: const [
           NotificationBadge(),
-          SizedBox(
-            width: 8,
-          ),
-          LogoutButton(),
         ],
       ),
     );

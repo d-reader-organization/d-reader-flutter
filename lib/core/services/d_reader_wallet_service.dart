@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
@@ -16,7 +17,7 @@ class DReaderWalletService {
         .getOneTimePassword(publicKey.toBase58());
   }
 
-  Future<String> connectWallet(
+  Future<AuthWallet?> connectWallet(
       Ed25519HDPublicKey publicKey, List<int> signedData) async {
     try {
       final connectWalletResponse =
@@ -25,10 +26,10 @@ class DReaderWalletService {
         publicKey.toBase58(),
         base58encode(signedData),
       );
-      return connectWalletResponse?.accessToken ?? 'no-token';
+      return connectWalletResponse;
     } catch (e) {
       print(e);
-      return 'An error occured.';
+      return null;
     }
   }
 

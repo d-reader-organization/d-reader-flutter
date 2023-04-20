@@ -32,10 +32,12 @@ import 'package:timeago/timeago.dart' as timeago;
 class ComicIssueDetailsScaffold extends ConsumerStatefulWidget {
   final Widget body;
   final ComicIssueModel issue;
+  final Function()? loadMore;
   const ComicIssueDetailsScaffold({
     Key? key,
     required this.body,
     required this.issue,
+    this.loadMore,
   }) : super(key: key);
 
   @override
@@ -74,6 +76,15 @@ class _ComicIssueDetailsScaffoldState
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.of(context).size.width * 0.1;
+          if (maxScroll - currentScroll <= delta) {
+            if (widget.loadMore != null) {
+              widget.loadMore!();
+            }
+          }
+
           if (notification.metrics.pixels > 70) {
             _controller.forward();
           } else if (notification.metrics.pixels < 70) {
@@ -98,7 +109,7 @@ class _ComicIssueDetailsScaffoldState
               Stack(
                 children: [
                   CachedImageBgPlaceholder(
-                    height: 364,
+                    height: 375,
                     imageUrl: widget.issue.cover,
                     cacheKey: '${widget.issue.id}',
                     overrideBorderRadius: BorderRadius.circular(0),
@@ -135,9 +146,12 @@ class _ComicIssueDetailsScaffoldState
                             children: [
                               Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     'EP',
-                                    style: textTheme.headlineLarge,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 4,
@@ -146,11 +160,17 @@ class _ComicIssueDetailsScaffoldState
                                     children: [
                                       Text(
                                         '${widget.issue.number}',
-                                        style: textTheme.headlineLarge,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                       Text(
                                         '/${widget.issue.stats?.totalIssuesCount}',
-                                        style: textTheme.headlineLarge,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -194,7 +214,7 @@ class _ComicIssueDetailsScaffoldState
                             ],
                           ),
                           const SizedBox(
-                            height: 24,
+                            height: 8,
                           ),
                           TextWithViewMore(
                             text: widget.issue.description,
@@ -269,10 +289,7 @@ class _ComicIssueDetailsScaffoldState
               const SizedBox(
                 height: 24,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-                child: widget.body,
-              )
+              widget.body,
             ],
           ),
         ),
@@ -336,7 +353,7 @@ class BottomNavigation extends HookConsumerWidget {
                             ? () async {
                                 globalHook.value =
                                     globalHook.value.copyWith(isLoading: true);
-                                final ListedItemModel selectedListing = ref
+                                final ListingModel selectedListing = ref
                                     .read(selectedItemsProvider)
                                     .elementAt(0);
                                 final isSuccessful =
@@ -521,7 +538,10 @@ class CandyMachineStats extends ConsumerWidget {
       print('Error in candy machine stats ${error.toString()}');
       return const Text('Something went wrong in candy machine stats');
     }, loading: () {
-      return const SkeletonRow();
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: SkeletonRow(),
+      );
     });
   }
 }
@@ -568,7 +588,10 @@ class ListingStats extends ConsumerWidget {
       print('Error in candy machine stats ${error.toString()}');
       return const Text('Something went wrong in candy machine stats');
     }, loading: () {
-      return const SkeletonRow();
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: SkeletonRow(),
+      );
     });
   }
 }

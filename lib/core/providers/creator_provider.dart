@@ -6,14 +6,14 @@ import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final creatorsProvider = FutureProvider.family<List<CreatorModel>, String?>(
-    (ref, queryString) async {
+final creatorsProvider = FutureProvider.autoDispose
+    .family<List<CreatorModel>, String?>((ref, queryString) async {
   return await IoCContainer.resolveContainer<CreatorRepositoryImpl>()
       .getCreators(queryString: queryString ?? appendDefaultQuery(queryString));
 });
 
 final creatorProvider =
-    FutureProvider.family<CreatorModel, String>((ref, slug) async {
+    FutureProvider.autoDispose.family<CreatorModel, String>((ref, slug) async {
   return await IoCContainer.resolveContainer<CreatorRepositoryImpl>()
       .getCreator(slug);
 });
@@ -24,7 +24,7 @@ final followCreatorProvider =
       .followCreator(slug);
 });
 
-final paginatedCreatorsProvider = StateNotifierProvider.family<
+final paginatedCreatorsProvider = StateNotifierProvider.autoDispose.family<
     PaginationNotifier<CreatorModel>,
     PaginationState<CreatorModel>,
     String?>((ref, query) {

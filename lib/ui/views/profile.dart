@@ -1,16 +1,26 @@
-import 'dart:io';
+import 'dart:io' show File;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/logout_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/welcome.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart' as fcm;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,40 +30,189 @@ class ProfileView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(myWalletProvider);
-
-    return provider.when(
-      data: (wallet) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 32),
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AvatarName(
-                  wallet: wallet!,
-                  ref: ref,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 6,
-                ),
-                InputFieldWithSubmit(
-                  wallet: wallet,
-                  ref: ref,
-                ),
-              ],
+    return SettingsScaffold(
+      appBarTitle: 'Edit Wallet',
+      bottomNavigationBar: Consumer(
+        builder: (context, ref, child) {
+          final String walletName = ref.watch(walletNameProvider);
+          return AnimatedOpacity(
+            opacity: walletName.isNotEmpty &&
+                    walletName.trim() != provider.value?.label
+                ? 1.0
+                : 0.0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CustomTextButton(
+                      size: const Size(double.infinity, 40),
+                      onPressed: () {
+                        final String walletName = ref.read(walletNameProvider);
+                        if (walletName.isNotEmpty) {
+                          ref.read(walletNameProvider.notifier).state = '';
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      backgroundColor: Colors.transparent,
+                      textColor: const Color(0xFFEBEDF3),
+                      borderColor: const Color(0xFFEBEDF3),
+                      child: const Text('Cancel'),
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomTextButton(
+                      isLoading: ref.watch(globalStateProvider).isLoading,
+                      size: const Size(double.infinity, 40),
+                      onPressed: () async {
+                        final String walletName = ref.read(walletNameProvider);
+                        if (walletName.isNotEmpty) {
+                          final notifier =
+                              ref.read(globalStateProvider.notifier);
+                          notifier.update(
+                            (state) => state.copyWith(
+                              isLoading: true,
+                            ),
+                          );
+                          await ref.read(
+                            updateWalletProvider(
+                              UpdateWalletPayload(
+                                address: provider.value?.address ?? '',
+                                label: walletName,
+                              ),
+                            ).future,
+                          );
+                          notifier.update(
+                            (state) => state.copyWith(
+                              isLoading: false,
+                            ),
+                          );
+                          ref
+                              .read(walletNameProvider.notifier)
+                              .update((state) => '');
+                          ref.invalidate(myWalletProvider);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Your wallet has been updated.'),
+                                duration: Duration(milliseconds: 500),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: const Text('Save'),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
-      error: (Object error, StackTrace stackTrace) {
-        print('Error in profile view ${error.toString()}');
-        return const Text('Something went wrong');
-      },
-      loading: () {
-        return const SizedBox();
-      },
+          );
+        },
+      ),
+      body: provider.when(
+        data: (wallet) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: const [
+                      Text(
+                        'Profile Image',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        'Recommended image size: 500x500',
+                        style: TextStyle(
+                            fontSize: 14, color: ColorPalette.greyscale100),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Avatar(
+                    wallet: wallet!,
+                    ref: ref,
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return SettingsTextField(
+                        labelText: 'Account name',
+                        defaultValue:
+                            wallet.label.isNotEmpty ? wallet.label : null,
+                        onChange: (String value) {
+                          ref.read(walletNameProvider.notifier).state = value;
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  SettingsTextField(
+                    labelText: 'Wallet address',
+                    defaultValue: formatAddress(wallet.address, 4),
+                    isReadOnly: true,
+                    suffix: SvgPicture.asset(
+                      '${Config.settingsAssetsPath}/bold/copy.svg',
+                    ),
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: wallet.address))
+                          .then((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Wallet address copied to clipboard",
+                            ),
+                          ),
+                        );
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SettingsCommonListTile(
+                    title: 'Disconnect wallet',
+                    leadingPath:
+                        '${Config.settingsAssetsPath}/light/logout.svg',
+                    overrideColor: ColorPalette.dReaderRed,
+                    onTap: () async {
+                      await ref.read(logoutProvider.future);
+                      if (context.mounted) {
+                        nextScreenCloseOthers(context, const WelcomeView());
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        error: (Object error, StackTrace stackTrace) {
+          print('Error in profile view ${error.toString()}');
+          return const Text('Something went wrong');
+        },
+        loading: () {
+          return const SizedBox();
+        },
+      ),
     );
   }
 }
@@ -79,10 +238,10 @@ class WalletSkeleton extends StatelessWidget {
   }
 }
 
-class AvatarName extends StatelessWidget {
+class Avatar extends StatelessWidget {
   final WalletModel wallet;
   final WidgetRef ref;
-  const AvatarName({
+  const Avatar({
     super.key,
     required this.wallet,
     required this.ref,
@@ -90,188 +249,88 @@ class AvatarName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles();
-            if (result != null) {
-              File file = File(result.files.single.path ?? '');
-              final bytes = await file.readAsBytes();
-              await ref.read(
-                updateWalletAvatarProvider(
-                  UpdateWalletPayload(
-                    address: wallet.address,
-                    avatar: http.MultipartFile.fromBytes(
-                      'avatar',
-                      bytes,
-                      filename: 'avatar.jpg',
-                    ),
+    return GestureDetector(
+      onTap: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles();
+        if (result != null) {
+          File file = File(result.files.single.path ?? '');
+          final bytes = await file.readAsBytes();
+          await ref.read(
+            updateWalletAvatarProvider(
+              UpdateWalletPayload(
+                address: wallet.address,
+                avatar: http.MultipartFile.fromBytes(
+                  'avatar',
+                  bytes,
+                  filename: 'avatar.jpg',
+                ),
+              ),
+            ).future,
+          );
+          ref.invalidate(myWalletProvider);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Your avatar has been uploaded.'),
+                duration: Duration(milliseconds: 500),
+              ),
+            );
+          }
+        }
+      },
+      child: wallet.avatar.isNotEmpty
+          ? CircleAvatar(
+              radius: 48,
+              backgroundColor: ColorPalette.boxBackground300,
+              child: CachedNetworkImage(
+                imageUrl: wallet.avatar,
+                cacheKey: wallet.address,
+                cacheManager: fcm.CacheManager(
+                  fcm.Config(
+                    wallet.address,
+                    stalePeriod: const Duration(days: 1),
                   ),
-                ).future,
-              );
-              ref.invalidate(myWalletProvider);
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Your avatar has been uploaded.'),
-                    duration: Duration(milliseconds: 500),
-                  ),
-                );
-              }
-            }
-          },
-          child: CircleAvatar(
-            radius: 64,
-            backgroundColor: Colors.transparent,
-            child: wallet.avatar.isNotEmpty
-                ? CachedNetworkImage(
-                    imageUrl: wallet.avatar,
-                    cacheKey: wallet.address,
-                    cacheManager: CacheManager(
-                      Config(
-                        wallet.address,
-                        stalePeriod: const Duration(days: 1),
+                ),
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(64),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(64),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                : Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                          color: ColorPalette.boxBackground400, width: 2),
-                    ),
-                    child: Icon(
-                      Icons.add_a_photo_rounded,
-                      color: ColorPalette.dReaderYellow100.withOpacity(0.8),
-                      size: 64,
+                  );
+                },
+              ))
+          : Container(
+              padding: const EdgeInsets.all(16),
+              height: 96,
+              width: 96,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(64),
+                border: Border.all(
+                  color: ColorPalette.boxBackground400,
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  SvgPicture.asset(
+                    '${Config.settingsAssetsPath}/bold/image.svg',
+                  ),
+                  const Text(
+                    'Browse File',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(
+                        0xFF777D8C,
+                      ),
                     ),
                   ),
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Text(formatAddress(wallet.address)),
-      ],
-    );
-  }
-}
-
-class InputFieldWithSubmit extends StatefulWidget {
-  final WalletModel wallet;
-  final WidgetRef ref;
-  const InputFieldWithSubmit({
-    super.key,
-    required this.wallet,
-    required this.ref,
-  });
-
-  @override
-  State<InputFieldWithSubmit> createState() => _InputFieldWithSubmitState();
-}
-
-class _InputFieldWithSubmitState extends State<InputFieldWithSubmit> {
-  final TextEditingController _labelController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _labelController.text = widget.wallet.label;
-  }
-
-  @override
-  void dispose() {
-    _labelController.dispose();
-    super.dispose();
-  }
-
-  saveWallet() async {
-    final notifier = widget.ref.read(globalStateProvider.notifier);
-    notifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    await widget.ref.read(
-      updateWalletProvider(
-        UpdateWalletPayload(
-          address: widget.wallet.address,
-          label: _labelController.text,
-        ),
-      ).future,
-    );
-    notifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    widget.ref.invalidate(myWalletProvider);
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Your wallet has been uploaded.'),
-          duration: Duration(milliseconds: 500),
-        ),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: _labelController,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorPalette.dReaderYellow100,
+                ],
               ),
             ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorPalette.dReaderYellow100,
-              ),
-            ),
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width / 2,
-            ),
-            contentPadding: const EdgeInsets.all(8),
-            labelText: 'Label',
-            labelStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        ValueListenableBuilder(
-          valueListenable: _labelController,
-          builder: (context, value, child) {
-            return RoundedButton(
-              text: 'Save',
-              size: Size(MediaQuery.of(context).size.width / 2, 48),
-              isLoading: widget.ref.watch(globalStateProvider).isLoading,
-              onPressed: value.text.length > 2 ? saveWallet : null,
-            );
-          },
-        ),
-      ],
     );
   }
 }

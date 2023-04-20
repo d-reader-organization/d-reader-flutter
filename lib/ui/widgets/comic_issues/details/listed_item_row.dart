@@ -13,7 +13,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 
 class ListedItemRow extends ConsumerWidget {
-  final ListedItemModel listing;
+  final ListingModel listing;
   const ListedItemRow({
     super.key,
     required this.listing,
@@ -31,7 +31,7 @@ class ListedItemRow extends ConsumerWidget {
       splashColor: Colors.transparent,
       onTap: myWallet.value?.address != listing.seller.address
           ? () {
-              List<ListedItemModel> items = [...selectedItems];
+              List<ListingModel> items = [...selectedItems];
               if (selectedItems.contains(listing)) {
                 items = [];
                 // items.remove(listing);

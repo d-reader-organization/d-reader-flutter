@@ -25,7 +25,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
   http: ^0.13.5
-  flutter_dotenv: ^5.0.2
   solana: ^0.29.0
   solana_mobile_client: ^0.1.0+1
   carousel_slider: ^4.2.1
@@ -79,10 +78,11 @@ flutter:
   generate: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - .env
     - assets/images/
     - assets/animation_files/
     - assets/icons/
+    - assets/icons/settings_screen/light/
+    - assets/icons/settings_screen/bold/    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

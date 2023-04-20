@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
@@ -265,6 +266,36 @@ class Body extends StatelessWidget {
                     ),
                     Row(
                       children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: ColorPalette.dReaderBlue,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                '${formatPrice(nft.royalties)}%',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: ColorPalette.dReaderBlue,
+                                    ),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                'royalty',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
                         !nft.isUsed
                             ? Container(
                                 padding: const EdgeInsets.all(8),
@@ -278,11 +309,17 @@ class Body extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/icons/mint_icon.svg'),
+                                      'assets/icons/mint_icon.svg',
+                                      height: 16,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
                                     Text(
                                       'Mint',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                   ],
                                 ),
@@ -301,11 +338,17 @@ class Body extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     SvgPicture.asset(
-                                        'assets/icons/signed_icon.svg'),
+                                      'assets/icons/signed_icon.svg',
+                                      height: 16,
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
                                     Text(
                                       'Signed',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                   ],
                                 ),

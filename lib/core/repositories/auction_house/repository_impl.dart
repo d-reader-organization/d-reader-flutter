@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/core/models/collection_stats.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/repositories/auction_house/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
-import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 
 class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   @override
@@ -18,17 +17,20 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   }
 
   @override
-  Future<List<ListedItemModel>> getListedItems({required int issueId}) async {
-    final String? responseBody = await ApiService.instance.apiCallGet(
-        '/auction-house/get/listings/$issueId?${appendDefaultQuery(null)}');
+  Future<List<ListingModel>> getListedItems({
+    required int issueId,
+    required String query,
+  }) async {
+    final String? responseBody = await ApiService.instance
+        .apiCallGet('/auction-house/get/listings/$issueId?$query');
 
     if (responseBody == null) {
       return [];
     }
     Iterable decodedData = jsonDecode(responseBody);
-    return List<ListedItemModel>.from(
+    return List<ListingModel>.from(
       decodedData.map(
-        (item) => ListedItemModel.fromJson(
+        (item) => ListingModel.fromJson(
           item,
         ),
       ),

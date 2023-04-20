@@ -30,7 +30,7 @@ class _TextWithViewMoreState extends State<TextWithViewMore> {
   Widget build(BuildContext context) {
     final int charactersLimit =
         MediaQuery.of(context).size.width > 360 ? 80 : 70;
-    return widget.text.length > charactersLimit
+    return widget.text.trim().length - 1 > charactersLimit
         ? Wrap(
             children: [
               RichText(

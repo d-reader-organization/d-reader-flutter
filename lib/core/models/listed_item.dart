@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
 
-class ListedItemModel {
+class ListingModel {
   final int id;
   final String nftAddress;
   final String name;
@@ -12,7 +12,7 @@ class ListedItemModel {
   final bool isUsed;
   final bool isSigned;
 
-  ListedItemModel({
+  ListingModel({
     required this.id,
     required this.nftAddress,
     required this.name,
@@ -25,8 +25,8 @@ class ListedItemModel {
     required this.isSigned,
   });
 
-  factory ListedItemModel.fromJson(Map<String, dynamic> json) {
-    return ListedItemModel(
+  factory ListingModel.fromJson(Map<String, dynamic> json) {
+    return ListingModel(
       id: json['id'],
       nftAddress: json['nftAddress'],
       name: json['name'],
@@ -108,4 +108,14 @@ class Seller {
     data['label'] = label;
     return data;
   }
+}
+
+class ListingsProviderArg {
+  final int issueId;
+  final String query;
+
+  ListingsProviderArg({
+    required this.issueId,
+    this.query = 'skip=0&take=10',
+  });
 }

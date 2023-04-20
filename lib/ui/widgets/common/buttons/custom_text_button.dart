@@ -11,23 +11,25 @@ class CustomTextButton extends StatelessWidget {
   final bool isLoading;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
+  final Color borderColor;
 
-  const CustomTextButton(
-      {Key? key,
-      required this.child,
-      required this.onPressed,
-      this.backgroundColor = ColorPalette.dReaderYellow100,
-      this.textColor = ColorPalette.appBackgroundColor,
-      this.size = const Size(120, 27),
-      this.fontSize = 14,
-      this.isLoading = false,
-      this.borderRadius = const BorderRadius.all(
-        Radius.circular(
-          32,
-        ),
+  const CustomTextButton({
+    Key? key,
+    required this.child,
+    required this.onPressed,
+    this.backgroundColor = ColorPalette.dReaderYellow100,
+    this.textColor = ColorPalette.appBackgroundColor,
+    this.size = const Size(120, 27),
+    this.fontSize = 14,
+    this.isLoading = false,
+    this.borderRadius = const BorderRadius.all(
+      Radius.circular(
+        32,
       ),
-      this.padding = const EdgeInsets.all(8)})
-      : super(key: key);
+    ),
+    this.padding = const EdgeInsets.all(8),
+    this.borderColor = Colors.transparent,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,9 @@ class CustomTextButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius,
+            side: BorderSide(
+              color: borderColor,
+            ),
           ),
           foregroundColor: textColor,
           textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(

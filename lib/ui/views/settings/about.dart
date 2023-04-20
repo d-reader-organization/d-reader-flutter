@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/main.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
@@ -25,10 +26,10 @@ class AboutView extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-          const Text(
-            'dReader',
+          Text(
+            packageInfo?.appName ?? 'dReader',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               color: Colors.white,
               fontWeight: FontWeight.w700,
@@ -37,10 +38,10 @@ class AboutView extends StatelessWidget {
           const SizedBox(
             height: 4,
           ),
-          const Text(
-            'Version 1.0',
+          Text(
+            'Version ${packageInfo?.version ?? 1.0}',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: ColorPalette.greyscale100,
               fontSize: 14,
               fontWeight: FontWeight.w500,

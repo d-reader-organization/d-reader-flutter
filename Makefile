@@ -21,6 +21,10 @@
 
 # # Set the path to your Android NDK
 # ANDROID_NDK_PATH=/path/to/android/ndk
+DEFINE_API_URL_DEV="--dart-define=apiUrl=https://d-reader-backend-dev.herokuapp.com"
+DEFINE_API_URL_DEV_DEVNET="--dart-define=apiUrl=https://d-reader-backend-dev-devnet.herokuapp.com"
+DEFINE_API_URL_PROD="--dart-define=apiUrl=https://d-reader-backend.herokuapp.com"
+DEFINE_API_URL_PROD_DEVNET="--dart-define=apiUrl=https://d-reader-backend-devnet.herokuapp.com"
 
 all: build-dev build-prod
 

@@ -1,6 +1,4 @@
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/ioc.dart';
@@ -12,21 +10,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+PackageInfo? packageInfo;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final sp = await SharedPreferences.getInstance();
-  final String? token = sp.getString(Config.tokenKey);
+  packageInfo = await PackageInfo.fromPlatform();
   IoCContainer.register();
   runApp(
     ProviderScope(
       overrides: [
-        authProvider.overrideWith(
-          (ref) => AuthNotifier(
-            token,
-          ),
-        ),
         solanaProvider.overrideWith(
           (ref) => SolanaClientNotifier(
             DReaderWalletService.instance,

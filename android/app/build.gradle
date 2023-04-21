@@ -26,6 +26,25 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    flavorDimensions "environment"
+
+    productFlavors {
+        dev {
+            dimension "environment"
+            resValue "string", "app_name", "dReader-Dev"
+            applicationIdSuffix ".dev"
+            versionCode flutterVersionCode.toInteger()
+            versionName flutterVersionName
+        }
+        prod {
+            dimension "environment"
+            resValue "string", "app_name", "dReader"
+            versionCode flutterVersionCode.toInteger()
+            versionName flutterVersionName     
+        }
+    }
+
+
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
@@ -51,6 +70,7 @@ android {
         targetSdkVersion 33 // for some reason doesn't read versions properly from local.properties
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        resValue "string", "app_name", "dReader"
     }
 
     buildTypes {

@@ -70,8 +70,8 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       final String? signature = networkData['signature'];
       state = state.copyWith(
         apiUrl: selectedNetwork == SolanaCluster.devnet.value
-            ? Config.devApiUrlDevnet
-            : Config.devApiUrl,
+            ? Config.apiUrlDevnet
+            : Config.apiUrl,
         authToken: networkData['authToken'],
         jwtToken: networkData['jwtToken'],
         refreshToken: networkData['refreshToken'],
@@ -86,7 +86,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     final bool isDevnet = input.solanaCluster == SolanaCluster.devnet.value ||
         state.solanaCluster == SolanaCluster.devnet.value;
     state = state.copyWith(
-      apiUrl: isDevnet ? Config.devApiUrlDevnet : Config.devApiUrl,
+      apiUrl: isDevnet ? Config.apiUrlDevnet : Config.apiUrl,
       authToken: input.authToken,
       jwtToken: input.jwtToken,
       refreshToken: input.refreshToken,

@@ -37,7 +37,7 @@ class ComicsListView extends ConsumerWidget {
         style: const TextStyle(color: Colors.red),
       ),
       loading: () => SizedBox(
-        height: 90,
+        height: 240,
         child: ListView.builder(
           itemCount: 3,
           shrinkWrap: true,

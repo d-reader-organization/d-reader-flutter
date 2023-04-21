@@ -7,7 +7,7 @@ class EnvironmentState {
   Ed25519HDPublicKey? publicKey;
 
   EnvironmentState({
-    this.apiUrl = Config.devApiUrl,
+    this.apiUrl = Config.apiUrl,
     required this.solanaCluster,
     this.authToken,
     this.jwtToken,

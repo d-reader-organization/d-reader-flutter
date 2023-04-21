@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  String _apiUrl = Config.devApiUrl;
+  String _apiUrl = Config.apiUrl;
   String? _token;
   SharedPreferences? _sharedPreferences;
   static ApiService get instance => IoCContainer.resolveContainer<ApiService>();
@@ -93,7 +93,7 @@ class ApiService {
     final lastNetwork = _sharedPreferences?.getString('temp-network') ??
         _sharedPreferences?.getString('last-network');
     _apiUrl = lastNetwork == SolanaCluster.devnet.value
-        ? Config.devApiUrlDevnet
-        : Config.devApiUrl;
+        ? Config.apiUrlDevnet
+        : Config.apiUrl;
   }
 }

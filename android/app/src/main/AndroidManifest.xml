@@ -2,7 +2,7 @@
     package="app.dreader.app.d_reader_flutter">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="dReader"
+        android:label="@string/app_name" 
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">

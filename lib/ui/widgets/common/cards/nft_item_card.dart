@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/nft.dart';
+import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';

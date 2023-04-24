@@ -62,11 +62,27 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
 
   @override
   Future<String?> buyItem({
-    required String mint,
+    required String mintAccount,
     required int price,
     required String sellerAddress,
   }) {
     return ApiService.instance.apiCallGet(
-        '/auction-house/transactions/instant-buy?mint=$mint&price=$price&seller=$sellerAddress');
+      '/auction-house/transactions/instant-buy?mintAccount=$mintAccount&price=$price&seller=$sellerAddress',
+    );
+  }
+
+  @override
+  Future<List<String>> buyMultipleItems(Map<String, dynamic> query) async {
+    final String? responseBody = await ApiService.instance.apiCallGet(
+      '/auction-house/transactions/instant-buy',
+      queryParameters: query,
+    );
+    return responseBody == null
+        ? []
+        : List<String>.from(
+            jsonDecode(
+              responseBody,
+            ),
+          );
   }
 }

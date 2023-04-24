@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -353,16 +353,32 @@ class BottomNavigation extends HookConsumerWidget {
                             ? () async {
                                 globalHook.value =
                                     globalHook.value.copyWith(isLoading: true);
-                                final ListingModel selectedListing = ref
+                                List<BuyNftInput> selectedNfts = ref
                                     .read(selectedItemsProvider)
-                                    .elementAt(0);
-                                final isSuccessful =
-                                    await ref.read(solanaProvider.notifier).buy(
-                                          mint: selectedListing.nftAddress,
-                                          price: selectedListing.price,
-                                          sellerAddress:
-                                              selectedListing.seller.address,
-                                        );
+                                    .map(
+                                      (e) => BuyNftInput(
+                                        mintAccount: e.nftAddress,
+                                        price: e.price,
+                                        sellerAddress: e.seller.address,
+                                      ),
+                                    )
+                                    .toList();
+                                // final ListingModel selectedListing = ref
+                                //     .read(selectedItemsProvider)
+                                //     .elementAt(0);
+                                final isSuccessful = await ref
+                                    .read(solanaProvider.notifier)
+                                    .buyMultiple(selectedNfts);
+                                // final isSuccessful = await ref
+                                //     .read(solanaProvider.notifier)
+                                //     .buy(
+                                //       BuyNftInput(
+                                //         mintAccount: selectedListing.nftAddress,
+                                //         price: selectedListing.price,
+                                //         sellerAddress:
+                                //             selectedListing.seller.address,
+                                //       ),
+                                //     );
                                 if (isSuccessful) {
                                   ref.invalidate(listedItemsProvider);
                                   ref.invalidate(walletAssetsProvider);

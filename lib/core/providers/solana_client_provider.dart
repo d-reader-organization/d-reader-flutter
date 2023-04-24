@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
@@ -131,7 +132,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (encodedNftTransaction == null) {
       return false;
     }
-    return await _signAndSendTransaction(encodedNftTransaction);
+    return await _signAndSendTransactions([encodedNftTransaction]);
   }
 
   Future<bool> list({
@@ -144,7 +145,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (encodedTransaction == null) {
       return false;
     }
-    return await _signAndSendTransaction(encodedTransaction);
+    return await _signAndSendTransactions([encodedTransaction]);
   }
 
   Future<bool> delist({
@@ -155,38 +156,58 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (encodedTransaction == null) {
       return false;
     }
-    return await _signAndSendTransaction(encodedTransaction);
+    return await _signAndSendTransactions([encodedTransaction]);
   }
 
-  Future<bool> buy({
-    required String mint,
-    required int price,
-    required String sellerAddress,
-  }) async {
+  Future<bool> buyMultiple(List<BuyNftInput> input) async {
+    final List<String> encodedTransactions =
+        await _walletService.buyMultipleItems(input);
+    if (encodedTransactions.isEmpty) {
+      return false;
+    }
+    return await _signAndSendTransactions(encodedTransactions);
+  }
+
+  Future<bool> buy(BuyNftInput input) async {
     final String? encodedTransaction = await _walletService.buyItem(
-        mint: mint, price: price, sellerAddress: sellerAddress);
+      mintAccount: input.mintAccount,
+      price: input.price,
+      sellerAddress: input.sellerAddress,
+    );
     if (encodedTransaction == null) {
       return false;
     }
-    return await _signAndSendTransaction(encodedTransaction);
+    return await _signAndSendTransactions([encodedTransaction]);
   }
 
-  Future<bool> _signAndSendTransaction(String encodedTransaction) async {
+  SignedTx _decodeAndResign({
+    required String encodedTransaction,
+    required Signature signature,
+  }) {
     final decodedTX = SignedTx.decode(encodedTransaction);
+    return decodedTX.resign(signature);
+  }
 
+  Future<bool> _signAndSendTransactions(
+      List<String> encodedTransactions) async {
     final session = await _getSession();
     final client = await session.start();
     final signature = _getSignature();
 
     if (await _doReauthorize(client) && signature != null) {
-      final finalTransaction = decodedTX.resign(signature);
+      List<SignedTx> resignedTransactions = encodedTransactions
+          .map(
+            (encoded) => _decodeAndResign(
+              encodedTransaction: encoded,
+              signature: signature,
+            ),
+          )
+          .toList();
       try {
         final response = await client.signAndSendTransactions(
-          transactions: [
-            base64Decode(
-              finalTransaction.encode(),
-            ),
-          ],
+          transactions: resignedTransactions.map((resignedTransaction) {
+            return base64Decode(resignedTransaction.encode());
+          }).toList(),
         );
         print('Sign and send response');
         print(response);

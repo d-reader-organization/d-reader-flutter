@@ -75,7 +75,9 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
         authToken: networkData['authToken'],
         jwtToken: networkData['jwtToken'],
         refreshToken: networkData['refreshToken'],
-        publicKey: Ed25519HDPublicKey.fromBase58(networkData['publicKey']),
+        publicKey: networkData['publicKey'] != null
+            ? Ed25519HDPublicKey.fromBase58(networkData['publicKey'])
+            : null,
         solanaCluster: selectedNetwork,
         signature: signature?.codeUnits,
       );

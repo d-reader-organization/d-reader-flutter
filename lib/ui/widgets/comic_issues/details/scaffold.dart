@@ -353,32 +353,19 @@ class BottomNavigation extends HookConsumerWidget {
                             ? () async {
                                 globalHook.value =
                                     globalHook.value.copyWith(isLoading: true);
-                                List<BuyNftInput> selectedNfts = ref
+                                List<BuyNftInput> selectedNftsInput = ref
                                     .read(selectedItemsProvider)
                                     .map(
                                       (e) => BuyNftInput(
                                         mintAccount: e.nftAddress,
                                         price: e.price,
-                                        sellerAddress: e.seller.address,
+                                        seller: e.seller.address,
                                       ),
                                     )
                                     .toList();
-                                // final ListingModel selectedListing = ref
-                                //     .read(selectedItemsProvider)
-                                //     .elementAt(0);
                                 final isSuccessful = await ref
                                     .read(solanaProvider.notifier)
-                                    .buyMultiple(selectedNfts);
-                                // final isSuccessful = await ref
-                                //     .read(solanaProvider.notifier)
-                                //     .buy(
-                                //       BuyNftInput(
-                                //         mintAccount: selectedListing.nftAddress,
-                                //         price: selectedListing.price,
-                                //         sellerAddress:
-                                //             selectedListing.seller.address,
-                                //       ),
-                                //     );
+                                    .buyMultiple(selectedNftsInput);
                                 if (isSuccessful) {
                                   ref.invalidate(listedItemsProvider);
                                   ref.invalidate(walletAssetsProvider);
@@ -581,7 +568,7 @@ class ListingStats extends ConsumerWidget {
             title: 'VOLUME',
             stats: issue.isFree
                 ? '--'
-                : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol) : 0}◎',
+                : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
           ),
           StatsInfo(
             title: 'SUPPLY',

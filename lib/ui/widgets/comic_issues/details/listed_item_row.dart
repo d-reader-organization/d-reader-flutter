@@ -33,11 +33,9 @@ class ListedItemRow extends ConsumerWidget {
           ? () {
               List<ListingModel> items = [...selectedItems];
               if (selectedItems.contains(listing)) {
-                items = [];
-                // items.remove(listing);
+                items.remove(listing);
               } else {
-                items = [listing];
-                // items.add(listing);
+                items.add(listing);
               }
               ref.read(selectedItemsProvider.notifier).state = items;
             }

@@ -19,16 +19,13 @@ class ApiService {
     Map<String, dynamic>? queryParameters,
   }) async {
     await _setters();
-    Uri uri = Uri.https(
-      _apiUrl,
-      path,
-      queryParameters?.map(
-        (key, value) => MapEntry(
-          key,
-          value.toString(),
-        ),
-      ),
-    );
+    Uri uri = queryParameters != null
+        ? Uri.https(
+            _apiUrl.replaceAll('https://', ''),
+            path,
+            queryParameters,
+          )
+        : Uri.parse('$_apiUrl$path');
     http.Response response = await http.get(
       uri,
       headers:

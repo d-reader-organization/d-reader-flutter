@@ -1,3 +1,5 @@
+import 'dart:convert' show jsonEncode;
+
 import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl.dart';
@@ -56,22 +58,20 @@ class DReaderWalletService {
   Future<String?> buyItem({
     required String mintAccount,
     required int price,
-    required String sellerAddress,
+    required String seller,
   }) {
     return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().buyItem(
       mintAccount: mintAccount,
       price: price,
-      sellerAddress: sellerAddress,
+      seller: seller,
     );
   }
 
   Future<List<String>> buyMultipleItems(List<BuyNftInput> input) {
-    Map<String, List<String>> query = {
-      "instantBuyParams": input
-          .map((buyNftInput) =>
-              "mintAccount=${buyNftInput.mintAccount}&price=${buyNftInput.price}&seller=${buyNftInput.sellerAddress}")
-          .toList()
-    };
+    Map<String, String> query = {};
+    for (int i = 0; i < input.length; ++i) {
+      query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
+    }
 
     return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
         .buyMultipleItems(query);

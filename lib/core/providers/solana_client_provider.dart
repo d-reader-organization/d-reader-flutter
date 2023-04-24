@@ -68,6 +68,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       cluster: cluster,
+      iconUri: Uri.file('assets/icons/favicon.ico'),
     );
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
     final envNotifier = ref.read(environmentProvider.notifier);
@@ -172,7 +173,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final String? encodedTransaction = await _walletService.buyItem(
       mintAccount: input.mintAccount,
       price: input.price,
-      sellerAddress: input.sellerAddress,
+      seller: input.seller,
     );
     if (encodedTransaction == null) {
       return false;
@@ -264,6 +265,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       authToken: authToken,
+      iconUri: Uri.file('assets/icons/favicon.ico'),
     );
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(

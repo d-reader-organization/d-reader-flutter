@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
@@ -68,7 +69,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       cluster: cluster,
-      iconUri: Uri.file('assets/icons/favicon.ico'),
+      iconUri: Uri.file(Config.faviconPath),
     );
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
     final envNotifier = ref.read(environmentProvider.notifier);
@@ -265,7 +266,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       authToken: authToken,
-      iconUri: Uri.file('assets/icons/favicon.ico'),
+      iconUri: Uri.file(Config.faviconPath),
     );
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(

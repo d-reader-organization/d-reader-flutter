@@ -16,13 +16,21 @@ class ApiService {
   Future<String?> apiCallGet(
     String path, {
     bool includeAuthHeader = true,
+    Map<String, dynamic>? queryParameters,
   }) async {
     await _setters();
-    Uri uri = Uri.parse('$_apiUrl$path');
-    http.Response response = await http.get(uri,
-        headers: includeAuthHeader
-            ? {HttpHeaders.authorizationHeader: '$_token'}
-            : {});
+    Uri uri = queryParameters != null
+        ? Uri.https(
+            _apiUrl.replaceAll('https://', ''),
+            path,
+            queryParameters,
+          )
+        : Uri.parse('$_apiUrl$path');
+    http.Response response = await http.get(
+      uri,
+      headers:
+          includeAuthHeader ? {HttpHeaders.authorizationHeader: '$_token'} : {},
+    );
     if (response.statusCode != 200) {
       print(response.body);
       return null;

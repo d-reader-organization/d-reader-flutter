@@ -48,13 +48,15 @@ class ComicIssueDetails extends ConsumerWidget {
                       ),
                       child: issue.isFree
                           ? const SizedBox()
-                          : issue.candyMachineAddress != null
-                              ? MintedItems(
-                                  issue: issue,
-                                )
-                              : ListedItems(
-                                  issue: issue,
-                                ),
+                          : Center(
+                              child: issue.candyMachineAddress != null
+                                  ? MintedItems(
+                                      issue: issue,
+                                    )
+                                  : ListedItems(
+                                      issue: issue,
+                                    ),
+                            ),
                     );
                   },
                 ),

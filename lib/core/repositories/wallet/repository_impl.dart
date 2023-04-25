@@ -1,7 +1,7 @@
 import 'dart:convert' show jsonDecode;
 
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
 

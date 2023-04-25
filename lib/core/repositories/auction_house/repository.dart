@@ -13,8 +13,10 @@ abstract class AuctionHouseRepository {
   Future<String?> executeSale({required String query});
   Future<String?> delistItem({required String mint});
   Future<String?> buyItem({
-    required String mint,
+    required String mintAccount,
     required int price,
-    required String sellerAddress,
+    required String seller,
   });
+
+  Future<List<String>> buyMultipleItems(Map<String, dynamic> query);
 }

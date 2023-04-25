@@ -13,7 +13,8 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
     String? printReceipt,
   }) {
     return ApiService.instance.apiCallGet(
-        '/auction-house/transactions/list?mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt');
+      '/auction-house/transactions/list?mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt',
+    );
   }
 
   @override
@@ -21,8 +22,9 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
     required int issueId,
     required String query,
   }) async {
-    final String? responseBody = await ApiService.instance
-        .apiCallGet('/auction-house/get/listings/$issueId?$query');
+    final String? responseBody = await ApiService.instance.apiCallGet(
+      '/auction-house/get/listings/$issueId?$query',
+    );
 
     if (responseBody == null) {
       return [];
@@ -62,11 +64,27 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
 
   @override
   Future<String?> buyItem({
-    required String mint,
+    required String mintAccount,
     required int price,
-    required String sellerAddress,
+    required String seller,
   }) {
     return ApiService.instance.apiCallGet(
-        '/auction-house/transactions/instant-buy?mint=$mint&price=$price&seller=$sellerAddress');
+      '/auction-house/transactions/instant-buy?mintAccount=$mintAccount&price=$price&seller=$seller',
+    );
+  }
+
+  @override
+  Future<List<String>> buyMultipleItems(Map<String, dynamic> query) async {
+    final String? responseBody = await ApiService.instance.apiCallGet(
+      '/auction-house/transactions/multiple-buy',
+      queryParameters: query,
+    );
+    return responseBody == null
+        ? []
+        : List<String>.from(
+            jsonDecode(
+              responseBody,
+            ),
+          );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -353,16 +353,19 @@ class BottomNavigation extends HookConsumerWidget {
                             ? () async {
                                 globalHook.value =
                                     globalHook.value.copyWith(isLoading: true);
-                                final ListingModel selectedListing = ref
+                                List<BuyNftInput> selectedNftsInput = ref
                                     .read(selectedItemsProvider)
-                                    .elementAt(0);
-                                final isSuccessful =
-                                    await ref.read(solanaProvider.notifier).buy(
-                                          mint: selectedListing.nftAddress,
-                                          price: selectedListing.price,
-                                          sellerAddress:
-                                              selectedListing.seller.address,
-                                        );
+                                    .map(
+                                      (e) => BuyNftInput(
+                                        mintAccount: e.nftAddress,
+                                        price: e.price,
+                                        seller: e.seller.address,
+                                      ),
+                                    )
+                                    .toList();
+                                final isSuccessful = await ref
+                                    .read(solanaProvider.notifier)
+                                    .buyMultiple(selectedNftsInput);
                                 if (isSuccessful) {
                                   ref.invalidate(listedItemsProvider);
                                   ref.invalidate(walletAssetsProvider);
@@ -565,7 +568,7 @@ class ListingStats extends ConsumerWidget {
             title: 'VOLUME',
             stats: issue.isFree
                 ? '--'
-                : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol) : 0}◎',
+                : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
           ),
           StatsInfo(
             title: 'SUPPLY',

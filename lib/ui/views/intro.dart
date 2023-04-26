@@ -1,13 +1,16 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -24,7 +27,7 @@ class IntroView extends HookConsumerWidget {
       titlePadding: const EdgeInsets.only(bottom: 16),
       pageColor: ColorPalette.appBackgroundColor,
       imagePadding: const EdgeInsets.only(top: 16),
-      imageFlex: 2,
+      imageFlex: 1,
     );
   }
 
@@ -33,10 +36,9 @@ class IntroView extends HookConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final globalHook = useGlobalState();
     final currentIndex = useState<int>(0);
-    final bool isLastScreen = ref.read(environmentProvider).solanaCluster ==
-            SolanaCluster.devnet.value
-        ? currentIndex.value == 2
-        : currentIndex.value == 1;
+    final bool isLastScreen = currentIndex.value == 2;
+    final bool shouldFreeze =
+        currentIndex.value == 1 && ref.watch(walletNameProvider).trim().isEmpty;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: IntroductionScreen(
@@ -45,6 +47,8 @@ class IntroView extends HookConsumerWidget {
         bodyPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         showDoneButton: false,
         showNextButton: false,
+        freeze: shouldFreeze,
+        showSkipButton: false,
         onChange: (int index) {
           currentIndex.value = index;
         },
@@ -53,32 +57,36 @@ class IntroView extends HookConsumerWidget {
           child: RoundedButton(
             text: isLastScreen ? 'CONNECT WALLET' : 'NEXT',
             size: const Size(double.infinity, 52),
-            onPressed: () async {
-              if (!isLastScreen) {
-                _introScreenKey.currentState?.next();
-              } else {
-                globalHook.value = globalHook.value.copyWith(isLoading: true);
-                final result = await ref
-                    .read(solanaProvider.notifier)
-                    .authorizeAndSignMessage();
-                if (result == false && context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Failed to sign a message.',
-                      ),
-                    ),
-                  );
-                  globalHook.value = globalHook.value
-                      .copyWith(isLoading: false, showSplash: false);
-                  return;
-                }
-                globalHook.value = globalHook.value.copyWith(isLoading: false);
-                if (context.mounted) {
-                  nextScreenReplace(context, const DReaderScaffold());
-                }
-              }
-            },
+            onPressed: shouldFreeze
+                ? null
+                : () async {
+                    if (!isLastScreen) {
+                      _introScreenKey.currentState?.next();
+                    } else {
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: true);
+                      final result = await ref
+                          .read(solanaProvider.notifier)
+                          .authorizeAndSignMessage();
+                      if (result == false && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Failed to sign a message.',
+                            ),
+                          ),
+                        );
+                        globalHook.value = globalHook.value
+                            .copyWith(isLoading: false, showSplash: false);
+                        return;
+                      }
+                      globalHook.value =
+                          globalHook.value.copyWith(isLoading: false);
+                      if (context.mounted) {
+                        nextScreenReplace(context, const DReaderScaffold());
+                      }
+                    }
+                  },
             isLoading: globalHook.value.isLoading,
           ),
         ),
@@ -112,133 +120,171 @@ class IntroView extends HookConsumerWidget {
             image: Image.asset('assets/images/splash_screen_1.png'),
             decoration: _pageDecoration(textTheme),
           ),
-          if (ref.read(environmentProvider).solanaCluster ==
-              SolanaCluster.devnet.value) ...[
-            PageViewModel(
-              title: "Caution",
-              bodyWidget: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: ColorPalette.boxBackground300,
-                      gradient: LinearGradient(
-                        stops: [0.02, 0.02],
-                        colors: [
-                          ColorPalette.dReaderOrange,
-                          ColorPalette.boxBackground300,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        bottomLeft: Radius.circular(4),
-                      ),
-                    ),
-                    child: Row(
-                      children: const [
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Icon(
-                          Icons.warning,
-                          color: ColorPalette.dReaderOrange,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Text(
-                              'Please use Solflare wallet for this environment',
-                              style: TextStyle(
-                                color: Colors.white,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: ColorPalette.boxBackground300,
-                      gradient: LinearGradient(
-                        stops: [0.02, 0.02],
-                        colors: [
-                          Colors.blue,
-                          ColorPalette.boxBackground300,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        bottomLeft: Radius.circular(4),
-                      ),
-                    ),
-                    child: Row(
-                      children: const [
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Icon(
-                          Icons.info_outline_rounded,
-                          color: Colors.blue,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Text(
-                              'Make sure to switch your wallet app to devnet',
-                              style: TextStyle(
-                                color: Colors.white,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              decoration: PageDecoration(
-                titleTextStyle: textTheme.headlineLarge!.copyWith(
-                  color: ColorPalette.dReaderYellow100,
+          PageViewModel(
+            title: "Set Your Account",
+            bodyWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SettingsTextField(
+                  labelText: 'Account name',
+                  onChange: (value) {
+                    ref.read(walletNameProvider.notifier).state = value;
+                  },
                 ),
-                titlePadding: const EdgeInsets.only(bottom: 16),
-                pageColor: ColorPalette.appBackgroundColor,
-                bodyAlignment: Alignment.center,
-              ),
+                const SizedBox(
+                  height: 32,
+                ),
+                ref.watch(hasReferralProvider)
+                    ? SettingsTextField(
+                        labelText: 'Referrer name/address',
+                        hintText: 'Referrer name',
+                        onChange: (String value) {
+                          ref.read(referrerNameProvider.notifier).state = value;
+                        },
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          ref.read(hasReferralProvider.notifier).state = true;
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/ticket.svg',
+                              colorFilter: const ColorFilter.mode(
+                                ColorPalette.dReaderYellow100,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            const Text(
+                              'Have referral code?',
+                              style: TextStyle(
+                                color: ColorPalette.dReaderYellow100,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ],
             ),
-          ],
+            decoration: PageDecoration(
+              titleTextStyle: textTheme.headlineLarge!.copyWith(
+                color: ColorPalette.dReaderYellow100,
+              ),
+              titlePadding: const EdgeInsets.only(bottom: 16),
+              pageColor: ColorPalette.appBackgroundColor,
+              bodyAlignment: Alignment.center,
+            ),
+          ),
           PageViewModel(
             title: "Connect with your wallet",
             bodyWidget: Column(
               children: [
                 Text(
-                  "Connect to any wallet to securely store youd digital comics & goods",
+                  "Connect Solflare or Phantom wallet to securely store your digital comics & goods",
                   textAlign: TextAlign.center,
                   style: textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(
-                  height: 32,
+                  height: 16,
                 ),
-                RichText(
-                  text: TextSpan(
-                      style: textTheme.bodyMedium,
-                      children: <TextSpan>[
-                        const TextSpan(
-                          text: "Don't have a wallet yet? ",
+                const Text(
+                  "Don't have a wallet yet?",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: ColorPalette.dReaderYellow100,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          10,
                         ),
-                        TextSpan(
-                          text: "Get one here!",
-                          style: textTheme.bodyMedium?.copyWith(
-                            color: ColorPalette.dReaderYellow100,
-                            fontWeight: FontWeight.w700,
+                        border: Border.all(
+                          color: ColorPalette.boxBackground300,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/ticket.svg',
+                            colorFilter: const ColorFilter.mode(
+                              ColorPalette.dReaderYellow100,
+                              BlendMode.srcIn,
+                            ),
                           ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          const Text(
+                            'Get Solflare',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          10,
                         ),
-                      ]),
+                        border: Border.all(
+                          color: ColorPalette.boxBackground300,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/ticket.svg',
+                            colorFilter: const ColorFilter.mode(
+                              ColorPalette.dReaderYellow100,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          const Text(
+                            'Get Phantom',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class SettingsTextField extends StatelessWidget {
-  final String labelText;
+  final String labelText, hintText;
   final String? defaultValue;
   final bool isReadOnly;
   final Widget? suffix;
@@ -12,6 +12,7 @@ class SettingsTextField extends StatelessWidget {
   const SettingsTextField({
     super.key,
     required this.labelText,
+    this.hintText = 'Wallet name',
     this.defaultValue,
     this.isReadOnly = false,
     this.suffix,
@@ -48,7 +49,7 @@ class SettingsTextField extends StatelessWidget {
             }
           },
           decoration: InputDecoration(
-            hintText: 'Wallet name',
+            hintText: hintText,
             constraints: const BoxConstraints(
               minHeight: 56,
               maxHeight: 56,

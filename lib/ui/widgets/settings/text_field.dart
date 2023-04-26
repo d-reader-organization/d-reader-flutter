@@ -53,6 +53,8 @@ class SettingsTextField extends StatelessWidget {
               minHeight: 56,
               maxHeight: 56,
             ),
+            fillColor: ColorPalette.boxBackground200,
+            filled: true,
             hintStyle: TextStyle(
               color: isReadOnly ? ColorPalette.greyscale200 : Colors.white,
               fontSize: 16,
@@ -66,19 +68,19 @@ class SettingsTextField extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xff414756),
+                color: ColorPalette.boxBackground400,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xff414756),
+                color: ColorPalette.boxBackground400,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xff414756),
+                color: ColorPalette.boxBackground400,
               ),
             ),
           ),

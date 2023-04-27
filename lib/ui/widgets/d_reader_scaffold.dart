@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';
 import 'package:d_reader_flutter/ui/views/settings/root.dart';
+import 'package:d_reader_flutter/ui/widgets/beta_access_wrapper.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -73,8 +74,12 @@ class DReaderScaffold extends ConsumerWidget {
                         .setNavigationIndex(index);
                   },
                   children: const [
-                    HomeView(),
-                    DiscoverView(),
+                    BetaAccessWrapper(
+                      child: HomeView(),
+                    ),
+                    BetaAccessWrapper(
+                      child: DiscoverView(),
+                    ),
                     LibraryView(),
                     SettingsRootView(),
                   ],

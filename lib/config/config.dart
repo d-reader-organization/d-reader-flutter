@@ -34,5 +34,4 @@ abstract class Config {
   static const String successAuthAsset = 'assets/animation_files/done.json';
   static const String settingsAssetsPath = 'assets/icons/settings_screen';
   static const String faviconPath = 'assets/icons/favicon.ico';
-  static const String otpErrorMessage = 'Failed to get OTP.';
 }

@@ -15,7 +15,7 @@ class DReaderWalletService {
   static final DReaderWalletService _instance = DReaderWalletService._();
   static DReaderWalletService get instance => _instance;
 
-  Future<String> getOneTimePassword({
+  Future<dynamic> getOneTimePassword({
     required Ed25519HDPublicKey publicKey,
     required String name,
     String? referrer,

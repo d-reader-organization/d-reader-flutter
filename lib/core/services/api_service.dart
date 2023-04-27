@@ -69,15 +69,18 @@ class ApiService {
             : {},
         body: body,
       );
-      final decodedBody = jsonDecode(response.body);
+
       if (response.statusCode != 200) {
+        final decodedBody = jsonDecode(response.body);
         throw ApiError(
           error: decodedBody['error'],
-          message: decodedBody['message'],
+          message: decodedBody['message'] is List
+              ? decodedBody['message'].join('. ')
+              : decodedBody['message'],
           statusCode: decodedBody['statusCode'] ?? 500,
         );
       }
-      return decodedBody;
+      return response.body;
     } on ApiError catch (error) {
       return error;
     }

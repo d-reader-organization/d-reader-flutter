@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
@@ -62,7 +63,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     _walletService = walletService;
   }
 
-  Future<bool> authorizeAndSignMessage([String? overrideCluster]) async {
+  Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
     final session = await _getSession();
     final client = await session.start();
     final String cluster =
@@ -78,8 +79,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
     final signMessageResult =
         await _signMessage(client, publicKey, result?.authToken ?? '', cluster);
-    if (signMessageResult.isEmpty) {
-      return false;
+    if (signMessageResult is String || signMessageResult.isEmpty) {
+      await session.close();
+      return signMessageResult is String
+          ? signMessageResult
+          : 'Failed to sign message.';
     }
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
@@ -96,7 +100,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     await session.close();
 
     await _getAndStoreToken(signMessageResult.first, publicKey);
-    return true;
+    return 'OK';
   }
 
   Future<void> _getAndStoreToken(
@@ -231,7 +235,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         : null;
   }
 
-  Future<List<Uint8List>> _signMessage(
+  Future<dynamic> _signMessage(
     MobileWalletAdapterClient client,
     Ed25519HDPublicKey signer,
     String overrideAuthToken,
@@ -246,8 +250,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         name: walletName,
         referrer: referrerName.isNotEmpty ? referrerName : null,
       );
-      if (message == Config.otpErrorMessage) {
-        return [];
+      if (message is ApiError) {
+        return message.message;
       }
       ref.read(environmentProvider.notifier).clearTempNetwork();
       final addresses = Uint8List.fromList(signer.bytes);

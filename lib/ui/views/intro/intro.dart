@@ -76,22 +76,24 @@ class IntroView extends HookConsumerWidget {
                       final result = await ref
                           .read(solanaProvider.notifier)
                           .authorizeAndSignMessage();
-                      if (result == false && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Failed to sign a message.',
-                            ),
-                          ),
-                        );
-                        globalHook.value = globalHook.value
-                            .copyWith(isLoading: false, showSplash: false);
-                        return;
-                      }
-                      globalHook.value =
-                          globalHook.value.copyWith(isLoading: false);
                       if (context.mounted) {
-                        nextScreenReplace(context, const DReaderScaffold());
+                        if (result == 'OK') {
+                          globalHook.value =
+                              globalHook.value.copyWith(isLoading: false);
+                          nextScreenReplace(context, const DReaderScaffold());
+                        } else {
+                          globalHook.value = globalHook.value.copyWith(
+                            isLoading: false,
+                            showSplash: false,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                result,
+                              ),
+                            ),
+                          );
+                        }
                       }
                     }
                   },

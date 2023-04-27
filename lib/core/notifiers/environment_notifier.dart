@@ -34,7 +34,7 @@ final environmentChangeProvider =
     final response = await ref
         .read(solanaProvider.notifier)
         .authorizeAndSignMessage(cluster);
-    return response;
+    return response == 'OK';
   }
   return true;
 });

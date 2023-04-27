@@ -1,14 +1,12 @@
 import 'dart:convert' show jsonDecode;
 
-import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   @override
-  Future<String> getOneTimePassword({
+  Future<dynamic> getOneTimePassword({
     required String address,
     required String name,
     String? referrer,
@@ -22,9 +20,7 @@ class AuthRepositoryImpl implements AuthRepository {
       },
       includeAuthHeader: false,
     );
-    if (responseBody is ApiError) {
-      return Config.otpErrorMessage;
-    }
+
     return responseBody;
   }
 

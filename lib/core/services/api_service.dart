@@ -51,12 +51,18 @@ class ApiService {
     return response.body;
   }
 
-  Future<String?> apiCallPatch(String path, [Object? body]) async {
+  Future<String?> apiCallPatch(
+    String path, {
+    bool includeAuthHeader = true,
+    Object? body,
+  }) async {
     Uri uri = Uri.parse('$_apiUrl$path');
     await _setters();
+
     http.Response response = await http.patch(
       uri,
-      headers: {HttpHeaders.authorizationHeader: '$_token'},
+      headers:
+          includeAuthHeader ? {HttpHeaders.authorizationHeader: '$_token'} : {},
       body: body,
     );
     if (response.statusCode != 200) {

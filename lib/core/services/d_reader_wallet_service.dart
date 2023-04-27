@@ -17,7 +17,7 @@ class DReaderWalletService {
 
   Future<String> getOneTimePassword({
     required Ed25519HDPublicKey publicKey,
-    String? name,
+    required String name,
     String? referrer,
   }) async {
     return await IoCContainer.resolveContainer<AuthRepositoryImpl>()

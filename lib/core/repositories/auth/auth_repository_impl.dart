@@ -1,5 +1,6 @@
 import 'dart:convert' show jsonDecode;
 
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
@@ -8,16 +9,19 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<String> getOneTimePassword({
     required String address,
-    String? name,
+    required String name,
     String? referrer,
   }) async {
-    String? responseBody = await ApiService.instance
-        .apiCallPatch('/auth/wallet/request-password/$address', {
-      "address": address,
-      "name": name,
-      "referrer": referrer,
-    });
-    return responseBody ?? 'An error occured';
+    String? responseBody = await ApiService.instance.apiCallPatch(
+      '/auth/wallet/request-password',
+      body: {
+        "address": address,
+        "name": name,
+        if (referrer != null) "referrer": referrer,
+      },
+      includeAuthHeader: false,
+    );
+    return responseBody ?? Config.otpErrorMessage;
   }
 
   @override

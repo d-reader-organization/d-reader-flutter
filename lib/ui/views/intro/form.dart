@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/core/providers/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/text_field.dart';
+import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -21,7 +21,7 @@ class IntroForm extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SettingsTextField(
+          CustomTextField(
             labelText: 'Account name',
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onValidate: (value) {
@@ -39,7 +39,7 @@ class IntroForm extends ConsumerWidget {
             },
           ),
           ref.watch(hasReferralProvider)
-              ? SettingsTextField(
+              ? CustomTextField(
                   labelText: 'Referrer name/address',
                   hintText: 'Referrer name',
                   onChange: (String value) {

@@ -48,7 +48,7 @@ class WalletRepositoryImpl implements WalletRepository {
   ) async {
     String? responseBody = await ApiService.instance.apiCallPatch(
       '/wallet/update/${payload.address}',
-      {
+      body: {
         "name": payload.name,
       },
     );
@@ -69,5 +69,15 @@ class WalletRepositoryImpl implements WalletRepository {
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  Future<WalletModel?> updateReferrer(String referrer) async {
+    String? responseBody = await ApiService.instance.apiCallPatch(
+      '/wallet/redeem-referral/$referrer',
+    );
+    return responseBody != null
+        ? WalletModel.fromJson(jsonDecode(responseBody))
+        : null;
   }
 }

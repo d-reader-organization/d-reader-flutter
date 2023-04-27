@@ -1,19 +1,20 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class SettingsTextField extends StatelessWidget {
-  final String labelText, hintText;
-  final String? defaultValue;
+class CustomTextField extends StatelessWidget {
+  final String hintText;
+  final String? defaultValue, labelText;
   final bool isReadOnly;
   final Widget? suffix;
   final Function()? onTap;
   final Function(String value)? onChange;
   final String? Function(String? value)? onValidate;
   final AutovalidateMode? autovalidateMode;
+  final TextEditingController? controller;
 
-  const SettingsTextField({
+  const CustomTextField({
     super.key,
-    required this.labelText,
+    this.labelText,
     this.hintText = 'Wallet name',
     this.defaultValue,
     this.isReadOnly = false,
@@ -22,6 +23,7 @@ class SettingsTextField extends StatelessWidget {
     this.onChange,
     this.onValidate,
     this.autovalidateMode,
+    this.controller,
   });
 
   @override
@@ -29,18 +31,21 @@ class SettingsTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          labelText,
-          style: const TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.w700,
+        if (labelText != null) ...[
+          Text(
+            labelText!,
+            style: const TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
+          const SizedBox(
+            height: 8,
+          ),
+        ],
         TextFormField(
           autovalidateMode: autovalidateMode,
+          controller: controller,
           onTap: onTap,
           initialValue: defaultValue,
           readOnly: isReadOnly,

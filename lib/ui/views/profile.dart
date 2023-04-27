@@ -15,7 +15,7 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.da
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/text_field.dart';
+import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -152,7 +152,7 @@ class ProfileView extends ConsumerWidget {
                   ),
                   Consumer(
                     builder: (context, ref, child) {
-                      return SettingsTextField(
+                      return CustomTextField(
                         labelText: 'Account name',
                         defaultValue:
                             wallet.name.isNotEmpty ? wallet.name : null,
@@ -165,7 +165,7 @@ class ProfileView extends ConsumerWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  SettingsTextField(
+                  CustomTextField(
                     labelText: 'Wallet address',
                     defaultValue: formatAddress(wallet.address, 4),
                     isReadOnly: true,

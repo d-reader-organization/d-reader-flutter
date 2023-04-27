@@ -243,9 +243,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       final String referrerName = ref.read(referrerNameProvider).trim();
       final message = await _walletService.getOneTimePassword(
         publicKey: signer,
-        name: walletName.isNotEmpty ? walletName : null,
+        name: walletName,
         referrer: referrerName.isNotEmpty ? referrerName : null,
       );
+      if (message == Config.otpErrorMessage) {
+        return [];
+      }
       ref.read(environmentProvider.notifier).clearTempNetwork();
       final addresses = Uint8List.fromList(signer.bytes);
 

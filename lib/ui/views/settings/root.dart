@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
 import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
+import 'package:d_reader_flutter/ui/views/settings/referrals.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -42,9 +43,12 @@ class SettingsRootView extends StatelessWidget {
               leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
               title: 'Security & Privacy',
             ),
-            const SettingsCommonListTile(
+            SettingsCommonListTile(
               leadingPath: '${Config.settingsAssetsPath}/light/3_user.svg',
               title: 'Referrals',
+              onTap: () {
+                nextScreenPush(context, const ReferralsView());
+              },
             ),
             SettingsCommonListTile(
               leadingPath: '${Config.settingsAssetsPath}/light/network.svg',

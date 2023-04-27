@@ -62,7 +62,7 @@ class ListedItemRow extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${formatAddress(listing.seller.address, 4)} ${formatWalletLabel(listing.seller.label)}',
+              '${formatAddress(listing.seller.address, 4)} ${formatWalletName(listing.seller.name)}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

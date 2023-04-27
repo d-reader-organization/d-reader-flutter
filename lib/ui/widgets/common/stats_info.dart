@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class StatsInfo extends StatelessWidget {
@@ -24,7 +25,7 @@ class StatsInfo extends StatelessWidget {
                 border: Border(
                   right: BorderSide(
                     width: 1,
-                    color: Color(0xFF414756),
+                    color: ColorPalette.boxBackground400,
                   ),
                 ),
               ),

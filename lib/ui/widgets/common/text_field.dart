@@ -1,22 +1,29 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class SettingsTextField extends StatelessWidget {
-  final String labelText;
-  final String? defaultValue;
+class CustomTextField extends StatelessWidget {
+  final String hintText;
+  final String? defaultValue, labelText;
   final bool isReadOnly;
   final Widget? suffix;
   final Function()? onTap;
   final Function(String value)? onChange;
+  final String? Function(String? value)? onValidate;
+  final AutovalidateMode? autovalidateMode;
+  final TextEditingController? controller;
 
-  const SettingsTextField({
+  const CustomTextField({
     super.key,
-    required this.labelText,
+    this.labelText,
+    this.hintText = 'Wallet name',
     this.defaultValue,
     this.isReadOnly = false,
     this.suffix,
     this.onTap,
     this.onChange,
+    this.onValidate,
+    this.autovalidateMode,
+    this.controller,
   });
 
   @override
@@ -24,21 +31,26 @@ class SettingsTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          labelText,
-          style: const TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.w700,
+        if (labelText != null) ...[
+          Text(
+            labelText!,
+            style: const TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
+          const SizedBox(
+            height: 8,
+          ),
+        ],
         TextFormField(
+          autovalidateMode: autovalidateMode,
+          controller: controller,
           onTap: onTap,
           initialValue: defaultValue,
           readOnly: isReadOnly,
           cursorColor: ColorPalette.dReaderYellow100,
+          validator: onValidate,
           onTapOutside: (event) {
             FocusManager.instance.primaryFocus?.unfocus();
           },
@@ -48,11 +60,13 @@ class SettingsTextField extends StatelessWidget {
             }
           },
           decoration: InputDecoration(
-            hintText: 'Wallet name',
+            hintText: hintText,
             constraints: const BoxConstraints(
-              minHeight: 56,
-              maxHeight: 56,
+              minHeight: 90,
+              maxHeight: 90,
             ),
+            fillColor: ColorPalette.boxBackground200,
+            filled: true,
             hintStyle: TextStyle(
               color: isReadOnly ? ColorPalette.greyscale200 : Colors.white,
               fontSize: 16,
@@ -66,19 +80,31 @@ class SettingsTextField extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xff414756),
+                color: ColorPalette.boxBackground400,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xff414756),
+                color: ColorPalette.boxBackground400,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: ColorPalette.dReaderRed,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: ColorPalette.dReaderRed,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xff414756),
+                color: ColorPalette.boxBackground400,
               ),
             ),
           ),

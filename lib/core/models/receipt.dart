@@ -44,19 +44,19 @@ class ReceiptNft {
 class ReceiptBuyer {
   final String address;
   final String avatar;
-  final String label;
+  final String name;
 
   ReceiptBuyer({
     required this.address,
     required this.avatar,
-    required this.label,
+    required this.name,
   });
 
   factory ReceiptBuyer.fromJson(dynamic json) {
     return ReceiptBuyer(
       address: json['address'],
       avatar: json['avatar'],
-      label: json['label'],
+      name: json['name'],
     );
   }
 }

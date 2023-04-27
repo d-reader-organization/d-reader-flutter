@@ -49,11 +49,25 @@ class WalletRepositoryImpl implements WalletRepository {
     String? responseBody = await ApiService.instance.apiCallPatch(
       '/wallet/update/${payload.address}',
       {
-        "label": payload.label,
+        "name": payload.name,
       },
     );
     return responseBody != null
         ? WalletModel.fromJson(jsonDecode(responseBody))
         : null;
+  }
+
+  @override
+  Future<bool> validateName(String name) async {
+    if (name.isEmpty) {
+      return false;
+    }
+    try {
+      String? responseBody = await ApiService.instance
+          .apiCallGet('/auth/wallet/validate-name/$name');
+      return responseBody != null ? jsonDecode(responseBody) : false;
+    } catch (e) {
+      return false;
+    }
   }
 }

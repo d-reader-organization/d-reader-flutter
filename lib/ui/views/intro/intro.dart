@@ -1,22 +1,22 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/intro/form.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class IntroView extends HookConsumerWidget {
   final GlobalKey<IntroductionScreenState> _introScreenKey =
       GlobalKey<IntroductionScreenState>();
+  final formKey = GlobalKey<FormState>();
   IntroView({Key? key}) : super(key: key);
 
   PageDecoration _pageDecoration(TextTheme textTheme) {
@@ -36,9 +36,12 @@ class IntroView extends HookConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final globalHook = useGlobalState();
     final currentIndex = useState<int>(0);
-    final bool isLastScreen = currentIndex.value == 2;
-    final bool shouldFreeze =
-        currentIndex.value == 1 && ref.watch(walletNameProvider).trim().isEmpty;
+    final validateNameProvider =
+        ref.watch(validateWalletNameProvider(ref.read(walletNameProvider)));
+    final isInvalidName =
+        validateNameProvider.value != null && !validateNameProvider.value!;
+    final bool shouldFreeze = currentIndex.value == 1 &&
+        (ref.watch(walletNameProvider).isEmpty || isInvalidName);
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: IntroductionScreen(
@@ -55,13 +58,18 @@ class IntroView extends HookConsumerWidget {
         globalFooter: Padding(
           padding: const EdgeInsets.all(8.0),
           child: RoundedButton(
-            text: isLastScreen ? 'CONNECT WALLET' : 'NEXT',
+            text: currentIndex.value == 2 ? 'CONNECT WALLET' : 'NEXT',
             size: const Size(double.infinity, 52),
             onPressed: shouldFreeze
                 ? null
                 : () async {
-                    if (!isLastScreen) {
+                    if (currentIndex.value == 0) {
                       _introScreenKey.currentState?.next();
+                    } else if (currentIndex.value == 1) {
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+                        _introScreenKey.currentState?.next();
+                      }
                     } else {
                       globalHook.value =
                           globalHook.value.copyWith(isLoading: true);
@@ -122,56 +130,7 @@ class IntroView extends HookConsumerWidget {
           ),
           PageViewModel(
             title: "Set Your Account",
-            bodyWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SettingsTextField(
-                  labelText: 'Account name',
-                  onChange: (value) {
-                    ref.read(walletNameProvider.notifier).state = value;
-                  },
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                ref.watch(hasReferralProvider)
-                    ? SettingsTextField(
-                        labelText: 'Referrer name/address',
-                        hintText: 'Referrer name',
-                        onChange: (String value) {
-                          ref.read(referrerNameProvider.notifier).state = value;
-                        },
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          ref.read(hasReferralProvider.notifier).state = true;
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/ticket.svg',
-                              colorFilter: const ColorFilter.mode(
-                                ColorPalette.dReaderYellow100,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            const Text(
-                              'Have referral code?',
-                              style: TextStyle(
-                                color: ColorPalette.dReaderYellow100,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-              ],
-            ),
+            bodyWidget: IntroForm(formKey: formKey),
             decoration: PageDecoration(
               titleTextStyle: textTheme.headlineLarge!.copyWith(
                 color: ColorPalette.dReaderYellow100,
@@ -225,12 +184,10 @@ class IntroView extends HookConsumerWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            'assets/icons/ticket.svg',
-                            colorFilter: const ColorFilter.mode(
-                              ColorPalette.dReaderYellow100,
-                              BlendMode.srcIn,
-                            ),
+                          Image.asset(
+                            'assets/images/solflare_logo.png',
+                            width: 24,
+                            height: 24,
                           ),
                           const SizedBox(
                             width: 8,
@@ -264,12 +221,10 @@ class IntroView extends HookConsumerWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            'assets/icons/ticket.svg',
-                            colorFilter: const ColorFilter.mode(
-                              ColorPalette.dReaderYellow100,
-                              BlendMode.srcIn,
-                            ),
+                          Image.asset(
+                            'assets/images/phantom_logo.png',
+                            width: 24,
+                            height: 24,
                           ),
                           const SizedBox(
                             width: 8,

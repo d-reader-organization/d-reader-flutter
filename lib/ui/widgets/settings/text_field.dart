@@ -8,6 +8,8 @@ class SettingsTextField extends StatelessWidget {
   final Widget? suffix;
   final Function()? onTap;
   final Function(String value)? onChange;
+  final String? Function(String? value)? onValidate;
+  final AutovalidateMode? autovalidateMode;
 
   const SettingsTextField({
     super.key,
@@ -18,6 +20,8 @@ class SettingsTextField extends StatelessWidget {
     this.suffix,
     this.onTap,
     this.onChange,
+    this.onValidate,
+    this.autovalidateMode,
   });
 
   @override
@@ -36,10 +40,12 @@ class SettingsTextField extends StatelessWidget {
           height: 8,
         ),
         TextFormField(
+          autovalidateMode: autovalidateMode,
           onTap: onTap,
           initialValue: defaultValue,
           readOnly: isReadOnly,
           cursorColor: ColorPalette.dReaderYellow100,
+          validator: onValidate,
           onTapOutside: (event) {
             FocusManager.instance.primaryFocus?.unfocus();
           },
@@ -51,8 +57,8 @@ class SettingsTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             constraints: const BoxConstraints(
-              minHeight: 56,
-              maxHeight: 56,
+              minHeight: 90,
+              maxHeight: 90,
             ),
             fillColor: ColorPalette.boxBackground200,
             filled: true,
@@ -76,6 +82,18 @@ class SettingsTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
                 color: ColorPalette.boxBackground400,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: ColorPalette.dReaderRed,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: ColorPalette.dReaderRed,
               ),
             ),
             focusedBorder: OutlineInputBorder(

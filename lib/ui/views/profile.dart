@@ -37,7 +37,7 @@ class ProfileView extends ConsumerWidget {
           final String walletName = ref.watch(walletNameProvider);
           return AnimatedOpacity(
             opacity: walletName.isNotEmpty &&
-                    walletName.trim() != provider.value?.label
+                    walletName.trim() != provider.value?.name
                 ? 1.0
                 : 0.0,
             duration: const Duration(milliseconds: 500),
@@ -80,7 +80,7 @@ class ProfileView extends ConsumerWidget {
                             updateWalletProvider(
                               UpdateWalletPayload(
                                 address: provider.value?.address ?? '',
-                                label: walletName,
+                                name: walletName,
                               ),
                             ).future,
                           );
@@ -155,7 +155,7 @@ class ProfileView extends ConsumerWidget {
                       return SettingsTextField(
                         labelText: 'Account name',
                         defaultValue:
-                            wallet.label.isNotEmpty ? wallet.label : null,
+                            wallet.name.isNotEmpty ? wallet.name : null,
                         onChange: (String value) {
                           ref.read(walletNameProvider.notifier).state = value;
                         },

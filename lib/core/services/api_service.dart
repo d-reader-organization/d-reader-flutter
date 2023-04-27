@@ -1,6 +1,8 @@
+import 'dart:convert' show jsonDecode;
 import 'dart:io';
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/ioc.dart';
 
@@ -51,25 +53,34 @@ class ApiService {
     return response.body;
   }
 
-  Future<String?> apiCallPatch(
+  Future<dynamic> apiCallPatch(
     String path, {
     bool includeAuthHeader = true,
     Object? body,
   }) async {
-    Uri uri = Uri.parse('$_apiUrl$path');
-    await _setters();
+    try {
+      Uri uri = Uri.parse('$_apiUrl$path');
+      await _setters();
 
-    http.Response response = await http.patch(
-      uri,
-      headers:
-          includeAuthHeader ? {HttpHeaders.authorizationHeader: '$_token'} : {},
-      body: body,
-    );
-    if (response.statusCode != 200) {
-      print(response.body);
-      return null;
+      http.Response response = await http.patch(
+        uri,
+        headers: includeAuthHeader
+            ? {HttpHeaders.authorizationHeader: '$_token'}
+            : {},
+        body: body,
+      );
+      final decodedBody = jsonDecode(response.body);
+      if (response.statusCode != 200) {
+        throw ApiError(
+          error: decodedBody['error'],
+          message: decodedBody['message'],
+          statusCode: decodedBody['statusCode'] ?? 500,
+        );
+      }
+      return decodedBody;
+    } on ApiError catch (error) {
+      return error;
     }
-    return response.body;
   }
 
   Future<String?> apiMultipartRequest(

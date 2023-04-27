@@ -1,7 +1,8 @@
 import 'package:d_reader_flutter/core/providers/common_text_controller_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/referral_provider.dart';
+import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -73,49 +74,43 @@ class ReferralsView extends StatelessWidget {
                     ref.read(commonTextValue.notifier).state = '';
                   },
                   onSave: () async {
-                    //todo
-                    if (referrer.isNotEmpty) {
-                      final notifier = ref.read(globalStateProvider.notifier);
-                      notifier.update(
-                        (state) => state.copyWith(
-                          isLoading: true,
-                        ),
-                      );
-                      final result = await ref.read(
-                        updateReferrer(referrer).future,
-                      );
+                    final notifier = ref.read(globalStateProvider.notifier);
+                    notifier.update(
+                      (state) => state.copyWith(
+                        isLoading: true,
+                      ),
+                    );
+                    final result = await ref.read(
+                      updateReferrer(referrer).future,
+                    );
 
-                      notifier.update(
-                        (state) => state.copyWith(
-                          isLoading: false,
-                        ),
-                      );
-                      if (result == null && context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Account $referrer doesn't exist."),
-                            duration: const Duration(milliseconds: 1000),
-                          ),
+                    notifier.update(
+                      (state) => state.copyWith(
+                        isLoading: false,
+                      ),
+                    );
+
+                    if (context.mounted) {
+                      if (result == 'OK') {
+                        ref.read(commonTextEditingController).clear();
+                        ref.read(commonTextValue.notifier).state = '';
+                        ref.invalidate(myWalletProvider);
+                        showSnackBar(
+                          context: context,
+                          text: 'Referrer has been redeemed.',
                         );
-                        return;
-                      }
-                      ref.read(commonTextEditingController).clear();
-                      ref.read(commonTextValue.notifier).state = '';
-                      ref.invalidate(myWalletProvider);
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Your wallet has been updated.'),
-                            duration: Duration(milliseconds: 500),
-                          ),
-                        );
-                        Future.delayed(
-                          const Duration(milliseconds: 800),
+                        return Future.delayed(
+                          const Duration(seconds: 1),
                           () {
                             Navigator.pop(context);
                           },
                         );
                       }
+                      showSnackBar(
+                        context: context,
+                        text: result,
+                        duration: 1000,
+                      );
                     }
                   },
                 )

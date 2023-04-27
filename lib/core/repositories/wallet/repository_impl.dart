@@ -1,5 +1,6 @@
 import 'dart:convert' show jsonDecode;
 
+import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
@@ -72,12 +73,13 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
-  Future<WalletModel?> updateReferrer(String referrer) async {
-    String? responseBody = await ApiService.instance.apiCallPatch(
+  Future<String> updateReferrer(String referrer) async {
+    dynamic responseBody = await ApiService.instance.apiCallPatch(
       '/wallet/redeem-referral/$referrer',
     );
-    return responseBody != null
-        ? WalletModel.fromJson(jsonDecode(responseBody))
-        : null;
+    if (responseBody is ApiError) {
+      return responseBody.message;
+    }
+    return 'OK';
   }
 }

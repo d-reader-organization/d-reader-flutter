@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/referral_provider.dart';
+import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';

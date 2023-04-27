@@ -1,6 +1,7 @@
 import 'dart:convert' show jsonDecode;
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
@@ -12,7 +13,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
     String? referrer,
   }) async {
-    String? responseBody = await ApiService.instance.apiCallPatch(
+    dynamic responseBody = await ApiService.instance.apiCallPatch(
       '/auth/wallet/request-password',
       body: {
         "address": address,
@@ -21,7 +22,10 @@ class AuthRepositoryImpl implements AuthRepository {
       },
       includeAuthHeader: false,
     );
-    return responseBody ?? Config.otpErrorMessage;
+    if (responseBody is ApiError) {
+      return Config.otpErrorMessage;
+    }
+    return responseBody;
   }
 
   @override

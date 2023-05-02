@@ -243,12 +243,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   ) async {
     if (await _doReauthorize(client, overrideAuthToken)) {
       ref.read(environmentProvider.notifier).updateTempNetwork(tempNetwork);
-      final String walletName = ref.read(walletNameProvider).trim();
-      final String referrerName = ref.read(referrerNameProvider).trim();
       final message = await _walletService.getOneTimePassword(
         publicKey: signer,
-        name: walletName,
-        referrer: referrerName.isNotEmpty ? referrerName : null,
       );
       if (message is ApiError) {
         return message.message;

@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/intro/form.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
@@ -170,76 +171,22 @@ class IntroView extends HookConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ),
-                        border: Border.all(
-                          color: ColorPalette.boxBackground300,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/solflare_logo.png',
-                            width: 24,
-                            height: 24,
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          const Text(
-                            'Get Solflare',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
+                    WalletAppContainer(
+                      image: 'assets/images/solflare_logo.png',
+                      onTap: () {
+                        openExternalApp('com.solflare.mobile');
+                      },
+                      title: 'Get Solflare',
                     ),
                     const SizedBox(
                       width: 8,
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ),
-                        border: Border.all(
-                          color: ColorPalette.boxBackground300,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/phantom_logo.png',
-                            width: 24,
-                            height: 24,
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          const Text(
-                            'Get Phantom',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
+                    WalletAppContainer(
+                      image: 'assets/images/phantom_logo.png',
+                      onTap: () {
+                        openExternalApp('app.phantom');
+                      },
+                      title: 'Get Phantom',
                     ),
                   ],
                 ),
@@ -249,6 +196,61 @@ class IntroView extends HookConsumerWidget {
             decoration: _pageDecoration(textTheme),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class WalletAppContainer extends StatelessWidget {
+  final String image;
+  final String title;
+  final Function() onTap;
+  const WalletAppContainer({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        openExternalApp('com.solflare.mobile');
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 8,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+            10,
+          ),
+          border: Border.all(
+            color: ColorPalette.boxBackground300,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              image,
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

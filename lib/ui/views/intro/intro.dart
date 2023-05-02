@@ -13,12 +13,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroView extends HookConsumerWidget {
   final GlobalKey<IntroductionScreenState> _introScreenKey =
       GlobalKey<IntroductionScreenState>();
   final formKey = GlobalKey<FormState>();
-  IntroView({Key? key}) : super(key: key);
+  final bool shouldShowInitial;
+  IntroView({
+    super.key,
+    required this.shouldShowInitial,
+  });
 
   PageDecoration _pageDecoration(TextTheme textTheme) {
     return PageDecoration(
@@ -66,6 +71,9 @@ class IntroView extends HookConsumerWidget {
                 : () async {
                     if (currentIndex.value == 0) {
                       _introScreenKey.currentState?.next();
+                      SharedPreferences.getInstance().then((value) {
+                        value.setBool(Config.hasSeenInitialKey, true);
+                      });
                     } else if (currentIndex.value == 1) {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();

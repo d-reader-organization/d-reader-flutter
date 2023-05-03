@@ -15,9 +15,13 @@ class DReaderWalletService {
   static final DReaderWalletService _instance = DReaderWalletService._();
   static DReaderWalletService get instance => _instance;
 
-  Future<String> getOneTimePassword(Ed25519HDPublicKey publicKey) async {
+  Future<dynamic> getOneTimePassword({
+    required Ed25519HDPublicKey publicKey,
+  }) async {
     return await IoCContainer.resolveContainer<AuthRepositoryImpl>()
-        .getOneTimePassword(publicKey.toBase58());
+        .getOneTimePassword(
+      address: publicKey.toBase58(),
+    );
   }
 
   Future<AuthWallet?> connectWallet(

@@ -8,3 +8,11 @@ Future<void> openUrl(String url) async {
     throw 'Could not open the url: $url';
   }
 }
+
+Future<void> openExternalApp(String appId) async {
+  final url = Uri.parse("market://details?id=$appId");
+  launchUrl(
+    url,
+    mode: LaunchMode.externalApplication,
+  );
+}

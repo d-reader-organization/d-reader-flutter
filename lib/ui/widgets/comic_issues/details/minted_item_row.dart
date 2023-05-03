@@ -42,7 +42,7 @@ class MintedItemRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${formatAddress(receipt.buyer.address, 4)} ${formatWalletLabel(receipt.buyer.label)}',
+              '${formatAddress(receipt.buyer.address, 4)} ${formatWalletName(receipt.buyer.name)}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

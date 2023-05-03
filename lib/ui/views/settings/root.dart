@@ -1,13 +1,18 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
 import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
+import 'package:d_reader_flutter/ui/views/settings/referrals.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsRootView extends StatelessWidget {
-  const SettingsRootView({super.key});
+  const SettingsRootView({
+    super.key,
+  });
 
   final textStyle = const TextStyle(
     fontSize: 16,
@@ -42,15 +47,37 @@ class SettingsRootView extends StatelessWidget {
               leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
               title: 'Security & Privacy',
             ),
-            const SettingsCommonListTile(
+            SettingsCommonListTile(
               leadingPath: '${Config.settingsAssetsPath}/light/3_user.svg',
               title: 'Referrals',
-            ),
-            SettingsCommonListTile(
-              leadingPath: '${Config.settingsAssetsPath}/light/network.svg',
-              title: 'Change Network',
               onTap: () {
-                nextScreenPush(context, const ChangeNetworkView());
+                nextScreenPush(context, const ReferralsView());
+              },
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                final myWallet = ref.watch(myWalletProvider);
+                return myWallet.maybeWhen(
+                  orElse: () {
+                    return const SizedBox();
+                  },
+                  data: (wallet) {
+                    if (wallet == null) {
+                      return const SizedBox();
+                    }
+                    return SettingsCommonListTile(
+                      leadingPath:
+                          '${Config.settingsAssetsPath}/light/network.svg',
+                      title: 'Change Network',
+                      onTap: wallet.hasBetaAccess
+                          ? () {
+                              nextScreenPush(
+                                  context, const ChangeNetworkView());
+                            }
+                          : null,
+                    );
+                  },
+                );
               },
             ),
             SettingsCommonListTile(

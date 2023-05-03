@@ -17,7 +17,7 @@ class EditWalletName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsScaffold(
-      body: WalletLabelInputField(
+      body: WalletNameInputField(
         wallet: wallet,
       ),
       appBarTitle: 'Account Name',
@@ -25,9 +25,9 @@ class EditWalletName extends StatelessWidget {
   }
 }
 
-class WalletLabelInputField extends ConsumerStatefulWidget {
+class WalletNameInputField extends ConsumerStatefulWidget {
   final WalletModel wallet;
-  const WalletLabelInputField({
+  const WalletNameInputField({
     super.key,
     required this.wallet,
   });
@@ -37,18 +37,18 @@ class WalletLabelInputField extends ConsumerStatefulWidget {
       _WalletNameInputFieldState();
 }
 
-class _WalletNameInputFieldState extends ConsumerState<WalletLabelInputField> {
-  final TextEditingController _labelController = TextEditingController();
+class _WalletNameInputFieldState extends ConsumerState<WalletNameInputField> {
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _labelController.text = widget.wallet.label;
+    _nameController.text = widget.wallet.name;
   }
 
   @override
   void dispose() {
-    _labelController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -63,7 +63,7 @@ class _WalletNameInputFieldState extends ConsumerState<WalletLabelInputField> {
       updateWalletProvider(
         UpdateWalletPayload(
           address: widget.wallet.address,
-          label: _labelController.text,
+          name: _nameController.text,
         ),
       ).future,
     );
@@ -91,7 +91,7 @@ class _WalletNameInputFieldState extends ConsumerState<WalletLabelInputField> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: TextField(
-            controller: _labelController,
+            controller: _nameController,
             cursorColor: Colors.white,
             onTapOutside: (event) {
               FocusManager.instance.primaryFocus?.unfocus();
@@ -116,7 +116,7 @@ class _WalletNameInputFieldState extends ConsumerState<WalletLabelInputField> {
                 maxWidth: MediaQuery.of(context).size.width / 2,
               ),
               contentPadding: const EdgeInsets.all(8),
-              labelText: 'Label',
+              labelText: 'Wallet Name',
               labelStyle: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -128,7 +128,7 @@ class _WalletNameInputFieldState extends ConsumerState<WalletLabelInputField> {
           height: 8,
         ),
         ValueListenableBuilder(
-          valueListenable: _labelController,
+          valueListenable: _nameController,
           builder: (context, value, child) {
             return RoundedButton(
               text: 'Save',

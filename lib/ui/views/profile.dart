@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -15,7 +16,7 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.da
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/text_field.dart';
+import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +38,7 @@ class ProfileView extends ConsumerWidget {
           final String walletName = ref.watch(walletNameProvider);
           return AnimatedOpacity(
             opacity: walletName.isNotEmpty &&
-                    walletName.trim() != provider.value?.label
+                    walletName.trim() != provider.value?.name
                 ? 1.0
                 : 0.0,
             duration: const Duration(milliseconds: 500),
@@ -76,11 +77,11 @@ class ProfileView extends ConsumerWidget {
                               isLoading: true,
                             ),
                           );
-                          await ref.read(
+                          final result = await ref.read(
                             updateWalletProvider(
                               UpdateWalletPayload(
                                 address: provider.value?.address ?? '',
-                                label: walletName,
+                                name: walletName,
                               ),
                             ).future,
                           );
@@ -152,10 +153,10 @@ class ProfileView extends ConsumerWidget {
                   ),
                   Consumer(
                     builder: (context, ref, child) {
-                      return SettingsTextField(
+                      return CustomTextField(
                         labelText: 'Account name',
                         defaultValue:
-                            wallet.label.isNotEmpty ? wallet.label : null,
+                            wallet.name.isNotEmpty ? wallet.name : null,
                         onChange: (String value) {
                           ref.read(walletNameProvider.notifier).state = value;
                         },
@@ -165,7 +166,7 @@ class ProfileView extends ConsumerWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  SettingsTextField(
+                  CustomTextField(
                     labelText: 'Wallet address',
                     defaultValue: formatAddress(wallet.address, 4),
                     isReadOnly: true,
@@ -184,6 +185,91 @@ class ProfileView extends ConsumerWidget {
                         );
                       });
                     },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SettingsCommonListTile(
+                    title: 'Airdrop \$SOL',
+                    leadingPath:
+                        '${Config.settingsAssetsPath}/light/arrow_down.svg',
+                    overrideColor: ref.watch(globalStateProvider).isLoading
+                        ? ColorPalette.boxBackground400
+                        : ColorPalette.dReaderGreen,
+                    overrideTrailing: ref.watch(globalStateProvider).isLoading
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: ColorPalette.boxBackground400,
+                            ),
+                          )
+                        : null,
+                    onTap: ref.watch(globalStateProvider).isLoading
+                        ? null
+                        : () async {
+                            final notifier =
+                                ref.read(globalStateProvider.notifier);
+                            notifier.update(
+                              (state) => state.copyWith(
+                                isLoading: true,
+                              ),
+                            );
+                            final airdropResult = await ref
+                                .read(solanaProvider.notifier)
+                                .requestAirdrop(wallet.address);
+                            notifier.update(
+                              (state) => state.copyWith(
+                                isLoading: false,
+                              ),
+                            );
+                            if (context.mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  bool isSuccessful =
+                                      airdropResult?.contains('SOL') ?? false;
+                                  return SimpleDialog(
+                                    alignment: Alignment.center,
+                                    contentPadding: const EdgeInsets.all(8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        16,
+                                      ),
+                                    ),
+                                    title: SizedBox(
+                                      height: 120,
+                                      width: 120,
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            isSuccessful
+                                                ? Icons
+                                                    .check_circle_outline_outlined
+                                                : Icons.close_outlined,
+                                            size: 32,
+                                            color: isSuccessful
+                                                ? ColorPalette.dReaderGreen
+                                                : ColorPalette.dReaderRed,
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          Text(
+                                            airdropResult ??
+                                                'Something went wrong',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
                   ),
                   const SizedBox(
                     height: 16,

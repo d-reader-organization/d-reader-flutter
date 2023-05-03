@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
@@ -59,8 +60,41 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         ) {
     _walletService = walletService;
   }
+  Future<String?> requestAirdrop(String publicKey) async {
+    try {
+      final String rpcUrl = ref.read(environmentProvider).solanaCluster ==
+              SolanaCluster.devnet.value
+          ? Config.rpcDevnetUrl
+          : Config.rpcUrl;
 
-  Future<bool> authorizeAndSignMessage([String? overrideCluster]) async {
+      final client = SolanaClient(
+        rpcUrl: Uri.parse(
+          '$rpcUrl?api-key=${Config.rpcApiKey}',
+        ),
+        websocketUrl: Uri.parse(
+          "ws://api.devnet.solana.com",
+        ),
+      );
+      await client.rpcClient.requestAirdrop(
+        publicKey,
+        2 * lamportsPerSol,
+        commitment: Commitment.finalized,
+      );
+      return "You have received 2 SOL";
+    } on HttpException catch (error) {
+      var message = error.toString();
+      // sentry log error;
+      if (message.contains('429')) {
+        return "Too many requests. Try again later.";
+      } else if (message.contains('500')) {}
+      return "Airdrop has failed.";
+    } catch (error) {
+      //log error
+      return null;
+    }
+  }
+
+  Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
     final session = await _getSession();
     final client = await session.start();
     final String cluster =
@@ -76,8 +110,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
     final signMessageResult =
         await _signMessage(client, publicKey, result?.authToken ?? '', cluster);
-    if (signMessageResult.isEmpty) {
-      return false;
+    if (signMessageResult is String || signMessageResult.isEmpty) {
+      await session.close();
+      return signMessageResult is String
+          ? signMessageResult
+          : 'Failed to sign message.';
     }
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
@@ -94,7 +131,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     await session.close();
 
     await _getAndStoreToken(signMessageResult.first, publicKey);
-    return true;
+    return 'OK';
   }
 
   Future<void> _getAndStoreToken(
@@ -229,7 +266,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         : null;
   }
 
-  Future<List<Uint8List>> _signMessage(
+  Future<dynamic> _signMessage(
     MobileWalletAdapterClient client,
     Ed25519HDPublicKey signer,
     String overrideAuthToken,
@@ -237,7 +274,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   ) async {
     if (await _doReauthorize(client, overrideAuthToken)) {
       ref.read(environmentProvider.notifier).updateTempNetwork(tempNetwork);
-      final message = await _walletService.getOneTimePassword(signer);
+      final message = await _walletService.getOneTimePassword(
+        publicKey: signer,
+      );
+      if (message is ApiError) {
+        return message.message;
+      }
       ref.read(environmentProvider.notifier).clearTempNetwork();
       final addresses = Uint8List.fromList(signer.bytes);
 

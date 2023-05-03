@@ -10,13 +10,13 @@ ValueNotifier<GlobalState> useGlobalState<T>() {
 class GlobalState {
   const GlobalState({
     required this.isLoading,
-    this.showSplash = false,
+    this.isReferred = false,
   });
   final bool isLoading;
-  final bool showSplash;
+  final bool isReferred;
 
-  GlobalState copyWith({required bool isLoading, bool showSplash = false}) {
-    return GlobalState(isLoading: isLoading, showSplash: showSplash);
+  GlobalState copyWith({required bool isLoading, bool isReferred = false}) {
+    return GlobalState(isLoading: isLoading, isReferred: isReferred);
   }
 }
 

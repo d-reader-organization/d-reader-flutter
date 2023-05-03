@@ -5,19 +5,37 @@ import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 PackageInfo? packageInfo;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   packageInfo = await PackageInfo.fromPlatform();
+  await SharedPreferences.getInstance().then((value) => value.clear());
   IoCContainer.register();
+  if (kReleaseMode) {
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = const String.fromEnvironment('sentryDsn');
+        options.tracesSampleRate = 0.1;
+      },
+      appRunner: initApp,
+    );
+  } else {
+    initApp();
+  }
+}
+
+void initApp() {
   runApp(
     ProviderScope(
       overrides: [

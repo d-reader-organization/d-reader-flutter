@@ -21,6 +21,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 const sectionHeadingStyle = TextStyle(
   color: Color(0xFF777D8C),
@@ -96,7 +97,7 @@ class NftDetails extends ConsumerWidget {
         );
       },
       error: (Object error, StackTrace stackTrace) {
-        print('error in nft details ${error.toString()}');
+        Sentry.captureException(error, stackTrace: stackTrace);
         return const Text('Something went wrong in nft details.');
       },
       loading: () {

@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/ui/widgets/comic_issues/details/minted_item_row
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class MintedItems extends ConsumerWidget {
   final ComicIssueModel issue;
@@ -45,8 +46,7 @@ class MintedItems extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        print('Listed items error: ${error.toString()}');
-        print(stackTrace);
+        Sentry.captureException(error, stackTrace: stackTrace);
         return const Text('Something went wrong');
       },
       loading: () {

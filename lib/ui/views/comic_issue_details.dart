@@ -10,6 +10,7 @@ import 'package:d_reader_flutter/ui/widgets/common/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ComicIssueDetails extends ConsumerWidget {
   final int id;
@@ -67,7 +68,7 @@ class ComicIssueDetails extends ConsumerWidget {
         );
       },
       error: (err, stack) {
-        print(stack);
+        Sentry.captureException(err, stackTrace: stack);
         return Text(
           'Error: $err',
           style: const TextStyle(color: Colors.red),

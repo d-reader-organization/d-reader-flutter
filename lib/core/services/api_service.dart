@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/ioc.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
@@ -20,37 +21,54 @@ class ApiService {
     bool includeAuthHeader = true,
     Map<String, dynamic>? queryParameters,
   }) async {
-    await _setters();
-    Uri uri = queryParameters != null
-        ? Uri.https(
-            _apiUrl.replaceAll('https://', ''),
-            path,
-            queryParameters,
-          )
-        : Uri.parse('$_apiUrl$path');
-    http.Response response = await http.get(
-      uri,
-      headers:
-          includeAuthHeader ? {HttpHeaders.authorizationHeader: '$_token'} : {},
-    );
-    if (response.statusCode != 200) {
-      print(response.body);
+    try {
+      await _setters();
+      Uri uri = queryParameters != null
+          ? Uri.https(
+              _apiUrl.replaceAll('https://', ''),
+              path,
+              queryParameters,
+            )
+          : Uri.parse('$_apiUrl$path');
+      http.Response response = await http.get(
+        uri,
+        headers: includeAuthHeader
+            ? {HttpHeaders.authorizationHeader: '$_token'}
+            : {},
+      );
+      if (response.statusCode != 200) {
+        Sentry.captureMessage(
+          'Api call GET on $path has ${response.statusCode} with message ${response.body}',
+          level: SentryLevel.error,
+        );
+        return null;
+      }
+      return response.body;
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
       return null;
     }
-    return response.body;
   }
 
   Future<String?> apiCallPost(String path) async {
     Uri uri = Uri.parse('$_apiUrl$path');
     await _setters();
-    http.Response response = await http.post(
-      uri,
-      headers: {HttpHeaders.authorizationHeader: '$_token'},
-    );
-    if (response.statusCode != 200) {
-      print(response.body);
+    try {
+      http.Response response = await http.post(
+        uri,
+        headers: {HttpHeaders.authorizationHeader: '$_token'},
+      );
+      if (response.statusCode != 200) {
+        Sentry.captureMessage(
+          'Api call POST on $path has ${response.statusCode} with message ${response.body}',
+          level: SentryLevel.error,
+        );
+      }
+      return response.body;
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      return null;
     }
-    return response.body;
   }
 
   Future<dynamic> apiCallPatch(
@@ -82,7 +100,11 @@ class ApiService {
       }
       return response.body;
     } on ApiError catch (error) {
+      Sentry.captureException(error);
       return error;
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      return null;
     }
   }
 
@@ -101,8 +123,8 @@ class ApiService {
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
       return responseBody;
-    } catch (error) {
-      print(error.toString());
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
     }
     return null;
   }

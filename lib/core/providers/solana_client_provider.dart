@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
@@ -248,10 +249,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             return base64Decode(resignedTransaction.encode());
           }).toList(),
         );
-        print('Sign and send response');
-        print(response);
-      } catch (e) {
-        print(e);
+        Sentry.captureMessage(
+          'Sign and send response $response',
+          level: SentryLevel.info,
+        );
+      } catch (exception, stackTrace) {
+        Sentry.captureException(exception, stackTrace: stackTrace);
       }
     }
     await session.close();
@@ -290,8 +293,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           addresses: [addresses],
         );
         return result.signedPayloads;
-      } catch (e) {
-        print('Error - Sign message:  ${e.toString()}');
+      } catch (exception, stackTrace) {
+        Sentry.captureException(exception, stackTrace: stackTrace);
       }
     }
     return [];

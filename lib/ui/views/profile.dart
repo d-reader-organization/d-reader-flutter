@@ -24,6 +24,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart' as fcm;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProfileView extends ConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -96,9 +97,13 @@ class ProfileView extends ConsumerWidget {
                           ref.invalidate(myWalletProvider);
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Your wallet has been updated.'),
-                                duration: Duration(milliseconds: 500),
+                              SnackBar(
+                                content: Text(
+                                  result != null
+                                      ? 'Your wallet has been updated.'
+                                      : 'Something went wrong',
+                                ),
+                                duration: const Duration(milliseconds: 500),
                               ),
                             );
                           }
@@ -292,7 +297,7 @@ class ProfileView extends ConsumerWidget {
           );
         },
         error: (Object error, StackTrace stackTrace) {
-          print('Error in profile view ${error.toString()}');
+          Sentry.captureException(error, stackTrace: stackTrace);
           return const Text('Something went wrong');
         },
         loading: () {

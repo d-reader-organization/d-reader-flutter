@@ -13,16 +13,20 @@ enum SolanaCluster {
 }
 
 abstract class Config {
-// https://d-reader-backend-dev.herokuapp.com/api dev branch - mainnet
-// https://d-reader-backend-dev-devnet.herokuapp.com/api dev branch - devnet
-// https://d-reader-backend.herokuapp.com/api main branch - mainnet
-// https://d-reader-backend-devnet.herokuapp.com/api main branch - devnet
-
-  static const apiUrl = String.fromEnvironment('apiUrl',
-      defaultValue:
-          'https://d-reader-backend-dev.herokuapp.com'); //'http://10.0.2.2:3005'
-  static const apiUrlDevnet = String.fromEnvironment('apiUrlDevnet',
-      defaultValue: 'https://d-reader-backend-dev-devnet.herokuapp.com');
+  static const apiUrl = String.fromEnvironment(
+    'apiUrl',
+    defaultValue: 'https://d-reader-backend-dev.herokuapp.com',
+  ); //'http://10.0.2.2:3005'
+  static const apiUrlDevnet = String.fromEnvironment(
+    'apiUrlDevnet',
+    defaultValue: 'https://d-reader-backend-dev-devnet.herokuapp.com',
+  );
+  static const rpcApiKey = String.fromEnvironment(
+    'rpcApiKey',
+    defaultValue: '',
+  );
+  static const rpcDevnetUrl = "https://rpc-devnet.helius.xyz/";
+  static const rpcUrl = "https://rpc.helius.xyz/";
   static const String logoTextPath = 'assets/images/logo-white-yellow.svg';
   static const String logoTextBlackPath =
       'assets/images/d_reader_logo_text_black.png';

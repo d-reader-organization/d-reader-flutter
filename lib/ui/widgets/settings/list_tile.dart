@@ -7,12 +7,14 @@ class SettingsCommonListTile extends StatelessWidget {
   final String leadingPath;
   final Function()? onTap;
   final Color? overrideColor;
+  final Widget? overrideTrailing;
   const SettingsCommonListTile({
     super.key,
     required this.title,
     required this.leadingPath,
     this.onTap,
     this.overrideColor,
+    this.overrideTrailing,
   });
 
   @override
@@ -35,13 +37,14 @@ class SettingsCommonListTile extends StatelessWidget {
         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       ),
       minLeadingWidth: 20,
-      trailing: SvgPicture.asset(
-        'assets/icons/arrow_right.svg',
-        colorFilter: ColorFilter.mode(
-          color,
-          BlendMode.srcIn,
-        ),
-      ),
+      trailing: overrideTrailing ??
+          SvgPicture.asset(
+            'assets/icons/arrow_right.svg',
+            colorFilter: ColorFilter.mode(
+              color,
+              BlendMode.srcIn,
+            ),
+          ),
     );
   }
 }

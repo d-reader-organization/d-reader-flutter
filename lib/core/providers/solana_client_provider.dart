@@ -5,8 +5,6 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +59,39 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           const SolanaClientState(),
         ) {
     _walletService = walletService;
+  }
+  Future<String?> requestAirdrop(String publicKey) async {
+    try {
+      final String rpcUrl = ref.read(environmentProvider).solanaCluster ==
+              SolanaCluster.devnet.value
+          ? Config.rpcDevnetUrl
+          : Config.rpcUrl;
+
+      final client = SolanaClient(
+        rpcUrl: Uri.parse(
+          '$rpcUrl?api-key=${Config.rpcApiKey}',
+        ),
+        websocketUrl: Uri.parse(
+          "ws://api.devnet.solana.com",
+        ),
+      );
+      await client.rpcClient.requestAirdrop(
+        publicKey,
+        2 * lamportsPerSol,
+        commitment: Commitment.finalized,
+      );
+      return "You have received 2 SOL";
+    } on HttpException catch (error) {
+      var message = error.toString();
+      // sentry log error;
+      if (message.contains('429')) {
+        return "Too many requests. Try again later.";
+      } else if (message.contains('500')) {}
+      return "Airdrop has failed.";
+    } catch (error) {
+      //log error
+      return null;
+    }
   }
 
   Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
@@ -243,12 +274,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   ) async {
     if (await _doReauthorize(client, overrideAuthToken)) {
       ref.read(environmentProvider.notifier).updateTempNetwork(tempNetwork);
-      final String walletName = ref.read(walletNameProvider).trim();
-      final String referrerName = ref.read(referrerNameProvider).trim();
       final message = await _walletService.getOneTimePassword(
         publicKey: signer,
-        name: walletName,
-        referrer: referrerName.isNotEmpty ? referrerName : null,
       );
       if (message is ApiError) {
         return message.message;

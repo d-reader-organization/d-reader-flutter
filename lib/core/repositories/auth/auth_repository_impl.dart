@@ -8,16 +8,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<dynamic> getOneTimePassword({
     required String address,
-    required String name,
-    String? referrer,
   }) async {
     dynamic responseBody = await ApiService.instance.apiCallPatch(
-      '/auth/wallet/request-password',
-      body: {
-        "address": address,
-        "name": name,
-        if (referrer != null) "referrer": referrer,
-      },
+      '/auth/wallet/request-password/$address',
       includeAuthHeader: false,
     );
 

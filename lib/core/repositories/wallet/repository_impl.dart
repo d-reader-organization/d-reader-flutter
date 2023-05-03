@@ -47,12 +47,19 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<WalletModel?> updateWallet(
     UpdateWalletPayload payload,
   ) async {
-    String? responseBody = await ApiService.instance.apiCallPatch(
+    dynamic responseBody = await ApiService.instance.apiCallPatch(
       '/wallet/update/${payload.address}',
       body: {
-        "name": payload.name,
+        if (payload.name != null && payload.name!.isNotEmpty)
+          "name": payload.name,
+        if (payload.referrer != null && payload.referrer!.isNotEmpty)
+          "referrer": payload.referrer
       },
     );
+    if (responseBody is ApiError) {
+      // sentry log error;
+      return null;
+    }
     return responseBody != null
         ? WalletModel.fromJson(jsonDecode(responseBody))
         : null;

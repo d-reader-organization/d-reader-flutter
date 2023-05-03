@@ -9,6 +9,7 @@
         "args": [
           "--dart-define=apiUrl=_",
           "--dart-define=apiUrlDevnet=_",
+          "--dart-define=rpcApiKey=",
           "--flavor",
           "dev",
           "--target",
@@ -23,6 +24,7 @@
         "args": [
           "--dart-define=apiUrl=_",
           "--dart-define=apiUrlDevnet=_",
+          "--dart-define=rpcApiKey=",
           "--flavor",
           "dev",
           "--release",
@@ -38,6 +40,7 @@
           "args": [
             "--dart-define=apiUrl=_",
             "--dart-define=apiUrlDevnet=_",
+            "--dart-define=rpcApiKey=",
             "--flavor",
             "prod",
             "--target",
@@ -52,6 +55,7 @@
           "args": [
             "--dart-define=apiUrl=_",
             "--dart-define=apiUrlDevnet=_",
+            "--dart-define=rpcApiKey=",
             "--flavor",
             "prod",
             "--release",

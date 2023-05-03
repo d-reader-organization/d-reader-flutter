@@ -84,7 +84,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     }
   }
 
-  void updateEnvironmentState(EnvironmentStateUpdateInput input) {
+  void updateEnvironmentState(EnvironmentStateUpdateInput input) async {
     final bool isDevnet = input.solanaCluster == SolanaCluster.devnet.value ||
         state.solanaCluster == SolanaCluster.devnet.value;
     state = state.copyWith(
@@ -105,7 +105,8 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     );
 
     if (input.jwtToken != null) {
-      _sharedPreferences?.setString(Config.tokenKey, input.jwtToken ?? '');
+      await _sharedPreferences?.setString(
+          Config.tokenKey, input.jwtToken ?? '');
     }
   }
 

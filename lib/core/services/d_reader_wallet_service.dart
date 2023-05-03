@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:d_reader_flutter/ioc.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
 
@@ -34,8 +35,8 @@ class DReaderWalletService {
         base58encode(signedData),
       );
       return connectWalletResponse;
-    } catch (e) {
-      print(e);
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
       return null;
     }
   }

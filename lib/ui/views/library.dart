@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/ui/widgets/common/cards/nft_item_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 // final walletAssets = List<WalletAsset>.from([
 //   {
@@ -151,7 +152,7 @@ class LibraryView extends ConsumerWidget {
           );
         },
         error: (error, stackTrace) {
-          print('error in wallet assets ${error.toString()}');
+          Sentry.captureException(error, stackTrace: stackTrace);
           return const Text('Something went wrong');
         },
         loading: () {

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CachedImageBgPlaceholder extends StatelessWidget {
   final String imageUrl;
@@ -63,7 +64,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
         foregroundDecoration: foregroundDecoration,
       ),
       errorWidget: (context, url, error) {
-        print(error);
+        Sentry.captureException(error);
         return Container(
           height: height,
           width: width,

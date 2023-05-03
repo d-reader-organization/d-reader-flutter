@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
   @override
@@ -57,7 +58,10 @@ class WalletRepositoryImpl implements WalletRepository {
       },
     );
     if (responseBody is ApiError) {
-      // sentry log error;
+      Sentry.captureMessage(
+        'Error: ${responseBody.message}: Status: ${responseBody.statusCode} - ${responseBody.error}',
+        level: SentryLevel.error,
+      );
       return null;
     }
     return responseBody != null

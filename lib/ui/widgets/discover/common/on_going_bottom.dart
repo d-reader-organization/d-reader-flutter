@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class OnGoingBottomWidget extends StatelessWidget {
   final PaginationState provider;
@@ -30,8 +31,7 @@ class OnGoingBottomWidget extends StatelessWidget {
             );
           },
           onGoingError: (items, e, stk) {
-            print('error in on going bottom widget :${e.toString()}');
-            print(stk.toString());
+            Sentry.captureException(e, stackTrace: stk);
             return const Center(
               child: Text('Something went wrong.'),
             );

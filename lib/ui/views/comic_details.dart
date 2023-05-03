@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/ui/widgets/comics/details/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ComicDetails extends ConsumerWidget {
   final String slug;
@@ -46,7 +47,7 @@ class ComicDetails extends ConsumerWidget {
                         return _IssuesList(issues: issues);
                       },
                       error: (Object? e, StackTrace? stk) {
-                        print(stk);
+                        Sentry.captureException(e, stackTrace: stk);
                         return const Text('Something Went Wrong.');
                       },
                       loading: () {

@@ -1,8 +1,12 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -42,12 +46,7 @@ class IntroView extends HookConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     final globalHook = useGlobalState();
     final currentIndex = useState<int>(0);
-    final validateNameProvider =
-        ref.watch(validateWalletNameProvider(ref.read(walletNameProvider)));
-    final isInvalidName =
-        validateNameProvider.value != null && !validateNameProvider.value!;
-    final bool shouldFreeze = currentIndex.value == 1 &&
-        (ref.watch(walletNameProvider).isEmpty || isInvalidName);
+    final isWalletNameValid = ref.watch(isValidWalletNameValue);
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: IntroductionScreen(
@@ -56,7 +55,6 @@ class IntroView extends HookConsumerWidget {
         bodyPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         showDoneButton: false,
         showNextButton: false,
-        freeze: shouldFreeze,
         showSkipButton: false,
         onChange: (int index) {
           currentIndex.value = index;
@@ -64,22 +62,16 @@ class IntroView extends HookConsumerWidget {
         globalFooter: Padding(
           padding: const EdgeInsets.all(8.0),
           child: RoundedButton(
-            text: currentIndex.value == 2 ? 'CONNECT WALLET' : 'NEXT',
+            text: currentIndex.value == 1 ? 'CONNECT WALLET' : 'NEXT',
             size: const Size(double.infinity, 52),
-            onPressed: shouldFreeze
-                ? null
-                : () async {
+            onPressed: currentIndex.value != 2 || (isWalletNameValid)
+                ? () async {
                     if (currentIndex.value == 0) {
                       _introScreenKey.currentState?.next();
                       SharedPreferences.getInstance().then((value) {
                         value.setBool(Config.hasSeenInitialKey, true);
                       });
                     } else if (currentIndex.value == 1) {
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        _introScreenKey.currentState?.next();
-                      }
-                    } else {
                       globalHook.value =
                           globalHook.value.copyWith(isLoading: true);
                       final result = await ref
@@ -87,13 +79,19 @@ class IntroView extends HookConsumerWidget {
                           .authorizeAndSignMessage();
                       if (context.mounted) {
                         if (result == 'OK') {
+                          Future.delayed(
+                            const Duration(
+                              milliseconds: 400,
+                            ),
+                            () {
+                              _introScreenKey.currentState?.next();
+                            },
+                          );
                           globalHook.value =
                               globalHook.value.copyWith(isLoading: false);
-                          nextScreenReplace(context, const DReaderScaffold());
                         } else {
                           globalHook.value = globalHook.value.copyWith(
                             isLoading: false,
-                            showSplash: false,
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -104,8 +102,38 @@ class IntroView extends HookConsumerWidget {
                           );
                         }
                       }
+                    } else {
+                      if (formKey.currentState!.validate()) {
+                        globalHook.value =
+                            globalHook.value.copyWith(isLoading: true);
+                        final String address = ref
+                                .read(environmentProvider)
+                                .publicKey
+                                ?.toBase58() ??
+                            '';
+                        final String walletName =
+                            ref.read(walletNameProvider).trim();
+                        final String referrerName =
+                            ref.read(referrerNameProvider).trim();
+                        formKey.currentState!.save();
+                        await ref.read(
+                          updateWalletProvider(
+                            UpdateWalletPayload(
+                              address: address,
+                              name: walletName.trim(),
+                              referrer: referrerName.trim(),
+                            ),
+                          ).future,
+                        );
+                        globalHook.value =
+                            globalHook.value.copyWith(isLoading: false);
+                        if (context.mounted) {
+                          nextScreenReplace(context, const DReaderScaffold());
+                        }
+                      }
                     }
-                  },
+                  }
+                : null,
             isLoading: globalHook.value.isLoading,
           ),
         ),
@@ -138,18 +166,6 @@ class IntroView extends HookConsumerWidget {
             ),
             image: Image.asset('assets/images/splash_screen_1.png'),
             decoration: _pageDecoration(textTheme),
-          ),
-          PageViewModel(
-            title: "Set Your Account",
-            bodyWidget: IntroForm(formKey: formKey),
-            decoration: PageDecoration(
-              titleTextStyle: textTheme.headlineLarge!.copyWith(
-                color: ColorPalette.dReaderYellow100,
-              ),
-              titlePadding: const EdgeInsets.only(bottom: 16),
-              pageColor: ColorPalette.appBackgroundColor,
-              bodyAlignment: Alignment.center,
-            ),
           ),
           PageViewModel(
             title: "Connect with your wallet",
@@ -203,6 +219,21 @@ class IntroView extends HookConsumerWidget {
             image: Image.asset(Config.digitalWalletImgPath),
             decoration: _pageDecoration(textTheme),
           ),
+          if (ref.watch(environmentProvider).authToken != null &&
+              ref.watch(environmentProvider).jwtToken != null) ...[
+            PageViewModel(
+              title: "Set Your Account",
+              bodyWidget: IntroForm(formKey: formKey),
+              decoration: PageDecoration(
+                titleTextStyle: textTheme.headlineLarge!.copyWith(
+                  color: ColorPalette.dReaderYellow100,
+                ),
+                titlePadding: const EdgeInsets.only(bottom: 16),
+                pageColor: ColorPalette.appBackgroundColor,
+                bodyAlignment: Alignment.center,
+              ),
+            ),
+          ],
         ],
       ),
     );

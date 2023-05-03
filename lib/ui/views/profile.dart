@@ -76,7 +76,7 @@ class ProfileView extends ConsumerWidget {
                               isLoading: true,
                             ),
                           );
-                          await ref.read(
+                          final result = await ref.read(
                             updateWalletProvider(
                               UpdateWalletPayload(
                                 address: provider.value?.address ?? '',

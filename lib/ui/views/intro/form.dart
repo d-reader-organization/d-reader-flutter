@@ -19,146 +19,168 @@ class IntroForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Form(
-      key: formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomTextField(
-            labelText: 'Account name',
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onValidate: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please enter Wallet Name.";
-              }
-              final result = ref.read(validateWalletNameProvider(value));
-              return result.value != null && result.value!
-                  ? null
-                  : 'Wallet Name not allowed.';
-            },
-            onChange: (value) async {
-              ref.read(walletNameProvider.notifier).state = value;
-              ref.read(validateWalletNameProvider(value).future);
-            },
-          ),
-          ref.watch(globalStateProvider).isLoading
-              ? const Center(
-                  child: SizedBox(
-                    height: 48,
-                    width: 48,
-                    child: CircularProgressIndicator(
-                      color: ColorPalette.dReaderBlue,
-                    ),
-                  ),
-                )
-              : ref.watch(globalStateProvider).isReferred
-                  ? const SizedBox(
-                      height: 48,
-                      width: 48,
-                      child: Icon(
-                        Icons.check_circle_outline_outlined,
-                        color: ColorPalette.dReaderGreen,
-                        size: 48,
+    final provider = ref.watch(myWalletProvider);
+    return provider.maybeWhen(
+      orElse: () {
+        return const Text('Failed to load wallet');
+      },
+      loading: () {
+        return const SizedBox();
+      },
+      data: (wallet) {
+        if (wallet == null) {
+          return const Text('No wallet');
+        }
+        return Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomTextField(
+                labelText: 'Account name',
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                defaultValue:
+                    wallet.name.isNotEmpty ? wallet.name : wallet.address,
+                onValidate: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter Wallet Name.";
+                  }
+                  final result = ref.watch(isValidWalletNameValue);
+                  return result ? null : 'Wallet Name not allowed.';
+                },
+                onChange: (value) async {
+                  final validatorNotifier =
+                      ref.read(isValidWalletNameValue.notifier);
+                  ref.read(walletNameProvider.notifier).state = value;
+                  if (value.isEmpty) {
+                    return validatorNotifier.state = false;
+                  }
+                  final result =
+                      await ref.read(validateWalletNameProvider(value).future);
+                  validatorNotifier.state = result;
+                },
+              ),
+              ref.watch(globalStateProvider).isLoading
+                  ? const Center(
+                      child: SizedBox(
+                        height: 48,
+                        width: 48,
+                        child: CircularProgressIndicator(
+                          color: ColorPalette.dReaderBlue,
+                        ),
                       ),
                     )
-                  : Column(
-                      children: [
-                        ref.watch(hasReferralProvider)
-                            ? CustomTextField(
-                                labelText: 'Referrer name/address',
-                                hintText: 'Referrer name',
-                                onChange: (String value) {
-                                  ref
-                                      .read(referrerNameProvider.notifier)
-                                      .state = value;
-                                },
-                              )
-                            : Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      ref
-                                          .read(hasReferralProvider.notifier)
-                                          .state = true;
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/icons/ticket.svg',
-                                          colorFilter: const ColorFilter.mode(
-                                            ColorPalette.dReaderYellow100,
-                                            BlendMode.srcIn,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        const Text(
-                                          'Have referral code?',
-                                          style: TextStyle(
-                                            color:
-                                                ColorPalette.dReaderYellow100,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                        Column(
+                  : ref.watch(globalStateProvider).isReferred
+                      ? const SizedBox(
+                          height: 48,
+                          width: 48,
+                          child: Icon(
+                            Icons.check_circle_outline_outlined,
+                            color: ColorPalette.dReaderGreen,
+                            size: 48,
+                          ),
+                        )
+                      : Column(
                           children: [
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                final notifier =
-                                    ref.read(globalStateProvider.notifier);
-                                notifier.update(
-                                  (state) => state.copyWith(
-                                    isLoading: true,
+                            ref.watch(hasReferralProvider)
+                                ? CustomTextField(
+                                    labelText: 'Referrer name/address',
+                                    hintText: 'Referrer name',
+                                    onChange: (String value) {
+                                      ref
+                                          .read(referrerNameProvider.notifier)
+                                          .state = value;
+                                    },
+                                  )
+                                : Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          ref
+                                              .read(
+                                                  hasReferralProvider.notifier)
+                                              .state = true;
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/icons/ticket.svg',
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                ColorPalette.dReaderYellow100,
+                                                BlendMode.srcIn,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            const Text(
+                                              'Have referral code?',
+                                              style: TextStyle(
+                                                color: ColorPalette
+                                                    .dReaderYellow100,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                );
-                                final result = await ref.read(
-                                  updateWalletProvider(
-                                    UpdateWalletPayload(
-                                      address: 'address',
-                                      referrer: 'Saga',
-                                    ),
-                                  ).future,
-                                );
-                                if (result != null && context.mounted) {
-                                  notifier.update(
-                                    (state) => state.copyWith(
-                                      isLoading: false,
-                                      isReferred: true,
-                                    ),
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'I am Saga user',
-                                style: TextStyle(
-                                  color: ColorPalette.dReaderYellow100,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  decoration: TextDecoration.underline,
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 16,
                                 ),
-                              ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final notifier =
+                                        ref.read(globalStateProvider.notifier);
+                                    notifier.update(
+                                      (state) => state.copyWith(
+                                        isLoading: true,
+                                      ),
+                                    );
+                                    final result = await ref.read(
+                                      updateWalletProvider(
+                                        UpdateWalletPayload(
+                                          address: 'address',
+                                          referrer: 'Saga',
+                                        ),
+                                      ).future,
+                                    );
+                                    notifier.update(
+                                      (state) => state.copyWith(
+                                        isLoading: false,
+                                        isReferred:
+                                            result != null ? true : false,
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'I am Saga user',
+                                    style: TextStyle(
+                                      color: ColorPalette.dReaderYellow100,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-        ],
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

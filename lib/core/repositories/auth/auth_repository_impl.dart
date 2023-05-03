@@ -10,10 +10,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String address,
   }) async {
     dynamic responseBody = await ApiService.instance.apiCallPatch(
-      '/auth/wallet/request-password',
-      body: {
-        "address": address,
-      },
+      '/auth/wallet/request-password/$address',
       includeAuthHeader: false,
     );
 

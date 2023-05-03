@@ -29,11 +29,12 @@ class WalletModel {
 class UpdateWalletPayload {
   final String address;
   final MultipartFile? avatar;
-  final String? name;
+  final String? name, referrer;
 
   UpdateWalletPayload({
     required this.address,
     this.avatar,
     this.name,
+    this.referrer,
   });
 }

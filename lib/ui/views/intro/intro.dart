@@ -81,7 +81,7 @@ class IntroView extends HookConsumerWidget {
                         if (result == 'OK') {
                           Future.delayed(
                             const Duration(
-                              milliseconds: 400,
+                              milliseconds: 500,
                             ),
                             () {
                               _introScreenKey.currentState?.next();

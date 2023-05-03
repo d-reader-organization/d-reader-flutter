@@ -26,6 +26,7 @@ import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -538,7 +539,7 @@ class CandyMachineStats extends ConsumerWidget {
         ],
       );
     }, error: (Object error, StackTrace stackTrace) {
-      print('Error in candy machine stats ${error.toString()}');
+      Sentry.captureException(error, stackTrace: stackTrace);
       return const Text('Something went wrong in candy machine stats');
     }, loading: () {
       return const Padding(
@@ -588,7 +589,7 @@ class ListingStats extends ConsumerWidget {
         ],
       );
     }, error: (Object error, StackTrace stackTrace) {
-      print('Error in candy machine stats ${error.toString()}');
+      Sentry.captureException(error, stackTrace: stackTrace);
       return const Text('Something went wrong in candy machine stats');
     }, loading: () {
       return const Padding(

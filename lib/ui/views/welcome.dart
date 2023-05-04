@@ -17,12 +17,12 @@ class _WelcomeViewState extends State<WelcomeView>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeInFadeOut;
-  late bool shouldShowInitial;
+  bool shouldShowInitial = true;
   @override
   void initState() {
     super.initState();
     SharedPreferences.getInstance().then((value) {
-      shouldShowInitial = value.getBool(Config.hasSeenInitialKey) ?? false;
+      shouldShowInitial = !(value.getBool(Config.hasSeenInitialKey) ?? false);
     });
     _animationController = AnimationController(
       vsync: this,

@@ -50,6 +50,8 @@ class IntroView extends HookConsumerWidget {
     AsyncValue<WalletModel?> walletProvider = ref.watch(myWalletProvider);
     final shouldShowSetNameScreen = walletProvider.value != null &&
         walletProvider.value?.address == walletProvider.value?.name;
+    final bool isConnectWalletScreen =
+        shouldShowInitial ? currentIndex.value == 1 : currentIndex.value == 0;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: IntroductionScreen(
@@ -65,16 +67,11 @@ class IntroView extends HookConsumerWidget {
         globalFooter: Padding(
           padding: const EdgeInsets.all(8.0),
           child: RoundedButton(
-            text: currentIndex.value == 1 ? 'CONNECT WALLET' : 'NEXT',
+            text: isConnectWalletScreen ? 'CONNECT WALLET' : 'NEXT',
             size: const Size(double.infinity, 52),
             onPressed: currentIndex.value != 2 || (isWalletNameValid)
                 ? () async {
-                    if (currentIndex.value == 0) {
-                      _introScreenKey.currentState?.next();
-                      SharedPreferences.getInstance().then((value) {
-                        value.setBool(Config.hasSeenInitialKey, true);
-                      });
-                    } else if (currentIndex.value == 1) {
+                    if (isConnectWalletScreen) {
                       globalHook.value =
                           globalHook.value.copyWith(isLoading: true);
                       final result = await ref
@@ -106,6 +103,11 @@ class IntroView extends HookConsumerWidget {
                           );
                         }
                       }
+                    } else if (currentIndex.value == 0) {
+                      _introScreenKey.currentState?.next();
+                      SharedPreferences.getInstance().then((value) {
+                        value.setBool(Config.hasSeenInitialKey, true);
+                      });
                     } else {
                       if (formKey.currentState!.validate()) {
                         globalHook.value =
@@ -155,25 +157,27 @@ class IntroView extends HookConsumerWidget {
           ),
         ),
         pages: [
-          PageViewModel(
-            title: "Join the digital comic revolution!",
-            bodyWidget: Column(
-              children: [
-                Text(
-                  "Help us shape the future of graphic novels and empower artists!",
-                  textAlign: TextAlign.center,
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
+          if (shouldShowInitial) ...[
+            PageViewModel(
+              title: "Join the digital comic revolution!",
+              bodyWidget: Column(
+                children: [
+                  Text(
+                    "Help us shape the future of graphic novels and empower artists!",
+                    textAlign: TextAlign.center,
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-              ],
+                  const SizedBox(
+                    height: 32,
+                  ),
+                ],
+              ),
+              image: Image.asset('assets/images/splash_screen_1.png'),
+              decoration: _pageDecoration(textTheme),
             ),
-            image: Image.asset('assets/images/splash_screen_1.png'),
-            decoration: _pageDecoration(textTheme),
-          ),
+          ],
           PageViewModel(
             title: "Connect with your wallet",
             bodyWidget: Column(

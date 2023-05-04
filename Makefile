@@ -26,7 +26,7 @@ DEFINE_API_URL_DEV_DEVNET="--dart-define=apiUrl=https://d-reader-backend-dev-dev
 DEFINE_API_URL_PROD="--dart-define=apiUrl=https://d-reader-backend.herokuapp.com"
 DEFINE_API_URL_PROD_DEVNET="--dart-define=apiUrl=https://d-reader-backend-devnet.herokuapp.com"
 
-all: build-dev build-prod
+all: build-dev build-prod build-prod-apk
 
 build-dev:
 	flutter clean && \
@@ -37,6 +37,11 @@ build-prod:
 	flutter clean && \
 	flutter build appbundle --release --dart-define=apiUrl=https://d-reader-backend.herokuapp.com --dart-define=apiUrlDevnet=https://d-reader-backend-devnet.herokuapp.com --flavor prod && \
 	mv ./build/app/outputs/bundle/prodRelease/app-prod-release.aab ./apks/dReader.aab
+
+build-prod-apk:
+	flutter clean && \
+	flutter build apk --split-per-abi --release --dart-define=apiUrl=https://d-reader-backend.herokuapp.com --dart-define=apiUrlDevnet=https://d-reader-backend-devnet.herokuapp.com --flavor prod && \
+	mv ./build/app/outputs/flutter-apk/app-armeabi-v7a-prod-release.apk ./apks/dReader.apk
 
 clean:
 	flutter clean

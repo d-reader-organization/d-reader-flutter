@@ -13,14 +13,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 PackageInfo? packageInfo;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   packageInfo = await PackageInfo.fromPlatform();
-  await SharedPreferences.getInstance().then((value) => value.clear());
   IoCContainer.register();
   if (kReleaseMode) {
     await SentryFlutter.init(

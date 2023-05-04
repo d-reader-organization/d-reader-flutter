@@ -1,4 +1,4 @@
-package app.dreader.app.d_reader_flutter
+package io.app.dreader
 
 import io.flutter.embedding.android.FlutterActivity
 

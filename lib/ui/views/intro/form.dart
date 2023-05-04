@@ -39,14 +39,14 @@ class IntroForm extends ConsumerWidget {
               CustomTextField(
                 labelText: 'Account name',
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                defaultValue:
-                    wallet.name.isNotEmpty ? wallet.name : wallet.address,
                 onValidate: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please enter Wallet Name.";
+                    return "Please enter account name.";
+                  } else if (value.length > 24) {
+                    return "Must be 24 characters.";
                   }
                   final result = ref.watch(isValidWalletNameValue);
-                  return result ? null : 'Wallet Name not allowed.';
+                  return result ? null : '$value already taken.';
                 },
                 onChange: (value) async {
                   final validatorNotifier =

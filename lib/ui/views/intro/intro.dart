@@ -47,6 +47,9 @@ class IntroView extends HookConsumerWidget {
     final globalHook = useGlobalState();
     final currentIndex = useState<int>(0);
     final isWalletNameValid = ref.watch(isValidWalletNameValue);
+    AsyncValue<WalletModel?> walletProvider = ref.watch(myWalletProvider);
+    final shouldShowSetNameScreen = walletProvider.value != null &&
+        walletProvider.value?.address == walletProvider.value?.name;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: IntroductionScreen(
@@ -79,9 +82,10 @@ class IntroView extends HookConsumerWidget {
                           .authorizeAndSignMessage();
                       if (context.mounted) {
                         if (result == 'OK') {
+                          walletProvider = ref.refresh(myWalletProvider);
                           Future.delayed(
                             const Duration(
-                              milliseconds: 500,
+                              milliseconds: 400,
                             ),
                             () {
                               _introScreenKey.currentState?.next();
@@ -125,6 +129,9 @@ class IntroView extends HookConsumerWidget {
                             ),
                           ).future,
                         );
+                        ref.invalidate(walletNameProvider);
+                        ref.invalidate(referrerNameProvider);
+                        ref.invalidate(myWalletProvider);
                         globalHook.value =
                             globalHook.value.copyWith(isLoading: false);
                         if (context.mounted) {
@@ -219,10 +226,11 @@ class IntroView extends HookConsumerWidget {
             image: Image.asset(Config.digitalWalletImgPath),
             decoration: _pageDecoration(textTheme),
           ),
-          if (ref.watch(environmentProvider).authToken != null &&
+          if (shouldShowSetNameScreen &&
+              ref.watch(environmentProvider).authToken != null &&
               ref.watch(environmentProvider).jwtToken != null) ...[
             PageViewModel(
-              title: "Set Your Account",
+              title: "Finish Setup",
               bodyWidget: IntroForm(formKey: formKey),
               decoration: PageDecoration(
                 titleTextStyle: textTheme.headlineLarge!.copyWith(

@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     this.labelText,
-    this.hintText = 'Wallet name',
+    this.hintText = 'Name',
     this.defaultValue,
     this.isReadOnly = false,
     this.suffix,

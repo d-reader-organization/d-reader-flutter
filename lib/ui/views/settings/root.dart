@@ -47,13 +47,6 @@ class SettingsRootView extends StatelessWidget {
               leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
               title: 'Security & Privacy',
             ),
-            SettingsCommonListTile(
-              leadingPath: '${Config.settingsAssetsPath}/light/3_user.svg',
-              title: 'Referrals',
-              onTap: () {
-                nextScreenPush(context, const ReferralsView());
-              },
-            ),
             Consumer(
               builder: (context, ref, child) {
                 final myWallet = ref.watch(myWalletProvider);
@@ -65,17 +58,24 @@ class SettingsRootView extends StatelessWidget {
                     if (wallet == null) {
                       return const SizedBox();
                     }
-                    return SettingsCommonListTile(
-                      leadingPath:
-                          '${Config.settingsAssetsPath}/light/network.svg',
-                      title: 'Change Network',
-                      onTap: wallet.hasBetaAccess
-                          ? () {
+                    return wallet.hasBetaAccess
+                        ? SettingsCommonListTile(
+                            leadingPath:
+                                '${Config.settingsAssetsPath}/light/network.svg',
+                            title: 'Change Network',
+                            onTap: () {
                               nextScreenPush(
                                   context, const ChangeNetworkView());
-                            }
-                          : null,
-                    );
+                            },
+                          )
+                        : SettingsCommonListTile(
+                            leadingPath:
+                                '${Config.settingsAssetsPath}/light/3_user.svg',
+                            title: 'Referrals',
+                            onTap: () {
+                              nextScreenPush(context, const ReferralsView());
+                            },
+                          );
                   },
                 );
               },

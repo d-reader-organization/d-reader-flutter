@@ -154,7 +154,7 @@ class ProfileView extends ConsumerWidget {
                     ref: ref,
                   ),
                   const SizedBox(
-                    height: 24,
+                    height: 16,
                   ),
                   Consumer(
                     builder: (context, ref, child) {
@@ -169,7 +169,7 @@ class ProfileView extends ConsumerWidget {
                     },
                   ),
                   const SizedBox(
-                    height: 24,
+                    height: 8,
                   ),
                   CustomTextField(
                     labelText: 'Wallet address',
@@ -192,7 +192,7 @@ class ProfileView extends ConsumerWidget {
                     },
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   SettingsCommonListTile(
                     title: 'Airdrop \$SOL',
@@ -275,9 +275,6 @@ class ProfileView extends ConsumerWidget {
                               );
                             }
                           },
-                  ),
-                  const SizedBox(
-                    height: 16,
                   ),
                   SettingsCommonListTile(
                     title: 'Disconnect wallet',

@@ -67,8 +67,8 @@ class CustomTextField extends StatelessWidget {
             ),
             fillColor: ColorPalette.boxBackground200,
             filled: true,
-            hintStyle: TextStyle(
-              color: isReadOnly ? ColorPalette.greyscale200 : Colors.white,
+            hintStyle: const TextStyle(
+              color: ColorPalette.greyscale200,
               fontSize: 16,
             ),
             suffixIcon: Padding(

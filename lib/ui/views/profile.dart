@@ -3,6 +3,7 @@ import 'dart:io' show File;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
@@ -26,12 +27,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-class ProfileView extends ConsumerWidget {
+class ProfileView extends HookConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(myWalletProvider);
+    final globalHook = useGlobalState();
     return SettingsScaffold(
       appBarTitle: 'Edit Wallet',
       bottomNavigationBar: Consumer(
@@ -103,6 +105,9 @@ class ProfileView extends ConsumerWidget {
                                       ? 'Your wallet has been updated.'
                                       : 'Something went wrong',
                                 ),
+                                backgroundColor: result != null
+                                    ? ColorPalette.dReaderGreen
+                                    : ColorPalette.dReaderRed,
                                 duration: const Duration(milliseconds: 500),
                               ),
                             );
@@ -194,88 +199,87 @@ class ProfileView extends ConsumerWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  SettingsCommonListTile(
-                    title: 'Airdrop \$SOL',
-                    leadingPath:
-                        '${Config.settingsAssetsPath}/light/arrow_down.svg',
-                    overrideColor: ref.watch(globalStateProvider).isLoading
-                        ? ColorPalette.boxBackground400
-                        : ColorPalette.dReaderGreen,
-                    overrideTrailing: ref.watch(globalStateProvider).isLoading
-                        ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              color: ColorPalette.boxBackground400,
-                            ),
-                          )
-                        : null,
-                    onTap: ref.watch(globalStateProvider).isLoading
-                        ? null
-                        : () async {
-                            final notifier =
-                                ref.read(globalStateProvider.notifier);
-                            notifier.update(
-                              (state) => state.copyWith(
-                                isLoading: true,
-                              ),
-                            );
-                            final airdropResult = await ref
-                                .read(solanaProvider.notifier)
-                                .requestAirdrop(wallet.address);
-                            notifier.update(
-                              (state) => state.copyWith(
-                                isLoading: false,
-                              ),
-                            );
-                            if (context.mounted) {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  bool isSuccessful =
-                                      airdropResult?.contains('SOL') ?? false;
-                                  return SimpleDialog(
-                                    alignment: Alignment.center,
-                                    contentPadding: const EdgeInsets.all(8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        16,
-                                      ),
-                                    ),
-                                    title: SizedBox(
-                                      height: 120,
-                                      width: 120,
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            isSuccessful
-                                                ? Icons
-                                                    .check_circle_outline_outlined
-                                                : Icons.close_outlined,
-                                            size: 32,
-                                            color: isSuccessful
-                                                ? ColorPalette.dReaderGreen
-                                                : ColorPalette.dReaderRed,
+                  ref.read(environmentProvider).solanaCluster ==
+                          SolanaCluster.devnet.value
+                      ? SettingsCommonListTile(
+                          title: 'Airdrop \$SOL',
+                          leadingPath:
+                              '${Config.settingsAssetsPath}/light/arrow_down.svg',
+                          overrideColor:
+                              ref.watch(globalStateProvider).isLoading
+                                  ? ColorPalette.boxBackground400
+                                  : ColorPalette.dReaderGreen,
+                          overrideTrailing: globalHook.value.isLoading
+                              ? const SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    color: ColorPalette.boxBackground400,
+                                  ),
+                                )
+                              : null,
+                          onTap: ref.watch(globalStateProvider).isLoading
+                              ? null
+                              : () async {
+                                  globalHook.value = globalHook.value
+                                      .copyWith(isLoading: true);
+                                  final airdropResult = await ref
+                                      .read(solanaProvider.notifier)
+                                      .requestAirdrop(wallet.address);
+                                  globalHook.value = globalHook.value
+                                      .copyWith(isLoading: false);
+                                  if (context.mounted) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        bool isSuccessful =
+                                            airdropResult?.contains('SOL') ??
+                                                false;
+                                        return SimpleDialog(
+                                          alignment: Alignment.center,
+                                          contentPadding:
+                                              const EdgeInsets.all(8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
                                           ),
-                                          const SizedBox(
-                                            height: 8,
+                                          title: SizedBox(
+                                            height: 120,
+                                            width: 120,
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  isSuccessful
+                                                      ? Icons
+                                                          .check_circle_outline_outlined
+                                                      : Icons.close_outlined,
+                                                  size: 32,
+                                                  color: isSuccessful
+                                                      ? ColorPalette
+                                                          .dReaderGreen
+                                                      : ColorPalette.dReaderRed,
+                                                ),
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Text(
+                                                  airdropResult ??
+                                                      'Something went wrong',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          Text(
-                                            airdropResult ??
-                                                'Something went wrong',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
+                                        );
+                                      },
+                                    );
+                                  }
                                 },
-                              );
-                            }
-                          },
-                  ),
+                        )
+                      : const SizedBox(),
                   SettingsCommonListTile(
                     title: 'Disconnect wallet',
                     leadingPath:
@@ -361,6 +365,7 @@ class Avatar extends StatelessWidget {
               const SnackBar(
                 content: Text('Your avatar has been uploaded.'),
                 duration: Duration(milliseconds: 500),
+                backgroundColor: ColorPalette.dReaderGreen,
               ),
             );
           }

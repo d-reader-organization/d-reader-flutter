@@ -1,0 +1,44 @@
+publisher:
+  name: dReader
+  address: 6wRhHf4ZkBCqj8a5DhoUztD4B5CyYYQ9r9Ek5CSPpLq8
+  website: https://dreader.io/
+  email: solana.dapp.store@dreader.io
+  media:
+    - purpose: icon
+      uri: ./512x512.png
+app:
+  name: dReader
+  address: HLGgu9pkQDwcbDh1YG6Y5qjDCfN1q3zBm3UBwwdDE3A
+  android_package: io.app.dreader
+  urls:
+    license_url: >-
+      https://github.com/d-reader-organization/d-reader-flutter/blob/main/LICENSE
+    copyright_url: >-
+      https://github.com/d-reader-organization/d-reader-flutter/blob/main/LICENSE
+    privacy_policy_url: https://dreader.io/
+    website: https://dreader.io/
+  media:
+    - purpose: icon
+      uri: ./512x512.png
+release:
+  address: ''
+  media:
+    - purpose: icon
+      uri: ./512x512.png
+    - purpose: screenshot
+      uri: ./screenshots/comics.jpg
+  files:
+    - purpose: install
+      uri: ./dReader.apk
+  catalog:
+    en-US:
+      name: dReader
+      short_description: Discover a new world of comic collecting
+      long_description: >-
+        Platform for discovering, trading, collecting, and reading digital
+        graphic novels
+      new_in_version: Initial alpha release
+      saga_features: Exclusive early access, free/discounted collectible comics
+solana_mobile_dapp_publisher_portal:
+  google_store_package: io.app.dreader
+  testing_instructions: Run the app

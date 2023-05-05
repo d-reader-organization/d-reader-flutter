@@ -1,0 +1,14 @@
+{
+  "assets": {
+    "./512x512.png": {
+      "path": "./512x512.png",
+      "sha256": "7X7IO2m4kp5uHjJ68SImzZ4kwSbv/3K8rqCKzJ6EN9M=",
+      "uri": "https://arweave.net/C3qDF4AyLbPNiOu2kfneCew59PwB1LBm6bGMV66jerI"
+    },
+    "./screenshots/comics.jpg": {
+      "path": "./screenshots/comics.jpg",
+      "sha256": "qTc5swECHK1mAkkpIVOJSR2/n385QKJ/WxV+HKepT/g=",
+      "uri": "https://arweave.net/EroW-LyndDSDDKbU6VxjNn5IzKVny1cMLR1-AwMv4N4"
+    }
+  }
+}

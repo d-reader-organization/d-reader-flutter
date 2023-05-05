@@ -37,6 +37,9 @@ abstract class Config {
   static const String tokenKey = 'dReader-token';
   static const String successAuthAsset = 'assets/animation_files/done.json';
   static const String settingsAssetsPath = 'assets/icons/settings_screen';
+  static const String introAssetsPath = 'assets/icons/intro';
   static const String faviconPath = 'assets/icons/favicon.ico';
   static const String hasSeenInitialKey = 'hasSeenInitial';
+  static const String onboardingHelpLink =
+      "https://forms.gle/AeoduUiBaXzB1DNm8";
 }

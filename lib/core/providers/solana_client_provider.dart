@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<void> _getAndStoreToken(
-      Uint8List signedMessage, Ed25519HDPublicKey publicKey) async {
+    Uint8List signedMessage,
+    Ed25519HDPublicKey publicKey,
+  ) async {
     final response = await _walletService.connectWallet(
       publicKey,
       signedMessage.sublist(
@@ -150,6 +153,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             refreshToken: response?.refreshToken,
           ),
         );
+    ref.read(networkChangeUpdateWallet);
   }
 
   Future<void> deauthorize() async {

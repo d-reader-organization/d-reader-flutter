@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/providers/common_text_controller_provider.
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
@@ -98,6 +99,7 @@ class ReferralsView extends StatelessWidget {
                         showSnackBar(
                           context: context,
                           text: 'Referrer has been redeemed.',
+                          backgroundColor: ColorPalette.dReaderGreen,
                         );
                         return Future.delayed(
                           const Duration(seconds: 1),

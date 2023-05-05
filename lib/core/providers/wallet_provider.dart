@@ -63,8 +63,25 @@ final updateWalletAvatarProvider =
   },
 );
 
-final updateWalletProvider =
-    FutureProvider.family<WalletModel?, UpdateWalletPayload>((ref, payload) {
+final updateWalletProvider = FutureProvider.autoDispose
+    .family<WalletModel?, UpdateWalletPayload>((ref, payload) {
   return IoCContainer.resolveContainer<WalletRepositoryImpl>()
       .updateWallet(payload);
 });
+
+final networkChangeUpdateWallet = FutureProvider.autoDispose(
+  (ref) async {
+    final walletProvider = ref.read(myWalletProvider);
+    if (walletProvider.value != null) {
+      final wallet = walletProvider.value!;
+      await ref.read(
+        updateWalletProvider(
+          UpdateWalletPayload(
+            address: wallet.address,
+            name: wallet.name,
+          ),
+        ).future,
+      );
+    }
+  },
+);

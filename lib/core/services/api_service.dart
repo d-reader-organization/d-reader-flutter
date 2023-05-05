@@ -43,6 +43,7 @@ class ApiService {
         );
         return null;
       }
+
       return response.body;
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
@@ -51,8 +52,8 @@ class ApiService {
   }
 
   Future<String?> apiCallPost(String path) async {
-    Uri uri = Uri.parse('$_apiUrl$path');
     await _setters();
+    Uri uri = Uri.parse('$_apiUrl$path');
     try {
       http.Response response = await http.post(
         uri,
@@ -77,8 +78,8 @@ class ApiService {
     Object? body,
   }) async {
     try {
-      Uri uri = Uri.parse('$_apiUrl$path');
       await _setters();
+      Uri uri = Uri.parse('$_apiUrl$path');
 
       http.Response response = await http.patch(
         uri,
@@ -114,6 +115,7 @@ class ApiService {
       if (payload.avatar == null) {
         return null;
       }
+      await _setters();
       Uri uri = Uri.parse('$_apiUrl$path');
       final sp = await SharedPreferences.getInstance();
       final token = sp.getString(Config.tokenKey);

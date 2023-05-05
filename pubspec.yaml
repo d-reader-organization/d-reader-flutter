@@ -86,7 +86,8 @@ flutter:
     - assets/animation_files/
     - assets/icons/
     - assets/icons/settings_screen/light/
-    - assets/icons/settings_screen/bold/    
+    - assets/icons/settings_screen/bold/
+    - assets/icons/intro/    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -49,7 +49,9 @@ class IntroView extends HookConsumerWidget {
     final isWalletNameValid = ref.watch(isValidWalletNameValue);
     AsyncValue<WalletModel?> walletProvider = ref.watch(myWalletProvider);
     final shouldShowSetNameScreen = walletProvider.value != null &&
-        walletProvider.value?.address == walletProvider.value?.name;
+        walletProvider.value?.address == walletProvider.value?.name &&
+        ref.watch(environmentProvider).authToken != null &&
+        ref.watch(environmentProvider).jwtToken != null;
     final bool isConnectWalletScreen =
         shouldShowInitial ? currentIndex.value == 1 : currentIndex.value == 0;
     return Scaffold(
@@ -85,7 +87,14 @@ class IntroView extends HookConsumerWidget {
                               milliseconds: 400,
                             ),
                             () {
-                              _introScreenKey.currentState?.next();
+                              if (shouldShowSetNameScreen) {
+                                _introScreenKey.currentState?.next();
+                              } else {
+                                nextScreenReplace(
+                                  context,
+                                  const DReaderScaffold(),
+                                );
+                              }
                             },
                           );
                           globalHook.value =
@@ -99,6 +108,7 @@ class IntroView extends HookConsumerWidget {
                               content: Text(
                                 result,
                               ),
+                              backgroundColor: ColorPalette.dReaderRed,
                             ),
                           );
                         }
@@ -230,9 +240,7 @@ class IntroView extends HookConsumerWidget {
             image: Image.asset(Config.digitalWalletImgPath),
             decoration: _pageDecoration(textTheme),
           ),
-          if (shouldShowSetNameScreen &&
-              ref.watch(environmentProvider).authToken != null &&
-              ref.watch(environmentProvider).jwtToken != null) ...[
+          if (shouldShowSetNameScreen) ...[
             PageViewModel(
               title: "Finish Setup",
               bodyWidget: IntroForm(formKey: formKey),

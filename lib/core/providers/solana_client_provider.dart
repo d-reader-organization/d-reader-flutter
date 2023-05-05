@@ -136,7 +136,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<void> _getAndStoreToken(
-      Uint8List signedMessage, Ed25519HDPublicKey publicKey) async {
+    Uint8List signedMessage,
+    Ed25519HDPublicKey publicKey,
+  ) async {
     final response = await _walletService.connectWallet(
       publicKey,
       signedMessage.sublist(

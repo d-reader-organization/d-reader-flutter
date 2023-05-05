@@ -78,6 +78,7 @@ class _WalletNameInputFieldState extends ConsumerState<WalletNameInputField> {
         const SnackBar(
           content: Text('Your wallet has been updated.'),
           duration: Duration(milliseconds: 500),
+          backgroundColor: ColorPalette.dReaderGreen,
         ),
       );
     }

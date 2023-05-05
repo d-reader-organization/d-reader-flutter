@@ -103,6 +103,9 @@ class ProfileView extends ConsumerWidget {
                                       ? 'Your wallet has been updated.'
                                       : 'Something went wrong',
                                 ),
+                                backgroundColor: result != null
+                                    ? ColorPalette.dReaderGreen
+                                    : ColorPalette.dReaderRed,
                                 duration: const Duration(milliseconds: 500),
                               ),
                             );
@@ -361,6 +364,7 @@ class Avatar extends StatelessWidget {
               const SnackBar(
                 content: Text('Your avatar has been uploaded.'),
                 duration: Duration(milliseconds: 500),
+                backgroundColor: ColorPalette.dReaderGreen,
               ),
             );
           }

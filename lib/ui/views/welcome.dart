@@ -59,7 +59,7 @@ class _WelcomeViewState extends State<WelcomeView>
       body: Center(
         child: FadeTransition(
           opacity: _fadeInFadeOut,
-          child: SvgPicture.asset(Config.logoTextPath),
+          child: SvgPicture.asset(Config.logoAlphaPath),
         ),
       ),
     );

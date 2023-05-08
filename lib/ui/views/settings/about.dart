@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/main.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:flutter/material.dart';
@@ -54,17 +55,37 @@ class AboutView extends StatelessWidget {
             thickness: 1,
             color: Color(0xFF35383F),
           ),
-          const SettingsCommonListTile(
+          SettingsCommonListTile(
             title: 'Help Center',
             leadingPath: '${Config.settingsAssetsPath}/light/info_square.svg',
+            onTap: () {
+              openUrl(Config.helpCenterLink);
+            },
           ),
-          const SettingsCommonListTile(
+          SettingsCommonListTile(
             title: 'Privacy Policy',
             leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
+            onTap: () {
+              openUrl(Config.privacyPolicyUrl);
+            },
           ),
           const SettingsCommonListTile(
             title: 'Terms of Services',
             leadingPath: '${Config.settingsAssetsPath}/light/password.svg',
+          ),
+          SettingsCommonListTile(
+            title: 'Twitter',
+            leadingPath: '${Config.settingsAssetsPath}/light/twitter.svg',
+            onTap: () {
+              openUrl(Config.twitterUrl);
+            },
+          ),
+          SettingsCommonListTile(
+            title: 'Discord',
+            leadingPath: '${Config.settingsAssetsPath}/light/discord.svg',
+            onTap: () {
+              openUrl(Config.discordUrl);
+            },
           ),
         ],
       ),

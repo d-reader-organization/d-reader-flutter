@@ -1,71 +1,66 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "devDebug",
-        "request": "launch",
-        "type": "dart",
-        "program": "lib/main.dart",
-        "args": [
-          "--dart-define=apiUrl=_",
-          "--dart-define=apiUrlDevnet=_",
-          "--dart-define=rpcApiKey=",
-          "--flavor",
-          "dev",
-          "--target",
-          "lib/main.dart"
-        ]
-      },
-      {
-        "name": "devRelease",
-        "request": "launch",
-        "type": "dart",
-        "program": "lib/main.dart",
-        "args": [
-          "--dart-define=apiUrl=_",
-          "--dart-define=apiUrlDevnet=_",
-          "--dart-define=rpcApiKey=",
-          "--dart-define=sentryDsn=-",
-          "--flavor",
-          "dev",
-          "--release",
-          "--target",
-          "lib/main.dart"
-        ]
-      },
-      {
-          "name": "prodDebug",
-          "request": "launch",
-          "type": "dart",
-          "program": "lib/main.dart",
-          "args": [
-            "--dart-define=apiUrl=_",
-            "--dart-define=apiUrlDevnet=_",
-            "--dart-define=rpcApiKey=",
-            "--flavor",
-            "prod",
-            "--target",
-            "lib/main.dart"
-          ]
-        },
-        {
-          "name": "prodRelease",
-          "request": "launch",
-          "type": "dart",
-          "program": "lib/main.dart",
-          "args": [
-            "--dart-define=apiUrl=_",
-            "--dart-define=apiUrlDevnet=_",
-            "--dart-define=rpcApiKey=",
-            "--dart-define=sentryDsn=-",
-            "--flavor",
-            "prod",
-            "--release",
-            "--target",
-            "lib/main.dart"
-          ]
-        }
-    ],
-    "compounds": []
-  }
-  
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "devDebug",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=apiUrl=_",
+        "--dart-define=apiUrlDevnet=_",
+        "--flavor",
+        "dev",
+        "--target",
+        "lib/main.dart"
+      ]
+    },
+    {
+      "name": "devRelease",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=apiUrl=_",
+        "--dart-define=apiUrlDevnet=_",
+        "--dart-define=sentryDsn=-",
+        "--flavor",
+        "dev",
+        "--release",
+        "--target",
+        "lib/main.dart"
+      ]
+    },
+    {
+      "name": "prodDebug",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=apiUrl=_",
+        "--dart-define=apiUrlDevnet=_",
+        "--flavor",
+        "prod",
+        "--target",
+        "lib/main.dart"
+      ]
+    },
+    {
+      "name": "prodRelease",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=apiUrl=_",
+        "--dart-define=apiUrlDevnet=_",
+        "--dart-define=sentryDsn=-",
+        "--flavor",
+        "prod",
+        "--release",
+        "--target",
+        "lib/main.dart"
+      ]
+    }
+  ],
+  "compounds": []
+}

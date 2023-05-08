@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
@@ -43,9 +44,14 @@ class SettingsRootView extends StatelessWidget {
                   '${Config.settingsAssetsPath}/light/notification.svg',
               title: 'Notifications',
             ),
-            const SettingsCommonListTile(
+            SettingsCommonListTile(
               leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
               title: 'Security & Privacy',
+              onTap: () {
+                openUrl(
+                  Config.privacyPolicyUrl,
+                );
+              },
             ),
             Consumer(
               builder: (context, ref, child) {

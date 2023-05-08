@@ -64,7 +64,7 @@ final updateWalletAvatarProvider =
 );
 
 final updateWalletProvider = FutureProvider.autoDispose
-    .family<WalletModel?, UpdateWalletPayload>((ref, payload) {
+    .family<dynamic, UpdateWalletPayload>((ref, payload) {
   return IoCContainer.resolveContainer<WalletRepositoryImpl>()
       .updateWallet(payload);
 });

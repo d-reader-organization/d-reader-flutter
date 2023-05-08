@@ -45,7 +45,7 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
-  Future<WalletModel?> updateWallet(
+  Future<dynamic> updateWallet(
     UpdateWalletPayload payload,
   ) async {
     dynamic responseBody = await ApiService.instance.apiCallPatch(
@@ -62,7 +62,7 @@ class WalletRepositoryImpl implements WalletRepository {
         'Error: ${responseBody.message}: Status: ${responseBody.statusCode} - ${responseBody.error}',
         level: SentryLevel.error,
       );
-      return null;
+      return responseBody.message;
     }
     return responseBody != null
         ? WalletModel.fromJson(jsonDecode(responseBody))

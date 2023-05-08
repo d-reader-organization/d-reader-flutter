@@ -64,14 +64,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
   Future<String?> requestAirdrop(String publicKey) async {
     try {
-      final String rpcUrl = ref.read(environmentProvider).solanaCluster ==
-              SolanaCluster.devnet.value
-          ? Config.rpcDevnetUrl
-          : Config.rpcUrl;
-
       final client = SolanaClient(
         rpcUrl: Uri.parse(
-          '$rpcUrl?api-key=${Config.rpcApiKey}',
+          Config.rpcDevnetUrl,
         ),
         websocketUrl: Uri.parse(
           "ws://api.devnet.solana.com",

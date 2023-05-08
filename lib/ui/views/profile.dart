@@ -21,7 +21,6 @@ import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart' as fcm;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -347,7 +346,13 @@ class Avatar extends StatelessWidget {
         if (result != null) {
           File file = File(result.files.single.path ?? '');
           final bytes = await file.readAsBytes();
-          await ref.read(
+          final notifier = ref.read(globalStateProvider.notifier);
+          notifier.update(
+            (state) => state.copyWith(
+              isLoading: true,
+            ),
+          );
+          final response = await ref.read(
             updateWalletAvatarProvider(
               UpdateWalletPayload(
                 address: wallet.address,
@@ -360,7 +365,17 @@ class Avatar extends StatelessWidget {
             ).future,
           );
           ref.invalidate(myWalletProvider);
-          if (context.mounted) {
+          Future.delayed(
+            const Duration(milliseconds: 500),
+            () {
+              notifier.update(
+                (state) => state.copyWith(
+                  isLoading: false,
+                ),
+              );
+            },
+          );
+          if (context.mounted && response != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Your avatar has been uploaded.'),
@@ -371,59 +386,64 @@ class Avatar extends StatelessWidget {
           }
         }
       },
-      child: wallet.avatar.isNotEmpty
-          ? CircleAvatar(
-              radius: 48,
-              backgroundColor: ColorPalette.boxBackground300,
-              child: CachedNetworkImage(
-                imageUrl: wallet.avatar,
-                cacheKey: wallet.address,
-                cacheManager: fcm.CacheManager(
-                  fcm.Config(
-                    wallet.address,
-                    stalePeriod: const Duration(days: 1),
-                  ),
-                ),
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(64),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-              ))
-          : Container(
-              padding: const EdgeInsets.all(16),
-              height: 96,
-              width: 96,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(64),
-                border: Border.all(
-                  color: ColorPalette.boxBackground400,
-                  width: 2,
+      child: ref.watch(globalStateProvider).isLoading
+          ? Center(
+              child: Container(
+                height: 96,
+                width: 96,
+                padding: const EdgeInsets.all(16),
+                child: const CircularProgressIndicator(
+                  color: ColorPalette.dReaderBlue,
                 ),
               ),
-              child: Column(
-                children: [
-                  SvgPicture.asset(
-                    '${Config.settingsAssetsPath}/bold/image.svg',
-                  ),
-                  const Text(
-                    'Browse File',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(
-                        0xFF777D8C,
-                      ),
+            )
+          : wallet.avatar.isNotEmpty
+              ? CircleAvatar(
+                  radius: 48,
+                  backgroundColor: ColorPalette.boxBackground300,
+                  child: CachedNetworkImage(
+                    imageUrl: wallet.avatar,
+                    cacheKey: wallet.avatar,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(64),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
+                  ))
+              : Container(
+                  padding: const EdgeInsets.all(16),
+                  height: 96,
+                  width: 96,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(64),
+                    border: Border.all(
+                      color: ColorPalette.boxBackground400,
+                      width: 2,
                     ),
                   ),
-                ],
-              ),
-            ),
+                  child: Column(
+                    children: [
+                      SvgPicture.asset(
+                        '${Config.settingsAssetsPath}/bold/image.svg',
+                      ),
+                      const Text(
+                        'Browse File',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(
+                            0xFF777D8C,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
     );
   }
 }

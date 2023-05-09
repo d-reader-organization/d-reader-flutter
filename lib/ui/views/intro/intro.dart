@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/intro/form.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
@@ -41,7 +42,9 @@ class IntroView extends HookConsumerWidget {
       titlePadding: const EdgeInsets.only(bottom: 16),
       pageColor: ColorPalette.appBackgroundColor,
       imagePadding: const EdgeInsets.only(top: 16),
-      imageFlex: 1,
+      imageFlex: 6,
+      bodyFlex: 4,
+      imageAlignment: Alignment.topCenter,
     );
   }
 
@@ -62,7 +65,9 @@ class IntroView extends HookConsumerWidget {
       body: IntroductionScreen(
         key: _introScreenKey,
         globalBackgroundColor: ColorPalette.appBackgroundColor,
-        bodyPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        bodyPadding: const EdgeInsets.symmetric(
+          vertical: 2,
+        ),
         showDoneButton: false,
         showNextButton: false,
         showSkipButton: false,
@@ -88,7 +93,7 @@ class IntroView extends HookConsumerWidget {
                           .authorizeAndSignMessage();
                       if (context.mounted) {
                         if (result == 'OK') {
-                          ref.invalidate(myWalletProvider);
+                          walletProvider = ref.refresh(myWalletProvider);
                           final result =
                               await ref.read(myWalletProvider.future);
                           Future.delayed(
@@ -141,7 +146,7 @@ class IntroView extends HookConsumerWidget {
                         final String referrerName =
                             ref.read(referrerNameProvider).trim();
                         formKey.currentState!.save();
-                        await ref.read(
+                        final result = await ref.read(
                           updateWalletProvider(
                             UpdateWalletPayload(
                               address: address,
@@ -153,6 +158,17 @@ class IntroView extends HookConsumerWidget {
                             ),
                           ).future,
                         );
+                        globalHook.value =
+                            globalHook.value.copyWith(isLoading: false);
+                        if (result is String && context.mounted) {
+                          return showSnackBar(
+                            context: context,
+                            text: result,
+                            backgroundColor: ColorPalette.dReaderRed,
+                            duration: 1000,
+                          );
+                        }
+
                         ref.invalidate(walletNameProvider);
                         ref.invalidate(referrerNameProvider);
                         ref.invalidate(myWalletProvider);
@@ -178,6 +194,122 @@ class IntroView extends HookConsumerWidget {
             borderRadius: BorderRadius.circular(5.0),
           ),
         ),
+        //  rawPages: [
+        //     CustomPageViewModel(
+        //       image: '${Config.introAssetsPath}/splash_1.svg',
+        //       bodyWidget: Column(
+        //         crossAxisAlignment: CrossAxisAlignment.stretch,
+        //         children: const [
+        //           Text(
+        //             "Join the comic revolution!",
+        //             textAlign: TextAlign.center,
+        //             style: TextStyle(
+        //               color: Colors.white,
+        //               fontSize: 40,
+        //               fontWeight: FontWeight.w700,
+        //             ),
+        //           ),
+        //           SizedBox(
+        //             height: 8,
+        //           ),
+        //           Text(
+        //             "Help us shape the future of digital graphic novels and empower artists!",
+        //             textAlign: TextAlign.center,
+        //             style: TextStyle(
+        //               fontSize: 18,
+        //               fontWeight: FontWeight.w500,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //     CustomPageViewModel(
+        //       image: '${Config.introAssetsPath}/splash_2.svg',
+        //       bodyWidget: Column(
+        //         crossAxisAlignment: CrossAxisAlignment.stretch,
+        //         children: [
+        //           RichText(
+        //             textAlign: TextAlign.center,
+        //             text: const TextSpan(
+        //               text: 'Connect with\n',
+        //               style: TextStyle(
+        //                 color: Colors.white,
+        //                 fontSize: 32,
+        //                 fontWeight: FontWeight.w700,
+        //                 fontFamily: 'Urbanist',
+        //               ),
+        //               children: <TextSpan>[
+        //                 TextSpan(
+        //                   text: 'your wallet',
+        //                   style: TextStyle(
+        //                     color: Colors.white,
+        //                     fontSize: 32,
+        //                     fontWeight: FontWeight.w700,
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //           const SizedBox(
+        //             height: 16,
+        //           ),
+        //           Column(
+        //             children: [
+        //               const Text(
+        //                 "Connect Solflare or Phantom wallet to store your digital comics & goods",
+        //                 textAlign: TextAlign.center,
+        //                 style: TextStyle(
+        //                   fontSize: 18,
+        //                   fontWeight: FontWeight.w500,
+        //                 ),
+        //               ),
+        //               const SizedBox(
+        //                 height: 16,
+        //               ),
+        //               Row(
+        //                 mainAxisAlignment: MainAxisAlignment.center,
+        //                 children: [
+        //                   WalletAppContainer(
+        //                     image: 'assets/images/solflare_logo.png',
+        //                     onTap: () {
+        //                       openExternalApp('com.solflare.mobile');
+        //                     },
+        //                     title: 'Get Solflare',
+        //                   ),
+        //                   const SizedBox(
+        //                     width: 8,
+        //                   ),
+        //                   WalletAppContainer(
+        //                     image: 'assets/images/phantom_logo.png',
+        //                     onTap: () {
+        //                       openExternalApp('app.phantom');
+        //                     },
+        //                     title: 'Get Phantom',
+        //                   ),
+        //                 ],
+        //               ),
+        //               const SizedBox(
+        //                 height: 24,
+        //               ),
+        //               GestureDetector(
+        //                 onTap: () {
+        //                   openUrl(Config.helpCenterLink);
+        //                 },
+        //                 child: const Text(
+        //                   "Need help onboarding?",
+        //                   style: TextStyle(
+        //                     fontSize: 14,
+        //                     fontWeight: FontWeight.w600,
+        //                     color: ColorPalette.dReaderYellow100,
+        //                   ),
+        //                 ),
+        //               ),
+        //             ],
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ],
         pages: [
           if (shouldShowInitial) ...[
             PageViewModel(
@@ -197,14 +329,35 @@ class IntroView extends HookConsumerWidget {
                   ),
                 ],
               ),
-              image: SvgPicture.asset(
-                '${Config.introAssetsPath}/splash_1.svg',
+              image: const IntroImage(
+                imagePath: '${Config.introAssetsPath}/splash_1.svg',
               ),
               decoration: _pageDecoration(true),
             ),
           ],
           PageViewModel(
-            title: "Connect with your wallet",
+            titleWidget: RichText(
+              textAlign: TextAlign.center,
+              text: const TextSpan(
+                text: 'Connect with\n',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Urbanist',
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'your wallet',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             bodyWidget: Column(
               children: [
                 const Text(
@@ -241,11 +394,11 @@ class IntroView extends HookConsumerWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 24,
                 ),
                 GestureDetector(
                   onTap: () {
-                    openUrl(Config.onboardingHelpLink);
+                    openUrl(Config.helpCenterLink);
                   },
                   child: const Text(
                     "Need help onboarding?",
@@ -258,19 +411,88 @@ class IntroView extends HookConsumerWidget {
                 ),
               ],
             ),
-            image: SvgPicture.asset('${Config.introAssetsPath}/splash_2.svg'),
+            image: const IntroImage(
+              imagePath: '${Config.introAssetsPath}/splash_2.svg',
+            ),
             decoration: _pageDecoration(false),
           ),
           if (shouldShowSetNameScreen) ...[
             PageViewModel(
-              title: "Finish Setup",
+              title: "Set your account",
               bodyWidget: IntroForm(formKey: formKey),
-              image: SvgPicture.asset('${Config.introAssetsPath}/splash_3.svg'),
+              image: const IntroImage(
+                imagePath: '${Config.introAssetsPath}/splash_3.svg',
+              ),
               decoration: _pageDecoration(false),
             ),
           ],
         ],
       ),
+    );
+  }
+}
+
+class CustomPageViewModel extends StatelessWidget {
+  final String image;
+  final Widget bodyWidget;
+  const CustomPageViewModel({
+    super.key,
+    required this.image,
+    required this.bodyWidget,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(top: 4, bottom: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: (MediaQuery.of(context).size.height) / 1.8,
+              child: IntroImage(
+                imagePath: image,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              height: (MediaQuery.of(context).size.height) / 2,
+              child: bodyWidget,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class IntroImage extends StatelessWidget {
+  final String imagePath;
+  const IntroImage({
+    super.key,
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          foregroundDecoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF565441),
+                Color.fromRGBO(86, 84, 65, 0),
+              ],
+            ),
+          ),
+        ),
+        SvgPicture.asset(
+          imagePath,
+        )
+      ],
     );
   }
 }
@@ -292,7 +514,7 @@ class WalletAppContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: 16,
+          vertical: 8,
           horizontal: 8,
         ),
         decoration: BoxDecoration(

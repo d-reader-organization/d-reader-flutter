@@ -21,13 +21,9 @@ abstract class Config {
     'apiUrlDevnet',
     defaultValue: 'https://d-reader-backend-dev-devnet.herokuapp.com',
   );
-  static const rpcApiKey = String.fromEnvironment(
-    'rpcApiKey',
-    defaultValue: '',
-  );
-  static const rpcDevnetUrl = "https://rpc-devnet.helius.xyz/";
-  static const rpcUrl = "https://rpc.helius.xyz/";
+  static const rpcDevnetUrl = "https://api.devnet.solana.com";
   static const String logoTextPath = 'assets/images/logo-white-yellow.svg';
+  static const String logoAlphaPath = 'assets/images/logo_alpha.svg';
   static const String logoTextBlackPath =
       'assets/images/d_reader_logo_text_black.png';
   static const String logoPath = 'assets/images/d_reader_logo.png';
@@ -40,6 +36,9 @@ abstract class Config {
   static const String introAssetsPath = 'assets/icons/intro';
   static const String faviconPath = 'assets/icons/favicon.ico';
   static const String hasSeenInitialKey = 'hasSeenInitial';
-  static const String onboardingHelpLink =
-      "https://forms.gle/AeoduUiBaXzB1DNm8";
+  static const String helpCenterLink = "https://forms.gle/AeoduUiBaXzB1DNm8";
+  static const String privacyPolicyUrl =
+      "https://github.com/d-reader-organization/.github/blob/main/PRIVACY_POLICY";
+  static const String twitterUrl = 'https://twitter.com/dReaderApp';
+  static const String discordUrl = 'https://discord.gg/rrZsRvC9mh';
 }

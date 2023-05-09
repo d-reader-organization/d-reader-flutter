@@ -5,7 +5,7 @@ abstract class WalletRepository {
   Future<List<WalletAsset>> myAssets();
   Future<WalletModel?> myWallet();
   Future<WalletModel?> updateAvatar(UpdateWalletPayload payload);
-  Future<WalletModel?> updateWallet(UpdateWalletPayload payload);
+  Future<dynamic> updateWallet(UpdateWalletPayload payload);
   Future<bool> validateName(String name);
   Future<String> updateReferrer(String referrer);
 }

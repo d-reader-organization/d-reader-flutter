@@ -89,8 +89,12 @@ class IntroForm extends ConsumerWidget {
                       ),
                       selectedColor: ColorPalette.dReaderYellow100,
                       onPressed: () {
-                        ref.read(selectedButtonProvider.notifier).state =
-                            'saga';
+                        if (ref.read(selectedButtonProvider) == 'saga') {
+                          ref.read(selectedButtonProvider.notifier).state = '';
+                        } else {
+                          ref.read(selectedButtonProvider.notifier).state =
+                              'saga';
+                        }
                       },
                     ),
                   ),
@@ -118,8 +122,12 @@ class IntroForm extends ConsumerWidget {
                       ),
                       selectedColor: ColorPalette.dReaderYellow100,
                       onPressed: () {
-                        ref.read(selectedButtonProvider.notifier).state =
-                            'referral';
+                        if (ref.read(selectedButtonProvider) == 'referral') {
+                          ref.read(selectedButtonProvider.notifier).state = '';
+                        } else {
+                          ref.read(selectedButtonProvider.notifier).state =
+                              'referral';
+                        }
                       },
                     ),
                   ),

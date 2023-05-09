@@ -101,7 +101,7 @@ class ApiService {
       }
       return response.body;
     } on ApiError catch (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error.message, stackTrace: error.error);
       return error;
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);

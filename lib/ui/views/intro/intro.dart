@@ -52,12 +52,8 @@ class IntroView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final globalHook = useGlobalState();
     final currentIndex = useState<int>(0);
+    final shouldShowSetAccountScreen = useState<bool>(false);
     final isWalletNameValid = ref.watch(isValidWalletNameValue);
-    AsyncValue<WalletModel?> walletProvider = ref.watch(myWalletProvider);
-    final shouldShowSetNameScreen = walletProvider.value != null &&
-        walletProvider.value?.address == walletProvider.value?.name &&
-        ref.watch(environmentProvider).authToken != null &&
-        ref.watch(environmentProvider).jwtToken != null;
     final bool isConnectWalletScreen =
         shouldShowInitial ? currentIndex.value == 1 : currentIndex.value == 0;
     return Scaffold(
@@ -93,15 +89,16 @@ class IntroView extends HookConsumerWidget {
                           .authorizeAndSignMessage();
                       if (context.mounted) {
                         if (result == 'OK') {
-                          walletProvider = ref.refresh(myWalletProvider);
                           final result =
                               await ref.read(myWalletProvider.future);
+                          final bool isNew = result?.address == result?.name;
+                          shouldShowSetAccountScreen.value = isNew;
                           Future.delayed(
                             const Duration(
                               milliseconds: 400,
                             ),
                             () {
-                              if (result?.address == result?.name) {
+                              if (isNew) {
                                 _introScreenKey.currentState?.next();
                               } else {
                                 nextScreenReplace(
@@ -416,7 +413,7 @@ class IntroView extends HookConsumerWidget {
             ),
             decoration: _pageDecoration(false),
           ),
-          if (shouldShowSetNameScreen) ...[
+          if (shouldShowSetAccountScreen.value) ...[
             PageViewModel(
               title: "Set your account",
               bodyWidget: IntroForm(formKey: formKey),

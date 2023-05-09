@@ -5,7 +5,6 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:flutter/material.dart';
@@ -142,13 +141,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         signedMessage.length,
       ),
     );
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
+    await ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             jwtToken: response?.accessToken,
             refreshToken: response?.refreshToken,
           ),
         );
-    ref.read(networkChangeUpdateWallet);
   }
 
   Future<void> deauthorize() async {
@@ -275,7 +273,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     String tempNetwork,
   ) async {
     if (await _doReauthorize(client, overrideAuthToken)) {
-      ref.read(environmentProvider.notifier).updateTempNetwork(tempNetwork);
+      await ref
+          .read(environmentProvider.notifier)
+          .updateTempNetwork(tempNetwork);
       final message = await _walletService.getOneTimePassword(
         publicKey: signer,
       );

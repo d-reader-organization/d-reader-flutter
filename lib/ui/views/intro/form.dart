@@ -1,3 +1,5 @@
+import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/intro/selected_button_provider.dart';
 import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
@@ -65,74 +67,84 @@ class IntroForm extends ConsumerWidget {
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ButtonWithIcon(
-                      name: 'saga',
-                      label: const Text(
-                        'Have Saga',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+              ref.read(environmentProvider).solanaCluster ==
+                      SolanaCluster.devnet.value
+                  ? const SizedBox()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ButtonWithIcon(
+                            name: 'saga',
+                            label: const Text(
+                              'Have Saga',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            icon: SvgPicture.asset(
+                              'assets/icons/category.svg',
+                              colorFilter: ColorFilter.mode(
+                                ref.watch(selectedButtonProvider) == 'saga'
+                                    ? Colors.black
+                                    : Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            selectedColor: ColorPalette.dReaderYellow100,
+                            onPressed: () {
+                              if (ref.read(selectedButtonProvider) == 'saga') {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = '';
+                              } else {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = 'saga';
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                      icon: SvgPicture.asset(
-                        'assets/icons/category.svg',
-                        colorFilter: ColorFilter.mode(
-                          ref.watch(selectedButtonProvider) == 'saga'
-                              ? Colors.black
-                              : Colors.white,
-                          BlendMode.srcIn,
+                        const SizedBox(
+                          width: 8,
                         ),
-                      ),
-                      selectedColor: ColorPalette.dReaderYellow100,
-                      onPressed: () {
-                        if (ref.read(selectedButtonProvider) == 'saga') {
-                          ref.read(selectedButtonProvider.notifier).state = '';
-                        } else {
-                          ref.read(selectedButtonProvider.notifier).state =
-                              'saga';
-                        }
-                      },
+                        Expanded(
+                          child: ButtonWithIcon(
+                            name: 'referral',
+                            label: const Text(
+                              'Referral code',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            icon: SvgPicture.asset(
+                              'assets/icons/ticket.svg',
+                              colorFilter: ColorFilter.mode(
+                                ref.watch(selectedButtonProvider) == 'referral'
+                                    ? Colors.black
+                                    : Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            selectedColor: ColorPalette.dReaderYellow100,
+                            onPressed: () {
+                              if (ref.read(selectedButtonProvider) ==
+                                  'referral') {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = '';
+                              } else {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = 'referral';
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: ButtonWithIcon(
-                      name: 'referral',
-                      label: const Text(
-                        'Referral code',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      icon: SvgPicture.asset(
-                        'assets/icons/ticket.svg',
-                        colorFilter: ColorFilter.mode(
-                          ref.watch(selectedButtonProvider) == 'referral'
-                              ? Colors.black
-                              : Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      selectedColor: ColorPalette.dReaderYellow100,
-                      onPressed: () {
-                        if (ref.read(selectedButtonProvider) == 'referral') {
-                          ref.read(selectedButtonProvider.notifier).state = '';
-                        } else {
-                          ref.read(selectedButtonProvider.notifier).state =
-                              'referral';
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(
                 height: 16,
               ),

@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -64,14 +65,30 @@ class ChangeNetworkView extends ConsumerWidget {
                     ) ??
                     false;
                 if (isConfirmed) {
-                  final response = await ref.read(
-                      environmentChangeProvider(SolanaCluster.mainnet.value)
-                          .future);
+                  final dynamic localStoreData = ref.read(
+                    localStoreNetworkDataProvider(SolanaCluster.mainnet.value),
+                  );
+                  bool isSuccessful = false;
+                  if (localStoreData != null) {
+                    isSuccessful = ref
+                        .read(environmentProvider.notifier)
+                        .updateEnvironmentState(
+                          EnvironmentStateUpdateInput.fromDynamic(
+                            localStoreData,
+                          ),
+                        );
+                  } else {
+                    isSuccessful = await ref
+                            .read(solanaProvider.notifier)
+                            .authorizeAndSignMessage(
+                                SolanaCluster.mainnet.value) ==
+                        'OK';
+                  }
                   if (context.mounted) {
-                    final snackbarText = response
+                    final snackbarText = isSuccessful
                         ? 'Network changed successfully'
                         : 'Network change failed.';
-                    if (!response) {
+                    if (!isSuccessful) {
                       ref
                           .read(environmentProvider.notifier)
                           .updateEnvironmentState(
@@ -85,7 +102,7 @@ class ChangeNetworkView extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(snackbarText),
-                        backgroundColor: response
+                        backgroundColor: isSuccessful
                             ? ColorPalette.dReaderGreen
                             : ColorPalette.dReaderRed,
                       ),
@@ -130,14 +147,31 @@ class ChangeNetworkView extends ConsumerWidget {
                     ) ??
                     false;
                 if (isConfirmed) {
-                  final response = await ref.read(
-                      environmentChangeProvider(SolanaCluster.devnet.value)
-                          .future);
+                  final dynamic localStoreData = ref.read(
+                    localStoreNetworkDataProvider(SolanaCluster.devnet.value),
+                  );
+                  bool isSuccessful = false;
+                  if (localStoreData != null) {
+                    isSuccessful = ref
+                        .read(environmentProvider.notifier)
+                        .updateEnvironmentState(
+                          EnvironmentStateUpdateInput.fromDynamic(
+                            localStoreData,
+                          ),
+                        );
+                  } else {
+                    isSuccessful = await ref
+                            .read(solanaProvider.notifier)
+                            .authorizeAndSignMessage(
+                              SolanaCluster.devnet.value,
+                            ) ==
+                        'OK';
+                  }
                   if (context.mounted) {
-                    final snackbarText = response
+                    final snackbarText = isSuccessful
                         ? 'Network changed successfully'
                         : 'Network change failed.';
-                    if (!response) {
+                    if (!isSuccessful) {
                       ref
                           .read(environmentProvider.notifier)
                           .updateEnvironmentState(
@@ -151,7 +185,7 @@ class ChangeNetworkView extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(snackbarText),
-                        backgroundColor: response
+                        backgroundColor: isSuccessful
                             ? ColorPalette.dReaderGreen
                             : ColorPalette.dReaderRed,
                       ),

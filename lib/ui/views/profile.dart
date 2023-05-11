@@ -307,7 +307,7 @@ class ProfileView extends HookConsumerWidget {
                               '${Config.settingsAssetsPath}/light/logout.svg',
                           overrideColor: ColorPalette.dReaderYellow100,
                           onTap: () async {
-                            await LocalStore.instance.deleteFromDisk();
+                            await LocalStore.instance.clear();
                             ref.invalidate(tabBarProvider);
                             ref.invalidate(scaffoldProvider);
                             ref.invalidate(environmentProvider);

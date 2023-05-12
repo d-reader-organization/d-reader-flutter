@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/button_with_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
@@ -40,17 +41,11 @@ class IntroForm extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomTextField(
-                labelText: 'Account name',
+                labelText: 'Username',
                 hintText: 'eg. BunBun',
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onValidate: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter account name.";
-                  } else if (value.length > 24) {
-                    return "Must be 24 characters.";
-                  }
-                  final result = ref.watch(isValidWalletNameValue);
-                  return result ? null : '$value already taken.';
+                  return validateUsername(value: value, ref: ref);
                 },
                 onChange: (value) async {
                   final validatorNotifier =

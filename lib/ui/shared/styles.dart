@@ -1,7 +1,11 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
-InputDecoration searchInputDecoration(Widget prefixIcon) {
+InputDecoration searchInputDecoration({
+  Widget? prefixIcon,
+  String hintText = 'Search',
+  Widget? suffixIcon,
+}) {
   return InputDecoration(
     fillColor: ColorPalette.boxBackground200,
     filled: true,
@@ -11,18 +15,19 @@ InputDecoration searchInputDecoration(Widget prefixIcon) {
         16.0,
       ),
     ),
-    hintText: 'Search',
+    hintText: hintText,
     hintStyle: const TextStyle(
       fontWeight: FontWeight.w400,
       fontSize: 14,
       color: ColorPalette.dReaderGrey,
     ),
     prefixIcon: prefixIcon,
-    suffixIcon: const Icon(
-      Icons.linear_scale_sharp,
-      // Icons.drag_handle_outlined ??
-      // Icons.commit,
-      color: ColorPalette.dReaderYellow100,
-    ),
+    suffixIcon: suffixIcon,
+    // suffixIcon: const Icon(
+    //   Icons.linear_scale_sharp,
+    //   // Icons.drag_handle_outlined ??
+    //   // Icons.commit,
+    //   color: ColorPalette.dReaderYellow100,
+    // ),
   );
 }

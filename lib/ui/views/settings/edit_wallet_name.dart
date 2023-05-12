@@ -20,7 +20,7 @@ class EditWalletName extends StatelessWidget {
       body: WalletNameInputField(
         wallet: wallet,
       ),
-      appBarTitle: 'Account Name',
+      appBarTitle: 'Username',
     );
   }
 }

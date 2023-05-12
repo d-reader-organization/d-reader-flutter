@@ -69,14 +69,15 @@ final updateWalletProvider = FutureProvider.autoDispose
       .updateWallet(payload);
 });
 
-final networkChangeUpdateWallet = FutureProvider.autoDispose(
-  (ref) async {
+final networkChangeUpdateWallet =
+    FutureProvider.autoDispose.family<void, String>(
+  (ref, address) async {
     final wallet = await ref.read(myWalletProvider.future);
-    if (wallet != null && wallet.name != wallet.address) {
+    if (wallet != null && wallet.name != address) {
       await ref.read(
         updateWalletProvider(
           UpdateWalletPayload(
-            address: wallet.address,
+            address: address,
             name: wallet.name,
           ),
         ).future,

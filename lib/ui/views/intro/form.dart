@@ -1,3 +1,5 @@
+import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/intro/selected_button_provider.dart';
 import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
@@ -5,6 +7,7 @@ import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/button_with_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
@@ -38,17 +41,11 @@ class IntroForm extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomTextField(
-                labelText: 'Account name',
+                labelText: 'Username',
                 hintText: 'eg. BunBun',
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 onValidate: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter account name.";
-                  } else if (value.length > 24) {
-                    return "Must be 24 characters.";
-                  }
-                  final result = ref.watch(isValidWalletNameValue);
-                  return result ? null : '$value already taken.';
+                  return validateUsername(value: value, ref: ref);
                 },
                 onChange: (value) async {
                   final validatorNotifier =
@@ -65,66 +62,84 @@ class IntroForm extends ConsumerWidget {
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ButtonWithIcon(
-                      name: 'saga',
-                      label: const Text(
-                        'Have Saga',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+              ref.read(environmentProvider).solanaCluster ==
+                      SolanaCluster.devnet.value
+                  ? const SizedBox()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: ButtonWithIcon(
+                            name: 'saga',
+                            label: const Text(
+                              'Have Saga',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            icon: SvgPicture.asset(
+                              'assets/icons/category.svg',
+                              colorFilter: ColorFilter.mode(
+                                ref.watch(selectedButtonProvider) == 'saga'
+                                    ? Colors.black
+                                    : Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            selectedColor: ColorPalette.dReaderYellow100,
+                            onPressed: () {
+                              if (ref.read(selectedButtonProvider) == 'saga') {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = '';
+                              } else {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = 'saga';
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                      icon: SvgPicture.asset(
-                        'assets/icons/category.svg',
-                        colorFilter: ColorFilter.mode(
-                          ref.watch(selectedButtonProvider) == 'saga'
-                              ? Colors.black
-                              : Colors.white,
-                          BlendMode.srcIn,
+                        const SizedBox(
+                          width: 8,
                         ),
-                      ),
-                      selectedColor: ColorPalette.dReaderYellow100,
-                      onPressed: () {
-                        ref.read(selectedButtonProvider.notifier).state =
-                            'saga';
-                      },
+                        Expanded(
+                          child: ButtonWithIcon(
+                            name: 'referral',
+                            label: const Text(
+                              'Referral code',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            icon: SvgPicture.asset(
+                              'assets/icons/ticket.svg',
+                              colorFilter: ColorFilter.mode(
+                                ref.watch(selectedButtonProvider) == 'referral'
+                                    ? Colors.black
+                                    : Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            selectedColor: ColorPalette.dReaderYellow100,
+                            onPressed: () {
+                              if (ref.read(selectedButtonProvider) ==
+                                  'referral') {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = '';
+                              } else {
+                                ref
+                                    .read(selectedButtonProvider.notifier)
+                                    .state = 'referral';
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: ButtonWithIcon(
-                      name: 'referral',
-                      label: const Text(
-                        'Referral code',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      icon: SvgPicture.asset(
-                        'assets/icons/ticket.svg',
-                        colorFilter: ColorFilter.mode(
-                          ref.watch(selectedButtonProvider) == 'referral'
-                              ? Colors.black
-                              : Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      selectedColor: ColorPalette.dReaderYellow100,
-                      onPressed: () {
-                        ref.read(selectedButtonProvider.notifier).state =
-                            'referral';
-                      },
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(
                 height: 16,
               ),

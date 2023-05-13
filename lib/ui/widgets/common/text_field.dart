@@ -101,6 +101,7 @@ class CustomTextField extends StatelessWidget {
                 color: ColorPalette.dReaderRed,
               ),
             ),
+            errorMaxLines: 2,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(

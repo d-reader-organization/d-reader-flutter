@@ -1,3 +1,5 @@
+import 'dart:convert' show jsonDecode;
+
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
@@ -64,4 +66,18 @@ class EnvironmentStateUpdateInput {
     this.publicKey,
     this.signature,
   });
+
+  factory EnvironmentStateUpdateInput.fromDynamic(dynamic data) {
+    final dynamic json = jsonDecode(data);
+    final String? signature = json['signature'];
+
+    return EnvironmentStateUpdateInput(
+      authToken: json['authToken'],
+      jwtToken: json['jwtToken'],
+      refreshToken: json['refreshToken'],
+      publicKey: Ed25519HDPublicKey.fromBase58(json['publicKey']),
+      solanaCluster: json['solanaCluster'],
+      signature: signature?.codeUnits,
+    );
+  }
 }

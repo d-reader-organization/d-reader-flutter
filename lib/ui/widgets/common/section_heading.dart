@@ -25,27 +25,31 @@ class SectionHeading extends ConsumerWidget {
           title,
           style: textTheme.headlineMedium,
         ),
-        GestureDetector(
-          onTap: initialTab != null
-              ? () {
-                  ref
-                      .read(tabBarProvider.notifier)
-                      .setTabIndex(initialTab!.index);
-                  ref.read(scaffoldProvider.notifier).setNavigationIndex(1);
-                  ref.read(scaffoldPageController).animateToPage(
-                        1,
-                        curve: Curves.linear,
-                        duration: const Duration(milliseconds: 350),
-                      );
-                }
-              : null,
-          child: Text(
-            AppLocalizations.of(context)?.seeAll ?? 'See All',
-            style: textTheme.titleSmall?.copyWith(
-              color: ColorPalette.dReaderYellow100,
-            ),
-          ),
-        ),
+        initialTab != null
+            ? GestureDetector(
+                onTap: initialTab != null
+                    ? () {
+                        ref
+                            .read(tabBarProvider.notifier)
+                            .setTabIndex(initialTab!.index);
+                        ref
+                            .read(scaffoldProvider.notifier)
+                            .setNavigationIndex(1);
+                        ref.read(scaffoldPageController).animateToPage(
+                              1,
+                              curve: Curves.linear,
+                              duration: const Duration(milliseconds: 350),
+                            );
+                      }
+                    : null,
+                child: Text(
+                  AppLocalizations.of(context)?.seeAll ?? 'See All',
+                  style: textTheme.titleSmall?.copyWith(
+                    color: ColorPalette.dReaderYellow100,
+                  ),
+                ),
+              )
+            : const SizedBox(),
       ],
     );
   }

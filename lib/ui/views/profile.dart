@@ -6,12 +6,16 @@ import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
+import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_name_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
@@ -34,7 +38,7 @@ class ProfileView extends HookConsumerWidget {
     final provider = ref.watch(myWalletProvider);
     final globalHook = useGlobalState();
     return SettingsScaffold(
-      appBarTitle: 'Edit Wallet',
+      appBarTitle: 'Edit Profile',
       bottomNavigationBar: Consumer(
         builder: (context, ref, child) {
           final String walletName = ref.watch(walletNameProvider);
@@ -125,6 +129,9 @@ class ProfileView extends HookConsumerWidget {
       ),
       body: provider.when(
         data: (wallet) {
+          if (wallet == null) {
+            return const SizedBox();
+          }
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
@@ -154,7 +161,7 @@ class ProfileView extends HookConsumerWidget {
                     height: 16,
                   ),
                   Avatar(
-                    wallet: wallet!,
+                    wallet: wallet,
                     ref: ref,
                   ),
                   const SizedBox(
@@ -163,9 +170,12 @@ class ProfileView extends HookConsumerWidget {
                   Consumer(
                     builder: (context, ref, child) {
                       return CustomTextField(
-                        labelText: 'Account name',
+                        labelText: 'Username',
                         defaultValue:
                             wallet.name.isNotEmpty ? wallet.name : null,
+                        onValidate: (value) {
+                          return validateUsername(value: value, ref: ref);
+                        },
                         onChange: (String value) {
                           ref.read(walletNameProvider.notifier).state = value;
                         },
@@ -291,6 +301,28 @@ class ProfileView extends HookConsumerWidget {
                       }
                     },
                   ),
+                  ref.read(environmentProvider).apiUrl ==
+                              'https://d-reader-backend-dev.herokuapp.com' ||
+                          ref.read(environmentProvider).apiUrl ==
+                              'https://d-reader-backend-dev-devnet.herokuapp.com'
+                      ? SettingsCommonListTile(
+                          title: 'Clear Data',
+                          leadingPath:
+                              '${Config.settingsAssetsPath}/light/logout.svg',
+                          overrideColor: ColorPalette.dReaderYellow100,
+                          onTap: () async {
+                            await LocalStore.instance.clear();
+                            ref.invalidate(tabBarProvider);
+                            ref.invalidate(scaffoldProvider);
+                            ref.invalidate(environmentProvider);
+
+                            if (context.mounted) {
+                              nextScreenCloseOthers(
+                                  context, const WelcomeView());
+                            }
+                          },
+                        )
+                      : const SizedBox()
                 ],
               ),
             ),

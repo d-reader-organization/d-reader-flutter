@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/intro/intro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key? key}) : super(key: key);
@@ -21,9 +21,9 @@ class _WelcomeViewState extends State<WelcomeView>
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((value) {
-      shouldShowInitial = !(value.getBool(Config.hasSeenInitialKey) ?? false);
-    });
+    final bool? hasSeenInitial =
+        LocalStore.instance.get(Config.hasSeenInitialKey);
+    shouldShowInitial = !(hasSeenInitial ?? false);
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2500),

@@ -29,7 +29,7 @@ class SearchBarSliver extends ConsumerWidget {
             color: Colors.white,
           ),
           decoration: searchInputDecoration(
-            IconButton(
+            prefixIcon: IconButton(
               onPressed: () {
                 FocusManager.instance.primaryFocus?.unfocus();
                 _submitHandler(ref);

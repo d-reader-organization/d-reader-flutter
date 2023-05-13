@@ -6,14 +6,14 @@ import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final logoutProvider = FutureProvider((ref) async {
+  ref.invalidate(myWalletProvider);
   await Future.wait(
     [
       ref.read(solanaProvider.notifier).deauthorize(),
-      ref.read(environmentProvider.notifier).clearDataFromSharedPref()
+      ref.read(environmentProvider.notifier).clearDataFromLocalStore()
     ],
   );
   ref.invalidate(tabBarProvider);
   ref.invalidate(scaffoldProvider);
-  ref.invalidate(myWalletProvider);
   ref.invalidate(environmentProvider);
 });

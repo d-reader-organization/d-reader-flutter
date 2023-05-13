@@ -41,4 +41,5 @@ abstract class Config {
       "https://github.com/d-reader-organization/.github/blob/main/PRIVACY_POLICY";
   static const String twitterUrl = 'https://twitter.com/dReaderApp';
   static const String discordUrl = 'https://discord.gg/rrZsRvC9mh';
+  static const String localStoreName = 'local_store';
 }

@@ -15,6 +15,7 @@ import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
@@ -37,7 +38,7 @@ class ProfileView extends HookConsumerWidget {
     final provider = ref.watch(myWalletProvider);
     final globalHook = useGlobalState();
     return SettingsScaffold(
-      appBarTitle: 'Edit Wallet',
+      appBarTitle: 'Edit Profile',
       bottomNavigationBar: Consumer(
         builder: (context, ref, child) {
           final String walletName = ref.watch(walletNameProvider);
@@ -169,9 +170,12 @@ class ProfileView extends HookConsumerWidget {
                   Consumer(
                     builder: (context, ref, child) {
                       return CustomTextField(
-                        labelText: 'Account name',
+                        labelText: 'Username',
                         defaultValue:
                             wallet.name.isNotEmpty ? wallet.name : null,
+                        onValidate: (value) {
+                          return validateUsername(value: value, ref: ref);
+                        },
                         onChange: (String value) {
                           ref.read(walletNameProvider.notifier).state = value;
                         },

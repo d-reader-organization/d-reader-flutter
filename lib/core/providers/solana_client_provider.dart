@@ -127,14 +127,17 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     envNotifier.updateLastSelectedNetwork(cluster);
     await session.close();
 
-    await _getAndStoreToken(signMessageResult.first, publicKey);
+    await _getAndStoreToken(
+      signedMessage: signMessageResult.first,
+      publicKey: publicKey,
+    );
     return 'OK';
   }
 
-  Future<void> _getAndStoreToken(
-    Uint8List signedMessage,
-    Ed25519HDPublicKey publicKey,
-  ) async {
+  Future<void> _getAndStoreToken({
+    required Uint8List signedMessage,
+    required Ed25519HDPublicKey publicKey,
+  }) async {
     final response = await _walletService.connectWallet(
       publicKey,
       signedMessage.sublist(
@@ -142,13 +145,19 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         signedMessage.length,
       ),
     );
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
-          EnvironmentStateUpdateInput(
-            jwtToken: response?.accessToken,
-            refreshToken: response?.refreshToken,
-          ),
-        );
-    ref.read(networkChangeUpdateWallet);
+    if (response != null) {
+      if (ref.read(environmentProvider).solanaCluster ==
+          SolanaCluster.devnet.value) {
+        await ref.read(networkChangeUpdateWallet(publicKey.toBase58()).future);
+      }
+
+      ref.read(environmentProvider.notifier).updateEnvironmentState(
+            EnvironmentStateUpdateInput(
+              jwtToken: response.accessToken,
+              refreshToken: response.refreshToken,
+            ),
+          );
+    }
   }
 
   Future<void> deauthorize() async {

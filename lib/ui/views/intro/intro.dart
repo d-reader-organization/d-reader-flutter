@@ -213,7 +213,7 @@ class IntroView extends HookConsumerWidget {
                     height: 16,
                   ),
                   Text(
-                    "Help us shape the future of digital graphic novels and empower artists!",
+                    "Discover, trade, and read comics and explore new ways of digital collecting!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
@@ -294,7 +294,7 @@ class IntroView extends HookConsumerWidget {
                     openUrl(Config.helpCenterLink);
                   },
                   child: const Text(
-                    "Need help onboarding?",
+                    "Have issues setting up?",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

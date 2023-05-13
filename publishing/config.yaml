@@ -1,6 +1,6 @@
 publisher:
   name: dReader
-  address: 6wRhHf4ZkBCqj8a5DhoUztD4B5CyYYQ9r9Ek5CSPpLq8
+  address: 5e7RkK7cJaoAEx2F5wRqauY9556exJtWn4dv2nQFF4X3
   website: https://dreader.io/
   email: solana.dapp.store@dreader.io
   media:
@@ -8,7 +8,7 @@ publisher:
       uri: ./512x512.png
 app:
   name: dReader
-  address: HLGgu9pkQDwcbDh1YG6Y5qjDCfN1q3zBm3UBwwdDE3A
+  address: FHJRMnXxYNccbr3CPBT76Zq7jejcbEVZhgqHEfTv3La4
   android_package: io.app.dreader
   urls:
     license_url: >-
@@ -21,7 +21,7 @@ app:
     - purpose: icon
       uri: ./512x512.png
 release:
-  address: ''
+  address: Djwk5HR2AvRHuj35Z2XDkCyABZ3EcXqF9M722mCNm358
   media:
     - purpose: icon
       uri: ./512x512.png

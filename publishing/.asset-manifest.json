@@ -1,0 +1,19 @@
+{
+  "assets": {
+    "./512x512.png": {
+      "path": "./512x512.png",
+      "sha256": "7X7IO2m4kp5uHjJ68SImzZ4kwSbv/3K8rqCKzJ6EN9M=",
+      "uri": "https://arweave.net/kSlFUs1eM1lfBzjkeGo4Pio5vK2np8mAc8jtvs9a1hE"
+    },
+    "./screenshots/comics.jpg": {
+      "path": "./screenshots/comics.jpg",
+      "sha256": "qTc5swECHK1mAkkpIVOJSR2/n385QKJ/WxV+HKepT/g=",
+      "uri": "https://arweave.net/5p8T3mMOeVlEda8y3gM2WOb1QzxBp0VbqkYiTp4HPP8"
+    },
+    "./dReader.apk": {
+      "path": "./dReader.apk",
+      "sha256": "c3xKo0LNPxbqR1D9dAnl3jEgGbUSyIh7aA7RonsOG3Q=",
+      "uri": "https://arweave.net/TFeVazepNt0f06f8-7h_Xmb1g28FQljoGc9u2nSn7K4"
+    }
+  }
+}

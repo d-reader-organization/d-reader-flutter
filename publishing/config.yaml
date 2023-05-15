@@ -2,7 +2,7 @@ publisher:
   name: dReader
   address: 5e7RkK7cJaoAEx2F5wRqauY9556exJtWn4dv2nQFF4X3
   website: https://dreader.io/
-  email: solana.dapp.store@dreader.io
+  email: dapp.store@dreader.io
   media:
     - purpose: icon
       uri: ./512x512.png
@@ -26,7 +26,19 @@ release:
     - purpose: icon
       uri: ./512x512.png
     - purpose: screenshot
-      uri: ./screenshots/comics.jpg
+      uri: ./screenshots/1.png
+    - purpose: screenshot
+      uri: ./screenshots/2.png
+    - purpose: screenshot
+      uri: ./screenshots/3.png
+    - purpose: screenshot
+      uri: ./screenshots/4.png
+    - purpose: screenshot
+      uri: ./screenshots/5.png
+    - purpose: screenshot
+      uri: ./screenshots/1.png
+    - purpose: screenshot
+      uri: ./screenshots/feature_graphic.png
   files:
     - purpose: install
       uri: ./dReader.apk

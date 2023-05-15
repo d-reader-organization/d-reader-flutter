@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
@@ -216,18 +217,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return await _signAndSendTransactions(encodedTransactions);
   }
 
-  Future<bool> buy(BuyNftInput input) async {
-    final String? encodedTransaction = await _walletService.buyItem(
-      mintAccount: input.mintAccount,
-      price: input.price,
-      seller: input.seller,
-    );
-    if (encodedTransaction == null) {
-      return false;
-    }
-    return await _signAndSendTransactions([encodedTransaction]);
-  }
-
   SignedTx _decodeAndResign({
     required String encodedTransaction,
     required Signature signature,
@@ -241,7 +230,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final session = await _getSession();
     final client = await session.start();
     final signature = _getSignature();
-
+    ref.read(globalStateProvider.notifier).state.copyWith(isLoading: true);
     if (await _doReauthorize(client) && signature != null) {
       List<SignedTx> resignedTransactions = encodedTransactions
           .map(

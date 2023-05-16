@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+// import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
@@ -15,7 +15,7 @@ class CreatorListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    // final TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, CreatorDetailsView(slug: creator.slug));
@@ -36,7 +36,7 @@ class CreatorListTile extends StatelessWidget {
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3.6,
@@ -46,14 +46,14 @@ class CreatorListTile extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  '${((creator.stats?.totalVolume ?? 0) / 100).toStringAsFixed(1)} %',
-                  style: textTheme.labelLarge
-                      ?.copyWith(color: ColorPalette.dReaderGreen),
-                )
+                // const SizedBox(
+                //   height: 4,
+                // ),
+                // Text(
+                //   '${((creator.stats?.totalVolume ?? 0) / 100).toStringAsFixed(1)} %',
+                //   style: textTheme.labelLarge
+                //       ?.copyWith(color: ColorPalette.dReaderGreen),
+                // )
               ],
             ),
           ],

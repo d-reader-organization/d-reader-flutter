@@ -207,8 +207,6 @@ class Body extends StatelessWidget {
                           : const Text('List'),
                       onPressed: () async {
                         if (nft.isListed) {
-                          ref.read(globalStateProvider.notifier).state =
-                              const GlobalState(isLoading: true);
                           await ref
                               .read(solanaProvider.notifier)
                               .delist(mint: nft.address);

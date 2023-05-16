@@ -305,7 +305,7 @@ class _ComicIssueDetailsScaffoldState
   }
 }
 
-class BottomNavigation extends HookConsumerWidget {
+class BottomNavigation extends ConsumerWidget {
   final ComicIssueModel issue;
   const BottomNavigation({
     super.key,
@@ -314,7 +314,6 @@ class BottomNavigation extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final globalHook = useGlobalState();
     return issue.isFree
         ? ReadButton(issue: issue)
         : Row(
@@ -323,24 +322,28 @@ class BottomNavigation extends HookConsumerWidget {
               issue.candyMachineAddress != null
                   ? Expanded(
                       child: TransactionButton(
-                        isLoading: globalHook.value.isLoading,
+                        isLoading: ref.watch(globalStateProvider).isLoading,
                         onPressed: () async {
                           try {
-                            globalHook.value =
-                                globalHook.value.copyWith(isLoading: true);
                             final isSuccessful = await ref
                                 .read(solanaProvider.notifier)
                                 .mint(issue.candyMachineAddress);
                             if (isSuccessful) {
                               ref.invalidate(
                                   receiptsProvider); // think we can remove this, needs to be tested
-                              ref.invalidate(walletAssetsProvider);
+                              ref.invalidate(
+                                walletAssetsProvider,
+                              );
                             }
-                            globalHook.value =
-                                globalHook.value.copyWith(isLoading: false);
+                            ref
+                                .read(globalStateProvider.notifier)
+                                .state
+                                .copyWith(isLoading: false);
                           } catch (error) {
-                            globalHook.value =
-                                globalHook.value.copyWith(isLoading: false);
+                            ref
+                                .read(globalStateProvider.notifier)
+                                .state
+                                .copyWith(isLoading: false);
                           }
                         },
                         text: 'MINT',
@@ -349,11 +352,9 @@ class BottomNavigation extends HookConsumerWidget {
                     )
                   : Expanded(
                       child: TransactionButton(
-                        isLoading: globalHook.value.isLoading,
+                        isLoading: ref.watch(globalStateProvider).isLoading,
                         onPressed: ref.read(selectedItemsProvider).isNotEmpty
                             ? () async {
-                                globalHook.value =
-                                    globalHook.value.copyWith(isLoading: true);
                                 List<BuyNftInput> selectedNftsInput = ref
                                     .read(selectedItemsProvider)
                                     .map(
@@ -371,8 +372,10 @@ class BottomNavigation extends HookConsumerWidget {
                                   ref.invalidate(listedItemsProvider);
                                   ref.invalidate(walletAssetsProvider);
                                 }
-                                globalHook.value =
-                                    globalHook.value.copyWith(isLoading: false);
+                                ref
+                                    .read(globalStateProvider.notifier)
+                                    .state
+                                    .copyWith(isLoading: false);
                               }
                             : () {},
                         text: 'BUY',

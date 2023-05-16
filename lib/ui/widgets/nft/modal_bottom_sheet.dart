@@ -106,7 +106,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
 
 double? _safeParse(String input) => double.tryParse(input);
 
-class SubmitButton extends HookConsumerWidget {
+class SubmitButton extends ConsumerWidget {
   final String mintAccount;
   final double? price;
   const SubmitButton({
@@ -117,18 +117,19 @@ class SubmitButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final globalHook = useGlobalState();
     return RoundedButton(
       text: 'Next',
-      isLoading: globalHook.value.isLoading,
+      isLoading: ref.watch(globalStateProvider).isLoading,
       onPressed: price != null
           ? () async {
-              globalHook.value = globalHook.value.copyWith(isLoading: true);
               final response = await ref.read(solanaProvider.notifier).list(
                     mintAccount: mintAccount,
                     price: (price! * lamportsPerSol).round(),
                   );
-              globalHook.value = globalHook.value.copyWith(isLoading: false);
+              ref
+                  .read(globalStateProvider.notifier)
+                  .state
+                  .copyWith(isLoading: false);
               Sentry.captureMessage('List item response: $response');
               if (context.mounted) {
                 ref.invalidate(nftProvider);

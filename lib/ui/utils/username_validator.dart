@@ -8,7 +8,7 @@ String? validateUsername({required String? value, required WidgetRef ref}) {
   } else if (value.length > 40) {
     return "Must be less than 40 characters.";
   } else if (!usernameRegex.hasMatch(value)) {
-    return "Usernames can only contain letters, numbers, underscores, and hyphens.";
+    return "Usernames can only contain letters and numbers.";
   }
   final result = ref.watch(isValidWalletNameValue);
   return result ? null : '$value already taken.';

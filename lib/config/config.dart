@@ -15,11 +15,11 @@ enum SolanaCluster {
 abstract class Config {
   static const apiUrl = String.fromEnvironment(
     'apiUrl',
-    defaultValue: 'https://d-reader-backend-dev.herokuapp.com',
+    defaultValue: 'https://api-main-devnet.dreader.io',
   ); //'http://10.0.2.2:3005'
   static const apiUrlDevnet = String.fromEnvironment(
     'apiUrlDevnet',
-    defaultValue: 'https://d-reader-backend-dev-devnet.herokuapp.com',
+    defaultValue: 'https://api-dev-devnet.dreader.io',
   );
   static const rpcDevnetUrl = "https://api.devnet.solana.com";
   static const String logoTextPath = 'assets/images/logo-white-yellow.svg';

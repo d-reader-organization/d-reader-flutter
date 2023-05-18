@@ -21,7 +21,7 @@ class ChangeNetworkView extends ConsumerWidget {
       context: context,
       builder: (context) {
         return ConfirmationDialog(
-          title: 'Change Network',
+          title: 'Are you sure you want to change network?',
           subtitle: subtitle,
         );
       },
@@ -41,8 +41,7 @@ class ChangeNetworkView extends ConsumerWidget {
               if (selectedCluster != SolanaCluster.mainnet.value) {
                 final isConfirmed = await _showDialog(
                       context: context,
-                      subtitle:
-                          'Are you sure you want to change network to Mainnet?',
+                      subtitle: 'Make sure to switch your wallet to Mainnet.',
                     ) ??
                     false;
                 if (isConfirmed) {
@@ -103,8 +102,7 @@ class ChangeNetworkView extends ConsumerWidget {
               if (selectedCluster != SolanaCluster.devnet.value) {
                 final isConfirmed = await _showDialog(
                       context: context,
-                      subtitle:
-                          'Are you sure you want to change network to Devnet?',
+                      subtitle: 'Make sure to switch your wallet to Devnet.',
                     ) ??
                     false;
                 if (isConfirmed) {

@@ -53,24 +53,24 @@ class ConfirmationDialog extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      right: BorderSide(
-                        color: ColorPalette.boxBackground200,
-                        width: 1,
-                      ),
-                      top: BorderSide(
-                        color: ColorPalette.boxBackground200,
-                        width: 1,
+                child: GestureDetector(
+                  onTap: () {
+                    return Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          color: ColorPalette.boxBackground200,
+                          width: 1,
+                        ),
+                        top: BorderSide(
+                          color: ColorPalette.boxBackground200,
+                          width: 1,
+                        ),
                       ),
                     ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      return Navigator.pop(context);
-                    },
                     child: const Text(
                       'Cancel',
                       textAlign: TextAlign.center,
@@ -83,20 +83,20 @@ class ConfirmationDialog extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: ColorPalette.boxBackground200,
-                        width: 1,
+                child: GestureDetector(
+                  onTap: () {
+                    return Navigator.pop(context, true);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: ColorPalette.boxBackground200,
+                          width: 1,
+                        ),
                       ),
                     ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      return Navigator.pop(context, true);
-                    },
                     child: const Text(
                       'OK',
                       textAlign: TextAlign.center,

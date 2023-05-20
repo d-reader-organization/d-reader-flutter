@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class RatingIcon extends StatelessWidget {
@@ -14,8 +13,8 @@ class RatingIcon extends StatelessWidget {
     return Row(
       children: [
         const Icon(
-          Icons.star,
-          color: ColorPalette.dReaderYellow100,
+          Icons.star_outline_outlined,
+          color: Colors.white,
           size: 16,
         ),
         const SizedBox(

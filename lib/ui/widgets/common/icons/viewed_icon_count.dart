@@ -17,8 +17,8 @@ class ViewedIconCount extends StatelessWidget {
       children: [
         SvgPicture.asset(
           'assets/icons/view_icon.svg',
-          width: 18,
-          height: 18,
+          width: 16,
+          height: 16,
           colorFilter: const ColorFilter.mode(
             Color(0xFFE0e0e0),
             BlendMode.srcIn,

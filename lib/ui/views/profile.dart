@@ -227,7 +227,7 @@ class ProfileView extends HookConsumerWidget {
                                   ),
                                 )
                               : null,
-                          onTap: ref.watch(globalStateProvider).isLoading
+                          onTap: globalHook.value.isLoading
                               ? null
                               : () async {
                                   globalHook.value = globalHook.value

@@ -12,8 +12,38 @@
     },
     "./dReader.apk": {
       "path": "./dReader.apk",
-      "sha256": "c3xKo0LNPxbqR1D9dAnl3jEgGbUSyIh7aA7RonsOG3Q=",
-      "uri": "https://arweave.net/TFeVazepNt0f06f8-7h_Xmb1g28FQljoGc9u2nSn7K4"
+      "sha256": "+d2cnpi4WFaJpVnXsITFj+3L/c+E95H4mx5fyT4yonw=",
+      "uri": "https://arweave.net/uRuKsLWgX6Uua0Qqe0hx_N6h9WDZR5wrzQ4NEN3rLrg"
+    },
+    "./screenshots/1.png": {
+      "path": "./screenshots/1.png",
+      "sha256": "rZX2+EyIqxe6ufkR7l7Ml8aWRCVg0uO18/jd3egkF98=",
+      "uri": "https://arweave.net/iUvJh3_7QRISumqx7t0y2-AFenSUs5nl3x90o-o83Tc"
+    },
+    "./screenshots/feature_graphic.png": {
+      "path": "./screenshots/feature_graphic.png",
+      "sha256": "us3z6rBTnDiRwLtNUbHReDJgQT+q+Xu79PFb3/Y/WlE=",
+      "uri": "https://arweave.net/29u_TDY4eAiT9VVelUNyot5-OLBPo4NNfbJPMBIzeZw"
+    },
+    "./screenshots/3.png": {
+      "path": "./screenshots/3.png",
+      "sha256": "hhW4FXLw6aIb381o0lDEijepttr97TQmDOQTDasGgR0=",
+      "uri": "https://arweave.net/z3iPP9Va2JUv798Nl_8VeS_6CBsvl0MW0DiJhjxWvwU"
+    },
+    "./screenshots/4.png": {
+      "path": "./screenshots/4.png",
+      "sha256": "GRQ030qbCmICc3R1lVAD5e7WupW3W8PcQ3lrDCJ+ikE=",
+      "uri": "https://arweave.net/zIFfmkj3PBI9zEhdM5OzG54jBQoDvhEwlu8l9bNVYXE"
+    },
+    "./screenshots/5.png": {
+      "path": "./screenshots/5.png",
+      "sha256": "iqelBS0Xs7dREtZPN4lUeDd/p5E2rY4sXtocDbWtCj0=",
+      "uri": "https://arweave.net/U8zSbbRMy0YlPUIfFdJU6cAz2E0cQ_EDHP53-TS6Abw"
+    },
+    "./screenshots/2.png": {
+      "path": "./screenshots/2.png",
+      "sha256": "eRbUs3CNqqwYfRLuHRbYP8uOdbGrAyYVH9blXmf81qA=",
+      "uri": "https://arweave.net/j84sCI8tmnLKj89iqHhJ4ZGD3MacBa4LIe-tNe3-clU"
     }
   }
 }

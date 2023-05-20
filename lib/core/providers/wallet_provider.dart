@@ -1,7 +1,9 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository_impl.dart';
+import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -51,8 +53,15 @@ final walletAssetsProvider = FutureProvider((ref) {
   return IoCContainer.resolveContainer<WalletRepositoryImpl>().myAssets();
 });
 
-final myWalletProvider = FutureProvider((_) {
-  return IoCContainer.resolveContainer<WalletRepositoryImpl>().myWallet();
+final myWalletProvider = FutureProvider.autoDispose((ref) async {
+  final myWallet =
+      await IoCContainer.resolveContainer<WalletRepositoryImpl>().myWallet();
+  if (myWallet != null &&
+      ref.read(environmentProvider).solanaCluster ==
+          SolanaCluster.mainnet.value) {
+    LocalStore.instance.put('walletName', myWallet.name);
+  }
+  return myWallet;
 });
 
 final updateWalletAvatarProvider =
@@ -73,12 +82,13 @@ final networkChangeUpdateWallet =
     FutureProvider.autoDispose.family<void, String>(
   (ref, address) async {
     final wallet = await ref.read(myWalletProvider.future);
+    final walletName = LocalStore.instance.get('walletName');
     if (wallet != null && wallet.name != address) {
       await ref.read(
         updateWalletProvider(
           UpdateWalletPayload(
             address: address,
-            name: wallet.name,
+            name: walletName,
           ),
         ).future,
       );

@@ -238,52 +238,33 @@ class ProfileView extends HookConsumerWidget {
                                   globalHook.value = globalHook.value
                                       .copyWith(isLoading: false);
                                   if (context.mounted) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        bool isSuccessful =
-                                            airdropResult?.contains('SOL') ??
-                                                false;
-                                        return SimpleDialog(
-                                          alignment: Alignment.center,
-                                          contentPadding:
-                                              const EdgeInsets.all(8),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
+                                    bool isSuccessful =
+                                        airdropResult?.contains('SOL') ?? false;
+                                    final Color snackBarColor = isSuccessful
+                                        ? ColorPalette.dReaderGreen
+                                        : ColorPalette.dReaderRed;
+                                    return ScaffoldMessenger.of(context)
+                                        .showSnackBar(
+                                      SnackBar(
+                                        behavior: SnackBarBehavior.floating,
+                                        shape: RoundedRectangleBorder(
+                                          side:
+                                              BorderSide(color: snackBarColor),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
                                           ),
-                                          title: SizedBox(
-                                            height: 120,
-                                            width: 120,
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  isSuccessful
-                                                      ? Icons
-                                                          .check_circle_outline_outlined
-                                                      : Icons.close_outlined,
-                                                  size: 32,
-                                                  color: isSuccessful
-                                                      ? ColorPalette
-                                                          .dReaderGreen
-                                                      : ColorPalette.dReaderRed,
-                                                ),
-                                                const SizedBox(
-                                                  height: 8,
-                                                ),
-                                                Text(
-                                                  airdropResult ??
-                                                      'Something went wrong',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                        ),
+                                        closeIconColor: Colors.white,
+                                        showCloseIcon: true,
+                                        content: Text(
+                                          isSuccessful
+                                              ? airdropResult ??
+                                                  "Successfully airdropped 2 \$SOL "
+                                              : 'Failed to airdrop 2 \$SOL',
+                                          style:
+                                              TextStyle(color: snackBarColor),
+                                        ),
+                                      ),
                                     );
                                   }
                                 },
@@ -302,9 +283,9 @@ class ProfileView extends HookConsumerWidget {
                     },
                   ),
                   ref.read(environmentProvider).apiUrl ==
-                              'https://d-reader-backend-dev.herokuapp.com' ||
+                              'https://api-dev-mainnet.dreader.io' ||
                           ref.read(environmentProvider).apiUrl ==
-                              'https://d-reader-backend-dev-devnet.herokuapp.com'
+                              'https://api-dev-devnet.dreader.io'
                       ? SettingsCommonListTile(
                           title: 'Clear Data',
                           leadingPath:

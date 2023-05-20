@@ -1,49 +1,118 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationDialog extends StatelessWidget {
-  final dynamic title;
+  final String title;
+  final String subtitle;
   const ConfirmationDialog({
     super.key,
     required this.title,
+    required this.subtitle,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: ColorPalette.boxBackground300,
-      title: title is Widget
-          ? title
-          : Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
+      contentPadding: EdgeInsets.zero,
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+              ],
             ),
-      actionsAlignment: MainAxisAlignment.end,
-      actions: <Widget>[
-        CustomTextButton(
-          padding: const EdgeInsets.all(4),
-          borderRadius: BorderRadius.circular(8),
-          backgroundColor: ColorPalette.boxBackground400,
-          textColor: Colors.white,
-          onPressed: () {
-            return Navigator.pop(context, false);
-          },
-          child: const Text('Cancel'),
-        ),
-        CustomTextButton(
-          padding: const EdgeInsets.all(4),
-          borderRadius: BorderRadius.circular(8),
-          onPressed: () {
-            return Navigator.pop(context, true);
-          },
-          child: const Text('Yes'),
-        ),
-      ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    return Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        right: BorderSide(
+                          color: ColorPalette.boxBackground200,
+                          width: 1,
+                        ),
+                        top: BorderSide(
+                          color: ColorPalette.boxBackground200,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Cancel',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: ColorPalette.dReaderYellow100,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    return Navigator.pop(context, true);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: ColorPalette.boxBackground200,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'OK',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: ColorPalette.dReaderYellow100,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

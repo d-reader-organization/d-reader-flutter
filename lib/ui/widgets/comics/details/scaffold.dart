@@ -226,6 +226,9 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                               RatingIcon(
                                 initialRating:
                                     widget.comic.stats?.averageRating ?? 0,
+                                isRatedByMe:
+                                    widget.comic.myStats?.rating != null,
+                                comicSlug: widget.comic.slug,
                               ),
                               const SizedBox(
                                 width: 20,

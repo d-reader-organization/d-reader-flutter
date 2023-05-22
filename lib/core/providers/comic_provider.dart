@@ -37,3 +37,17 @@ final updateComicFavouriteProvider =
   IoCContainer.resolveContainer<ComicRepositoryImpl>()
       .updateComicFavourite(slug);
 });
+
+final rateComicProvider = FutureProvider.autoDispose.family<dynamic, dynamic>(
+  (ref, input) async {
+    if (input['slug'] != null) {
+      final result =
+          await IoCContainer.resolveContainer<ComicRepositoryImpl>().rateComic(
+        slug: input['slug'],
+        rating: input['rating'],
+      );
+
+      return result;
+    }
+  },
+);

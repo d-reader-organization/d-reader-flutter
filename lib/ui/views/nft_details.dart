@@ -42,31 +42,9 @@ class NftDetails extends ConsumerWidget {
 
     return provider.when(
       data: (nft) {
-        nft ??= NftModel.fromJson(
-          {
-            "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
-            "uri":
-                "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
-            "image":
-                "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
-            "name": "Rise of the Gorecats #8",
-            "description":
-                'Fearless siblings come across a red hawk that has been injured. They work together to help nurse the hawk but...someone.....is knocking on the doors. Who was it? Is it Charlie?',
-            "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
-            "royalties": 8,
-            "isUsed": false,
-            "isSigned": false,
-            "comicName": "Gorecats",
-            "comicIssueName": "Rise of the Gorecats",
-            "comicIssueId": 5,
-            "attributes": [
-              {"trait": "used", "value": "false"},
-              {"trait": "signed", "value": "false"}
-            ],
-            "isListed": true,
-          },
-        );
-
+        if (nft == null) {
+          return const Text('Something went wrong.');
+        }
         return Scaffold(
           backgroundColor: ColorPalette.appBackgroundColor,
           body: CustomScrollView(

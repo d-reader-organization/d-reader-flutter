@@ -13,15 +13,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ChangeNetworkView extends ConsumerWidget {
   const ChangeNetworkView({super.key});
 
-  Future<bool?> _showDialog(
-    BuildContext context,
-    dynamic title,
-  ) {
+  Future<bool?> _showDialog({
+    required BuildContext context,
+    required String subtitle,
+  }) {
     return showDialog<bool>(
       context: context,
       builder: (context) {
         return ConfirmationDialog(
-          title: title,
+          title: 'Are you sure you want to change network?',
+          subtitle: subtitle,
         );
       },
     );
@@ -39,29 +40,8 @@ class ChangeNetworkView extends ConsumerWidget {
             onTap: () async {
               if (selectedCluster != SolanaCluster.mainnet.value) {
                 final isConfirmed = await _showDialog(
-                      context,
-                      RichText(
-                        text: const TextSpan(
-                          text: 'Are you sure you want switch to ',
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'mainnet?\n',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            TextSpan(
-                                text: 'Make sure to switch your wallet to '),
-                            TextSpan(
-                              text: 'mainnet.',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      context: context,
+                      subtitle: 'Make sure to switch your wallet to Mainnet.',
                     ) ??
                     false;
                 if (isConfirmed) {
@@ -121,29 +101,8 @@ class ChangeNetworkView extends ConsumerWidget {
             onTap: () async {
               if (selectedCluster != SolanaCluster.devnet.value) {
                 final isConfirmed = await _showDialog(
-                      context,
-                      RichText(
-                        text: const TextSpan(
-                          text: 'Are you sure you want switch to ',
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'devnet?\n',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            TextSpan(
-                                text: 'Make sure to switch your wallet to '),
-                            TextSpan(
-                              text: 'devnet.',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      context: context,
+                      subtitle: 'Make sure to switch your wallet to Devnet.',
                     ) ??
                     false;
                 if (isConfirmed) {

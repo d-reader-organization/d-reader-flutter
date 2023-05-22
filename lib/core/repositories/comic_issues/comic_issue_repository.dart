@@ -5,5 +5,9 @@ abstract class ComicIssueRepository {
   Future<List<ComicIssueModel>> getComicIssues({String? queryString});
   Future<ComicIssueModel?> getComicIssue(int id);
   Future<List<PageModel>> getComicIssuePages(int id);
+  Future<void> rateIssue({
+    required int id,
+    required int rating,
+  });
   Future<void> favouritiseIssue(int id);
 }

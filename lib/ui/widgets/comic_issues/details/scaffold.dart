@@ -262,7 +262,8 @@ class _ComicIssueDetailsScaffoldState
                         Row(
                           children: [
                             RatingIcon(
-                              rating: widget.issue.stats?.averageRating ?? 0,
+                              initialRating:
+                                  widget.issue.stats?.averageRating ?? 0,
                             ),
                             const SizedBox(
                               width: 20,

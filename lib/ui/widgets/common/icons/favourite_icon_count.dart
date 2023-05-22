@@ -11,14 +11,14 @@ enum Variant { filled, blank }
 class FavouriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
   final bool isFavourite;
-  final String slug;
+  final String? slug;
   final Variant variant;
   final int? id;
   const FavouriteIconCount({
     Key? key,
     required this.favouritesCount,
     required this.isFavourite,
-    required this.slug,
+    this.slug,
     this.variant = Variant.blank,
     this.id,
   }) : super(key: key);
@@ -36,8 +36,8 @@ class FavouriteIconCount extends HookConsumerWidget {
       onTap: () async {
         if (id != null) {
           ref.read(favouriteComicIssueProvider(id!));
-        } else {
-          ref.read(updateComicFavouriteProvider(slug));
+        } else if (slug != null) {
+          ref.read(updateComicFavouriteProvider(slug!));
         }
         favouriteHook.value = favouriteHook.value.copyWith(
           count: favouriteHook.value.isSelected

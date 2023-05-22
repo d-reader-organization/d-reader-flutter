@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
 import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
@@ -20,6 +21,8 @@ class EReaderView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<PageModel>> pagesProvider =
         ref.watch(comicIssuePagesProvider(issueId));
+    AsyncValue<ComicIssueModel?> issueProvider =
+        ref.watch(comicIssueDetailsProvider(issueId));
     final notifier = ref.read(isAppBarVisibleProvider.notifier);
     return NotificationListener(
       onNotification: (notification) {
@@ -95,6 +98,8 @@ class EReaderView extends ConsumerWidget {
         ),
         bottomNavigationBar: EReaderBottomNavigation(
           totalPages: pagesProvider.value?.length ?? 0,
+          rating: issueProvider.value?.stats?.averageRating ?? 0,
+          issueId: issueId,
         ),
       ),
     );

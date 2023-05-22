@@ -34,6 +34,22 @@ final favouriteComicIssueProvider =
   },
 );
 
+final rateComicIssueProvider =
+    FutureProvider.autoDispose.family<dynamic, dynamic>(
+  (ref, input) async {
+    if (input['id'] != null) {
+      final result =
+          await IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
+              .rateIssue(
+        id: input['id'],
+        rating: input['rating'],
+      );
+
+      return result;
+    }
+  },
+);
+
 final paginatedIssuesProvider = StateNotifierProvider.autoDispose.family<
     PaginationNotifier<ComicIssueModel>,
     PaginationState<ComicIssueModel>,

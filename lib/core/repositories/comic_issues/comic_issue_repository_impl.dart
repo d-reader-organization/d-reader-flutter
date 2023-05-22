@@ -1,5 +1,6 @@
 import 'dart:convert' show jsonDecode;
 
+import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository.dart';
@@ -52,5 +53,24 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
   @override
   Future<void> favouritiseIssue(int id) {
     return ApiService.instance.apiCallPatch('/comic-issue/favouritise/$id');
+  }
+
+  @override
+  Future<dynamic> rateIssue({
+    required int id,
+    required int rating,
+  }) async {
+    final result = await ApiService.instance.apiCallPatch(
+      '/comic-issue/rate/$id',
+      body: {
+        'rating': rating,
+      },
+    );
+    if (result is ApiError) {
+      return result.message;
+    }
+    return result != null
+        ? ComicIssueModel.fromJson(jsonDecode(result))
+        : result;
   }
 }

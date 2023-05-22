@@ -224,7 +224,8 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                           Row(
                             children: [
                               RatingIcon(
-                                rating: widget.comic.stats?.averageRating ?? 0,
+                                initialRating:
+                                    widget.comic.stats?.averageRating ?? 0,
                               ),
                               const SizedBox(
                                 width: 20,

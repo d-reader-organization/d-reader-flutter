@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class ConfirmationDialog extends StatelessWidget {
   final String title;
   final String subtitle;
+  final Widget? additionalChild;
   const ConfirmationDialog({
     super.key,
     required this.title,
     required this.subtitle,
+    this.additionalChild,
   });
 
   @override
@@ -48,6 +50,7 @@ class ConfirmationDialog extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
+                if (additionalChild != null) additionalChild!
               ],
             ),
           ),

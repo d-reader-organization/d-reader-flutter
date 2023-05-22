@@ -38,16 +38,17 @@ class EReaderView extends ConsumerWidget {
         backgroundColor: ColorPalette.appBackgroundColor,
         extendBodyBehindAppBar: true,
         extendBody: true,
-        appBar: const PreferredSize(
-          preferredSize: Size(0, 64),
+        appBar: PreferredSize(
+          preferredSize: const Size(0, 64),
           child: VisibilityAnimationAppBar(
             title: 'Episode 5',
             centerTitle: false,
             actions: [
               Padding(
-                padding: EdgeInsets.only(right: 16.0),
+                padding: const EdgeInsets.only(right: 16.0),
                 child: Icon(
                   Icons.bookmark_outline_rounded,
+                  color: ColorPalette.boxBackground400.withOpacity(0.6),
                 ),
               ),
             ],

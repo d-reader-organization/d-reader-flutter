@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EReaderBottomNavigation extends ConsumerWidget {
-  final int totalPages;
-
+  final int totalPages, favouritesCount;
+  final double rating;
   const EReaderBottomNavigation({
     super.key,
     required this.totalPages,
+    this.favouritesCount = 1550,
+    this.rating = 4.8,
   });
 
   @override
@@ -27,13 +29,13 @@ class EReaderBottomNavigation extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              children: const [
-                RatingIcon(rating: 4.9),
-                SizedBox(
+              children: [
+                RatingIcon(rating: rating),
+                const SizedBox(
                   width: 8,
                 ),
                 FavouriteIconCount(
-                  favouritesCount: 3229,
+                  favouritesCount: favouritesCount,
                   isFavourite: false,
                   slug: 'my-slug',
                 ),

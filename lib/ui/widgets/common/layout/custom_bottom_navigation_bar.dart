@@ -59,7 +59,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               BottomNavigationBarItem(
                 icon: BottomNavigationItemIcon(
                     imagePath: 'assets/icons/discovery.svg'),
-                label: 'Discovery',
+                label: 'Discover',
                 activeIcon: BottomNavigationItemIcon(
                   imagePath: 'assets/icons/discovery_bold.svg',
                   isActive: true,

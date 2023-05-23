@@ -99,22 +99,18 @@ class ConfirmationDialog extends StatelessWidget {
                       onTap: () async {
                         dynamic result;
                         if (onTap != null) {
-                          final globalStateNotifier =
-                              ref.read(globalStateProvider.notifier);
-                          globalStateNotifier.update(
-                            (state) => state.copyWith(
-                              isLoading: true,
-                            ),
+                          final privateLoadingNotifier =
+                              ref.read(privateLoadingProvider.notifier);
+                          privateLoadingNotifier.update(
+                            (state) => true,
                           );
                           result = await onTap!();
                           if (result is! String) {
                             ref.invalidate(comicIssueDetailsProvider);
                             ref.invalidate(comicSlugProvider);
                           }
-                          globalStateNotifier.update(
-                            (state) => state.copyWith(
-                              isLoading: false,
-                            ),
+                          privateLoadingNotifier.update(
+                            (state) => false,
                           );
                         }
 
@@ -135,7 +131,7 @@ class ConfirmationDialog extends StatelessWidget {
                             ),
                           ),
                         ),
-                        child: ref.watch(globalStateProvider).isLoading
+                        child: ref.watch(privateLoadingProvider)
                             ? const Center(
                                 child: SizedBox(
                                   height: 22,

@@ -25,3 +25,9 @@ final globalStateProvider = StateProvider(
     isLoading: false,
   ),
 );
+
+final privateLoadingProvider = StateProvider<bool>(
+  (ref) {
+    return false;
+  },
+);

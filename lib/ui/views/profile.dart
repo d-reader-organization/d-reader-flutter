@@ -232,6 +232,7 @@ class ProfileView extends HookConsumerWidget {
                                   final airdropResult = await ref
                                       .read(solanaProvider.notifier)
                                       .requestAirdrop(wallet.address);
+
                                   globalHook.value = globalHook.value
                                       .copyWith(isLoading: false);
                                   if (context.mounted) {

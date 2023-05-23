@@ -264,6 +264,8 @@ class _ComicIssueDetailsScaffoldState
                             RatingIcon(
                               initialRating:
                                   widget.issue.stats?.averageRating ?? 0,
+                              isRatedByMe: widget.issue.myStats?.rating != null,
+                              issueId: widget.issue.id,
                             ),
                             const SizedBox(
                               width: 20,

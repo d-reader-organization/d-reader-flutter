@@ -147,17 +147,16 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       ),
     );
     if (response != null) {
-      if (ref.read(environmentProvider).solanaCluster ==
-          SolanaCluster.devnet.value) {
-        await ref.read(networkChangeUpdateWallet(publicKey.toBase58()).future);
-      }
-
       ref.read(environmentProvider.notifier).updateEnvironmentState(
             EnvironmentStateUpdateInput(
               jwtToken: response.accessToken,
               refreshToken: response.refreshToken,
             ),
           );
+      if (ref.read(environmentProvider).solanaCluster ==
+          SolanaCluster.devnet.value) {
+        await ref.read(networkChangeUpdateWallet(publicKey.toBase58()).future);
+      }
     }
   }
 

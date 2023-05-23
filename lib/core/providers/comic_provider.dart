@@ -46,7 +46,6 @@ final rateComicProvider = FutureProvider.autoDispose.family<dynamic, dynamic>(
         slug: input['slug'],
         rating: input['rating'],
       );
-
       return result;
     }
   },

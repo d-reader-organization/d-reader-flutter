@@ -34,6 +34,26 @@ class RatingIcon extends ConsumerWidget {
                     title:
                         issueId != null ? 'Rate the episode' : 'Rate the comic',
                     subtitle: 'Tap a star to give ratings!',
+                    onTap: () {
+                      final int rating = ref.read(selectedRatingStarIndex) + 1;
+                      return issueId != null && rating > 0
+                          ? ref.read(
+                              rateComicIssueProvider(
+                                {
+                                  'id': issueId,
+                                  'rating': rating,
+                                },
+                              ).future,
+                            )
+                          : ref.read(
+                              rateComicProvider(
+                                {
+                                  'slug': comicSlug,
+                                  'rating': rating,
+                                },
+                              ).future,
+                            );
+                    },
                     additionalChild: const Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
@@ -42,33 +62,17 @@ class RatingIcon extends ConsumerWidget {
                   );
                 },
               );
-              final int rating = ref.read(selectedRatingStarIndex) + 1;
-              if (result != null && result && rating > 0) {
-                final response = issueId != null
-                    ? await ref.read(
-                        rateComicIssueProvider(
-                          {
-                            'id': issueId,
-                            'rating': rating,
-                          },
-                        ).future,
-                      )
-                    : await ref.read(
-                        rateComicProvider({'slug': comicSlug, 'rating': rating})
-                            .future);
 
-                if (context.mounted) {
-                  showSnackBar(
-                    context: context,
-                    text: response is String
-                        ? response
-                        : 'Submitted successfully.',
-                    duration: 3000,
-                    backgroundColor: response is String
-                        ? ColorPalette.dReaderRed
-                        : ColorPalette.dReaderGreen,
-                  );
-                }
+              if (context.mounted && result != null) {
+                final isString = result is String;
+                showSnackBar(
+                  context: context,
+                  text: isString ? result : 'Submitted successfully.',
+                  duration: 3000,
+                  backgroundColor: isString
+                      ? ColorPalette.dReaderRed
+                      : ColorPalette.dReaderGreen,
+                );
               }
             }
           : null,

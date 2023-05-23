@@ -87,7 +87,7 @@ class ApiService {
                 HttpHeaders.contentTypeHeader: 'application/json'
               }
             : {},
-        body: jsonEncode(body),
+        body: body != null ? jsonEncode(body) : null,
       );
 
       if (response.statusCode != 200) {

@@ -33,11 +33,13 @@ class FavouriteIconCount extends HookConsumerWidget {
       ),
     );
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         if (id != null) {
           ref.read(favouriteComicIssueProvider(id!));
+          ref.invalidate(comicIssueDetailsProvider);
         } else if (slug != null) {
           ref.read(updateComicFavouriteProvider(slug!));
+          ref.invalidate(comicSlugProvider);
         }
         favouriteHook.value = favouriteHook.value.copyWith(
           count: favouriteHook.value.isSelected

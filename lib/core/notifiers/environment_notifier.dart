@@ -65,10 +65,11 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
         ) ??
         SolanaCluster.mainnet.value;
     final localStoreData = localStore.get(
-        selectedNetwork == SolanaCluster.mainnet.value
-            ? 'prod-network'
-            : 'dev-network',
-        defaultValue: null);
+      selectedNetwork == SolanaCluster.mainnet.value
+          ? 'prod-network'
+          : 'dev-network',
+      defaultValue: null,
+    );
 
     if (localStoreData != null) {
       var networkData = jsonDecode(localStoreData);
@@ -141,13 +142,11 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     LocalStore.instance.delete('temp-network');
   }
 
-  Future<void> clearDataFromLocalStore() async {
+  Future<void> clearDataFromLocalStore(String cluster) async {
     final localStore = LocalStore.instance;
     localStore.delete(Config.tokenKey);
     return await localStore.delete(
-      state.solanaCluster == SolanaCluster.devnet.value
-          ? 'dev-network'
-          : 'prod-network',
+      cluster == SolanaCluster.devnet.value ? 'dev-network' : 'prod-network',
     );
   }
 }

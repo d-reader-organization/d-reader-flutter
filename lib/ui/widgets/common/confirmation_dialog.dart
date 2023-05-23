@@ -119,7 +119,10 @@ class ConfirmationDialog extends StatelessWidget {
                         }
 
                         if (context.mounted) {
-                          return Navigator.pop(context, result);
+                          return Navigator.pop(
+                            context,
+                            onTap != null ? result : true,
+                          );
                         }
                       },
                       child: Container(

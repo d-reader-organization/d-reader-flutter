@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/count_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -11,16 +10,14 @@ enum Variant { filled, blank }
 class FavouriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
   final bool isFavourite;
-  final String? slug;
+  final String slug;
   final Variant variant;
-  final int? id;
   const FavouriteIconCount({
     Key? key,
     required this.favouritesCount,
     required this.isFavourite,
-    this.slug,
+    required this.slug,
     this.variant = Variant.blank,
-    this.id,
   }) : super(key: key);
 
   @override
@@ -34,13 +31,9 @@ class FavouriteIconCount extends HookConsumerWidget {
     );
     return GestureDetector(
       onTap: () {
-        if (id != null) {
-          ref.read(favouriteComicIssueProvider(id!));
-          ref.invalidate(comicIssueDetailsProvider);
-        } else if (slug != null) {
-          ref.read(updateComicFavouriteProvider(slug!));
-          ref.invalidate(comicSlugProvider);
-        }
+        ref.read(updateComicFavouriteProvider(slug));
+        ref.invalidate(comicSlugProvider);
+
         favouriteHook.value = favouriteHook.value.copyWith(
           count: favouriteHook.value.isSelected
               ? favouriteHook.value.count - 1

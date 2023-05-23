@@ -51,11 +51,6 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
   }
 
   @override
-  Future<void> favouritiseIssue(int id) {
-    return ApiService.instance.apiCallPatch('/comic-issue/favouritise/$id');
-  }
-
-  @override
   Future<dynamic> rateIssue({
     required int id,
     required int rating,

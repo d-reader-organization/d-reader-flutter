@@ -26,14 +26,6 @@ final comicIssuePagesProvider =
       .getComicIssuePages(id);
 });
 
-final favouriteComicIssueProvider =
-    FutureProvider.autoDispose.family<void, int>(
-  (ref, id) {
-    return IoCContainer.resolveContainer<ComicIssueRepositoryImpl>()
-        .favouritiseIssue(id);
-  },
-);
-
 final rateComicIssueProvider =
     FutureProvider.autoDispose.family<dynamic, dynamic>(
   (ref, input) async {

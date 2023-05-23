@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -40,22 +39,10 @@ class EReaderBottomNavigation extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    RatingIcon(
-                      initialRating: issue?.stats?.averageRating ?? 0,
-                      issueId: issueId,
-                      isRatedByMe: issue?.myStats?.rating != null,
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    FavouriteIconCount(
-                      favouritesCount: issue?.stats?.favouritesCount ?? 0,
-                      isFavourite: issue?.myStats?.isFavourite ?? false,
-                      id: issueId,
-                    ),
-                  ],
+                RatingIcon(
+                  initialRating: issue?.stats?.averageRating ?? 0,
+                  issueId: issueId,
+                  isRatedByMe: issue?.myStats?.rating != null,
                 )
 
                 // Consumer(builder: (context, ref, child) {

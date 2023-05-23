@@ -9,5 +9,4 @@ abstract class ComicIssueRepository {
     required int id,
     required int rating,
   });
-  Future<void> favouritiseIssue(int id);
 }

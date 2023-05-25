@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
 import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
@@ -61,7 +62,10 @@ class EReaderView extends ConsumerWidget {
           data: (pages) {
             return GestureDetector(
               onTap: () {
-                if (!ref.read(isAppBarVisibleProvider)) {
+                if (ref.watch(isPageByPageReadingMode)) {
+                  notifier
+                      .update((state) => !ref.read(isAppBarVisibleProvider));
+                } else if (!ref.read(isAppBarVisibleProvider)) {
                   notifier.update(
                     (state) {
                       return true;
@@ -69,21 +73,37 @@ class EReaderView extends ConsumerWidget {
                   );
                 }
               },
-              child: InteractiveViewer(
-                minScale: 0.1, // Minimum scale allowed
-                maxScale: 10, // Maximum scale allowed
-                panEnabled: true,
-                scaleEnabled: true,
-                constrained: true,
-                child: ListView.builder(
-                  itemCount: pages.length,
-                  itemBuilder: (context, index) {
-                    return CommonCachedImage(
-                      imageUrl: pages[index].image,
-                    );
-                  },
-                ),
-              ),
+              child: ref.watch(isPageByPageReadingMode)
+                  ? PageView.builder(
+                      pageSnapping: true,
+                      itemBuilder: (context, index) {
+                        return InteractiveViewer(
+                          minScale: 0.1, // Minimum scale allowed
+                          maxScale: 10, // Maximum scale allowed
+                          panEnabled: true,
+                          scaleEnabled: true,
+                          constrained: true,
+                          child: CommonCachedImage(
+                            imageUrl: pages[index].image,
+                          ),
+                        );
+                      },
+                    )
+                  : InteractiveViewer(
+                      minScale: 0.1, // Minimum scale allowed
+                      maxScale: 10, // Maximum scale allowed
+                      panEnabled: true,
+                      scaleEnabled: true,
+                      constrained: true,
+                      child: ListView.builder(
+                        itemCount: pages.length,
+                        itemBuilder: (context, index) {
+                          return CommonCachedImage(
+                            imageUrl: pages[index].image,
+                          );
+                        },
+                      ),
+                    ),
             );
           },
           error: (Object error, StackTrace stackTrace) {

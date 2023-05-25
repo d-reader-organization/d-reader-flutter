@@ -11,12 +11,21 @@ class GlobalState {
   const GlobalState({
     required this.isLoading,
     this.isReferred = false,
+    this.isMinting,
   });
-  final bool isLoading;
-  final bool isReferred;
+  final bool isLoading, isReferred;
+  final bool? isMinting;
 
-  GlobalState copyWith({required bool isLoading, bool isReferred = false}) {
-    return GlobalState(isLoading: isLoading, isReferred: isReferred);
+  GlobalState copyWith({
+    required bool isLoading,
+    bool? isMinting,
+    bool isReferred = false,
+  }) {
+    return GlobalState(
+      isLoading: isLoading,
+      isMinting: isMinting,
+      isReferred: isReferred,
+    );
   }
 }
 

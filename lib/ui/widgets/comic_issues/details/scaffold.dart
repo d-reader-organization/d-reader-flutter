@@ -17,6 +17,7 @@ import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
@@ -106,6 +107,11 @@ class _ComicIssueDetailsScaffoldState
         body: SingleChildScrollView(
           child: Column(
             children: [
+              const MintingProgressWidget(
+                margin: EdgeInsets.only(
+                  top: 72,
+                ),
+              ),
               Stack(
                 children: [
                   CachedImageBgPlaceholder(

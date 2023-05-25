@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,7 +22,12 @@ PackageInfo? packageInfo;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   packageInfo = await PackageInfo.fromPlatform();
-  await Hive.initFlutter();
+  await Future.wait(
+    [
+      dotenv.load(fileName: ".env"),
+      Hive.initFlutter(),
+    ],
+  );
   await LocalStore().init();
   IoCContainer.register();
   if (kReleaseMode) {

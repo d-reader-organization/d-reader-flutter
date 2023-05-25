@@ -6,12 +6,14 @@ import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:solana/base58.dart';
 import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
@@ -67,7 +69,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     try {
       final client = SolanaClient(
         rpcUrl: Uri.parse(
-          Config.rpcDevnetUrl,
+          Config.solanaRpcDevnet,
         ),
         websocketUrl: Uri.parse(
           "ws://api.devnet.solana.com",
@@ -245,6 +247,17 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             return base64Decode(resignedTransaction.encode());
           }).toList(),
         );
+        if (response.signatures.isNotEmpty) {
+          ref.read(globalStateProvider.notifier).update(
+                (state) => state.copyWith(
+                  isLoading: false,
+                  isMinting: true,
+                ),
+              );
+          final transactionSignature =
+              base58encode(response.signatures.first.toList());
+          ref.read(mintingStatusProvider(transactionSignature));
+        }
         Sentry.captureMessage(
           'Sign and send response $response',
           level: SentryLevel.info,

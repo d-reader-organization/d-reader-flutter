@@ -26,8 +26,8 @@ class MintingProgressWidget extends ConsumerWidget {
             ),
             child: Text(
               ref.watch(globalStateProvider).isMinting!
-                  ? 'Minting...'
-                  : 'Minted!',
+                  ? 'Confirming transaction'
+                  : 'Transaction successful',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 14,

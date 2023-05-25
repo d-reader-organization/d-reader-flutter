@@ -139,7 +139,7 @@ class LibraryView extends ConsumerWidget {
                     height: 8,
                   ),
                   const Text(
-                    'Mint comic issues first',
+                    'Buy comic episodes first',
                     style: TextStyle(
                       fontSize: 14,
                       letterSpacing: 0.2,

@@ -1,7 +1,9 @@
 import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/ui/widgets/e_reader/reading_mode_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -43,8 +45,42 @@ class EReaderBottomNavigation extends ConsumerWidget {
                   initialRating: issue?.stats?.averageRating ?? 0,
                   issueId: issueId,
                   isRatedByMe: issue?.myStats?.rating != null,
-                )
-
+                ),
+                Row(
+                  children: [
+                    ReadingModeIcon(
+                      isActive: !ref.watch(isPageByPageReadingMode),
+                      iconPath: 'assets/icons/scroll_icon.svg',
+                      onTap: () {
+                        ref
+                            .read(isPageByPageReadingMode.notifier)
+                            .update((state) => false);
+                      },
+                    ),
+                    Switch(
+                      value: ref.watch(isPageByPageReadingMode),
+                      activeTrackColor: ColorPalette.boxBackground400,
+                      activeColor: Colors.white,
+                      trackColor: const MaterialStatePropertyAll<Color>(
+                        ColorPalette.boxBackground400,
+                      ),
+                      onChanged: (value) {
+                        ref
+                            .read(isPageByPageReadingMode.notifier)
+                            .update((state) => value);
+                      },
+                    ),
+                    ReadingModeIcon(
+                      isActive: ref.watch(isPageByPageReadingMode),
+                      iconPath: 'assets/icons/page_by_page.svg',
+                      onTap: () {
+                        ref
+                            .read(isPageByPageReadingMode.notifier)
+                            .update((state) => true);
+                      },
+                    ),
+                  ],
+                ),
                 // Consumer(builder: (context, ref, child) {
                 //   final currentEpisode = ref.watch(currentComicEpisodeProvider);
                 //   return IconButton(

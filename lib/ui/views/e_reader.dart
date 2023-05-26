@@ -76,6 +76,8 @@ class EReaderView extends ConsumerWidget {
               child: ref.watch(isPageByPageReadingMode)
                   ? PageView.builder(
                       pageSnapping: true,
+                      allowImplicitScrolling: true,
+                      itemCount: pages.length,
                       itemBuilder: (context, index) {
                         return InteractiveViewer(
                           minScale: 0.1, // Minimum scale allowed

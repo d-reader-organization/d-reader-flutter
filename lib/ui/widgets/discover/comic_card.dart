@@ -82,7 +82,7 @@ class DiscoverComicCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           RatingIcon(
-                            rating: comic.stats?.averageRating ?? 0,
+                            initialRating: comic.stats?.averageRating ?? 0,
                           ),
                           FavouriteIconCount(
                             favouritesCount: comic.stats?.favouritesCount ?? 0,

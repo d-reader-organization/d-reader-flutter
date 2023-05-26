@@ -116,7 +116,7 @@ class ReferralsView extends ConsumerWidget {
             ),
             ref.watch(selectedButtonProvider) == 'referral'
                 ? CustomTextField(
-                    hintText: 'Address or Wallet name',
+                    hintText: 'Username or Wallet address',
                     controller: ref.read(commonTextEditingController),
                     onChange: (String value) {
                       ref.read(commonTextValue.notifier).state = value;

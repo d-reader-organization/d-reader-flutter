@@ -16,12 +16,13 @@ class ChangeNetworkView extends ConsumerWidget {
   Future<bool?> _showDialog({
     required BuildContext context,
     required String subtitle,
+    required String cluster,
   }) {
     return showDialog<bool>(
       context: context,
       builder: (context) {
         return ConfirmationDialog(
-          title: 'Are you sure you want to change network?',
+          title: 'Warning, switching to $cluster',
           subtitle: subtitle,
         );
       },
@@ -41,7 +42,9 @@ class ChangeNetworkView extends ConsumerWidget {
               if (selectedCluster != SolanaCluster.mainnet.value) {
                 final isConfirmed = await _showDialog(
                       context: context,
-                      subtitle: 'Make sure to switch your wallet to Mainnet.',
+                      subtitle:
+                          'Make sure your mobile wallet app is set to Mainnet before proceeding!',
+                      cluster: 'Mainnet',
                     ) ??
                     false;
                 if (isConfirmed) {
@@ -102,7 +105,9 @@ class ChangeNetworkView extends ConsumerWidget {
               if (selectedCluster != SolanaCluster.devnet.value) {
                 final isConfirmed = await _showDialog(
                       context: context,
-                      subtitle: 'Make sure to switch your wallet to Devnet.',
+                      subtitle:
+                          'Devnet is only used for testing purposes and assets don\'t have any value. Make sure your mobile wallet app is set to Devnet before proceeding!',
+                      cluster: 'Devnet',
                     ) ??
                     false;
                 if (isConfirmed) {

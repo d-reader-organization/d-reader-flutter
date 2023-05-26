@@ -1,4 +1,4 @@
-import 'dart:convert' show jsonDecode;
+import 'dart:convert' show jsonDecode, jsonEncode;
 import 'dart:io';
 
 import 'package:d_reader_flutter/config/config.dart';
@@ -74,7 +74,7 @@ class ApiService {
   Future<dynamic> apiCallPatch(
     String path, {
     bool includeAuthHeader = true,
-    Object? body,
+    dynamic body,
   }) async {
     try {
       await _setters();
@@ -82,9 +82,12 @@ class ApiService {
       http.Response response = await http.patch(
         uri,
         headers: includeAuthHeader
-            ? {HttpHeaders.authorizationHeader: '$_token'}
+            ? {
+                HttpHeaders.authorizationHeader: '$_token',
+                HttpHeaders.contentTypeHeader: 'application/json'
+              }
             : {},
-        body: body,
+        body: body != null ? jsonEncode(body) : null,
       );
 
       if (response.statusCode != 200) {
@@ -103,7 +106,7 @@ class ApiService {
       return error;
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      return null;
+      return exception.toString();
     }
   }
 

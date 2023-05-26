@@ -1,3 +1,5 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -14,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class IntroForm extends ConsumerWidget {
+class IntroForm extends ConsumerStatefulWidget {
   final GlobalKey<FormState> formKey;
   const IntroForm({
     super.key,
@@ -22,7 +24,20 @@ class IntroForm extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _IntroFormState();
+}
+
+class _IntroFormState extends ConsumerState<IntroForm> {
+  Timer? _debouncer;
+
+  @override
+  void dispose() {
+    _debouncer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final provider = ref.watch(myWalletProvider);
     return provider.maybeWhen(
       orElse: () {
@@ -36,7 +51,7 @@ class IntroForm extends ConsumerWidget {
           return const Text('No wallet');
         }
         return Form(
-          key: formKey,
+          key: widget.formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -47,16 +62,23 @@ class IntroForm extends ConsumerWidget {
                 onValidate: (value) {
                   return validateUsername(value: value, ref: ref);
                 },
-                onChange: (value) async {
-                  final validatorNotifier =
-                      ref.read(isValidWalletNameValue.notifier);
-                  ref.read(walletNameProvider.notifier).state = value;
-                  if (value.isEmpty) {
-                    return validatorNotifier.state = false;
+                onChange: (value) {
+                  if (_debouncer?.isActive ?? false) {
+                    _debouncer?.cancel();
                   }
-                  final result =
-                      await ref.read(validateWalletNameProvider(value).future);
-                  validatorNotifier.state = result;
+                  _debouncer =
+                      Timer(const Duration(milliseconds: 200), () async {
+                    final validatorNotifier =
+                        ref.read(isValidWalletNameValue.notifier);
+                    ref.read(walletNameProvider.notifier).state = value;
+                    if (value.isEmpty) {
+                      validatorNotifier.state = false;
+                      return;
+                    }
+                    final result = await ref
+                        .read(validateWalletNameProvider(value).future);
+                    validatorNotifier.state = result;
+                  });
                 },
               ),
               const SizedBox(

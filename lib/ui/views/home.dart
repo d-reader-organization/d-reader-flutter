@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_grid.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
+import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
 import 'package:d_reader_flutter/ui/widgets/common/search_auto_complete.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
@@ -18,6 +19,7 @@ class HomeView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            const MintingProgressWidget(),
             const SearchAutoComplete(),
             const SizedBox(
               height: 24,

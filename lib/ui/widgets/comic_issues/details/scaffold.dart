@@ -12,12 +12,12 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
-import 'package:d_reader_flutter/ui/widgets/common/app_bar_without_logo.dart';
+import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
@@ -107,6 +107,11 @@ class _ComicIssueDetailsScaffoldState
         body: SingleChildScrollView(
           child: Column(
             children: [
+              const MintingProgressWidget(
+                margin: EdgeInsets.only(
+                  top: 72,
+                ),
+              ),
               Stack(
                 children: [
                   CachedImageBgPlaceholder(
@@ -259,23 +264,14 @@ class _ComicIssueDetailsScaffoldState
                             ],
                           ),
                         ),
-                        Row(
-                          children: [
-                            RatingIcon(
-                              rating: widget.issue.stats?.averageRating ?? 0,
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            FavouriteIconCount(
-                              favouritesCount:
-                                  widget.issue.stats?.favouritesCount ?? 0,
-                              isFavourite:
-                                  widget.issue.myStats?.isFavourite ?? false,
-                              slug: widget.issue.slug,
-                              id: widget.issue.id,
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: RatingIcon(
+                            initialRating:
+                                widget.issue.stats?.averageRating ?? 0,
+                            isRatedByMe: widget.issue.myStats?.rating != null,
+                            issueId: widget.issue.id,
+                          ),
                         ),
                       ],
                     ),

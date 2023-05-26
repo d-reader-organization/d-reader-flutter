@@ -42,20 +42,20 @@ class EReaderView extends ConsumerWidget {
         backgroundColor: ColorPalette.appBackgroundColor,
         extendBodyBehindAppBar: true,
         extendBody: true,
-        appBar: const PreferredSize(
-          preferredSize: Size(0, 64),
+        appBar: PreferredSize(
+          preferredSize: const Size(0, 64),
           child: VisibilityAnimationAppBar(
-            title: 'Episode 5',
+            title: issueProvider.value?.title ?? '',
             centerTitle: false,
-            actions: [
-              // Padding(
-              //   padding: const EdgeInsets.only(right: 16.0),
-              //   child: Icon(
-              //     Icons.bookmark_outline_rounded,
-              //     color: ColorPalette.boxBackground400.withOpacity(0.6),
-              //   ),
-              // ),
-            ],
+            // actions: [
+            //   Padding(
+            //     padding: const EdgeInsets.only(right: 16.0),
+            //     child: Icon(
+            //       Icons.bookmark_outline_rounded,
+            //       color: ColorPalette.boxBackground400.withOpacity(0.6),
+            //     ),
+            //   ),
+            // ],
           ),
         ),
         body: pagesProvider.when(
@@ -86,6 +86,7 @@ class EReaderView extends ConsumerWidget {
                           scaleEnabled: true,
                           constrained: true,
                           child: CommonCachedImage(
+                            fit: BoxFit.contain,
                             imageUrl: pages[index].image,
                           ),
                         );
@@ -99,6 +100,7 @@ class EReaderView extends ConsumerWidget {
                       constrained: true,
                       child: ListView.builder(
                         itemCount: pages.length,
+                        cacheExtent: pages.length * 300,
                         itemBuilder: (context, index) {
                           return CommonCachedImage(
                             imageUrl: pages[index].image,

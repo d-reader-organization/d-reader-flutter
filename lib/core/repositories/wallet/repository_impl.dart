@@ -71,7 +71,7 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<bool> validateName(String name) async {
-    if (name.isEmpty) {
+    if (name.trim().isEmpty) {
       return false;
     }
     try {

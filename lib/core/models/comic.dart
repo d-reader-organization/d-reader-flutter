@@ -113,7 +113,7 @@ class ComicStats {
 
 class MyStats {
   final bool? isFavourite, isSubscribed;
-  final double? rating;
+  final int? rating;
   final DateTime? viewedAt;
 
   MyStats({

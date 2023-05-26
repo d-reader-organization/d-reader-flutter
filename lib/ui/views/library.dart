@@ -1,9 +1,11 @@
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_item_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -116,10 +118,36 @@ class LibraryView extends ConsumerWidget {
       child: provider.when(
         data: (walletAssets) {
           if (walletAssets.isEmpty) {
-            return const Center(
-              child: Text(
-                'Nothing in your library',
-                style: TextStyle(fontSize: 18),
+            return Center(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  SvgPicture.asset('assets/icons/bunny_in_the_hole.svg'),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Text(
+                    'Nothing to see in here!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Text(
+                    'Buy comic episodes first',
+                    style: TextStyle(
+                      fontSize: 14,
+                      letterSpacing: 0.2,
+                      fontWeight: FontWeight.w500,
+                      color: ColorPalette.greyscale100,
+                    ),
+                  ),
+                ],
               ),
             );
           }

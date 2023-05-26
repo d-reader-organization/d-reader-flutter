@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 extension SolanaClusterValue on SolanaCluster {
   static const clusterValues = {
     SolanaCluster.devnet: 'devnet',
@@ -21,7 +23,7 @@ abstract class Config {
     'apiUrlDevnet',
     defaultValue: 'https://api-dev-devnet.dreader.io',
   );
-  static const rpcDevnetUrl = "https://api.devnet.solana.com";
+  static const solanaRpcDevnet = "https://api.devnet.solana.com";
   static const String logoTextPath = 'assets/images/logo-white-yellow.svg';
   static const String logoAlphaPath = 'assets/images/logo_alpha.svg';
   static const String logoTextBlackPath =
@@ -42,4 +44,8 @@ abstract class Config {
   static const String twitterUrl = 'https://twitter.com/dReaderApp';
   static const String discordUrl = 'https://discord.gg/rrZsRvC9mh';
   static const String localStoreName = 'local_store';
+  static String rpcUrlMainnet =
+      dotenv.get('rpcMainnet', fallback: 'https://api.mainnet-beta.solana.com');
+  static String rpcUrlDevnet =
+      dotenv.get('rpcDevnet', fallback: 'https://api.devnet.solana.com');
 }

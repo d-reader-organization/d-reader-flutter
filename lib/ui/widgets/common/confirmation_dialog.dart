@@ -1,13 +1,21 @@
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
   final String subtitle;
+  final Widget? additionalChild;
+  final Future Function()? onTap;
   const ConfirmationDialog({
     super.key,
     required this.title,
     required this.subtitle,
+    this.onTap,
+    this.additionalChild,
   });
 
   @override
@@ -48,6 +56,7 @@ class ConfirmationDialog extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
+                if (additionalChild != null) additionalChild!
               ],
             ),
           ),
@@ -83,32 +92,68 @@ class ConfirmationDialog extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    return Navigator.pop(context, true);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: ColorPalette.boxBackground200,
-                          width: 1,
+              Consumer(
+                builder: (context, ref, child) {
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () async {
+                        dynamic result;
+                        if (onTap != null) {
+                          final privateLoadingNotifier =
+                              ref.read(privateLoadingProvider.notifier);
+                          privateLoadingNotifier.update(
+                            (state) => true,
+                          );
+                          result = await onTap!();
+                          if (result is! String) {
+                            ref.invalidate(comicIssueDetailsProvider);
+                            ref.invalidate(comicSlugProvider);
+                          }
+                          privateLoadingNotifier.update(
+                            (state) => false,
+                          );
+                        }
+
+                        if (context.mounted) {
+                          return Navigator.pop(
+                            context,
+                            onTap != null ? result : true,
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: ColorPalette.boxBackground200,
+                              width: 1,
+                            ),
+                          ),
                         ),
+                        child: ref.watch(privateLoadingProvider)
+                            ? const Center(
+                                child: SizedBox(
+                                  height: 22,
+                                  width: 22,
+                                  child: CircularProgressIndicator(
+                                    color: ColorPalette.appBackgroundColor,
+                                  ),
+                                ),
+                              )
+                            : const Text(
+                                'OK',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorPalette.dReaderYellow100,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
                       ),
                     ),
-                    child: const Text(
-                      'OK',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: ColorPalette.dReaderYellow100,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+                  );
+                },
+              )
             ],
           ),
         ],

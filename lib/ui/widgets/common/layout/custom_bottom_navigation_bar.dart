@@ -19,7 +19,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         ),
       ),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaY: 64, sigmaX: 64),
+        filter: ImageFilter.blur(sigmaY: 48, sigmaX: 48),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: BottomNavigationBar(

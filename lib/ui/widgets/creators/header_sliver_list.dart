@@ -82,23 +82,31 @@ class StatsDescriptionWidget extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              FollowBox(
-                followersCount: creator.stats?.followersCount ?? 0,
-                isFollowing: creator.myStats?.isFollowing ?? false,
-                slug: creator.slug,
-              ),
-              const SocialRow(),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FollowBox(
+                  followersCount: creator.stats?.followersCount ?? 0,
+                  isFollowing: creator.myStats?.isFollowing ?? false,
+                  slug: creator.slug,
+                ),
+                SocialRow(
+                  creator: creator,
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 24,
           ),
-          StatsBoxRow(
-            totalVolume: double.parse('${creator.stats?.totalVolume ?? 0}'),
-            issuesCount: creator.stats?.comicIssuesCount ?? 0,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: StatsBoxRow(
+              totalVolume: double.parse('${creator.stats?.totalVolume ?? 0}'),
+              issuesCount: creator.stats?.comicIssuesCount ?? 0,
+            ),
           ),
           const SizedBox(
             height: 24,

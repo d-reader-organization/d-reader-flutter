@@ -8,4 +8,5 @@ abstract class WalletRepository {
   Future<dynamic> updateWallet(UpdateWalletPayload payload);
   Future<bool> validateName(String name);
   Future<String> updateReferrer(String referrer);
+  Future<dynamic> syncWallet();
 }

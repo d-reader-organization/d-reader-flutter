@@ -93,4 +93,9 @@ class WalletRepositoryImpl implements WalletRepository {
     }
     return 'OK';
   }
+
+  @override
+  Future syncWallet() {
+    return ApiService.instance.apiCallGet('/wallet/sync');
+  }
 }

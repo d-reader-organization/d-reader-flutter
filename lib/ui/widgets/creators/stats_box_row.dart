@@ -13,7 +13,7 @@ class StatsBoxRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         StatsBox(
           title: 'TOTAL VOLUME',

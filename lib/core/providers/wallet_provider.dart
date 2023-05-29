@@ -95,3 +95,9 @@ final networkChangeUpdateWallet =
     }
   },
 );
+
+final syncWalletProvider = FutureProvider.autoDispose(
+  (ref) {
+    return IoCContainer.resolveContainer<WalletRepositoryImpl>().syncWallet();
+  },
+);

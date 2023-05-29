@@ -13,9 +13,9 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 //   {
 //     "address": "CXS1HQHrgnu6Sjd7HDw7HN5E2vPU8VbhUNyhWfDxYJXe",
 //     "uri":
-//         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
+//         "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
 //     "image":
-//         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
+//         "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
 //     "name": "Rise of the Gorecats #8",
 //     "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
 //     "royalties": 4.5,
@@ -33,7 +33,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 //     "uri":
 //         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
 //     "image":
-//         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
+//         "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
 //     "name": "Rise of the Gorecats #8",
 //     "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
 //     "royalties": 4.5,
@@ -51,7 +51,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 //     "uri":
 //         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
 //     "image":
-//         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
+//         "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
 //     "name": "Rise of the Gorecats #8",
 //     "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
 //     "royalties": 4.5,
@@ -69,7 +69,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 //     "uri":
 //         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
 //     "image":
-//         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
+//         "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
 //     "name": "Rise of the Gorecats #8",
 //     "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
 //     "royalties": 4.5,
@@ -87,7 +87,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 //     "uri":
 //         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/CLOSlE94zMJ4CfVMheTw",
 //     "image":
-//         "https://s3.us-east-1.amazonaws.com/d-reader-dev-metadata/rdgflTMG4flbEB4mu48N",
+//         "https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80",
 //     "name": "Rise of the Gorecats #8",
 //     "owner": "BnTeboF7M7x78f7mNoG71dgzaCubvGrwQyVHteZoF9rY",
 //     "royalties": 8,
@@ -113,6 +113,7 @@ class LibraryView extends ConsumerWidget {
     final provider = ref.watch(walletAssetsProvider);
     return RefreshIndicator(
       onRefresh: () async {
+        await ref.read(syncWalletProvider.future);
         ref.invalidate(walletAssetsProvider);
       },
       child: provider.when(
@@ -155,6 +156,7 @@ class LibraryView extends ConsumerWidget {
             itemCount: walletAssets.length,
             primary: false,
             shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.only(top: 12, bottom: 24),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

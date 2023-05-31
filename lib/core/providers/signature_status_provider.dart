@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -31,6 +32,7 @@ final mintingStatusProvider = StateProvider.family<void, String>(
       )
           .then((value) {
         Future.delayed(const Duration(milliseconds: 2500), () {
+          ref.invalidate(comicIssueDetailsProvider);
           ref.read(globalStateProvider.notifier).update(
                 (state) => state.copyWith(
                   isLoading: false,

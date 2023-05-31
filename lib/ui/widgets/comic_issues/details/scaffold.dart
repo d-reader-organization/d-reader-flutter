@@ -326,7 +326,8 @@ class BottomNavigation extends ConsumerWidget {
                                 .mint(issue.candyMachineAddress);
                             if (isSuccessful) {
                               ref.invalidate(
-                                  receiptsProvider); // think we can remove this, needs to be tested
+                                receiptsProvider,
+                              ); // think we can remove this, needs to be tested
                               ref.invalidate(
                                 walletAssetsProvider,
                               );

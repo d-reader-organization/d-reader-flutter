@@ -1,8 +1,4 @@
-import 'dart:convert' show jsonEncode;
-
 import 'package:d_reader_flutter/core/models/auth.dart';
-import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
-import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:d_reader_flutter/ioc.dart';
@@ -46,39 +42,39 @@ class DReaderWalletService {
         .constructNftTransaction(candyMachineAddress);
   }
 
-  Future<String?> listItem({
-    required String mintAccount,
-    required int price,
-    String? printReceipt,
-  }) async {
-    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().listItem(
-        mintAccount: mintAccount, price: price, printReceipt: printReceipt);
-  }
+  // Future<String?> listItem({
+  //   required String mintAccount,
+  //   required int price,
+  //   String? printReceipt,
+  // }) async {
+  //   return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().listItem(
+  //       mintAccount: mintAccount, price: price, printReceipt: printReceipt);
+  // }
 
-  Future<String?> delistItem({required String mint}) {
-    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
-        .delistItem(mint: mint);
-  }
+  // Future<String?> delistItem({required String mint}) {
+  //   return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+  //       .delistItem(mint: mint);
+  // }
 
-  Future<String?> buyItem({
-    required String mintAccount,
-    required int price,
-    required String seller,
-  }) {
-    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().buyItem(
-      mintAccount: mintAccount,
-      price: price,
-      seller: seller,
-    );
-  }
+  // Future<String?> buyItem({
+  //   required String mintAccount,
+  //   required int price,
+  //   required String seller,
+  // }) {
+  //   return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>().buyItem(
+  //     mintAccount: mintAccount,
+  //     price: price,
+  //     seller: seller,
+  //   );
+  // }
 
-  Future<List<String>> buyMultipleItems(List<BuyNftInput> input) {
-    Map<String, String> query = {};
-    for (int i = 0; i < input.length; ++i) {
-      query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
-    }
+  // Future<List<String>> buyMultipleItems(List<BuyNftInput> input) {
+  //   Map<String, String> query = {};
+  //   for (int i = 0; i < input.length; ++i) {
+  //     query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
+  //   }
 
-    return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
-        .buyMultipleItems(query);
-  }
+  //   return IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+  //       .buyMultipleItems(query);
+  // }
 }

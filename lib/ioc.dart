@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:d_reader_flutter/core/repositories/creator/creator_repository_impl.dart';
@@ -16,7 +15,6 @@ abstract class IoCContainer {
     container.registerSingleton((container) => CandyMachineRepositoryImpl());
     container.registerSingleton((container) => WalletRepositoryImpl());
     container.registerSingleton((container) => NftRepositoryImpl());
-    container.registerSingleton((container) => AuctionHouseRepositoryImpl());
   }
 
   static T resolveContainer<T>() {

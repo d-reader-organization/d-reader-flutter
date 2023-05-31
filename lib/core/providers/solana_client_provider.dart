@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
@@ -37,20 +38,6 @@ extension ResignTx on SignedTx {
           ..insert(0, newSignature),
         compiledMessage: compiledMessage,
       );
-}
-
-AuthorizationResult? authResultFromDynamic(String? json) {
-  if (json == null) {
-    return null;
-  }
-  final decoded = jsonDecode(json);
-
-  return AuthorizationResult(
-    authToken: decoded['authToken'],
-    publicKey: Uint8List.fromList(decoded['publicKey'].codeUnits),
-    accountLabel: null,
-    walletUriBase: null,
-  );
 }
 
 class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
@@ -190,8 +177,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required int price,
     String printReceipt = 'false',
   }) async {
-    final String? encodedTransaction = await _walletService.listItem(
-        mintAccount: mintAccount, price: price, printReceipt: printReceipt);
+    final String? encodedTransaction =
+        await ref.read(auctionHouseRepositoryProvider).listItem(
+              mintAccount: mintAccount,
+              price: price,
+              printReceipt: printReceipt,
+            );
     if (encodedTransaction == null) {
       return false;
     }
@@ -202,7 +193,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String mint,
   }) async {
     final String? encodedTransaction =
-        await _walletService.delistItem(mint: mint);
+        await ref.read(auctionHouseRepositoryProvider).delistItem(mint: mint);
     if (encodedTransaction == null) {
       return false;
     }
@@ -210,8 +201,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> buyMultiple(List<BuyNftInput> input) async {
+    Map<String, String> query = {};
+    for (int i = 0; i < input.length; ++i) {
+      query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
+    }
     final List<String> encodedTransactions =
-        await _walletService.buyMultipleItems(input);
+        await ref.read(auctionHouseRepositoryProvider).buyMultipleItems(query);
     if (encodedTransactions.isEmpty) {
       return false;
     }

@@ -380,7 +380,11 @@ class BottomNavigation extends ConsumerWidget {
                         isListing: true,
                       ),
                     ),
-              Expanded(child: ReadButton(issue: issue)),
+              Expanded(
+                child: ReadButton(
+                  issue: issue,
+                ),
+              ),
             ],
           );
   }

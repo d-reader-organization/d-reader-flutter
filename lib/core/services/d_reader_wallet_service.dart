@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
-import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/base58.dart';
@@ -37,10 +36,10 @@ class DReaderWalletService {
     }
   }
 
-  Future<String?> getNftTransaction(String candyMachineAddress) async {
-    return await IoCContainer.resolveContainer<CandyMachineRepositoryImpl>()
-        .constructNftTransaction(candyMachineAddress);
-  }
+  // Future<String?> getNftTransaction(String candyMachineAddress) async {
+  //   return await IoCContainer.resolveContainer<CandyMachineRepositoryImpl>()
+  //       .constructNftTransaction(candyMachineAddress);
+  // }
 
   // Future<String?> listItem({
   //   required String mintAccount,

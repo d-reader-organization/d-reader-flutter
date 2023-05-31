@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EReaderView extends ConsumerWidget {
@@ -60,6 +61,8 @@ class EReaderView extends ConsumerWidget {
         ),
         body: pagesProvider.when(
           data: (pages) {
+            bool canRead = issueProvider.value?.myStats?.canRead != null &&
+                issueProvider.value!.myStats!.canRead;
             return GestureDetector(
               onTap: () {
                 if (ref.watch(isPageByPageReadingMode)) {
@@ -77,7 +80,7 @@ class EReaderView extends ConsumerWidget {
                   ? PageView.builder(
                       pageSnapping: true,
                       allowImplicitScrolling: true,
-                      itemCount: pages.length,
+                      itemCount: canRead ? pages.length : pages.length + 1,
                       itemBuilder: (context, index) {
                         return InteractiveViewer(
                           minScale: 0.1, // Minimum scale allowed
@@ -85,10 +88,12 @@ class EReaderView extends ConsumerWidget {
                           panEnabled: true,
                           scaleEnabled: true,
                           constrained: true,
-                          child: CommonCachedImage(
-                            fit: BoxFit.contain,
-                            imageUrl: pages[index].image,
-                          ),
+                          child: index == pages.length
+                              ? const PreviewImage()
+                              : CommonCachedImage(
+                                  fit: BoxFit.contain,
+                                  imageUrl: pages[index].image,
+                                ),
                         );
                       },
                     )
@@ -99,12 +104,14 @@ class EReaderView extends ConsumerWidget {
                       scaleEnabled: true,
                       constrained: true,
                       child: ListView.builder(
-                        itemCount: pages.length,
+                        itemCount: canRead ? pages.length : pages.length + 1,
                         cacheExtent: pages.length * 300,
                         itemBuilder: (context, index) {
-                          return CommonCachedImage(
-                            imageUrl: pages[index].image,
-                          );
+                          return index == pages.length
+                              ? const PreviewImage()
+                              : CommonCachedImage(
+                                  imageUrl: pages[index].image,
+                                );
                         },
                       ),
                     ),
@@ -125,6 +132,20 @@ class EReaderView extends ConsumerWidget {
           rating: issueProvider.value?.stats?.averageRating ?? 0,
           issueId: issueId,
         ),
+      ),
+    );
+  }
+}
+
+class PreviewImage extends StatelessWidget {
+  const PreviewImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SvgPicture.asset(
+        'assets/icons/comic_preview.svg',
       ),
     );
   }

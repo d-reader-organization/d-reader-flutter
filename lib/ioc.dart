@@ -2,7 +2,6 @@ import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:d_reader_flutter/core/repositories/creator/creator_repository_impl.dart';
-import 'package:d_reader_flutter/core/repositories/genre/genre_repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/nft/repository_impl.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository_impl.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
@@ -13,7 +12,6 @@ abstract class IoCContainer {
     KiwiContainer container = KiwiContainer();
     container.registerSingleton((container) => AuthRepositoryImpl());
     container.registerSingleton((container) => CreatorRepositoryImpl());
-    container.registerSingleton((container) => GenreRepositoryImpl());
     container.registerSingleton((container) => ApiService());
     container.registerSingleton((container) => CandyMachineRepositoryImpl());
     container.registerSingleton((container) => WalletRepositoryImpl());

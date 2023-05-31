@@ -21,7 +21,7 @@ app:
     - purpose: icon
       uri: ./512x512.png
 release:
-  address: AhD61gHgxec34t7d7ZPEYj45cjTKLkBcTMTp7zEYKgW
+  address: 7HmXMajn4wfW3L6z5diMgsKpo8iWEWcei7Uedee7w3AL
   media:
     - purpose: icon
       uri: ./512x512.png

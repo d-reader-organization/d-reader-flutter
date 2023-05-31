@@ -12,15 +12,15 @@ class GenreRepositoryImpl implements GenreRepository {
   @override
   Future<List<GenreModel>> getGenres() async {
     final response = await client.get('/genre/get').then((value) => value.data);
-    if (response == null) {
-      return [];
-    }
-    return List<GenreModel>.from(
-      response.map(
-        (item) => GenreModel.fromJson(
-          item,
-        ),
-      ),
-    );
+
+    return response != null
+        ? List<GenreModel>.from(
+            response.map(
+              (item) => GenreModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 }

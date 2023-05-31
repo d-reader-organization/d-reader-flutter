@@ -12,15 +12,15 @@ class CarouselRepositoryImpl implements CarouselRepository {
   Future<List<CarouselModel>> getCarouselData() async {
     final response =
         await client.get('/carousel/slides/get').then((value) => value.data);
-    if (response == null) {
-      return [];
-    }
-    return List<CarouselModel>.from(
-      response.map(
-        (item) => CarouselModel.fromJson(
-          item,
-        ),
-      ),
-    );
+
+    return response != null
+        ? List<CarouselModel>.from(
+            response.map(
+              (item) => CarouselModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 }

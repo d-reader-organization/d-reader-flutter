@@ -25,7 +25,7 @@ class FollowBox extends HookConsumerWidget {
     );
     return GestureDetector(
       onTap: () {
-        ref.read(followCreatorProvider(slug));
+        ref.read(creatorRepositoryProvider).followCreator(slug);
         followingHook.value = followingHook.value.copyWith(
           count: followingHook.value.isSelected
               ? followingHook.value.count - 1

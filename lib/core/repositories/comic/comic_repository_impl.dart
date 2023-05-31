@@ -13,16 +13,16 @@ class ComicRepositoryImpl implements ComicRepository {
     final response = await client
         .get<List<dynamic>>('/comic/get?$queryString')
         .then((value) => value.data);
-    if (response == null) {
-      return [];
-    }
-    return List<ComicModel>.from(
-      response.map(
-        (item) => ComicModel.fromJson(
-          item,
-        ),
-      ),
-    );
+
+    return response != null
+        ? List<ComicModel>.from(
+            response.map(
+              (item) => ComicModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 
   @override
@@ -31,7 +31,7 @@ class ComicRepositoryImpl implements ComicRepository {
         .get<dynamic>('/comic/get/$slug')
         .then((value) => value.data);
 
-    return response == null ? null : ComicModel.fromJson(response);
+    return response != null ? ComicModel.fromJson(response) : null;
   }
 
   @override

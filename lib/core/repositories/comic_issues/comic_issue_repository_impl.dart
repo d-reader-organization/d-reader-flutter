@@ -16,17 +16,15 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
         .get<List<dynamic>?>('/comic-issue/get?$queryString')
         .then((value) => value.data);
 
-    if (response == null) {
-      return [];
-    }
-
-    return List<ComicIssueModel>.from(
-      response.map(
-        (item) => ComicIssueModel.fromJson(
-          item,
-        ),
-      ),
-    );
+    return response != null
+        ? List<ComicIssueModel>.from(
+            response.map(
+              (item) => ComicIssueModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 
   @override
@@ -34,7 +32,7 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
     final response =
         await client.get('/comic-issue/get/$id').then((value) => value.data);
 
-    return response == null ? null : ComicIssueModel.fromJson(response);
+    return response != null ? ComicIssueModel.fromJson(response) : null;
   }
 
   @override
@@ -42,17 +40,16 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
     final response = await client
         .get('/comic-issue/get/$id/pages')
         .then((value) => value.data);
-    if (response == null) {
-      return [];
-    }
 
-    return List<PageModel>.from(
-      response.map(
-        (item) => PageModel.fromJson(
-          item,
-        ),
-      ),
-    );
+    return response != null
+        ? List<PageModel>.from(
+            response.map(
+              (item) => PageModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 
   @override

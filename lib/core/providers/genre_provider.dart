@@ -6,11 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final genreRepositoryProvider = Provider<GenreRepositoryImpl>(
   (ref) {
     return GenreRepositoryImpl(
-      client: ref.watch(
-        dioProvider(
-          null,
-        ),
-      ),
+      client: ref.watch(dioProvider),
     );
   },
 );

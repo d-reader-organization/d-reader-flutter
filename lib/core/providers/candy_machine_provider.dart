@@ -8,9 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final candyMachineRepositoryProvider = Provider<CandyMachineRepositoryImpl>(
   (ref) {
     return CandyMachineRepositoryImpl(
-      client: ref.watch(
-        dioProvider(null),
-      ),
+      client: ref.watch(dioProvider),
     );
   },
 );

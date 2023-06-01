@@ -150,6 +150,6 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future syncWallet() {
-    return ApiService.instance.apiCallGet('/wallet/sync');
+    return client.get('/wallet/sync').then((value) => value.data);
   }
 }

@@ -9,8 +9,9 @@ import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet_auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
-import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
+
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,7 +24,7 @@ import 'package:solana_mobile_client/solana_mobile_client.dart';
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
   (ref) {
-    return SolanaClientNotifier(DReaderWalletService.instance, ref);
+    return SolanaClientNotifier(ref);
   },
 );
 
@@ -42,17 +43,12 @@ extension ResignTx on SignedTx {
 }
 
 class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
-  late DReaderWalletService _walletService;
   final StateNotifierProviderRef ref;
 
   SolanaClientNotifier(
-    DReaderWalletService walletService,
     this.ref,
-  ) : super(
-          const SolanaClientState(),
-        ) {
-    _walletService = walletService;
-  }
+  ) : super(const SolanaClientState());
+
   Future<String?> requestAirdrop(String publicKey) async {
     try {
       final client = SolanaClient(
@@ -94,10 +90,16 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       iconUri: Uri.file(Config.faviconPath),
     );
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
+    final apiUrl = cluster == SolanaCluster.devnet.value
+        ? Config.apiUrlDevnet
+        : Config.apiUrl;
     final envNotifier = ref.read(environmentProvider.notifier);
-
-    final signMessageResult =
-        await _signMessage(client, publicKey, result?.authToken ?? '', cluster);
+    final signMessageResult = await _signMessage(
+      client: client,
+      signer: publicKey,
+      overrideAuthToken: result?.authToken ?? '',
+      apiUrl: apiUrl,
+    );
     if (signMessageResult is String || signMessageResult.isEmpty) {
       await session.close();
       return signMessageResult is String
@@ -109,6 +111,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         publicKey: publicKey,
         authToken: result?.authToken,
         solanaCluster: cluster,
+        apiUrl: apiUrl,
         signature: Signature(
           signMessageResult.first.sublist(0, 64),
           publicKey: publicKey,
@@ -121,6 +124,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     await _getAndStoreToken(
       signedMessage: signMessageResult.first,
       publicKey: publicKey,
+      apiUrl: apiUrl,
     );
     return 'OK';
   }
@@ -128,14 +132,18 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   Future<void> _getAndStoreToken({
     required Uint8List signedMessage,
     required Ed25519HDPublicKey publicKey,
+    required String apiUrl,
   }) async {
-    final response = await _walletService.connectWallet(
-      publicKey,
-      signedMessage.sublist(
-        signedMessage.length - 64,
-        signedMessage.length,
-      ),
-    );
+    final response = await ref.read(authRepositoryProvider).connectWallet(
+          address: publicKey.toBase58(),
+          encoding: base58encode(
+            signedMessage.sublist(
+              signedMessage.length - 64,
+              signedMessage.length,
+            ),
+          ),
+          apiUrl: apiUrl,
+        );
     if (response != null) {
       ref.read(environmentProvider.notifier).updateEnvironmentState(
             EnvironmentStateUpdateInput(
@@ -275,19 +283,17 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         : null;
   }
 
-  Future<dynamic> _signMessage(
-    MobileWalletAdapterClient client,
-    Ed25519HDPublicKey signer,
-    String overrideAuthToken,
-    String tempNetwork,
-  ) async {
+  Future<dynamic> _signMessage({
+    required MobileWalletAdapterClient client,
+    required Ed25519HDPublicKey signer,
+    required String overrideAuthToken,
+    required String apiUrl,
+  }) async {
     if (await _doReauthorize(client, overrideAuthToken)) {
-      await ref
-          .read(environmentProvider.notifier)
-          .updateTempNetwork(tempNetwork);
-      final message = await _walletService.getOneTimePassword(
-        publicKey: signer,
-      );
+      final message = await ref.read(authRepositoryProvider).getOneTimePassword(
+            address: signer.toBase58(),
+            apiUrl: apiUrl,
+          );
       if (message is ApiError) {
         return message.message;
       }

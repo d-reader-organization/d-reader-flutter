@@ -10,11 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final walletRepositoryProvider = Provider<WalletRepositoryImpl>(
   (ref) {
     return WalletRepositoryImpl(
-      client: ref.watch(
-        dioProvider(
-          null,
-        ),
-      ),
+      client: ref.watch(dioProvider),
     );
   },
 );
@@ -92,15 +88,13 @@ final networkChangeUpdateWallet =
   (ref, address) async {
     final wallet = await ref.read(myWalletProvider.future);
     final walletName = LocalStore.instance.get('walletName');
-    if (wallet != null && wallet.name != address) {
-      await ref.read(
-        updateWalletProvider(
-          UpdateWalletPayload(
-            address: address,
-            name: walletName,
-          ),
-        ).future,
-      );
+    if (wallet != null && walletName != address) {
+      await ref.read(walletRepositoryProvider).updateWallet(
+            UpdateWalletPayload(
+              address: address,
+              name: walletName,
+            ),
+          );
     }
   },
 );

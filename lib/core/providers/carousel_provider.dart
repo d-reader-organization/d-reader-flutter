@@ -5,11 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final carouselRepositoryProvider = Provider<CarouselRepositoryImpl>((ref) {
   return CarouselRepositoryImpl(
-    client: ref.watch(
-      dioProvider(
-        null,
-      ),
-    ),
+    client: ref.watch(dioProvider),
   );
 });
 

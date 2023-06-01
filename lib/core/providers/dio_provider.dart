@@ -4,10 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-final dioProvider = Provider.family<Dio, String?>((ref, overrideApiUrl) {
+final dioProvider = Provider<Dio>((ref) {
   final Dio dio = Dio(
     BaseOptions(
-      baseUrl: overrideApiUrl ?? ref.watch(environmentProvider).apiUrl,
+      baseUrl: ref.watch(environmentProvider).apiUrl,
     ),
   );
   return dio

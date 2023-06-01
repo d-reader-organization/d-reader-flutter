@@ -7,11 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final auctionHouseRepositoryProvider = Provider<AuctionHouseRepositoryImpl>(
   (ref) {
     return AuctionHouseRepositoryImpl(
-      client: ref.watch(
-        dioProvider(
-          null,
-        ),
-      ),
+      client: ref.watch(dioProvider),
     );
   },
 );

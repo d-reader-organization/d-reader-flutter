@@ -8,11 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final creatorRepositoryProvider = Provider<CreatorRepositoryImpl>((ref) {
   return CreatorRepositoryImpl(
-    client: ref.watch(
-      dioProvider(
-        null,
-      ),
-    ),
+    client: ref.watch(dioProvider),
   );
 });
 

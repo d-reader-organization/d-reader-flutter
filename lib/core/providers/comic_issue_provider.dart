@@ -10,11 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final comicIssueRepository = Provider<ComicIssueRepositoryImpl>(
   (ref) {
     return ComicIssueRepositoryImpl(
-      client: ref.watch(
-        dioProvider(
-          null,
-        ),
-      ),
+      client: ref.watch(dioProvider),
     );
   },
 );

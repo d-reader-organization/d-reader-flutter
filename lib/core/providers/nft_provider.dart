@@ -6,11 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final nftRepositoryProvider = Provider<NftRepositoryImpl>(
   (ref) {
     return NftRepositoryImpl(
-      client: ref.watch(
-        dioProvider(
-          null,
-        ),
-      ),
+      client: ref.watch(dioProvider),
     );
   },
 );

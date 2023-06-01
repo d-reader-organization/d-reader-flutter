@@ -35,7 +35,7 @@ final comicIssueDetailsProvider =
 });
 
 final comicIssuePagesProvider =
-    FutureProvider.family<List<PageModel>, int>((ref, id) async {
+    FutureProvider.autoDispose.family<List<PageModel>, int>((ref, id) async {
   return ref.read(comicIssueRepository).getComicIssuePages(id);
 });
 

@@ -16,6 +16,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
       'last-network',
     ),
     LocalStore.instance.delete(Config.hasSeenInitialKey),
+    LocalStore.instance.clear(),
   ]);
   await Future.wait(
     [

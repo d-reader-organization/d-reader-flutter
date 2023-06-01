@@ -49,7 +49,7 @@ final registerWalletToSocketEvents = Provider(
   },
 );
 
-final walletAssetsProvider = FutureProvider((ref) {
+final walletAssetsProvider = FutureProvider.autoDispose((ref) {
   return IoCContainer.resolveContainer<WalletRepositoryImpl>().myAssets();
 });
 

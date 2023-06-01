@@ -1,6 +1,9 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/filled_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SocialRow extends StatelessWidget {
@@ -15,9 +18,23 @@ class SocialRow extends StatelessWidget {
     return Row(
       children: [
         creator.lynkfire.isNotEmpty
-            ? FilledIcon(
-                iconData: FontAwesomeIcons.fire,
-                url: creator.lynkfire,
+            ? GestureDetector(
+                onTap: () {
+                  openUrl(creator.lynkfire);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  margin: const EdgeInsets.only(left: 6),
+                  decoration: BoxDecoration(
+                    color: ColorPalette.boxBackground300,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/lynkfire.svg',
+                    height: 20,
+                    width: 24,
+                  ),
+                ),
               )
             : const SizedBox(),
         creator.website.isNotEmpty

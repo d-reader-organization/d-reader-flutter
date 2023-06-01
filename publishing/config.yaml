@@ -21,12 +21,10 @@ app:
     - purpose: icon
       uri: ./512x512.png
 release:
-  address: AhD61gHgxec34t7d7ZPEYj45cjTKLkBcTMTp7zEYKgW
+  address: MypQuCoQxQYoLRUbynLnJu38bxhNaBW8N8EcuzrqzBT
   media:
     - purpose: icon
       uri: ./512x512.png
-    - purpose: screenshot
-      uri: ./screenshots/1.png
     - purpose: screenshot
       uri: ./screenshots/2.png
     - purpose: screenshot
@@ -35,10 +33,6 @@ release:
       uri: ./screenshots/4.png
     - purpose: screenshot
       uri: ./screenshots/5.png
-    - purpose: screenshot
-      uri: ./screenshots/1.png
-    - purpose: screenshot
-      uri: ./screenshots/feature_graphic.png
   files:
     - purpose: install
       uri: ./dReader.apk

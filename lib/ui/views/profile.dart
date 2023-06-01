@@ -24,7 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProfileView extends HookConsumerWidget {
@@ -334,7 +333,7 @@ class Avatar extends StatelessWidget {
         FilePickerResult? result = await FilePicker.platform.pickFiles();
         if (result != null) {
           File file = File(result.files.single.path ?? '');
-          final bytes = await file.readAsBytes();
+
           final notifier = ref.read(globalStateProvider.notifier);
           notifier.update(
             (state) => state.copyWith(
@@ -345,11 +344,7 @@ class Avatar extends StatelessWidget {
             updateWalletAvatarProvider(
               UpdateWalletPayload(
                 address: wallet.address,
-                avatar: http.MultipartFile.fromBytes(
-                  'avatar',
-                  bytes,
-                  filename: 'avatar.jpg',
-                ),
+                avatar: file,
               ),
             ).future,
           );

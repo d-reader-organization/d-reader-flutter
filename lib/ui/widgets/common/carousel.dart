@@ -35,15 +35,18 @@ class Carousel extends ConsumerWidget {
               .map(
                 (carouselItem) => GestureDetector(
                   onTap: () {
-                    if (carouselItem.externalLink != null) {
+                    if (carouselItem.externalLink != null &&
+                        carouselItem.externalLink!.isNotEmpty) {
                       openUrl(carouselItem.externalLink!);
-                    } else if (carouselItem.comicSlug != null) {
+                    } else if (carouselItem.comicSlug != null &&
+                        carouselItem.comicSlug!.isNotEmpty) {
                       return nextScreenPush(
                           context, ComicDetails(slug: carouselItem.comicSlug!));
                     } else if (carouselItem.comicIssueId != null) {
                       return nextScreenPush(context,
                           ComicIssueDetails(id: carouselItem.comicIssueId!));
-                    } else if (carouselItem.creatorSlug != null) {
+                    } else if (carouselItem.creatorSlug != null &&
+                        carouselItem.creatorSlug!.isNotEmpty) {
                       return nextScreenPush(context,
                           CreatorDetailsView(slug: carouselItem.creatorSlug!));
                     }

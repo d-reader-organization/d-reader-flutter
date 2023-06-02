@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/services/d_reader_wallet_service.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -49,7 +48,6 @@ void initApp() {
       overrides: [
         solanaProvider.overrideWith(
           (ref) => SolanaClientNotifier(
-            DReaderWalletService.instance,
             ref,
           ),
         ),

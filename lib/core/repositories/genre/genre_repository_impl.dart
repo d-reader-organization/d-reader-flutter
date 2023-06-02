@@ -1,23 +1,26 @@
-import 'dart:convert' show jsonDecode;
-
 import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/repositories/genre/genre_repository.dart';
-import 'package:d_reader_flutter/core/services/api_service.dart';
+import 'package:dio/dio.dart';
 
 class GenreRepositoryImpl implements GenreRepository {
+  final Dio client;
+
+  GenreRepositoryImpl({
+    required this.client,
+  });
+
   @override
   Future<List<GenreModel>> getGenres() async {
-    String? responseBody = await ApiService.instance.apiCallGet('/genre/get');
-    if (responseBody == null) {
-      return [];
-    }
-    Iterable decodedData = jsonDecode(responseBody);
-    return List<GenreModel>.from(
-      decodedData.map(
-        (item) => GenreModel.fromJson(
-          item,
-        ),
-      ),
-    );
+    final response = await client.get('/genre/get').then((value) => value.data);
+
+    return response != null
+        ? List<GenreModel>.from(
+            response.map(
+              (item) => GenreModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 }

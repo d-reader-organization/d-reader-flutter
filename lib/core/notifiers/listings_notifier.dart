@@ -14,6 +14,7 @@ final listingsAsyncProvider = AsyncNotifierProvider.autoDispose
 class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
     List<ListingModel>, ComicIssueModel> {
   bool isEnd = false;
+  bool isLoading = false;
   @override
   FutureOr<List<ListingModel>> build(ComicIssueModel arg) async {
     final listings = await ref.read(
@@ -53,9 +54,10 @@ class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
   }
 
   fetchNext() async {
-    if (isEnd) {
+    if (isEnd || isLoading) {
       return;
     }
+    isLoading = true;
     final newListings = await ref.read(
       listedItemsProvider(
         ListingsProviderArg(
@@ -68,6 +70,7 @@ class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
       isEnd = true;
       return;
     }
+    isLoading = false;
     state = AsyncValue.data([...?state.value, ...newListings]);
   }
 }

@@ -113,7 +113,7 @@ class DReaderScaffold extends ConsumerWidget {
                   ],
                 ),
           ),
-          extendBody: true,
+          extendBody: false,
           bottomNavigationBar:
               showBottomNavigation ? const CustomBottomNavigationBar() : null,
         ),

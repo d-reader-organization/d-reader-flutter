@@ -75,9 +75,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       var networkData = jsonDecode(localStoreData);
       final String? signature = networkData['signature'];
       state = state.copyWith(
-        apiUrl: selectedNetwork == SolanaCluster.devnet.value
-            ? Config.apiUrlDevnet
-            : Config.apiUrl,
+        apiUrl: networkData['apiUrl'],
         authToken: networkData['authToken'],
         jwtToken: networkData['jwtToken'],
         refreshToken: networkData['refreshToken'],
@@ -92,11 +90,9 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
 
   bool updateEnvironmentState(EnvironmentStateUpdateInput input) {
     final localStore = LocalStore.instance;
-    final bool isDevnet = input.solanaCluster == SolanaCluster.devnet.value ||
-        state.solanaCluster == SolanaCluster.devnet.value;
 
     state = state.copyWith(
-      apiUrl: isDevnet ? Config.apiUrlDevnet : Config.apiUrl,
+      apiUrl: input.apiUrl,
       authToken: input.authToken,
       jwtToken: input.jwtToken,
       refreshToken: input.refreshToken,
@@ -104,6 +100,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       publicKey: input.publicKey,
       signature: input.signature,
     );
+
     // localStore.put(
     //   isDevnet ? 'dev-network' : 'prod-network',
     //   jsonEncode(
@@ -131,15 +128,6 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
 
   void updateLastSelectedNetwork(String selectedNetwork) {
     LocalStore.instance.put('last-network', selectedNetwork);
-  }
-
-// this is added just to get OTP from proper apiUrl
-  Future updateTempNetwork(String tempNetwork) {
-    return LocalStore.instance.put('temp-network', tempNetwork);
-  }
-
-  void clearTempNetwork() {
-    LocalStore.instance.delete('temp-network');
   }
 
   Future<void> clearDataFromLocalStore(String cluster) async {

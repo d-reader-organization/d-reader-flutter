@@ -1,4 +1,4 @@
-import 'package:http/http.dart' show MultipartFile;
+import 'dart:io' show File;
 
 class WalletModel {
   final String role;
@@ -28,7 +28,7 @@ class WalletModel {
 
 class UpdateWalletPayload {
   final String address;
-  final MultipartFile? avatar;
+  final File? avatar;
   final String? name, referrer;
 
   UpdateWalletPayload({

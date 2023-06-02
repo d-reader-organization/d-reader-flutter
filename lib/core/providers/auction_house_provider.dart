@@ -1,26 +1,30 @@
 import 'package:d_reader_flutter/core/models/collection_stats.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
+import 'package:d_reader_flutter/core/providers/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/auction_house/repository_impl.dart';
-import 'package:d_reader_flutter/ioc.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final auctionHouseRepositoryProvider = Provider<AuctionHouseRepositoryImpl>(
+  (ref) {
+    return AuctionHouseRepositoryImpl(
+      client: ref.watch(dioProvider),
+    );
+  },
+);
 
 final listedItemsProvider = FutureProvider.autoDispose
     .family<List<ListingModel>, ListingsProviderArg>((ref, arg) async {
   ref.invalidate(selectedItemsProvider);
-  return await IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+  return ref
+      .read(auctionHouseRepositoryProvider)
       .getListedItems(issueId: arg.issueId, query: arg.query);
 });
 
 final collectionStatsProvider = FutureProvider.autoDispose
     .family<CollectionStatsModel?, int>((ref, issueId) async {
-  return await IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
+  return ref
+      .read(auctionHouseRepositoryProvider)
       .getCollectionStatus(issueId: issueId);
-});
-
-final buyListedItemProvider =
-    FutureProvider.autoDispose.family<String?, String>((ref, query) async {
-  return await IoCContainer.resolveContainer<AuctionHouseRepositoryImpl>()
-      .executeSale(query: query);
 });
 
 final selectedItemsProvider = StateProvider<List<ListingModel>>((ref) => []);

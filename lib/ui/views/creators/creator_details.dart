@@ -20,12 +20,15 @@ class CreatorDetailsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<CreatorModel> creator = ref.watch(creatorProvider(slug));
+    AsyncValue<CreatorModel?> creator = ref.watch(creatorProvider(slug));
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: SafeArea(
           child: creator.when(
         data: (creator) {
+          if (creator == null) {
+            return const SizedBox();
+          }
           return DefaultTabController(
             length: 3,
             child: NestedScrollView(

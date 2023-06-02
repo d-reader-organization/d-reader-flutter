@@ -51,6 +51,7 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_typeahead: ^4.3.8
   flutter_dotenv: ^5.0.2
+  dio: ^5.1.2
 
 dev_dependencies:
   flutter_test:

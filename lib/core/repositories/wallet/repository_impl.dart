@@ -5,32 +5,34 @@ import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
 import 'package:d_reader_flutter/core/services/api_service.dart';
+import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
+  final Dio client;
+
+  WalletRepositoryImpl({
+    required this.client,
+  });
   @override
   Future<List<WalletAsset>> myAssets() async {
-    String? responseBody =
-        await ApiService.instance.apiCallGet('/wallet/get/my-assets');
-    if (responseBody == null) {
-      return [];
-    }
-    final decodedData = jsonDecode(responseBody);
+    final response =
+        await client.get('/wallet/get/my-assets').then((value) => value.data);
 
-    return List<WalletAsset>.from(
-      decodedData.map(
-        (item) => WalletAsset.fromJson(item),
-      ),
-    );
+    return response != null
+        ? List<WalletAsset>.from(
+            response.map(
+              (item) => WalletAsset.fromJson(item),
+            ),
+          )
+        : [];
   }
 
   @override
   Future<WalletModel?> myWallet() async {
-    String? responseBody =
-        await ApiService.instance.apiCallGet('/wallet/get/me');
-    return responseBody == null
-        ? null
-        : WalletModel.fromJson(jsonDecode(responseBody));
+    final response =
+        await client.get('/wallet/get/me').then((value) => value.data);
+    return response != null ? WalletModel.fromJson(response) : null;
   }
 
   @override
@@ -42,31 +44,68 @@ class WalletRepositoryImpl implements WalletRepository {
     return responseBody != null
         ? WalletModel.fromJson(jsonDecode(responseBody))
         : null;
+    // if (payload.avatar == null) {
+    //   return null;
+    // }
+    // String fileName = payload.avatar!.path.split('/').last;
+
+    // var formData = FormData.fromMap({
+    //   'image': MultipartFile.fromBytes(payload.avatar!.readAsBytesSync(),
+    //       filename: fileName,
+    //       headers: {
+    //         'Content-Type': [
+    //           'multipart/form-data',
+    //         ],
+    //       }),
+    // });
+
+    // final response = await client
+    //     .patch('/wallet/update/${payload.address}/avatar',
+    //         data: formData,
+    //         options: Options(headers: {
+    //           'Content-Type': 'multipart/form-data',
+    //         }))
+    //     .then((value) => value.data)
+    //     .onError((error, stackTrace) {
+    //   print(error);
+    // });
+
+    // return response != null ? WalletModel.fromJson(response) : null;
   }
 
   @override
   Future<dynamic> updateWallet(
     UpdateWalletPayload payload,
   ) async {
-    dynamic responseBody = await ApiService.instance.apiCallPatch(
+    final response = await client.patch(
       '/wallet/update/${payload.address}',
-      body: {
+      data: {
         if (payload.name != null && payload.name!.isNotEmpty)
           "name": payload.name,
         if (payload.referrer != null && payload.referrer!.isNotEmpty)
           "referrer": payload.referrer
       },
-    );
-    if (responseBody is ApiError) {
+    ).then((value) {
+      if (value.statusCode != 200) {
+        return ApiError(
+          error: value.data['error'],
+          message: value.data['message'] is List
+              ? value.data['message'].join('. ')
+              : value.data['message'],
+          statusCode: value.data['statusCode'] ?? 500,
+        );
+      }
+      return value.data;
+    });
+
+    if (response is ApiError) {
       Sentry.captureMessage(
-        'Error: ${responseBody.message}: Status: ${responseBody.statusCode} - ${responseBody.error}',
+        'Error: ${response.message}: Status: ${response.statusCode} - ${response.error}',
         level: SentryLevel.error,
       );
-      return responseBody.message;
+      return response.message;
     }
-    return responseBody != null
-        ? WalletModel.fromJson(jsonDecode(responseBody))
-        : null;
+    return response != null ? WalletModel.fromJson(response) : null;
   }
 
   @override
@@ -75,9 +114,10 @@ class WalletRepositoryImpl implements WalletRepository {
       return false;
     }
     try {
-      String? responseBody = await ApiService.instance
-          .apiCallGet('/auth/wallet/validate-name/$name');
-      return responseBody != null ? jsonDecode(responseBody) : false;
+      final response = await client
+          .get('/auth/wallet/validate-name/$name')
+          .then((value) => value.data);
+      return response != null ? true : false;
     } catch (e) {
       return false;
     }
@@ -85,17 +125,31 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<String> updateReferrer(String referrer) async {
-    dynamic responseBody = await ApiService.instance.apiCallPatch(
+    final response = await client
+        .patch(
       '/wallet/redeem-referral/$referrer',
-    );
-    if (responseBody is ApiError) {
-      return responseBody.message;
+    )
+        .then((value) {
+      if (value.statusCode != 200) {
+        return ApiError(
+          error: value.data['error'],
+          message: value.data['message'] is List
+              ? value.data['message'].join('. ')
+              : value.data['message'],
+          statusCode: value.data['statusCode'] ?? 500,
+        );
+      }
+      return value.data;
+    });
+
+    if (response is ApiError) {
+      return response.message;
     }
     return 'OK';
   }
 
   @override
   Future syncWallet() {
-    return ApiService.instance.apiCallGet('/wallet/sync');
+    return client.get('/wallet/sync').then((value) => value.data);
   }
 }

@@ -116,12 +116,17 @@ class ApiService {
       if (payload.avatar == null) {
         return null;
       }
+      final imageFile = http.MultipartFile.fromBytes(
+        'avatar',
+        payload.avatar!.readAsBytesSync(),
+        filename: 'avatar.jpg',
+      );
       await _setters();
       Uri uri = Uri.parse('$_apiUrl$path');
       final token = LocalStore.instance.get(Config.tokenKey);
       var request = http.MultipartRequest('PATCH', uri)
         ..headers.addAll({HttpHeaders.authorizationHeader: '$token'})
-        ..files.add(payload.avatar!);
+        ..files.add(imageFile);
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
       return responseBody;

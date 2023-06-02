@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
-import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -69,30 +68,35 @@ class CreatorListItem extends StatelessWidget {
               fontSize: 14,
             ),
           ),
-          Expanded(
+          const Expanded(
             flex: 1,
-            child: SolanaPrice(
-              price: ((creator.stats?.totalVolume) ?? 0) / 100,
-              mainAxisAlignment: MainAxisAlignment.end,
-              textDirection: TextDirection.rtl,
-            ),
+            child: Text('--'),
+            //  SolanaPrice(
+            //   price: ((creator.stats?.totalVolume) ?? 0) / 100,
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   textDirection: TextDirection.rtl,
+            // ),
           ),
           Expanded(
             flex: 1,
             child: Text(
-              '${((creator.stats?.totalVolume) ?? 0).toStringAsFixed(1)}%',
+              '--', //'${((creator.stats?.totalVolume) ?? 0).toStringAsFixed(1)}%',
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: ColorPalette.dReaderGreen,
                   ),
             ),
           ),
-          Expanded(
+          const Expanded(
             flex: 1,
-            child: SolanaPrice(
-              price: ((creator.stats?.totalVolume) ?? 0) / 100,
+            child: Text(
+              '--',
               textDirection: TextDirection.rtl,
             ),
+            //  SolanaPrice(
+            //   price: ((creator.stats?.totalVolume) ?? 0) / 100,
+            //   textDirection: TextDirection.rtl,
+            // ),
           ),
         ],
       ),

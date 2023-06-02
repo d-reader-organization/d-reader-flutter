@@ -54,11 +54,12 @@ class EnvironmentState {
 }
 
 class EnvironmentStateUpdateInput {
-  final String? authToken, jwtToken, refreshToken, solanaCluster;
+  final String? apiUrl, authToken, jwtToken, refreshToken, solanaCluster;
   final Ed25519HDPublicKey? publicKey;
   final List<int>? signature;
 
   EnvironmentStateUpdateInput({
+    this.apiUrl,
     this.authToken,
     this.jwtToken,
     this.refreshToken,
@@ -72,6 +73,7 @@ class EnvironmentStateUpdateInput {
     final String? signature = json['signature'];
 
     return EnvironmentStateUpdateInput(
+      apiUrl: json['apiUrl'],
       authToken: json['authToken'],
       jwtToken: json['jwtToken'],
       refreshToken: json['refreshToken'],

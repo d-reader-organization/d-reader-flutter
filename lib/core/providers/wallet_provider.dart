@@ -86,9 +86,8 @@ final updateWalletProvider = FutureProvider.autoDispose
 final networkChangeUpdateWallet =
     FutureProvider.autoDispose.family<void, String>(
   (ref, address) async {
-    final wallet = await ref.read(myWalletProvider.future);
     final walletName = LocalStore.instance.get('walletName');
-    if (wallet != null && walletName != address && walletName != wallet.name) {
+    if (walletName != address) {
       await ref.read(walletRepositoryProvider).updateWallet(
             UpdateWalletPayload(
               address: address,

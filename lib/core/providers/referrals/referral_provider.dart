@@ -1,5 +1,4 @@
-import 'package:d_reader_flutter/core/repositories/wallet/repository_impl.dart';
-import 'package:d_reader_flutter/ioc.dart';
+import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final referrerNameProvider = StateProvider<String>((ref) {
@@ -8,7 +7,6 @@ final referrerNameProvider = StateProvider<String>((ref) {
 
 final updateReferrer = FutureProvider.autoDispose.family<String, String>(
   (ref, referrer) {
-    return IoCContainer.resolveContainer<WalletRepositoryImpl>()
-        .updateReferrer(referrer);
+    return ref.read(walletRepositoryProvider).updateReferrer(referrer);
   },
 );

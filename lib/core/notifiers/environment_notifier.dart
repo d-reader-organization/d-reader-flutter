@@ -132,10 +132,6 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     LocalStore.instance.put('last-network', selectedNetwork);
   }
 
-  void clearTempNetwork() {
-    LocalStore.instance.delete('temp-network');
-  }
-
   Future<void> clearDataFromLocalStore(String cluster) async {
     final localStore = LocalStore.instance;
     localStore.delete(Config.tokenKey);

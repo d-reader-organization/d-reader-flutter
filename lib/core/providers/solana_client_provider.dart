@@ -297,7 +297,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       if (message is ApiError) {
         return message.message;
       }
-      ref.read(environmentProvider.notifier).clearTempNetwork();
       final addresses = Uint8List.fromList(signer.bytes);
 
       final messageToBeSigned = Uint8List.fromList(utf8.encode(message));

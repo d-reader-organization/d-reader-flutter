@@ -88,7 +88,7 @@ final networkChangeUpdateWallet =
   (ref, address) async {
     final wallet = await ref.read(myWalletProvider.future);
     final walletName = LocalStore.instance.get('walletName');
-    if (wallet != null && walletName != address) {
+    if (wallet != null && walletName != address && walletName != wallet.name) {
       await ref.read(walletRepositoryProvider).updateWallet(
             UpdateWalletPayload(
               address: address,

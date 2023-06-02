@@ -75,9 +75,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       var networkData = jsonDecode(localStoreData);
       final String? signature = networkData['signature'];
       state = state.copyWith(
-        apiUrl: selectedNetwork == SolanaCluster.devnet.value
-            ? Config.apiUrlDevnet
-            : Config.apiUrl,
+        apiUrl: networkData['apiUrl'],
         authToken: networkData['authToken'],
         jwtToken: networkData['jwtToken'],
         refreshToken: networkData['refreshToken'],

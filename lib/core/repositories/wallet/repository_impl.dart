@@ -60,15 +60,6 @@ class WalletRepositoryImpl implements WalletRepository {
             "referrer": payload.referrer
         },
       ).then((value) {
-        if (value.statusCode != 200) {
-          return ApiError(
-            error: value.data['error'],
-            message: value.data['message'] is List
-                ? value.data['message'].join('. ')
-                : value.data['message'],
-            statusCode: value.data['statusCode'] ?? 500,
-          );
-        }
         return value.data;
       });
 
@@ -112,22 +103,15 @@ class WalletRepositoryImpl implements WalletRepository {
       '/wallet/redeem-referral/$referrer',
     )
         .then((value) {
-      if (value.statusCode != 200) {
-        return ApiError(
-          error: value.data['error'],
-          message: value.data['message'] is List
-              ? value.data['message'].join('. ')
-              : value.data['message'],
-          statusCode: value.data['statusCode'] ?? 500,
-        );
+      return 'OK';
+    }).onError((error, stackTrace) {
+      if (error is DioError) {
+        return error.response?.data['message'];
       }
-      return value.data;
+      return error.toString();
     });
 
-    if (response is ApiError) {
-      return response.message;
-    }
-    return 'OK';
+    return response;
   }
 
   @override

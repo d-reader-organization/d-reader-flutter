@@ -1,10 +1,6 @@
-import 'dart:convert' show jsonDecode;
-
-import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
-import 'package:d_reader_flutter/core/services/api_service.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -36,13 +32,30 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
-  Future<WalletModel?> updateAvatar(UpdateWalletPayload payload) async {
-    String? responseBody = await ApiService.instance.apiMultipartRequest(
-      '/wallet/update/${payload.address}/avatar',
-      payload,
-    );
-    return responseBody != null
-        ? WalletModel.fromJson(jsonDecode(responseBody))
+  Future<dynamic> updateAvatar(UpdateWalletPayload payload) async {
+    if (payload.avatar == null) {
+      return null;
+    }
+    String fileName = payload.avatar!.path.split('/').last;
+
+    FormData formData = FormData.fromMap({
+      "avatar": MultipartFile.fromBytes(
+        payload.avatar!.readAsBytesSync(),
+        filename: fileName,
+      ),
+    });
+    final response = await client
+        .patch('/wallet/update/${payload.address}/avatar', data: formData)
+        .then((value) => value.data)
+        .onError((error, stackTrace) {
+      if (error is DioError) {
+        return error.response?.data['message'];
+      }
+    });
+    return response != null
+        ? response is String
+            ? response
+            : WalletModel.fromJson(response)
         : null;
   }
 
@@ -50,35 +63,28 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<dynamic> updateWallet(
     UpdateWalletPayload payload,
   ) async {
-    try {
-      final response = await client.patch(
-        '/wallet/update/${payload.address}',
-        data: {
-          if (payload.name != null && payload.name!.isNotEmpty)
-            "name": payload.name,
-          if (payload.referrer != null && payload.referrer!.isNotEmpty)
-            "referrer": payload.referrer
-        },
-      ).then((value) {
-        return value.data;
-      });
+    final response = await client.patch(
+      '/wallet/update/${payload.address}',
+      data: {
+        if (payload.name != null && payload.name!.isNotEmpty)
+          "name": payload.name,
+        if (payload.referrer != null && payload.referrer!.isNotEmpty)
+          "referrer": payload.referrer
+      },
+    ).then((value) {
+      return value.data;
+    }).onError((error, stackTrace) {
+      Sentry.captureException(error);
+      if (error is DioError) {
+        return error;
+      }
+    });
 
-      if (response is ApiError) {
-        Sentry.captureMessage(
-          'Error: ${response.message}: Status: ${response.statusCode} - ${response.error}',
-          level: SentryLevel.error,
-        );
-        return response.message;
-      }
-      return response != null ? WalletModel.fromJson(response) : null;
-    } catch (err) {
-      if (err is DioError) {
-        Sentry.captureException(err);
-        return err.response?.data['message'];
-      }
-      Sentry.captureException(err);
-      return err.toString();
-    }
+    return response != null
+        ? response is DioError
+            ? response.response?.data['message']
+            : WalletModel.fromJson(response)
+        : null;
   }
 
   @override

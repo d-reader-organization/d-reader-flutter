@@ -72,7 +72,7 @@ final myWalletProvider = FutureProvider.autoDispose((ref) async {
 });
 
 final updateWalletAvatarProvider =
-    FutureProvider.family<WalletModel?, UpdateWalletPayload>(
+    FutureProvider.family<dynamic, UpdateWalletPayload>(
   (ref, payload) {
     return ref.read(walletRepositoryProvider).updateAvatar(payload);
   },

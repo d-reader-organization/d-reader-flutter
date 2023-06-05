@@ -61,8 +61,10 @@ class EReaderView extends ConsumerWidget {
         ),
         body: pagesProvider.when(
           data: (pages) {
-            bool canRead = issueProvider.value?.myStats?.canRead != null &&
-                issueProvider.value!.myStats!.canRead;
+            bool canRead = (issueProvider.value?.isFree != null &&
+                    !issueProvider.value!.isFree) &&
+                (issueProvider.value?.myStats?.canRead != null &&
+                    issueProvider.value!.myStats!.canRead);
             return GestureDetector(
               onTap: () {
                 if (ref.watch(isPageByPageReadingMode)) {

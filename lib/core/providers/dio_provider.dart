@@ -45,7 +45,7 @@ final dioProvider = Provider<Dio>((ref) {
               ref.invalidate(environmentProvider);
               return;
             }
-            Sentry.captureException(e);
+            Sentry.captureException(e.response?.data ?? e);
             return handler.next(e);
           },
         ),

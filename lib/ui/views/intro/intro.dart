@@ -142,7 +142,8 @@ class IntroView extends HookConsumerWidget {
                       await LocalStore.instance
                           .put(Config.hasSeenInitialKey, true);
                     } else {
-                      if (formKey.currentState!.validate()) {
+                      if (formKey.currentState != null &&
+                          formKey.currentState!.validate()) {
                         globalHook.value =
                             globalHook.value.copyWith(isLoading: true);
                         final String address = ref

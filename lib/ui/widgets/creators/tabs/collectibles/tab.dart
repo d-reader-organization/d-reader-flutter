@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/ui/widgets/common/cards/collectible_card.dart';
 import 'package:flutter/material.dart';
 
 class CreatorCollectiblesTab extends StatelessWidget {
@@ -6,15 +5,20 @@ class CreatorCollectiblesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 1,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.all(12.0),
-          child: CollectibleCard(),
-        );
-      },
+    return const Center(
+      child: Text(
+        'Nothing to see in here, move along',
+      ),
     );
+    //  ListView.builder(
+    //   itemCount: 1,
+    //   shrinkWrap: true,
+    //   itemBuilder: (context, index) {
+    //     return const Padding(
+    //       padding: EdgeInsets.all(12.0),
+    //       child: CollectibleCard(),
+    //     );
+    //   },
+    // );
   }
 }

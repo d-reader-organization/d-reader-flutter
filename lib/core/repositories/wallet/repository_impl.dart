@@ -44,68 +44,50 @@ class WalletRepositoryImpl implements WalletRepository {
     return responseBody != null
         ? WalletModel.fromJson(jsonDecode(responseBody))
         : null;
-    // if (payload.avatar == null) {
-    //   return null;
-    // }
-    // String fileName = payload.avatar!.path.split('/').last;
-
-    // var formData = FormData.fromMap({
-    //   'image': MultipartFile.fromBytes(payload.avatar!.readAsBytesSync(),
-    //       filename: fileName,
-    //       headers: {
-    //         'Content-Type': [
-    //           'multipart/form-data',
-    //         ],
-    //       }),
-    // });
-
-    // final response = await client
-    //     .patch('/wallet/update/${payload.address}/avatar',
-    //         data: formData,
-    //         options: Options(headers: {
-    //           'Content-Type': 'multipart/form-data',
-    //         }))
-    //     .then((value) => value.data)
-    //     .onError((error, stackTrace) {
-    //   print(error);
-    // });
-
-    // return response != null ? WalletModel.fromJson(response) : null;
   }
 
   @override
   Future<dynamic> updateWallet(
     UpdateWalletPayload payload,
   ) async {
-    final response = await client.patch(
-      '/wallet/update/${payload.address}',
-      data: {
-        if (payload.name != null && payload.name!.isNotEmpty)
-          "name": payload.name,
-        if (payload.referrer != null && payload.referrer!.isNotEmpty)
-          "referrer": payload.referrer
-      },
-    ).then((value) {
-      if (value.statusCode != 200) {
-        return ApiError(
-          error: value.data['error'],
-          message: value.data['message'] is List
-              ? value.data['message'].join('. ')
-              : value.data['message'],
-          statusCode: value.data['statusCode'] ?? 500,
-        );
-      }
-      return value.data;
-    });
+    try {
+      final response = await client.patch(
+        '/wallet/update/${payload.address}',
+        data: {
+          if (payload.name != null && payload.name!.isNotEmpty)
+            "name": payload.name,
+          if (payload.referrer != null && payload.referrer!.isNotEmpty)
+            "referrer": payload.referrer
+        },
+      ).then((value) {
+        if (value.statusCode != 200) {
+          return ApiError(
+            error: value.data['error'],
+            message: value.data['message'] is List
+                ? value.data['message'].join('. ')
+                : value.data['message'],
+            statusCode: value.data['statusCode'] ?? 500,
+          );
+        }
+        return value.data;
+      });
 
-    if (response is ApiError) {
-      Sentry.captureMessage(
-        'Error: ${response.message}: Status: ${response.statusCode} - ${response.error}',
-        level: SentryLevel.error,
-      );
-      return response.message;
+      if (response is ApiError) {
+        Sentry.captureMessage(
+          'Error: ${response.message}: Status: ${response.statusCode} - ${response.error}',
+          level: SentryLevel.error,
+        );
+        return response.message;
+      }
+      return response != null ? WalletModel.fromJson(response) : null;
+    } catch (err) {
+      if (err is DioError) {
+        Sentry.captureException(err);
+        return err.response?.data['message'];
+      }
+      Sentry.captureException(err);
+      return err.toString();
     }
-    return response != null ? WalletModel.fromJson(response) : null;
   }
 
   @override

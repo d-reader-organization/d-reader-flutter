@@ -93,6 +93,8 @@ class EReaderView extends ConsumerWidget {
                               : CommonCachedImage(
                                   fit: BoxFit.contain,
                                   imageUrl: pages[index].image,
+                                  cacheKey:
+                                      '$issueId-${pages[index].pageNumber}',
                                 ),
                         );
                       },
@@ -105,12 +107,18 @@ class EReaderView extends ConsumerWidget {
                       constrained: true,
                       child: ListView.builder(
                         itemCount: canRead ? pages.length : pages.length + 1,
-                        cacheExtent: pages.length * 300,
                         itemBuilder: (context, index) {
                           return index == pages.length
                               ? const PreviewImage()
                               : CommonCachedImage(
+                                  placeholder: Container(
+                                    height: 250,
+                                    width: double.infinity,
+                                    color: ColorPalette.boxBackground300,
+                                  ),
                                   imageUrl: pages[index].image,
+                                  cacheKey:
+                                      '$issueId-${pages[index].pageNumber}',
                                 );
                         },
                       ),

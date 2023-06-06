@@ -21,7 +21,7 @@ app:
     - purpose: icon
       uri: ./512x512.png
 release:
-  address: MypQuCoQxQYoLRUbynLnJu38bxhNaBW8N8EcuzrqzBT
+  address: DadXy9sYJgqia3TjJvFRCbZTNTSDpb7ALu8HkND3omcp
   media:
     - purpose: icon
       uri: ./512x512.png
@@ -43,7 +43,7 @@ release:
       long_description: >-
         Platform for discovering, trading, collecting, and reading digital
         graphic novels
-      new_in_version: Initial alpha release
+      new_in_version: UX improvements and production scaling
       saga_features: Exclusive early access, free/discounted collectible comics
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader

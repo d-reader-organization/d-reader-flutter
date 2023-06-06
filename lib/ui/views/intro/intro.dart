@@ -16,6 +16,7 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/intro/form.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -110,10 +111,35 @@ class IntroView extends HookConsumerWidget {
                             const Duration(
                               milliseconds: 400,
                             ),
-                            () {
+                            () async {
                               globalHook.value =
                                   globalHook.value.copyWith(isLoading: false);
                               if (isNew) {
+                                DeviceInfoPlugin deviceInfo =
+                                    DeviceInfoPlugin();
+                                AndroidDeviceInfo androidInfo =
+                                    await deviceInfo.androidInfo;
+
+                                if (androidInfo.model == 'Saga') {
+                                  final refererResult = await ref.read(
+                                    updateReferrer('Saga').future,
+                                  );
+                                  final bool isReferred = refererResult == 'OK';
+                                  if (context.mounted && !isReferred) {
+                                    shouldShowSetAccountScreen.value = false;
+                                    return ScaffoldMessenger.of(context)
+                                        .showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          refererResult,
+                                        ),
+                                        backgroundColor:
+                                            ColorPalette.dReaderRed,
+                                      ),
+                                    );
+                                  }
+                                }
+
                                 _introScreenKey.currentState?.next();
                               } else {
                                 nextScreenReplace(
@@ -142,7 +168,8 @@ class IntroView extends HookConsumerWidget {
                       await LocalStore.instance
                           .put(Config.hasSeenInitialKey, true);
                     } else {
-                      if (formKey.currentState!.validate()) {
+                      if (formKey.currentState != null &&
+                          formKey.currentState!.validate()) {
                         globalHook.value =
                             globalHook.value.copyWith(isLoading: true);
                         final String address = ref

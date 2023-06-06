@@ -61,8 +61,10 @@ class EReaderView extends ConsumerWidget {
         ),
         body: pagesProvider.when(
           data: (pages) {
-            bool canRead = issueProvider.value?.myStats?.canRead != null &&
-                issueProvider.value!.myStats!.canRead;
+            bool canRead = (issueProvider.value?.isFree != null &&
+                    !issueProvider.value!.isFree) &&
+                (issueProvider.value?.myStats?.canRead != null &&
+                    issueProvider.value!.myStats!.canRead);
             return GestureDetector(
               onTap: () {
                 if (ref.watch(isPageByPageReadingMode)) {
@@ -93,6 +95,8 @@ class EReaderView extends ConsumerWidget {
                               : CommonCachedImage(
                                   fit: BoxFit.contain,
                                   imageUrl: pages[index].image,
+                                  cacheKey:
+                                      '$issueId-${pages[index].pageNumber}',
                                 ),
                         );
                       },
@@ -105,12 +109,18 @@ class EReaderView extends ConsumerWidget {
                       constrained: true,
                       child: ListView.builder(
                         itemCount: canRead ? pages.length : pages.length + 1,
-                        cacheExtent: pages.length * 300,
                         itemBuilder: (context, index) {
                           return index == pages.length
                               ? const PreviewImage()
                               : CommonCachedImage(
+                                  placeholder: Container(
+                                    height: 400,
+                                    width: double.infinity,
+                                    color: ColorPalette.boxBackground300,
+                                  ),
                                   imageUrl: pages[index].image,
+                                  cacheKey:
+                                      '$issueId-${pages[index].pageNumber}',
                                 );
                         },
                       ),

@@ -85,7 +85,8 @@ class _IntroFormState extends ConsumerState<IntroForm> {
                 height: 8,
               ),
               ref.read(environmentProvider).solanaCluster ==
-                      SolanaCluster.devnet.value
+                          SolanaCluster.devnet.value ||
+                      wallet.hasBetaAccess
                   ? const SizedBox()
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.center,

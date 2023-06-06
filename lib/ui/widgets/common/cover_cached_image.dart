@@ -5,11 +5,13 @@ class CommonCachedImage extends StatelessWidget {
   final String imageUrl;
   final String? cacheKey;
   final BoxFit fit;
+  final Widget? placeholder;
   const CommonCachedImage({
     Key? key,
     required this.imageUrl,
     this.cacheKey,
     this.fit = BoxFit.cover,
+    this.placeholder,
   }) : super(key: key);
 
   @override
@@ -17,11 +19,13 @@ class CommonCachedImage extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: fit,
-      placeholder: (context, url) => Container(
-        height: 200,
-        width: 200,
-        color: Colors.grey,
-      ),
+      placeholder: (context, url) =>
+          placeholder ??
+          Container(
+            height: 200,
+            width: 200,
+            color: Colors.grey,
+          ),
       errorWidget: (context, url, error) => Container(
         height: 200,
         width: 200,

@@ -1,10 +1,6 @@
-import 'dart:convert' show jsonDecode;
-
-import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
-import 'package:d_reader_flutter/core/services/api_service.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -36,41 +32,31 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
-  Future<WalletModel?> updateAvatar(UpdateWalletPayload payload) async {
-    String? responseBody = await ApiService.instance.apiMultipartRequest(
-      '/wallet/update/${payload.address}/avatar',
-      payload,
-    );
-    return responseBody != null
-        ? WalletModel.fromJson(jsonDecode(responseBody))
+  Future<dynamic> updateAvatar(UpdateWalletPayload payload) async {
+    if (payload.avatar == null) {
+      return null;
+    }
+    String fileName = payload.avatar!.path.split('/').last;
+
+    FormData formData = FormData.fromMap({
+      "avatar": MultipartFile.fromBytes(
+        payload.avatar!.readAsBytesSync(),
+        filename: fileName,
+      ),
+    });
+    final response = await client
+        .patch('/wallet/update/${payload.address}/avatar', data: formData)
+        .then((value) => value.data)
+        .onError((error, stackTrace) {
+      if (error is DioError) {
+        return error.response?.data['message'];
+      }
+    });
+    return response != null
+        ? response is String
+            ? response
+            : WalletModel.fromJson(response)
         : null;
-    // if (payload.avatar == null) {
-    //   return null;
-    // }
-    // String fileName = payload.avatar!.path.split('/').last;
-
-    // var formData = FormData.fromMap({
-    //   'image': MultipartFile.fromBytes(payload.avatar!.readAsBytesSync(),
-    //       filename: fileName,
-    //       headers: {
-    //         'Content-Type': [
-    //           'multipart/form-data',
-    //         ],
-    //       }),
-    // });
-
-    // final response = await client
-    //     .patch('/wallet/update/${payload.address}/avatar',
-    //         data: formData,
-    //         options: Options(headers: {
-    //           'Content-Type': 'multipart/form-data',
-    //         }))
-    //     .then((value) => value.data)
-    //     .onError((error, stackTrace) {
-    //   print(error);
-    // });
-
-    // return response != null ? WalletModel.fromJson(response) : null;
   }
 
   @override
@@ -86,26 +72,19 @@ class WalletRepositoryImpl implements WalletRepository {
           "referrer": payload.referrer
       },
     ).then((value) {
-      if (value.statusCode != 200) {
-        return ApiError(
-          error: value.data['error'],
-          message: value.data['message'] is List
-              ? value.data['message'].join('. ')
-              : value.data['message'],
-          statusCode: value.data['statusCode'] ?? 500,
-        );
-      }
       return value.data;
+    }).onError((error, stackTrace) {
+      Sentry.captureException(error);
+      if (error is DioError) {
+        return error;
+      }
     });
 
-    if (response is ApiError) {
-      Sentry.captureMessage(
-        'Error: ${response.message}: Status: ${response.statusCode} - ${response.error}',
-        level: SentryLevel.error,
-      );
-      return response.message;
-    }
-    return response != null ? WalletModel.fromJson(response) : null;
+    return response != null
+        ? response is DioError
+            ? response.response?.data['message']
+            : WalletModel.fromJson(response)
+        : null;
   }
 
   @override
@@ -130,22 +109,15 @@ class WalletRepositoryImpl implements WalletRepository {
       '/wallet/redeem-referral/$referrer',
     )
         .then((value) {
-      if (value.statusCode != 200) {
-        return ApiError(
-          error: value.data['error'],
-          message: value.data['message'] is List
-              ? value.data['message'].join('. ')
-              : value.data['message'],
-          statusCode: value.data['statusCode'] ?? 500,
-        );
+      return 'OK';
+    }).onError((error, stackTrace) {
+      if (error is DioError) {
+        return error.response?.data['message'];
       }
-      return value.data;
+      return error.toString();
     });
 
-    if (response is ApiError) {
-      return response.message;
-    }
-    return 'OK';
+    return response;
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
-import 'package:d_reader_flutter/ioc.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
@@ -28,7 +27,6 @@ void main() async {
     ],
   );
   await LocalStore().init();
-  IoCContainer.register();
   if (kReleaseMode) {
     await SentryFlutter.init(
       (options) {

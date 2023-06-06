@@ -114,7 +114,7 @@ class EReaderView extends ConsumerWidget {
                               ? const PreviewImage()
                               : CommonCachedImage(
                                   placeholder: Container(
-                                    height: 250,
+                                    height: 400,
                                     width: double.infinity,
                                     color: ColorPalette.boxBackground300,
                                   ),

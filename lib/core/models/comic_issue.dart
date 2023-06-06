@@ -124,17 +124,19 @@ class ComicIssueMyStats {
     this.viewedAt,
   });
 
-  factory ComicIssueMyStats.fromJson(dynamic json) => ComicIssueMyStats(
-        rating: json['rating'],
-        isFavourite: json['isFavourite'],
-        canRead: json['canRead'],
-        readAt: json['readAt'],
-        viewedAt: json['viewedAt'] != null
-            ? DateTime.parse(
-                json['viewedAt'],
-              )
-            : null,
-      );
+  factory ComicIssueMyStats.fromJson(dynamic json) {
+    return ComicIssueMyStats(
+      rating: json['rating'],
+      isFavourite: json['isFavourite'],
+      canRead: json['canRead'],
+      readAt: json['readAt'] != null ? DateTime.parse(json['readAt']) : null,
+      viewedAt: json['viewedAt'] != null
+          ? DateTime.parse(
+              json['viewedAt'],
+            )
+          : null,
+    );
+  }
 }
 
 class ComicType {

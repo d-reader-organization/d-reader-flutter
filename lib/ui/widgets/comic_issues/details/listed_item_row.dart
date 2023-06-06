@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';

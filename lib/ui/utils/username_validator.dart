@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/validate_wallet_name.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 String? validateUsername({required String? value, required WidgetRef ref}) {

@@ -9,9 +9,8 @@ import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet_auth_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet_provider.dart';
-
+import 'package:d_reader_flutter/core/providers/wallet/wallet_auth_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

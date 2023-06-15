@@ -1,7 +1,9 @@
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -68,19 +70,12 @@ class FilterBottomSheet extends StatelessWidget {
               ],
             ),
             const SectionDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                SectionTitle(title: 'Genres'),
-                Text(
-                  'See all',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: ColorPalette.dReaderYellow100,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
+            const SectionTitle(title: 'Genres'),
+            const SizedBox(
+              height: 16,
+            ),
+            const GenreListView(
+              isFilterList: true,
             ),
             const SectionDivider(),
             const SortMenu(),
@@ -95,6 +90,7 @@ class FilterBottomSheet extends StatelessWidget {
             confirmText: 'Filter',
             onCancel: () {
               ref.invalidate(selectedFilterProvider);
+              ref.invalidate(selectedGenresProvider);
             },
             onSave: () {},
           );
@@ -131,7 +127,7 @@ class SectionDivider extends StatelessWidget {
     return Column(
       children: const [
         SizedBox(
-          height: 16,
+          height: 24,
         ),
         Divider(
           height: 1,
@@ -139,7 +135,7 @@ class SectionDivider extends StatelessWidget {
           color: ColorPalette.boxBackground300,
         ),
         SizedBox(
-          height: 16,
+          height: 24,
         ),
       ],
     );

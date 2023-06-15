@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/filter_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ class FilterIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool isActive = ref.watch(selectedFilterProvider) != null;
+    final bool isActive = ref.watch(selectedFilterProvider) != null ||
+        ref.watch(selectedGenresProvider).isNotEmpty;
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(

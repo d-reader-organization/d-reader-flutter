@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/filter_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -7,22 +8,34 @@ class FilterIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: ColorPalette.boxBackground200,
-        borderRadius: BorderRadius.circular(
-          8,
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          useSafeArea: true,
+          builder: (context) {
+            return const FilterBottomSheet();
+          },
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: ColorPalette.boxBackground200,
+          borderRadius: BorderRadius.circular(
+            8,
+          ),
+          border: Border.all(
+            color: ColorPalette.dReaderYellow100,
+          ),
         ),
-        border: Border.all(
-          color: ColorPalette.dReaderYellow100,
-        ),
-      ),
-      child: SvgPicture.asset(
-        'assets/icons/filter.svg',
-        colorFilter: const ColorFilter.mode(
-          Colors.white,
-          BlendMode.srcIn,
+        child: SvgPicture.asset(
+          'assets/icons/filter.svg',
+          colorFilter: const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
         ),
       ),
     );

@@ -12,7 +12,7 @@ InputDecoration searchInputDecoration({
     border: OutlineInputBorder(
       borderSide: const BorderSide(width: 0, style: BorderStyle.none),
       borderRadius: BorderRadius.circular(
-        16.0,
+        8,
       ),
     ),
     hintText: hintText,

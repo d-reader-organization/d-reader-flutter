@@ -1,13 +1,16 @@
+import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/filter_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FilterIcon extends StatelessWidget {
+class FilterIcon extends ConsumerWidget {
   const FilterIcon({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool isActive = ref.watch(selectedFilterProvider) != null;
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
@@ -19,37 +22,38 @@ class FilterIcon extends StatelessWidget {
           },
         );
       },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: ColorPalette.boxBackground200,
-          borderRadius: BorderRadius.circular(
-            8,
-          ),
-          border: Border.all(
-            color: ColorPalette.dReaderYellow100,
-          ),
-        ),
-        child: SvgPicture.asset(
-          'assets/icons/filter.svg',
-          colorFilter: const ColorFilter.mode(
-            Colors.white,
-            BlendMode.srcIn,
-          ),
-        ),
-      ),
+      child: isActive
+          ? Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: ColorPalette.boxBackground200,
+                borderRadius: BorderRadius.circular(
+                  8,
+                ),
+                border: Border.all(
+                  color: ColorPalette.dReaderYellow100,
+                ),
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/filter.svg',
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
+                ),
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: ColorPalette.boxBackground200,
+                borderRadius: BorderRadius.circular(
+                  8,
+                ),
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/filter.svg',
+              ),
+            ),
     );
-    // return Container(
-    //   padding: const EdgeInsets.all(16),
-    //   decoration: BoxDecoration(
-    //     color: ColorPalette.boxBackground200,
-    //     borderRadius: BorderRadius.circular(
-    //       8,
-    //     ),
-    //   ),
-    //   child: SvgPicture.asset(
-    //     'assets/icons/filter.svg',
-    //   ),
-    // );
   }
 }

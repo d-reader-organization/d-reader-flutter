@@ -1,8 +1,11 @@
+import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FilterBottomSheet extends StatelessWidget {
   const FilterBottomSheet({super.key});
@@ -42,6 +45,28 @@ class FilterBottomSheet extends StatelessWidget {
         child: ListView(
           children: [
             const SectionTitle(title: 'Show issues'),
+            const SizedBox(
+              height: 16,
+            ),
+            Row(
+              children: const [
+                Expanded(
+                  child: FilterContainer(
+                    id: FilterId.free,
+                    text: 'Free to read',
+                  ),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: FilterContainer(
+                    id: FilterId.popular,
+                    text: 'Popular',
+                  ),
+                ),
+              ],
+            ),
             const SectionDivider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,12 +87,18 @@ class FilterBottomSheet extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: SettingsButtonsBottom(
-        isLoading: false,
-        cancelText: 'Reset',
-        confirmText: 'Filter',
-        onCancel: () {},
-        onSave: () {},
+      bottomNavigationBar: Consumer(
+        builder: (context, ref, child) {
+          return SettingsButtonsBottom(
+            isLoading: false,
+            cancelText: 'Reset',
+            confirmText: 'Filter',
+            onCancel: () {
+              ref.invalidate(selectedFilterProvider);
+            },
+            onSave: () {},
+          );
+        },
       ),
     );
   }

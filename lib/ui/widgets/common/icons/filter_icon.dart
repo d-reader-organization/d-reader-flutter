@@ -12,7 +12,8 @@ class FilterIcon extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isActive = ref.watch(selectedFilterProvider) != null ||
-        ref.watch(selectedGenresProvider).isNotEmpty;
+        ref.watch(selectedGenresProvider).isNotEmpty ||
+        ref.watch(selectedSortByProvider) != null;
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(

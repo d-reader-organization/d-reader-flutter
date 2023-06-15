@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/ui/widgets/common/buttons/radio_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,7 +23,27 @@ class SortMenu extends StatelessWidget {
               ),
             ),
           ],
-        )
+        ),
+        Column(
+          children: const [
+            FilterRadioButton(
+              title: 'Rating',
+              value: SortByEnum.rating,
+            ),
+            FilterRadioButton(
+              title: 'Likes',
+              value: SortByEnum.likes,
+            ),
+            FilterRadioButton(
+              title: 'Readers',
+              value: SortByEnum.readers,
+            ),
+            FilterRadioButton(
+              title: 'Viewers',
+              value: SortByEnum.viewers,
+            ),
+          ],
+        ),
       ],
     );
   }

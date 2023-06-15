@@ -91,6 +91,7 @@ class FilterBottomSheet extends StatelessWidget {
             onCancel: () {
               ref.invalidate(selectedFilterProvider);
               ref.invalidate(selectedGenresProvider);
+              ref.invalidate(selectedSortByProvider);
             },
             onSave: () {},
           );

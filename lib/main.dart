@@ -75,6 +75,7 @@ class MyApp extends ConsumerWidget {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
         fontFamily: 'Urbanist',
+        unselectedWidgetColor: ColorPalette.greyscale100,
         textTheme: const TextTheme(
           titleSmall: TextStyle(
             fontSize: 16,

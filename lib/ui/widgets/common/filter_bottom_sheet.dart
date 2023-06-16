@@ -1,6 +1,11 @@
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
+import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_list_view.dart';
@@ -93,7 +98,18 @@ class FilterBottomSheet extends StatelessWidget {
               ref.invalidate(selectedGenresProvider);
               ref.invalidate(selectedSortByProvider);
             },
-            onSave: () {},
+            onSave: () {
+              final int currentTabIndex =
+                  ref.read(tabBarProvider).selectedTabIndex;
+              if (currentTabIndex == DiscoverTabViewEnum.comics.index) {
+                ref.invalidate(paginatedComicsProvider);
+              } else if (currentTabIndex == DiscoverTabViewEnum.issues.index) {
+                ref.invalidate(paginatedIssuesProvider);
+              } else {
+                ref.invalidate(paginatedCreatorsProvider);
+              }
+              Navigator.pop(context);
+            },
           );
         },
       ),

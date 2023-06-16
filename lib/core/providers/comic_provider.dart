@@ -24,7 +24,7 @@ final comicsProvider =
   },
 );
 
-final paginatedComicsProvider = StateNotifierProvider.autoDispose.family<
+final paginatedComicsProvider = StateNotifierProvider.family<
     PaginationNotifier<ComicModel>,
     PaginationState<ComicModel>,
     String?>((ref, query) {

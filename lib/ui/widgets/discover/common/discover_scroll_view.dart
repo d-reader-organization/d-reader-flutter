@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
+import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
@@ -14,8 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DiscoverScrollView extends ConsumerStatefulWidget {
-  final AutoDisposeStateNotifierProviderFamily<PaginationNotifier,
-      PaginationState, String?> listenableProvider;
+  final StateNotifierProviderFamily<PaginationNotifier, PaginationState,
+      String?> listenableProvider;
   final ScrollListType scrollListType;
 
   const DiscoverScrollView({
@@ -78,9 +79,13 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
   @override
   Widget build(BuildContext context) {
     String search = ref.watch(searchProvider).search;
+    final String genreTags = ref
+        .read(selectedGenresProvider)
+        .map((genreSlug) => 'genreSlugs[]=$genreSlug')
+        .join('&');
     final String query = widget.scrollListType == ScrollListType.issueList
-        ? 'titleSubstring=$search'
-        : 'nameSubstring=$search';
+        ? 'titleSubstring=$search&$genreTags'
+        : 'nameSubstring=$search&$genreTags';
     final provider = ref.watch(
       widget.listenableProvider(query),
     );

@@ -25,38 +25,29 @@ class FilterIcon extends ConsumerWidget {
           },
         );
       },
-      child: isActive
-          ? Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: ColorPalette.boxBackground200,
-                borderRadius: BorderRadius.circular(
-                  8,
-                ),
-                border: Border.all(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: ColorPalette.boxBackground200,
+          borderRadius: BorderRadius.circular(
+            8,
+          ),
+          border: isActive
+              ? Border.all(
                   color: ColorPalette.dReaderYellow100,
-                ),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/filter.svg',
-                colorFilter: const ColorFilter.mode(
+                )
+              : null,
+        ),
+        child: SvgPicture.asset(
+          'assets/icons/filter.svg',
+          colorFilter: isActive
+              ? const ColorFilter.mode(
                   Colors.white,
                   BlendMode.srcIn,
-                ),
-              ),
-            )
-          : Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: ColorPalette.boxBackground200,
-                borderRadius: BorderRadius.circular(
-                  8,
-                ),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/filter.svg',
-              ),
-            ),
+                )
+              : null,
+        ),
+      ),
     );
   }
 }

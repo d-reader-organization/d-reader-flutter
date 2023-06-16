@@ -1,3 +1,6 @@
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -93,7 +96,12 @@ class FilterBottomSheet extends StatelessWidget {
               ref.invalidate(selectedGenresProvider);
               ref.invalidate(selectedSortByProvider);
             },
-            onSave: () {},
+            onSave: () {
+              ref.invalidate(paginatedComicsProvider);
+              ref.invalidate(paginatedIssuesProvider);
+              ref.invalidate(paginatedCreatorsProvider);
+              Navigator.pop(context);
+            },
           );
         },
       ),

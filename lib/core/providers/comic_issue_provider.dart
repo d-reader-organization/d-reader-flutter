@@ -49,7 +49,7 @@ final rateComicIssueProvider =
   },
 );
 
-final paginatedIssuesProvider = StateNotifierProvider.autoDispose.family<
+final paginatedIssuesProvider = StateNotifierProvider.family<
     PaginationNotifier<ComicIssueModel>,
     PaginationState<ComicIssueModel>,
     String?>((ref, query) {

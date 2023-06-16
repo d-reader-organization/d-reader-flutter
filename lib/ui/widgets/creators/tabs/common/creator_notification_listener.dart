@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorNotificationListener extends ConsumerWidget {
-  final AutoDisposeStateNotifierProviderFamily<PaginationNotifier,
-      PaginationState, String?> listenableProvider;
+  final StateNotifierProviderFamily<PaginationNotifier, PaginationState,
+      String?> listenableProvider;
   final String query;
   final ScrollListType scrollListType;
   const CreatorNotificationListener({

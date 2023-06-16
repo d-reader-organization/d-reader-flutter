@@ -9,3 +9,7 @@ final selectedFilterProvider = StateProvider<FilterId?>((ref) {
 final selectedSortByProvider = StateProvider<SortByEnum?>((ref) {
   return null;
 });
+
+final showAllGenresProvider = StateProvider.autoDispose<bool>((ref) {
+  return false;
+});

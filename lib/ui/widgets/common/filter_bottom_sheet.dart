@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_list_view.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/expandable_list.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -73,13 +73,37 @@ class FilterBottomSheet extends StatelessWidget {
               ],
             ),
             const SectionDivider(),
-            const SectionTitle(title: 'Genres'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SectionTitle(title: 'Genres'),
+                Consumer(
+                  builder: (context, ref, child) {
+                    return ref.watch(showAllGenresProvider)
+                        ? const SizedBox()
+                        : GestureDetector(
+                            onTap: () {
+                              ref
+                                  .read(showAllGenresProvider.notifier)
+                                  .update((state) => true);
+                            },
+                            child: const Text(
+                              'See all',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: ColorPalette.dReaderYellow100,
+                              ),
+                            ),
+                          );
+                  },
+                ),
+              ],
+            ),
             const SizedBox(
               height: 16,
             ),
-            const GenreListView(
-              isFilterList: true,
-            ),
+            const ExpandableGenreList(),
             const SectionDivider(),
             const SortMenu(),
           ],

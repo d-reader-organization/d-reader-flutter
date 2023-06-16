@@ -1,16 +1,14 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_card.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_filter.dart';
+
 import 'package:d_reader_flutter/ui/widgets/genre/skeleton_genre_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class GenreListView extends ConsumerWidget {
-  final bool isFilterList;
   const GenreListView({
     Key? key,
-    this.isFilterList = false,
   }) : super(key: key);
 
   @override
@@ -25,13 +23,9 @@ class GenreListView extends ConsumerWidget {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return isFilterList
-                  ? GenreFilter(
-                      genre: data[index],
-                    )
-                  : GenreCard(
-                      genre: data[index],
-                    );
+              return GenreCard(
+                genre: data[index],
+              );
             },
           ),
         );

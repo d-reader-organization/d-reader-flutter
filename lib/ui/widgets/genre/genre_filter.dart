@@ -29,8 +29,7 @@ class GenreFilter extends ConsumerWidget {
       },
       child: Container(
         height: 87,
-        width: 87,
-        margin: const EdgeInsets.only(right: 16),
+        width: 85,
         decoration: BoxDecoration(
           color: ref.watch(selectedGenresProvider).contains(genre.slug)
               ? getColorFromGenreString(genre.color)

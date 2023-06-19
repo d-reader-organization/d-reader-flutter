@@ -41,7 +41,6 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
 
   @override
   Widget build(BuildContext context) {
-    print('RERENDER');
     return DefaultTabController(
       length: 3,
       initialIndex: ref.read(tabBarProvider).selectedTabIndex,

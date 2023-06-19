@@ -1,11 +1,13 @@
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_grid.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/radio_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
 import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
 import 'package:d_reader_flutter/ui/widgets/common/search_auto_complete.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -41,6 +43,7 @@ class HomeView extends StatelessWidget {
             const SectionHeading(
               title: 'Popular Comics',
               initialTab: DiscoverTabViewEnum.comics,
+              filter: FilterId.popular,
             ),
             const SizedBox(
               height: 16,
@@ -54,6 +57,7 @@ class HomeView extends StatelessWidget {
             const SectionHeading(
               title: 'New Episodes',
               initialTab: DiscoverTabViewEnum.issues,
+              sort: SortByEnum.latest,
             ),
             const SizedBox(
               height: 16,
@@ -78,6 +82,7 @@ class HomeView extends StatelessWidget {
             const SectionHeading(
               title: 'New Comics',
               initialTab: DiscoverTabViewEnum.comics,
+              sort: SortByEnum.latest,
             ),
             const SizedBox(
               height: 16,
@@ -91,6 +96,7 @@ class HomeView extends StatelessWidget {
             const SectionHeading(
               title: 'Free Episodes',
               initialTab: DiscoverTabViewEnum.issues,
+              filter: FilterId.free,
             ),
             const SizedBox(
               height: 16,

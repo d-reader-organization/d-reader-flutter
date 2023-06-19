@@ -27,6 +27,10 @@ class SortMenu extends StatelessWidget {
         Column(
           children: const [
             FilterRadioButton(
+              title: 'New',
+              value: SortByEnum.latest,
+            ),
+            FilterRadioButton(
               title: 'Rating',
               value: SortByEnum.rating,
             ),

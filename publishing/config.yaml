@@ -5,7 +5,7 @@ publisher:
   email: dapp.store@dreader.io
   media:
     - purpose: icon
-      uri: ./512x512.png
+      uri: ./512x512_rounded.png
 app:
   name: dReader
   address: FHJRMnXxYNccbr3CPBT76Zq7jejcbEVZhgqHEfTv3La4
@@ -19,12 +19,12 @@ app:
     website: https://dreader.io/
   media:
     - purpose: icon
-      uri: ./512x512.png
+      uri: ./512x512_rounded.png
 release:
   address: DadXy9sYJgqia3TjJvFRCbZTNTSDpb7ALu8HkND3omcp
   media:
     - purpose: icon
-      uri: ./512x512.png
+      uri: ./512x512_rounded.png
     - purpose: screenshot
       uri: ./screenshots/2.png
     - purpose: screenshot

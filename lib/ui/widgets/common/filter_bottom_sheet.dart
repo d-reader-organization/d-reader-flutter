@@ -84,23 +84,21 @@ class FilterBottomSheet extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SectionTitle(title: 'Genres'),
-                ref.watch(showAllGenresProvider)
-                    ? const SizedBox()
-                    : GestureDetector(
-                        onTap: () {
-                          ref
-                              .read(showAllGenresProvider.notifier)
-                              .update((state) => true);
-                        },
-                        child: const Text(
-                          'See all',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: ColorPalette.dReaderYellow100,
-                          ),
-                        ),
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    ref
+                        .read(showAllGenresProvider.notifier)
+                        .update((state) => !state);
+                  },
+                  child: Text(
+                    ref.watch(showAllGenresProvider) ? 'Hide' : 'See all',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: ColorPalette.dReaderYellow100,
+                    ),
+                  ),
+                ),
               ],
             ),
             const SizedBox(

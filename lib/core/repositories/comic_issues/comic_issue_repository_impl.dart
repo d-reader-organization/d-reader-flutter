@@ -53,6 +53,13 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
   }
 
   @override
+  Future<void> favouritiseIssue(int id) {
+    return client
+        .patch('/comic-issue/favouritise/$id')
+        .then((value) => value.data);
+  }
+
+  @override
   Future<dynamic> rateIssue({
     required int id,
     required int rating,

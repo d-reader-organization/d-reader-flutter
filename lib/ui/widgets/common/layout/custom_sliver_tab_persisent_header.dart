@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 class CustomSliverTabPersistentHeader extends StatelessWidget {
   final List<Tab> tabs;
+  final TabController? controller;
   const CustomSliverTabPersistentHeader({
     Key? key,
     required this.tabs,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -17,6 +19,7 @@ class CustomSliverTabPersistentHeader extends StatelessWidget {
         minHeight: 60,
         maxHeight: 60,
         child: CustomSliverTabBar(
+          controller: controller,
           children: tabs,
         ),
       ),

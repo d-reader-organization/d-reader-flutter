@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
+import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
@@ -12,10 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FilterBottomSheet extends StatelessWidget {
+class FilterBottomSheet extends ConsumerWidget {
   const FilterBottomSheet({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       appBar: PreferredSize(
@@ -49,84 +50,88 @@ class FilterBottomSheet extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [
-            const SectionTitle(title: 'Show issues'),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: const [
-                Expanded(
-                  child: FilterContainer(
-                    id: FilterId.free,
-                    text: 'Free to read',
-                  ),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: FilterContainer(
-                    id: FilterId.popular,
-                    text: 'Popular',
-                  ),
-                ),
-              ],
-            ),
-            const SectionDivider(),
+            ref.watch(tabBarProvider).selectedTabIndex == 1
+                ? Column(
+                    children: [
+                      const SectionTitle(title: 'Show issues'),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        children: const [
+                          Expanded(
+                            child: FilterContainer(
+                              id: FilterId.free,
+                              text: 'Free to read',
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                            child: FilterContainer(
+                              id: FilterId.popular,
+                              text: 'Popular',
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SectionDivider(),
+                    ],
+                  )
+                : const SizedBox(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SectionTitle(title: 'Genres'),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(showAllGenresProvider)
-                        ? const SizedBox()
-                        : GestureDetector(
-                            onTap: () {
-                              ref
-                                  .read(showAllGenresProvider.notifier)
-                                  .update((state) => true);
-                            },
-                            child: const Text(
-                              'See all',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: ColorPalette.dReaderYellow100,
-                              ),
-                            ),
-                          );
-                  },
-                ),
+                ref.watch(showAllGenresProvider)
+                    ? const SizedBox()
+                    : GestureDetector(
+                        onTap: () {
+                          ref
+                              .read(showAllGenresProvider.notifier)
+                              .update((state) => true);
+                        },
+                        child: const Text(
+                          'See all',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: ColorPalette.dReaderYellow100,
+                          ),
+                        ),
+                      ),
               ],
             ),
             const SizedBox(
               height: 16,
             ),
             const ExpandableGenreList(),
-            const SectionDivider(),
-            const SortMenu(),
+            ref.watch(tabBarProvider).selectedTabIndex == 1
+                ? Column(
+                    children: const [
+                      SectionDivider(),
+                      SortMenu(),
+                    ],
+                  )
+                : const SizedBox(),
           ],
         ),
       ),
-      bottomNavigationBar: Consumer(
-        builder: (context, ref, child) {
-          return SettingsButtonsBottom(
-            isLoading: false,
-            cancelText: 'Reset',
-            confirmText: 'Filter',
-            onCancel: () {
-              ref.invalidate(selectedFilterProvider);
-              ref.invalidate(selectedGenresProvider);
-              ref.invalidate(selectedSortByProvider);
-            },
-            onSave: () {
-              ref.invalidate(paginatedComicsProvider);
-              ref.invalidate(paginatedIssuesProvider);
-              ref.invalidate(paginatedCreatorsProvider);
-              Navigator.pop(context);
-            },
-          );
+      bottomNavigationBar: SettingsButtonsBottom(
+        isLoading: false,
+        cancelText: 'Reset',
+        confirmText: 'Filter',
+        onCancel: () {
+          ref.invalidate(selectedFilterProvider);
+          ref.invalidate(selectedGenresProvider);
+          ref.invalidate(selectedSortByProvider);
+        },
+        onSave: () {
+          ref.invalidate(paginatedComicsProvider);
+          ref.invalidate(paginatedIssuesProvider);
+          ref.invalidate(paginatedCreatorsProvider);
+          Navigator.pop(context);
         },
       ),
     );

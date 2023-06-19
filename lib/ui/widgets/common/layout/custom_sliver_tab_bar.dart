@@ -5,9 +5,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CustomSliverTabBar extends ConsumerWidget with PreferredSizeWidget {
   final List<Widget> children;
+  final TabController? controller;
   const CustomSliverTabBar({
     Key? key,
     required this.children,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -37,6 +39,7 @@ class CustomSliverTabBar extends ConsumerWidget with PreferredSizeWidget {
               ref.read(searchProvider).searchController.clear();
             },
             tabs: children,
+            controller: controller,
             indicatorWeight: 4,
             indicatorColor: ColorPalette.dReaderYellow100,
             labelColor: ColorPalette.dReaderYellow100,

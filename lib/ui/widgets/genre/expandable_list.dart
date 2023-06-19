@@ -16,16 +16,24 @@ class ExpandableGenreList extends ConsumerWidget {
     return genres.when(
       data: (data) {
         final double screenWidth = MediaQuery.of(context).size.width;
+        final bool isTablet = screenWidth >= 600;
         data = ref.watch(showAllGenresProvider)
             ? data
-            : data.sublist(0, screenWidth >= 440 ? 4 : 3);
-        return Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 16,
-          runSpacing: 16,
-          children: data.map((item) {
-            return GenreFilter(genre: item);
-          }).toList(),
+            : data.sublist(0, isTablet ? 8 : 4);
+        return GridView.builder(
+          itemCount: data.length,
+          physics: const PageScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: isTablet ? 8 : 4,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
+          itemBuilder: (context, index) {
+            return GenreFilter(
+              genre: data[index],
+            );
+          },
         );
       },
       error: (err, stack) => Text('Error: $err'),

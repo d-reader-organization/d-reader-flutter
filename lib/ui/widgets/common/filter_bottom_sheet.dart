@@ -22,12 +22,16 @@ class FilterBottomSheet extends ConsumerWidget {
       appBar: PreferredSize(
         preferredSize: const Size(0, 64),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
           child: AppBar(
             backgroundColor: ColorPalette.appBackgroundColor,
             elevation: 0,
             leading: SvgPicture.asset(
-              'assets/icons/filter_2.svg',
+              'assets/icons/filter.svg',
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
               height: 24,
               width: 24,
             ),
@@ -52,6 +56,7 @@ class FilterBottomSheet extends ConsumerWidget {
           children: [
             ref.watch(tabBarProvider).selectedTabIndex == 1
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SectionTitle(title: 'Show issues'),
                       const SizedBox(

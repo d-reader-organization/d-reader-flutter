@@ -7,14 +7,16 @@ import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dar
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 String getSortByQueryString(SortByEnum selected) {
-  if (selected == SortByEnum.likes) {
-    return 'tag=likes';
+  if (selected == SortByEnum.latest) {
+    return 'sortTag=latest';
+  } else if (selected == SortByEnum.likes) {
+    return 'sortTag=likes';
   } else if (selected == SortByEnum.rating) {
-    return 'tag=rating';
+    return 'sortTag=rating';
   } else if (selected == SortByEnum.readers) {
-    return 'tag=readers';
+    return 'sortTag=readers';
   } else if (selected == SortByEnum.viewers) {
-    return 'tag=viewers';
+    return 'sortTag=viewers';
   }
   return '';
 }
@@ -29,8 +31,8 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   final SortByEnum? selectedSortBy = ref.read(selectedSortByProvider);
   final String tagFilter = selectedFilter != null
       ? selectedFilter == FilterId.free
-          ? 'tag=free'
-          : 'tag=popular'
+          ? 'filterTag=free'
+          : 'filterTag=popular'
       : '';
   final String sortByFilter =
       selectedSortBy != null ? getSortByQueryString(selectedSortBy) : '';

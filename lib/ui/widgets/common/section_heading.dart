@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -47,11 +48,14 @@ class SectionHeading extends ConsumerWidget {
                               curve: Curves.linear,
                               duration: const Duration(milliseconds: 350),
                             );
+                        ref.invalidate(selectedGenresProvider);
                         if (filter != null) {
+                          ref.invalidate(selectedSortByProvider);
                           ref
                               .read(selectedFilterProvider.notifier)
                               .update((state) => filter);
                         } else if (sort != null) {
+                          ref.invalidate(selectedFilterProvider);
                           ref
                               .read(selectedSortByProvider.notifier)
                               .update((state) => sort);

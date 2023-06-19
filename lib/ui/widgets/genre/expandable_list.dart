@@ -26,8 +26,9 @@ class ExpandableGenreList extends ConsumerWidget {
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: isTablet ? 8 : 4,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
+            crossAxisSpacing: screenWidth <= 380 ? 8 : 16,
+            mainAxisSpacing: screenWidth <= 380 ? 8 : 16,
+            mainAxisExtent: 87,
           ),
           itemBuilder: (context, index) {
             return GenreFilter(

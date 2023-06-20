@@ -44,6 +44,18 @@ build-prod-apk:
 	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_PROD) --dart-define=apiUrlDevnet=$(API_URL_PROD_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor prod && \
 	mv ./build/app/outputs/flutter-apk/app-armeabi-v7a-prod-release.apk ./apks/dReader.apk
 
+start-saga-release:
+	pre-saga-release create-saga-release publish-saga-update
+
+pre-saga-release:
+	make build-prod-apk && mv ./apks/dReader.apk ./publishing/
+
+create-saga-release:
+	cd publishing && nvm use && npx dapp-store create release -k ${keyPairPath} -b ~/Library/Android/sdk/build-tools/34.0.0-rc3 -u ${rpcMainnet}
+
+publish-saga-update:
+	cd publishing && nvm use && npx dapp-store publish update -k ${keyPairPath} -u ${rpcMainnet} --requestor-is-authorized --complies-with-solana-dapp-store-policies
+
 clean:
 	flutter clean
 

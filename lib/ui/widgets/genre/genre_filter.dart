@@ -1,16 +1,14 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
-import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
-import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/justify_color_string.dart';
-import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class GenreCard extends ConsumerWidget {
+class GenreFilter extends ConsumerWidget {
   final GenreModel genre;
-  const GenreCard({
+  const GenreFilter({
     Key? key,
     required this.genre,
   }) : super(key: key);
@@ -19,27 +17,25 @@ class GenreCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        ref.read(selectedGenresProvider.notifier).update(
-              (state) => [genre.slug],
-            );
-        ref.read(tabBarProvider.notifier).setTabIndex(
-              DiscoverTabViewEnum.comics.index,
-            );
-        ref.read(scaffoldProvider.notifier).setNavigationIndex(1);
-        ref.read(scaffoldPageController).animateToPage(
-              1,
-              curve: Curves.linear,
-              duration: const Duration(milliseconds: 350),
-            );
+        final selectedGenres = ref.read(selectedGenresProvider);
+        final notifer = ref.read(selectedGenresProvider.notifier);
+        if (selectedGenres.contains(genre.slug)) {
+          selectedGenres.remove(genre.slug);
+        } else {
+          selectedGenres.add(genre.slug);
+        }
+
+        notifer.update((state) => [...selectedGenres]);
       },
       child: Container(
-        height: 90,
+        height: 87,
         width: 85,
-        margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
-          color: getColorFromGenreString(genre.color),
+          color: ref.watch(selectedGenresProvider).contains(genre.slug)
+              ? getColorFromGenreString(genre.color)
+              : null,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(width: 0),
+          border: Border.all(color: ColorPalette.boxBackground300),
         ),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         child: Column(

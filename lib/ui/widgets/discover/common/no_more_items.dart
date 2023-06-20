@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NoMoreItemsWidget extends ConsumerWidget {
-  final AutoDisposeStateNotifierProviderFamily<PaginationNotifier,
-      PaginationState, String?> listenableProvider;
+  final StateNotifierProviderFamily<PaginationNotifier, PaginationState,
+      String?> listenableProvider;
   final String query;
   const NoMoreItemsWidget({
     super.key,

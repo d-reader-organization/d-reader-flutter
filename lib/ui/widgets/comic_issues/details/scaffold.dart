@@ -16,6 +16,7 @@ import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
@@ -264,14 +265,26 @@ class _ComicIssueDetailsScaffoldState
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: RatingIcon(
-                            initialRating:
-                                widget.issue.stats?.averageRating ?? 0,
-                            isRatedByMe: widget.issue.myStats?.rating != null,
-                            issueId: widget.issue.id,
-                          ),
+                        Row(
+                          children: [
+                            RatingIcon(
+                              initialRating:
+                                  widget.issue.stats?.averageRating ?? 0,
+                              isRatedByMe: widget.issue.myStats?.rating != null,
+                              issueId: widget.issue.id,
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            FavouriteIconCount(
+                              favouritesCount:
+                                  widget.issue.stats?.favouritesCount ?? 0,
+                              isFavourite:
+                                  widget.issue.myStats?.isFavourite ?? false,
+                              slug: widget.issue.slug,
+                              issueId: widget.issue.id,
+                            ),
+                          ],
                         ),
                       ],
                     ),

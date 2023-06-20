@@ -1,7 +1,11 @@
+import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/radio_button.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,10 +13,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class SectionHeading extends ConsumerWidget {
   final String title;
   final DiscoverTabViewEnum? initialTab;
+  final FilterId? filter;
+  final SortByEnum? sort;
   const SectionHeading({
     Key? key,
     required this.title,
     this.initialTab,
+    this.filter,
+    this.sort,
   }) : super(key: key);
 
   @override
@@ -40,6 +48,18 @@ class SectionHeading extends ConsumerWidget {
                               curve: Curves.linear,
                               duration: const Duration(milliseconds: 350),
                             );
+                        ref.invalidate(selectedGenresProvider);
+                        if (filter != null) {
+                          ref.invalidate(selectedSortByProvider);
+                          ref
+                              .read(selectedFilterProvider.notifier)
+                              .update((state) => filter);
+                        } else if (sort != null) {
+                          ref.invalidate(selectedFilterProvider);
+                          ref
+                              .read(selectedSortByProvider.notifier)
+                              .update((state) => sort);
+                        }
                       }
                     : null,
                 child: Text(

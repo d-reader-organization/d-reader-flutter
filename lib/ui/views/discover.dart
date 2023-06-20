@@ -10,11 +10,37 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum DiscoverTabViewEnum { comics, issues, creators }
 
-class DiscoverView extends ConsumerWidget {
-  const DiscoverView({Key? key}) : super(key: key);
+class DiscoverView extends ConsumerStatefulWidget {
+  const DiscoverView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _DiscoverViewState();
+}
+
+class _DiscoverViewState extends ConsumerState<DiscoverView>
+    with SingleTickerProviderStateMixin {
+  late TabController _controller;
+
+  @override
+  void initState() {
+    _controller = TabController(
+        length: 3,
+        vsync: this,
+        initialIndex: ref.read(tabBarProvider).selectedTabIndex);
+    _controller.addListener(() {
+      ref.read(tabBarProvider.notifier).setTabIndex(_controller.index);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       initialIndex: ref.read(tabBarProvider).selectedTabIndex,
@@ -25,8 +51,9 @@ class DiscoverView extends ConsumerWidget {
               child: MintingProgressWidget(),
             ),
             const SearchBarSliver(),
-            const CustomSliverTabPersistentHeader(
-              tabs: [
+            CustomSliverTabPersistentHeader(
+              controller: _controller,
+              tabs: const [
                 Tab(
                   text: 'Comics',
                 ),
@@ -40,8 +67,9 @@ class DiscoverView extends ConsumerWidget {
             ),
           ];
         },
-        body: const TabBarView(
-          children: [
+        body: TabBarView(
+          controller: _controller,
+          children: const [
             DiscoverComicsTab(),
             DiscoverIssuesTab(),
             DiscoverCreatorsTab(),

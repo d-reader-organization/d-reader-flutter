@@ -4,12 +4,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsButtonsBottom extends StatelessWidget {
   final bool isLoading;
-  final Function() onCancel;
-  final Function() onSave;
+  final String cancelText, confirmText;
+  final Function() onCancel, onSave;
 
   const SettingsButtonsBottom({
     super.key,
     required this.isLoading,
+    this.cancelText = 'Cancel',
+    this.confirmText = 'Save',
     required this.onCancel,
     required this.onSave,
   });
@@ -17,7 +19,7 @@ class SettingsButtonsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
         children: [
           Expanded(
@@ -28,7 +30,7 @@ class SettingsButtonsBottom extends StatelessWidget {
               backgroundColor: Colors.transparent,
               textColor: const Color(0xFFEBEDF3),
               borderColor: const Color(0xFFEBEDF3),
-              child: const Text('Cancel'),
+              child: Text(cancelText),
             ),
           ),
           Consumer(
@@ -39,7 +41,7 @@ class SettingsButtonsBottom extends StatelessWidget {
                   size: const Size(double.infinity, 40),
                   onPressed: onSave,
                   borderRadius: BorderRadius.circular(8),
-                  child: const Text('Save'),
+                  child: Text(confirmText),
                 ),
               );
             },

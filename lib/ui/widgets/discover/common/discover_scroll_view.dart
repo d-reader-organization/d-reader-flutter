@@ -2,9 +2,9 @@ import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
-import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/ui/utils/discover_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_list.dart';
@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DiscoverScrollView extends ConsumerStatefulWidget {
-  final AutoDisposeStateNotifierProviderFamily<PaginationNotifier,
-      PaginationState, String?> listenableProvider;
+  final StateNotifierProviderFamily<PaginationNotifier, PaginationState,
+      String?> listenableProvider;
   final ScrollListType scrollListType;
 
   const DiscoverScrollView({
@@ -77,12 +77,11 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
 
   @override
   Widget build(BuildContext context) {
-    String search = ref.watch(searchProvider).search;
-    final String query = widget.scrollListType == ScrollListType.issueList
-        ? 'titleSubstring=$search'
-        : 'nameSubstring=$search';
+    final String query = getFilterQueryString(ref, widget.scrollListType);
     final provider = ref.watch(
-      widget.listenableProvider(query),
+      widget.listenableProvider(
+        query,
+      ),
     );
 
     _scrollController.addListener(() {

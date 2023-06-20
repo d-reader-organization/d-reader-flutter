@@ -24,7 +24,7 @@ final creatorProvider =
   return await ref.read(creatorRepositoryProvider).getCreator(slug);
 });
 
-final paginatedCreatorsProvider = StateNotifierProvider.autoDispose.family<
+final paginatedCreatorsProvider = StateNotifierProvider.family<
     PaginationNotifier<CreatorModel>,
     PaginationState<CreatorModel>,
     String?>((ref, query) {

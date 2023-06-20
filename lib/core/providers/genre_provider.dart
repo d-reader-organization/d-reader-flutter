@@ -14,3 +14,9 @@ final genreRepositoryProvider = Provider<GenreRepositoryImpl>(
 final genreProvider = FutureProvider<List<GenreModel>>((ref) async {
   return await ref.read(genreRepositoryProvider).getGenres();
 });
+
+final selectedGenresProvider = StateProvider<List<String>>(
+  (ref) {
+    return [];
+  },
+);

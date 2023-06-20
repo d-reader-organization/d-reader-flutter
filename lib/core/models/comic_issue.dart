@@ -1,21 +1,22 @@
+import 'package:d_reader_flutter/core/models/collaborator.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/core/models/stateful_cover.dart';
+import 'package:d_reader_flutter/core/models/stateless_cover.dart';
 
 class ComicIssueModel {
-  final int id;
-  final int number;
-  final String title;
-  final String slug;
-  final String description;
-  final String cover;
+  final int id, number, supply;
+  final String cover, description, slug, title;
+  final bool isPopular, isFree;
+  final String? candyMachineAddress;
+  final double sellerFee;
+  final DateTime releaseDate;
   final ComicIssueStats? stats;
   final ComicIssueMyStats? myStats;
   final ComicType? comic;
   final CreatorModel creator;
-  final bool isPopular, isFree;
-  final DateTime releaseDate;
-  final int supply;
-  final String? candyMachineAddress;
-  final double sellerFee;
+  final List<Collaborator>? collaborators;
+  final List<StatelessCover>? statelessCovers;
+  final List<StatefulCover>? statefulCovers;
 
   ComicIssueModel({
     required this.id,
@@ -34,6 +35,9 @@ class ComicIssueModel {
     required this.isFree,
     required this.sellerFee,
     this.candyMachineAddress,
+    this.collaborators,
+    this.statelessCovers,
+    this.statefulCovers,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -61,6 +65,33 @@ class ComicIssueModel {
       candyMachineAddress: json['candyMachineAddress'],
       sellerFee:
           json['sellerFee'] is int ? json['sellerFee'] + .0 : json['sellerFee'],
+      collaborators: json['collaborators'] != null
+          ? List<Collaborator>.from(
+              json['collaborators'].map(
+                (item) => Collaborator.fromJson(
+                  item,
+                ),
+              ),
+            )
+          : [],
+      statelessCovers: json['statelessCovers'] != null
+          ? List<StatelessCover>.from(
+              json['statelessCovers'].map(
+                (item) => StatelessCover.fromJson(
+                  item,
+                ),
+              ),
+            )
+          : [],
+      statefulCovers: json['statefulCovers'] != null
+          ? List<StatefulCover>.from(
+              json['statefulCovers'].map(
+                (item) => StatefulCover.fromJson(
+                  item,
+                ),
+              ),
+            )
+          : [],
     );
   }
 }

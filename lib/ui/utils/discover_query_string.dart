@@ -2,8 +2,6 @@ import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/radio_button.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 String getSortByQueryString(SortByEnum selected) {
@@ -21,6 +19,10 @@ String getSortByQueryString(SortByEnum selected) {
   return '';
 }
 
+String getSortDirection(SortDirection direction) {
+  return direction == SortDirection.asc ? 'asc' : 'desc';
+}
+
 String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   String search = ref.watch(searchProvider).search;
   final String genreTags = ref
@@ -29,6 +31,7 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
       .join('&');
   final FilterId? selectedFilter = ref.read(selectedFilterProvider);
   final SortByEnum? selectedSortBy = ref.read(selectedSortByProvider);
+  final SortDirection selectedSortDirection = ref.read(sortDirectionProvider);
   final String tagFilter = selectedFilter != null
       ? selectedFilter == FilterId.free
           ? 'filterTag=free'
@@ -36,8 +39,9 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
       : '';
   final String sortByFilter =
       selectedSortBy != null ? getSortByQueryString(selectedSortBy) : '';
+  final String sortDirection = getSortDirection(selectedSortDirection);
   final String common =
-      '${adjustQueryString(genreTags)}${adjustQueryString(sortByFilter)}${adjustQueryString(tagFilter)}';
+      'sortOrder=$sortDirection&${adjustQueryString(genreTags)}${adjustQueryString(sortByFilter)}${adjustQueryString(tagFilter)}';
   final String query = scrollListType == ScrollListType.issueList
       ? '$common${'titleSubstring=$search'}'
       : '$common${'nameSubstring=$search'}';

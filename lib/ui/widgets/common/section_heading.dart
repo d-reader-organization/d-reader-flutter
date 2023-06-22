@@ -4,8 +4,6 @@ import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/radio_button.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

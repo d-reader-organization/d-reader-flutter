@@ -2,8 +2,6 @@ import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum SortByEnum { latest, rating, likes, readers, viewers }
-
 class FilterRadioButton extends ConsumerWidget {
   final String title;
   final SortByEnum value;

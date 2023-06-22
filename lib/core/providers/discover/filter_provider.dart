@@ -21,7 +21,7 @@ final showAllGenresProvider = StateProvider.autoDispose<bool>((ref) {
   return false;
 });
 
-final sortDirectionProvider = StateProvider.autoDispose<SortDirection>(
+final sortDirectionProvider = StateProvider<SortDirection>(
   (ref) {
     return SortDirection.desc;
   },

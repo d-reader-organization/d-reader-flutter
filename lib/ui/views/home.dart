@@ -5,11 +5,8 @@ import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
 import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
-// import 'package:d_reader_flutter/ui/widgets/common/search_auto_complete.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
-// import 'package:d_reader_flutter/ui/widgets/genre/genre_list_view.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -21,10 +18,6 @@ class HomeView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const MintingProgressWidget(),
-            // const SearchAutoComplete(),
-            // const SizedBox(
-            //   height: 24,
-            // ),
             const Carousel(),
             Padding(
               padding: const EdgeInsets.only(
@@ -34,16 +27,6 @@ class HomeView extends StatelessWidget {
               ),
               child: Column(
                 children: const [
-                  // const SizedBox(
-                  //   height: 32,
-                  // ),
-                  // SectionHeading(
-                  //   title: AppLocalizations.of(context)?.genres ?? 'Genres',
-                  // ),
-                  // const SizedBox(
-                  //   height: 16,
-                  // ),
-                  // const GenreListView(),
                   SizedBox(
                     height: 24,
                   ),

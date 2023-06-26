@@ -75,7 +75,8 @@ class ComicCard extends ConsumerWidget {
                         AuthorVerified(
                           authorName: comic.creator.name,
                           isVerified: comic.creator.isVerified,
-                          textColor: const Color(0xFFb9b9b9),
+                          fontSize: 14,
+                          textColor: ColorPalette.greyscale100,
                         ),
                       ],
                     ),

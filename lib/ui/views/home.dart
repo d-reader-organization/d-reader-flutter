@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_grid.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_list.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
 import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
@@ -52,8 +52,8 @@ class HomeView extends StatelessWidget {
                   SizedBox(
                     height: 16,
                   ),
-                  ComicIssuesGrid(
-                    query: 'skip=0&take=4',
+                  ComicIssuesList(
+                    query: 'skip=0&take=20&sortTag=latest',
                   ),
                   SizedBox(
                     height: 32,
@@ -91,8 +91,8 @@ class HomeView extends StatelessWidget {
                   SizedBox(
                     height: 16,
                   ),
-                  ComicIssuesGrid(
-                    query: 'skip=4&take=4',
+                  ComicIssuesList(
+                    query: 'skip=0&take=20&filterTag=free',
                   ),
                   SizedBox(
                     height: 32,

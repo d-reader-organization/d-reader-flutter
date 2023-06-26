@@ -75,6 +75,15 @@ class DReaderScaffold extends ConsumerWidget {
     }
   }
 
+  EdgeInsets _bodyPadding(int screenIndex) {
+    if (screenIndex == 0) {
+      return EdgeInsets.zero;
+    } else if (screenIndex == 3) {
+      return const EdgeInsets.symmetric(horizontal: 12);
+    }
+    return const EdgeInsets.only(left: 12.0, right: 12, top: 8.0);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
@@ -88,11 +97,7 @@ class DReaderScaffold extends ConsumerWidget {
                 SolanaCluster.devnet.value,
           ),
           body: Padding(
-            padding: ref.watch(scaffoldProvider).navigationIndex != 3
-                ? const EdgeInsets.only(left: 12.0, right: 12, top: 8.0)
-                : const EdgeInsets.symmetric(
-                    horizontal: 12,
-                  ),
+            padding: _bodyPadding(ref.watch(scaffoldProvider).navigationIndex),
             child: body ??
                 PageView(
                   controller: ref.watch(scaffoldPageController),
@@ -114,6 +119,8 @@ class DReaderScaffold extends ConsumerWidget {
                 ),
           ),
           extendBody: false,
+          extendBodyBehindAppBar:
+              ref.watch(scaffoldProvider).navigationIndex == 0 ? true : false,
           bottomNavigationBar:
               showBottomNavigation ? const CustomBottomNavigationBar() : null,
         ),

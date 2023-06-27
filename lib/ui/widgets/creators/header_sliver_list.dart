@@ -54,6 +54,7 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
                   isVerified: creator.isVerified,
                   fontSize: 24,
                   mainAxisAlignment: MainAxisAlignment.center,
+                  displayFullName: true,
                 ),
                 const SizedBox(
                   height: 16,

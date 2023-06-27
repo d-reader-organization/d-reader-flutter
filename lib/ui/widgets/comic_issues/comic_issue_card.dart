@@ -3,9 +3,8 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
-import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 
@@ -24,90 +23,86 @@ class ComicIssueCard extends StatelessWidget {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
       child: Container(
-        height: 270,
-        width: 178,
+        height: 276,
+        width: 160,
+        margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               cacheKey: '${issue.id}',
-              height: 150,
-              overrideBorderRadius: const BorderRadius.vertical(
-                top: Radius.circular(
-                  16,
+              foregroundDecoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    ColorPalette.boxBackground200,
+                    Colors.transparent,
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  stops: [0.0, .48],
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  EpisodeCircle(
-                    text: 'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
-                  ),
-                ],
               ),
             ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(
-                  right: 4,
-                  left: 8,
-                  top: 12,
-                  bottom: 12,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          issue.comic?.name ?? 'Missing',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.bodyMedium?.copyWith(
-                            color: ColorPalette.dReaderYellow100,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          issue.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        AuthorVerified(
-                          authorName: issue.creator.name,
-                          isVerified: issue.creator.isVerified,
-                          textColor: const Color(0xFFb9b9b9),
-                        ),
-                      ],
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  issue.isPopular
+                      ? Row(
+                          children: const [
+                            HotIconSmall(),
+                          ],
+                        )
+                      : const SizedBox(),
+                  Text(
+                    issue.comic?.name ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: textTheme.titleSmall?.copyWith(
+                      color: ColorPalette.greyscale100,
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      child: SolanaPrice(
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    issue.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                      SolanaPrice(
                         price: formatLamportPrice(issue.stats?.price),
                         mainAxisAlignment: MainAxisAlignment.end,
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  )
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),

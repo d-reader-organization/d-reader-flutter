@@ -1,8 +1,6 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
-// import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
-import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 
@@ -15,49 +13,39 @@ class CreatorListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final TextTheme textTheme = Theme.of(context).textTheme;
-    return GestureDetector(
+    final textTheme = Theme.of(context).textTheme;
+    return ListTile(
       onTap: () {
         nextScreenPush(context, CreatorDetailsView(slug: creator.slug));
       },
-      child: Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: Row(
-          children: [
-            CreatorAvatar(
-              avatar: creator.avatar,
-              slug: creator.slug,
-              radius: 48,
-              width: 48,
-              height: 48,
+      leading: CreatorAvatar(
+        avatar: creator.avatar,
+        slug: creator.slug,
+        radius: 48,
+        width: 48,
+        height: 48,
+      ),
+      contentPadding: const EdgeInsets.all(4),
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              creator.name,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              style: textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                color: Colors.white,
+              ),
             ),
-            const SizedBox(
-              width: 8,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 3.6,
-                  child: AuthorVerified(
-                    authorName: creator.name,
-                    isVerified: creator.isVerified,
-                    fontSize: 14,
-                  ),
-                ),
-                // const SizedBox(
-                //   height: 4,
-                // ),
-                // Text(
-                //   '${((creator.stats?.totalVolume ?? 0) / 100).toStringAsFixed(1)} %',
-                //   style: textTheme.labelLarge
-                //       ?.copyWith(color: ColorPalette.dReaderGreen),
-                // )
-              ],
-            ),
-          ],
-        ),
+          ),
+          const Icon(
+            Icons.verified,
+            color: Colors.yellow,
+            size: 16,
+          ),
+        ],
       ),
     );
   }

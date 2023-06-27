@@ -108,13 +108,25 @@ flutter:
   fonts:
     - family: Urbanist
       fonts:
-        - asset: assets/fonts/Urbanist-Light.ttf
+        - asset: assets/fonts/urbanist/Urbanist-Light.ttf
           weight: 400
-        - asset: assets/fonts/Urbanist-Regular.ttf
+        - asset: assets/fonts/urbanist/Urbanist-Regular.ttf
           weight: 500
-        - asset: assets/fonts/Urbanist-Medium.ttf
+        - asset: assets/fonts/urbanist/Urbanist-Medium.ttf
           weight: 600
-        - asset: assets/fonts/Urbanist-SemiBold.ttf
+        - asset: assets/fonts/urbanist/Urbanist-SemiBold.ttf
           weight: 700
-        - asset: assets/fonts/Urbanist-Bold.ttf
+        - asset: assets/fonts/urbanist/Urbanist-Bold.ttf
+          weight: 800
+    - family: Satoshi
+      fonts:
+        - asset: assets/fonts/satoshi/Satoshi-Light.ttf
+          weight: 400
+        - asset: assets/fonts/satoshi/Satoshi-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/satoshi/Satoshi-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/satoshi/Satoshi-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/satoshi/Satoshi-Bold.ttf
           weight: 800

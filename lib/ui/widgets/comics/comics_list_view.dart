@@ -21,7 +21,7 @@ class ComicsListView extends ConsumerWidget {
           return const SizedBox();
         }
         return SizedBox(
-          height: 255,
+          height: 276,
           child: ListView.builder(
             itemCount: data.length,
             shrinkWrap: true,

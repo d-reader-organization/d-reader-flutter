@@ -5,10 +5,10 @@ import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ComicIssuesGrid extends ConsumerWidget {
+class ComicIssuesList extends ConsumerWidget {
   final String? query;
   final bool onlyFree;
-  const ComicIssuesGrid({
+  const ComicIssuesList({
     Key? key,
     this.query,
     this.onlyFree = false,
@@ -24,23 +24,20 @@ class ComicIssuesGrid extends ConsumerWidget {
           data = data.where((element) => element.isFree).toList();
         }
         return data.isNotEmpty
-            ? GridView.builder(
-                primary: false,
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  mainAxisExtent: 255,
+            ? SizedBox(
+                height: 276,
+                child: ListView.builder(
+                  itemCount: data.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return ComicIssueCard(
+                      issue: data[index],
+                    );
+                  },
                 ),
-                itemBuilder: (context, index) {
-                  return ComicIssueCard(
-                    issue: data[index],
-                  );
-                },
-                itemCount: data.length > 4 ? 4 : data.length,
               )
-            : Text('No ${onlyFree ? 'free' : 'popular'} issues');
+            : const Text('No issues found.');
       },
       error: (err, stack) => Text(
         'Error: $err',

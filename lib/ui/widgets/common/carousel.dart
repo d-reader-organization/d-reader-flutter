@@ -21,83 +21,118 @@ class Carousel extends ConsumerWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     return carouselData.when(
       data: (data) {
-        return CarouselSlider(
-          options: CarouselOptions(
-            height: 266.0,
-            viewportFraction: 1,
-            enlargeCenterPage: true,
-            autoPlay: true,
-            autoPlayInterval: const Duration(
-              seconds: 5,
-            ),
-          ),
-          items: data
-              .map(
-                (carouselItem) => GestureDetector(
-                  onTap: () {
-                    if (carouselItem.externalLink != null &&
-                        carouselItem.externalLink!.isNotEmpty) {
-                      openUrl(carouselItem.externalLink!);
-                    } else if (carouselItem.comicSlug != null &&
-                        carouselItem.comicSlug!.isNotEmpty) {
-                      return nextScreenPush(
-                          context, ComicDetails(slug: carouselItem.comicSlug!));
-                    } else if (carouselItem.comicIssueId != null) {
-                      return nextScreenPush(context,
-                          ComicIssueDetails(id: carouselItem.comicIssueId!));
-                    } else if (carouselItem.creatorSlug != null &&
-                        carouselItem.creatorSlug!.isNotEmpty) {
-                      return nextScreenPush(context,
-                          CreatorDetailsView(slug: carouselItem.creatorSlug!));
-                    }
-                  },
-                  child: Stack(
-                    children: [
-                      CachedImageBgPlaceholder(
-                        height: 266,
-                        imageUrl: carouselItem.image,
-                        cacheKey: '${carouselItem.id}${carouselItem.title}',
-                        foregroundDecoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              ColorPalette.boxBackground200,
-                              Colors.transparent,
-                            ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            stops: [0, 0.8],
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            16,
-                          ),
-                        ),
-                      ),
-                      Positioned.fill(
-                        bottom: 20,
-                        left: 16,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              carouselItem.subtitle,
-                              style: textTheme.bodySmall,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              carouselItem.title,
-                              style: textTheme.headlineLarge,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+        return Column(
+          children: [
+            CarouselSlider(
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  ref
+                      .read(sliderDotsIndicatorPosition.notifier)
+                      .update((state) => index);
+                },
+                height: 320,
+                viewportFraction: 1,
+                enlargeCenterPage: true,
+                autoPlay: true,
+                autoPlayInterval: const Duration(
+                  seconds: 5,
                 ),
-              )
-              .toList(),
+              ),
+              items: data
+                  .map(
+                    (carouselItem) => GestureDetector(
+                      onTap: () {
+                        if (carouselItem.externalLink != null &&
+                            carouselItem.externalLink!.isNotEmpty) {
+                          openUrl(carouselItem.externalLink!);
+                        } else if (carouselItem.comicSlug != null &&
+                            carouselItem.comicSlug!.isNotEmpty) {
+                          return nextScreenPush(context,
+                              ComicDetails(slug: carouselItem.comicSlug!));
+                        } else if (carouselItem.comicIssueId != null) {
+                          return nextScreenPush(
+                              context,
+                              ComicIssueDetails(
+                                  id: carouselItem.comicIssueId!));
+                        } else if (carouselItem.creatorSlug != null &&
+                            carouselItem.creatorSlug!.isNotEmpty) {
+                          return nextScreenPush(
+                              context,
+                              CreatorDetailsView(
+                                  slug: carouselItem.creatorSlug!));
+                        }
+                      },
+                      child: Stack(
+                        children: [
+                          CachedImageBgPlaceholder(
+                            height: 320,
+                            imageUrl: carouselItem.image,
+                            cacheKey: '${carouselItem.id}${carouselItem.title}',
+                            borderRadius: 0,
+                            foregroundDecoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  ColorPalette.appBackgroundColor,
+                                  Color.fromRGBO(31, 34, 42, 0.0),
+                                  ColorPalette.appBackgroundColor,
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                stops: [
+                                  0,
+                                  .4236,
+                                  1.0,
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned.fill(
+                            bottom: 20,
+                            left: 16,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  carouselItem.subtitle,
+                                  style: textTheme.bodySmall,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  carouselItem.title,
+                                  style: textTheme.headlineLarge,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: data.asMap().entries.map((entry) {
+                return Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 4.0,
+                  ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ref.watch(sliderDotsIndicatorPosition) == entry.key
+                        ? const Color(0xFFD9D9D9)
+                        : ColorPalette.boxBackground300,
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
         );
       },
       error: (err, stack) => Text(

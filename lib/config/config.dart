@@ -25,6 +25,7 @@ abstract class Config {
   );
   static const solanaRpcDevnet = "https://api.devnet.solana.com";
   static const String logoTextPath = 'assets/images/logo-white-yellow.svg';
+  static const String whiteLogoPath = 'assets/images/logo-white.svg';
   static const String logoAlphaPath = 'assets/images/logo_alpha.svg';
   static const String logoTextBlackPath =
       'assets/images/d_reader_logo_text_black.png';

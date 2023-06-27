@@ -24,7 +24,7 @@ class SkeletonCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: ColorPalette.dReaderGrey,
           borderRadius: BorderRadius.circular(
-            16,
+            8,
           ),
         ),
         foregroundDecoration: const BoxDecoration(

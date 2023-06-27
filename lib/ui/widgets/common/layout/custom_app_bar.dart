@@ -14,17 +14,14 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: Container(
-        padding: const EdgeInsets.all(12),
-        child: SvgPicture.asset(
-          Config.whiteLogoPath,
-          colorFilter: const ColorFilter.mode(
-            Colors.white,
-            BlendMode.srcIn,
-          ),
+      leading: SvgPicture.asset(
+        Config.whiteLogoPath,
+        colorFilter: const ColorFilter.mode(
+          Colors.white,
+          BlendMode.srcIn,
         ),
       ),
-      leadingWidth: 164,
+      leadingWidth: 112,
       backgroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
       actions: [

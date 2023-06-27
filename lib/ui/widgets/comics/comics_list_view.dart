@@ -37,13 +37,15 @@ class ComicsListView extends ConsumerWidget {
         style: const TextStyle(color: Colors.red),
       ),
       loading: () => SizedBox(
-        height: 240,
+        height: 276,
         child: ListView.builder(
           itemCount: 3,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => const SkeletonCard(
             margin: EdgeInsets.only(right: 16),
+            width: 180,
+            height: 276,
           ),
         ),
       ),

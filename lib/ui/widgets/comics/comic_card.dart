@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -24,8 +25,7 @@ class ComicCard extends ConsumerWidget {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 16),
-        width: 160,
-        height: 276,
+        width: 180,
         decoration: const BoxDecoration(
           color: ColorPalette.boxBackground200,
           borderRadius: BorderRadius.only(
@@ -43,7 +43,9 @@ class ComicCard extends ConsumerWidget {
             CachedImageBgPlaceholder(
               imageUrl: comic.cover,
               cacheKey: comic.slug,
-              height: 166,
+              width: 180,
+              height: 170,
+              opacity: .4,
               overrideBorderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(
                   8,
@@ -52,6 +54,11 @@ class ComicCard extends ConsumerWidget {
                   8,
                 ),
               ),
+              child: comic.logo.isNotEmpty
+                  ? CachedNetworkImage(
+                      imageUrl: comic.logo,
+                    )
+                  : null,
             ),
             Expanded(
               child: Padding(

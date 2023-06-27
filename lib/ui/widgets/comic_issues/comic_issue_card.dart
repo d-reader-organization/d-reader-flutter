@@ -23,8 +23,7 @@ class ComicIssueCard extends StatelessWidget {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
       child: Container(
-        height: 276,
-        width: 160,
+        width: 180,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,
@@ -35,6 +34,7 @@ class ComicIssueCard extends StatelessWidget {
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               cacheKey: '${issue.id}',
+              width: 180,
               foregroundDecoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [

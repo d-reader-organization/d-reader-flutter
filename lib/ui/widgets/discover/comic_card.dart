@@ -1,16 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DiscoverComicCard extends StatelessWidget {
   final ComicModel comic;
@@ -27,7 +28,6 @@ class DiscoverComicCard extends StatelessWidget {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
       child: Container(
-        height: 150,
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Row(
           children: [
@@ -36,18 +36,14 @@ class DiscoverComicCard extends StatelessWidget {
               child: CachedImageBgPlaceholder(
                 imageUrl: comic.cover,
                 cacheKey: comic.slug,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    EpisodeCircle(
-                      text: '${comic.stats?.issuesCount} EPs',
-                      color: comic.isCompleted
-                          ? ColorPalette.dReaderGreen
-                          : Colors.white,
-                    ),
-                  ],
-                ),
+                borderRadius: 8,
+                height: 135,
+                opacity: .4,
+                child: comic.logo.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: comic.logo,
+                      )
+                    : null,
               ),
             ),
             const SizedBox(
@@ -62,11 +58,21 @@ class DiscoverComicCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        comic.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.titleSmall,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            comic.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: textTheme.titleSmall,
+                          ),
+                          SvgPicture.asset(
+                            comic.logo.isNotEmpty
+                                ? 'assets/icons/bookmark_unsaved.svg'
+                                : 'assets/icons/bookmark_saved.svg',
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 4,
@@ -74,9 +80,22 @@ class DiscoverComicCard extends StatelessWidget {
                       AuthorVerified(
                         authorName: comic.creator.name,
                         isVerified: comic.creator.isVerified,
+                        textColor: ColorPalette.greyscale100,
+                        fontSize: 12,
                       ),
                       const SizedBox(
-                        height: 24,
+                        height: 4,
+                      ),
+                      Text(
+                        '${comic.stats?.issuesCount ?? 0} EPs',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: ColorPalette.boxBackground300,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,14 +105,14 @@ class DiscoverComicCard extends StatelessWidget {
                             comicSlug: comic.slug,
                             isRatedByMe: comic.myStats?.rating != null,
                           ),
+                          ViewedIconCount(
+                            viewedCount: comic.stats?.viewersCount ?? 0,
+                            isViewed: comic.myStats?.viewedAt != null,
+                          ),
                           FavouriteIconCount(
                             favouritesCount: comic.stats?.favouritesCount ?? 0,
                             isFavourite: comic.myStats?.isFavourite ?? false,
                             slug: comic.slug,
-                          ),
-                          ViewedIconCount(
-                            viewedCount: comic.stats?.viewersCount ?? 0,
-                            isViewed: comic.myStats?.viewedAt != null,
                           ),
                           comic.audienceType == AudienceType.Mature.name
                               ? const MatureAudience()
@@ -103,14 +122,26 @@ class DiscoverComicCard extends StatelessWidget {
                                 ),
                         ],
                       ),
-                      const Divider(
-                        height: 2,
-                        color: ColorPalette.boxBackground300,
-                      ),
                     ],
                   ),
-                  GenreTags(
-                    genres: comic.genres,
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Row(
+                      children: (comic.genres.length > 3
+                              ? comic.genres.sublist(0, 3)
+                              : comic.genres)
+                          .map(
+                            (genre) => TagContainer(
+                              genre: genre,
+                              color: ColorPalette.greyscale200,
+                            ),
+                          )
+                          .toList(),
+                    ),
                   ),
                 ],
               ),

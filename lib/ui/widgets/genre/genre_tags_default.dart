@@ -51,15 +51,21 @@ class GenreTagsDefault extends StatelessWidget {
 
 class TagContainer extends StatelessWidget {
   final GenreModel genre;
+  final Color color;
   const TagContainer({
     super.key,
     required this.genre,
+    this.color = Colors.white,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(2),
+      padding: const EdgeInsets.only(
+        top: 2,
+        right: 2,
+        bottom: 2,
+      ),
       margin: const EdgeInsets.only(right: 4),
       child: genre.name.isNotEmpty
           ? Row(
@@ -67,8 +73,8 @@ class TagContainer extends StatelessWidget {
               children: [
                 SvgPicture.network(
                   genre.icon,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
+                  colorFilter: ColorFilter.mode(
+                    color,
                     BlendMode.srcIn,
                   ),
                   height: 16,
@@ -79,10 +85,10 @@ class TagContainer extends StatelessWidget {
                 ),
                 Text(
                   genre.name,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w500),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: color,
+                      ),
                 ),
               ],
             )

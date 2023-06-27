@@ -17,7 +17,11 @@ class CustomAppBar extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(12),
         child: SvgPicture.asset(
-          Config.logoTextPath,
+          Config.whiteLogoPath,
+          colorFilter: const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
         ),
       ),
       leadingWidth: 164,

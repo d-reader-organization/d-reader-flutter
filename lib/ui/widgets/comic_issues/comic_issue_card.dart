@@ -43,7 +43,7 @@ class ComicIssueCard extends StatelessWidget {
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.0, 0.35],
+                  stops: [0.0, .48],
                 ),
               ),
             ),

@@ -23,6 +23,7 @@ class CreatorsGrid extends ConsumerWidget {
         return GridView.builder(
           itemCount: data.length,
           primary: false,
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: isTablet ? 3 : 2,

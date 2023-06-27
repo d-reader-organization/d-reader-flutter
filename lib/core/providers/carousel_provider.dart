@@ -13,7 +13,7 @@ final carouselProvider = FutureProvider<List<CarouselModel>>((ref) async {
   return ref.read(carouselRepositoryProvider).getCarouselData();
 });
 
-final sliderDotsIndicatorPosition = StateProvider<int>(
+final sliderDotsIndicatorPosition = StateProvider.autoDispose<int>(
   (ref) {
     return 0;
   },

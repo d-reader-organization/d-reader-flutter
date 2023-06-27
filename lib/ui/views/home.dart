@@ -36,7 +36,7 @@ class HomeView extends StatelessWidget {
                     filter: FilterId.popular,
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 24,
                   ),
                   ComicsListView(
                     query: 'skip=0&take=4',
@@ -50,7 +50,7 @@ class HomeView extends StatelessWidget {
                     sort: SortByEnum.latest,
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 24,
                   ),
                   ComicIssuesList(
                     query: 'skip=0&take=20&sortTag=latest',
@@ -63,7 +63,7 @@ class HomeView extends StatelessWidget {
                     initialTab: DiscoverTabViewEnum.creators,
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 24,
                   ),
                   CreatorsGrid(query: 'skip=0&take=4'),
                   SizedBox(
@@ -75,7 +75,7 @@ class HomeView extends StatelessWidget {
                     sort: SortByEnum.latest,
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 24,
                   ),
                   ComicsListView(
                     query: 'skip=4&take=4',
@@ -89,7 +89,7 @@ class HomeView extends StatelessWidget {
                     filter: FilterId.free,
                   ),
                   SizedBox(
-                    height: 16,
+                    height: 24,
                   ),
                   ComicIssuesList(
                     query: 'skip=0&take=20&filterTag=free',

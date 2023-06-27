@@ -9,7 +9,6 @@ import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.d
 import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +45,6 @@ class DiscoverComicIssueCard extends StatelessWidget {
                       text:
                           'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
                     ),
-                    issue.isPopular ? const HotIconSmall() : const SizedBox()
                   ],
                 ),
               ),

@@ -37,12 +37,12 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             type: BottomNavigationBarType.fixed,
             selectedLabelStyle: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
               letterSpacing: 0.2,
             ),
             unselectedLabelStyle: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
               letterSpacing: 0.2,
             ),
             elevation: 0,

@@ -65,7 +65,7 @@ class CreatorListItem extends StatelessWidget {
             child: AuthorVerified(
               authorName: creator.name,
               isVerified: creator.isVerified,
-              fontSize: 14,
+              fontSize: 12,
             ),
           ),
           const Expanded(

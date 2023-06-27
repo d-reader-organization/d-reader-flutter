@@ -263,7 +263,7 @@ class IntroView extends HookConsumerWidget {
                   color: Colors.white,
                   fontSize: 32,
                   fontWeight: FontWeight.w700,
-                  fontFamily: 'Urbanist',
+                  fontFamily: 'Satoshi',
                 ),
                 children: <TextSpan>[
                   TextSpan(

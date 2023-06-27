@@ -59,7 +59,7 @@ class ComicListItemSkeleton extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: const SkeletonCard(
                     height: 135,

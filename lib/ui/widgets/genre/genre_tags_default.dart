@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tag.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,28 @@ class GenreTagsDefault extends StatelessWidget {
                   (genre) => TagContainer(genre: genre),
                 )
                 .toList());
+  }
+}
+
+class DiscoverGenreTagsDefault extends StatelessWidget {
+  final List<GenreModel> genres;
+  const DiscoverGenreTagsDefault({
+    super.key,
+    required this.genres,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: (genres.length > 3 ? genres.sublist(0, 3) : genres)
+          .map(
+            (genre) => TagContainer(
+              genre: genre,
+              color: ColorPalette.greyscale200,
+            ),
+          )
+          .toList(),
+    );
   }
 }
 

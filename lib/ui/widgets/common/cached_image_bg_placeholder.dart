@@ -21,7 +21,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
     this.child,
     this.width,
     this.height,
-    this.borderRadius = 16,
+    this.borderRadius = 8,
     this.foregroundDecoration,
     this.overrideBorderRadius,
     this.bgImageFit = BoxFit.cover,

@@ -1,8 +1,31 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:flutter/material.dart';
 
+Color getAudienceColor(String type) {
+  if (type == AudienceType.Mature.name) {
+    return const Color(0xFFE00924);
+  } else if (type == AudienceType.Teen.name) {
+    return const Color(0xFFF2CA63);
+  }
+  return const Color(0xFFA6C434);
+}
+
+String getAudienceText(String type) {
+  if (type == AudienceType.Mature.name) {
+    return '18';
+  } else if (type == AudienceType.Teen.name ||
+      type == AudienceType.TeenPlus.name) {
+    return '12';
+  }
+  return '7';
+}
+
 class MatureAudience extends StatelessWidget {
-  const MatureAudience({Key? key}) : super(key: key);
+  final String audienceType;
+  const MatureAudience({
+    super.key,
+    required this.audienceType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +34,13 @@ class MatureAudience extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: ColorPalette.dReaderRed,
+          color: getAudienceColor(audienceType),
         ),
       ),
-      child: const Text(
-        '18+',
+      child: Text(
+        getAudienceText(audienceType),
         style: TextStyle(
-          color: ColorPalette.dReaderRed,
+          color: getAudienceColor(audienceType),
           fontSize: 8,
           fontWeight: FontWeight.w600,
         ),

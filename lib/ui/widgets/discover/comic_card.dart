@@ -114,12 +114,7 @@ class DiscoverComicCard extends StatelessWidget {
                             isFavourite: comic.myStats?.isFavourite ?? false,
                             slug: comic.slug,
                           ),
-                          comic.audienceType == AudienceType.Mature.name
-                              ? const MatureAudience()
-                              : const SizedBox(
-                                  width: 22,
-                                  height: 16,
-                                ),
+                          MatureAudience(audienceType: comic.audienceType),
                         ],
                       ),
                     ],
@@ -130,17 +125,8 @@ class DiscoverComicCard extends StatelessWidget {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     physics: const NeverScrollableScrollPhysics(),
-                    child: Row(
-                      children: (comic.genres.length > 3
-                              ? comic.genres.sublist(0, 3)
-                              : comic.genres)
-                          .map(
-                            (genre) => TagContainer(
-                              genre: genre,
-                              color: ColorPalette.greyscale200,
-                            ),
-                          )
-                          .toList(),
+                    child: DiscoverGenreTagsDefault(
+                      genres: comic.genres,
                     ),
                   ),
                 ],

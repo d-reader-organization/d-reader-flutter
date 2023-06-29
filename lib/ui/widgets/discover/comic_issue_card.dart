@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -26,9 +25,13 @@ class DiscoverComicIssueCard extends StatelessWidget {
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
+      behavior: HitTestBehavior.opaque,
       child: Container(
         height: 165,
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 4,
+        ),
         child: Row(
           children: [
             Expanded(
@@ -58,7 +61,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 2,
+                    height: 4,
                   ),
                   Text(
                     issue.title,
@@ -68,7 +71,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 2,
+                    height: 4,
                   ),
                   Text(
                     'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
@@ -79,7 +82,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 2,
+                    height: 4,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,6 +98,9 @@ class DiscoverComicIssueCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 2,
+                  ),
                   const Divider(
                     color: ColorPalette.boxBackground300,
                     thickness: 1,
@@ -104,8 +110,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                     children: [
                       RatingIcon(
                         initialRating: issue.stats?.averageRating ?? 0,
-                        issueId: issue.id,
-                        isRatedByMe: issue.myStats?.rating != null,
+                        isRatedByMe: true,
                       ),
                       DateWidget(
                         date: issue.releaseDate,
@@ -115,24 +120,14 @@ class DiscoverComicIssueCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  DiscoverGenreTagsDefault(
-                    genres: List<GenreModel>.from(
-                      [
-                        GenreModel(
-                          name: 'Action',
-                          slug: 'action',
-                          icon:
-                              'https://d-reader-dev-mainnet.s3.amazonaws.com/genres/action.svg',
-                          color: '#e9a860',
-                        ),
-                        GenreModel(
-                          name: 'Manga',
-                          slug: 'manga',
-                          icon:
-                              'https://d-reader-dev-mainnet.s3.amazonaws.com/genres/manga.svg',
-                          color: '#e85a5b',
-                        ),
-                      ],
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: DiscoverGenreTagsDefault(
+                      genres: issue.genres,
                     ),
                   ),
                 ],

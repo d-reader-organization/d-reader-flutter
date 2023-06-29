@@ -11,7 +11,6 @@ import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DiscoverComicCard extends StatelessWidget {
   final ComicModel comic;
@@ -27,6 +26,7 @@ class DiscoverComicCard extends StatelessWidget {
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
+      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Row(
@@ -67,11 +67,11 @@ class DiscoverComicCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: textTheme.titleSmall,
                           ),
-                          SvgPicture.asset(
-                            comic.logo.isNotEmpty
-                                ? 'assets/icons/bookmark_unsaved.svg'
-                                : 'assets/icons/bookmark_saved.svg',
-                          ),
+                          // SvgPicture.asset(
+                          //   comic.logo.isNotEmpty
+                          //       ? 'assets/icons/bookmark_unsaved.svg'
+                          //       : 'assets/icons/bookmark_saved.svg',
+                          // ),
                         ],
                       ),
                       const SizedBox(
@@ -102,8 +102,7 @@ class DiscoverComicCard extends StatelessWidget {
                         children: [
                           RatingIcon(
                             initialRating: comic.stats?.averageRating ?? 0,
-                            comicSlug: comic.slug,
-                            isRatedByMe: comic.myStats?.rating != null,
+                            isRatedByMe: true,
                           ),
                           ViewedIconCount(
                             viewedCount: comic.stats?.viewersCount ?? 0,
@@ -111,8 +110,7 @@ class DiscoverComicCard extends StatelessWidget {
                           ),
                           FavouriteIconCount(
                             favouritesCount: comic.stats?.favouritesCount ?? 0,
-                            isFavourite: comic.myStats?.isFavourite ?? false,
-                            slug: comic.slug,
+                            isFavourite: true,
                           ),
                           MatureAudience(audienceType: comic.audienceType),
                         ],

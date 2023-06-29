@@ -53,6 +53,7 @@ class GenreFilter extends ConsumerWidget {
             Text(
               genre.name,
               textAlign: TextAlign.center,
+              maxLines: 1,
               overflow: TextOverflow.fade,
               style: Theme.of(context)
                   .textTheme

@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
@@ -18,12 +19,13 @@ class ComicIssueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    final double cardWidth = getCardWidth(MediaQuery.of(context).size.width);
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
       child: Container(
-        width: 180,
+        width: cardWidth,
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,
@@ -34,7 +36,7 @@ class ComicIssueCard extends StatelessWidget {
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               cacheKey: '${issue.id}',
-              width: 180,
+              width: cardWidth,
               foregroundDecoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [

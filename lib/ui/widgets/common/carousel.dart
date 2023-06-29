@@ -140,7 +140,7 @@ class Carousel extends ConsumerWidget {
         style: const TextStyle(color: Colors.red),
       ),
       loading: () => const SkeletonCard(
-        height: 266,
+        height: 320,
         width: double.infinity,
       ),
     );

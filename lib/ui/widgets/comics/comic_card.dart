@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
@@ -19,13 +20,14 @@ class ComicCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    final double cardWidth = getCardWidth(MediaQuery.of(context).size.width);
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
       },
       child: Container(
         margin: const EdgeInsets.only(right: 16),
-        width: 180,
+        width: cardWidth,
         decoration: const BoxDecoration(
           color: ColorPalette.boxBackground200,
           borderRadius: BorderRadius.only(
@@ -43,7 +45,7 @@ class ComicCard extends ConsumerWidget {
             CachedImageBgPlaceholder(
               imageUrl: comic.cover,
               cacheKey: comic.slug,
-              width: 180,
+              width: cardWidth,
               height: 170,
               opacity: .4,
               overrideBorderRadius: const BorderRadius.only(

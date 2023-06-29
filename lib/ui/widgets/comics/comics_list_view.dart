@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comic_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +43,9 @@ class ComicsListView extends ConsumerWidget {
           itemCount: 3,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) => const SkeletonCard(
-            margin: EdgeInsets.only(right: 16),
-            width: 180,
+          itemBuilder: (context, index) => SkeletonCard(
+            margin: const EdgeInsets.only(right: 16),
+            width: getCardWidth(MediaQuery.of(context).size.width),
             height: 276,
           ),
         ),

@@ -8,7 +8,6 @@ import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.d
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 
@@ -100,17 +99,21 @@ class DiscoverComicCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          RatingIcon(
-                            initialRating: comic.stats?.averageRating ?? 0,
-                            isRatedByMe: true,
-                          ),
-                          ViewedIconCount(
-                            viewedCount: comic.stats?.viewersCount ?? 0,
-                            isViewed: comic.myStats?.viewedAt != null,
-                          ),
-                          FavouriteIconCount(
-                            favouritesCount: comic.stats?.favouritesCount ?? 0,
-                            isFavourite: true,
+                          Row(
+                            children: [
+                              RatingIcon(
+                                initialRating: comic.stats?.averageRating ?? 0,
+                                isRatedByMe: true,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              FavouriteIconCount(
+                                favouritesCount:
+                                    comic.stats?.favouritesCount ?? 0,
+                                isFavourite: true,
+                              ),
+                            ],
                           ),
                           MatureAudience(audienceType: comic.audienceType),
                         ],

@@ -26,7 +26,7 @@ class GenreTagsDefault extends StatelessWidget {
     final sublistLimit = getGenreLimit(screenWidth);
     return withHorizontalScroll
         ? SizedBox(
-            height: 21,
+            height: 24,
             child: ListView.builder(
               itemCount: genres.length,
               shrinkWrap: true,
@@ -93,6 +93,7 @@ class TagContainer extends StatelessWidget {
       child: genre.name.isNotEmpty
           ? Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SvgPicture.network(
                   genre.icon,

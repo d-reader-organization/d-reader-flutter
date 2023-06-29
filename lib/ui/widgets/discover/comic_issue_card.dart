@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
@@ -50,15 +51,23 @@ class DiscoverComicIssueCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    issue.comic?.name ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ColorPalette.greyscale100,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        issue.comic?.name ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.greyscale100,
+                        ),
+                      ),
+                      MatureAudience(
+                        audienceType: issue.comic?.audienceType ?? '',
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 4,
@@ -108,15 +117,23 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RatingIcon(
-                        initialRating: issue.stats?.averageRating ?? 0,
-                        isRatedByMe: true,
+                      Row(
+                        children: [
+                          RatingIcon(
+                            initialRating: issue.stats?.averageRating ?? 0,
+                            isRatedByMe: true,
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          FavouriteIconCount(
+                            favouritesCount: issue.stats?.favouritesCount ?? 0,
+                            isFavourite: true,
+                          ),
+                        ],
                       ),
                       DateWidget(
                         date: issue.releaseDate,
-                      ),
-                      MatureAudience(
-                        audienceType: issue.comic?.audienceType ?? '',
                       ),
                     ],
                   ),

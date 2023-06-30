@@ -99,7 +99,6 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                     CachedImageBgPlaceholder(
                       height: 364,
                       imageUrl: widget.comic.cover,
-                      cacheKey: widget.comic.slug,
                       overrideBorderRadius: BorderRadius.circular(0),
                       foregroundDecoration: const BoxDecoration(
                         gradient: LinearGradient(

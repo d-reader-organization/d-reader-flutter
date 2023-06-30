@@ -118,7 +118,6 @@ class _ComicIssueDetailsScaffoldState
                   CachedImageBgPlaceholder(
                     height: 375,
                     imageUrl: widget.issue.cover,
-                    cacheKey: '${widget.issue.id}',
                     overrideBorderRadius: BorderRadius.circular(0),
                     foregroundDecoration: const BoxDecoration(
                       gradient: LinearGradient(

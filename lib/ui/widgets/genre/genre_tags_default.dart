@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tag.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class GenreTagsDefault extends StatelessWidget {
     final sublistLimit = getGenreLimit(screenWidth);
     return withHorizontalScroll
         ? SizedBox(
-            height: 21,
+            height: 24,
             child: ListView.builder(
               itemCount: genres.length,
               shrinkWrap: true,
@@ -49,26 +50,55 @@ class GenreTagsDefault extends StatelessWidget {
   }
 }
 
+class DiscoverGenreTagsDefault extends StatelessWidget {
+  final List<GenreModel> genres;
+  const DiscoverGenreTagsDefault({
+    super.key,
+    required this.genres,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: (genres.length > 3 ? genres.sublist(0, 3) : genres)
+          .map(
+            (genre) => TagContainer(
+              genre: genre,
+              color: ColorPalette.greyscale200,
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
 class TagContainer extends StatelessWidget {
   final GenreModel genre;
+  final Color color;
   const TagContainer({
     super.key,
     required this.genre,
+    this.color = Colors.white,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(2),
+      padding: const EdgeInsets.only(
+        top: 2,
+        right: 2,
+        bottom: 2,
+      ),
       margin: const EdgeInsets.only(right: 4),
       child: genre.name.isNotEmpty
           ? Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SvgPicture.network(
                   genre.icon,
-                  colorFilter: const ColorFilter.mode(
-                    Colors.white,
+                  colorFilter: ColorFilter.mode(
+                    color,
                     BlendMode.srcIn,
                   ),
                   height: 16,
@@ -79,10 +109,10 @@ class TagContainer extends StatelessWidget {
                 ),
                 Text(
                   genre.name,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w500),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: color,
+                      ),
                 ),
               ],
             )

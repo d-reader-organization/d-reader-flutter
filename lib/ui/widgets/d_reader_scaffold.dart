@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';
 import 'package:d_reader_flutter/ui/views/settings/root.dart';
 import 'package:d_reader_flutter/ui/widgets/beta_access_wrapper.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/custom_app_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/app_bar_title_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/test_mode_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,28 +30,23 @@ class DReaderScaffold extends ConsumerWidget {
   }) {
     switch (navigationIndex) {
       case 0:
-      case 2:
-        return PreferredSize(
-          preferredSize: Size(0, isDevnet ? 90 : 64),
-          child: Column(
-            children: [
-              const TestModeWidget(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: CustomAppBar(
-                  showSearchIcon: showSearchIcon,
-                ),
-              ),
-            ],
-          ),
-        );
       case 1:
         return isDevnet
             ? const PreferredSize(
-                preferredSize: Size(0, 64),
+                preferredSize: Size(0, 56),
                 child: TestModeWidget(),
               )
             : null;
+      case 2:
+        return PreferredSize(
+          preferredSize: Size(0, isDevnet ? 90 : 56),
+          child: AppBarTitleIcon(
+            isDevnet: isDevnet,
+            iconPath: 'assets/icons/dolar_coin.svg',
+            title: 'My Library',
+          ),
+        );
+
       case 3:
         return PreferredSize(
           preferredSize: Size(0, isDevnet ? 90 : 56),
@@ -61,13 +56,13 @@ class DReaderScaffold extends ConsumerWidget {
               AppBar(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
+                toolbarHeight: 48,
                 title: const Text(
                   'Settings',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                leadingWidth: 32,
               ),
             ],
           ),
@@ -113,14 +108,14 @@ class DReaderScaffold extends ConsumerWidget {
                     BetaAccessWrapper(
                       child: DiscoverView(),
                     ),
-                    LibraryView(),
+                    BetaAccessWrapper(
+                      child: LibraryView(),
+                    ),
                     SettingsRootView(),
                   ],
                 ),
           ),
           extendBody: false,
-          extendBodyBehindAppBar:
-              ref.watch(scaffoldProvider).navigationIndex == 0 ? true : false,
           bottomNavigationBar:
               showBottomNavigation ? const CustomBottomNavigationBar() : null,
         ),

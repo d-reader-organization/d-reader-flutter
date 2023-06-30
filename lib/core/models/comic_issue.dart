@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/collaborator.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/models/stateful_cover.dart';
 import 'package:d_reader_flutter/core/models/stateless_cover.dart';
 
@@ -17,6 +18,7 @@ class ComicIssueModel {
   final List<Collaborator>? collaborators;
   final List<StatelessCover>? statelessCovers;
   final List<StatefulCover>? statefulCovers;
+  final List<GenreModel> genres;
 
   ComicIssueModel({
     required this.id,
@@ -34,6 +36,7 @@ class ComicIssueModel {
     required this.supply,
     required this.isFree,
     required this.sellerFee,
+    required this.genres,
     this.candyMachineAddress,
     this.collaborators,
     this.statelessCovers,
@@ -87,6 +90,15 @@ class ComicIssueModel {
           ? List<StatefulCover>.from(
               json['statefulCovers'].map(
                 (item) => StatefulCover.fromJson(
+                  item,
+                ),
+              ),
+            )
+          : [],
+      genres: json['genres'] != null
+          ? List<GenreModel>.from(
+              json['genres'].map(
+                (item) => GenreModel.fromJson(
                   item,
                 ),
               ),

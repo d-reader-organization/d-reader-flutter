@@ -50,7 +50,7 @@ class IssueListItemSkeleton extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 4,
+            flex: 2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,10 +59,10 @@ class IssueListItemSkeleton extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: const SkeletonCard(
-                    height: 145,
+                    height: 165,
                   ),
                 )
               ],
@@ -74,7 +74,7 @@ class IssueListItemSkeleton extends StatelessWidget {
           const Expanded(
             flex: 7,
             child: SkeletonCard(
-              height: 145,
+              height: 165,
             ),
           ),
         ],

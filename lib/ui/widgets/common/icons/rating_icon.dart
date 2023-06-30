@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rating_stars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RatingIcon extends ConsumerWidget {
@@ -78,11 +79,17 @@ class RatingIcon extends ConsumerWidget {
           : null,
       child: Row(
         children: [
-          Icon(
-            isRatedByMe ? Icons.star : Icons.star_outline_outlined,
-            color: isRatedByMe ? ColorPalette.dReaderYellow100 : Colors.white,
-            size: 16,
-          ),
+          isRatedByMe
+              ? SvgPicture.asset(
+                  'assets/icons/star_bold.svg',
+                  width: 16,
+                  height: 16,
+                )
+              : SvgPicture.asset(
+                  'assets/icons/star_light.svg',
+                  width: 16,
+                  height: 16,
+                ),
           const SizedBox(
             width: 4,
           ),

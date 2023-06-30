@@ -24,6 +24,7 @@ class ComicsResultsBuilder extends StatelessWidget {
       separatorBuilder: (BuildContext context, int index) {
         return const Divider(
           color: ColorPalette.boxBackground300,
+          thickness: 1,
         );
       },
     );

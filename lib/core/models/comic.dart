@@ -11,12 +11,8 @@ enum AudienceType {
 }
 
 class ComicModel {
-  final String name;
-  final String slug;
-  final String cover;
-  final String banner;
-  final String description;
-  final String flavorText;
+  final String name, slug, cover, banner, description, flavorText, logo;
+
   final CreatorModel creator;
   final ComicStats? stats;
   final bool isPopular;
@@ -34,6 +30,7 @@ class ComicModel {
     required this.description,
     required this.flavorText,
     required this.creator,
+    required this.logo,
     this.stats,
     required this.isPopular,
     required this.isCompleted,
@@ -51,6 +48,7 @@ class ComicModel {
       banner: json['banner'],
       description: json['description'],
       flavorText: json['flavorText'],
+      logo: json['logo'],
       creator: CreatorModel.fromJson(json['creator']),
       stats: json['stats'] != null ? ComicStats.fromJson(json['stats']) : null,
       myStats:

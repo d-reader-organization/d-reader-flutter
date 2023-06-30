@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -7,9 +6,11 @@ import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
-import 'package:d_reader_flutter/ui/widgets/common/figures/episode_circle.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
+import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 
 class DiscoverComicIssueCard extends StatelessWidget {
@@ -21,32 +22,25 @@ class DiscoverComicIssueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
+      behavior: HitTestBehavior.opaque,
       child: Container(
-        height: 145,
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        height: 165,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 4,
+        ),
         child: Row(
           children: [
             Expanded(
-              flex: 4,
+              flex: 3,
               child: CachedImageBgPlaceholder(
                 imageUrl: issue.cover,
-                height: 145,
+                height: 165,
                 cacheKey: '${issue.id}',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    EpisodeCircle(
-                      text:
-                          'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
-                    ),
-                  ],
-                ),
               ),
             ),
             const SizedBox(
@@ -57,41 +51,44 @@ class DiscoverComicIssueCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    issue.comic?.name ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: ColorPalette.dReaderYellow100,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Text(
-                    issue.title,
-                    style: textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  AuthorVerified(
-                    authorName: issue.creator.name,
-                    isVerified: issue.creator.isVerified,
-                    textColor: const Color(0xFFb9b9b9),
-                  ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  DateWidget(
-                    date: issue.releaseDate,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        issue.comic?.name ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.greyscale100,
+                        ),
+                      ),
+                      MatureAudience(
+                        audienceType: issue.comic?.audienceType ?? '',
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 4,
                   ),
-                  const Divider(
-                    color: ColorPalette.boxBackground300,
-                    height: 2,
+                  Text(
+                    issue.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(
                     height: 4,
@@ -99,50 +96,56 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'PRICE',
-                            style: textTheme.labelSmall,
-                          ),
-                          Text(
-                            issue.stats?.price != null &&
-                                    issue.stats!.price! > 0
-                                ? '${formatLamportPrice(issue.stats?.price ?? 0)}◎'
-                                : 'FREE',
-                            style: textTheme.labelSmall?.copyWith(
-                              color: ColorPalette.dReaderYellow100,
-                            ),
-                          ),
-                        ],
+                      AuthorVerified(
+                        authorName: issue.creator.name,
+                        isVerified: issue.creator.isVerified,
+                        textColor: ColorPalette.greyscale100,
+                        fontSize: 14,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'VOLUME',
-                            style: textTheme.labelSmall,
-                          ),
-                          Text(
-                            '${formatLamportPrice(issue.stats?.totalVolume)}◎',
-                            style: textTheme.labelSmall,
-                          ),
-                        ],
+                      SolanaPrice(
+                        price: formatLamportPrice(issue.stats?.price),
                       ),
-                      ViewedIconCount(
-                        viewedCount: issue.stats?.viewersCount ?? 0,
-                        isViewed: issue.myStats?.viewedAt != null,
-                      ),
-                      issue.comic?.audienceType != null &&
-                              issue.comic!.audienceType ==
-                                  AudienceType.Mature.name
-                          ? const MatureAudience()
-                          : const SizedBox(
-                              width: 22,
-                              height: 16,
-                            )
                     ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  const Divider(
+                    color: ColorPalette.boxBackground300,
+                    thickness: 1,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          RatingIcon(
+                            initialRating: issue.stats?.averageRating ?? 0,
+                            isRatedByMe: true,
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          FavouriteIconCount(
+                            favouritesCount: issue.stats?.favouritesCount ?? 0,
+                            isFavourite: true,
+                          ),
+                        ],
+                      ),
+                      DateWidget(
+                        date: issue.releaseDate,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: DiscoverGenreTagsDefault(
+                      genres: issue.genres,
+                    ),
                   ),
                 ],
               ),

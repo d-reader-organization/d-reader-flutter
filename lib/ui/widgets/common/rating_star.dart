@@ -20,6 +20,8 @@ class RatingStar extends ConsumerWidget {
         index <= ref.watch(selectedRatingStarIndex)
             ? 'assets/icons/star_bold.svg'
             : 'assets/icons/star_light.svg',
+        width: 24,
+        height: 24,
       ),
     );
   }

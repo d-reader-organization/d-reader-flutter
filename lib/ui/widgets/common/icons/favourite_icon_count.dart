@@ -11,15 +11,14 @@ enum Variant { filled, blank }
 class FavouriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
   final bool isFavourite;
-  final String slug;
+  final String? slug;
   final int? issueId;
-  final Variant variant;
+
   const FavouriteIconCount({
     Key? key,
     required this.favouritesCount,
     required this.isFavourite,
-    required this.slug,
-    this.variant = Variant.blank,
+    this.slug,
     this.issueId,
   }) : super(key: key);
 
@@ -33,61 +32,44 @@ class FavouriteIconCount extends HookConsumerWidget {
       ),
     );
     return GestureDetector(
-      onTap: () {
-        if (issueId != null) {
-          ref.read(favouritiseComicIssueProvider(issueId!));
-          ref.invalidate(comicIssueDetailsProvider);
-        } else {
-          ref.read(updateComicFavouriteProvider(slug));
-          ref.invalidate(comicSlugProvider);
-        }
+      onTap: slug != null || issueId != null
+          ? () {
+              if (issueId != null) {
+                ref.read(favouritiseComicIssueProvider(issueId!));
+                ref.invalidate(comicIssueDetailsProvider);
+              } else if (slug != null) {
+                ref.read(updateComicFavouriteProvider(slug!));
+                ref.invalidate(comicSlugProvider);
+              }
 
-        favouriteHook.value = favouriteHook.value.copyWith(
-          count: favouriteHook.value.isSelected
-              ? favouriteHook.value.count - 1
-              : favouriteHook.value.count + 1,
-          isSelected: !favouriteHook.value.isSelected,
-        );
-      },
-      child: variant == Variant.filled
-          ? Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(
-                  64,
-                ),
-              ),
-              child: Icon(
-                favouriteHook.value.isSelected
-                    ? CupertinoIcons.heart_fill
-                    : CupertinoIcons.heart,
-                color: favouriteHook.value.isSelected
-                    ? ColorPalette.dReaderRed
-                    : ColorPalette.dReaderGrey,
-                size: 16,
-              ),
-            )
-          : Row(
-              children: [
-                Icon(
-                  favouriteHook.value.isSelected
-                      ? CupertinoIcons.heart_fill
-                      : CupertinoIcons.heart,
-                  color: favouriteHook.value.isSelected
-                      ? ColorPalette.dReaderRed
-                      : ColorPalette.dReaderGrey,
-                  size: 16,
-                ),
-                const SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  favouriteHook.value.count.toString(),
-                  style: textTheme.labelMedium,
-                ),
-              ],
-            ),
+              favouriteHook.value = favouriteHook.value.copyWith(
+                count: favouriteHook.value.isSelected
+                    ? favouriteHook.value.count - 1
+                    : favouriteHook.value.count + 1,
+                isSelected: !favouriteHook.value.isSelected,
+              );
+            }
+          : null,
+      child: Row(
+        children: [
+          Icon(
+            favouriteHook.value.isSelected
+                ? CupertinoIcons.heart_fill
+                : CupertinoIcons.heart,
+            color: favouriteHook.value.isSelected
+                ? ColorPalette.dReaderRed
+                : ColorPalette.dReaderGrey,
+            size: 16,
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          Text(
+            favouriteHook.value.count.toString(),
+            style: textTheme.labelMedium,
+          ),
+        ],
+      ),
     );
   }
 }

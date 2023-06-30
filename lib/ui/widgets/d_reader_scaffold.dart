@@ -31,7 +31,12 @@ class DReaderScaffold extends ConsumerWidget {
     switch (navigationIndex) {
       case 0:
       case 1:
-        return null;
+        return isDevnet
+            ? const PreferredSize(
+                preferredSize: Size(0, 56),
+                child: TestModeWidget(),
+              )
+            : null;
       case 2:
         return PreferredSize(
           preferredSize: Size(0, isDevnet ? 90 : 56),
@@ -51,13 +56,13 @@ class DReaderScaffold extends ConsumerWidget {
               AppBar(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
+                toolbarHeight: 48,
                 title: const Text(
                   'Settings',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                leadingWidth: 32,
               ),
             ],
           ),

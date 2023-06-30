@@ -20,6 +20,7 @@ class AppBarTitleIcon extends StatelessWidget {
         AppBar(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
+          toolbarHeight: 48,
           title: Text(
             title,
             style: const TextStyle(

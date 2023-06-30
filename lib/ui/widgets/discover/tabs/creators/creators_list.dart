@@ -27,7 +27,7 @@ class CreatorsList extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
-          return const SkeletonRow();
+          return const SizedBox(height: 56, child: SkeletonRow());
         },
       ),
       onGoingError: (List<CreatorModel> items, Object? e, StackTrace? stk) {

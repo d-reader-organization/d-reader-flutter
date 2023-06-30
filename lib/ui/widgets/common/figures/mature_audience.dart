@@ -30,15 +30,18 @@ class MatureAudience extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      padding: const EdgeInsets.all(4),
+      width: 20,
+      height: 20,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: getAudienceColor(audienceType),
         ),
       ),
       child: Text(
         getAudienceText(audienceType),
+        textAlign: TextAlign.center,
         style: TextStyle(
           color: getAudienceColor(audienceType),
           fontSize: 8,

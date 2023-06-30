@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/carousel.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -10,6 +11,7 @@ import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Carousel extends ConsumerWidget {
@@ -23,6 +25,17 @@ class Carousel extends ConsumerWidget {
       data: (data) {
         return Column(
           children: [
+            Container(
+              padding: const EdgeInsets.only(top: 12, left: 12),
+              alignment: Alignment.centerLeft,
+              child: SvgPicture.asset(
+                Config.whiteLogoPath,
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
             CarouselSlider(
               options: CarouselOptions(
                 onPageChanged: (index, reason) {

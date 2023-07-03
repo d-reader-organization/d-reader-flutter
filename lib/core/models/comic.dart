@@ -71,12 +71,14 @@ class ComicModel {
 }
 
 class ComicStats {
-  final int favouritesCount;
-  final int ratersCount;
+  final int favouritesCount,
+      issuesCount,
+      ratersCount,
+      readersCount,
+      totalVolume,
+      viewersCount;
+
   final double averageRating;
-  final int issuesCount;
-  final int totalVolume;
-  final int viewersCount;
 
   ComicStats({
     required this.favouritesCount,
@@ -84,6 +86,7 @@ class ComicStats {
     required this.averageRating,
     required this.issuesCount,
     required this.totalVolume,
+    required this.readersCount,
     required this.viewersCount,
   });
 
@@ -98,6 +101,7 @@ class ComicStats {
           : 0,
       issuesCount: json['issuesCount'],
       totalVolume: 1000000000,
+      readersCount: json['readersCount'],
       viewersCount: json['viewersCount'],
     );
   }

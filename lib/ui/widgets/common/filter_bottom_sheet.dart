@@ -54,33 +54,39 @@ class FilterBottomSheet extends ConsumerWidget {
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [
-            ref.watch(tabBarProvider).selectedTabIndex == 1
+            ref.watch(tabBarProvider).selectedTabIndex != 2
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SectionTitle(title: 'Show issues'),
+                      SectionTitle(
+                          title: ref.watch(tabBarProvider).selectedTabIndex == 0
+                              ? 'Show comics'
+                              : 'Show issues'),
                       const SizedBox(
                         height: 16,
                       ),
-                      Row(
-                        children: const [
-                          Expanded(
-                            child: FilterContainer(
-                              id: FilterId.free,
-                              text: 'Free to read',
+                      ref.watch(tabBarProvider).selectedTabIndex == 0
+                          ? const FilterContainer(
+                              id: FilterId.popular, text: 'Popular')
+                          : Row(
+                              children: const [
+                                Expanded(
+                                  child: FilterContainer(
+                                    id: FilterId.free,
+                                    text: 'Free to read',
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: FilterContainer(
+                                    id: FilterId.popular,
+                                    text: 'Popular',
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                            child: FilterContainer(
-                              id: FilterId.popular,
-                              text: 'Popular',
-                            ),
-                          ),
-                        ],
-                      ),
                       const SectionDivider(),
                     ],
                   )
@@ -110,14 +116,12 @@ class FilterBottomSheet extends ConsumerWidget {
               height: 16,
             ),
             const ExpandableGenreList(),
-            ref.watch(tabBarProvider).selectedTabIndex == 1
-                ? Column(
-                    children: const [
-                      SectionDivider(),
-                      SortMenu(),
-                    ],
-                  )
-                : const SizedBox(),
+            Column(
+              children: const [
+                SectionDivider(),
+                SortMenu(),
+              ],
+            )
           ],
         ),
       ),

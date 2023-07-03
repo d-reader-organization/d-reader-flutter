@@ -5,7 +5,15 @@ enum FilterId {
   popular,
 }
 
-enum SortByEnum { latest, rating, likes, readers, viewers }
+enum SortByEnum {
+  latest,
+  rating,
+  likes,
+  readers,
+  viewers,
+  followers,
+  name,
+}
 
 enum SortDirection { asc, desc }
 

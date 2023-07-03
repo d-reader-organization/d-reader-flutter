@@ -246,31 +246,54 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           )
           .toList();
       try {
-        final response = await client.signAndSendTransactions(
+        final response = await client.signTransactions(
           transactions: resignedTransactions.map((resignedTransaction) {
             return base64Decode(resignedTransaction.encode());
           }).toList(),
         );
-        if (response.signatures.isNotEmpty) {
+        await session.close();
+        if (response.signedPayloads.isNotEmpty) {
+          final String rpcUrl = ref.read(environmentProvider).solanaCluster ==
+                  SolanaCluster.devnet.value
+              ? Config.rpcUrlDevnet
+              : Config.rpcUrlMainnet;
+
+          final client = SolanaClient(
+            rpcUrl: Uri.parse(
+              rpcUrl,
+            ),
+            websocketUrl: Uri.parse(
+              rpcUrl.replaceAll(
+                'https',
+                'ws',
+              ),
+            ),
+          );
+
+          final signedTx = SignedTx.fromBytes(
+            response.signedPayloads.first.toList(),
+          );
+          client.rpcClient.sendTransaction(
+            signedTx.encode(),
+            preflightCommitment: Commitment.confirmed,
+          );
           ref.read(globalStateProvider.notifier).update(
                 (state) => state.copyWith(
                   isLoading: false,
                   isMinting: true,
                 ),
               );
-          final transactionSignature =
-              base58encode(response.signatures.first.toList());
-          ref.read(mintingStatusProvider(transactionSignature));
+          ref.read(mintingStatusProvider(signedTx.signatures.first.toBase58()));
         }
         Sentry.captureMessage(
-          'Sign and send response $response',
+          'Sign and send response ${response.signedPayloads.first}',
           level: SentryLevel.info,
         );
       } catch (exception, stackTrace) {
+        await session.close();
         Sentry.captureException(exception, stackTrace: stackTrace);
       }
     }
-    await session.close();
     return true;
   }
 

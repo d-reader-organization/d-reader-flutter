@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/radio_button.dart';
 import 'package:flutter/material.dart';
@@ -91,31 +92,97 @@ class SortMenu extends ConsumerWidget {
           ],
         ),
         const SizedBox(
-          height: 8,
+          height: 16,
         ),
-        Column(
-          children: const [
-            FilterRadioButton(
-              title: 'New',
-              value: SortByEnum.latest,
-            ),
-            FilterRadioButton(
-              title: 'Rating',
-              value: SortByEnum.rating,
-            ),
-            FilterRadioButton(
-              title: 'Likes',
-              value: SortByEnum.likes,
-            ),
-            FilterRadioButton(
-              title: 'Readers',
-              value: SortByEnum.readers,
-            ),
-            FilterRadioButton(
-              title: 'Viewers',
-              value: SortByEnum.viewers,
-            ),
-          ],
+        if (ref.watch(tabBarProvider).selectedTabIndex == 0)
+          const ComicSortMenu()
+        else if (ref.watch(tabBarProvider).selectedTabIndex == 1)
+          const IssueSortMenu()
+        else if (ref.watch(tabBarProvider).selectedTabIndex == 2)
+          const CreatorSortMenu(),
+      ],
+    );
+  }
+}
+
+class ComicSortMenu extends StatelessWidget {
+  const ComicSortMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        FilterRadioButton(
+          title: 'New',
+          value: SortByEnum.latest,
+        ),
+        FilterRadioButton(
+          title: 'Rating',
+          value: SortByEnum.rating,
+        ),
+        FilterRadioButton(
+          title: 'Likes',
+          value: SortByEnum.likes,
+        ),
+        FilterRadioButton(
+          title: 'Readers',
+          value: SortByEnum.readers,
+        ),
+        FilterRadioButton(
+          title: 'Viewers',
+          value: SortByEnum.viewers,
+        ),
+      ],
+    );
+  }
+}
+
+class IssueSortMenu extends StatelessWidget {
+  const IssueSortMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        FilterRadioButton(
+          title: 'New',
+          value: SortByEnum.latest,
+        ),
+        FilterRadioButton(
+          title: 'Rating',
+          value: SortByEnum.rating,
+        ),
+        FilterRadioButton(
+          title: 'Likes',
+          value: SortByEnum.likes,
+        ),
+        FilterRadioButton(
+          title: 'Readers',
+          value: SortByEnum.readers,
+        ),
+        FilterRadioButton(
+          title: 'Viewers',
+          value: SortByEnum.viewers,
+        ),
+      ],
+    );
+  }
+}
+
+class CreatorSortMenu extends StatelessWidget {
+  const CreatorSortMenu({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        FilterRadioButton(
+          title: 'Name',
+          value: SortByEnum.name,
+        ),
+        FilterRadioButton(
+          title: 'Followers',
+          value: SortByEnum.followers,
         ),
       ],
     );

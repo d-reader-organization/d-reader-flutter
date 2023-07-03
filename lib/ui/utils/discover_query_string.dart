@@ -15,6 +15,8 @@ String getSortByQueryString(SortByEnum selected) {
     return 'sortTag=readers';
   } else if (selected == SortByEnum.viewers) {
     return 'sortTag=viewers';
+  } else if (selected == SortByEnum.followers) {
+    return 'sortTag=followers';
   }
   return '';
 }

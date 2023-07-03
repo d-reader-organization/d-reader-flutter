@@ -44,7 +44,6 @@ class ComicCard extends ConsumerWidget {
           children: [
             CachedImageBgPlaceholder(
               imageUrl: comic.cover,
-              cacheKey: comic.slug,
               width: cardWidth,
               height: 170,
               opacity: .4,

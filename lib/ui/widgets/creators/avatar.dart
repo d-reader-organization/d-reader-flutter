@@ -20,7 +20,6 @@ class CreatorAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedImageBgPlaceholder(
       imageUrl: avatar,
-      cacheKey: slug,
       borderRadius: radius,
       height: height,
       width: width,

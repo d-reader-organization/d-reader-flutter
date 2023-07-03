@@ -80,7 +80,6 @@ class Carousel extends ConsumerWidget {
                           CachedImageBgPlaceholder(
                             height: 320,
                             imageUrl: carouselItem.image,
-                            cacheKey: '${carouselItem.id}${carouselItem.title}',
                             borderRadius: 0,
                             foregroundDecoration: const BoxDecoration(
                               gradient: LinearGradient(

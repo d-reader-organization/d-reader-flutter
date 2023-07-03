@@ -1,23 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CachedImageBgPlaceholder extends StatelessWidget {
   final String imageUrl;
-  final String cacheKey;
   final Widget? child;
-  final double? width;
-  final double? height;
+  final double? height, width;
   final double borderRadius, opacity;
   final Decoration? foregroundDecoration;
   final BorderRadiusGeometry? overrideBorderRadius;
   final BoxFit bgImageFit;
+
   const CachedImageBgPlaceholder({
     Key? key,
     required this.imageUrl,
-    required this.cacheKey,
     this.child,
     this.width,
     this.height,
@@ -31,13 +28,6 @@ class CachedImageBgPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      cacheKey: cacheKey,
-      cacheManager: CacheManager(
-        Config(
-          cacheKey,
-          stalePeriod: const Duration(days: 1),
-        ),
-      ),
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         height: height,

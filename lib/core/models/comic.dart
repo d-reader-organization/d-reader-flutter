@@ -71,18 +71,17 @@ class ComicModel {
 }
 
 class ComicStats {
-  final int favouritesCount;
-  final int subscribersCount;
-  final int ratersCount;
+  final int favouritesCount,
+      issuesCount,
+      ratersCount,
+      readersCount,
+      totalVolume,
+      viewersCount;
+
   final double averageRating;
-  final int issuesCount;
-  final int totalVolume;
-  final int readersCount;
-  final int viewersCount;
 
   ComicStats({
     required this.favouritesCount,
-    required this.subscribersCount,
     required this.ratersCount,
     required this.averageRating,
     required this.issuesCount,
@@ -94,7 +93,6 @@ class ComicStats {
   factory ComicStats.fromJson(dynamic json) {
     return ComicStats(
       favouritesCount: json['favouritesCount'],
-      subscribersCount: json['subscribersCount'],
       ratersCount: json['ratersCount'],
       averageRating: json['averageRating'] != null
           ? double.tryParse(json['averageRating'].toStringAsFixed(1))

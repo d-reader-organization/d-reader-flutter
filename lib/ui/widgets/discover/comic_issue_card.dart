@@ -40,7 +40,6 @@ class DiscoverComicIssueCard extends StatelessWidget {
               child: CachedImageBgPlaceholder(
                 imageUrl: issue.cover,
                 height: 165,
-                cacheKey: '${issue.id}',
               ),
             ),
             const SizedBox(

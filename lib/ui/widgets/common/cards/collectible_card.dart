@@ -18,7 +18,6 @@ class CollectibleCard extends StatelessWidget {
       children: [
         CachedImageBgPlaceholder(
           imageUrl: imageUrl,
-          cacheKey: imageUrl,
           height: 344,
           foregroundDecoration: BoxDecoration(
             gradient: const LinearGradient(

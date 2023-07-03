@@ -18,7 +18,6 @@ class NfTCard extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return CachedImageBgPlaceholder(
       imageUrl: imageUrl,
-      cacheKey: '$comicName-$issueName',
       height: 396,
       bgImageFit: BoxFit.fill,
       child: Align(

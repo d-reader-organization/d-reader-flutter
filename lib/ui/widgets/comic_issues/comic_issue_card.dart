@@ -35,7 +35,6 @@ class ComicIssueCard extends StatelessWidget {
           children: [
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
-              cacheKey: '${issue.id}',
               width: cardWidth,
               foregroundDecoration: const BoxDecoration(
                 gradient: LinearGradient(

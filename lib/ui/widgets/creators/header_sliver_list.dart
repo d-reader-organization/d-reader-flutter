@@ -23,7 +23,6 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
         children: [
           CachedImageBgPlaceholder(
             height: 250,
-            cacheKey: '${creator.slug}-banner',
             imageUrl: creator.banner,
             borderRadius: 0,
             foregroundDecoration: const BoxDecoration(

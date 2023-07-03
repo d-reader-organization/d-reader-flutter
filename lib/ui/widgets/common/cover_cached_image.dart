@@ -31,7 +31,6 @@ class CommonCachedImage extends StatelessWidget {
         width: 200,
         color: Colors.red,
       ),
-      cacheKey: cacheKey,
     );
   }
 }

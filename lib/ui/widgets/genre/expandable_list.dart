@@ -15,7 +15,7 @@ class ExpandableGenreList extends ConsumerWidget {
     AsyncValue<List<GenreModel>> genres = ref.watch(genreProvider);
     return genres.when(
       data: (data) {
-        final double screenWidth = MediaQuery.of(context).size.width;
+        final double screenWidth = MediaQuery.sizeOf(context).width;
         final bool isTablet = screenWidth >= 600;
         data = ref.watch(showAllGenresProvider)
             ? data

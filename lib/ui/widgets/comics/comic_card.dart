@@ -20,7 +20,7 @@ class ComicCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    final double cardWidth = getCardWidth(MediaQuery.of(context).size.width);
+    final double cardWidth = getCardWidth(MediaQuery.sizeOf(context).width);
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));

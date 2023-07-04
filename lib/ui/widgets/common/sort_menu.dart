@@ -110,8 +110,8 @@ class ComicSortMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         FilterRadioButton(
           title: 'New',
           value: SortByEnum.latest,
@@ -142,8 +142,8 @@ class IssueSortMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         FilterRadioButton(
           title: 'New',
           value: SortByEnum.latest,
@@ -174,8 +174,8 @@ class CreatorSortMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         FilterRadioButton(
           title: 'Name',
           value: SortByEnum.name,

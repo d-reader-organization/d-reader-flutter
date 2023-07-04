@@ -133,9 +133,9 @@ class ProfileView extends HookConsumerWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: const [
+                    children: [
                       Text(
                         'Profile Image',
                         style: TextStyle(
@@ -301,8 +301,8 @@ class WalletSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         SkeletonRow(),
         SizedBox(
           height: 8,

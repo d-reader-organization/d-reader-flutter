@@ -52,7 +52,7 @@ class ComicIssuesList extends ConsumerWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => SkeletonCard(
             height: 276,
-            width: getCardWidth(MediaQuery.of(context).size.width),
+            width: getCardWidth(MediaQuery.sizeOf(context).width),
           ),
         ),
       ),

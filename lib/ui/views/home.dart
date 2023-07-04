@@ -12,21 +12,21 @@ class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const MintingProgressWidget(),
-            const Carousel(),
+            MintingProgressWidget(),
+            Carousel(),
             Padding(
-              padding: const EdgeInsets.only(
+              padding: EdgeInsets.only(
                 left: 12.0,
                 right: 12,
                 top: 8.0,
               ),
               child: Column(
-                children: const [
+                children: [
                   SizedBox(
                     height: 24,
                   ),

@@ -114,7 +114,7 @@ class _WalletNameInputFieldState extends ConsumerState<WalletNameInputField> {
                 ),
               ),
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width / 2,
+                maxWidth: MediaQuery.sizeOf(context).width / 2,
               ),
               contentPadding: const EdgeInsets.all(8),
               labelText: 'Wallet Name',

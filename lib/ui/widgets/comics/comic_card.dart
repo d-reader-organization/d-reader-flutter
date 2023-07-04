@@ -28,6 +28,7 @@ class ComicCard extends ConsumerWidget {
       child: Container(
         margin: const EdgeInsets.only(right: 16),
         width: cardWidth,
+        constraints: const BoxConstraints(maxWidth: 190),
         decoration: const BoxDecoration(
           color: ColorPalette.boxBackground200,
           borderRadius: BorderRadius.only(

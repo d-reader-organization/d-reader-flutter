@@ -26,6 +26,7 @@ class ComicIssueCard extends StatelessWidget {
       },
       child: Container(
         width: cardWidth,
+        constraints: const BoxConstraints(maxWidth: 190),
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,

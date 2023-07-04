@@ -19,8 +19,7 @@ class ComicCardLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    final nameCharacterLimit =
-        MediaQuery.of(context).size.width > 360 ? 22 : 19;
+    final nameCharacterLimit = MediaQuery.sizeOf(context).width > 360 ? 22 : 19;
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));

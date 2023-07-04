@@ -34,7 +34,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 2.2,
+      height: MediaQuery.sizeOf(context).height / 2.2,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: const BoxDecoration(

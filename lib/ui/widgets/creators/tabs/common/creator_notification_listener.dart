@@ -67,7 +67,7 @@ class CreatorNotificationListener extends ConsumerWidget {
         if (notification is ScrollNotification) {
           double maxScroll = notification.metrics.maxScrollExtent;
           double currentScroll = notification.metrics.pixels;
-          double delta = MediaQuery.of(context).size.width * 0.1;
+          double delta = MediaQuery.sizeOf(context).width * 0.1;
           if (maxScroll - currentScroll <= delta) {
             ref.read(listenableProvider(query).notifier).fetchNext();
           }

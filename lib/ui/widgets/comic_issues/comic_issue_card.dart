@@ -19,13 +19,14 @@ class ComicIssueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    final double cardWidth = getCardWidth(MediaQuery.of(context).size.width);
+    final double cardWidth = getCardWidth(MediaQuery.sizeOf(context).width);
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicIssueDetails(id: issue.id));
       },
       child: Container(
         width: cardWidth,
+        constraints: const BoxConstraints(maxWidth: 190),
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,
@@ -55,8 +56,8 @@ class ComicIssueCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   issue.isPopular
-                      ? Row(
-                          children: const [
+                      ? const Row(
+                          children: [
                             HotIconSmall(),
                           ],
                         )

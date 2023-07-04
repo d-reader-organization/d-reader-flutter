@@ -20,7 +20,7 @@ class ComicCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    final double cardWidth = getCardWidth(MediaQuery.of(context).size.width);
+    final double cardWidth = getCardWidth(MediaQuery.sizeOf(context).width);
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
@@ -28,6 +28,7 @@ class ComicCard extends ConsumerWidget {
       child: Container(
         margin: const EdgeInsets.only(right: 16),
         width: cardWidth,
+        constraints: const BoxConstraints(maxWidth: 190),
         decoration: const BoxDecoration(
           color: ColorPalette.boxBackground200,
           borderRadius: BorderRadius.only(

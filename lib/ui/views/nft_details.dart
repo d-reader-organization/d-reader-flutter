@@ -129,16 +129,16 @@ class Body extends StatelessWidget {
               Expanded(
                 child: CustomTextButton(
                   backgroundColor: ColorPalette.dReaderGreen,
-                  size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                  size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(
                       8,
                     ),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(
                         FontAwesomeIcons.glasses,
                         size: 14,
@@ -172,7 +172,7 @@ class Body extends StatelessWidget {
                 builder: (context, ref, child) {
                   return Expanded(
                     child: CustomTextButton(
-                      size: Size(MediaQuery.of(context).size.width / 2.4, 50),
+                      size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
                       borderRadius: const BorderRadius.all(
                         Radius.circular(
                           8,
@@ -200,8 +200,7 @@ class Body extends StatelessWidget {
                           builder: (context) {
                             return Padding(
                               padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom,
+                                bottom: MediaQuery.viewInsetsOf(context).bottom,
                               ),
                               child: NftModalBottomSheet(nft: nft),
                             );

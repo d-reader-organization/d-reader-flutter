@@ -233,8 +233,8 @@ class IntroView extends HookConsumerWidget {
           if (shouldShowInitial) ...[
             PageViewModel(
               title: "Join the comic revolution!",
-              bodyWidget: Column(
-                children: const [
+              bodyWidget: const Column(
+                children: [
                   SizedBox(
                     height: 16,
                   ),

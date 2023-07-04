@@ -68,8 +68,8 @@ class FilterBottomSheet extends ConsumerWidget {
                       ref.watch(tabBarProvider).selectedTabIndex == 0
                           ? const FilterContainer(
                               id: FilterId.popular, text: 'Popular')
-                          : Row(
-                              children: const [
+                          : const Row(
+                              children: [
                                 Expanded(
                                   child: FilterContainer(
                                     id: FilterId.free,
@@ -116,8 +116,8 @@ class FilterBottomSheet extends ConsumerWidget {
               height: 16,
             ),
             const ExpandableGenreList(),
-            Column(
-              children: const [
+            const Column(
+              children: [
                 SectionDivider(),
                 SortMenu(),
               ],
@@ -169,8 +169,8 @@ class SectionDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         SizedBox(
           height: 24,
         ),

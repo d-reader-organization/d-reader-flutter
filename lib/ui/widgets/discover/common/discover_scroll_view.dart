@@ -87,7 +87,7 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
     _scrollController.addListener(() {
       double maxScroll = _scrollController.position.maxScrollExtent;
       double currentScroll = _scrollController.position.pixels;
-      double delta = MediaQuery.of(context).size.width * 0.2;
+      double delta = MediaQuery.sizeOf(context).width * 0.2;
 
       if (maxScroll - currentScroll <= delta) {
         ref.read(widget.listenableProvider(query).notifier).fetchNext();

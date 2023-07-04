@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CustomSliverTabBar extends ConsumerWidget with PreferredSizeWidget {
+class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
   final List<Widget> children;
   final TabController? controller;
   const CustomSliverTabBar({

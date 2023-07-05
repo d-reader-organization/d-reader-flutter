@@ -1,4 +1,6 @@
+import 'package:d_reader_flutter/animation_screen.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -15,6 +17,7 @@ import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicDetailsScaffold extends StatefulWidget {
   final Widget body;
@@ -195,31 +198,56 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () => nextScreenPush(
-                              context,
-                              CreatorDetailsView(
-                                slug: widget.comic.creator.slug,
+                          Consumer(builder: (context, ref, child) {
+                            return GestureDetector(
+                              onTap: () async {
+                                ref.read(globalStateProvider.notifier).update(
+                                    (state) => state.copyWith(
+                                        isLoading: state.isLoading,
+                                        isMinting: true));
+                                showDialog(
+                                  context: context,
+                                  // barrierDismissible: false,
+                                  builder: (context) {
+                                    return const MintLoadingAnimation();
+                                  },
+                                );
+                                await Future.delayed(
+                                  const Duration(seconds: 5),
+                                  () {
+                                    ref
+                                        .read(globalStateProvider.notifier)
+                                        .update((state) => state.copyWith(
+                                            isLoading: state.isLoading,
+                                            isMinting: false));
+                                  },
+                                );
+                              },
+                              // onTap: () => nextScreenPush(
+                              //   context,
+                              //   CreatorDetailsView(
+                              //     slug: widget.comic.creator.slug,
+                              //   ),
+                              // ),
+                              child: Row(
+                                children: [
+                                  CreatorAvatar(
+                                    avatar: widget.comic.creator.avatar,
+                                    radius: 24,
+                                    height: 32,
+                                    width: 32,
+                                    slug: widget.comic.creator.slug,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  AuthorVerified(
+                                    authorName: widget.comic.creator.name,
+                                    isVerified: widget.comic.creator.isVerified,
+                                    fontSize: 15,
+                                  ),
+                                ],
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                CreatorAvatar(
-                                  avatar: widget.comic.creator.avatar,
-                                  radius: 24,
-                                  height: 32,
-                                  width: 32,
-                                  slug: widget.comic.creator.slug,
-                                ),
-                                const SizedBox(width: 12),
-                                AuthorVerified(
-                                  authorName: widget.comic.creator.name,
-                                  isVerified: widget.comic.creator.isVerified,
-                                  fontSize: 15,
-                                ),
-                              ],
-                            ),
-                          ),
+                            );
+                          }),
                           Row(
                             children: [
                               RatingIcon(

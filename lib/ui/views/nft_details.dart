@@ -86,7 +86,9 @@ class NftDetails extends ConsumerWidget {
           ),
           body: ListView(
             children: const [
-              SkeletonCard(),
+              SkeletonCard(
+                height: 396,
+              ),
               SizedBox(
                 height: 8,
               ),

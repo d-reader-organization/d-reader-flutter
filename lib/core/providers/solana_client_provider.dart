@@ -332,10 +332,17 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (authToken == null) {
       return false;
     }
-    final result = await client.reauthorize(
+    var result = await client.reauthorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       authToken: authToken,
+      iconUri: Uri.file(Config.faviconPath),
+    );
+
+    result ??= await client.authorize(
+      identityUri: Uri.parse('https://dreader.io/'),
+      identityName: 'dReader',
+      cluster: ref.read(environmentProvider).solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
     ref.read(environmentProvider.notifier).updateEnvironmentState(

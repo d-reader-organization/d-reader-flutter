@@ -1,6 +1,4 @@
-import 'package:d_reader_flutter/animation_screen.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -200,35 +198,12 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         children: [
                           Consumer(builder: (context, ref, child) {
                             return GestureDetector(
-                              onTap: () async {
-                                ref.read(globalStateProvider.notifier).update(
-                                    (state) => state.copyWith(
-                                        isLoading: state.isLoading,
-                                        isMinting: true));
-                                showDialog(
-                                  context: context,
-                                  // barrierDismissible: false,
-                                  builder: (context) {
-                                    return const MintLoadingAnimation();
-                                  },
-                                );
-                                await Future.delayed(
-                                  const Duration(seconds: 5),
-                                  () {
-                                    ref
-                                        .read(globalStateProvider.notifier)
-                                        .update((state) => state.copyWith(
-                                            isLoading: state.isLoading,
-                                            isMinting: false));
-                                  },
-                                );
-                              },
-                              // onTap: () => nextScreenPush(
-                              //   context,
-                              //   CreatorDetailsView(
-                              //     slug: widget.comic.creator.slug,
-                              //   ),
-                              // ),
+                              onTap: () => nextScreenPush(
+                                context,
+                                CreatorDetailsView(
+                                  slug: widget.comic.creator.slug,
+                                ),
+                              ),
                               child: Row(
                                 children: [
                                   CreatorAvatar(

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
@@ -336,13 +337,9 @@ class BottomNavigation extends ConsumerWidget {
                             final isSuccessful = await ref
                                 .read(solanaProvider.notifier)
                                 .mint(issue.candyMachineAddress);
-                            if (isSuccessful) {
-                              ref.invalidate(
-                                receiptsProvider,
-                              ); // think we can remove this, needs to be tested
-                              ref.invalidate(
-                                walletAssetsProvider,
-                              );
+                            if (isSuccessful && context.mounted) {
+                              nextScreenPush(
+                                  context, const MintLoadingAnimation());
                             }
                             ref
                                 .read(globalStateProvider.notifier)

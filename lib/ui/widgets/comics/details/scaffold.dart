@@ -15,6 +15,7 @@ import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicDetailsScaffold extends StatefulWidget {
   final Widget body;
@@ -195,31 +196,33 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () => nextScreenPush(
-                              context,
-                              CreatorDetailsView(
-                                slug: widget.comic.creator.slug,
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                CreatorAvatar(
-                                  avatar: widget.comic.creator.avatar,
-                                  radius: 24,
-                                  height: 32,
-                                  width: 32,
+                          Consumer(builder: (context, ref, child) {
+                            return GestureDetector(
+                              onTap: () => nextScreenPush(
+                                context,
+                                CreatorDetailsView(
                                   slug: widget.comic.creator.slug,
                                 ),
-                                const SizedBox(width: 12),
-                                AuthorVerified(
-                                  authorName: widget.comic.creator.name,
-                                  isVerified: widget.comic.creator.isVerified,
-                                  fontSize: 15,
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
+                              child: Row(
+                                children: [
+                                  CreatorAvatar(
+                                    avatar: widget.comic.creator.avatar,
+                                    radius: 24,
+                                    height: 32,
+                                    width: 32,
+                                    slug: widget.comic.creator.slug,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  AuthorVerified(
+                                    authorName: widget.comic.creator.name,
+                                    isVerified: widget.comic.creator.isVerified,
+                                    fontSize: 15,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
                           Row(
                             children: [
                               RatingIcon(

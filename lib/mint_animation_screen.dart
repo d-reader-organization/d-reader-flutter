@@ -45,7 +45,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.asset(widget.isPortrait
-        ? 'assets/animation_files/bunbun_reveal.mp4'
+        ? 'assets/animation_files/mint_loading.mp4'
         : 'assets/animation_files/landscape_bunbun_reveal.mp4');
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);

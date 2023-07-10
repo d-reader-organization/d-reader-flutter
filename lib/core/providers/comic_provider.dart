@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/providers/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/comic/comic_repository_impl.dart';
@@ -54,5 +55,14 @@ final rateComicProvider = FutureProvider.autoDispose.family<dynamic, dynamic>(
           );
       return result;
     }
+  },
+);
+
+final ownedComicsProvider =
+    FutureProvider.autoDispose.family<List<ComicModel>, OwnedComicsArgs>(
+  (ref, arg) {
+    return ref
+        .read(comicRepositoryProvider)
+        .getOwnedComics(walletAddress: arg.walletAddress, query: arg.query);
   },
 );

@@ -22,26 +22,39 @@ class OwnedListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: 5,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.only(
-            top: 8,
-            bottom: 8,
-          ),
-          child: OwnedNftItems(
-            letter: helper(index),
-          ),
-        );
+    return NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.sizeOf(context).width * 0.1;
+          if (maxScroll - currentScroll <= delta) {
+            // call fetchNext
+          }
+        }
+        return true;
       },
-      separatorBuilder: (BuildContext context, int index) {
-        return const Divider(
-          thickness: 1,
-          color: ColorPalette.boxBackground300,
-        );
-      },
+      child: ListView.separated(
+        itemCount: 5,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.only(
+              top: 8,
+              bottom: 8,
+            ),
+            child: OwnedNftItems(
+              letter: helper(index),
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            thickness: 1,
+            color: ColorPalette.boxBackground300,
+          );
+        },
+      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/library/owned_nft_items.dart';
+import 'package:d_reader_flutter/ui/widgets/library/owned_comic_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -94,7 +94,7 @@ class OwnedListView extends ConsumerWidget {
                   top: 8,
                   bottom: 8,
                 ),
-                child: OwnedNftItems(
+                child: OwnedComicItems(
                   letter: helper(index),
                   comic: data[index],
                 ),
@@ -116,7 +116,7 @@ class OwnedListView extends ConsumerWidget {
         );
       },
       loading: () {
-        return const LoadingOwnedNftItems();
+        return const LoadingOwnedComicItems();
       },
     );
   }

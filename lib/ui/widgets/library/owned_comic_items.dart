@@ -7,10 +7,10 @@ import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
-class OwnedNftItems extends StatelessWidget {
+class OwnedComicItems extends StatelessWidget {
   final String letter;
   final ComicModel comic;
-  const OwnedNftItems({
+  const OwnedComicItems({
     super.key,
     required this.letter,
     required this.comic,
@@ -117,8 +117,8 @@ class OwnedNftItems extends StatelessWidget {
   }
 }
 
-class LoadingOwnedNftItems extends StatelessWidget {
-  const LoadingOwnedNftItems({super.key});
+class LoadingOwnedComicItems extends StatelessWidget {
+  const LoadingOwnedComicItems({super.key});
 
   @override
   Widget build(BuildContext context) {

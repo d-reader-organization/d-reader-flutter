@@ -1,18 +1,16 @@
 class NftModel {
   final List<NftAttribute> attributes;
-  final String address;
-  final String uri;
-  final String image;
-  final String name;
-  final String description;
-  final String owner;
+  final String address,
+      comicName,
+      comicIssueName,
+      uri,
+      image,
+      name,
+      description,
+      owner;
   final double royalties;
-  final bool isUsed;
-  final bool isSigned;
-  final String comicName;
-  final String comicIssueName;
+  final bool isUsed, isSigned, isListed;
   final int comicIssueId;
-  final bool isListed;
 
   NftModel({
     required this.attributes,

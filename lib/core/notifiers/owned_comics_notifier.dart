@@ -4,16 +4,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 final ownedComicsAsyncProvider = AsyncNotifierProvider.autoDispose
-    .family<OwnedComicsAsyncNotifier, List<ComicModel>, OwnedComicsArgs>(
+    .family<OwnedComicsAsyncNotifier, List<ComicModel>, String>(
   OwnedComicsAsyncNotifier.new,
 );
 
 class OwnedComicsAsyncNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<ComicModel>, OwnedComicsArgs> {
+    extends AutoDisposeFamilyAsyncNotifier<List<ComicModel>, String> {
   bool isEnd = false, isLoading = false;
   @override
-  FutureOr<List<ComicModel>> build(OwnedComicsArgs arg) async {
-    return await ref.read(ownedComicsProvider(arg).future);
+  FutureOr<List<ComicModel>> build(String arg) async {
+    return await ref.read(ownedComicsProvider(
+            OwnedComicsArgs(walletAddress: arg, query: 'skip=0&take=20'))
+        .future);
   }
 
   fetchNext() async {
@@ -24,7 +26,7 @@ class OwnedComicsAsyncNotifier
     final newComics = await ref.read(
       ownedComicsProvider(
         OwnedComicsArgs(
-          walletAddress: arg.walletAddress,
+          walletAddress: arg,
           query: 'skip=${state.value?.length ?? 0}&take=20',
         ),
       ).future,

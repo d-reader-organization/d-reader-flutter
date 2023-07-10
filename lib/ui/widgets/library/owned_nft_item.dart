@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
@@ -5,9 +6,11 @@ import 'package:flutter/material.dart';
 
 class OwnedNftItems extends StatelessWidget {
   final String letter;
+  final ComicModel comic;
   const OwnedNftItems({
     super.key,
     required this.letter,
+    required this.comic,
   });
 
   @override

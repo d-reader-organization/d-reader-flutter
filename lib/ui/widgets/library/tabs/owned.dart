@@ -1,10 +1,11 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/library/owned_nft_item.dart';
+import 'package:d_reader_flutter/ui/widgets/library/owned_nft_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class OwnedListView extends ConsumerWidget {
   const OwnedListView({super.key});
@@ -109,10 +110,13 @@ class OwnedListView extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        return const SizedBox();
+        Sentry.captureException(error, stackTrace: stackTrace);
+        return const Center(
+          child: Text('Nothing to see in here.'),
+        );
       },
       loading: () {
-        return const SizedBox();
+        return const LoadingOwnedNftItems();
       },
     );
   }

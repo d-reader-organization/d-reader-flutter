@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';
 import 'package:d_reader_flutter/ui/views/settings/root.dart';
 import 'package:d_reader_flutter/ui/widgets/beta_access_wrapper.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/app_bar_title_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/test_mode_widget.dart';
 import 'package:flutter/material.dart';
@@ -31,22 +30,13 @@ class DReaderScaffold extends ConsumerWidget {
     switch (navigationIndex) {
       case 0:
       case 1:
+      case 2:
         return isDevnet
             ? const PreferredSize(
                 preferredSize: Size(0, 56),
                 child: TestModeWidget(),
               )
             : null;
-      case 2:
-        return PreferredSize(
-          preferredSize: Size(0, isDevnet ? 90 : 56),
-          child: AppBarTitleIcon(
-            isDevnet: isDevnet,
-            iconPath: 'assets/icons/dolar_coin.svg',
-            title: 'My Library',
-          ),
-        );
-
       case 3:
         return PreferredSize(
           preferredSize: Size(0, isDevnet ? 90 : 56),
@@ -76,7 +66,7 @@ class DReaderScaffold extends ConsumerWidget {
     } else if (screenIndex == 3) {
       return const EdgeInsets.symmetric(horizontal: 12);
     }
-    return const EdgeInsets.only(left: 12.0, right: 12, top: 8.0);
+    return const EdgeInsets.only(left: 16.0, right: 16, top: 8.0);
   }
 
   @override
@@ -109,7 +99,7 @@ class DReaderScaffold extends ConsumerWidget {
                       child: DiscoverView(),
                     ),
                     BetaAccessWrapper(
-                      child: LibraryView(),
+                      child: NewLibraryView(),
                     ),
                     SettingsRootView(),
                   ],

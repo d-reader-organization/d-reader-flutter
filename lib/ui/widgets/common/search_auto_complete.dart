@@ -142,7 +142,7 @@ class SuggestionsListItem extends StatelessWidget {
       title: Row(
         children: [
           Text(
-            comic.name,
+            comic.title,
             style: textTheme.bodyMedium,
           ),
           const SizedBox(

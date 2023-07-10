@@ -63,7 +63,7 @@ class ComicIssueCard extends StatelessWidget {
                         )
                       : const SizedBox(),
                   Text(
-                    issue.comic?.name ?? '',
+                    issue.comic?.title ?? '',
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: textTheme.titleSmall?.copyWith(

@@ -30,7 +30,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
       child: Container(
         height: 165,
         padding: const EdgeInsets.symmetric(
-          horizontal: 12,
+          horizontal: 4,
           vertical: 4,
         ),
         child: Row(
@@ -54,7 +54,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        issue.comic?.name ?? '',
+                        issue.comic?.title ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(

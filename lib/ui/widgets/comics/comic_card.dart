@@ -73,7 +73,7 @@ class ComicCard extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          comic.name,
+                          comic.title,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: textTheme.titleSmall,

@@ -102,7 +102,7 @@ class _ComicIssueDetailsScaffoldState
           preferredSize: const Size(0, 64),
           child: AnimatedAppBar(
             animation: _animation,
-            title: widget.issue.comic?.name,
+            title: widget.issue.comic?.title,
           ),
         ),
         extendBodyBehindAppBar: true,

@@ -18,7 +18,7 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       margin: const EdgeInsets.only(bottom: 16),
       color: ColorPalette.appBackgroundColor,
       child: Stack(

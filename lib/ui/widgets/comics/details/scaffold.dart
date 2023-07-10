@@ -125,7 +125,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  widget.comic.name,
+                                  widget.comic.title,
                                   style: textTheme.headlineLarge,
                                 ),
                                 widget.comic.isPopular

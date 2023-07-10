@@ -17,7 +17,7 @@ class SearchBarSliver extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       sliver: SliverAppBar(
         backgroundColor: ColorPalette.appBackgroundColor,
         leadingWidth: double.infinity,

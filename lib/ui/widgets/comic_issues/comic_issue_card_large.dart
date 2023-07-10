@@ -91,7 +91,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                           height: 2,
                         ),
                         Text(
-                          issue.comic?.name ?? 'Missing',
+                          issue.comic?.title ?? 'Missing',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.titleMedium?.copyWith(

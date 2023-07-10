@@ -27,7 +27,7 @@ class DiscoverComicCard extends StatelessWidget {
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         child: Row(
           children: [
             Expanded(
@@ -60,7 +60,7 @@ class DiscoverComicCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            comic.name,
+                            comic.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: textTheme.titleSmall,

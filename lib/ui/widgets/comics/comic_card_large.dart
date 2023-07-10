@@ -96,9 +96,9 @@ class ComicCardLarge extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  comic.name.length > nameCharacterLimit
-                                      ? '${comic.name.substring(0, nameCharacterLimit)}...'
-                                      : comic.name,
+                                  comic.title.length > nameCharacterLimit
+                                      ? '${comic.title.substring(0, nameCharacterLimit)}...'
+                                      : comic.title,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: textTheme.titleMedium

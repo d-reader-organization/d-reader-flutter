@@ -1,10 +1,7 @@
 import 'dart:io' show File;
 
 class WalletModel {
-  final String role;
-  final String address;
-  final String name;
-  final String avatar;
+  final String address, avatar, name, role;
   final bool hasBetaAccess;
 
   WalletModel({

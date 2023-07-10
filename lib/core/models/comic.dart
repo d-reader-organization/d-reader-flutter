@@ -11,7 +11,7 @@ enum AudienceType {
 }
 
 class ComicModel {
-  final String name, slug, cover, banner, description, flavorText, logo;
+  final String title, slug, cover, banner, description, flavorText, logo;
 
   final CreatorModel creator;
   final ComicStats? stats;
@@ -23,7 +23,7 @@ class ComicModel {
   final bool isVerified;
 
   ComicModel({
-    required this.name,
+    required this.title,
     required this.slug,
     required this.cover,
     required this.banner,
@@ -42,7 +42,7 @@ class ComicModel {
 
   factory ComicModel.fromJson(dynamic json) {
     return ComicModel(
-      name: json['name'],
+      title: json['title'],
       slug: json['slug'],
       cover: json['cover'],
       banner: json['banner'],

@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository.dart';
 import 'package:dio/dio.dart';
@@ -77,5 +78,23 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
         });
 
     return result != null ? ComicIssueModel.fromJson(result) : result;
+  }
+
+  @override
+  Future<List<OwnedComicIssue>> getOwnedIssues(
+      {required String walletAddress}) async {
+    final response = await client
+        .get('/comic-issue/get/by-owner/$walletAddress')
+        .then((value) => value.data);
+
+    return response != null
+        ? List<OwnedComicIssue>.from(
+            response.map(
+              (item) => OwnedComicIssue.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 }

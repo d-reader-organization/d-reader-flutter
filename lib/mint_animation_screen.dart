@@ -54,9 +54,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
       final bool isMinted = ref.watch(globalStateProvider).isMinting != null &&
           !ref.watch(globalStateProvider).isMinting! &&
           ref.watch(lastMintedNftProvider) != null;
-      if (_controller.value.duration != Duration.zero &&
-          _controller.value.isPlaying &&
-          isMinted) {
+      if (_controller.value.isPlaying && isMinted) {
         _controller.pause();
         final nft = await ref
             .read(nftProvider(ref.watch(lastMintedNftProvider)!).future);

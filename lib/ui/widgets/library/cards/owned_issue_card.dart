@@ -1,11 +1,19 @@
+import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/owned_copies.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
 import 'package:flutter/material.dart';
 
 class OwnedIssueCard extends StatelessWidget {
-  const OwnedIssueCard({super.key});
+  final OwnedComicIssue issue;
+
+  const OwnedIssueCard({
+    super.key,
+    required this.issue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +45,11 @@ class OwnedIssueCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Episode issue.number',
+                  Text(
+                    'Episode ${issue.number}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: ColorPalette.greyscale100,
@@ -50,9 +58,9 @@ class OwnedIssueCard extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  const Text(
-                    'issue.title',
-                    style: TextStyle(
+                  Text(
+                    issue.title,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -60,18 +68,33 @@ class OwnedIssueCard extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  const Row(
-                    children: [
-                      MintedRoyalty(),
-                      SignedRoyalty(),
-                      OwnedCopies(),
-                    ],
-                  ),
+                  issue.ownedNft != null
+                      ? Row(
+                          children: [
+                            const MintedRoyalty(),
+                            issue.ownedNft!.isSigned
+                                ? const SignedRoyalty()
+                                : const SizedBox(),
+                            OwnedCopies(copiesCount: issue.ownedCopiesCount)
+                          ],
+                        )
+                      : OwnedCopies(copiesCount: issue.ownedCopiesCount),
                   const SizedBox(
                     height: 9,
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      if (issue.ownedNft != null) {
+                        nextScreenPush(
+                          context,
+                          NftDetails(
+                            address: issue.ownedNft?.address ?? '',
+                          ),
+                        );
+                      } else {
+                        // bottom sheet with nfts
+                      }
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),

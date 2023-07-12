@@ -2,7 +2,11 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class OwnedCopies extends StatelessWidget {
-  const OwnedCopies({super.key});
+  final int copiesCount;
+  const OwnedCopies({
+    super.key,
+    required this.copiesCount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +22,11 @@ class OwnedCopies extends StatelessWidget {
           color: ColorPalette.greyscale100,
         ),
       ),
-      child: const Row(
+      child: Row(
         children: [
           Text(
-            '15 copies',
-            style: TextStyle(
+            '$copiesCount copies',
+            style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),

@@ -69,6 +69,7 @@ class OwnedListView extends ConsumerWidget {
             ),
           );
         }
+        // order alphabetically
         return NotificationListener(
           onNotification: (notification) {
             if (notification is ScrollNotification) {
@@ -96,7 +97,7 @@ class OwnedListView extends ConsumerWidget {
                 ),
                 child: OwnedComicItems(
                   letter: helper(index),
-                  comic: data[index],
+                  comics: data,
                 ),
               );
             },

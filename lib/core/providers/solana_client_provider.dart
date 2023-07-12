@@ -263,7 +263,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           final signedTx = SignedTx.fromBytes(
             response.signedPayloads.first.toList(),
           );
-          client.rpcClient.sendTransaction(
+          final sendTransactionResult = await client.rpcClient.sendTransaction(
             signedTx.encode(),
             preflightCommitment: Commitment.confirmed,
           );
@@ -273,7 +273,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
                   isMinting: true,
                 ),
               );
-          ref.read(mintingStatusProvider(signedTx.signatures.first.toBase58()));
+          ref.read(mintingStatusProvider(sendTransactionResult));
         }
         Sentry.captureMessage(
           'Sign and send response ${response.signedPayloads.first}',

@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/library/cards/owned_issue_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -75,7 +76,7 @@ class OwnedIssuesItems extends ConsumerWidget {
                     color: ColorPalette.boxBackground200,
                   );
                 },
-                itemCount: 15,
+                itemCount: data.length,
               ),
             ],
           ),
@@ -99,6 +100,50 @@ class LoadingOwnedIssuesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      children: [
+        const Row(
+          children: [
+            SkeletonCard(
+              height: 16,
+              width: 16,
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            SkeletonCard(
+              height: 16,
+              width: 16,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        const Divider(
+          thickness: 1,
+          color: ColorPalette.boxBackground200,
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const PageScrollPhysics(),
+          itemBuilder: (context, index) {
+            return const SkeletonCard(
+              height: 130,
+            );
+          },
+          separatorBuilder: (context, index) {
+            return const Divider(
+              thickness: 1,
+              color: ColorPalette.boxBackground200,
+            );
+          },
+          itemCount: 3,
+        ),
+      ],
+    );
   }
 }

@@ -36,7 +36,7 @@ class OwnedComicItems extends StatelessWidget {
         Expanded(
           flex: 9,
           child: GridView.builder(
-            itemCount: 5,
+            itemCount: comics.length,
             primary: false,
             padding: EdgeInsets.zero,
             shrinkWrap: true,

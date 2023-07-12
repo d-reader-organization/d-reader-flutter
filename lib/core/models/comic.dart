@@ -13,7 +13,7 @@ enum AudienceType {
 class ComicModel {
   final String title, slug, cover, banner, description, flavorText, logo;
 
-  final CreatorModel creator;
+  final CreatorModel? creator;
   final ComicStats? stats;
   final bool isPopular;
   final bool isCompleted;
@@ -29,7 +29,7 @@ class ComicModel {
     required this.banner,
     required this.description,
     required this.flavorText,
-    required this.creator,
+    this.creator,
     required this.logo,
     this.stats,
     required this.isPopular,
@@ -49,7 +49,9 @@ class ComicModel {
       description: json['description'],
       flavorText: json['flavorText'],
       logo: json['logo'],
-      creator: CreatorModel.fromJson(json['creator']),
+      creator: json['creator'] != null
+          ? CreatorModel.fromJson(json['creator'])
+          : null,
       stats: json['stats'] != null ? ComicStats.fromJson(json['stats']) : null,
       myStats:
           json['myStats'] != null ? MyStats.fromJson(json['myStats']) : null,
@@ -92,17 +94,17 @@ class ComicStats {
 
   factory ComicStats.fromJson(dynamic json) {
     return ComicStats(
-      favouritesCount: json['favouritesCount'],
-      ratersCount: json['ratersCount'],
+      favouritesCount: json['favouritesCount'] ?? 0,
+      ratersCount: json['ratersCount'] ?? 0,
       averageRating: json['averageRating'] != null
           ? double.tryParse(json['averageRating'].toStringAsFixed(1))
                   ?.toDouble() ??
               0
           : 0,
-      issuesCount: json['issuesCount'],
+      issuesCount: json['issuesCount'] ?? 0,
       totalVolume: 1000000000,
-      readersCount: json['readersCount'],
-      viewersCount: json['viewersCount'],
+      readersCount: json['readersCount'] ?? 0,
+      viewersCount: json['viewersCount'] ?? 0,
     );
   }
 }

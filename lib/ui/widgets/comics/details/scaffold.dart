@@ -201,22 +201,25 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                               onTap: () => nextScreenPush(
                                 context,
                                 CreatorDetailsView(
-                                  slug: widget.comic.creator.slug,
+                                  slug: widget.comic.creator?.slug ?? '',
                                 ),
                               ),
                               child: Row(
                                 children: [
                                   CreatorAvatar(
-                                    avatar: widget.comic.creator.avatar,
+                                    avatar: widget.comic.creator?.avatar ?? '',
                                     radius: 24,
                                     height: 32,
                                     width: 32,
-                                    slug: widget.comic.creator.slug,
+                                    slug: widget.comic.creator?.slug ?? '',
                                   ),
                                   const SizedBox(width: 12),
                                   AuthorVerified(
-                                    authorName: widget.comic.creator.name,
-                                    isVerified: widget.comic.creator.isVerified,
+                                    authorName:
+                                        widget.comic.creator?.name ?? '',
+                                    isVerified:
+                                        widget.comic.creator?.isVerified ??
+                                            false,
                                     fontSize: 15,
                                   ),
                                 ],

@@ -16,6 +16,11 @@ final nftProvider =
   return ref.read(nftRepositoryProvider).getNft(address);
 });
 
+final nftsProvider =
+    FutureProvider.autoDispose.family<List<NftModel>, String>((ref, query) {
+  return ref.read(nftRepositoryProvider).getNfts(query);
+});
+
 final lastMintedNftProvider = StateProvider<String?>(
   (ref) {
     return null;

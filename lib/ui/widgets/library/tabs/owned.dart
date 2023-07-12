@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/library_utils.dart';
 import 'package:d_reader_flutter/ui/widgets/library/owned_comic_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,21 +10,6 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 class OwnedListView extends ConsumerWidget {
   const OwnedListView({super.key});
-
-  helper(int index) {
-    switch (index) {
-      case 0:
-        return 'A';
-      case 1:
-        return 'B';
-      case 2:
-        return 'C';
-      case 3:
-        return 'D';
-      case 4:
-        return 'E';
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,7 +55,7 @@ class OwnedListView extends ConsumerWidget {
             ),
           );
         }
-        // order alphabetically
+        Map<String, int> sortedLetters = sortAndGetLetterOccurences(data);
         return NotificationListener(
           onNotification: (notification) {
             if (notification is ScrollNotification) {
@@ -87,17 +73,36 @@ class OwnedListView extends ConsumerWidget {
             return true;
           },
           child: ListView.separated(
-            itemCount: data.length,
+            itemCount: sortedLetters.keys.length,
             padding: const EdgeInsets.symmetric(vertical: 8),
             itemBuilder: (context, index) {
+              final int previousLetterCount = index != 0
+                  ? sortedLetters[sortedLetters.keys.elementAt(index - 1)] ?? 0
+                  : 0;
+              final int currentLetterCount =
+                  sortedLetters[sortedLetters.keys.elementAt(index)] ?? 0;
+
+              final int startAt = index == 0 ? 0 : currentLetterCount - 1;
+              final int endAtLimit = index == 0
+                  ? currentLetterCount
+                  : currentLetterCount + previousLetterCount;
+
               return Container(
                 margin: const EdgeInsets.only(
                   top: 8,
                   bottom: 8,
                 ),
                 child: OwnedComicItems(
-                  letter: helper(index),
-                  comics: data,
+                  letter: sortedLetters.keys.elementAt(index),
+                  comics: index == 0
+                      ? data.sublist(
+                          startAt,
+                          endAtLimit,
+                        )
+                      : data.sublist(
+                          startAt,
+                          endAtLimit,
+                        ),
                 ),
               );
             },

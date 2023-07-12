@@ -11,6 +11,8 @@ abstract class ComicIssueRepository {
     required int id,
     required int rating,
   });
-
-  Future<List<OwnedComicIssue>> getOwnedIssues({required String walletAddress});
+  Future<List<OwnedComicIssue>> getOwnedIssues({
+    required String walletAddress,
+    required String query,
+  });
 }

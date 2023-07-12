@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/library/owned_issues_items.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class OwnedComicCard extends StatelessWidget {
+class OwnedComicCard extends ConsumerWidget {
   final double cardWidth;
   final ComicModel comic;
 
@@ -17,15 +17,10 @@ class OwnedComicCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return GestureDetector(
       onTap: () {
-        nextScreenPush(
-          context,
-          OwnedIssuesItems(
-            comic: comic,
-          ),
-        );
+        ref.read(selectedOwnedComicProvider.notifier).update((state) => comic);
       },
       child: Container(
         width: cardWidth,

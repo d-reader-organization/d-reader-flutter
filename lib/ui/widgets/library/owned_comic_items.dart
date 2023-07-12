@@ -64,55 +64,58 @@ class LoadingOwnedComicItems extends StatelessWidget {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final cardWidth = getCardWidth(screenWidth);
     bool isTablet = screenWidth > 600;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 1,
-          child: SkeletonAnimation(
-            shimmerDuration: 1000,
-            child: Container(
-              height: 20,
-              width: 20,
-              decoration: const BoxDecoration(
-                color: ColorPalette.dReaderGrey,
-              ),
-              foregroundDecoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    ColorPalette.boxBackground200,
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  stops: [0, 0.8],
+    return Container(
+      margin: const EdgeInsets.only(top: 12, bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
+            child: SkeletonAnimation(
+              shimmerDuration: 1000,
+              child: Container(
+                height: 20,
+                width: 20,
+                decoration: const BoxDecoration(
+                  color: ColorPalette.dReaderGrey,
+                ),
+                foregroundDecoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorPalette.boxBackground200,
+                      Colors.transparent,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [0, 0.8],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          flex: 9,
-          child: GridView.builder(
-            itemCount: 5,
-            primary: false,
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: isTablet ? 3 : 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              mainAxisExtent: 190,
+          Expanded(
+            flex: 9,
+            child: GridView.builder(
+              itemCount: 5,
+              primary: false,
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isTablet ? 3 : 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                mainAxisExtent: 190,
+              ),
+              itemBuilder: (context, index) {
+                return SkeletonCard(
+                  height: 190,
+                  width: cardWidth,
+                );
+              },
             ),
-            itemBuilder: (context, index) {
-              return SkeletonCard(
-                height: 190,
-                width: cardWidth,
-              );
-            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

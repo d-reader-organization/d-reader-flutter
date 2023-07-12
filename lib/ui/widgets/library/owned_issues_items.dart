@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
+import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/library/cards/owned_issue_card.dart';
@@ -31,28 +32,28 @@ class OwnedIssuesItems extends ConsumerWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
+              GestureDetector(
+                onTap: () {
+                  ref.invalidate(selectedOwnedComicProvider);
+                },
+                child: Row(
+                  children: [
+                    const Icon(
                       Icons.arrow_back,
                       color: Colors.white,
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    comic.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                    const SizedBox(
+                      width: 8,
                     ),
-                  ),
-                ],
+                    Text(
+                      comic.title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 4,
@@ -100,50 +101,104 @@ class LoadingOwnedIssuesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Row(
-          children: [
-            SkeletonCard(
-              height: 16,
-              width: 16,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            SkeletonCard(
-              height: 16,
-              width: 16,
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        const Divider(
-          thickness: 1,
-          color: ColorPalette.boxBackground200,
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const PageScrollPhysics(),
-          itemBuilder: (context, index) {
-            return const SkeletonCard(
-              height: 130,
-            );
-          },
-          separatorBuilder: (context, index) {
-            return const Divider(
-              thickness: 1,
-              color: ColorPalette.boxBackground200,
-            );
-          },
-          itemCount: 3,
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          const Row(
+            children: [
+              SkeletonCard(
+                height: 16,
+                width: 16,
+                withBorderRadius: false,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              SkeletonCard(
+                height: 16,
+                width: 120,
+                withBorderRadius: false,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          const Divider(
+            thickness: 1,
+            color: ColorPalette.boxBackground200,
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const PageScrollPhysics(),
+            itemBuilder: (context, index) {
+              return const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: SkeletonCard(
+                      height: 126,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    flex: 7,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SkeletonCard(
+                          withBorderRadius: false,
+                          width: 70,
+                          height: 18,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        SkeletonCard(
+                          withBorderRadius: false,
+                          width: 120,
+                          height: 18,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        SkeletonCard(
+                          withBorderRadius: false,
+                          width: 100,
+                          height: 18,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        SkeletonCard(
+                          width: 120,
+                          height: 40,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const Divider(
+                thickness: 1,
+                color: ColorPalette.boxBackground200,
+              );
+            },
+            itemCount: 3,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
+import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/owned_copies.dart';
@@ -33,11 +34,8 @@ class OwnedIssueCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 3,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: ColorPalette.dReaderGreen,
-                  borderRadius: BorderRadius.circular(4),
-                ),
+              child: CachedImageBgPlaceholder(
+                imageUrl: issue.cover,
               ),
             ),
             const SizedBox(
@@ -115,7 +113,9 @@ class OwnedIssueCard extends StatelessWidget {
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
+                            horizontal: 24,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: ColorPalette.greyscale100,

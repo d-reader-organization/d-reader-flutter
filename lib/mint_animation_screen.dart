@@ -44,9 +44,8 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.isPortrait
-        ? 'assets/animation_files/mint_loading.mp4'
-        : 'assets/animation_files/landscape_bunbun_reveal.mp4');
+    _controller = VideoPlayerController.asset(
+        'assets/animation_files/loading-animation.mp4');
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     _controller.play();
@@ -88,30 +87,12 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
             if (snapshot.connectionState == ConnectionState.done) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 250,
-                      width: 250,
-                      child: VideoPlayer(
-                        _controller,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    const Text(
-                      'Confirming transaction',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                child: SizedBox(
+                  height: 250,
+                  width: 250,
+                  child: VideoPlayer(
+                    _controller,
+                  ),
                 ),
               );
             } else {

@@ -82,8 +82,8 @@ class ComicCard extends ConsumerWidget {
                           height: 4,
                         ),
                         AuthorVerified(
-                          authorName: comic.creator.name,
-                          isVerified: comic.creator.isVerified,
+                          authorName: comic.creator?.name ?? '',
+                          isVerified: comic.creator?.isVerified ?? false,
                           fontSize: 14,
                           textColor: ColorPalette.greyscale100,
                         ),

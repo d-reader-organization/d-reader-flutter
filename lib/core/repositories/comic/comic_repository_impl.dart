@@ -55,4 +55,22 @@ class ComicRepositoryImpl implements ComicRepository {
 
     return result != null ? ComicModel.fromJson(result) : result;
   }
+
+  @override
+  Future<List<ComicModel>> getOwnedComics(
+      {required String walletAddress, required String query}) async {
+    final response = await client
+        .get('/comic/get/by-owner/$walletAddress?$query')
+        .then((value) => value.data);
+
+    return response != null
+        ? List<ComicModel>.from(
+            response.map(
+              (item) => ComicModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
+  }
 }

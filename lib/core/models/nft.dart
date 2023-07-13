@@ -1,18 +1,25 @@
 class NftModel {
+  //   export enum ComicRarity {
+//     None = 'None',
+//     Common = 'Common',
+//     Uncommon = 'Uncommon',
+//     Rare = 'Rare',
+//     Epic = 'Epic',
+//     Legendary = 'Legendary',
+// }
   final List<NftAttribute> attributes;
-  final String address;
-  final String uri;
-  final String image;
-  final String name;
-  final String description;
-  final String owner;
+  final String address,
+      comicName,
+      comicIssueName,
+      uri,
+      image,
+      name,
+      description,
+      rarity,
+      owner;
   final double royalties;
-  final bool isUsed;
-  final bool isSigned;
-  final String comicName;
-  final String comicIssueName;
+  final bool isUsed, isSigned, isListed;
   final int comicIssueId;
-  final bool isListed;
 
   NftModel({
     required this.attributes,
@@ -29,6 +36,7 @@ class NftModel {
     required this.comicIssueName,
     required this.comicIssueId,
     required this.isListed,
+    required this.rarity,
   });
 
   factory NftModel.fromJson(dynamic json) {
@@ -56,7 +64,8 @@ class NftModel {
       comicName: json['comicName'],
       comicIssueName: json['comicIssueName'],
       comicIssueId: json['comicIssueId'],
-      isListed: json['isListed'],
+      isListed: json['isListed'] ?? false,
+      rarity: json['rarity'],
     );
   }
 }

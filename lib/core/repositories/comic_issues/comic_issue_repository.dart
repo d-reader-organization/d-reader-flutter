@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
 
 abstract class ComicIssueRepository {
@@ -9,5 +10,9 @@ abstract class ComicIssueRepository {
   Future<void> rateIssue({
     required int id,
     required int rating,
+  });
+  Future<List<OwnedComicIssue>> getOwnedIssues({
+    required String walletAddress,
+    required String query,
   });
 }

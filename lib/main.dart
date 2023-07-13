@@ -74,6 +74,7 @@ class MyApp extends ConsumerWidget {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
+        scaffoldBackgroundColor: ColorPalette.appBackgroundColor,
         fontFamily: 'Satoshi',
         unselectedWidgetColor: ColorPalette.greyscale100,
         textTheme: const TextTheme(

@@ -25,16 +25,10 @@ final mintingStatusProvider = StateProvider.family<void, String>(
           ref.read(globalStateProvider.notifier).update(
                 (state) => state.copyWith(
                   isLoading: false,
-                  isMinting: null,
+                  isMinting: false,
                 ),
               );
         });
-        ref.read(globalStateProvider.notifier).update(
-              (state) => state.copyWith(
-                isLoading: false,
-                isMinting: false,
-              ),
-            );
       }).onError((error, stackTrace) {
         Sentry.captureException(error, stackTrace: stackTrace);
         ref.read(globalStateProvider.notifier).update(

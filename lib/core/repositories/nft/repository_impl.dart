@@ -16,4 +16,20 @@ class NftRepositoryImpl implements NftRepository {
 
     return response != null ? NftModel.fromJson(response) : null;
   }
+
+  @override
+  Future<List<NftModel>> getNfts(String query) async {
+    final response =
+        await client.get('/nft/get?$query').then((value) => value.data);
+
+    return response != null
+        ? List<NftModel>.from(
+            response.map(
+              (item) => NftModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
+  }
 }

@@ -6,11 +6,13 @@ class SkeletonCard extends StatelessWidget {
   final double height;
   final double width;
   final EdgeInsets? margin;
+  final bool withBorderRadius;
   const SkeletonCard({
     Key? key,
     this.height = 255,
     this.width = 180,
     this.margin,
+    this.withBorderRadius = true,
   }) : super(key: key);
 
   @override
@@ -23,9 +25,11 @@ class SkeletonCard extends StatelessWidget {
         margin: margin,
         decoration: BoxDecoration(
           color: ColorPalette.dReaderGrey,
-          borderRadius: BorderRadius.circular(
-            8,
-          ),
+          borderRadius: withBorderRadius
+              ? BorderRadius.circular(
+                  8,
+                )
+              : null,
         ),
         foregroundDecoration: const BoxDecoration(
           gradient: LinearGradient(

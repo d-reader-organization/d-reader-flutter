@@ -8,4 +8,8 @@ abstract class ComicRepository {
     required String slug,
     required int rating,
   });
+  Future<List<ComicModel>> getOwnedComics({
+    required String walletAddress,
+    required String query,
+  });
 }

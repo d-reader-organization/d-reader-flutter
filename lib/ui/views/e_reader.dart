@@ -95,8 +95,6 @@ class EReaderView extends ConsumerWidget {
                               : CommonCachedImage(
                                   fit: BoxFit.contain,
                                   imageUrl: pages[index].image,
-                                  cacheKey:
-                                      '$issueId-${pages[index].pageNumber}',
                                 ),
                         );
                       },
@@ -119,8 +117,6 @@ class EReaderView extends ConsumerWidget {
                                     color: ColorPalette.boxBackground300,
                                   ),
                                   imageUrl: pages[index].image,
-                                  cacheKey:
-                                      '$issueId-${pages[index].pageNumber}',
                                 );
                         },
                       ),

@@ -64,7 +64,7 @@ class NftModel {
       comicName: json['comicName'],
       comicIssueName: json['comicIssueName'],
       comicIssueId: json['comicIssueId'],
-      isListed: json['isListed'],
+      isListed: json['isListed'] ?? false,
       rarity: json['rarity'],
     );
   }

@@ -13,9 +13,19 @@ class OwnedIssuesAsyncNotifier
   bool isEnd = false, isLoading = false;
   @override
   FutureOr<List<OwnedComicIssue>> build(String arg) async {
+    final (walletAddress, queryString) = getArgs();
+
     return await ref.read(ownedIssuesProvider(
-            OwnedIssuesArgs(walletAddress: arg, query: 'skip=0&take=20'))
-        .future);
+      OwnedIssuesArgs(
+        walletAddress: walletAddress,
+        query: 'skip=0&take=20&$queryString',
+      ),
+    ).future);
+  }
+
+  (String, String) getArgs() {
+    final [walletAddress, query] = arg.split('?');
+    return (walletAddress, query);
   }
 
   fetchNext() async {
@@ -23,11 +33,12 @@ class OwnedIssuesAsyncNotifier
       return;
     }
     isLoading = true;
+    final (walletAddress, queryString) = getArgs();
     final newIssues = await ref.read(
       ownedIssuesProvider(
         OwnedIssuesArgs(
-          walletAddress: arg,
-          query: 'skip=${state.value?.length ?? 0}&take=20',
+          walletAddress: walletAddress,
+          query: 'skip=${state.value?.length ?? 0}&take=20&$queryString',
         ),
       ).future,
     );

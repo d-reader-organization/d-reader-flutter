@@ -29,6 +29,32 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 class ProfileView extends HookConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
 
+  displaySnackBar({
+    required BuildContext context,
+    required Color color,
+    required String text,
+    Duration duration = const Duration(seconds: 1),
+  }) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: color),
+          borderRadius: BorderRadius.circular(
+            8,
+          ),
+        ),
+        duration: duration,
+        closeIconColor: Colors.white,
+        showCloseIcon: true,
+        content: Text(
+          text,
+          style: TextStyle(color: color),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(myWalletProvider);
@@ -97,18 +123,14 @@ class ProfileView extends HookConsumerWidget {
                               .update((state) => '');
                           ref.invalidate(myWalletProvider);
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  result != null
-                                      ? 'Your wallet has been updated.'
-                                      : 'Something went wrong',
-                                ),
-                                backgroundColor: result != null
-                                    ? ColorPalette.dReaderGreen
-                                    : ColorPalette.dReaderRed,
-                                duration: const Duration(milliseconds: 500),
-                              ),
+                            displaySnackBar(
+                              context: context,
+                              color: result != null
+                                  ? ColorPalette.dReaderGreen
+                                  : ColorPalette.dReaderRed,
+                              text: result != null
+                                  ? 'Your wallet has been updated.'
+                                  : 'Something went wrong',
                             );
                           }
                         }
@@ -204,6 +226,38 @@ class ProfileView extends HookConsumerWidget {
                   const SizedBox(
                     height: 8,
                   ),
+                  CustomTextButton(
+                    size: const Size(double.infinity, 40),
+                    borderRadius: BorderRadius.circular(8),
+                    padding: EdgeInsets.zero,
+                    textColor: Colors.black,
+                    backgroundColor: ColorPalette.dReaderGreen,
+                    isLoading: ref.watch(privateLoadingProvider),
+                    onPressed: () async {
+                      final loadingNotifier =
+                          ref.read(privateLoadingProvider.notifier);
+                      loadingNotifier.update((state) => true);
+                      await ref.read(syncWalletProvider.future);
+                      ref.invalidate(walletAssetsProvider);
+                      loadingNotifier.update((state) => false);
+                      if (context.mounted) {
+                        displaySnackBar(
+                          context: context,
+                          color: ColorPalette.dReaderGreen,
+                          text: 'Done',
+                        );
+                      }
+                    },
+                    child: const Text(
+                      'Sync',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   ref.read(environmentProvider).solanaCluster ==
                           SolanaCluster.devnet.value
                       ? SettingsCommonListTile(
@@ -240,27 +294,15 @@ class ProfileView extends HookConsumerWidget {
                                     final Color snackBarColor = isSuccessful
                                         ? ColorPalette.dReaderGreen
                                         : ColorPalette.dReaderRed;
-                                    return ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      SnackBar(
-                                        behavior: SnackBarBehavior.floating,
-                                        shape: RoundedRectangleBorder(
-                                          side:
-                                              BorderSide(color: snackBarColor),
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                        ),
-                                        closeIconColor: Colors.white,
-                                        showCloseIcon: true,
-                                        content: Text(
-                                          isSuccessful
-                                              ? airdropResult ??
-                                                  "Successfully airdropped 2 \$SOL "
-                                              : 'Failed to airdrop 2 \$SOL',
-                                          style:
-                                              TextStyle(color: snackBarColor),
-                                        ),
+                                    return displaySnackBar(
+                                      context: context,
+                                      color: snackBarColor,
+                                      text: isSuccessful
+                                          ? airdropResult ??
+                                              "Successfully airdropped 2 \$SOL "
+                                          : 'Failed to airdrop 2 \$SOL',
+                                      duration: const Duration(
+                                        seconds: 2,
                                       ),
                                     );
                                   }

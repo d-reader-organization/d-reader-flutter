@@ -20,8 +20,7 @@ class OwnedIssuesItems extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       ownedIssuesAsyncProvider(
-        ref.watch(environmentProvider).publicKey?.toBase58() ?? '',
-      ),
+          '${ref.watch(environmentProvider).publicKey?.toBase58() ?? ''}?comicSlug=${comic.slug}'),
     );
 
     return provider.when(

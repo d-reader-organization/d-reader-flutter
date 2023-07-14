@@ -18,7 +18,6 @@ class CreatorsListBuilder extends StatelessWidget {
     return ListView.separated(
       itemCount: creators.isNotEmpty ? creators.length + 1 : 0,
       shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(horizontal: 4),
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         if (index == 0) {

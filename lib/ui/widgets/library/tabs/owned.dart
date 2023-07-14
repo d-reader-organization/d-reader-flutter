@@ -84,19 +84,8 @@ class OwnedListView extends ConsumerWidget {
                   itemCount: sortedLetters.keys.length,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   itemBuilder: (context, index) {
-                    final int previousLetterCount = index != 0
-                        ? sortedLetters[
-                                sortedLetters.keys.elementAt(index - 1)] ??
-                            0
-                        : 0;
-                    final int currentLetterCount =
-                        sortedLetters[sortedLetters.keys.elementAt(index)] ?? 0;
-
-                    final int startAt = index == 0 ? 0 : currentLetterCount - 1;
-                    final int endAtLimit = index == 0
-                        ? currentLetterCount
-                        : currentLetterCount + previousLetterCount;
-
+                    final (startAt, endAtLimit) =
+                        getSublistBorders(sortedLetters, index);
                     return Container(
                       margin: const EdgeInsets.only(
                         top: 8,
@@ -104,15 +93,10 @@ class OwnedListView extends ConsumerWidget {
                       ),
                       child: OwnedComicItems(
                         letter: sortedLetters.keys.elementAt(index),
-                        comics: index == 0
-                            ? data.sublist(
-                                startAt,
-                                endAtLimit,
-                              )
-                            : data.sublist(
-                                startAt,
-                                endAtLimit,
-                              ),
+                        comics: data.sublist(
+                          startAt,
+                          endAtLimit,
+                        ),
                       ),
                     );
                   },

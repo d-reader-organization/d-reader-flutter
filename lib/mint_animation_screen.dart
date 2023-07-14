@@ -4,8 +4,11 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
+import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -120,6 +123,8 @@ class DoneMintingAnimation extends StatefulWidget {
 
 class _DoneMintingAnimationState extends State<DoneMintingAnimation>
     with SingleTickerProviderStateMixin {
+  late VideoPlayerController _controller;
+  late Future<void> _initializeVideoPlayerFuture;
   late final AnimationController _animationController;
 
   @override
@@ -129,13 +134,17 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
-    _animationController.repeat(reverse: true);
+    _animationController.forward();
+    _controller =
+        VideoPlayerController.asset('assets/animation_files/nft-mint-bg.mp4');
+    _initializeVideoPlayerFuture = _controller.initialize();
+    _controller.setLooping(true);
+    _controller.play();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
-
+    _controller.dispose();
     super.dispose();
   }
 
@@ -143,70 +152,93 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: GestureDetector(
-            onTap: () {
-              nextScreenReplace(
-                context,
-                NftDetails(
-                  address: widget.nft.address,
-                ),
-              );
+      body: Stack(
+        children: [
+          FutureBuilder(
+            future: _initializeVideoPlayerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return VideoPlayer(
+                  _controller,
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
             },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FadeTransition(
-                    opacity: _animationController,
+          ),
+          FadeTransition(
+            opacity: _animationController,
+            child: GestureDetector(
+              onTap: () {
+                nextScreenReplace(
+                  context,
+                  NftDetails(
+                    address: widget.nft.address,
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AspectRatio(
+                    aspectRatio: 276 / 220,
                     child: CachedNetworkImage(
                       imageUrl: widget.nft.image,
-                      imageBuilder: (context, imageProvider) {
-                        return Container(
-                          constraints: const BoxConstraints(
-                            maxWidth: 320,
-                            maxHeight: 320,
-                          ),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        );
-                      },
-                      placeholder: (context, url) {
-                        return Container(
-                          width: 320,
-                          height: 320,
-                          decoration: BoxDecoration(
-                            color: ColorPalette.greyscale200,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        );
-                      },
                     ),
                   ),
-                ),
-                CustomTextButton(
-                  backgroundColor: ColorPalette.dReaderGreen,
-                  borderRadius: BorderRadius.circular(8),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Close',
+                  const SizedBox(
+                    height: 16,
                   ),
-                ),
-              ],
+                  Text(
+                    widget.nft.comicName,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'Congrats you own ${shortenNftName(widget.nft.name)}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const MintedRoyalty(),
+                      widget.nft.isSigned
+                          ? const SignedRoyalty()
+                          : const SizedBox(),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
-        ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: CustomTextButton(
+              backgroundColor: ColorPalette.dReaderGreen,
+              borderRadius: BorderRadius.circular(8),
+              textColor: Colors.black,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Next',
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

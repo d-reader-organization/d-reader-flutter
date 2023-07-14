@@ -66,7 +66,7 @@ class DReaderScaffold extends ConsumerWidget {
     } else if (screenIndex == 3) {
       return const EdgeInsets.symmetric(horizontal: 12);
     }
-    return const EdgeInsets.only(left: 16.0, right: 16, top: 8.0);
+    return const EdgeInsets.only(left: 12.0, right: 12, top: 8.0);
   }
 
   @override

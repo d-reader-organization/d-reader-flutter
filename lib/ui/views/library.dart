@@ -58,33 +58,33 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
           ),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
-              SliverAppBar(
+              const SliverAppBar(
                 leading: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: EdgeInsets.all(4.0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'My Library',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            return;
-                          },
-                          child: SvgPicture.asset(
-                            'assets/icons/search.svg',
-                            width: 24,
-                            height: 24,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.white,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     return;
+                        //   },
+                        //   child: SvgPicture.asset(
+                        //     'assets/icons/search.svg',
+                        //     width: 24,
+                        //     height: 24,
+                        //     colorFilter: const ColorFilter.mode(
+                        //       Colors.white,
+                        //       BlendMode.srcIn,
+                        //     ),
+                        //   ),
+                        // ),
                       ]),
                 ),
                 leadingWidth: double.infinity,

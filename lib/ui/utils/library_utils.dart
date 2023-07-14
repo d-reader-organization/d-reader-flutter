@@ -15,3 +15,17 @@ Map<String, int> sortAndGetLetterOccurences(List<ComicModel> comics) {
                 : 1
           });
 }
+
+(int, int) getSublistBorders(Map<String, int> sortedLetters, int currentIndex) {
+  int previousLettersCounts = 0;
+  int currentElementOccurences =
+      (sortedLetters[sortedLetters.keys.elementAt(currentIndex)] ?? 0);
+  for (var i = 0; i < currentIndex; ++i) {
+    previousLettersCounts +=
+        sortedLetters[sortedLetters.keys.elementAt(i)] ?? 0;
+  }
+
+  int startAt = previousLettersCounts;
+  int endAt = previousLettersCounts + currentElementOccurences;
+  return (startAt, endAt);
+}

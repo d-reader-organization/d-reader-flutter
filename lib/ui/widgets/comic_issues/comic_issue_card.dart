@@ -28,17 +28,14 @@ class ComicIssueCard extends StatelessWidget {
         width: cardWidth,
         constraints: const BoxConstraints(maxWidth: 190),
         margin: const EdgeInsets.only(right: 16),
-        decoration: BoxDecoration(
-          color: ColorPalette.boxBackground200,
-          borderRadius: BorderRadius.circular(8),
-        ),
         child: Stack(
           children: [
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               width: cardWidth,
-              foregroundDecoration: const BoxDecoration(
-                gradient: LinearGradient(
+              foregroundDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                gradient: const LinearGradient(
                   colors: [
                     ColorPalette.boxBackground200,
                     Colors.transparent,

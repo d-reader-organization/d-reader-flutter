@@ -30,7 +30,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
       child: Container(
         height: 165,
         padding: const EdgeInsets.symmetric(
-          horizontal: 4,
+          horizontal: 0,
           vertical: 4,
         ),
         child: Row(

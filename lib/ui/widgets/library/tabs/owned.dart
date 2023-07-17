@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/library_utils.dart';
 import 'package:d_reader_flutter/ui/widgets/library/owned_comic_items.dart';
 import 'package:d_reader_flutter/ui/widgets/library/owned_issues_items.dart';
+import 'package:d_reader_flutter/ui/widgets/library/tabs/owned_nfts_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,7 +23,9 @@ class OwnedListView extends ConsumerWidget {
     );
 
     return ref.watch(selectedOwnedComicProvider) != null
-        ? OwnedIssuesItems(comic: ref.read(selectedOwnedComicProvider)!)
+        ? ref.watch(selectedIssueInfoProvider) != null
+            ? OwnedNftsItems(issue: ref.read(selectedIssueInfoProvider)!)
+            : OwnedIssuesItems(comic: ref.read(selectedOwnedComicProvider)!)
         : provider.when(
             data: (data) {
               if (data.isEmpty) {

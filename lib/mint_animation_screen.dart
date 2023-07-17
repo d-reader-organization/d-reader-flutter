@@ -40,13 +40,19 @@ class MintLoadingAnimation extends ConsumerStatefulWidget {
       _MintLoadingAnimationState();
 }
 
-class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
+class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
+    with SingleTickerProviderStateMixin {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
-
+  late final AnimationController _animationController;
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+    _animationController.forward();
     _controller = VideoPlayerController.asset(
         'assets/animation_files/loading-animation.mp4');
     _initializeVideoPlayerFuture = _controller.initialize();
@@ -58,15 +64,24 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
           ref.watch(lastMintedNftProvider) != null;
       if (_controller.value.isPlaying && isMinted) {
         _controller.pause();
+        _animationController.reverse(
+          from: 1,
+        );
         final nft = await ref
             .read(nftProvider(ref.watch(lastMintedNftProvider)!).future);
+
         if (context.mounted && nft != null) {
           ref.invalidate(lastMintedNftProvider);
-          nextScreenReplace(
-            context,
-            DoneMintingAnimation(
-              nft: nft,
-            ),
+          await Future.delayed(
+            const Duration(milliseconds: 1000),
+            () {
+              nextScreenReplace(
+                context,
+                DoneMintingAnimation(
+                  nft: nft,
+                ),
+              );
+            },
           );
         }
       }
@@ -76,6 +91,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
   @override
   void dispose() {
     _controller.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -88,13 +104,16 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation> {
           future: _initializeVideoPlayerFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 250,
-                  width: 250,
-                  child: VideoPlayer(
-                    _controller,
+              return FadeTransition(
+                opacity: _animationController,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 250,
+                    width: 250,
+                    child: VideoPlayer(
+                      _controller,
+                    ),
                   ),
                 ),
               );
@@ -122,29 +141,45 @@ class DoneMintingAnimation extends StatefulWidget {
 }
 
 class _DoneMintingAnimationState extends State<DoneMintingAnimation>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
   late final AnimationController _animationController;
+  late final AnimationController _bgAnimationController;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    _animationController.forward();
     _controller =
         VideoPlayerController.asset('assets/animation_files/nft-mint-bg.mp4');
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    _bgAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2500),
+    );
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     _controller.play();
+
+    _bgAnimationController.forward();
+    Future.delayed(
+      const Duration(
+        milliseconds: 2000,
+      ),
+      () {
+        _animationController.forward();
+      },
+    );
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _animationController.dispose();
+    _bgAnimationController.dispose();
     super.dispose();
   }
 
@@ -152,93 +187,97 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
-      body: Stack(
-        children: [
-          FutureBuilder(
-            future: _initializeVideoPlayerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return VideoPlayer(
-                  _controller,
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-          FadeTransition(
-            opacity: _animationController,
-            child: GestureDetector(
-              onTap: () {
-                nextScreenReplace(
-                  context,
-                  NftDetails(
-                    address: widget.nft.address,
-                  ),
-                );
+      body: FadeTransition(
+        opacity: _bgAnimationController,
+        child: Stack(
+          children: [
+            FutureBuilder(
+              future: _initializeVideoPlayerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return VideoPlayer(
+                    _controller,
+                  );
+                } else {
+                  return const SizedBox();
+                }
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 276 / 220,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.nft.image,
+            ),
+            FadeTransition(
+              opacity: _animationController,
+              child: GestureDetector(
+                onTap: () {
+                  nextScreenReplace(
+                    context,
+                    NftDetails(
+                      address: widget.nft.address,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    widget.nft.comicName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                  );
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 276 / 220,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.nft.image,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    'Congrats you own ${shortenNftName(widget.nft.name)}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                    const SizedBox(
+                      height: 16,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const MintedRoyalty(),
-                      widget.nft.isSigned
-                          ? const SignedRoyalty()
-                          : const SizedBox(),
-                    ],
-                  )
-                ],
+                    Text(
+                      widget.nft.comicName,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      'Congrats you own ${shortenNftName(widget.nft.name)}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const MintedRoyalty(),
+                        widget.nft.isSigned
+                            ? const SignedRoyalty()
+                            : const SizedBox(),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: CustomTextButton(
-              backgroundColor: ColorPalette.dReaderGreen,
-              borderRadius: BorderRadius.circular(8),
-              textColor: Colors.black,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Next',
+            FadeTransition(
+              opacity: _animationController,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: CustomTextButton(
+                  backgroundColor: ColorPalette.dReaderGreen,
+                  borderRadius: BorderRadius.circular(8),
+                  textColor: Colors.black,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Next',
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

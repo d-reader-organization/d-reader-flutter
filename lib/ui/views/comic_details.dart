@@ -19,8 +19,11 @@ class ComicDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<ComicModel?> provider = ref.watch(comicSlugProvider(slug));
-    final issuesProvider =
-        ref.watch(paginatedIssuesProvider('comicSlug=$slug'));
+    final issuesProvider = ref.watch(
+      paginatedIssuesProvider(
+        'comicSlug=$slug&sortTag=latest&sortOrder=asc',
+      ),
+    );
 
     return provider.when(
       data: (comic) {

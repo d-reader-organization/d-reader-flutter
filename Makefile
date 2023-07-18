@@ -51,10 +51,10 @@ pre-saga-release:
 	make build-prod-apk && mv ./apks/dReader.apk ./publishing/
 
 create-saga-release:
-	cd publishing && nvm use && npx dapp-store create release -k ${keyPairPath} -b ~/Library/Android/sdk/build-tools/34.0.0-rc3 -u ${rpcMainnet}
+	cd publishing && NVM_DIR="$${HOME}/.nvm" && . "$${NVM_DIR}/nvm.sh" && nvm use && npx dapp-store create release -k ${keyPairPath} -b ~/Library/Android/sdk/build-tools/34.0.0-rc3 -u ${rpcMainnet}
 
 publish-saga-update:
-	cd publishing && nvm use && npx dapp-store publish update -k ${keyPairPath} -u ${rpcMainnet} --requestor-is-authorized --complies-with-solana-dapp-store-policies
+	cd publishing && NVM_DIR="$${HOME}/.nvm" && . "$${NVM_DIR}/nvm.sh" && nvm use && npx dapp-store publish update -k ${keyPairPath} -u ${rpcMainnet} --requestor-is-authorized --complies-with-solana-dapp-store-policies
 
 clean:
 	flutter clean

@@ -12,8 +12,8 @@
     },
     "./dReader.apk": {
       "path": "./dReader.apk",
-      "sha256": "iFGzijU8iLPvuXgm1rs5ayub3KjeT8o/usd762Br7/o=",
-      "uri": "https://arweave.net/wGppoz1av0aQ8fM9PR4zOTP54m-rpJTwfiYAn7DceE8"
+      "sha256": "pvefUaKa1SCzFP62iNWzJeW15a0lI/pQVQAOVu5LCbU=",
+      "uri": "https://arweave.net/jMpc2Xp7J5iDEuRHTcTvPkpCkJl0D3N6qq3W40Bwb2c"
     },
     "./screenshots/1.png": {
       "path": "./screenshots/1.png",
@@ -44,6 +44,11 @@
       "path": "./screenshots/2.png",
       "sha256": "eRbUs3CNqqwYfRLuHRbYP8uOdbGrAyYVH9blXmf81qA=",
       "uri": "https://arweave.net/j84sCI8tmnLKj89iqHhJ4ZGD3MacBa4LIe-tNe3-clU"
+    },
+    "./512x512_rounded.png": {
+      "path": "./512x512_rounded.png",
+      "sha256": "viQAeLJKnoVXp3rHkzwHi/N/yBHe+//rL6HW2CZueTY=",
+      "uri": "https://arweave.net/x3Q8oydq1FqzjGrYme8EQElqpfwjM5MiAJ9mYYhYV2g"
     }
   }
 }

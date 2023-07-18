@@ -274,17 +274,14 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
                 ),
               );
           ref.read(mintingStatusProvider(sendTransactionResult));
+          return true;
         }
-        Sentry.captureMessage(
-          'Sign and send response ${response.signedPayloads.first}',
-          level: SentryLevel.info,
-        );
       } catch (exception, stackTrace) {
         await session.close();
         Sentry.captureException(exception, stackTrace: stackTrace);
       }
     }
-    return true;
+    return false;
   }
 
   Signature? _getSignature() {

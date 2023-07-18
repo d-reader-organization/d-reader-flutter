@@ -59,33 +59,42 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     _controller.setLooping(true);
     _controller.play();
     _controller.addListener(() async {
-      final bool isMinted = ref.watch(globalStateProvider).isMinting != null &&
-          !ref.watch(globalStateProvider).isMinting! &&
-          ref.watch(lastMintedNftProvider) != null;
-      if (_controller.value.isPlaying && isMinted) {
-        _controller.pause();
-        _animationController.reverse(
-          from: 1,
-        );
-        final nft = await ref
-            .read(nftProvider(ref.watch(lastMintedNftProvider)!).future);
-
-        if (context.mounted && nft != null) {
-          ref.invalidate(lastMintedNftProvider);
-          await Future.delayed(
-            const Duration(milliseconds: 1000),
-            () {
-              nextScreenReplace(
-                context,
-                DoneMintingAnimation(
-                  nft: nft,
-                ),
-              );
-            },
-          );
+      final bool isMinting = ref.watch(globalStateProvider).isMinting != null &&
+          ref.watch(globalStateProvider).isMinting!;
+      final bool isMinted = ref.watch(lastMintedNftProvider) != null;
+      if (_controller.value.isPlaying) {
+        if (isMinted) {
+          await _handleMintedCase();
         }
+      } else if (!isMinting && !isMinted) {
+        _controller.pause();
+        Navigator.pop(context);
       }
     });
+  }
+
+  _handleMintedCase() async {
+    _controller.pause();
+    _animationController.reverse(
+      from: 1,
+    );
+    final nft =
+        await ref.read(nftProvider(ref.watch(lastMintedNftProvider)!).future);
+
+    if (context.mounted && nft != null) {
+      ref.invalidate(lastMintedNftProvider);
+      await Future.delayed(
+        const Duration(milliseconds: 1000),
+        () {
+          nextScreenReplace(
+            context,
+            DoneMintingAnimation(
+              nft: nft,
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override

@@ -1,50 +1,25 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/owned_copies.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class OwnedIssueCard extends ConsumerWidget {
-  final OwnedComicIssue issue;
+class OwnedNftCard extends ConsumerWidget {
+  final NftModel nft;
 
-  const OwnedIssueCard({
+  const OwnedNftCard({
     super.key,
-    required this.issue,
+    required this.nft,
   });
-
-  openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.6,
-          minChildSize: 0.5,
-          maxChildSize: 0.8,
-          expand: false,
-          builder: (context, scrollController) {
-            return OwnedNftsBottomSheet(
-              ownedNfts: ownedNfts,
-              ownedIssue: issue,
-            );
-          },
-        );
-      },
-    );
-  }
 
   fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
     final globalNotifier = ref.read(globalStateProvider.notifier);
@@ -66,18 +41,9 @@ class OwnedIssueCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: ref.watch(globalStateProvider).isLoading
-          ? null
-          : () async {
-              if (issue.ownedNft == null || issue.ownedCopiesCount == 1) {
-                nextScreenPush(context, EReaderView(issueId: issue.id));
-              } else {
-                final ownedNfts = await fetchOwnedNfts(ref, '${issue.id}');
-                if (context.mounted) {
-                  openModalBottomSheet(context, ownedNfts);
-                }
-              }
-            },
+      onTap: () {
+        nextScreenPush(context, EReaderView(issueId: nft.comicIssueId));
+      },
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 130,
@@ -90,7 +56,7 @@ class OwnedIssueCard extends ConsumerWidget {
             Expanded(
               flex: 3,
               child: CachedImageBgPlaceholder(
-                imageUrl: issue.cover,
+                imageUrl: nft.image,
               ),
             ),
             const SizedBox(
@@ -106,7 +72,7 @@ class OwnedIssueCard extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Episode ${issue.number}',
+                        shortenNftName(nft.name),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -116,7 +82,7 @@ class OwnedIssueCard extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        issue.title,
+                        ref.watch(selectedIssueInfoProvider)?.title ?? '',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -124,39 +90,22 @@ class OwnedIssueCard extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  issue.ownedNft != null
-                      ? Row(
-                          children: [
-                            const MintedRoyalty(),
-                            issue.ownedNft!.isSigned
-                                ? const SignedRoyalty()
-                                : const SizedBox(),
-                            OwnedCopies(copiesCount: issue.ownedCopiesCount)
-                          ],
-                        )
-                      : OwnedCopies(copiesCount: issue.ownedCopiesCount),
+                  Row(
+                    children: [
+                      const MintedRoyalty(),
+                      nft.isSigned ? const SignedRoyalty() : const SizedBox(),
+                    ],
+                  ),
                   const SizedBox(),
                   GestureDetector(
-                    onTap: ref.watch(globalStateProvider).isLoading
-                        ? null
-                        : () async {
-                            if (issue.ownedNft != null &&
-                                issue.ownedCopiesCount == 1) {
-                              nextScreenPush(
-                                context,
-                                NftDetails(
-                                  address: issue.ownedNft?.address ?? '',
-                                ),
-                              );
-                            } else {
-                              final ComicIssueModel? comicIssue = await ref
-                                  .read(comicIssueDetailsProvider(issue.id)
-                                      .future);
-                              ref
-                                  .read(selectedIssueInfoProvider.notifier)
-                                  .update((state) => comicIssue);
-                            }
-                          },
+                    onTap: () {
+                      nextScreenPush(
+                        context,
+                        NftDetails(
+                          address: nft.address,
+                        ),
+                      );
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,

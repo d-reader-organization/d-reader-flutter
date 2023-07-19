@@ -39,7 +39,7 @@ class HomeView extends StatelessWidget {
                     height: 24,
                   ),
                   ComicsListView(
-                    query: 'skip=0&take=4',
+                    query: 'skip=0&take=4&filterTag=popular',
                   ),
                   SizedBox(
                     height: 32,

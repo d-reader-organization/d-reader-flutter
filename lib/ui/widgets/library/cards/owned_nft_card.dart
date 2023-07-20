@@ -1,7 +1,5 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
@@ -21,28 +19,16 @@ class OwnedNftCard extends ConsumerWidget {
     required this.nft,
   });
 
-  fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    final ownedNfts =
-        await ref.read(nftsProvider('comicIssueId=$comicIssueId').future);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    return ownedNfts;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        nextScreenPush(context, EReaderView(issueId: nft.comicIssueId));
+        nextScreenPush(
+          context,
+          EReaderView(
+            issueId: nft.comicIssueId,
+          ),
+        );
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
@@ -80,6 +66,9 @@ class OwnedNftCard extends ConsumerWidget {
                           fontWeight: FontWeight.w500,
                           color: ColorPalette.greyscale100,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 2,
                       ),
                       Text(
                         ref.watch(selectedIssueInfoProvider)?.title ?? '',

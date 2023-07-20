@@ -21,7 +21,7 @@ final nftsProvider =
   return ref.read(nftRepositoryProvider).getNfts(query);
 });
 
-final lastMintedNftProvider = StateProvider<String?>(
+final lastProcessedNftProvider = StateProvider<String?>(
   (ref) {
     return null;
   },

@@ -13,26 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-class AnimationDialog extends StatelessWidget {
-  const AnimationDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return MintLoadingAnimation(
-          isPortrait: orientation == Orientation.portrait,
-        );
-      },
-    );
-  }
-}
-
 class MintLoadingAnimation extends ConsumerStatefulWidget {
-  final bool isPortrait;
   const MintLoadingAnimation({
     super.key,
-    this.isPortrait = true,
   });
 
   @override
@@ -61,7 +44,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     _controller.addListener(() async {
       final bool isMinting = ref.watch(globalStateProvider).isMinting != null &&
           ref.watch(globalStateProvider).isMinting!;
-      final bool isMinted = ref.watch(lastMintedNftProvider) != null;
+      final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
       if (_controller.value.isPlaying) {
         if (isMinted) {
           await _handleMintedCase();
@@ -78,11 +61,11 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     _animationController.reverse(
       from: 1,
     );
-    final nft =
-        await ref.read(nftProvider(ref.watch(lastMintedNftProvider)!).future);
+    final nft = await ref
+        .read(nftProvider(ref.watch(lastProcessedNftProvider)!).future);
 
     if (context.mounted && nft != null) {
-      ref.invalidate(lastMintedNftProvider);
+      ref.invalidate(lastProcessedNftProvider);
       await Future.delayed(
         const Duration(milliseconds: 1000),
         () {

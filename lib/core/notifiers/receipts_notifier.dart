@@ -41,7 +41,7 @@ class ReceiptsAsyncNotifier
       final newReceipt = Receipt.fromJson(data);
       ref.invalidate(candyMachineProvider);
       ref
-          .read(lastMintedNftProvider.notifier)
+          .read(lastProcessedNftProvider.notifier)
           .update((state) => newReceipt.nft.address);
       if (!canRead) {
         canRead = await ref

@@ -1,13 +1,16 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OwnedNftsBottomSheet extends StatelessWidget {
   final List<NftModel> ownedNfts;
@@ -106,30 +109,39 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: CustomTextButton(
-                          borderColor: ColorPalette.dReaderGreen,
-                          textColor: ColorPalette.dReaderGreen,
-                          borderRadius: BorderRadius.circular(8),
-                          padding: const EdgeInsets.only(
-                            top: 4,
-                            bottom: 4,
-                            left: 4,
-                          ),
-                          backgroundColor: Colors.transparent,
-                          onPressed: () {
-                            nextScreenPush(
-                              context,
-                              NftDetails(
-                                address: ownedNft.address,
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: CustomTextButton(
+                              borderColor: ColorPalette.dReaderGreen,
+                              textColor: ColorPalette.dReaderGreen,
+                              borderRadius: BorderRadius.circular(8),
+                              padding: const EdgeInsets.only(
+                                top: 4,
+                                bottom: 4,
+                                left: 4,
                               ),
-                            );
-                          },
-                          child: const Text('Open'),
-                        ),
-                      ),
+                              backgroundColor: Colors.transparent,
+                              onPressed: () async {
+                                final isSuccessful = await ref
+                                    .read(solanaProvider.notifier)
+                                    .useMint(
+                                      nftAddress: ownedNft.address,
+                                    );
+                                if (context.mounted && isSuccessful) {
+                                  nextScreenPush(
+                                    context,
+                                    const OpenNftAnimation(),
+                                  );
+                                }
+                              },
+                              child: const Text('Open'),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 );

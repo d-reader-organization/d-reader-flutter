@@ -69,13 +69,17 @@ class OwnedIssueCard extends ConsumerWidget {
       onTap: ref.watch(globalStateProvider).isLoading
           ? null
           : () async {
-              if (issue.ownedNft == null || issue.ownedCopiesCount == 1) {
-                nextScreenPush(context, EReaderView(issueId: issue.id));
-              } else {
-                final ownedNfts = await fetchOwnedNfts(ref, '${issue.id}');
-                if (context.mounted) {
-                  openModalBottomSheet(context, ownedNfts);
+              final List<NftModel> ownedNfts =
+                  await fetchOwnedNfts(ref, '${issue.id}');
+
+              final isAtLeastOneUsed = ownedNfts.any((nft) => nft.isUsed);
+
+              if (context.mounted) {
+                if (isAtLeastOneUsed) {
+                  return nextScreenPush(
+                      context, EReaderView(issueId: issue.id));
                 }
+                openModalBottomSheet(context, ownedNfts);
               }
             },
       behavior: HitTestBehavior.opaque,
@@ -140,22 +144,26 @@ class OwnedIssueCard extends ConsumerWidget {
                     onTap: ref.watch(globalStateProvider).isLoading
                         ? null
                         : () async {
-                            if (issue.ownedNft != null &&
-                                issue.ownedCopiesCount == 1) {
-                              nextScreenPush(
+                            final List<NftModel> ownedNfts =
+                                await fetchOwnedNfts(ref, '${issue.id}');
+                            final int usedNftIndex = ownedNfts
+                                .indexWhere((element) => element.isUsed);
+
+                            if (context.mounted && usedNftIndex > -1) {
+                              return nextScreenPush(
                                 context,
                                 NftDetails(
-                                  address: issue.ownedNft?.address ?? '',
+                                  address:
+                                      ownedNfts.elementAt(usedNftIndex).address,
                                 ),
                               );
-                            } else {
-                              final ComicIssueModel? comicIssue = await ref
-                                  .read(comicIssueDetailsProvider(issue.id)
-                                      .future);
-                              ref
-                                  .read(selectedIssueInfoProvider.notifier)
-                                  .update((state) => comicIssue);
                             }
+                            final ComicIssueModel? comicIssue = await ref.read(
+                              comicIssueDetailsProvider(issue.id).future,
+                            );
+                            ref
+                                .read(selectedIssueInfoProvider.notifier)
+                                .update((state) => comicIssue);
                           },
                     child: Container(
                       padding: const EdgeInsets.symmetric(

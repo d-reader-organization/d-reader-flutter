@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
@@ -232,10 +231,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return decodedTX.resign(signature);
   }
 
-  Future<bool> useMint({required NftModel nft}) async {
+  Future<bool> useMint({required String nftAddress}) async {
     final String transaction = await ref
         .read(candyMachineRepositoryProvider)
-        .useComicIssueNftTransaction(nft);
+        .useComicIssueNftTransaction(nftAddress);
     return await _signAndSendTransactions([transaction]);
   }
 

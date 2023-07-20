@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository.dart';
@@ -50,15 +49,13 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
   }
 
   @override
-  Future<String> useComicIssueNftTransaction(NftModel nft) async {
+  Future<String> useComicIssueNftTransaction(String nftAddress) async {
     try {
-      final transaction = await client.get(
-        '/candy-machine/transactions/use-comic-issue-nft',
-        queryParameters: {
-          'mint': nft.address,
-          'rarity': nft.rarity,
-        },
-      ).then((value) => value.data);
+      final transaction = await client
+          .get(
+            '/candy-machine/transactions/use-comic-issue-nft/$nftAddress',
+          )
+          .then((value) => value.data);
       return transaction;
     } catch (error, stackTrace) {
       Sentry.captureException(error, stackTrace: stackTrace);

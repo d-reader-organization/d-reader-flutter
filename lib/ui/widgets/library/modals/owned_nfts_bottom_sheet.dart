@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -130,10 +131,19 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                     .useMint(
                                       nftAddress: ownedNft.address,
                                     );
-                                if (context.mounted && isSuccessful) {
-                                  nextScreenPush(
-                                    context,
-                                    const OpenNftAnimation(),
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                  if (isSuccessful) {
+                                    return nextScreenPush(
+                                      context,
+                                      const OpenNftAnimation(),
+                                    );
+                                  }
+                                  showSnackBar(
+                                    context: context,
+                                    backgroundColor: ColorPalette.dReaderRed,
+                                    duration: 2000,
+                                    text: 'Failed to open',
                                   );
                                 }
                               },

@@ -1,11 +1,9 @@
 import 'package:d_reader_flutter/core/providers/common_text_controller_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/intro/selected_button_provider.dart';
 import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/button_with_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -50,87 +48,22 @@ class ReferralsView extends ConsumerWidget {
               ),
             ),
             const SizedBox(
-              height: 16,
-            ),
-            ButtonWithIcon(
-              name: 'saga',
-              label: const Text(
-                'Have Saga',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              icon: SvgPicture.asset(
-                'assets/icons/category.svg',
-                colorFilter: ColorFilter.mode(
-                  ref.watch(selectedButtonProvider) == 'saga'
-                      ? Colors.black
-                      : Colors.white,
-                  BlendMode.srcIn,
-                ),
-              ),
-              selectedColor: ColorPalette.dReaderYellow100,
-              onPressed: () {
-                ref.read(commonTextValue.notifier).state = '';
-                ref.read(commonTextEditingController).clear();
-                if (ref.read(selectedButtonProvider) == 'saga') {
-                  ref.read(selectedButtonProvider.notifier).state = '';
-                } else {
-                  ref.read(selectedButtonProvider.notifier).state = 'saga';
-                }
-              },
-            ),
-            const SizedBox(
               height: 8,
             ),
-            ButtonWithIcon(
-              name: 'referral',
-              label: const Text(
-                'Referral code',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              icon: SvgPicture.asset(
-                'assets/icons/ticket.svg',
-                colorFilter: ColorFilter.mode(
-                  ref.watch(selectedButtonProvider) == 'referral'
-                      ? Colors.black
-                      : Colors.white,
-                  BlendMode.srcIn,
-                ),
-              ),
-              selectedColor: ColorPalette.dReaderYellow100,
-              onPressed: () {
-                if (ref.read(selectedButtonProvider) == 'referral') {
-                  ref.read(selectedButtonProvider.notifier).state = '';
-                } else {
-                  ref.read(selectedButtonProvider.notifier).state = 'referral';
-                }
+            CustomTextField(
+              hintText: 'Username or Wallet address',
+              controller: ref.read(commonTextEditingController),
+              onChange: (String value) {
+                ref.read(commonTextValue.notifier).state = value;
               },
             ),
-            const SizedBox(
-              height: 8,
-            ),
-            ref.watch(selectedButtonProvider) == 'referral'
-                ? CustomTextField(
-                    hintText: 'Username or Wallet address',
-                    controller: ref.read(commonTextEditingController),
-                    onChange: (String value) {
-                      ref.read(commonTextValue.notifier).state = value;
-                    },
-                  )
-                : const SizedBox(),
           ],
         ),
       ),
       bottomNavigationBar: Consumer(
         builder: (context, ref, child) {
           final String referrer = ref.watch(commonTextValue);
-          return referrer.isNotEmpty ||
-                  ref.watch(selectedButtonProvider) == 'saga'
+          return referrer.isNotEmpty
               ? SettingsButtonsBottom(
                   isLoading: ref.watch(globalStateProvider).isLoading,
                   onCancel: () {
@@ -145,8 +78,7 @@ class ReferralsView extends ConsumerWidget {
                       ),
                     );
                     final result = await ref.read(
-                      updateReferrer(referrer.isEmpty ? 'saga' : referrer)
-                          .future,
+                      updateReferrer(referrer).future,
                     );
 
                     notifier.update(
@@ -160,7 +92,7 @@ class ReferralsView extends ConsumerWidget {
                         ref.read(commonTextEditingController).clear();
                         ref.read(commonTextValue.notifier).state = '';
                         ref.invalidate(myWalletProvider);
-                        ref.invalidate(selectedButtonProvider);
+
                         showSnackBar(
                           context: context,
                           text: 'Referrer has been redeemed.',

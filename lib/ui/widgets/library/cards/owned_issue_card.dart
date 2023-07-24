@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
@@ -53,8 +54,9 @@ class OwnedIssueCard extends ConsumerWidget {
         isLoading: true,
       ),
     );
-    final ownedNfts =
-        await ref.read(nftsProvider('comicIssueId=$comicIssueId').future);
+    final ownedNfts = await ref.read(nftsProvider(
+            'comicIssueId=$comicIssueId&owner=${ref.read(environmentProvider).publicKey?.toBase58()}')
+        .future);
     globalNotifier.update(
       (state) => state.copyWith(
         isLoading: false,

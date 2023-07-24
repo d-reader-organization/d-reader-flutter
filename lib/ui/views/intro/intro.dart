@@ -2,7 +2,6 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/intro/selected_button_provider.dart';
 import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
@@ -186,10 +185,7 @@ class IntroView extends HookConsumerWidget {
                             UpdateWalletPayload(
                               address: address,
                               name: walletName.trim(),
-                              referrer:
-                                  ref.read(selectedButtonProvider) == 'saga'
-                                      ? 'Saga'
-                                      : referrerName.trim(),
+                              referrer: referrerName.trim(),
                             ),
                           ).future,
                         );

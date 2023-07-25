@@ -5,7 +5,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CachedImageBgPlaceholder extends StatelessWidget {
   final String imageUrl;
-  final Widget? child;
+  final Widget? child, placeholder;
   final double? height, width;
   final double borderRadius, opacity;
   final Decoration? foregroundDecoration;
@@ -23,6 +23,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
     this.overrideBorderRadius,
     this.bgImageFit = BoxFit.cover,
     this.opacity = 1,
+    this.placeholder,
   }) : super(key: key);
 
   @override
@@ -45,16 +46,18 @@ class CachedImageBgPlaceholder extends StatelessWidget {
         ),
         child: child,
       ),
-      placeholder: (context, url) => Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius:
-              overrideBorderRadius ?? BorderRadius.circular(borderRadius),
-        ),
-        foregroundDecoration: foregroundDecoration,
-      ),
+      placeholder: (context, url) =>
+          placeholder ??
+          Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius:
+                  overrideBorderRadius ?? BorderRadius.circular(borderRadius),
+            ),
+            foregroundDecoration: foregroundDecoration,
+          ),
       errorWidget: (context, url, error) {
         Sentry.captureException(error);
         return Container(

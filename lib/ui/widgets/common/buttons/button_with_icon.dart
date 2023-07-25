@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/core/providers/intro/selected_button_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,6 +8,7 @@ class ButtonWithIcon extends ConsumerWidget {
   final Widget icon;
   final Function()? onPressed;
   final Color selectedColor;
+  final bool isSelected;
   const ButtonWithIcon({
     super.key,
     required this.name,
@@ -16,11 +16,11 @@ class ButtonWithIcon extends ConsumerWidget {
     required this.icon,
     this.onPressed,
     required this.selectedColor,
+    this.isSelected = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isSelected = ref.watch(selectedButtonProvider) == name;
     return TextButton.icon(
       style: TextButton.styleFrom(
         foregroundColor: isSelected ? Colors.black : Colors.white,

@@ -1,15 +1,11 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
-import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
+import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -21,28 +17,16 @@ class OwnedNftCard extends ConsumerWidget {
     required this.nft,
   });
 
-  fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    final ownedNfts =
-        await ref.read(nftsProvider('comicIssueId=$comicIssueId').future);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    return ownedNfts;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        nextScreenPush(context, EReaderView(issueId: nft.comicIssueId));
+        nextScreenPush(
+          context,
+          EReaderView(
+            issueId: nft.comicIssueId,
+          ),
+        );
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
@@ -81,6 +65,9 @@ class OwnedNftCard extends ConsumerWidget {
                           color: ColorPalette.greyscale100,
                         ),
                       ),
+                      const SizedBox(
+                        height: 2,
+                      ),
                       Text(
                         ref.watch(selectedIssueInfoProvider)?.title ?? '',
                         style: const TextStyle(
@@ -92,41 +79,19 @@ class OwnedNftCard extends ConsumerWidget {
                   ),
                   Row(
                     children: [
-                      const MintedRoyalty(),
-                      nft.isSigned ? const SignedRoyalty() : const SizedBox(),
+                      const RoyaltyWidget(
+                        iconPath: 'assets/icons/mint_icon.svg',
+                        text: 'Mint',
+                        color: ColorPalette.dReaderGreen,
+                      ),
+                      nft.isSigned
+                          ? const RoyaltyWidget(
+                              iconPath: 'assets/icons/signed_icon.svg',
+                              text: 'Signed',
+                              color: ColorPalette.dReaderOrange,
+                            )
+                          : const SizedBox(),
                     ],
-                  ),
-                  const SizedBox(),
-                  GestureDetector(
-                    onTap: () {
-                      nextScreenPush(
-                        context,
-                        NftDetails(
-                          address: nft.address,
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: ColorPalette.greyscale100,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          8,
-                        ),
-                      ),
-                      child: const Text(
-                        'Info',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),

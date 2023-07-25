@@ -44,9 +44,9 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   final String sortDirection = getSortDirection(selectedSortDirection);
   final String common =
       'sortOrder=$sortDirection&${adjustQueryString(genreTags)}${adjustQueryString(sortByFilter)}${adjustQueryString(tagFilter)}';
-  final String query = scrollListType == ScrollListType.issueList
-      ? '$common${'titleSubstring=$search'}'
-      : '$common${'nameSubstring=$search'}';
+  final String query = scrollListType == ScrollListType.creatorList
+      ? '$common${'nameSubstring=$search'}'
+      : '$common${'titleSubstring=$search'}';
   return query;
 }
 

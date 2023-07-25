@@ -1,7 +1,9 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository_impl.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
@@ -30,6 +32,7 @@ final registerWalletToSocketEvents = Provider(
     if (socket.connected) {
       return;
     }
+    socket.connect();
     final String address =
         ref.read(environmentProvider).publicKey?.toBase58() ?? '';
 
@@ -53,6 +56,13 @@ final registerWalletToSocketEvents = Provider(
     });
     socket.on('wallet/$address/item-sent', (data) {
       ref.invalidate(walletAssetsProvider);
+    });
+    socket.on('wallet/$address/item-used', (data) {
+      ref.invalidate(ownedIssuesProvider);
+      ref.invalidate(nftProvider);
+      return ref
+          .read(lastProcessedNftProvider.notifier)
+          .update((state) => data['address']);
     });
   },
 );

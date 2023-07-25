@@ -7,32 +7,15 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
+import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
-class AnimationDialog extends StatelessWidget {
-  const AnimationDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return MintLoadingAnimation(
-          isPortrait: orientation == Orientation.portrait,
-        );
-      },
-    );
-  }
-}
-
 class MintLoadingAnimation extends ConsumerStatefulWidget {
-  final bool isPortrait;
   const MintLoadingAnimation({
     super.key,
-    this.isPortrait = true,
   });
 
   @override
@@ -61,7 +44,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     _controller.addListener(() async {
       final bool isMinting = ref.watch(globalStateProvider).isMinting != null &&
           ref.watch(globalStateProvider).isMinting!;
-      final bool isMinted = ref.watch(lastMintedNftProvider) != null;
+      final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
       if (_controller.value.isPlaying) {
         if (isMinted) {
           await _handleMintedCase();
@@ -78,11 +61,11 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     _animationController.reverse(
       from: 1,
     );
-    final nft =
-        await ref.read(nftProvider(ref.watch(lastMintedNftProvider)!).future);
+    final nft = await ref
+        .read(nftProvider(ref.watch(lastProcessedNftProvider)!).future);
 
     if (context.mounted && nft != null) {
-      ref.invalidate(lastMintedNftProvider);
+      ref.invalidate(lastProcessedNftProvider);
       await Future.delayed(
         const Duration(milliseconds: 1000),
         () {
@@ -258,9 +241,17 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const MintedRoyalty(),
+                        const RoyaltyWidget(
+                          iconPath: 'assets/icons/mint_icon.svg',
+                          text: 'Mint',
+                          color: ColorPalette.dReaderGreen,
+                        ),
                         widget.nft.isSigned
-                            ? const SignedRoyalty()
+                            ? const RoyaltyWidget(
+                                iconPath: 'assets/icons/signed_icon.svg',
+                                text: 'Signed',
+                                color: ColorPalette.dReaderOrange,
+                              )
                             : const SizedBox(),
                       ],
                     )

@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/mint_animation_screen.dart';
+import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
@@ -472,6 +472,8 @@ class ReadButton extends StatelessWidget {
         ),
       ),
       onPressed: () {
+        // if any of nfts is not opened, open modal bottom sheet and force user to open at least one
+        // if there are open nfts go to the Ereader
         nextScreenPush(
           context,
           EReaderView(

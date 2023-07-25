@@ -5,4 +5,5 @@ abstract class CandyMachineRepository {
   Future<CandyMachineModel?> getCandyMachine(String address);
   Future<List<Receipt>> getReceipts({String? queryString});
   Future<String?> constructNftTransaction(String candyMachineAddress);
+  Future<String?> useComicIssueNftTransaction(String nftAddress);
 }

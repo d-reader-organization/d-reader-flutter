@@ -78,22 +78,35 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
   }
 
-  Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
-    final session = await _getSession();
-    final client = await session.start();
-    final String cluster =
-        overrideCluster ?? ref.read(environmentProvider).solanaCluster;
-    final result = await client.authorize(
+  Future<AuthorizationResult?> _authorize({
+    required MobileWalletAdapterClient client,
+    required String cluster,
+  }) {
+    return client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       cluster: cluster,
       iconUri: Uri.file(Config.faviconPath),
     );
+  }
+
+  Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
+    final session = await _getSession();
+    final client = await session.start();
+    final String cluster =
+        overrideCluster ?? ref.read(environmentProvider).solanaCluster;
+
+    final result = await _authorize(
+      client: client,
+      cluster: cluster,
+    );
+
     final publicKey = Ed25519HDPublicKey(result?.publicKey ?? []);
     final apiUrl = cluster == SolanaCluster.devnet.value
         ? Config.apiUrlDevnet
         : Config.apiUrl;
     final envNotifier = ref.read(environmentProvider.notifier);
+
     final signMessageResult = await _signMessage(
       client: client,
       signer: publicKey,
@@ -106,6 +119,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           ? signMessageResult
           : 'Failed to sign message.';
     }
+
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
@@ -119,13 +133,18 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       ),
     );
     envNotifier.updateLastSelectedNetwork(cluster);
-    await session.close();
 
-    await _getAndStoreToken(
-      signedMessage: signMessageResult.first,
-      publicKey: publicKey,
-      apiUrl: apiUrl,
+    await Future.wait(
+      [
+        session.close(),
+        _getAndStoreToken(
+          signedMessage: signMessageResult.first,
+          publicKey: publicKey,
+          apiUrl: apiUrl,
+        ),
+      ],
     );
+
     return 'OK';
   }
 
@@ -231,12 +250,21 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return decodedTX.resign(signature);
   }
 
+  Future<bool> useMint({required String nftAddress}) async {
+    final String transaction = await ref
+        .read(candyMachineRepositoryProvider)
+        .useComicIssueNftTransaction(nftAddress);
+    return await _signAndSendTransactions([transaction]);
+  }
+
   Future<bool> _signAndSendTransactions(
       List<String> encodedTransactions) async {
     final session = await _getSession();
     final client = await session.start();
+
     final signature = _getSignature();
     ref.read(globalStateProvider.notifier).state.copyWith(isLoading: true);
+
     if (await _doReauthorize(client) && signature != null) {
       List<SignedTx> resignedTransactions = encodedTransactions
           .map(
@@ -246,6 +274,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             ),
           )
           .toList();
+
       try {
         final response = await client.signTransactions(
           transactions: resignedTransactions.map((resignedTransaction) {
@@ -255,10 +284,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         await session.close();
         if (response.signedPayloads.isNotEmpty) {
           final client = createSolanaClient(
-              rpcUrl: ref.read(environmentProvider).solanaCluster ==
-                      SolanaCluster.devnet.value
-                  ? Config.rpcUrlDevnet
-                  : Config.rpcUrlMainnet);
+            rpcUrl: ref.read(environmentProvider).solanaCluster ==
+                    SolanaCluster.devnet.value
+                ? Config.rpcUrlDevnet
+                : Config.rpcUrlMainnet,
+          );
 
           final signedTx = SignedTx.fromBytes(
             response.signedPayloads.first.toList(),

@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository.dart';
 import 'package:dio/dio.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CandyMachineRepositoryImpl implements CandyMachineRepository {
   final Dio client;
@@ -45,5 +46,20 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
         .then(
           (value) => value.data,
         );
+  }
+
+  @override
+  Future<String> useComicIssueNftTransaction(String nftAddress) async {
+    try {
+      final transaction = await client
+          .get(
+            '/candy-machine/transactions/use-comic-issue-nft/$nftAddress',
+          )
+          .then((value) => value.data);
+      return transaction;
+    } catch (error, stackTrace) {
+      Sentry.captureException(error, stackTrace: stackTrace);
+      throw Exception('Failed to get transaction from API');
+    }
   }
 }

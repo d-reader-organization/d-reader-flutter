@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:flutter/material.dart';
 
@@ -15,37 +14,12 @@ class NfTCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return CachedImageBgPlaceholder(
-      imageUrl: imageUrl,
-      height: 276,
-      bgImageFit: BoxFit.cover,
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          margin: const EdgeInsets.only(top: 8),
-          decoration: BoxDecoration(
-            color: ColorPalette.appBackgroundColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                comicName,
-                style: textTheme.titleMedium?.copyWith(
-                  color: ColorPalette.dReaderYellow100,
-                ),
-              ),
-              Text(
-                issueName,
-                style: textTheme.titleMedium,
-              ),
-            ],
-          ),
-        ),
+    return AspectRatio(
+      aspectRatio: 338 / 232,
+      child: CachedImageBgPlaceholder(
+        imageUrl: imageUrl,
+        bgImageFit: BoxFit.scaleDown,
+        placeholder: const SizedBox(),
       ),
     );
   }

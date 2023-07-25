@@ -21,7 +21,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: 7ATD3PoNVkZ1QPqLHuHVqbB4ExffEGTw2G8yv4qmtnUq
+  address: J81vNkHaaDsNAJAsmZqzFBagujBGKzdeRtASHk3RRgaJ
   media:
     - purpose: icon
       uri: ./512x512_rounded.png

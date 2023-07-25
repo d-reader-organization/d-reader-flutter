@@ -7,19 +7,20 @@ import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
+import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/nft/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -87,7 +88,7 @@ class NftDetails extends ConsumerWidget {
           body: ListView(
             children: const [
               SkeletonCard(
-                height: 396,
+                height: 328,
               ),
               SizedBox(
                 height: 8,
@@ -116,6 +117,21 @@ class Body extends StatelessWidget {
     required this.nft,
   });
 
+  _handleNftOpen(BuildContext context, bool isSuccessful) {
+    if (isSuccessful) {
+      return nextScreenPush(
+        context,
+        const OpenNftAnimation(),
+      );
+    }
+    showSnackBar(
+      context: context,
+      backgroundColor: ColorPalette.dReaderRed,
+      duration: 2000,
+      text: 'Failed to open',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -128,48 +144,6 @@ class Body extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: CustomTextButton(
-                  backgroundColor: ColorPalette.dReaderGreen,
-                  size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(
-                      8,
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.glasses,
-                        size: 14,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        'Read',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ],
-                  ),
-                  onPressed: () {
-                    nextScreenPush(
-                      context,
-                      EReaderView(
-                        issueId: nft.comicIssueId,
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
               Consumer(
                 builder: (context, ref, child) {
                   return Expanded(
@@ -180,11 +154,25 @@ class Body extends StatelessWidget {
                           8,
                         ),
                       ),
+                      borderColor: ColorPalette.greyscale200,
                       padding: const EdgeInsets.symmetric(vertical: 8),
+                      backgroundColor: Colors.transparent,
                       isLoading: ref.watch(globalStateProvider).isLoading,
                       child: nft.isListed
-                          ? const Text('Delist')
-                          : const Text('List'),
+                          ? const Text(
+                              'Delist',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: ColorPalette.greyscale200),
+                            )
+                          : const Text(
+                              'List',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: ColorPalette.greyscale200),
+                            ),
                       onPressed: () async {
                         if (nft.isListed) {
                           await ref
@@ -213,6 +201,51 @@ class Body extends StatelessWidget {
                   );
                 },
               ),
+              const SizedBox(
+                width: 16,
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  return Expanded(
+                    child: CustomTextButton(
+                      backgroundColor: Colors.transparent,
+                      borderColor: ColorPalette.dReaderGreen,
+                      size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(
+                          8,
+                        ),
+                      ),
+                      child: Text(
+                        nft.isUsed ? 'Read' : 'Open',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: ColorPalette.dReaderGreen,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (nft.isUsed) {
+                          return nextScreenPush(
+                            context,
+                            EReaderView(
+                              issueId: nft.comicIssueId,
+                            ),
+                          );
+                        }
+                        final isSuccessful =
+                            await ref.read(solanaProvider.notifier).useMint(
+                                  nftAddress: nft.address,
+                                );
+                        if (context.mounted) {
+                          _handleNftOpen(context, isSuccessful);
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
             ],
           ),
           const SizedBox(
@@ -231,115 +264,68 @@ class Body extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          !nft.isUsed || nft.isSigned
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Properties',
-                      style: sectionHeadingStyle,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Properties',
+                style: sectionHeadingStyle,
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    height: 40,
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: ColorPalette.dReaderBlue,
+                      ),
                     ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Row(
+                    child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: ColorPalette.dReaderBlue,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                '${formatPrice(nft.royalties)}%',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: ColorPalette.dReaderBlue,
-                                    ),
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                'royalty',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ],
-                          ),
+                        Text(
+                          '${formatPrice(nft.royalties)}%',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: ColorPalette.dReaderBlue,
+                                  ),
                         ),
-                        !nft.isUsed
-                            ? Container(
-                                padding: const EdgeInsets.all(8),
-                                margin: const EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: ColorPalette.dReaderGreen,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/mint_icon.svg',
-                                      height: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      'Mint',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox(),
-                        nft.isSigned
-                            ? Container(
-                                padding: const EdgeInsets.all(8),
-                                margin: const EdgeInsets.only(right: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: ColorPalette.dReaderOrange,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/signed_icon.svg',
-                                      height: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      'Signed',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : const SizedBox(),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          'royalty',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                  ],
-                )
-              : const SizedBox(),
+                  ),
+                  const RoyaltyWidget(
+                    iconPath: 'assets/icons/mint_icon.svg',
+                    text: 'Mint',
+                    color: ColorPalette.dReaderGreen,
+                    isLarge: true,
+                  ),
+                  nft.isSigned
+                      ? const RoyaltyWidget(
+                          iconPath: 'assets/icons/signed_icon.svg',
+                          text: 'Signed',
+                          color: ColorPalette.dReaderOrange,
+                          isLarge: true,
+                        )
+                      : const SizedBox(),
+                ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
           const Text(
             'Owner',
             style: sectionHeadingStyle,

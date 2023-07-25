@@ -19,7 +19,13 @@ class ComicsListView extends ConsumerWidget {
     return comics.when(
       data: (data) {
         if (data.isEmpty) {
-          return const SizedBox();
+          return const Text(
+            'No comics.',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          );
         }
         return SizedBox(
           height: 276,

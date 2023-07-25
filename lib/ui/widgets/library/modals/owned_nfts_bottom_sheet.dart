@@ -8,8 +8,7 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
+import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -99,9 +98,18 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  const MintedRoyalty(),
+                                  const RoyaltyWidget(
+                                    iconPath: 'assets/icons/mint_icon.svg',
+                                    text: 'Mint',
+                                    color: ColorPalette.dReaderGreen,
+                                  ),
                                   ownedNft.isSigned
-                                      ? const SignedRoyalty()
+                                      ? const RoyaltyWidget(
+                                          iconPath:
+                                              'assets/icons/signed_icon.svg',
+                                          text: 'Signed',
+                                          color: ColorPalette.dReaderOrange,
+                                        )
                                       : const SizedBox(),
                                 ],
                               ),

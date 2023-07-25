@@ -58,6 +58,7 @@ final registerWalletToSocketEvents = Provider(
     });
     socket.on('wallet/$address/item-used', (data) {
       ref.invalidate(ownedIssuesProvider);
+      ref.invalidate(nftProvider);
       return ref
           .read(lastProcessedNftProvider.notifier)
           .update((state) => data['address']);

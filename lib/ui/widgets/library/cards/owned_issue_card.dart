@@ -11,10 +11,9 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/owned_copies.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -133,9 +132,17 @@ class OwnedIssueCard extends ConsumerWidget {
                   issue.ownedNft != null
                       ? Row(
                           children: [
-                            const MintedRoyalty(),
+                            const RoyaltyWidget(
+                              iconPath: 'assets/icons/mint_icon.svg',
+                              text: 'Mint',
+                              color: ColorPalette.dReaderGreen,
+                            ),
                             issue.ownedNft!.isSigned
-                                ? const SignedRoyalty()
+                                ? const RoyaltyWidget(
+                                    iconPath: 'assets/icons/signed_icon.svg',
+                                    text: 'Signed',
+                                    color: ColorPalette.dReaderOrange,
+                                  )
                                 : const SizedBox(),
                             OwnedCopies(copiesCount: issue.ownedCopiesCount)
                           ],
@@ -148,15 +155,19 @@ class OwnedIssueCard extends ConsumerWidget {
                         : () async {
                             final List<NftModel> ownedNfts =
                                 await fetchOwnedNfts(ref, '${issue.id}');
+
                             final int usedNftIndex = ownedNfts
                                 .indexWhere((element) => element.isUsed);
 
-                            if (context.mounted && usedNftIndex > -1) {
+                            if (context.mounted &&
+                                (usedNftIndex > -1 || ownedNfts.length == 1)) {
+                              final properIndex =
+                                  usedNftIndex > -1 ? usedNftIndex : 0;
                               return nextScreenPush(
                                 context,
                                 NftDetails(
                                   address:
-                                      ownedNfts.elementAt(usedNftIndex).address,
+                                      ownedNfts.elementAt(properIndex).address,
                                 ),
                               );
                             }

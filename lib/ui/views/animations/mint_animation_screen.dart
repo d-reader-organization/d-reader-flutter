@@ -7,8 +7,8 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/minted.dart';
-import 'package:d_reader_flutter/ui/widgets/royalties/signed.dart';
+import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -241,9 +241,17 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const MintedRoyalty(),
+                        const RoyaltyWidget(
+                          iconPath: 'assets/icons/mint_icon.svg',
+                          text: 'Mint',
+                          color: ColorPalette.dReaderGreen,
+                        ),
                         widget.nft.isSigned
-                            ? const SignedRoyalty()
+                            ? const RoyaltyWidget(
+                                iconPath: 'assets/icons/signed_icon.svg',
+                                text: 'Signed',
+                                color: ColorPalette.dReaderOrange,
+                              )
                             : const SizedBox(),
                       ],
                     )

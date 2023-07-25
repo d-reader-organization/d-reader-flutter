@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
@@ -39,20 +40,31 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
     _controller.setLooping(true);
     _controller.play();
 
-    _controller.addListener(() {
-      final bool isMinting = ref.watch(globalStateProvider).isMinting != null &&
-          ref.watch(globalStateProvider).isMinting!;
-      final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
+    Future.delayed(
+      const Duration(seconds: 15),
+      () {
+        final bool isMinting =
+            (ref.read(globalStateProvider).isMinting == null ||
+                ref.read(globalStateProvider).isMinting == false);
+        final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
 
-      if (_controller.value.isPlaying) {
-        if (isMinted) {
-          _handleMintedCase();
+        if (_controller.value.isPlaying) {
+          if (isMinted) {
+            return _handleMintedCase();
+          } else if (!isMinting && !isMinted) {
+            Navigator.pop(context);
+            showSnackBar(
+              context: context,
+              text: 'Internal server error.',
+              duration: 2500,
+              backgroundColor: ColorPalette.dReaderRed,
+            );
+            return;
+          }
+          Navigator.pop(context);
         }
-      } else if (!isMinting && !isMinted) {
-        _controller.pause();
-        Navigator.pop(context);
-      }
-    });
+      },
+    );
   }
 
   _handleMintedCase() {

@@ -40,31 +40,27 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
     _controller.setLooping(true);
     _controller.play();
 
-    Future.delayed(
-      const Duration(seconds: 15),
-      () {
-        final bool isMinting =
-            (ref.read(globalStateProvider).isMinting == null ||
-                ref.read(globalStateProvider).isMinting == false);
-        final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
+    _controller.addListener(() {
+      final bool isMinting = ref.watch(globalStateProvider).isMinting != null &&
+          ref.watch(globalStateProvider).isMinting!;
+      final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
 
-        if (_controller.value.isPlaying) {
-          if (isMinted) {
-            return _handleMintedCase();
-          } else if (!isMinting && !isMinted) {
-            Navigator.pop(context);
-            showSnackBar(
-              context: context,
-              text: 'Internal server error.',
-              duration: 2500,
-              backgroundColor: ColorPalette.dReaderRed,
-            );
-            return;
-          }
+      if (_controller.value.isPlaying) {
+        if (isMinted) {
+          _handleMintedCase();
+        } else if (!isMinting && !isMinted) {
+          _controller.pause();
           Navigator.pop(context);
+          showSnackBar(
+            context: context,
+            text: 'Internal server error.',
+            duration: 2500,
+            backgroundColor: ColorPalette.dReaderRed,
+          );
+          return;
         }
-      },
-    );
+      }
+    });
   }
 
   _handleMintedCase() {
@@ -78,14 +74,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
       nextScreenReplace(
         context,
         _SuccessAnimation(
-          handler: () {
-            nextScreenReplace(
-              context,
-              NftDetails(
-                address: nftAddress,
-              ),
-            );
-          },
+          nftAddress: nftAddress,
         ),
       );
     }
@@ -133,10 +122,10 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
 }
 
 class _SuccessAnimation extends StatefulWidget {
-  final Function() handler;
+  final String nftAddress;
 
   const _SuccessAnimation({
-    required this.handler,
+    required this.nftAddress,
   });
 
   @override
@@ -180,7 +169,14 @@ class _SuccessAnimationState extends State<_SuccessAnimation>
         opacity: _animationController,
         child: Center(
           child: CustomTextButton(
-            onPressed: widget.handler,
+            onPressed: () {
+              nextScreenReplace(
+                context,
+                NftDetails(
+                  address: widget.nftAddress,
+                ),
+              );
+            },
             backgroundColor: ColorPalette.dReaderGreen,
             padding: const EdgeInsets.all(16),
             borderRadius: BorderRadius.circular(8),

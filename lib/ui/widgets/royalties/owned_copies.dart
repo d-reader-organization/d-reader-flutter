@@ -26,7 +26,7 @@ class OwnedCopies extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '$copiesCount copies',
+            '$copiesCount ${copiesCount > 1 ? 'copies' : 'copy'}',
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,

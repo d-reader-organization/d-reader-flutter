@@ -23,16 +23,16 @@ class AuthorVerified extends StatelessWidget {
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       children: [
-        Text(
-          authorName.length > 12 && !displayFullName
-              ? authorName.substring(0, 12)
-              : authorName,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: fontSize,
-            color: textColor,
+        Expanded(
+          child: Text(
+            authorName,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w500,
+              fontSize: fontSize,
+              color: textColor,
+            ),
           ),
         ),
         const SizedBox(

@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -15,6 +16,7 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.da
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
+import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
@@ -305,11 +307,15 @@ class Body extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const RoyaltyWidget(
-                    iconPath: 'assets/icons/mint_icon.svg',
-                    text: 'Mint',
-                    color: ColorPalette.dReaderGreen,
+                  RoyaltyWidget(
                     isLarge: true,
+                    iconPath: nft.isUsed
+                        ? 'assets/icons/used_nft.svg'
+                        : 'assets/icons/mint_icon.svg',
+                    text: nft.isUsed ? 'Used' : 'Mint',
+                    color: nft.isUsed
+                        ? ColorPalette.lightblue
+                        : ColorPalette.dReaderGreen,
                   ),
                   nft.isSigned
                       ? const RoyaltyWidget(
@@ -319,6 +325,11 @@ class Body extends StatelessWidget {
                           isLarge: true,
                         )
                       : const SizedBox(),
+                  RarityWidget(
+                    rarity: nft.rarity.rarityEnum,
+                    iconPath: 'assets/icons/rarity.svg',
+                    isLarge: true,
+                  ),
                 ],
               ),
               const SizedBox(

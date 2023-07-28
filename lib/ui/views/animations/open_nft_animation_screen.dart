@@ -71,6 +71,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
     final String? nftAddress = ref.read(lastProcessedNftProvider);
     if (context.mounted && nftAddress != null) {
       ref.invalidate(lastProcessedNftProvider);
+      ref.invalidate(nftsProvider);
       nextScreenReplace(
         context,
         _SuccessAnimation(

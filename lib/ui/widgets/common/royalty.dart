@@ -30,6 +30,7 @@ class RoyaltyWidget extends StatelessWidget {
         ),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           SvgPicture.asset(
             iconPath,

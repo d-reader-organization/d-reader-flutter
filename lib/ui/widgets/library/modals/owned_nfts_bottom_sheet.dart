@@ -2,12 +2,14 @@ import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -64,102 +66,120 @@ class OwnedNftsBottomSheet extends StatelessWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 final ownedNft = ownedNfts[index];
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Episode ${ownedIssue.number}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: ColorPalette.greyscale100,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            shortenNftName(
-                              ownedNft.name,
-                            ),
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Row(
+                    Text(
+                      'Episode ${ownedIssue.number}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.greyscale100,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      shortenNftName(
+                        ownedNft.name,
+                      ),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            alignment: WrapAlignment.start,
+                            direction: Axis.horizontal,
+                            runSpacing: 4,
                             children: [
-                              Row(
-                                children: [
-                                  const RoyaltyWidget(
-                                    iconPath: 'assets/icons/mint_icon.svg',
-                                    text: 'Mint',
-                                    color: ColorPalette.dReaderGreen,
-                                  ),
-                                  ownedNft.isSigned
-                                      ? const RoyaltyWidget(
-                                          iconPath:
-                                              'assets/icons/signed_icon.svg',
-                                          text: 'Signed',
-                                          color: ColorPalette.dReaderOrange,
-                                        )
-                                      : const SizedBox(),
-                                ],
+                              RoyaltyWidget(
+                                iconPath: ownedNft.isUsed
+                                    ? 'assets/icons/used_nft.svg'
+                                    : 'assets/icons/mint_icon.svg',
+                                text: ownedNft.isUsed ? 'Used' : 'Mint',
+                                color: ownedNft.isUsed
+                                    ? ColorPalette.lightblue
+                                    : ColorPalette.dReaderGreen,
+                              ),
+                              ownedNft.isSigned
+                                  ? const RoyaltyWidget(
+                                      iconPath: 'assets/icons/signed_icon.svg',
+                                      text: 'Signed',
+                                      color: ColorPalette.dReaderOrange,
+                                    )
+                                  : const SizedBox(),
+                              RarityWidget(
+                                rarity: ownedNft.rarity.rarityEnum,
+                                iconPath: 'assets/icons/rarity.svg',
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        return Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: CustomTextButton(
-                              borderColor: ColorPalette.dReaderGreen,
-                              textColor: ColorPalette.dReaderGreen,
-                              borderRadius: BorderRadius.circular(8),
-                              padding: const EdgeInsets.only(
-                                top: 4,
-                                bottom: 4,
-                                left: 4,
-                              ),
-                              backgroundColor: Colors.transparent,
-                              onPressed: () async {
-                                final isSuccessful = await ref
-                                    .read(solanaProvider.notifier)
-                                    .useMint(
-                                      nftAddress: ownedNft.address,
-                                    );
-                                if (context.mounted) {
-                                  Navigator.pop(context);
-                                  if (isSuccessful) {
-                                    return nextScreenPush(
-                                      context,
-                                      const OpenNftAnimation(),
+                        ),
+                        Expanded(
+                          child: Consumer(
+                            builder: (context, ref, child) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  final isSuccessful = await ref
+                                      .read(solanaProvider.notifier)
+                                      .useMint(
+                                        nftAddress: ownedNft.address,
+                                      );
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                    if (isSuccessful) {
+                                      return nextScreenPush(
+                                        context,
+                                        const OpenNftAnimation(),
+                                      );
+                                    }
+                                    showSnackBar(
+                                      context: context,
+                                      backgroundColor: ColorPalette.dReaderRed,
+                                      duration: 2000,
+                                      text: 'Failed to open',
                                     );
                                   }
-                                  showSnackBar(
-                                    context: context,
-                                    backgroundColor: ColorPalette.dReaderRed,
-                                    duration: 2000,
-                                    text: 'Failed to open',
-                                  );
-                                }
-                              },
-                              child: const Text('Open'),
-                            ),
+                                },
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 80,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: ColorPalette.dReaderGreen,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                        8,
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Open',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: ColorPalette.dReaderGreen,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ],
                 );

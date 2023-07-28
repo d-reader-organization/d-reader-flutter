@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_pro
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
-import 'package:d_reader_flutter/ui/views/e_reader.dart';
+import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +21,7 @@ class OwnedNftCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        nextScreenPush(
-          context,
-          EReaderView(
-            issueId: nft.comicIssueId,
-          ),
-        );
+        nextScreenPush(context, NftDetails(address: nft.address));
       },
       behavior: HitTestBehavior.opaque,
       child: Container(

@@ -69,10 +69,12 @@ class CreatorListItem extends StatelessWidget {
                 const SizedBox(
                   width: 8,
                 ),
-                AuthorVerified(
-                  authorName: creator.name,
-                  isVerified: creator.isVerified,
-                  fontSize: 16,
+                Expanded(
+                  child: AuthorVerified(
+                    authorName: creator.name,
+                    isVerified: creator.isVerified,
+                    fontSize: 16,
+                  ),
                 ),
               ],
             ),

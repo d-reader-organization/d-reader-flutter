@@ -1,12 +1,4 @@
 class NftModel {
-  //   export enum ComicRarity {
-//     None = 'None',
-//     Common = 'Common',
-//     Uncommon = 'Uncommon',
-//     Rare = 'Rare',
-//     Epic = 'Epic',
-//     Legendary = 'Legendary',
-// }
   final List<NftAttribute> attributes;
   final String address,
       comicName,

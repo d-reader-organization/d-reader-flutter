@@ -429,7 +429,6 @@ class Avatar extends StatelessWidget {
                   backgroundColor: ColorPalette.boxBackground300,
                   child: CachedNetworkImage(
                     imageUrl: wallet.avatar,
-                    cacheKey: wallet.avatar,
                     imageBuilder: (context, imageProvider) {
                       return Container(
                         decoration: BoxDecoration(

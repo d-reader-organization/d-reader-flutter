@@ -31,8 +31,8 @@ class OwnedIssueCard extends ConsumerWidget {
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.6,
-          minChildSize: 0.5,
+          initialChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          minChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
           maxChildSize: 0.8,
           expand: false,
           builder: (context, scrollController) {

@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,12 +17,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
     LocalStore.instance.delete(Config.hasSeenInitialKey),
     LocalStore.instance.clear(),
   ]);
-  await Future.wait(
-    [
-      ref.read(solanaProvider.notifier).deauthorize(),
-      ref
-          .read(environmentProvider.notifier)
-          .clearDataFromLocalStore(currentNetwork)
-    ],
-  );
+  await ref
+      .read(environmentProvider.notifier)
+      .clearDataFromLocalStore(currentNetwork);
 });

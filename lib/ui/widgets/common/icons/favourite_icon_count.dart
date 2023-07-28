@@ -36,7 +36,6 @@ class FavouriteIconCount extends HookConsumerWidget {
           ? () {
               if (issueId != null) {
                 ref.read(favouritiseComicIssueProvider(issueId!));
-                ref.invalidate(comicIssueDetailsProvider);
               } else if (slug != null) {
                 ref.read(updateComicFavouriteProvider(slug!));
                 ref.invalidate(comicSlugProvider);

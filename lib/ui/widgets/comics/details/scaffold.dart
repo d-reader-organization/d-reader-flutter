@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
@@ -194,58 +193,67 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         height: 16,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Consumer(builder: (context, ref, child) {
-                            return GestureDetector(
-                              onTap: () => nextScreenPush(
-                                context,
-                                CreatorDetailsView(
-                                  slug: widget.comic.creator?.slug ?? '',
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  CreatorAvatar(
-                                    avatar: widget.comic.creator?.avatar ?? '',
-                                    radius: 24,
-                                    height: 32,
-                                    width: 32,
+                          Expanded(
+                            flex: 3,
+                            child: Consumer(builder: (context, ref, child) {
+                              return GestureDetector(
+                                onTap: () => nextScreenPush(
+                                  context,
+                                  CreatorDetailsView(
                                     slug: widget.comic.creator?.slug ?? '',
                                   ),
-                                  const SizedBox(width: 12),
-                                  AuthorVerified(
-                                    authorName:
+                                ),
+                                child: Row(
+                                  children: [
+                                    CreatorAvatar(
+                                      avatar:
+                                          widget.comic.creator?.avatar ?? '',
+                                      radius: 24,
+                                      height: 32,
+                                      width: 32,
+                                      slug: widget.comic.creator?.slug ?? '',
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
                                         widget.comic.creator?.name ?? '',
-                                    isVerified:
-                                        widget.comic.creator?.isVerified ??
-                                            false,
-                                    fontSize: 15,
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                          Row(
-                            children: [
-                              RatingIcon(
-                                initialRating:
-                                    widget.comic.stats?.averageRating ?? 0,
-                                isRatedByMe:
-                                    widget.comic.myStats?.rating != null,
-                                comicSlug: widget.comic.slug,
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              FavouriteIconCount(
-                                favouritesCount:
-                                    widget.comic.stats?.favouritesCount ?? 0,
-                                isFavourite:
-                                    widget.comic.myStats?.isFavourite ?? false,
-                                slug: widget.comic.slug,
-                              ),
-                            ],
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                RatingIcon(
+                                  initialRating:
+                                      widget.comic.stats?.averageRating ?? 0,
+                                  isRatedByMe:
+                                      widget.comic.myStats?.rating != null,
+                                  comicSlug: widget.comic.slug,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                FavouriteIconCount(
+                                  favouritesCount:
+                                      widget.comic.stats?.favouritesCount ?? 0,
+                                  isFavourite:
+                                      widget.comic.myStats?.isFavourite ??
+                                          false,
+                                  slug: widget.comic.slug,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

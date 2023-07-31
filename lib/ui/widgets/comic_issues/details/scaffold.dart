@@ -14,7 +14,6 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -238,53 +237,67 @@ class _ComicIssueDetailsScaffoldState
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
-                          onTap: () => nextScreenPush(
-                            context,
-                            CreatorDetailsView(
-                              slug: widget.issue.creator.slug,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              CreatorAvatar(
-                                avatar: widget.issue.creator.avatar,
-                                radius: 24,
-                                height: 32,
-                                width: 32,
+                        Expanded(
+                          flex: 3,
+                          child: GestureDetector(
+                            onTap: () => nextScreenPush(
+                              context,
+                              CreatorDetailsView(
                                 slug: widget.issue.creator.slug,
                               ),
-                              const SizedBox(width: 12),
-                              AuthorVerified(
-                                authorName: widget.issue.creator.name,
-                                isVerified: widget.issue.creator.isVerified,
-                                fontSize: 15,
+                            ),
+                            child: Row(
+                              children: [
+                                CreatorAvatar(
+                                  avatar: widget.issue.creator.avatar,
+                                  radius: 24,
+                                  height: 32,
+                                  width: 32,
+                                  slug: widget.issue.creator.slug,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    widget.issue.creator.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              RatingIcon(
+                                initialRating:
+                                    widget.issue.stats?.averageRating ?? 0,
+                                isRatedByMe:
+                                    widget.issue.myStats?.rating != null,
+                                issueId: widget.issue.id,
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              FavouriteIconCount(
+                                favouritesCount:
+                                    widget.issue.stats?.favouritesCount ?? 0,
+                                isFavourite:
+                                    widget.issue.myStats?.isFavourite ?? false,
+                                slug: widget.issue.slug,
+                                issueId: widget.issue.id,
                               ),
                             ],
                           ),
-                        ),
-                        Row(
-                          children: [
-                            RatingIcon(
-                              initialRating:
-                                  widget.issue.stats?.averageRating ?? 0,
-                              isRatedByMe: widget.issue.myStats?.rating != null,
-                              issueId: widget.issue.id,
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            FavouriteIconCount(
-                              favouritesCount:
-                                  widget.issue.stats?.favouritesCount ?? 0,
-                              isFavourite:
-                                  widget.issue.myStats?.isFavourite ?? false,
-                              slug: widget.issue.slug,
-                              issueId: widget.issue.id,
-                            ),
-                          ],
                         ),
                       ],
                     ),

@@ -19,7 +19,7 @@ final nftProvider =
 });
 
 final nftsProvider =
-    FutureProvider.autoDispose.family<List<NftModel>, String>((ref, query) {
+    FutureProvider.family<List<NftModel>, String>((ref, query) {
   Timer? timer;
 
   ref.onDispose(() {

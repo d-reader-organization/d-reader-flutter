@@ -63,12 +63,13 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<dynamic> updateWallet(
     UpdateWalletPayload payload,
   ) async {
+    final name = payload.name != null ? payload.name!.trim() : null;
+    final referrer = payload.referrer != null ? payload.referrer!.trim() : null;
     final response = await client.patch(
       '/wallet/update/${payload.address}',
       data: {
-        if (payload.name != null && payload.name!.isNotEmpty)
-          "name": payload.name,
-        if (payload.referrer != null && payload.referrer!.isNotEmpty)
+        if (name != null && name.isNotEmpty) "name": payload.name,
+        if (referrer != null && referrer.isNotEmpty)
           "referrer": payload.referrer
       },
     ).then((value) {
@@ -89,12 +90,13 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<bool> validateName(String name) async {
-    if (name.trim().isEmpty) {
+    final nameTrimmed = name.trim();
+    if (nameTrimmed.isEmpty) {
       return false;
     }
     try {
       final response = await client
-          .get('/auth/wallet/validate-name/$name')
+          .get('/auth/wallet/validate-name/$nameTrimmed')
           .then((value) => value.data);
       return response != null ? true : false;
     } catch (e) {
@@ -106,7 +108,7 @@ class WalletRepositoryImpl implements WalletRepository {
   Future<String> updateReferrer(String referrer) async {
     final response = await client
         .patch(
-      '/wallet/redeem-referral/$referrer',
+      '/wallet/redeem-referral/${referrer.trim()}',
     )
         .then((value) {
       return 'OK';

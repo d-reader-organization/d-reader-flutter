@@ -26,7 +26,7 @@ class RatingIcon extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
-      onTap: !isRatedByMe && (issueId != null || comicSlug != null)
+      onTap: (issueId != null || comicSlug != null)
           ? () async {
               final result = await showDialog(
                 context: context,

@@ -6,8 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum Variant { filled, blank }
-
 class FavouriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
   final bool isFavourite;

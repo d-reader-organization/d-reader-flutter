@@ -15,7 +15,6 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -334,27 +333,6 @@ class ProfileView extends HookConsumerWidget {
           return const SizedBox();
         },
       ),
-    );
-  }
-}
-
-class WalletSkeleton extends StatelessWidget {
-  const WalletSkeleton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        SkeletonRow(),
-        SizedBox(
-          height: 8,
-        ),
-        SkeletonRow(),
-        SizedBox(
-          height: 8,
-        ),
-        SkeletonRow(),
-      ],
     );
   }
 }

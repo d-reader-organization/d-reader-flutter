@@ -1,9 +1,14 @@
 import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_tag.dart';
-import 'package:d_reader_flutter/ui/widgets/genre/genre_tags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+int getGenreLimit(double screenWidth) {
+  if (screenWidth > 360) {
+    return 5;
+  }
+  return 4;
+}
 
 class GenreTagsDefault extends StatelessWidget {
   final List<GenreModel> genres;
@@ -117,6 +122,25 @@ class TagContainer extends StatelessWidget {
               ],
             )
           : const EmptyGenreTag(),
+    );
+  }
+}
+
+class EmptyGenreTag extends StatelessWidget {
+  const EmptyGenreTag({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(32),
+          border: Border.all(color: ColorPalette.boxBackground400, width: 1)),
+      child: const Icon(
+        Icons.more_horiz_outlined,
+        color: ColorPalette.boxBackground400,
+        size: 15,
+      ),
     );
   }
 }

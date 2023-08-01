@@ -4,13 +4,14 @@ import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -259,25 +260,67 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                               )
                             : const SizedBox(),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
             ),
             FadeTransition(
               opacity: _animationController,
-              child: Align(
+              child: Container(
                 alignment: Alignment.bottomCenter,
-                child: CustomTextButton(
-                  backgroundColor: ColorPalette.dReaderGreen,
-                  borderRadius: BorderRadius.circular(8),
-                  textColor: Colors.black,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Next',
-                  ),
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Consumer(
+                        builder: (context, ref, child) {
+                          final bool isLoading =
+                              ref.watch(globalStateProvider).isLoading;
+                          return CustomTextButton(
+                            backgroundColor: ColorPalette.dReaderYellow100,
+                            padding: const EdgeInsets.all(4),
+                            borderRadius: BorderRadius.circular(8),
+                            textColor: Colors.black,
+                            isLoading: isLoading,
+                            onPressed: isLoading
+                                ? null
+                                : () async {
+                                    final isSuccessful = await ref
+                                        .read(solanaProvider.notifier)
+                                        .useMint(
+                                          nftAddress: widget.nft.address,
+                                        );
+                                    if (context.mounted && isSuccessful) {
+                                      nextScreenReplace(
+                                        context,
+                                        const OpenNftAnimation(),
+                                      );
+                                    }
+                                  },
+                            child: const Text(
+                              'Unwrap',
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: CustomTextButton(
+                        backgroundColor: ColorPalette.dReaderGreen,
+                        padding: const EdgeInsets.all(4),
+                        borderRadius: BorderRadius.circular(8),
+                        textColor: Colors.black,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Done',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

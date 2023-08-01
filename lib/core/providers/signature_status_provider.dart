@@ -17,7 +17,7 @@ final mintingStatusProvider = StateProvider.family<void, String>(
       client
           .waitForSignatureStatus(
         signature,
-        status: Commitment.finalized,
+        status: Commitment.confirmed,
         timeout: const Duration(seconds: 15),
       )
           .then((value) {

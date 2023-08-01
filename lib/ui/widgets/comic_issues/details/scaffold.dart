@@ -396,7 +396,7 @@ class BottomNavigation extends ConsumerWidget {
                                     .state
                                     .copyWith(isLoading: false);
                               }
-                            : () {},
+                            : null,
                         text: 'BUY',
                         price: ref.watch(selectedItemsPrice),
                         isListing: true,
@@ -414,14 +414,14 @@ class BottomNavigation extends ConsumerWidget {
 
 class TransactionButton extends StatelessWidget {
   final bool isLoading;
-  final Function() onPressed;
+  final Function()? onPressed;
   final String text;
   final int? price;
   final bool isListing;
   const TransactionButton({
     super.key,
     required this.isLoading,
-    required this.onPressed,
+    this.onPressed,
     required this.text,
     this.price,
     this.isListing = false,

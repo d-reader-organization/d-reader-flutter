@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
+import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
+import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -66,6 +68,9 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
 
     if (context.mounted && nft != null) {
       ref.invalidate(lastProcessedNftProvider);
+      ref.invalidate(ownedComicsAsyncProvider);
+      ref.invalidate(ownedIssuesAsyncProvider);
+      ref.invalidate(nftsProvider);
       await Future.delayed(
         const Duration(milliseconds: 1000),
         () {

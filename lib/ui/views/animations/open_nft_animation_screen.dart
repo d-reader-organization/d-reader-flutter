@@ -1,3 +1,5 @@
+import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
+import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -72,6 +74,8 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
     if (context.mounted && nftAddress != null) {
       ref.invalidate(lastProcessedNftProvider);
       ref.invalidate(nftsProvider);
+      ref.invalidate(ownedComicsAsyncProvider);
+      ref.invalidate(ownedIssuesAsyncProvider);
       nextScreenReplace(
         context,
         _SuccessAnimation(

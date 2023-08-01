@@ -116,7 +116,7 @@ class _ComicIssueDetailsScaffoldState
               Stack(
                 children: [
                   CachedImageBgPlaceholder(
-                    height: 375,
+                    height: 320,
                     imageUrl: widget.issue.cover,
                     overrideBorderRadius: BorderRadius.circular(0),
                     foregroundDecoration: const BoxDecoration(
@@ -219,13 +219,6 @@ class _ComicIssueDetailsScaffoldState
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          TextWithViewMore(
-                            text: widget.issue.description,
-                            textAlign: TextAlign.start,
-                          ),
                         ],
                       ),
                     ),
@@ -236,6 +229,13 @@ class _ComicIssueDetailsScaffoldState
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
+                    TextWithViewMore(
+                      text: widget.issue.description,
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
                     Row(
                       children: [
                         Expanded(

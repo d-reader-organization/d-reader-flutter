@@ -53,6 +53,7 @@ dependencies:
   dio: ^5.1.2
   device_info_plus: ^9.0.2
   video_player: ^2.7.0
+  expandable_text: 2.3.0
 
 dev_dependencies:
   flutter_test:

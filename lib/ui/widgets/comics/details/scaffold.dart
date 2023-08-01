@@ -97,7 +97,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                 Stack(
                   children: [
                     CachedImageBgPlaceholder(
-                      height: 364,
+                      height: 320,
                       imageUrl: widget.comic.cover,
                       overrideBorderRadius: BorderRadius.circular(0),
                       foregroundDecoration: const BoxDecoration(
@@ -161,14 +161,6 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 12,
-                            ),
-                            TextWithViewMore(
-                              text: widget.comic.description,
-                              maxLines: 2,
-                              textAlign: TextAlign.start,
-                            ),
                           ],
                         ),
                       ),
@@ -185,6 +177,14 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      TextWithViewMore(
+                        text: widget.comic.description,
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
                       GenreTagsDefault(
                         genres: widget.comic.genres,
                         withHorizontalScroll: true,

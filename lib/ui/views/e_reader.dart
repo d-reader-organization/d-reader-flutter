@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class EReaderView extends ConsumerWidget {
+class EReaderView extends ConsumerStatefulWidget {
   final int issueId;
   const EReaderView({
     super.key,
@@ -20,11 +20,48 @@ class EReaderView extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _EReaderViewState();
+}
+
+class _EReaderViewState extends ConsumerState<EReaderView>
+    with SingleTickerProviderStateMixin {
+  late TransformationController _transformationController;
+  late AnimationController _animationController;
+
+  TapDownDetails? tapDownDetails;
+  Animation<Matrix4>? animation;
+
+  bool _isPageChangeEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _transformationController = TransformationController();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+    )..addListener(() {
+        if (animation?.value != null) {
+          _transformationController.value = animation!.value;
+        }
+      });
+  }
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     AsyncValue<List<PageModel>> pagesProvider =
-        ref.watch(comicIssuePagesProvider(issueId));
+        ref.watch(comicIssuePagesProvider(widget.issueId));
     AsyncValue<ComicIssueModel?> issueProvider =
-        ref.watch(comicIssueDetailsProvider(issueId));
+        ref.watch(comicIssueDetailsProvider(widget.issueId));
     final notifier = ref.read(isAppBarVisibleProvider.notifier);
     return NotificationListener(
       onNotification: (notification) {
@@ -67,28 +104,61 @@ class EReaderView extends ConsumerWidget {
                     issueProvider.value!.myStats!.canRead);
             return GestureDetector(
               onTap: () {
-                if (ref.watch(isPageByPageReadingMode)) {
-                  notifier
-                      .update((state) => !ref.read(isAppBarVisibleProvider));
-                } else if (!ref.read(isAppBarVisibleProvider)) {
-                  notifier.update(
-                    (state) {
-                      return true;
-                    },
-                  );
-                }
+                notifier.update((state) => !ref.read(isAppBarVisibleProvider));
+              },
+              onDoubleTapDown: (details) {
+                tapDownDetails = details;
+              },
+              onDoubleTap: () {
+                final position = tapDownDetails?.localPosition;
+                const double scale = 3;
+                final x = (-position!.dx) * (scale - 1);
+                final y = (-position.dy) * (scale - 1);
+
+                final zoomed = Matrix4.identity()
+                  ..translate(x, y)
+                  ..scale(scale);
+                final end = _transformationController.value.isIdentity()
+                    ? zoomed
+                    : Matrix4.identity();
+
+                animation = Matrix4Tween(
+                  begin: _transformationController.value,
+                  end: end,
+                ).animate(
+                  CurveTween(curve: Curves.easeOut).animate(
+                    _animationController,
+                  ),
+                );
+
+                _animationController.forward(from: 0);
+                setState(() {
+                  _isPageChangeEnabled = end.getMaxScaleOnAxis() <= 1;
+                });
               },
               child: ref.watch(isPageByPageReadingMode)
                   ? PageView.builder(
                       pageSnapping: true,
+                      physics: _isPageChangeEnabled
+                          ? const PageScrollPhysics()
+                          : const NeverScrollableScrollPhysics(),
                       allowImplicitScrolling: true,
                       itemCount: canRead ? pages.length : pages.length + 1,
                       itemBuilder: (context, index) {
-                        return InteractiveViewer(
-                          minScale: 0.1, // Minimum scale allowed
-                          maxScale: 10, // Maximum scale allowed
+                        return MyInteractiveViewer(
+                          minScale: 0.1,
+                          maxScale: 4,
                           panEnabled: true,
                           scaleEnabled: true,
+                          transformationController: _transformationController,
+                          onInteractionEnd: (scaleDetails) {
+                            double scale = _transformationController.value
+                                .getMaxScaleOnAxis();
+
+                            setState(() {
+                              _isPageChangeEnabled = scale <= 1;
+                            });
+                          },
                           constrained: true,
                           child: index == pages.length
                               ? const PreviewImage()
@@ -99,10 +169,11 @@ class EReaderView extends ConsumerWidget {
                         );
                       },
                     )
-                  : InteractiveViewer(
-                      minScale: 0.1, // Minimum scale allowed
-                      maxScale: 10, // Maximum scale allowed
+                  : MyInteractiveViewer(
+                      minScale: 0.1,
+                      maxScale: 4,
                       panEnabled: true,
+                      transformationController: _transformationController,
                       scaleEnabled: true,
                       constrained: true,
                       child: ListView.builder(
@@ -136,7 +207,7 @@ class EReaderView extends ConsumerWidget {
         bottomNavigationBar: EReaderBottomNavigation(
           totalPages: pagesProvider.value?.length ?? 0,
           rating: issueProvider.value?.stats?.averageRating ?? 0,
-          issueId: issueId,
+          issueId: widget.issueId,
         ),
       ),
     );
@@ -153,6 +224,39 @@ class PreviewImage extends StatelessWidget {
       child: SvgPicture.asset(
         'assets/icons/comic_preview.svg',
       ),
+    );
+  }
+}
+
+class MyInteractiveViewer extends StatelessWidget {
+  final Widget child;
+  final TransformationController? transformationController;
+  final double minScale, maxScale;
+  final bool panEnabled, scaleEnabled, constrained;
+  final void Function(ScaleEndDetails)? onInteractionEnd;
+  const MyInteractiveViewer({
+    super.key,
+    required this.child,
+    this.transformationController,
+    this.minScale = 0.1,
+    this.maxScale = 4,
+    this.panEnabled = true,
+    this.scaleEnabled = false,
+    this.constrained = false,
+    this.onInteractionEnd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InteractiveViewer(
+      minScale: minScale,
+      maxScale: maxScale,
+      panEnabled: panEnabled,
+      transformationController: transformationController,
+      scaleEnabled: scaleEnabled,
+      constrained: constrained,
+      onInteractionEnd: onInteractionEnd,
+      child: child,
     );
   }
 }

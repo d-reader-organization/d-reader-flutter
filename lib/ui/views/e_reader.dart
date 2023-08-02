@@ -132,9 +132,11 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                 );
 
                 _animationController.forward(from: 0);
-                setState(() {
-                  _isPageChangeEnabled = end.getMaxScaleOnAxis() <= 1;
-                });
+                if (ref.read(isPageByPageReadingMode)) {
+                  setState(() {
+                    _isPageChangeEnabled = end.getMaxScaleOnAxis() <= 1;
+                  });
+                }
               },
               child: ref.watch(isPageByPageReadingMode)
                   ? PageView.builder(

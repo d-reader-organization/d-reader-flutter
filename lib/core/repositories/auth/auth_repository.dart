@@ -10,4 +10,8 @@ abstract class AuthRepository {
     required String encoding,
     required String apiUrl,
   });
+  Future<void> disconnectWallet({
+    required String address,
+    required String apiUrl,
+  });
 }

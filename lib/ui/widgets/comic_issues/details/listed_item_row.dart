@@ -62,6 +62,7 @@ class ListedItemRow extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              // TODO: if listing.seller.name is defined -> use that, otherwise use shortened wallet address
               '${formatAddress(listing.seller.address, 4)} ${formatWalletName(listing.seller.name)}',
               style: const TextStyle(
                 fontSize: 16,

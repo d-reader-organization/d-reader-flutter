@@ -13,7 +13,8 @@ class BetaAccessWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(myWalletProvider).maybeWhen(
       data: (data) {
-        if (data == null || !data.hasBetaAccess) {
+        // TODO: we should actually check if the user.role is 'Tester' instead of isEmailVerified
+        if (data == null || !data.isEmailVerified) {
           return const Center(
             child: Text(
               "You do not have alpha access. Go to 'settings > referrals' to claim it",

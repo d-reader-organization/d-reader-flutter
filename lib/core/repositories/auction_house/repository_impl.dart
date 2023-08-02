@@ -12,13 +12,14 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
 
   @override
   Future<String?> listItem({
+    required String sellerAddress,
     required String mintAccount,
     required int price,
     String? printReceipt,
   }) {
     return client
         .get(
-          '/auction-house/transactions/list?mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt',
+          '/auction-house/transactions/list?sellerAddress=$sellerAddress&mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt',
         )
         .then((value) => value.data);
   }
@@ -62,9 +63,9 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   }
 
   @override
-  Future<String?> delistItem({required String mint}) {
+  Future<String?> delistItem({required String nftAddress}) {
     return client
-        .get('/auction-house/transactions/cancel-listing?mint=$mint')
+        .get('/auction-house/transactions/cancel-listing?nftAddress=$nftAddress')
         .then((value) => value.data);
   }
 
@@ -72,11 +73,12 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   Future<String?> buyItem({
     required String mintAccount,
     required int price,
-    required String seller,
+    required String sellerAddress,
+    required String buyerAddress,
   }) {
     return client
         .get(
-          '/auction-house/transactions/instant-buy?mintAccount=$mintAccount&price=$price&seller=$seller',
+          '/auction-house/transactions/instant-buy?mintAccount=$mintAccount&price=$price&sellerAddress=$sellerAddress&buyerAddress=$buyerAddress',
         )
         .then((value) => value.data);
   }

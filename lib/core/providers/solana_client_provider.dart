@@ -194,7 +194,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
     final String? encodedNftTransaction = await ref
         .read(candyMachineRepositoryProvider)
-        .constructNftTransaction(candyMachineAddress);
+        .constructNftTransaction({candyMachineAddress, '' }); // TODO: minterAddress is the currently active (selected) wallet
     if (encodedNftTransaction == null) {
       return false;
     }
@@ -202,12 +202,14 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> list({
+    required String sellerAddress,
     required String mintAccount,
     required int price,
     String printReceipt = 'false',
   }) async {
     final String? encodedTransaction =
         await ref.read(auctionHouseRepositoryProvider).listItem(
+              sellerAddress: sellerAddress,
               mintAccount: mintAccount,
               price: price,
               printReceipt: printReceipt,
@@ -219,10 +221,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> delist({
-    required String mint,
+    required String nftAddress,
   }) async {
     final String? encodedTransaction =
-        await ref.read(auctionHouseRepositoryProvider).delistItem(mint: mint);
+        await ref.read(auctionHouseRepositoryProvider).delistItem(nftAddress: nftAddress);
     if (encodedTransaction == null) {
       return false;
     }
@@ -250,10 +252,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return decodedTX.resign(signature);
   }
 
-  Future<bool> useMint({required String nftAddress}) async {
+  Future<bool> useMint({required String nftAddress, required String ownerAddress}) async {
     final String transaction = await ref
         .read(candyMachineRepositoryProvider)
-        .useComicIssueNftTransaction(nftAddress);
+        .useComicIssueNftTransaction(nftAddress, ownerAddress);
     return await _signAndSendTransactions([transaction]);
   }
 

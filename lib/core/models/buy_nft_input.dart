@@ -1,17 +1,19 @@
 class BuyNftInput {
-  final String mintAccount, seller;
+  final String mintAccount, sellerAddress, buyerAddress;
   final int price;
 
   BuyNftInput({
     required this.mintAccount,
     required this.price,
-    required this.seller,
+    required this.sellerAddress,
+    required this.buyerAddress,
   });
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['mintAccount'] = mintAccount;
-    data['seller'] = seller;
+    data['sellerAddress'] = sellerAddress;
+    data['buyerAddress'] = buyerAddress;
     data['price'] = price;
     return data;
   }

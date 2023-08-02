@@ -64,7 +64,7 @@ class SettingsRootView extends StatelessWidget {
                     if (wallet == null) {
                       return const SizedBox();
                     }
-                    return wallet.hasBetaAccess
+                    return wallet.isEmailVerified // TODO: this should actually check if the user.role is 'Tester'
                         ? SettingsCommonListTile(
                             leadingPath:
                                 '${Config.settingsAssetsPath}/light/network.svg',

@@ -12,7 +12,7 @@ abstract class ComicIssueRepository {
     required int rating,
   });
   Future<List<OwnedComicIssue>> getOwnedIssues({
-    required String walletAddress,
+    required int id,
     required String query,
   });
 }

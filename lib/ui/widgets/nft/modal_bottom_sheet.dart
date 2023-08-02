@@ -93,6 +93,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
             ],
           ),
           SubmitButton(
+            sellerAddress:  '', // TODO: active (selected) wallet
             mintAccount: widget.nft.address,
             price: _safeParse(
               _textEditingController.text,
@@ -107,10 +108,12 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
 double? _safeParse(String input) => double.tryParse(input);
 
 class SubmitButton extends ConsumerWidget {
+  final String sellerAddress;
   final String mintAccount;
   final double? price;
   const SubmitButton({
     super.key,
+    required this.sellerAddress,
     required this.mintAccount,
     this.price,
   });
@@ -123,6 +126,7 @@ class SubmitButton extends ConsumerWidget {
       onPressed: price != null
           ? () async {
               final response = await ref.read(solanaProvider.notifier).list(
+                    sellerAddress: '', // TODO: active (selected) wallet
                     mintAccount: mintAccount,
                     price: (price! * lamportsPerSol).round(),
                   );

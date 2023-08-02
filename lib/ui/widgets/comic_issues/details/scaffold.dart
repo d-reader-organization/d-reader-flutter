@@ -336,7 +336,7 @@ class BottomNavigation extends ConsumerWidget {
                           try {
                             final isSuccessful = await ref
                                 .read(solanaProvider.notifier)
-                                .mint(issue.candyMachineAddress);
+                                .mint({issue.candyMachineAddress, ''}); // TODO: active (selected) wallet
                             if (isSuccessful && context.mounted) {
                               nextScreenPush(
                                   context, const MintLoadingAnimation());
@@ -367,7 +367,8 @@ class BottomNavigation extends ConsumerWidget {
                                       (e) => BuyNftInput(
                                         mintAccount: e.nftAddress,
                                         price: e.price,
-                                        seller: e.seller.address,
+                                        sellerAddress: e.seller.address,
+                                        buyerAddress: '', // TODO: active (selected) wallet
                                       ),
                                     )
                                     .toList();

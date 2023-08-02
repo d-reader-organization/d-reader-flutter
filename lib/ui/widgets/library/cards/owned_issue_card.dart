@@ -54,7 +54,7 @@ class OwnedIssueCard extends ConsumerWidget {
       ),
     );
     final ownedNfts = await ref.read(nftsProvider(
-            'comicIssueId=$comicIssueId&owner=${ref.read(environmentProvider).publicKey?.toBase58()}')
+            'comicIssueId=$comicIssueId&ownerAddress=${ref.read(environmentProvider).publicKey?.toBase58()}')
         .future);
     globalNotifier.update(
       (state) => state.copyWith(

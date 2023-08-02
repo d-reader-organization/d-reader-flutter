@@ -132,6 +132,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                       .read(solanaProvider.notifier)
                                       .useMint(
                                         nftAddress: ownedNft.address,
+                                        ownerAddress: ownedNft.ownerAddress,
                                       );
                                   if (context.mounted) {
                                     Navigator.pop(context);

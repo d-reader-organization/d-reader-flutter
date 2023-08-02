@@ -83,18 +83,18 @@ class Attribute {
 }
 
 class Seller {
-  String address;
-  String avatar;
-  String name;
+  final String id;
+  final String address;
+  final String avatar;
+  final String name;
 
   Seller({
     required this.address,
-    required this.avatar,
-    required this.name,
   });
 
   factory Seller.fromJson(Map<String, dynamic> json) {
     return Seller(
+      id: json['id'],
       address: json['address'],
       avatar: json['avatar'],
       name: json['name'],
@@ -103,6 +103,7 @@ class Seller {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
     data['address'] = address;
     data['avatar'] = avatar;
     data['name'] = name;

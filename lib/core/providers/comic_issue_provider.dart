@@ -1,3 +1,5 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
@@ -17,8 +19,24 @@ final comicIssueRepository = Provider<ComicIssueRepositoryImpl>(
   },
 );
 
-final comicIssuesProvider = FutureProvider.autoDispose
-    .family<List<ComicIssueModel>, String?>((ref, queryString) async {
+final comicIssuesProvider =
+    FutureProvider.family<List<ComicIssueModel>, String?>(
+        (ref, queryString) async {
+  Timer? timer;
+
+  ref.onDispose(() {
+    timer?.cancel();
+  });
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 30), () {
+      ref.invalidateSelf();
+    });
+  });
+
+  ref.onResume(() {
+    timer?.cancel();
+  });
+
   return ref.read(comicIssueRepository).getComicIssues(
         queryString: queryString ??
             appendDefaultQuery(

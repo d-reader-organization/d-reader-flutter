@@ -5,7 +5,6 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -323,27 +322,6 @@ class ProfileView extends HookConsumerWidget {
       //     return const SizedBox();
       //   },
       // ),
-    );
-  }
-}
-
-class WalletSkeleton extends StatelessWidget {
-  const WalletSkeleton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        SkeletonRow(),
-        SizedBox(
-          height: 8,
-        ),
-        SkeletonRow(),
-        SizedBox(
-          height: 8,
-        ),
-        SkeletonRow(),
-      ],
     );
   }
 }

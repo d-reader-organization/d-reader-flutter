@@ -1,18 +1,36 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final ownedComicsAsyncProvider = AsyncNotifierProvider.autoDispose
-    .family<OwnedComicsAsyncNotifier, List<ComicModel>, String>(
+final ownedComicsAsyncProvider = AsyncNotifierProvider.family<
+    OwnedComicsAsyncNotifier, List<ComicModel>, String>(
   OwnedComicsAsyncNotifier.new,
 );
 
 class OwnedComicsAsyncNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<ComicModel>, String> {
+    extends FamilyAsyncNotifier<List<ComicModel>, String> {
   bool isEnd = false, isLoading = false;
   @override
   FutureOr<List<ComicModel>> build(String arg) async {
+    Timer? timer;
+
+    ref.onDispose(() {
+      timer?.cancel();
+    });
+
+    ref.onCancel(() {
+      timer = Timer(const Duration(seconds: 30), () {
+        ref.invalidateSelf();
+      });
+    });
+
+    ref.onResume(() {
+      timer?.cancel();
+    });
+
     return await ref.read(ownedComicsProvider(
             OwnedComicsArgs(walletAddress: arg, query: 'skip=0&take=20'))
         .future);

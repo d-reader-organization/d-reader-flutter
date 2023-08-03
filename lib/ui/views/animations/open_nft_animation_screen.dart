@@ -1,5 +1,8 @@
+import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
+import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -28,7 +31,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
   @override
   void initState() {
     super.initState();
-
+    ref.read(registerWalletToSocketEvents);
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -72,6 +75,8 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
     if (context.mounted && nftAddress != null) {
       ref.invalidate(lastProcessedNftProvider);
       ref.invalidate(nftsProvider);
+      ref.invalidate(ownedComicsAsyncProvider);
+      ref.invalidate(ownedIssuesAsyncProvider);
       nextScreenReplace(
         context,
         _SuccessAnimation(

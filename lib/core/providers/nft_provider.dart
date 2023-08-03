@@ -1,3 +1,5 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/nft/repository_impl.dart';
@@ -17,7 +19,22 @@ final nftProvider =
 });
 
 final nftsProvider =
-    FutureProvider.autoDispose.family<List<NftModel>, String>((ref, query) {
+    FutureProvider.family<List<NftModel>, String>((ref, query) {
+  Timer? timer;
+
+  ref.onDispose(() {
+    timer?.cancel();
+  });
+
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 30), () {
+      ref.invalidateSelf();
+    });
+  });
+
+  ref.onResume(() {
+    timer?.cancel();
+  });
   return ref.read(nftRepositoryProvider).getNfts(query);
 });
 

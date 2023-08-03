@@ -3,7 +3,6 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
-import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
@@ -95,14 +94,26 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AuthorVerified(
-                        authorName: issue.creator.name,
-                        isVerified: issue.creator.isVerified,
-                        textColor: ColorPalette.greyscale100,
-                        fontSize: 14,
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          issue.creator.name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                    color: ColorPalette.greyscale100,
+                                  ),
+                        ),
                       ),
-                      SolanaPrice(
-                        price: formatLamportPrice(issue.stats?.price),
+                      Expanded(
+                        flex: 1,
+                        child: SolanaPrice(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          price: formatLamportPrice(issue.stats?.price),
+                        ),
                       ),
                     ],
                   ),

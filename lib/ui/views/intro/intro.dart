@@ -1,11 +1,10 @@
+import 'dart:math';
+
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/referrals/referral_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
@@ -14,7 +13,6 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/intro/form.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -88,9 +86,10 @@ class IntroView extends HookConsumerWidget {
                           .authorizeAndSignMessage();
                       if (context.mounted) {
                         if (result == 'OK') {
-                          final response =
-                              await ref.read(myWalletProvider.future);
-                          if (response == null && context.mounted) {
+                          // final response =
+                          //     await ref.read(myWalletProvider.future);
+                          // if (response == null && context.mounted) {
+                          if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text(
@@ -102,8 +101,7 @@ class IntroView extends HookConsumerWidget {
                                 globalHook.value.copyWith(isLoading: false);
                             return;
                           }
-                          final bool isNew =
-                              response?.address == response?.name;
+                          final bool isNew = Random().nextInt(100) > 50; // TODO
                           shouldShowSetAccountScreen.value = isNew;
                           Future.delayed(
                             const Duration(
@@ -113,31 +111,6 @@ class IntroView extends HookConsumerWidget {
                               globalHook.value =
                                   globalHook.value.copyWith(isLoading: false);
                               if (isNew) {
-                                DeviceInfoPlugin deviceInfo =
-                                    DeviceInfoPlugin();
-                                AndroidDeviceInfo androidInfo =
-                                    await deviceInfo.androidInfo;
-
-                                if (androidInfo.model == 'Saga') {
-                                  final refererResult = await ref.read(
-                                    updateReferrer('Saga').future,
-                                  );
-                                  final bool isReferred = refererResult == 'OK';
-                                  if (context.mounted && !isReferred) {
-                                    shouldShowSetAccountScreen.value = false;
-                                    return ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          refererResult,
-                                        ),
-                                        backgroundColor:
-                                            ColorPalette.dReaderRed,
-                                      ),
-                                    );
-                                  }
-                                }
-
                                 _introScreenKey.currentState?.next();
                               } else {
                                 nextScreenReplace(
@@ -170,44 +143,18 @@ class IntroView extends HookConsumerWidget {
                           formKey.currentState!.validate()) {
                         globalHook.value =
                             globalHook.value.copyWith(isLoading: true);
-                        final String address = ref
-                                .read(environmentProvider)
-                                .publicKey
-                                ?.toBase58() ??
-                            '';
-                        final String walletName =
-                            ref.read(walletNameProvider).trim();
-                        final String referrerName =
-                            ref.read(referrerNameProvider).trim();
-                        formKey.currentState!.save();
-                        final result = await ref.read(
-                          updateWalletProvider(
-                            UpdateWalletPayload(
-                              address: address,
-                              name: walletName.trim(),
-                              referrer: referrerName.trim(),
-                            ),
-                          ).future,
-                        );
-                        globalHook.value =
-                            globalHook.value.copyWith(isLoading: false);
-                        if (result is String && context.mounted) {
-                          return showSnackBar(
-                            context: context,
-                            text: result,
-                            backgroundColor: ColorPalette.dReaderRed,
-                            duration: 1000,
-                          );
-                        }
 
-                        ref.invalidate(walletNameProvider);
-                        ref.invalidate(referrerNameProvider);
-                        ref.invalidate(myWalletProvider);
+                        formKey.currentState!.save();
+                        //TODO update user - check git history
+
                         globalHook.value =
                             globalHook.value.copyWith(isLoading: false);
-                        if (context.mounted) {
-                          nextScreenReplace(context, const DReaderScaffold());
-                        }
+                        return showSnackBar(
+                          context: context,
+                          text: 'TODO',
+                          backgroundColor: ColorPalette.dReaderRed,
+                          duration: 1000,
+                        );
                       }
                     }
                   }

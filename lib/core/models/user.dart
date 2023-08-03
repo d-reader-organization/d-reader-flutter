@@ -28,17 +28,15 @@ class UserModel {
 
 class UpdateUserPayload {
   final int id;
-  final String email;
-  final String name;
+
   final File? avatar;
-  final String? name, referrer;
+  final String? email, name, referrer;
 
   UpdateUserPayload({
     required this.id,
     this.email,
     this.name,
     this.avatar,
-    this.name,
     this.referrer,
   });
 }

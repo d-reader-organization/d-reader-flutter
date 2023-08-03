@@ -43,13 +43,14 @@ class ReceiptNft {
 
 // This is same as Seller class
 class ReceiptBuyer {
-  final String id;
+  final String? id, avatar, name;
   final String address;
-  final String avatar;
-  final String name;
 
   ReceiptBuyer({
     required this.address,
+    this.id,
+    this.avatar,
+    this.name,
   });
 
   factory ReceiptBuyer.fromJson(dynamic json) {

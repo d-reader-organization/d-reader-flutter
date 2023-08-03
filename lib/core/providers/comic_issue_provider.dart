@@ -72,6 +72,6 @@ final ownedIssuesProvider =
   (ref, arg) {
     return ref
         .read(comicIssueRepository)
-        .getOwnedIssues(walletAddress: arg.walletAddress, query: arg.query);
+        .getOwnedIssues(id: arg.userId, query: arg.query);
   },
 );

@@ -6,7 +6,6 @@ import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -336,7 +335,7 @@ class BottomNavigation extends ConsumerWidget {
                           try {
                             final isSuccessful = await ref
                                 .read(solanaProvider.notifier)
-                                .mint({issue.candyMachineAddress, ''}); // TODO: active (selected) wallet
+                                .mint(issue.candyMachineAddress);
                             if (isSuccessful && context.mounted) {
                               nextScreenPush(
                                   context, const MintLoadingAnimation());
@@ -368,7 +367,8 @@ class BottomNavigation extends ConsumerWidget {
                                         mintAccount: e.nftAddress,
                                         price: e.price,
                                         sellerAddress: e.seller.address,
-                                        buyerAddress: '', // TODO: active (selected) wallet
+                                        buyerAddress:
+                                            '', // TODO: active (selected) wallet
                                       ),
                                     )
                                     .toList();
@@ -377,7 +377,7 @@ class BottomNavigation extends ConsumerWidget {
                                     .buyMultiple(selectedNftsInput);
                                 if (isSuccessful) {
                                   ref.invalidate(listedItemsProvider);
-                                  ref.invalidate(walletAssetsProvider);
+                                  // ref.invalidate(walletAssetsProvider); // TODO PRoper assets
                                 }
                                 ref
                                     .read(globalStateProvider.notifier)

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
@@ -22,38 +21,40 @@ class ListedItemRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedItems = ref.watch(selectedItemsProvider);
-    final myWallet = ref.watch(myWalletProvider);
+    // final myWallet = ref.watch(myWalletProvider); TODO getUser
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       selected: selectedItems.contains(listing),
       selectedColor: ColorPalette.dReaderYellow100,
       selectedTileColor: ColorPalette.boxBackground300,
       splashColor: Colors.transparent,
-      onTap: myWallet.value?.address != listing.seller.address
-          ? () {
-              List<ListingModel> items = [...selectedItems];
-              if (selectedItems.contains(listing)) {
-                items.remove(listing);
-              } else {
-                items.add(listing);
-              }
-              ref.read(selectedItemsProvider.notifier).state = items;
-            }
-          : null,
+      onTap: null,
+      // onTap: myWallet.value?.address != listing.seller.address
+      //     ? () {
+      //         List<ListingModel> items = [...selectedItems];
+      //         if (selectedItems.contains(listing)) {
+      //           items.remove(listing);
+      //         } else {
+      //           items.add(listing);
+      //         }
+      //         ref.read(selectedItemsProvider.notifier).state = items;
+      //       }
+      //     : null,
       leading: CircleAvatar(
         maxRadius: 24,
-        backgroundImage: listing.seller.avatar.isNotEmpty
-            ? CachedNetworkImageProvider(
-                listing.seller.avatar,
-                cacheKey: listing.seller.address,
-                cacheManager: fcm.CacheManager(
-                  fcm.Config(
-                    listing.seller.address,
-                    stalePeriod: const Duration(days: 1),
-                  ),
-                ),
-              )
-            : null,
+        backgroundImage:
+            listing.seller.avatar != null && listing.seller.avatar!.isNotEmpty
+                ? CachedNetworkImageProvider(
+                    listing.seller.avatar!,
+                    cacheKey: listing.seller.address,
+                    cacheManager: fcm.CacheManager(
+                      fcm.Config(
+                        listing.seller.address,
+                        stalePeriod: const Duration(days: 1),
+                      ),
+                    ),
+                  )
+                : null,
       ),
       title: SizedBox(
         height: 50,
@@ -63,7 +64,7 @@ class ListedItemRow extends ConsumerWidget {
           children: [
             Text(
               // TODO: if listing.seller.name is defined -> use that, otherwise use shortened wallet address
-              '${formatAddress(listing.seller.address, 4)} ${formatWalletName(listing.seller.name)}',
+              '${formatAddress(listing.seller.address, 4)} ${formatWalletName('Ba ba ba')}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

@@ -3,8 +3,9 @@ import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final ownedIssuesAsyncProvider = AsyncNotifierProvider.autoDispose
-    .family<OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
+final ownedIssuesAsyncProvider =
+    AsyncNotifierProvider.autoDispose // TODO change arguments
+        .family<OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
   OwnedIssuesAsyncNotifier.new,
 );
 
@@ -13,19 +14,19 @@ class OwnedIssuesAsyncNotifier
   bool isEnd = false, isLoading = false;
   @override
   FutureOr<List<OwnedComicIssue>> build(String arg) async {
-    final (walletAddress, queryString) = getArgs();
+    final (userId, queryString) = getArgs();
 
     return await ref.read(ownedIssuesProvider(
       OwnedIssuesArgs(
-        walletAddress: walletAddress,
+        userId: userId,
         query: 'skip=0&take=20&$queryString',
       ),
     ).future);
   }
 
-  (String, String) getArgs() {
-    final [walletAddress, query] = arg.split('?');
-    return (walletAddress, query);
+  (int, String) getArgs() {
+    final [userId, query] = arg.split('?');
+    return (int.parse(userId), query);
   }
 
   fetchNext() async {
@@ -33,11 +34,11 @@ class OwnedIssuesAsyncNotifier
       return;
     }
     isLoading = true;
-    final (walletAddress, queryString) = getArgs();
+    final (userId, queryString) = getArgs();
     final newIssues = await ref.read(
       ownedIssuesProvider(
         OwnedIssuesArgs(
-          walletAddress: walletAddress,
+          userId: userId,
           query: 'skip=${state.value?.length ?? 0}&take=20&$queryString',
         ),
       ).future,
@@ -52,10 +53,11 @@ class OwnedIssuesAsyncNotifier
 }
 
 class OwnedIssuesArgs {
-  final String walletAddress, query;
+  final String query;
+  final int userId;
 
   OwnedIssuesArgs({
-    required this.walletAddress,
+    required this.userId,
     this.query = 'skip=0&take=20',
   });
 }

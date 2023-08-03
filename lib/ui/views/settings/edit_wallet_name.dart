@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
@@ -59,20 +58,14 @@ class _WalletNameInputFieldState extends ConsumerState<WalletNameInputField> {
         isLoading: true,
       ),
     );
-    await ref.read(
-      updateWalletProvider(
-        UpdateWalletPayload(
-          address: widget.wallet.address,
-          name: _nameController.text,
-        ),
-      ).future,
-    );
+    // TODO update user
+
     notifier.update(
       (state) => state.copyWith(
         isLoading: false,
       ),
     );
-    ref.invalidate(myWalletProvider);
+    // ref.invalidate(myWalletProvider); TODO invalidate get user
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

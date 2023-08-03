@@ -83,13 +83,14 @@ class Attribute {
 }
 
 class Seller {
-  final String id;
+  final String? id, avatar, name;
   final String address;
-  final String avatar;
-  final String name;
 
   Seller({
     required this.address,
+    this.id,
+    this.avatar,
+    this.name,
   });
 
   factory Seller.fromJson(Map<String, dynamic> json) {

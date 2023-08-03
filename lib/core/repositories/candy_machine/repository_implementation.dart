@@ -39,10 +39,9 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
   }
 
   @override
-  Future<String?> constructNftTransaction({
-    required String candyMachineAddress,
-    required String minterAddress
-  }) async {
+  Future<String?> constructNftTransaction(
+      {required String candyMachineAddress,
+      required String minterAddress}) async {
     return await client
         .get(
             '/candy-machine/transactions/mint-one?candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress')
@@ -52,7 +51,8 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
   }
 
   @override
-  Future<String> useComicIssueNftTransaction({String nftAddress, String ownerAddress}) async {
+  Future<String> useComicIssueNftTransaction(
+      {required String nftAddress, required String ownerAddress}) async {
     try {
       final transaction = await client
           .get(

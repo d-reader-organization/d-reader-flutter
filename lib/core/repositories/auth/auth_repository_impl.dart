@@ -4,6 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
+  final Dio client;
+
+  AuthRepositoryImpl({
+    required this.client,
+  });
+
   @override
   Future<dynamic> getOneTimePassword({
     required String address,
@@ -21,7 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
   // TODO: missing /user/login | /user/register /user/refresh-token
 
   @override
-  Future<AuthWallet?> connectWallet({
+  Future<AuthSignInResponse?> connectWallet({
     required String address,
     required String encoding,
     required String apiUrl,
@@ -32,7 +38,9 @@ class AuthRepositoryImpl implements AuthRepository {
           .get('/auth/wallet/connect/$address/$encoding')
           .then((value) => value.data);
       dio.close();
-      return response != null ? AuthWallet.fromJson(response) : null; // TODO: we don't get authorization from this anymore
+      return response != null
+          ? AuthSignInResponse.fromJson(response)
+          : null; // TODO: we don't get authorization from this anymore
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
       return null;
@@ -40,7 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthWallet?> disconnectWallet({
+  Future<AuthSignInResponse?> disconnectWallet({
     required String address,
     required String apiUrl,
   }) async {
@@ -50,8 +58,31 @@ class AuthRepositoryImpl implements AuthRepository {
           .get('/auth/wallet/disconnect/$address')
           .then((value) => value.data);
       dio.close();
-      return response != null ? AuthWallet.fromJson(response) : null;  // TODO: we don't get authorization here as well
+      return response != null
+          ? AuthSignInResponse.fromJson(response)
+          : null; // TODO: we don't get authorization here as well
     } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      return null;
+    }
+  }
+
+  @override
+  Future<dynamic>? signIn({
+    required String nameOrEmail,
+    required String password,
+  }) async {
+    try {
+      final response = await client.post('/auth/user/login', data: {
+        'nameOrEmail': nameOrEmail,
+        'password': password,
+      }).then((value) => value.data);
+      return response != null ? AuthSignInResponse.fromJson(response) : null;
+    } catch (exception, stackTrace) {
+      if (exception is DioError) {
+        return exception.response?.data?['message'] ??
+            exception.response?.data.toString();
+      }
       Sentry.captureException(exception, stackTrace: stackTrace);
       return null;
     }

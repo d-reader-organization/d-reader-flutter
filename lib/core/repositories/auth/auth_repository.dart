@@ -5,7 +5,7 @@ abstract class AuthRepository {
     required String address,
     required String apiUrl,
   });
-  Future<AuthWallet?> connectWallet({
+  Future<AuthSignInResponse?> connectWallet({
     required String address,
     required String encoding,
     required String apiUrl,
@@ -13,5 +13,10 @@ abstract class AuthRepository {
   Future<void> disconnectWallet({
     required String address,
     required String apiUrl,
+  });
+
+  Future<dynamic>? signIn({
+    required String nameOrEmail,
+    required String password,
   });
 }

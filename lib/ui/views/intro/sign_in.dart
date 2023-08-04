@@ -1,6 +1,8 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:email_validator/email_validator.dart';
@@ -10,7 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final obscureTextProvider = StateProvider<bool>((ref) {
-  return false;
+  return true;
 });
 
 class SignInScreen extends ConsumerStatefulWidget {
@@ -173,11 +175,22 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     double.infinity,
                     50,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_signInFormKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
+                      final authRepo = ref.read(authRepositoryProvider);
+                      final response = await authRepo.signIn(
+                        nameOrEmail: _emailController.text.trim(),
+                        password: _passwordController.text.trim(),
                       );
+                      if (response is String && context.mounted) {
+                        return showSnackBar(
+                          context: context,
+                          text: response,
+                          backgroundColor: ColorPalette.dReaderRed,
+                          duration: 1500,
+                        );
+                      }
+                      // TODO Go on home screen
                     }
                   },
                 ),

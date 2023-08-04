@@ -43,13 +43,22 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 8,
-        ),
+        padding: const EdgeInsets.all(16),
         children: [
           const SizedBox(
             height: 32,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+            ),
           ),
           SvgPicture.asset(
             Config.whiteLogoSymbol,
@@ -60,6 +69,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               BlendMode.srcIn,
             ),
           ),
+          const SizedBox(),
           const SizedBox(
             height: 32,
           ),
@@ -115,9 +125,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   },
                   controller: _emailController,
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
                 CustomTextField(
                   labelText: 'Password',
                   hintText: 'Set your password',
@@ -161,10 +168,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 64,
+                  height: 48,
                 ),
                 RoundedButton(
                   text: 'Login',
+                  padding: 0,
                   textStyle: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,

@@ -75,9 +75,10 @@ class CustomTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             constraints: const BoxConstraints(
-              minHeight: 80,
-              maxHeight: 80,
+              maxHeight: 70,
+              minHeight: 70,
             ),
+            isDense: true,
             fillColor: ColorPalette.boxBackground200,
             filled: true,
             contentPadding: const EdgeInsets.all(12),

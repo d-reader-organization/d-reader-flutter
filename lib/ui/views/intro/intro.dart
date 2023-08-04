@@ -182,7 +182,7 @@ class IntroView extends HookConsumerWidget {
                     height: 16,
                   ),
                   Text(
-                    "Discover, trade, and read comics and explore new ways of digital collecting!",
+                    "Help us shape the future of digital graphic novels and empower artists!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,

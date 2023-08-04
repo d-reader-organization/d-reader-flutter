@@ -10,7 +10,8 @@ class RoundedButton extends StatelessWidget {
   final double fontSize;
   final bool isLoading;
   final Color borderColor;
-
+  final double padding;
+  final TextStyle textStyle;
   const RoundedButton({
     Key? key,
     required this.text,
@@ -21,12 +22,18 @@ class RoundedButton extends StatelessWidget {
     this.fontSize = 14,
     this.isLoading = false,
     this.borderColor = Colors.transparent,
+    this.padding = 8,
+    this.textStyle = const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.2,
+    ),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(padding),
       child: TextButton(
         onPressed: isLoading ? null : onPressed,
         style: TextButton.styleFrom(
@@ -61,6 +68,7 @@ class RoundedButton extends StatelessWidget {
               )
             : Text(
                 text,
+                style: textStyle,
               ),
       ),
     );

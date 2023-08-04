@@ -5,9 +5,8 @@ import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final ownedIssuesAsyncProvider =
-    AsyncNotifierProvider.autoDispose // TODO change arguments
-        .family<OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
+final ownedIssuesAsyncProvider = AsyncNotifierProvider // TODO change arguments
+    .family<OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
   OwnedIssuesAsyncNotifier.new,
 );
 

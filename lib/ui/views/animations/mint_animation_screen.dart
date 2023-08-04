@@ -291,6 +291,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                                         .read(solanaProvider.notifier)
                                         .useMint(
                                           nftAddress: widget.nft.address,
+                                          ownerAddress: widget.nft.ownerAddress,
                                         );
                                     if (context.mounted && isSuccessful) {
                                       nextScreenReplace(

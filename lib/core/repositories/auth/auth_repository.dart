@@ -1,14 +1,14 @@
-import 'package:d_reader_flutter/core/models/auth.dart';
-
 abstract class AuthRepository {
   Future<dynamic> getOneTimePassword({
     required String address,
     required String apiUrl,
+    required String jwtToken,
   });
-  Future<AuthorizationResponse?> connectWallet({
+  Future<void> connectWallet({
     required String address,
     required String encoding,
     required String apiUrl,
+    required String jwtToken,
   });
   Future<void> disconnectWallet({
     required String address,

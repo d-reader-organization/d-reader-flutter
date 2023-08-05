@@ -3,7 +3,6 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_1.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_2.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_up/step_2_verification.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -92,7 +91,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     },
                   ),
                   if (ref.watch(signUpDataProvider).isSuccess) ...[
-                    const SignUpStep2Verification(),
+                    // const SignUpStep2Verification(),
                     const SignUpStep3(),
                   ],
                 ],

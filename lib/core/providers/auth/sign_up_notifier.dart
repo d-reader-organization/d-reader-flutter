@@ -47,7 +47,12 @@ class SignUpDataProvider extends Notifier<SignUpData> {
   }
 
   void updateSucces(bool isSuccess) {
-    state = state.copyWith(isSuccess: isSuccess);
+    state = state.copyWith(
+      isSuccess: isSuccess,
+      email: '',
+      password: '',
+      username: '',
+    );
   }
 
   void clearData() {

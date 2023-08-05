@@ -1,6 +1,9 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,35 @@ class SignUpStep3 extends ConsumerWidget {
   const SignUpStep3({
     super.key,
   });
+
+  Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    final result =
+        await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: false,
+      ),
+    );
+    if (context.mounted) {
+      if (result != 'OK') {
+        return showSnackBar(
+          context: context,
+          text: result,
+          backgroundColor: ColorPalette.dReaderRed,
+        );
+      }
+      nextScreenCloseOthers(
+        context,
+        const DReaderScaffold(),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -133,6 +165,7 @@ class SignUpStep3 extends ConsumerWidget {
             Expanded(
               child: RoundedButton(
                 text: 'Connect',
+                isLoading: ref.watch(globalStateProvider).isLoading,
                 backgroundColor: ColorPalette.dReaderYellow100,
                 textColor: Colors.black,
                 textStyle: const TextStyle(
@@ -143,8 +176,8 @@ class SignUpStep3 extends ConsumerWidget {
                   0,
                   50,
                 ),
-                onPressed: () {
-                  // start wallet connection
+                onPressed: () async {
+                  await _handleConnectWallet(ref, context);
                 },
               ),
             ),

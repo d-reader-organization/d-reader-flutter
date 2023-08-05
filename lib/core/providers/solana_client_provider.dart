@@ -105,12 +105,16 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         ? Config.apiUrlDevnet
         : Config.apiUrl;
     final envNotifier = ref.read(environmentProvider.notifier);
-
+    final String jwtToken = ref.read(environmentProvider).jwtToken ?? '';
+    if (jwtToken.isEmpty) {
+      throw Exception('Missing jwt token');
+    }
     final signMessageResult = await _signMessage(
       client: client,
       signer: publicKey,
       overrideAuthToken: result?.authToken ?? '',
       apiUrl: apiUrl,
+      jwtToken: jwtToken,
     );
     if (signMessageResult is String || signMessageResult.isEmpty) {
       await session.close();
@@ -136,10 +140,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     await Future.wait(
       [
         session.close(),
-        _getAndStoreToken(
+        _connectWallet(
           signedMessage: signMessageResult.first,
           publicKey: publicKey,
           apiUrl: apiUrl,
+          jwtToken: jwtToken,
         ),
       ],
     );
@@ -147,12 +152,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return 'OK';
   }
 
-  Future<void> _getAndStoreToken({
+  Future<void> _connectWallet({
     required Uint8List signedMessage,
     required Ed25519HDPublicKey publicKey,
     required String apiUrl,
+    required String jwtToken,
   }) async {
-    final response = await ref.read(authRepositoryProvider).connectWallet(
+    await ref.read(authRepositoryProvider).connectWallet(
           address: publicKey.toBase58(),
           encoding: base58encode(
             signedMessage.sublist(
@@ -161,15 +167,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             ),
           ),
           apiUrl: apiUrl,
+          jwtToken: jwtToken,
         );
-    if (response != null) {
-      ref.read(environmentProvider.notifier).updateEnvironmentState(
-            EnvironmentStateUpdateInput(
-              jwtToken: response.accessToken,
-              refreshToken: response.refreshToken,
-            ),
-          );
-    }
   }
 
   Future<bool> mint(String? candyMachineAddress) async {
@@ -326,11 +325,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required Ed25519HDPublicKey signer,
     required String overrideAuthToken,
     required String apiUrl,
+    required String jwtToken,
   }) async {
     if (await _doReauthorize(client, overrideAuthToken)) {
       final message = await ref.read(authRepositoryProvider).getOneTimePassword(
             address: signer.toBase58(),
             apiUrl: apiUrl,
+            jwtToken: jwtToken,
           );
       if (message is ApiError) {
         return message.message;

@@ -14,10 +14,18 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<dynamic> getOneTimePassword({
     required String address,
     required String apiUrl,
+    required String jwtToken,
   }) async {
     final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
     final response = await dio
-        .patch('/auth/wallet/request-password/$address')
+        .patch(
+          '/auth/wallet/request-password/$address',
+          options: Options(
+            headers: {
+              'Authorization': jwtToken,
+            },
+          ),
+        )
         .then((value) => value.data);
     dio.close();
 
@@ -25,43 +33,43 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthorizationResponse?> connectWallet({
+  Future<void> connectWallet({
     required String address,
     required String encoding,
     required String apiUrl,
+    required String jwtToken,
   }) async {
     try {
       final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
-      final response = await dio
-          .get('/auth/wallet/connect/$address/$encoding')
+      await dio
+          .get(
+            '/auth/wallet/connect/$address/$encoding',
+            options: Options(
+              headers: {
+                'Authorization': jwtToken,
+              },
+            ),
+          )
           .then((value) => value.data);
       dio.close();
-      return response != null
-          ? AuthorizationResponse.fromJson(response)
-          : null; // TODO: we don't get authorization from this anymore
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      return null;
     }
   }
 
   @override
-  Future<AuthorizationResponse?> disconnectWallet({
+  Future<void> disconnectWallet({
     required String address,
     required String apiUrl,
   }) async {
     try {
       final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
-      final response = await dio
+      await dio
           .get('/auth/wallet/disconnect/$address')
           .then((value) => value.data);
       dio.close();
-      return response != null
-          ? AuthorizationResponse.fromJson(response)
-          : null; // TODO: we don't get authorization here as well
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
-      return null;
     }
   }
 

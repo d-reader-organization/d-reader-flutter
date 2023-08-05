@@ -105,7 +105,7 @@ class ReferralsView extends ConsumerWidget {
                         context: context,
                         text: 'Text',
                         backgroundColor: ColorPalette.dReaderRed,
-                        duration: 1000,
+                        milisecondsDuration: 1000,
                       );
                     }
                   },

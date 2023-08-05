@@ -1,14 +1,14 @@
-class AuthSignInResponse {
+class AuthorizationResponse {
   String accessToken;
   String refreshToken;
 
-  AuthSignInResponse({
+  AuthorizationResponse({
     required this.accessToken,
     required this.refreshToken,
   });
 
-  factory AuthSignInResponse.fromJson(json) {
-    return AuthSignInResponse(
+  factory AuthorizationResponse.fromJson(json) {
+    return AuthorizationResponse(
       accessToken: json['accessToken'],
       refreshToken: json['refreshToken'],
     );

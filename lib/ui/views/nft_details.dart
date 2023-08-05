@@ -129,7 +129,7 @@ class Body extends StatelessWidget {
     showSnackBar(
       context: context,
       backgroundColor: ColorPalette.dReaderRed,
-      duration: 2000,
+      milisecondsDuration: 2000,
       text: 'Failed to open',
     );
   }
@@ -239,7 +239,8 @@ class Body extends StatelessWidget {
                         final isSuccessful =
                             await ref.read(solanaProvider.notifier).useMint(
                                   nftAddress: nft.address,
-                                  ownerAddress: nft.ownerAddress, // TODO: we have to make sure that we sign this action with the correct wallet (auth_token)
+                                  ownerAddress: nft
+                                      .ownerAddress, // TODO: we have to make sure that we sign this action with the correct wallet (auth_token)
                                 );
                         if (context.mounted) {
                           _handleNftOpen(context, isSuccessful);

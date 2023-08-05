@@ -8,7 +8,7 @@ class RoundedButton extends StatelessWidget {
   final void Function()? onPressed;
   final Size size;
   final double fontSize;
-  final bool isLoading;
+  final bool isLoading, isDisabled;
   final Color borderColor;
   final double padding;
   final TextStyle textStyle;
@@ -21,6 +21,7 @@ class RoundedButton extends StatelessWidget {
     this.size = const Size(120, 27),
     this.fontSize = 14,
     this.isLoading = false,
+    this.isDisabled = false,
     this.borderColor = Colors.transparent,
     this.padding = 8,
     this.textStyle = const TextStyle(
@@ -35,7 +36,7 @@ class RoundedButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(padding),
       child: TextButton(
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isLoading || isDisabled ? null : onPressed,
         style: TextButton.styleFrom(
           minimumSize: size,
           disabledBackgroundColor: ColorPalette.dReaderGrey,

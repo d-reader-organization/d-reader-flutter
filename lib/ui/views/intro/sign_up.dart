@@ -1,13 +1,15 @@
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_1.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_2.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_2_verification.dart';
+import 'package:d_reader_flutter/ui/views/intro/sign_up/step_3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final signUpPageProvider = StateProvider<int>((ref) {
+final signUpPageProvider = StateProvider.autoDispose<int>((ref) {
   return 0;
 });
 
@@ -51,48 +53,50 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Consumer(
             builder: (context, ref, child) {
-              return ref.watch(globalStateProvider).isLoading
-                  ? const Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Please wait...',
-                          ),
-                          CircularProgressIndicator(
-                            color: ColorPalette.dReaderBlue,
-                          ),
-                        ],
-                      ),
-                    )
-                  : PageView(
-                      controller: _pageController,
-                      onPageChanged: (value) {
-                        ref
-                            .read(signUpPageProvider.notifier)
-                            .update((state) => value);
-                      },
-                      children: [
-                        SignUpStep1(
-                          onSuccess: () {
-                            _pageController.animateToPage(
-                              1,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          },
-                        ),
-                        SignUpStep2(
-                          onSuccess: () {
-                            _pageController.animateToPage(
-                              2,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          },
-                        ),
-                        const SignUpStep2Verification(),
-                      ],
-                    );
+              return PageView(
+                controller: _pageController,
+                physics: ref.watch(signUpPageProvider) > 2
+                    ? const NeverScrollableScrollPhysics()
+                    : null,
+                onPageChanged: (value) {
+                  ref
+                      .read(signUpPageProvider.notifier)
+                      .update((state) => value);
+                },
+                children: [
+                  SignUpStep1(
+                    onSuccess: () {
+                      _pageController.animateToPage(
+                        1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                  ),
+                  SignUpStep2(
+                    onSuccess: () {
+                      ref.read(signUpDataProvider.notifier).updateSucces(true);
+                      _pageController.animateToPage(
+                        2,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    onFail: (text) {
+                      showSnackBar(
+                        context: context,
+                        text: text,
+                        backgroundColor: ColorPalette.dReaderRed,
+                        milisecondsDuration: 2000,
+                      );
+                    },
+                  ),
+                  if (ref.watch(signUpDataProvider).isSuccess) ...[
+                    const SignUpStep2Verification(),
+                    const SignUpStep3(),
+                  ],
+                ],
+              );
             },
           ),
         ),

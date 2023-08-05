@@ -1,6 +1,9 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
+import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -12,9 +15,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SignUpStep2 extends ConsumerStatefulWidget {
   final Function() onSuccess;
+  final Function(String text) onFail;
   const SignUpStep2({
     super.key,
     required this.onSuccess,
+    required this.onFail,
   });
 
   @override
@@ -27,10 +32,37 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
   final TextEditingController _passwordController = TextEditingController();
 
   @override
+  void initState() {
+    final signupData = ref.read(signUpDataProvider);
+    _emailController.text = signupData.email;
+    _passwordController.text = signupData.password;
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  _handleConfirm() async {
+    final notifier = ref.read(globalStateProvider.notifier);
+    notifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    final result = await ref.read(signUpFutureProvider.future);
+    notifier.update(
+      (state) => state.copyWith(
+        isLoading: false,
+      ),
+    );
+    if (result is bool && result) {
+      widget.onSuccess();
+    }
+    widget.onFail(result);
   }
 
   @override
@@ -88,7 +120,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                   } else if (value.length < 8) {
                     return 'Password has to be minimum 8 characters length.';
                   } else if (!passwordRegex.hasMatch(value)) {
-                    return 'Password must contain at least 1 upper and lower case letter. Needs to have at least 1 number or special character.';
+                    return 'At least 1 upper, lower case letter and 1 number or special character.';
                   }
                   return null;
                 },
@@ -109,6 +141,9 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                     ),
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 8,
               ),
               const Text(
                 '8 characters minimum. Must contain at least 1 lowercase, 1 uppercase character, 1 number or 1 special character',
@@ -147,6 +182,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
               RoundedButton(
                 text: 'Confirm',
                 padding: 0,
+                isLoading: ref.watch(globalStateProvider).isLoading,
                 textStyle: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
@@ -159,7 +195,13 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                 ),
                 onPressed: () async {
                   if (_step2FormKey.currentState!.validate()) {
-                    widget.onSuccess();
+                    ref
+                        .read(signUpDataProvider.notifier)
+                        .updateEmailAndPassword(
+                          email: _emailController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        );
+                    await _handleConfirm();
                   }
                 },
               ),

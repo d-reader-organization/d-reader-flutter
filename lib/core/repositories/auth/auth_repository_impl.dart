@@ -24,10 +24,8 @@ class AuthRepositoryImpl implements AuthRepository {
     return response;
   }
 
-  // TODO: missing /user/login | /user/register /user/refresh-token
-
   @override
-  Future<AuthSignInResponse?> connectWallet({
+  Future<AuthorizationResponse?> connectWallet({
     required String address,
     required String encoding,
     required String apiUrl,
@@ -39,7 +37,7 @@ class AuthRepositoryImpl implements AuthRepository {
           .then((value) => value.data);
       dio.close();
       return response != null
-          ? AuthSignInResponse.fromJson(response)
+          ? AuthorizationResponse.fromJson(response)
           : null; // TODO: we don't get authorization from this anymore
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
@@ -48,7 +46,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthSignInResponse?> disconnectWallet({
+  Future<AuthorizationResponse?> disconnectWallet({
     required String address,
     required String apiUrl,
   }) async {
@@ -59,7 +57,7 @@ class AuthRepositoryImpl implements AuthRepository {
           .then((value) => value.data);
       dio.close();
       return response != null
-          ? AuthSignInResponse.fromJson(response)
+          ? AuthorizationResponse.fromJson(response)
           : null; // TODO: we don't get authorization here as well
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
@@ -77,14 +75,53 @@ class AuthRepositoryImpl implements AuthRepository {
         'nameOrEmail': nameOrEmail,
         'password': password,
       }).then((value) => value.data);
-      return response != null ? AuthSignInResponse.fromJson(response) : null;
+      return response != null ? AuthorizationResponse.fromJson(response) : null;
     } catch (exception, stackTrace) {
       if (exception is DioError) {
-        return exception.response?.data?['message'] ??
-            exception.response?.data.toString();
+        final dynamic message = exception.response?.data?['message'];
+        return message != null
+            ? message is List
+                ? message.join('. ')
+                : message
+            : exception.response?.data.toString();
       }
       Sentry.captureException(exception, stackTrace: stackTrace);
       return null;
     }
+  }
+
+  @override
+  Future? signUp({
+    required String email,
+    required String password,
+    required String username,
+  }) async {
+    try {
+      final response = await client.post('/auth/user/register', data: {
+        'email': email,
+        'password': password,
+        'name': username,
+      }).then((value) => value.data);
+
+      return response != null ? AuthorizationResponse.fromJson(response) : null;
+    } catch (exception, stackTrace) {
+      if (exception is DioError) {
+        final dynamic message = exception.response?.data?['message'];
+        return message != null
+            ? message is List
+                ? message.join('. ')
+                : message
+            : exception.response?.data.toString();
+      }
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      return null;
+    }
+  }
+
+  @override
+  Future<String>? refreshToken(String refreshToken) {
+    return client
+        .get('/auth/user/refresh-token/$refreshToken')
+        .then((value) => value.data);
   }
 }

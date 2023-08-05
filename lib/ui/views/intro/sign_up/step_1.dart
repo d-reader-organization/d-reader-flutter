@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -21,6 +22,12 @@ class SignUpStep1 extends ConsumerStatefulWidget {
 class _SignUpStep1State extends ConsumerState<SignUpStep1> {
   final GlobalKey<FormState> _usernameFormKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
+
+  @override
+  void initState() {
+    _usernameController.text = ref.read(signUpDataProvider).username;
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -100,6 +107,9 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                 ),
                 onPressed: () async {
                   if (_usernameFormKey.currentState!.validate()) {
+                    ref.read(signUpDataProvider.notifier).updateUsername(
+                          _usernameController.text.trim(),
+                        );
                     widget.onSuccess();
                   }
                 },

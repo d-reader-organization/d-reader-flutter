@@ -193,7 +193,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             context: context,
                             text: response,
                             backgroundColor: ColorPalette.dReaderRed,
-                            duration: 1500,
+                            milisecondsDuration: 1500,
                           );
                         }
                         // TODO Go on home screen

@@ -69,7 +69,7 @@ class RatingIcon extends ConsumerWidget {
                 showSnackBar(
                   context: context,
                   text: isString ? result : 'Submitted successfully.',
-                  duration: 3000,
+                  milisecondsDuration: 3000,
                   backgroundColor: isString
                       ? ColorPalette.dReaderRed
                       : ColorPalette.dReaderGreen,

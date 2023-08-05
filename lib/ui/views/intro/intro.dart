@@ -153,7 +153,7 @@ class IntroView extends HookConsumerWidget {
                           context: context,
                           text: 'TODO',
                           backgroundColor: ColorPalette.dReaderRed,
-                          duration: 1000,
+                          milisecondsDuration: 1000,
                         );
                       }
                     }

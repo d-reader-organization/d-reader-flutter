@@ -145,7 +145,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                     showSnackBar(
                                       context: context,
                                       backgroundColor: ColorPalette.dReaderRed,
-                                      duration: 2000,
+                                      milisecondsDuration: 2000,
                                       text: 'Failed to open',
                                     );
                                   }

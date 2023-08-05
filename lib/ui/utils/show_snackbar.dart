@@ -4,12 +4,12 @@ showSnackBar({
   required BuildContext context,
   required String text,
   Color? backgroundColor,
-  int duration = 700,
+  int milisecondsDuration = 700,
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(text),
-      duration: Duration(milliseconds: duration),
+      duration: Duration(milliseconds: milisecondsDuration),
       backgroundColor: backgroundColor,
     ),
   );

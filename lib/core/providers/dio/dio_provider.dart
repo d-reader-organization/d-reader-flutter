@@ -48,8 +48,8 @@ Dio dio(DioRef ref) {
               return;
             }
             Sentry.captureException(e);
-            Sentry.captureMessage(
-                e.response?.data['message'] ?? e.response?.data.toString());
+            Sentry.captureMessage(e.response?.data['message'].toString() ??
+                e.response?.data.toString());
             return handler.next(e);
           },
         ),

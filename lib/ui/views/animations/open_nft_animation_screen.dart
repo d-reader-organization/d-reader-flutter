@@ -57,7 +57,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
           showSnackBar(
             context: context,
             text: 'Internal server error.',
-            duration: 2500,
+            milisecondsDuration: 2500,
             backgroundColor: ColorPalette.dReaderRed,
           );
           return;

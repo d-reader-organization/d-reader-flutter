@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
-import 'package:d_reader_flutter/core/providers/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/creator/creator_repository_impl.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';

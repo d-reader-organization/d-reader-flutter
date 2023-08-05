@@ -1,10 +1,12 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:dio/dio.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'dio_provider.g.dart';
 
-final dioProvider = Provider<Dio>((ref) {
+@Riverpod(keepAlive: true)
+Dio dio(DioRef ref) {
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: ref.watch(environmentProvider).apiUrl,
@@ -53,4 +55,4 @@ final dioProvider = Provider<Dio>((ref) {
         ),
       ],
     );
-});
+}

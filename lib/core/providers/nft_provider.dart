@@ -1,7 +1,7 @@
 import 'dart:async' show Timer;
 
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/providers/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/nft/repository_impl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_1.dart';
 import 'package:d_reader_flutter/ui/views/intro/sign_up/step_2.dart';
@@ -48,32 +49,51 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (value) {
-              ref.read(signUpPageProvider.notifier).update((state) => value);
+          child: Consumer(
+            builder: (context, ref, child) {
+              return ref.watch(globalStateProvider).isLoading
+                  ? const Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Please wait...',
+                          ),
+                          CircularProgressIndicator(
+                            color: ColorPalette.dReaderBlue,
+                          ),
+                        ],
+                      ),
+                    )
+                  : PageView(
+                      controller: _pageController,
+                      onPageChanged: (value) {
+                        ref
+                            .read(signUpPageProvider.notifier)
+                            .update((state) => value);
+                      },
+                      children: [
+                        SignUpStep1(
+                          onSuccess: () {
+                            _pageController.animateToPage(
+                              1,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                        ),
+                        SignUpStep2(
+                          onSuccess: () {
+                            _pageController.animateToPage(
+                              2,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                            );
+                          },
+                        ),
+                        const SignUpStep2Verification(),
+                      ],
+                    );
             },
-            children: [
-              SignUpStep1(
-                onSuccess: () {
-                  _pageController.animateToPage(
-                    1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-              ),
-              SignUpStep2(
-                onSuccess: () {
-                  _pageController.animateToPage(
-                    2,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-              ),
-              const SignUpStep2Verification(),
-            ],
           ),
         ),
       ),

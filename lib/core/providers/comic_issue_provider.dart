@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
-import 'package:d_reader_flutter/core/providers/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository_impl.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';

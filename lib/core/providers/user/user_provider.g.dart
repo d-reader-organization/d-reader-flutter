@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'dio_provider.dart';
+part of 'user_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'85904c4fc2ede9f74b8c35444068188b74f3af6c';
+String _$myUserHash() => r'dcce5ba0c551bc148791914a301b1ef5f6f25323';
 
-/// See also [dio].
-@ProviderFor(dio)
-final dioProvider = Provider<Dio>.internal(
-  dio,
-  name: r'dioProvider',
+/// See also [myUser].
+@ProviderFor(myUser)
+final myUserProvider = AutoDisposeFutureProvider<UserModel?>.internal(
+  myUser,
+  name: r'myUserProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$dioHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$myUserHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef DioRef = ProviderRef<Dio>;
+typedef MyUserRef = AutoDisposeFutureProviderRef<UserModel?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member

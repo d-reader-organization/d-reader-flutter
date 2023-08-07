@@ -60,7 +60,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
       ),
     );
     if (result is bool && result) {
-      widget.onSuccess();
+      return widget.onSuccess();
     }
     widget.onFail(result);
   }

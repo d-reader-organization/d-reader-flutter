@@ -2,10 +2,13 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
+import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -171,6 +174,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   RoundedButton(
                     text: 'Login',
                     padding: 0,
+                    isLoading: ref.watch(globalStateProvider).isLoading,
                     textStyle: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -183,20 +187,33 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     ),
                     onPressed: () async {
                       if (_signInFormKey.currentState!.validate()) {
-                        final authRepo = ref.read(authRepositoryProvider);
-                        final response = await authRepo.signIn(
+                        final globalNotifier =
+                            ref.read(globalStateProvider.notifier);
+                        globalNotifier.update(
+                          (state) => state.copyWith(
+                            isLoading: true,
+                          ),
+                        );
+                        final response = await ref.read(signInFutureProvider(
                           nameOrEmail: _emailController.text.trim(),
                           password: _passwordController.text.trim(),
+                        ).future);
+                        globalNotifier.update(
+                          (state) => state.copyWith(
+                            isLoading: false,
+                          ),
                         );
-                        if (response is String && context.mounted) {
-                          return showSnackBar(
-                            context: context,
-                            text: response,
-                            backgroundColor: ColorPalette.dReaderRed,
-                            milisecondsDuration: 1500,
-                          );
+                        if (context.mounted) {
+                          if (response is String) {
+                            return showSnackBar(
+                              context: context,
+                              text: response,
+                              backgroundColor: ColorPalette.dReaderRed,
+                              milisecondsDuration: 1500,
+                            );
+                          }
+                          nextScreenReplace(context, const DReaderScaffold());
                         }
-                        // TODO Go on home screen
                       }
                     },
                   ),

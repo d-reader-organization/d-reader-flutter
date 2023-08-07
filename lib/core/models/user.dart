@@ -26,6 +26,24 @@ class UserModel {
   }
 }
 
+enum UserRole {
+  user,
+  tester,
+  admin,
+  superadmin,
+}
+
+extension UserRoleValue on UserRole {
+  static const userRoles = {
+    UserRole.user: 'User',
+    UserRole.tester: 'Tester',
+    UserRole.admin: 'Admin',
+    UserRole.superadmin: 'Superadmin',
+  };
+
+  String get name => userRoles[this] ?? 'User';
+}
+
 class UpdateUserPayload {
   final int id;
 

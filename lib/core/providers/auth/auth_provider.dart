@@ -12,6 +12,27 @@ final authRepositoryProvider = Provider<AuthRepositoryImpl>((ref) {
 });
 
 @riverpod
+Future<dynamic> signInFuture(
+  SignInFutureRef ref, {
+  required String nameOrEmail,
+  required String password,
+}) async {
+  final result = await ref.read(authRepositoryProvider).signIn(
+        nameOrEmail: nameOrEmail,
+        password: password,
+      );
+  if (result is AuthorizationResponse) {
+    return ref.read(environmentProvider.notifier).updateEnvironmentState(
+          EnvironmentStateUpdateInput(
+            jwtToken: result.accessToken,
+            refreshToken: result.refreshToken,
+          ),
+        );
+  }
+  return 'Failed to login.';
+}
+
+@riverpod
 Future<dynamic> signUpFuture(
   SignUpFutureRef ref,
 ) async {

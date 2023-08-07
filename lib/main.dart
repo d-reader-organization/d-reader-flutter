@@ -140,8 +140,7 @@ class MyApp extends ConsumerWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      home: ref.watch(environmentProvider).authToken != null &&
-              ref.watch(environmentProvider).jwtToken != null
+      home: ref.watch(environmentProvider).jwtToken != null
           ? const DReaderScaffold()
           : const WelcomeView(),
     );

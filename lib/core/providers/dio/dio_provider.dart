@@ -7,6 +7,7 @@ part 'dio_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Dio dio(DioRef ref) {
+  print(ref.watch(environmentProvider).jwtToken);
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: ref.watch(environmentProvider).apiUrl,
@@ -42,7 +43,7 @@ Dio dio(DioRef ref) {
             // temp production fix
             if (e.response?.statusCode == 401 ||
                 (e.response?.statusCode == 404 &&
-                    e.response?.requestOptions.path == '/wallet/get/me')) {
+                    e.response?.requestOptions.path == '/user/get/me')) {
               await LocalStore.instance.clear();
               ref.invalidate(environmentProvider);
               return;

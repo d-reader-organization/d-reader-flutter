@@ -99,6 +99,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       solanaCluster: input.solanaCluster,
       publicKey: input.publicKey,
       signature: input.signature,
+      wallets: input.wallets,
     );
 
     // localStore.put(

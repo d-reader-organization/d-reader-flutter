@@ -122,7 +122,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           ? signMessageResult
           : 'Failed to sign message.';
     }
-
+    final currentWallets = ref.read(environmentProvider).wallets;
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
@@ -133,6 +133,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           signMessageResult.first.sublist(0, 64),
           publicKey: publicKey,
         ).bytes,
+        wallets: [
+          ...(currentWallets ?? []),
+          {
+            publicKey.toBase58(): result?.authToken ?? '',
+          },
+        ],
       ),
     );
     envNotifier.updateLastSelectedNetwork(cluster);
@@ -372,9 +378,17 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       cluster: ref.read(environmentProvider).solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
+    final currentWallets = ref.read(environmentProvider).wallets;
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result?.authToken,
+            wallets: [
+              ...(currentWallets ?? []),
+              {
+                ref.read(environmentProvider).publicKey?.toBase58() ?? '':
+                    result?.authToken ?? '',
+              },
+            ],
           ),
         );
     return result != null;

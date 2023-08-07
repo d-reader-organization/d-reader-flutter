@@ -6,6 +6,7 @@ import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 class EnvironmentState {
   final String apiUrl, solanaCluster;
   final String? authToken, jwtToken, refreshToken, signature;
+  final List<Map<String, String>>? wallets;
   Ed25519HDPublicKey? publicKey;
 
   EnvironmentState({
@@ -16,6 +17,7 @@ class EnvironmentState {
     this.refreshToken,
     this.publicKey,
     this.signature,
+    this.wallets,
   });
 
   EnvironmentState copyWith({
@@ -26,6 +28,7 @@ class EnvironmentState {
     String? solanaCluster,
     List<int>? signature,
     Ed25519HDPublicKey? publicKey,
+    List<Map<String, String>>? wallets,
   }) {
     return EnvironmentState(
       apiUrl: apiUrl ?? this.apiUrl,
@@ -36,6 +39,7 @@ class EnvironmentState {
       publicKey: publicKey ?? this.publicKey,
       signature:
           signature != null ? String.fromCharCodes(signature) : this.signature,
+      wallets: wallets ?? this.wallets,
     );
   }
 
@@ -57,6 +61,7 @@ class EnvironmentStateUpdateInput {
   final String? apiUrl, authToken, jwtToken, refreshToken, solanaCluster;
   final Ed25519HDPublicKey? publicKey;
   final List<int>? signature;
+  List<Map<String, String>>? wallets;
 
   EnvironmentStateUpdateInput({
     this.apiUrl,
@@ -66,6 +71,7 @@ class EnvironmentStateUpdateInput {
     this.solanaCluster,
     this.publicKey,
     this.signature,
+    this.wallets,
   });
 
   factory EnvironmentStateUpdateInput.fromDynamic(dynamic data) {
@@ -80,6 +86,7 @@ class EnvironmentStateUpdateInput {
       publicKey: Ed25519HDPublicKey.fromBase58(json['publicKey']),
       solanaCluster: json['solanaCluster'],
       signature: signature?.codeUnits,
+      wallets: json['wallets'],
     );
   }
 }

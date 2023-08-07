@@ -7,7 +7,6 @@ part 'dio_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Dio dio(DioRef ref) {
-  print(ref.watch(environmentProvider).jwtToken);
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: ref.watch(environmentProvider).apiUrl,

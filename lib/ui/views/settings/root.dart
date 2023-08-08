@@ -1,10 +1,15 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/user.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
+import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
+import 'package:d_reader_flutter/ui/views/settings/referrals.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SettingsRootView extends StatelessWidget {
   const SettingsRootView({
@@ -25,10 +30,17 @@ class SettingsRootView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/user.svg',
+              title: 'My profile',
+              onTap: () {
+                nextScreenPush(context, const ProfileView());
+              },
+            ),
+            SettingsCommonListTile(
               leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
               title: 'Wallet',
               onTap: () {
-                nextScreenPush(context, const ProfileView());
+                // nextScreenPush(context, const ProfileView());
               },
             ),
             const SettingsCommonListTile(
@@ -49,40 +61,31 @@ class SettingsRootView extends StatelessWidget {
                 );
               },
             ),
-            // TODO swap this consumer
-            // Consumer(
-            //   builder: (context, ref, child) {
-            //     final myWallet = ref.watch(myWalletProvider);
-            //     return myWallet.maybeWhen(
-            //       orElse: () {
-            //         return const SizedBox();
-            //       },
-            //       data: (wallet) {
-            //         if (wallet == null) {
-            //           return const SizedBox();
-            //         }
-            //         return wallet.isEmailVerified // TODO: this should actually check if the user.role is 'Tester'
-            //             ? SettingsCommonListTile(
-            //                 leadingPath:
-            //                     '${Config.settingsAssetsPath}/light/network.svg',
-            //                 title: 'Change Network',
-            //                 onTap: () {
-            //                   nextScreenPush(
-            //                       context, const ChangeNetworkView());
-            //                 },
-            //               )
-            //             : SettingsCommonListTile(
-            //                 leadingPath:
-            //                     '${Config.settingsAssetsPath}/light/3_user.svg',
-            //                 title: 'Referrals',
-            //                 onTap: () {
-            //                   nextScreenPush(context, const ReferralsView());
-            //                 },
-            //               );
-            //       },
-            //     );
-            //   },
-            // ),
+            SettingsCommonListTile(
+              leadingPath: '${Config.settingsAssetsPath}/light/3_user.svg',
+              title: 'Referrals',
+              onTap: () {
+                nextScreenPush(
+                  context,
+                  const ReferralsView(),
+                );
+              },
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                final userRole = ref.watch(environmentProvider).userRole;
+                return userRole == UserRole.tester.name
+                    ? SettingsCommonListTile(
+                        leadingPath:
+                            '${Config.settingsAssetsPath}/light/network.svg',
+                        title: 'Change Network',
+                        onTap: () {
+                          nextScreenPush(context, const ChangeNetworkView());
+                        },
+                      )
+                    : const SizedBox();
+              },
+            ),
             SettingsCommonListTile(
               leadingPath: '${Config.settingsAssetsPath}/light/bun_bun.svg',
               title: 'About dReader',

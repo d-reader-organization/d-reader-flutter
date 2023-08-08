@@ -136,7 +136,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         wallets: [
           ...(currentWallets ?? []),
           {
-            publicKey.toBase58(): result?.authToken ?? '',
+            publicKey.toBase58(): WalletData(
+              authToken: result?.authToken ?? '',
+              signature: Signature(
+                signMessageResult.first.sublist(0, 64),
+                publicKey: publicKey,
+              ).toBase58(),
+            ),
           },
         ],
       ),
@@ -378,15 +384,32 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       cluster: ref.read(environmentProvider).solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
-    final currentWallets = ref.read(environmentProvider).wallets;
+    final wallets = ref.read(environmentProvider).wallets ?? [];
+    WalletData? currentWalletData;
+    for (int i = 0; i < wallets.length; ++i) {
+      final current = wallets[i]
+          [(ref.read(environmentProvider).publicKey?.toBase58() ?? '')];
+      if (current != null) {
+        currentWalletData = current;
+        break;
+      }
+    }
+
+    if (currentWalletData == null) {
+      return false;
+    }
+
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result?.authToken,
             wallets: [
-              ...(currentWallets ?? []),
+              ...(wallets),
               {
                 ref.read(environmentProvider).publicKey?.toBase58() ?? '':
-                    result?.authToken ?? '',
+                    WalletData(
+                  authToken: result?.authToken ?? '',
+                  signature: currentWalletData.signature,
+                )
               },
             ],
           ),

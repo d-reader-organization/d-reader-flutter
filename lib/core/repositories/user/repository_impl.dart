@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/core/models/user.dart';
-import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/user/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -10,25 +9,16 @@ class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl({
     required this.client,
   });
-  @override
-  Future<List<WalletAsset>> getAssets(int id) async {
-    final response =
-        await client.get('/user/get/$id/assets').then((value) => value.data);
-
-    return response != null
-        ? List<WalletAsset>.from(
-            response.map(
-              (item) => WalletAsset.fromJson(item),
-            ),
-          )
-        : [];
-  }
 
   @override
   Future<UserModel?> myUser() async {
-    final response =
-        await client.get('/user/get/me').then((value) => value.data);
-    return response != null ? UserModel.fromJson(response) : null;
+    try {
+      final response =
+          await client.get('/user/get/me').then((value) => value.data);
+      return response != null ? UserModel.fromJson(response) : null;
+    } catch (error) {
+      throw Exception(error.toString());
+    }
   }
 
   @override
@@ -63,7 +53,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<dynamic> updateUser(
     UpdateUserPayload payload,
   ) async {
-    // TODO: these conditions prob need improvements, e.g. check that email is not null or empty
+    // TODO: test update user endpoint
     final response = await client.patch(
       '/user/update/${payload.id}',
       data: {

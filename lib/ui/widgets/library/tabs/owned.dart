@@ -18,6 +18,7 @@ class OwnedListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       ownedComicsAsyncProvider(
+        // TODO send user id and use new endpoint
         ref.watch(environmentProvider).publicKey?.toBase58() ?? '',
       ),
     );

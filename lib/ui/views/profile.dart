@@ -1,15 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/models/user.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/logout_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/username_validator.dart';
+import 'package:d_reader_flutter/ui/views/settings/reset_password.dart';
+import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
+import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProfileView extends HookConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -42,10 +53,10 @@ class ProfileView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final provider = ref.watch(myWalletProvider); TODO - user provider
-    // final globalHook = useGlobalState();
+    final provider = ref.watch(myUserProvider);
+    final globalHook = useGlobalState();
     return SettingsScaffold(
-      appBarTitle: 'Edit Profile',
+      appBarTitle: 'My Profile',
       bottomNavigationBar: Consumer(
         builder: (context, ref, child) {
           final String walletName = ref.watch(walletNameProvider);
@@ -132,206 +143,184 @@ class ProfileView extends HookConsumerWidget {
           );
         },
       ),
-      body: const Text('User Profile'),
-      //      body: provider.when(
-      //   data: (wallet) {
-      //     if (wallet == null) {
-      //       return const SizedBox();
-      //     }
-      //     return Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: SingleChildScrollView(
-      //         child: Column(
-      //           children: [
-      //             const Column(
-      //               crossAxisAlignment: CrossAxisAlignment.stretch,
-      //               children: [
-      //                 Text(
-      //                   'Profile Image',
-      //                   style: TextStyle(
-      //                     fontSize: 16,
-      //                     fontWeight: FontWeight.w700,
-      //                   ),
-      //                 ),
-      //                 SizedBox(
-      //                   height: 2,
-      //                 ),
-      //                 Text(
-      //                   'Recommended image size: 500x500',
-      //                   style: TextStyle(
-      //                       fontSize: 14, color: ColorPalette.greyscale100),
-      //                 ),
-      //               ],
-      //             ),
-      //             const SizedBox(
-      //               height: 16,
-      //             ),
-      //             Avatar(
-      //               wallet: wallet,
-      //               ref: ref,
-      //             ),
-      //             const SizedBox(
-      //               height: 16,
-      //             ),
-      //             Consumer(
-      //               builder: (context, ref, child) {
-      //                 return CustomTextField(
-      //                   labelText: 'Username',
-      //                   defaultValue:
-      //                       wallet.name.isNotEmpty ? wallet.name : null,
-      //                   onValidate: (value) {
-      //                     return validateUsername(value: value, ref: ref);
-      //                   },
-      //                   onChange: (String value) {
-      //                     ref.read(walletNameProvider.notifier).state = value;
-      //                   },
-      //                 );
-      //               },
-      //             ),
-      //             const SizedBox(
-      //               height: 8,
-      //             ),
-      //             CustomTextField(
-      //               labelText: 'Wallet address',
-      //               defaultValue: formatAddress(wallet.address, 4),
-      //               isReadOnly: true,
-      //               suffix: SvgPicture.asset(
-      //                 '${Config.settingsAssetsPath}/bold/copy.svg',
-      //               ),
-      //               onTap: () {
-      //                 Clipboard.setData(ClipboardData(text: wallet.address))
-      //                     .then((_) {
-      //                   ScaffoldMessenger.of(context).showSnackBar(
-      //                     const SnackBar(
-      //                       content: Text(
-      //                         "Wallet address copied to clipboard",
-      //                       ),
-      //                     ),
-      //                   );
-      //                 });
-      //               },
-      //             ),
-      //             const SizedBox(
-      //               height: 8,
-      //             ),
-      //             CustomTextButton(
-      //               size: const Size(double.infinity, 40),
-      //               borderRadius: BorderRadius.circular(8),
-      //               padding: EdgeInsets.zero,
-      //               textColor: Colors.black,
-      //               backgroundColor: ColorPalette.dReaderGreen,
-      //               isLoading: ref.watch(privateLoadingProvider),
-      //               onPressed: () async {
-      //                 final loadingNotifier =
-      //                     ref.read(privateLoadingProvider.notifier);
-      //                 loadingNotifier.update((state) => true);
-      //                 await ref.read(syncWalletProvider.future);
-      //                 ref.invalidate(walletAssetsProvider);
-      //                 loadingNotifier.update((state) => false);
-      //                 if (context.mounted) {
-      //                   displaySnackBar(
-      //                     context: context,
-      //                     color: ColorPalette.dReaderGreen,
-      //                     text: 'Done',
-      //                   );
-      //                 }
-      //               },
-      //               child: const Text(
-      //                 'Sync',
-      //                 style: TextStyle(
-      //                   fontSize: 18,
-      //                 ),
-      //               ),
-      //             ),
-      //             const SizedBox(
-      //               height: 8,
-      //             ),
-      //             ref.read(environmentProvider).solanaCluster ==
-      //                     SolanaCluster.devnet.value
-      //                 ? SettingsCommonListTile(
-      //                     title: 'Airdrop \$SOL',
-      //                     leadingPath:
-      //                         '${Config.settingsAssetsPath}/light/arrow_down.svg',
-      //                     overrideColor:
-      //                         ref.watch(globalStateProvider).isLoading
-      //                             ? ColorPalette.boxBackground400
-      //                             : ColorPalette.dReaderGreen,
-      //                     overrideTrailing: globalHook.value.isLoading
-      //                         ? const SizedBox(
-      //                             height: 24,
-      //                             width: 24,
-      //                             child: CircularProgressIndicator(
-      //                               color: ColorPalette.boxBackground400,
-      //                             ),
-      //                           )
-      //                         : null,
-      //                     onTap: globalHook.value.isLoading
-      //                         ? null
-      //                         : () async {
-      //                             globalHook.value = globalHook.value
-      //                                 .copyWith(isLoading: true);
-      //                             final airdropResult = await ref
-      //                                 .read(solanaProvider.notifier)
-      //                                 .requestAirdrop(wallet.address);
+      body: provider.when(
+        data: (user) {
+          if (user == null) {
+            return const SizedBox();
+          }
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Profile Image',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        'Recommended image size: 500x500',
+                        style: TextStyle(
+                            fontSize: 14, color: ColorPalette.greyscale100),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Avatar(
+                    user: user,
+                    ref: ref,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return Column(
+                        children: [
+                          CustomTextField(
+                            labelText: 'Username',
+                            defaultValue:
+                                user.name.isNotEmpty ? user.name : null,
+                            onValidate: (value) {
+                              return validateUsername(value: value, ref: ref);
+                            },
+                            onChange: (String value) {
+                              ref.read(walletNameProvider.notifier).state =
+                                  value;
+                            },
+                          ),
+                          const Text(
+                            'Must be 3 to 20 characters long. Letters, numbers and dashes are allowed.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: ColorPalette.greyscale200,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  ref.read(environmentProvider).solanaCluster ==
+                          SolanaCluster.devnet.value
+                      ? SettingsCommonListTile(
+                          title: 'Airdrop \$SOL',
+                          leadingPath:
+                              '${Config.settingsAssetsPath}/light/arrow_down.svg',
+                          overrideColor:
+                              ref.watch(globalStateProvider).isLoading
+                                  ? ColorPalette.boxBackground400
+                                  : ColorPalette.dReaderGreen,
+                          overrideTrailing: globalHook.value.isLoading
+                              ? const SizedBox(
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    color: ColorPalette.boxBackground400,
+                                  ),
+                                )
+                              : null,
+                          onTap: globalHook.value.isLoading
+                              ? null
+                              : () async {
+                                  globalHook.value = globalHook.value
+                                      .copyWith(isLoading: true);
+                                  final lastAddress = ref
+                                      .read(environmentProvider)
+                                      .publicKey
+                                      ?.toBase58();
+                                  final airdropResult = await ref
+                                      .read(solanaProvider.notifier)
+                                      .requestAirdrop(lastAddress ?? '');
 
-      //                             globalHook.value = globalHook.value
-      //                                 .copyWith(isLoading: false);
-      //                             if (context.mounted) {
-      //                               bool isSuccessful =
-      //                                   airdropResult?.contains('SOL') ?? false;
-      //                               final Color snackBarColor = isSuccessful
-      //                                   ? ColorPalette.dReaderGreen
-      //                                   : ColorPalette.dReaderRed;
-      //                               return displaySnackBar(
-      //                                 context: context,
-      //                                 color: snackBarColor,
-      //                                 text: isSuccessful
-      //                                     ? airdropResult ??
-      //                                         "Successfully airdropped 2 \$SOL "
-      //                                     : 'Failed to airdrop 2 \$SOL',
-      //                                 duration: const Duration(
-      //                                   seconds: 2,
-      //                                 ),
-      //                               );
-      //                             }
-      //                           },
-      //                   )
-      //                 : const SizedBox(),
-      //             SettingsCommonListTile(
-      //               title: 'Disconnect wallet',
-      //               leadingPath:
-      //                   '${Config.settingsAssetsPath}/light/logout.svg',
-      //               overrideColor: ColorPalette.dReaderRed,
-      //               onTap: () async {
-      //                 await ref.read(logoutProvider.future);
-      //                 if (context.mounted) {
-      //                   nextScreenCloseOthers(context, const WelcomeView());
-      //                 }
-      //               },
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     );
-      //   },
-      //   error: (Object error, StackTrace stackTrace) {
-      //     Sentry.captureException(error, stackTrace: stackTrace);
-      //     return const Text('Something went wrong');
-      //   },
-      //   loading: () {
-      //     return const SizedBox();
-      //   },
-      // ),
+                                  globalHook.value = globalHook.value
+                                      .copyWith(isLoading: false);
+                                  if (context.mounted) {
+                                    bool isSuccessful =
+                                        airdropResult?.contains('SOL') ?? false;
+                                    final Color snackBarColor = isSuccessful
+                                        ? ColorPalette.dReaderGreen
+                                        : ColorPalette.dReaderRed;
+                                    return displaySnackBar(
+                                      context: context,
+                                      color: snackBarColor,
+                                      text: isSuccessful
+                                          ? airdropResult ??
+                                              "Successfully airdropped 2 \$SOL "
+                                          : 'Failed to airdrop 2 \$SOL',
+                                      duration: const Duration(
+                                        seconds: 2,
+                                      ),
+                                    );
+                                  }
+                                },
+                        )
+                      : const SizedBox(),
+                  const Divider(
+                    thickness: 1,
+                    color: ColorPalette.boxBackground200,
+                  ),
+                  SettingsCommonListTile(
+                    title: 'Reset password',
+                    leadingPath: 'assets/icons/reset_password.svg',
+                    overrideColor: Colors.white,
+                    overrideTrailing: const SizedBox(),
+                    onTap: () {
+                      nextScreenPush(
+                          context,
+                          ResetPasswordView(
+                            email: user.email,
+                          ));
+                    },
+                  ),
+                  SettingsCommonListTile(
+                    title: 'Log out',
+                    leadingPath:
+                        '${Config.settingsAssetsPath}/light/logout.svg',
+                    overrideColor: ColorPalette.dReaderRed,
+                    onTap: () async {
+                      await ref.read(logoutProvider.future);
+                      if (context.mounted) {
+                        nextScreenCloseOthers(context, const WelcomeView());
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        error: (Object error, StackTrace stackTrace) {
+          Sentry.captureException(error, stackTrace: stackTrace);
+          return const Text('Something went wrong');
+        },
+        loading: () {
+          return const SizedBox();
+        },
+      ),
     );
   }
 }
 
 class Avatar extends StatelessWidget {
-  final WalletModel wallet;
+  final UserModel user;
   final WidgetRef ref;
   const Avatar({
     super.key,
-    required this.wallet,
+    required this.user,
     required this.ref,
   });
 
@@ -391,12 +380,12 @@ class Avatar extends StatelessWidget {
                 ),
               ),
             )
-          : wallet.avatar.isNotEmpty
+          : user.avatar.isNotEmpty
               ? CircleAvatar(
                   radius: 48,
                   backgroundColor: ColorPalette.boxBackground300,
                   child: CachedNetworkImage(
-                    imageUrl: wallet.avatar,
+                    imageUrl: user.avatar,
                     imageBuilder: (context, imageProvider) {
                       return Container(
                         decoration: BoxDecoration(

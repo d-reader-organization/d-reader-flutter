@@ -29,7 +29,7 @@ Future<dynamic> signInFuture(
           ),
         );
   }
-  return 'Failed to login.';
+  return result ?? 'Failed to login.';
 }
 
 @riverpod

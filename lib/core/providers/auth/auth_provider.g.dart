@@ -6,7 +6,7 @@ part of 'auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$signInFutureHash() => r'9ecf91382a8ba29a1f277e4f8b6482a20fd54ee1';
+String _$signInFutureHash() => r'453180968ee458388a011e30c83f2f067ad9fb71';
 
 /// Copied from Dart SDK
 class _SystemHash {

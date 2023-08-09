@@ -53,7 +53,6 @@ class UserRepositoryImpl implements UserRepository {
   Future<dynamic> updateUser(
     UpdateUserPayload payload,
   ) async {
-    // TODO: test update user endpoint
     final response = await client.patch(
       '/user/update/${payload.id}',
       data: {
@@ -75,7 +74,7 @@ class UserRepositoryImpl implements UserRepository {
 
     return response != null
         ? response is DioError
-            ? response.response?.data['message']
+            ? response.response?.data['message'].toString()
             : UserModel.fromJson(response)
         : null;
   }
@@ -131,5 +130,28 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future syncWallets(int id) {
     return client.get('/user/sync-wallets/$id').then((value) => value.data);
+  }
+
+  @override
+  Future<void> resetPassword({
+    required String newPassword,
+    required String id,
+  }) {
+    return client.patch('/user/reset-password', queryParameters: {
+      'id': id,
+    });
+  }
+
+  @override
+  Future<void> requestEmailVerification() {
+    return client.post('/user/request-email-verification');
+  }
+
+  @override
+  Future<void> verifyEmail({
+    required String verificationToken,
+  }) {
+    // TODO: implement verifyEmail
+    throw UnimplementedError();
   }
 }

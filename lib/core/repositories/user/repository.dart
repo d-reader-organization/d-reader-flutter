@@ -8,4 +8,12 @@ abstract class UserRepository {
   Future<bool> validateEmail(String email);
   Future<String> updateReferrer(String referrer);
   Future<dynamic> syncWallets(int id);
+  Future<void> resetPassword({
+    required String newPassword,
+    required String id,
+  });
+  Future<void> requestEmailVerification();
+  Future<void> verifyEmail({
+    required String verificationToken,
+  });
 }

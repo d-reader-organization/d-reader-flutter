@@ -1,3 +1,5 @@
+import 'dart:io' show File;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
@@ -6,7 +8,6 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
@@ -59,12 +60,12 @@ class ProfileView extends HookConsumerWidget {
       appBarTitle: 'My Profile',
       bottomNavigationBar: Consumer(
         builder: (context, ref, child) {
-          final String walletName = ref.watch(walletNameProvider);
+          final String username = ref.watch(usernameTextProvider);
           return AnimatedOpacity(
-            opacity: walletName.isNotEmpty
-                // walletName.trim() != provider.value?.name
-                ? 1.0
-                : 0.0,
+            opacity:
+                username.isNotEmpty && username.trim() != provider.value?.name
+                    ? 1.0
+                    : 0.0,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
             child: Padding(
@@ -75,9 +76,9 @@ class ProfileView extends HookConsumerWidget {
                     child: CustomTextButton(
                       size: const Size(double.infinity, 40),
                       onPressed: () {
-                        final String walletName = ref.read(walletNameProvider);
-                        if (walletName.isNotEmpty) {
-                          ref.read(walletNameProvider.notifier).state = '';
+                        final String username = ref.read(usernameTextProvider);
+                        if (username.isNotEmpty) {
+                          ref.read(usernameTextProvider.notifier).state = '';
                         }
                       },
                       borderRadius: BorderRadius.circular(8),
@@ -92,45 +93,50 @@ class ProfileView extends HookConsumerWidget {
                       isLoading: ref.watch(globalStateProvider).isLoading,
                       size: const Size(double.infinity, 40),
                       onPressed: () async {
-                        final String walletName = ref.read(walletNameProvider);
-                        if (walletName.isNotEmpty) {
+                        final String username = ref.read(usernameTextProvider);
+                        if (username.isNotEmpty) {
                           final notifier =
                               ref.read(globalStateProvider.notifier);
-                          notifier.update(
-                            (state) => state.copyWith(
-                              isLoading: true,
-                            ),
-                          );
 
-                          // final updateResult = updateUser(); TODO - update user
-                          //            final result = await ref.read(
-                          //   updateWalletProvider(
-                          //     UpdateWalletPayload(
-                          //       address: provider.value?.address ?? '',
-                          //       name: walletName,
-                          //     ),
-                          //   ).future,
-                          // );
-                          notifier.update(
-                            (state) => state.copyWith(
-                              isLoading: false,
-                            ),
-                          );
-                          ref
-                              .read(walletNameProvider.notifier)
-                              .update((state) => '');
-                          // ref.invalidate(myWalletProvider); TODO invalidate userget
-                          // if (context.mounted) {
-                          //   displaySnackBar(
-                          //     context: context,
-                          //     color: result != null
-                          //         ? ColorPalette.dReaderGreen
-                          //         : ColorPalette.dReaderRed,
-                          //     text: result != null
-                          //         ? 'Your wallet has been updated.'
-                          //         : 'Something went wrong',
-                          //   );
-                          // }
+                          if (provider.value?.id != null) {
+                            notifier.update(
+                              (state) => state.copyWith(
+                                isLoading: true,
+                              ),
+                            );
+                            final updateResult = await ref
+                                .read(userRepositoryProvider)
+                                .updateUser(
+                                  UpdateUserPayload(
+                                    id: provider.value!.id,
+                                    email: provider.value?.email ?? '',
+                                    name: username,
+                                  ),
+                                );
+                            notifier.update(
+                              (state) => state.copyWith(
+                                isLoading: false,
+                              ),
+                            );
+                            ref
+                                .read(usernameTextProvider.notifier)
+                                .update((state) => '');
+                            ref.invalidate(myUserProvider);
+                            if (context.mounted) {
+                              displaySnackBar(
+                                context: context,
+                                duration: const Duration(
+                                  seconds: 2,
+                                ),
+                                color: updateResult is String
+                                    ? ColorPalette.dReaderRed
+                                    : ColorPalette.dReaderGreen,
+                                text: updateResult is String
+                                    ? updateResult
+                                    : 'Your username has been updated.',
+                              );
+                            }
+                          }
                         }
                       },
                       borderRadius: BorderRadius.circular(8),
@@ -195,7 +201,7 @@ class ProfileView extends HookConsumerWidget {
                               return validateUsername(value: value, ref: ref);
                             },
                             onChange: (String value) {
-                              ref.read(walletNameProvider.notifier).state =
+                              ref.read(usernameTextProvider.notifier).state =
                                   value;
                             },
                           ),
@@ -330,46 +336,41 @@ class Avatar extends StatelessWidget {
       onTap: () async {
         FilePickerResult? result = await FilePicker.platform.pickFiles();
         if (result != null) {
-          // File file = File(result.files.single.path ?? '');
+          File file = File(result.files.single.path ?? '');
 
-          final notifier = ref.read(globalStateProvider.notifier);
+          final notifier = ref.read(privateLoadingProvider.notifier);
           notifier.update(
-            (state) => state.copyWith(
-              isLoading: true,
-            ),
+            (state) => true,
           );
-          // final response = await ref.read( //TODO something
-          //   updateWalletAvatarProvider(
-          //     UpdateWalletPayload(
-          //       address: wallet.address,
-          //       avatar: file,
-          //     ),
-          //   ).future,
-          // );
-          // ref.invalidate(myWalletProvider);
+          final response = await ref.read(userRepositoryProvider).updateAvatar(
+                UpdateUserPayload(
+                  id: user.id,
+                  avatar: file,
+                ),
+              );
+          ref.invalidate(myUserProvider);
           Future.delayed(
             const Duration(milliseconds: 500),
             () {
-              notifier.update(
-                (state) => state.copyWith(
-                  isLoading: false,
-                ),
-              );
+              notifier.update((state) => false);
             },
           );
           if (context.mounted) {
-            // TODO response != null
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Your avatar has been uploaded.'),
-                duration: Duration(milliseconds: 500),
+              SnackBar(
+                content: Text(
+                  response is String
+                      ? response
+                      : 'Your avatar has been uploaded.',
+                ),
+                duration: const Duration(milliseconds: 500),
                 backgroundColor: ColorPalette.dReaderGreen,
               ),
             );
           }
         }
       },
-      child: ref.watch(globalStateProvider).isLoading
+      child: ref.watch(privateLoadingProvider)
           ? Center(
               child: Container(
                 height: 96,

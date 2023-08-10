@@ -22,11 +22,9 @@ Future<UserModel?> myUser(MyUserRef ref) async {
 Future<void> resetPassword(
   ResetPasswordRef ref, {
   required String id,
-  required String newPassword,
 }) async {
   await ref.read(userRepositoryProvider).resetPassword(
-        newPassword: newPassword,
-        id: id,
+        id,
       );
 }
 

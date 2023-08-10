@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/ui/views/profile.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
 import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
 import 'package:d_reader_flutter/ui/views/settings/referrals.dart';
+import 'package:d_reader_flutter/ui/views/settings/wallet.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -40,7 +41,7 @@ class SettingsRootView extends StatelessWidget {
               leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
               title: 'Wallet',
               onTap: () {
-                // nextScreenPush(context, const ProfileView());
+                nextScreenPush(context, const WalletScreen());
               },
             ),
             const SettingsCommonListTile(

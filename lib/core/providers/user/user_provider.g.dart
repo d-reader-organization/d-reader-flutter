@@ -35,7 +35,7 @@ final myUserProvider = AutoDisposeFutureProvider<UserModel?>.internal(
 );
 
 typedef MyUserRef = AutoDisposeFutureProviderRef<UserModel?>;
-String _$resetPasswordHash() => r'b3bd8770500ff210c3b1787b1613731711075775';
+String _$resetPasswordHash() => r'f20a47dc7a505ed5f152a27c2d21ed3fabd280dc';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,11 +72,9 @@ class ResetPasswordFamily extends Family<AsyncValue<void>> {
   /// See also [resetPassword].
   ResetPasswordProvider call({
     required String id,
-    required String newPassword,
   }) {
     return ResetPasswordProvider(
       id: id,
-      newPassword: newPassword,
     );
   }
 
@@ -86,7 +84,6 @@ class ResetPasswordFamily extends Family<AsyncValue<void>> {
   ) {
     return call(
       id: provider.id,
-      newPassword: provider.newPassword,
     );
   }
 
@@ -110,12 +107,10 @@ class ResetPasswordProvider extends AutoDisposeFutureProvider<void> {
   /// See also [resetPassword].
   ResetPasswordProvider({
     required this.id,
-    required this.newPassword,
   }) : super.internal(
           (ref) => resetPassword(
             ref,
             id: id,
-            newPassword: newPassword,
           ),
           from: resetPasswordProvider,
           name: r'resetPasswordProvider',
@@ -129,20 +124,16 @@ class ResetPasswordProvider extends AutoDisposeFutureProvider<void> {
         );
 
   final String id;
-  final String newPassword;
 
   @override
   bool operator ==(Object other) {
-    return other is ResetPasswordProvider &&
-        other.id == id &&
-        other.newPassword == newPassword;
+    return other is ResetPasswordProvider && other.id == id;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
-    hash = _SystemHash.combine(hash, newPassword.hashCode);
 
     return _SystemHash.finish(hash);
   }

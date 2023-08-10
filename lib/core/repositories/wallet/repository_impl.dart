@@ -1,6 +1,8 @@
+import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
 import 'package:dio/dio.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
   final Dio client;
@@ -26,5 +28,20 @@ class WalletRepositoryImpl implements WalletRepository {
   @override
   Future syncWallet(String address) {
     return client.get('/wallet/sync/$address').then((value) => value.data);
+  }
+
+  @override
+  Future<WalletModel?> getWallet(String address) async {
+    try {
+      if (address.isEmpty) {
+        return null;
+      }
+      final response =
+          await client.get('/wallet/get/$address').then((value) => value.data);
+      return response != null ? WalletModel.fromJson(response) : null;
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception(exception);
+    }
   }
 }

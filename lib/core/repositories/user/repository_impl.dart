@@ -133,10 +133,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> resetPassword({
-    required String newPassword,
-    required String id,
-  }) {
+  Future<void> resetPassword(String id) {
     return client.patch('/user/reset-password', queryParameters: {
       'id': id,
     });

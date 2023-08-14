@@ -156,33 +156,33 @@ final requestEmailVerificationProvider =
 );
 
 typedef RequestEmailVerificationRef = AutoDisposeFutureProviderRef<void>;
-String _$verifyEmailHash() => r'828b08f9c3ededb19ec72cc08e055402792c6e98';
-typedef VerifyEmailRef = AutoDisposeFutureProviderRef<void>;
+String _$userWalletsHash() => r'1afcfc64ff6df8b289f0a0a18454116d3dcbe018';
+typedef UserWalletsRef = AutoDisposeFutureProviderRef<List<WalletModel>>;
 
-/// See also [verifyEmail].
-@ProviderFor(verifyEmail)
-const verifyEmailProvider = VerifyEmailFamily();
+/// See also [userWallets].
+@ProviderFor(userWallets)
+const userWalletsProvider = UserWalletsFamily();
 
-/// See also [verifyEmail].
-class VerifyEmailFamily extends Family<AsyncValue<void>> {
-  /// See also [verifyEmail].
-  const VerifyEmailFamily();
+/// See also [userWallets].
+class UserWalletsFamily extends Family<AsyncValue<List<WalletModel>>> {
+  /// See also [userWallets].
+  const UserWalletsFamily();
 
-  /// See also [verifyEmail].
-  VerifyEmailProvider call({
-    required String verificationToken,
+  /// See also [userWallets].
+  UserWalletsProvider call({
+    required int? id,
   }) {
-    return VerifyEmailProvider(
-      verificationToken: verificationToken,
+    return UserWalletsProvider(
+      id: id,
     );
   }
 
   @override
-  VerifyEmailProvider getProviderOverride(
-    covariant VerifyEmailProvider provider,
+  UserWalletsProvider getProviderOverride(
+    covariant UserWalletsProvider provider,
   ) {
     return call(
-      verificationToken: provider.verificationToken,
+      id: provider.id,
     );
   }
 
@@ -198,42 +198,41 @@ class VerifyEmailFamily extends Family<AsyncValue<void>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'verifyEmailProvider';
+  String? get name => r'userWalletsProvider';
 }
 
-/// See also [verifyEmail].
-class VerifyEmailProvider extends AutoDisposeFutureProvider<void> {
-  /// See also [verifyEmail].
-  VerifyEmailProvider({
-    required this.verificationToken,
+/// See also [userWallets].
+class UserWalletsProvider extends AutoDisposeFutureProvider<List<WalletModel>> {
+  /// See also [userWallets].
+  UserWalletsProvider({
+    required this.id,
   }) : super.internal(
-          (ref) => verifyEmail(
+          (ref) => userWallets(
             ref,
-            verificationToken: verificationToken,
+            id: id,
           ),
-          from: verifyEmailProvider,
-          name: r'verifyEmailProvider',
+          from: userWalletsProvider,
+          name: r'userWalletsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$verifyEmailHash,
-          dependencies: VerifyEmailFamily._dependencies,
+                  : _$userWalletsHash,
+          dependencies: UserWalletsFamily._dependencies,
           allTransitiveDependencies:
-              VerifyEmailFamily._allTransitiveDependencies,
+              UserWalletsFamily._allTransitiveDependencies,
         );
 
-  final String verificationToken;
+  final int? id;
 
   @override
   bool operator ==(Object other) {
-    return other is VerifyEmailProvider &&
-        other.verificationToken == verificationToken;
+    return other is UserWalletsProvider && other.id == id;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, verificationToken.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
 
     return _SystemHash.finish(hash);
   }

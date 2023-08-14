@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/user.dart';
+import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/repositories/user/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -145,10 +146,25 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> verifyEmail({
-    required String verificationToken,
-  }) {
-    // TODO: implement verifyEmail
-    throw UnimplementedError();
+  Future<List<WalletModel>> userWallets(int id) async {
+    try {
+      final response =
+          await client.get('/user/get/$id/wallets').then((value) => value.data);
+
+      return response != null
+          ? List<WalletModel>.from(
+              response.map(
+                (item) => WalletModel.fromJson(
+                  {
+                    'address': item,
+                  },
+                ),
+              ),
+            )
+          : [];
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception(exception);
+    }
   }
 }

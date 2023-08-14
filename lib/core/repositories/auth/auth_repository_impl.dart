@@ -18,7 +18,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
     final response = await dio
-        .patch(
+        .get(
           '/auth/wallet/request-password/$address',
           options: Options(
             headers: {

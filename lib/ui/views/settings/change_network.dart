@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
@@ -79,7 +80,7 @@ class ChangeNetworkView extends ConsumerWidget {
                             ),
                           );
                     } else {
-                      // ref.invalidate(myWalletProvider); TODO invalidate user get
+                      ref.invalidate(myUserProvider);
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -143,7 +144,7 @@ class ChangeNetworkView extends ConsumerWidget {
                             ),
                           );
                     } else {
-                      // ref.invalidate(myWalletProvider); // TODO invalidate user get
+                      ref.invalidate(myUserProvider);
                     }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

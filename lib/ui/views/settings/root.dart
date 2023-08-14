@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/profile.dart';
@@ -37,11 +38,23 @@ class SettingsRootView extends StatelessWidget {
                 nextScreenPush(context, const ProfileView());
               },
             ),
-            SettingsCommonListTile(
-              leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
-              title: 'Wallet',
-              onTap: () {
-                nextScreenPush(context, const WalletScreen());
+            Consumer(
+              builder: (context, ref, child) {
+                return SettingsCommonListTile(
+                  leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
+                  title: 'Wallet',
+                  onTap: () async {
+                    final user = await ref.read(myUserProvider.future);
+                    if (context.mounted && user != null) {
+                      nextScreenPush(
+                        context,
+                        WalletScreen(
+                          userId: user.id,
+                        ),
+                      );
+                    }
+                  },
+                );
               },
             ),
             const SettingsCommonListTile(

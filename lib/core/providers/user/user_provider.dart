@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/user.dart';
+import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/user/repository_impl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,13 +35,14 @@ Future<void> requestEmailVerification(RequestEmailVerificationRef ref) async {
 }
 
 @riverpod
-Future<void> verifyEmail(
-  VerifyEmailRef ref, {
-  required String verificationToken,
+Future<List<WalletModel>> userWallets(
+  UserWalletsRef ref, {
+  required int? id,
 }) async {
-  await ref
-      .read(userRepositoryProvider)
-      .verifyEmail(verificationToken: verificationToken);
+  if (id != null) {
+    return ref.read(userRepositoryProvider).userWallets(id);
+  }
+  return [];
 }
 
 final usernameTextProvider = StateProvider<String>(

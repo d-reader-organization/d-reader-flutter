@@ -1,7 +1,9 @@
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SignUpStep2Verification extends StatelessWidget {
   const SignUpStep2Verification({super.key});
@@ -46,23 +48,6 @@ class SignUpStep2Verification extends StatelessWidget {
                     color: ColorPalette.greyscale100,
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                CustomTextButton(
-                  onPressed: () {
-                    // open email app
-                  },
-                  borderRadius: BorderRadius.circular(8),
-                  size: const Size(120, 50),
-                  child: const Text(
-                    'Open email app',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -85,20 +70,32 @@ class SignUpStep2Verification extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    // resend
+                Consumer(
+                  builder: (context, ref, child) {
+                    return GestureDetector(
+                      onTap: () async {
+                        await ref.read(requestEmailVerificationProvider.future);
+                        if (context.mounted) {
+                          showSnackBar(
+                            context: context,
+                            text: 'Verification email has been resent.',
+                            milisecondsDuration: 2000,
+                            backgroundColor: ColorPalette.dReaderGreen,
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Resend email confirmation link',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.dReaderYellow100,
+                        ),
+                      ),
+                    );
                   },
-                  child: const Text(
-                    'Resend email confirmation link',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ColorPalette.dReaderYellow100,
-                    ),
-                  ),
-                )
+                ),
               ],
             ),
           ),

@@ -395,10 +395,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       }
     }
 
-    if (currentWalletData == null) {
-      return false;
-    }
-
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result?.authToken,
@@ -408,7 +404,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
                 ref.read(environmentProvider).publicKey?.toBase58() ?? '':
                     WalletData(
                   authToken: result?.authToken ?? '',
-                  signature: currentWalletData.signature,
+                  signature: currentWalletData?.signature ?? '',
                 )
               },
             ],

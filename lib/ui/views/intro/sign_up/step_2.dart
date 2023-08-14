@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -60,6 +61,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
       ),
     );
     if (result is bool && result) {
+      await ref.read(requestEmailVerificationProvider.future);
       return widget.onSuccess();
     }
     widget.onFail(result);

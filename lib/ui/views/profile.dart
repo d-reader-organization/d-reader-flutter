@@ -288,6 +288,7 @@ class ProfileView extends HookConsumerWidget {
                       nextScreenPush(
                           context,
                           ResetPasswordView(
+                            id: '${user.id}',
                             email: user.email,
                           ));
                     },

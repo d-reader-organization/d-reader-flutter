@@ -1,13 +1,16 @@
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ResetPasswordView extends StatelessWidget {
-  final String email;
+  final String id, email;
   const ResetPasswordView({
     super.key,
+    required this.id,
     required this.email,
   });
 
@@ -68,10 +71,17 @@ class ResetPasswordView extends StatelessWidget {
                     isLoading: true,
                   ),
                 );
+                ref.read(resetPasswordProvider(id: id));
                 globalNotifier.update(
                   (state) => state.copyWith(
                     isLoading: false,
                   ),
+                );
+                showSnackBar(
+                  context: context,
+                  text: 'Instructions have been sent.',
+                  milisecondsDuration: 2000,
+                  backgroundColor: ColorPalette.dReaderGreen,
                 );
               },
               size: const Size(

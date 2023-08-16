@@ -87,7 +87,7 @@ class SettingsRootView extends StatelessWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                final userRole = ref.watch(environmentProvider).userRole;
+                final userRole = ref.watch(environmentProvider).user?.role;
                 return userRole == UserRole.tester.name
                     ? SettingsCommonListTile(
                         leadingPath:

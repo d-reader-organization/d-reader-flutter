@@ -5,8 +5,8 @@ import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final ownedIssuesAsyncProvider = AsyncNotifierProvider // TODO change arguments
-    .family<OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
+final ownedIssuesAsyncProvider = AsyncNotifierProvider.family<
+    OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
   OwnedIssuesAsyncNotifier.new,
 );
 
@@ -32,10 +32,8 @@ class OwnedIssuesAsyncNotifier
       timer?.cancel();
     });
     return await ref.read(ownedIssuesProvider(
-      OwnedIssuesArgs(
-        userId: userId,
-        query: 'skip=0&take=20&$queryString',
-      ),
+      userId: userId,
+      query: 'skip=0&take=20&$queryString',
     ).future);
   }
 
@@ -52,10 +50,8 @@ class OwnedIssuesAsyncNotifier
     final (userId, queryString) = getArgs();
     final newIssues = await ref.read(
       ownedIssuesProvider(
-        OwnedIssuesArgs(
-          userId: userId,
-          query: 'skip=${state.value?.length ?? 0}&take=20&$queryString',
-        ),
+        userId: userId,
+        query: 'skip=${state.value?.length ?? 0}&take=20&$queryString',
       ).future,
     );
     if (newIssues.isEmpty) {
@@ -65,14 +61,4 @@ class OwnedIssuesAsyncNotifier
     isLoading = false;
     state = AsyncValue.data([...?state.value, ...newIssues]);
   }
-}
-
-class OwnedIssuesArgs {
-  final String query;
-  final int userId;
-
-  OwnedIssuesArgs({
-    required this.userId,
-    this.query = 'skip=0&take=20',
-  });
 }

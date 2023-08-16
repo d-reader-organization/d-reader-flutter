@@ -75,6 +75,7 @@ dev_dependencies:
   riverpod_generator: ^2.2.4
   riverpod_lint: ^1.4.0
   custom_lint: ^0.4.0
+  hive_generator: ^2.0.1
 
 flutter_icons:
   android: "launcher_icon"

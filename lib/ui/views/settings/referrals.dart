@@ -1,5 +1,8 @@
+import 'package:d_reader_flutter/core/models/user.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/common_text_controller_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
@@ -75,7 +78,17 @@ class ReferralsView extends ConsumerWidget {
                         isLoading: true,
                       ),
                     );
-                    // TODO update user
+                    final currentUser = ref.read(environmentProvider).user;
+                    dynamic updateResult;
+                    if (currentUser != null) {
+                      updateResult =
+                          await ref.read(userRepositoryProvider).updateUser(
+                                UpdateUserPayload(
+                                  id: currentUser.id,
+                                  referrer: referrer,
+                                ),
+                              );
+                    }
 
                     notifier.update(
                       (state) => state.copyWith(
@@ -84,28 +97,24 @@ class ReferralsView extends ConsumerWidget {
                     );
 
                     if (context.mounted) {
-                      // if (result == 'OK') {
-                      //   ref.read(commonTextEditingController).clear();
-                      //   ref.read(commonTextValue.notifier).state = '';
-                      //   ref.invalidate(myWalletProvider);
+                      ref.read(commonTextEditingController).clear();
+                      ref.read(commonTextValue.notifier).state = '';
+                      ref.invalidate(myUserProvider);
 
-                      //   showSnackBar(
-                      //     context: context,
-                      //     text: 'Referrer has been redeemed.',
-                      //     backgroundColor: ColorPalette.dReaderGreen,
-                      //   );
-                      //   return Future.delayed(
-                      //     const Duration(seconds: 1),
-                      //     () {
-                      //       Navigator.pop(context);
-                      //     },
-                      //   );
-                      // }
                       showSnackBar(
                         context: context,
-                        text: 'Text',
-                        backgroundColor: ColorPalette.dReaderRed,
-                        milisecondsDuration: 1000,
+                        text: updateResult is String
+                            ? updateResult
+                            : 'Referrer has been redeemed.',
+                        backgroundColor: updateResult is String
+                            ? ColorPalette.dReaderRed
+                            : ColorPalette.dReaderGreen,
+                      );
+                      return Future.delayed(
+                        const Duration(seconds: 1),
+                        () {
+                          Navigator.pop(context);
+                        },
                       );
                     }
                   },

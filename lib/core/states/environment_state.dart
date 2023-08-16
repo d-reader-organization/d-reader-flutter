@@ -1,27 +1,30 @@
-import 'dart:convert' show jsonDecode;
+import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
 class EnvironmentState {
+  final UserModel? user;
   final String apiUrl, solanaCluster;
-  final String? authToken, jwtToken, refreshToken, signature, userRole;
+  final String? authToken, jwtToken, refreshToken, signature;
   final List<Map<String, WalletData>>? wallets;
   Ed25519HDPublicKey? publicKey;
 
   EnvironmentState({
     this.apiUrl = Config.apiUrl,
     required this.solanaCluster,
+    this.user,
     this.authToken,
     this.jwtToken,
     this.refreshToken,
     this.publicKey,
     this.signature,
     this.wallets,
-    this.userRole,
   });
 
   EnvironmentState copyWith({
+    UserModel? user,
     String? apiUrl,
     String? authToken,
     String? jwtToken,
@@ -33,11 +36,11 @@ class EnvironmentState {
     List<Map<String, WalletData>>? wallets,
   }) {
     return EnvironmentState(
+      user: user ?? this.user,
       apiUrl: apiUrl ?? this.apiUrl,
       authToken: authToken ?? this.authToken,
       jwtToken: jwtToken ?? this.jwtToken,
       refreshToken: refreshToken ?? this.refreshToken,
-      userRole: userRole ?? this.userRole,
       solanaCluster: solanaCluster ?? this.solanaCluster,
       publicKey: publicKey ?? this.publicKey,
       signature:
@@ -55,23 +58,20 @@ class EnvironmentState {
     data['solanaCluster'] = solanaCluster;
     data['publicKey'] = publicKey?.toBase58();
     data['signature'] = signature;
-    data['userRole'] = userRole;
+    data['user'] = user != null ? jsonEncode(user) : null;
     return data;
   }
 }
 
 class EnvironmentStateUpdateInput {
-  final String? apiUrl,
-      authToken,
-      jwtToken,
-      refreshToken,
-      solanaCluster,
-      userRole;
+  final UserModel? user;
+  final String? apiUrl, authToken, jwtToken, refreshToken, solanaCluster;
   final Ed25519HDPublicKey? publicKey;
   final List<int>? signature;
   List<Map<String, WalletData>>? wallets;
 
   EnvironmentStateUpdateInput({
+    this.user,
     this.apiUrl,
     this.authToken,
     this.jwtToken,
@@ -80,7 +80,6 @@ class EnvironmentStateUpdateInput {
     this.publicKey,
     this.signature,
     this.wallets,
-    this.userRole,
   });
 
   factory EnvironmentStateUpdateInput.fromDynamic(dynamic data) {
@@ -96,7 +95,13 @@ class EnvironmentStateUpdateInput {
       solanaCluster: json['solanaCluster'],
       signature: signature?.codeUnits,
       wallets: json['wallets'],
-      userRole: json['userRole'],
+      user: json['user'] != null
+          ? UserModel.fromJson(
+              jsonDecode(
+                json['user'],
+              ),
+            )
+          : null,
     );
   }
 }

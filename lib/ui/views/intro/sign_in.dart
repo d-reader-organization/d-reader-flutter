@@ -1,8 +1,11 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -212,7 +215,18 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                               milisecondsDuration: 1500,
                             );
                           }
-                          nextScreenReplace(context, const DReaderScaffold());
+                          final user = await ref.read(myUserProvider.future);
+                          ref
+                              .read(environmentProvider.notifier)
+                              .updateEnvironmentState(
+                                EnvironmentStateUpdateInput(
+                                  user: user,
+                                ),
+                              );
+
+                          if (context.mounted) {
+                            nextScreenReplace(context, const DReaderScaffold());
+                          }
                         }
                       }
                     },

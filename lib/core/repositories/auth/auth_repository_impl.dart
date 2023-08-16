@@ -79,7 +79,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      final response = await client.post('/auth/user/login', data: {
+      final response = await client.patch('/auth/user/login', data: {
         'nameOrEmail': nameOrEmail,
         'password': password,
       }).then((value) => value.data);

@@ -18,8 +18,7 @@ class OwnedListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       ownedComicsAsyncProvider(
-        // TODO send user id and use new endpoint
-        ref.watch(environmentProvider).publicKey?.toBase58() ?? '',
+        ref.watch(environmentProvider).user?.id ?? 0,
       ),
     );
 
@@ -73,11 +72,7 @@ class OwnedListView extends ConsumerWidget {
                     if (maxScroll - currentScroll <= delta) {
                       ref
                           .read(ownedComicsAsyncProvider(
-                            ref
-                                    .read(environmentProvider)
-                                    .publicKey
-                                    ?.toBase58() ??
-                                '',
+                            ref.read(environmentProvider).user?.id ?? 0,
                           ).notifier)
                           .fetchNext();
                     }

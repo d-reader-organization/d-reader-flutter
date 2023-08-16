@@ -24,6 +24,17 @@ class UserModel {
       isEmailVerified: json['isEmailVerified'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['email'] = email;
+    data['name'] = name;
+    data['avatar'] = avatar;
+    data['role'] = role;
+    data['isEmailVerified'] = isEmailVerified;
+    return data;
+  }
 }
 
 enum UserRole {

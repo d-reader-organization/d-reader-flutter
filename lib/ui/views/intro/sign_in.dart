@@ -201,13 +201,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           nameOrEmail: _emailController.text.trim(),
                           password: _passwordController.text.trim(),
                         ).future);
-                        globalNotifier.update(
-                          (state) => state.copyWith(
-                            isLoading: false,
-                          ),
-                        );
+
                         if (context.mounted) {
                           if (response is String) {
+                            globalNotifier.update(
+                              (state) => state.copyWith(
+                                isLoading: false,
+                              ),
+                            );
                             return showSnackBar(
                               context: context,
                               text: response,
@@ -216,6 +217,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             );
                           }
                           final user = await ref.read(myUserProvider.future);
+                          globalNotifier.update(
+                            (state) => state.copyWith(
+                              isLoading: false,
+                            ),
+                          );
                           ref
                               .read(environmentProvider.notifier)
                               .updateEnvironmentState(

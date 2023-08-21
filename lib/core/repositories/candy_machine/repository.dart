@@ -8,12 +8,4 @@ abstract class CandyMachineRepository {
   Future<List<Receipt>> getReceipts({
     String? queryString,
   });
-  Future<String?> constructNftTransaction({
-    required String candyMachineAddress,
-    required String minterAddress,
-  });
-  Future<String?> useComicIssueNftTransaction({
-    required String nftAddress,
-    required String ownerAddress,
-  });
 }

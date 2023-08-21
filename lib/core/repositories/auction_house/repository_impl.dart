@@ -11,20 +11,6 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   });
 
   @override
-  Future<String?> listItem({
-    required String sellerAddress,
-    required String mintAccount,
-    required int price,
-    String? printReceipt,
-  }) {
-    return client
-        .get(
-          '/auction-house/transactions/list?sellerAddress=$sellerAddress&mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt',
-        )
-        .then((value) => value.data);
-  }
-
-  @override
   Future<List<ListingModel>> getListedItems({
     required String query,
   }) async {
@@ -51,50 +37,5 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
         .then((value) => value.data);
 
     return response == null ? null : CollectionStatsModel.fromJson(response);
-  }
-
-  @override
-  Future<String?> executeSale({required String query}) async {
-    final responseBody = await client
-        .get('/auction-house/transactions/execute-sale?$query')
-        .then((value) => value.data);
-    return responseBody;
-  }
-
-  @override
-  Future<String?> delistItem({required String nftAddress}) {
-    return client
-        .get(
-            '/auction-house/transactions/cancel-listing?nftAddress=$nftAddress')
-        .then((value) => value.data);
-  }
-
-  @override
-  Future<String?> buyItem({
-    required String mintAccount,
-    required int price,
-    required String sellerAddress,
-    required String buyerAddress,
-  }) {
-    return client
-        .get(
-          '/auction-house/transactions/instant-buy?mintAccount=$mintAccount&price=$price&sellerAddress=$sellerAddress&buyerAddress=$buyerAddress',
-        )
-        .then((value) => value.data);
-  }
-
-  @override
-  Future<List<String>> buyMultipleItems(Map<String, dynamic> query) async {
-    final responseBody = await client
-        .get(
-      '/auction-house/transactions/multiple-buy',
-      queryParameters: query,
-    )
-        .then(
-      (value) {
-        return value.data;
-      },
-    );
-    return responseBody == null ? [] : List<String>.from(responseBody);
   }
 }

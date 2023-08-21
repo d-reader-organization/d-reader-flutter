@@ -5,11 +5,10 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
-import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
+import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +191,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       return false;
     }
     final String? encodedNftTransaction =
-        await ref.read(candyMachineRepositoryProvider).constructNftTransaction(
+        await ref.read(transactionRepositoryProvider).mintOneTransaction(
               candyMachineAddress: candyMachineAddress,
               minterAddress: minterAddress,
             );
@@ -209,7 +208,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     String printReceipt = 'false',
   }) async {
     final String? encodedTransaction =
-        await ref.read(auctionHouseRepositoryProvider).listItem(
+        await ref.read(transactionRepositoryProvider).listTransaction(
               sellerAddress: sellerAddress,
               mintAccount: mintAccount,
               price: price,
@@ -225,8 +224,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String nftAddress,
   }) async {
     final String? encodedTransaction = await ref
-        .read(auctionHouseRepositoryProvider)
-        .delistItem(nftAddress: nftAddress);
+        .read(transactionRepositoryProvider)
+        .cancelListingTransaction(nftAddress: nftAddress);
     if (encodedTransaction == null) {
       return false;
     }
@@ -239,7 +238,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
     }
     final List<String> encodedTransactions =
-        await ref.read(auctionHouseRepositoryProvider).buyMultipleItems(query);
+        await ref.read(transactionRepositoryProvider).buyMultipleItems(query);
     if (encodedTransactions.isEmpty) {
       return false;
     }
@@ -259,7 +258,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String ownerAddress,
   }) async {
     final String transaction = await ref
-        .read(candyMachineRepositoryProvider)
+        .read(transactionRepositoryProvider)
         .useComicIssueNftTransaction(
           nftAddress: nftAddress,
           ownerAddress: ownerAddress,

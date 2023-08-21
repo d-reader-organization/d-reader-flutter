@@ -55,16 +55,16 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
       ),
     );
     final result = await ref.read(signUpFutureProvider.future);
+    final bool isSuccess = result is bool && result;
+    if (isSuccess) {
+      await ref.read(requestEmailVerificationProvider.future);
+    }
     notifier.update(
       (state) => state.copyWith(
         isLoading: false,
       ),
     );
-    if (result is bool && result) {
-      await ref.read(requestEmailVerificationProvider.future);
-      return widget.onSuccess();
-    }
-    widget.onFail(result);
+    isSuccess ? widget.onSuccess() : widget.onFail(result);
   }
 
   @override

@@ -142,7 +142,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<void> requestEmailVerification() {
-    return client.post('/user/request-email-verification');
+    return client.patch('/user/request-email-verification');
   }
 
   @override

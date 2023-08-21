@@ -136,14 +136,14 @@ class WalletScreen extends ConsumerWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '${(accountData.value?.lamports ?? 0) * lamportsPerSol}',
+                                          '${(accountData.value?.lamports ?? 0) / lamportsPerSol}',
                                           style: topTextStyle,
                                         ),
                                         const SizedBox(
                                           height: 8,
                                         ),
                                         Text(
-                                          '${(accountData.value?.lamports ?? 0) * lamportsPerSol} SOL',
+                                          '${(accountData.value?.lamports ?? 0) / lamportsPerSol} SOL',
                                           style: bottomTextStyle,
                                         ),
                                       ],

@@ -18,7 +18,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
     final response = await dio
-        .get(
+        .patch(
           '/auth/wallet/request-password/$address',
           options: Options(
             headers: {
@@ -42,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
       await dio
-          .get(
+          .patch(
             '/auth/wallet/connect/$address/$encoding',
             options: Options(
               headers: {
@@ -65,7 +65,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
       await dio
-          .get('/auth/wallet/disconnect/$address')
+          .patch('/auth/wallet/disconnect/$address')
           .then((value) => value.data);
       dio.close();
     } catch (exception, stackTrace) {
@@ -129,7 +129,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<String>? refreshToken(String refreshToken) {
     return client
-        .get('/auth/user/refresh-token/$refreshToken')
+        .patch('/auth/user/refresh-token/$refreshToken')
         .then((value) => value.data);
   }
 }

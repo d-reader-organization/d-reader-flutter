@@ -26,11 +26,10 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
 
   @override
   Future<List<ListingModel>> getListedItems({
-    required int issueId,
     required String query,
   }) async {
     final response = await client
-        .get('/auction-house/get/listings/$issueId?$query')
+        .get('/auction-house/get/listed-items?$query')
         .then((value) => value.data);
     if (response == null) {
       return [];
@@ -65,7 +64,8 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
   @override
   Future<String?> delistItem({required String nftAddress}) {
     return client
-        .get('/auction-house/transactions/cancel-listing?nftAddress=$nftAddress')
+        .get(
+            '/auction-house/transactions/cancel-listing?nftAddress=$nftAddress')
         .then((value) => value.data);
   }
 

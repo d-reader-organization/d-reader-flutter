@@ -13,11 +13,9 @@ final auctionHouseRepositoryProvider = Provider<AuctionHouseRepositoryImpl>(
 );
 
 final listedItemsProvider = FutureProvider.autoDispose
-    .family<List<ListingModel>, ListingsProviderArg>((ref, arg) async {
+    .family<List<ListingModel>, String>((ref, query) async {
   ref.invalidate(selectedItemsProvider);
-  return ref
-      .read(auctionHouseRepositoryProvider)
-      .getListedItems(issueId: arg.issueId, query: arg.query);
+  return ref.read(auctionHouseRepositoryProvider).getListedItems(query: query);
 });
 
 final collectionStatsProvider = FutureProvider.autoDispose

@@ -197,10 +197,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             isLoading: true,
                           ),
                         );
-                        final response = await ref.read(signInFutureProvider(
-                          nameOrEmail: _emailController.text.trim(),
-                          password: _passwordController.text.trim(),
-                        ).future);
+                        final response = await ref.read(
+                          signInFutureProvider(
+                            nameOrEmail: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                          ).future,
+                        );
 
                         if (context.mounted) {
                           if (response is String) {

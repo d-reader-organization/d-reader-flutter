@@ -19,6 +19,8 @@ import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
+const String missingWalletAppText = 'Missing wallet application.';
+
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
   (ref) {
@@ -90,6 +92,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
     final session = await _getSession();
+    if (session == null) {
+      throw Exception(missingWalletAppText);
+    }
     final client = await session.start();
     final String cluster =
         overrideCluster ?? ref.read(environmentProvider).solanaCluster;
@@ -269,6 +274,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   Future<bool> _signAndSendTransactions(
       List<String> encodedTransactions) async {
     final session = await _getSession();
+    if (session == null) {
+      throw Exception(missingWalletAppText);
+    }
     final client = await session.start();
 
     final signature = _getSignature();
@@ -412,9 +420,14 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return result != null;
   }
 
-  Future<LocalAssociationScenario> _getSession() async {
+  Future<LocalAssociationScenario?> _getSession() async {
     final session = await LocalAssociationScenario.create();
-    session.startActivityForResult(null).ignore();
+    try {
+      await session.startActivityForResult(null);
+    } catch (error) {
+      return null;
+    }
+
     return session;
   }
 }

@@ -8,6 +8,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/install_wallet_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -186,25 +187,50 @@ class WalletScreen extends ConsumerWidget {
               isLoading: true,
             ),
           );
-          final result =
-              await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+          try {
+            final result = await ref
+                .read(solanaProvider.notifier)
+                .authorizeAndSignMessage();
 
-          globalNotifier.update(
-            (state) => state.copyWith(
-              isLoading: false,
-            ),
-          );
-          final bool isConnected = result == 'OK';
-          if (context.mounted) {
-            showSnackBar(
-              context: context,
-              text: isConnected
-                  ? 'Wallet has been connected.'
-                  : 'Something went wrong',
+            globalNotifier.update(
+              (state) => state.copyWith(
+                isLoading: false,
+              ),
             );
-            if (isConnected) {
-              ref.invalidate(userWalletsProvider);
+            final bool isConnected = result == 'OK';
+            if (context.mounted) {
+              showSnackBar(
+                context: context,
+                text: isConnected
+                    ? 'Wallet has been connected.'
+                    : 'Something went wrong',
+              );
+              if (isConnected) {
+                ref.invalidate(userWalletsProvider);
+              }
             }
+          } catch (error) {
+            globalNotifier.update(
+              (state) => state.copyWith(
+                isLoading: false,
+              ),
+            );
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return DraggableScrollableSheet(
+                  expand: false,
+                  initialChildSize: 0.65,
+                  minChildSize: 0.65,
+                  maxChildSize: 0.8,
+                  builder: (context, scrollController) {
+                    return const InstallWalletBottomSheet();
+                  },
+                );
+              },
+            );
           }
         },
         size: const Size(double.infinity, 50),

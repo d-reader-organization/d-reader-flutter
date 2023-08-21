@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/install_wallet_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,24 +23,45 @@ class SignUpStep3 extends ConsumerWidget {
         isLoading: true,
       ),
     );
-    final result =
-        await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    if (context.mounted) {
-      if (result != 'OK') {
-        return showSnackBar(
-          context: context,
-          text: result,
-          backgroundColor: ColorPalette.dReaderRed,
+
+    try {
+      final result =
+          await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      if (context.mounted) {
+        if (result != 'OK') {
+          return showSnackBar(
+            context: context,
+            text: result,
+            backgroundColor: ColorPalette.dReaderRed,
+          );
+        }
+        nextScreenCloseOthers(
+          context,
+          const DReaderScaffold(),
         );
       }
-      nextScreenCloseOthers(
-        context,
-        const DReaderScaffold(),
+    } catch (error) {
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return DraggableScrollableSheet(
+            expand: false,
+            builder: (context, scrollController) {
+              return const InstallWalletBottomSheet();
+            },
+          );
+        },
       );
     }
   }

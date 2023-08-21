@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -56,9 +55,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
     );
     final result = await ref.read(signUpFutureProvider.future);
     final bool isSuccess = result is bool && result;
-    if (isSuccess) {
-      await ref.read(requestEmailVerificationProvider.future);
-    }
+
     notifier.update(
       (state) => state.copyWith(
         isLoading: false,

@@ -96,6 +96,7 @@ flutter:
     - assets/images/
     - assets/animation_files/
     - assets/icons/
+    - assets/icons/wallets/
     - assets/icons/settings_screen/light/
     - assets/icons/settings_screen/bold/
     - assets/icons/intro/

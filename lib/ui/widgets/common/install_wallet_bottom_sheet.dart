@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -49,8 +50,10 @@ class InstallWalletBottomSheet extends ConsumerWidget {
               ),
               WalletAppRow(
                 appName: 'Espresso Cash',
-                iconPath: 'assets/icons/wallets/phantom.svg',
-                onPressed: () {},
+                iconPath: 'assets/icons/wallets/espresso_cash.svg',
+                onPressed: () {
+                  openExternalApp('com.pleasecrypto.flutter');
+                },
               ),
               const Divider(
                 color: ColorPalette.greyscale100,
@@ -58,15 +61,19 @@ class InstallWalletBottomSheet extends ConsumerWidget {
               WalletAppRow(
                 appName: 'Ultimate',
                 iconPath: 'assets/icons/wallets/ultimate.svg',
-                onPressed: () {},
+                onPressed: () {
+                  openExternalApp('fi.unstoppable.ultimate.android');
+                },
               ),
               const Divider(
                 color: ColorPalette.greyscale100,
               ),
               WalletAppRow(
                 appName: 'Solflare',
-                iconPath: 'assets/icons/wallets/ultimate.svg',
-                onPressed: () {},
+                iconPath: 'assets/icons/wallets/solflare.svg',
+                onPressed: () {
+                  openExternalApp('com.solflare.mobile');
+                },
               ),
               const Divider(
                 color: ColorPalette.greyscale100,
@@ -74,7 +81,9 @@ class InstallWalletBottomSheet extends ConsumerWidget {
               WalletAppRow(
                 appName: 'Phantom',
                 iconPath: 'assets/icons/wallets/phantom.svg',
-                onPressed: () {},
+                onPressed: () {
+                  openExternalApp('app.phantom');
+                },
               ),
             ],
           ),

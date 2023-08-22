@@ -50,7 +50,7 @@ class InstallWalletBottomSheet extends ConsumerWidget {
               ),
               WalletAppRow(
                 appName: 'Espresso Cash',
-                iconPath: 'assets/icons/wallets/espresso_cash.svg',
+                iconPath: 'assets/icons/wallets/espresso_cash.png',
                 onPressed: () {
                   openExternalApp('com.pleasecrypto.flutter');
                 },
@@ -112,7 +112,17 @@ class WalletAppRow extends StatelessWidget {
         children: [
           Row(
             children: [
-              SvgPicture.asset(iconPath),
+              iconPath.contains('espresso')
+                  ? Image.asset(
+                      iconPath,
+                      height: 24,
+                      width: 24,
+                    )
+                  : SvgPicture.asset(
+                      iconPath,
+                      height: 24,
+                      width: 24,
+                    ),
               const SizedBox(
                 width: 8,
               ),

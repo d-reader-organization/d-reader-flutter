@@ -93,7 +93,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
             ],
           ),
           SubmitButton(
-            sellerAddress:  '', // TODO: active (selected) wallet
+            sellerAddress: widget.nft.ownerAddress,
             mintAccount: widget.nft.address,
             price: _safeParse(
               _textEditingController.text,
@@ -126,7 +126,7 @@ class SubmitButton extends ConsumerWidget {
       onPressed: price != null
           ? () async {
               final response = await ref.read(solanaProvider.notifier).list(
-                    sellerAddress: '', // TODO: active (selected) wallet
+                    sellerAddress: sellerAddress,
                     mintAccount: mintAccount,
                     price: (price! * lamportsPerSol).round(),
                   );

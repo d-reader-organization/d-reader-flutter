@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/user/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -159,6 +160,25 @@ class UserRepositoryImpl implements UserRepository {
                     'address': item,
                   },
                 ),
+              ),
+            )
+          : [];
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception(exception);
+    }
+  }
+
+  @override
+  Future<List<WalletAsset>> userAssets(int id) async {
+    try {
+      final response =
+          await client.get('/user/get/$id/assets').then((value) => value.data);
+
+      return response != null
+          ? List<WalletAsset>.from(
+              response.map(
+                (item) => WalletAsset.fromJson(item),
               ),
             )
           : [];

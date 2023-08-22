@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
@@ -390,7 +391,7 @@ class BottomNavigation extends ConsumerWidget {
                                     .buyMultiple(selectedNftsInput);
                                 if (isSuccessful) {
                                   ref.invalidate(listedItemsProvider);
-                                  // ref.invalidate(walletAssetsProvider); // TODO PRoper assets
+                                  ref.invalidate(userAssetsProvider);
                                 }
                                 ref
                                     .read(globalStateProvider.notifier)

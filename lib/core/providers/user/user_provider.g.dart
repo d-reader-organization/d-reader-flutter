@@ -237,5 +237,87 @@ class UserWalletsProvider extends AutoDisposeFutureProvider<List<WalletModel>> {
     return _SystemHash.finish(hash);
   }
 }
+
+String _$userAssetsHash() => r'cb93a6f28c294d1404ee38b6c18c6ad0b56ea7bf';
+typedef UserAssetsRef = AutoDisposeFutureProviderRef<List<WalletAsset>>;
+
+/// See also [userAssets].
+@ProviderFor(userAssets)
+const userAssetsProvider = UserAssetsFamily();
+
+/// See also [userAssets].
+class UserAssetsFamily extends Family<AsyncValue<List<WalletAsset>>> {
+  /// See also [userAssets].
+  const UserAssetsFamily();
+
+  /// See also [userAssets].
+  UserAssetsProvider call({
+    required int id,
+  }) {
+    return UserAssetsProvider(
+      id: id,
+    );
+  }
+
+  @override
+  UserAssetsProvider getProviderOverride(
+    covariant UserAssetsProvider provider,
+  ) {
+    return call(
+      id: provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userAssetsProvider';
+}
+
+/// See also [userAssets].
+class UserAssetsProvider extends AutoDisposeFutureProvider<List<WalletAsset>> {
+  /// See also [userAssets].
+  UserAssetsProvider({
+    required this.id,
+  }) : super.internal(
+          (ref) => userAssets(
+            ref,
+            id: id,
+          ),
+          from: userAssetsProvider,
+          name: r'userAssetsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userAssetsHash,
+          dependencies: UserAssetsFamily._dependencies,
+          allTransitiveDependencies:
+              UserAssetsFamily._allTransitiveDependencies,
+        );
+
+  final int id;
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserAssetsProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member

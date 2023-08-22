@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/user/repository_impl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -50,3 +51,11 @@ final usernameTextProvider = StateProvider<String>(
     return '';
   },
 );
+
+@riverpod
+Future<List<WalletAsset>> userAssets(
+  Ref ref, {
+  required int id,
+}) {
+  return ref.read(userRepositoryProvider).userAssets(id);
+}

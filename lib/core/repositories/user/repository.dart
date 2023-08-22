@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 
 abstract class UserRepository {
   Future<UserModel?> myUser();
@@ -14,4 +15,5 @@ abstract class UserRepository {
   );
   Future<void> requestEmailVerification();
   Future<List<WalletModel>> userWallets(int id);
+  Future<List<WalletAsset>> userAssets(int id);
 }

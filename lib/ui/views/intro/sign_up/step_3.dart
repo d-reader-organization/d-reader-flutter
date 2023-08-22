@@ -204,7 +204,7 @@ class SignUpStep3 extends ConsumerWidget {
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

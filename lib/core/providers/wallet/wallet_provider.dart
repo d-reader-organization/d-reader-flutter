@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
@@ -5,8 +6,10 @@ import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository_impl.dart';
+import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:solana/dto.dart';
 part 'wallet_provider.g.dart';
 
 final walletRepositoryProvider = Provider<WalletRepositoryImpl>(
@@ -57,3 +60,17 @@ final syncWalletProvider = FutureProvider.autoDispose.family<dynamic, String>(
     return ref.read(walletRepositoryProvider).syncWallet(walletAddress);
   },
 );
+
+@riverpod
+Future<AccountResult> accountInfo(
+  AccountInfoRef ref, {
+  required String address,
+}) {
+  final client = createSolanaClient(
+    rpcUrl: ref.read(environmentProvider).solanaCluster ==
+            SolanaCluster.devnet.value
+        ? Config.rpcUrlDevnet
+        : Config.rpcUrlMainnet,
+  );
+  return client.rpcClient.getAccountInfo(address);
+}

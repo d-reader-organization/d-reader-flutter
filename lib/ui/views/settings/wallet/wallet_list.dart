@@ -1,40 +1,23 @@
-import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/core/utils/utils.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/install_wallet_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:solana/dto.dart';
-import 'package:solana/solana.dart';
-part 'wallet.g.dart';
 
-@riverpod
-Future<AccountResult> accountInfo(
-  AccountInfoRef ref, {
-  required String address,
-}) {
-  final client = createSolanaClient(
-    rpcUrl: ref.read(environmentProvider).solanaCluster ==
-            SolanaCluster.devnet.value
-        ? Config.rpcUrlDevnet
-        : Config.rpcUrlMainnet,
-  );
-  return client.rpcClient.getAccountInfo(address);
-}
-
-class WalletScreen extends ConsumerWidget {
+class WalletListScreen extends ConsumerWidget {
   final int userId;
-  const WalletScreen({
+  const WalletListScreen({
     super.key,
     required this.userId,
   });
@@ -84,86 +67,97 @@ class WalletScreen extends ConsumerWidget {
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {
-                return Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: ColorPalette.boxBackground300,
-                    borderRadius: BorderRadius.circular(
-                      8,
+                return GestureDetector(
+                  onTap: () {
+                    nextScreenPush(
+                      context,
+                      WalletInfoScreen(
+                        address: data[index].address,
+                        name: 'Wallet ${index + 1}',
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: ColorPalette.boxBackground300,
+                      borderRadius: BorderRadius.circular(
+                        8,
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Wallet 1',
-                            style: topTextStyle,
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            formatAddress(data[index].address, 4),
-                            style: bottomTextStyle,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 48,
-                        child: VerticalDivider(
-                          color: ColorPalette.boxBackground400,
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ref
-                                    .watch(
-                                  accountInfoProvider(
-                                    address: data[index].address,
-                                  ),
-                                )
-                                    .when(
-                                  data: (accountData) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${(accountData.value?.lamports ?? 0) / lamportsPerSol}',
-                                          style: topTextStyle,
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        Text(
-                                          '${(accountData.value?.lamports ?? 0) / lamportsPerSol} SOL',
-                                          style: bottomTextStyle,
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                  error: (error, stackTrace) {
-                                    return const SizedBox();
-                                  },
-                                  loading: () {
-                                    return const SizedBox();
-                                  },
-                                ),
-                              ],
+                            Text(
+                              'Wallet ${index + 1}',
+                              style: topTextStyle,
                             ),
-                            SvgPicture.asset('assets/icons/more.svg'),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              formatAddress(data[index].address, 4),
+                              style: bottomTextStyle,
+                            ),
                           ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 48,
+                          child: VerticalDivider(
+                            color: ColorPalette.boxBackground400,
+                          ),
+                        ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ref
+                                      .watch(
+                                    accountInfoProvider(
+                                      address: data[index].address,
+                                    ),
+                                  )
+                                      .when(
+                                    data: (accountData) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '\$\$',
+                                            style: topTextStyle,
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          Text(
+                                            '${formatLamportPrice((accountData.value?.lamports ?? 0))} SOL',
+                                            style: bottomTextStyle,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                    error: (error, stackTrace) {
+                                      return const SizedBox();
+                                    },
+                                    loading: () {
+                                      return const SizedBox();
+                                    },
+                                  ),
+                                ],
+                              ),
+                              SvgPicture.asset('assets/icons/more.svg'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

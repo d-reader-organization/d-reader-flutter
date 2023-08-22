@@ -58,10 +58,28 @@ class WalletListScreen extends ConsumerWidget {
         child: walletsProvider.when(
           data: (data) {
             if (data.isEmpty) {
-              return const Center(
-                child: Text(
-                  'User does not have a connected wallet',
-                ),
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/intro/splash_2.svg',
+                    height: 281,
+                    width: 238,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const Text(
+                    'No wallet detected',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               );
             }
             return ListView.builder(

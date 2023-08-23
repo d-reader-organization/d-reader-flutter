@@ -334,8 +334,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   Signature? _getSignature() {
     final envState = ref.read(environmentProvider);
     return envState.signature != null && envState.publicKey != null
-        ? Signature(envState.signature?.codeUnits ?? [],
-            publicKey: envState.publicKey!)
+        ? Signature(
+            envState.signature?.codeUnits ?? [],
+            publicKey: envState.publicKey!,
+          )
         : null;
   }
 
@@ -422,11 +424,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<LocalAssociationScenario?> _getSession() async {
     final session = await LocalAssociationScenario.create();
-    try {
-      await session.startActivityForResult(null);
-    } catch (error) {
-      return null;
-    }
+
+    session.startActivityForResult(null).ignore();
 
     return session;
   }

@@ -1,7 +1,9 @@
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
 class WalletListScreen extends ConsumerWidget {
   final int userId;
@@ -103,6 +106,10 @@ class WalletListScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(
                         8,
                       ),
+                      border: ref.watch(selectedWalletProvider) ==
+                              data[index].address
+                          ? Border.all(color: ColorPalette.dReaderYellow100)
+                          : null,
                     ),
                     child: Row(
                       children: [
@@ -148,14 +155,7 @@ class WalletListScreen extends ConsumerWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '\$\$',
-                                            style: topTextStyle,
-                                          ),
-                                          const SizedBox(
-                                            height: 8,
-                                          ),
-                                          Text(
-                                            '${formatLamportPrice((accountData.value?.lamports ?? 0))} SOL',
+                                            '${formatLamportPrice((accountData.value?.lamports ?? 0))} \$ SOL',
                                             style: bottomTextStyle,
                                           ),
                                         ],
@@ -170,7 +170,35 @@ class WalletListScreen extends ConsumerWidget {
                                   ),
                                 ],
                               ),
-                              SvgPicture.asset('assets/icons/more.svg'),
+                              GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(selectedWalletProvider.notifier)
+                                      .update(
+                                        (state) => data[index].address,
+                                      );
+                                  ref
+                                      .read(environmentProvider.notifier)
+                                      .updateEnvironmentState(
+                                        EnvironmentStateUpdateInput(
+                                          publicKey:
+                                              Ed25519HDPublicKey.fromBase58(
+                                            data[index].address,
+                                          ),
+                                        ),
+                                      );
+                                },
+                                child: Icon(
+                                  ref.watch(selectedWalletProvider) ==
+                                          data[index].address
+                                      ? Icons.circle
+                                      : Icons.circle_outlined,
+                                  color: ref.watch(selectedWalletProvider) ==
+                                          data[index].address
+                                      ? ColorPalette.dReaderYellow100
+                                      : ColorPalette.boxBackground400,
+                                ),
+                              ),
                             ],
                           ),
                         ),

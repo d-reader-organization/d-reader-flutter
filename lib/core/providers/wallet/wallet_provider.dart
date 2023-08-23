@@ -74,3 +74,11 @@ Future<AccountResult> accountInfo(
   );
   return client.rpcClient.getAccountInfo(address);
 }
+
+final selectedWalletProvider = StateProvider.autoDispose<String>(
+  (ref) {
+    final latestWallet =
+        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+    return latestWallet;
+  },
+);

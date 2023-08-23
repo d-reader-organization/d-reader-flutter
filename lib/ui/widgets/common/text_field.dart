@@ -7,7 +7,7 @@ class CustomTextField extends StatelessWidget {
   final bool isReadOnly, obscureText;
   final Widget? suffix;
   final Function()? onTap;
-  final Function(String value)? onChange;
+  final Function(String value)? onChange, onFieldSubmitted;
   final String? Function(String? value)? onValidate;
   final AutovalidateMode? autovalidateMode;
   final TextEditingController? controller;
@@ -25,6 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.onValidate,
     this.autovalidateMode,
     this.controller,
+    this.onFieldSubmitted,
   });
 
   OutlineInputBorder _outlineInputBorder({
@@ -72,6 +73,7 @@ class CustomTextField extends StatelessWidget {
               onChange!(value);
             }
           },
+          onFieldSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
             hintText: hintText,
             constraints: const BoxConstraints(

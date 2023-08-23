@@ -15,6 +15,53 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ReferralsView extends ConsumerWidget {
   const ReferralsView({super.key});
 
+  _handleSave(BuildContext context, WidgetRef ref, String referrer) async {
+    final notifier = ref.read(globalStateProvider.notifier);
+    notifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    final currentUser = ref.read(environmentProvider).user;
+    dynamic updateResult;
+    if (currentUser != null) {
+      updateResult = await ref.read(userRepositoryProvider).updateUser(
+            UpdateUserPayload(
+              id: currentUser.id,
+              referrer: referrer,
+            ),
+          );
+    }
+
+    notifier.update(
+      (state) => state.copyWith(
+        isLoading: false,
+      ),
+    );
+
+    if (context.mounted) {
+      ref.read(commonTextEditingController).clear();
+      ref.read(commonTextValue.notifier).state = '';
+      ref.invalidate(myUserProvider);
+
+      showSnackBar(
+        context: context,
+        text: updateResult is String
+            ? updateResult
+            : 'Referrer has been redeemed.',
+        backgroundColor: updateResult is String
+            ? ColorPalette.dReaderRed
+            : ColorPalette.dReaderGreen,
+      );
+      return Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          Navigator.pop(context);
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SettingsScaffold(
@@ -42,7 +89,7 @@ class ReferralsView extends ConsumerWidget {
               height: 32,
             ),
             const Text(
-              'Type in the username or the wallet address from your referrer to claim alpha access',
+              'Type in the username, email, or wallet address from your referrer to unlock all the features',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -54,6 +101,11 @@ class ReferralsView extends ConsumerWidget {
             CustomTextField(
               hintText: 'Username or Wallet address',
               controller: ref.read(commonTextEditingController),
+              onFieldSubmitted: (value) async {
+                if (value.isNotEmpty) {
+                  await _handleSave(context, ref, value);
+                }
+              },
               onChange: (String value) {
                 ref.read(commonTextValue.notifier).state = value;
               },
@@ -72,51 +124,7 @@ class ReferralsView extends ConsumerWidget {
                     ref.read(commonTextValue.notifier).state = '';
                   },
                   onSave: () async {
-                    final notifier = ref.read(globalStateProvider.notifier);
-                    notifier.update(
-                      (state) => state.copyWith(
-                        isLoading: true,
-                      ),
-                    );
-                    final currentUser = ref.read(environmentProvider).user;
-                    dynamic updateResult;
-                    if (currentUser != null) {
-                      updateResult =
-                          await ref.read(userRepositoryProvider).updateUser(
-                                UpdateUserPayload(
-                                  id: currentUser.id,
-                                  referrer: referrer,
-                                ),
-                              );
-                    }
-
-                    notifier.update(
-                      (state) => state.copyWith(
-                        isLoading: false,
-                      ),
-                    );
-
-                    if (context.mounted) {
-                      ref.read(commonTextEditingController).clear();
-                      ref.read(commonTextValue.notifier).state = '';
-                      ref.invalidate(myUserProvider);
-
-                      showSnackBar(
-                        context: context,
-                        text: updateResult is String
-                            ? updateResult
-                            : 'Referrer has been redeemed.',
-                        backgroundColor: updateResult is String
-                            ? ColorPalette.dReaderRed
-                            : ColorPalette.dReaderGreen,
-                      );
-                      return Future.delayed(
-                        const Duration(seconds: 1),
-                        () {
-                          Navigator.pop(context);
-                        },
-                      );
-                    }
+                    await _handleSave(context, ref, referrer);
                   },
                 )
               : const SizedBox();

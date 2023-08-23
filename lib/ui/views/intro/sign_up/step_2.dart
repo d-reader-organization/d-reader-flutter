@@ -119,7 +119,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                   } else if (value.length < 8) {
                     return 'Password has to be minimum 8 characters length.';
                   } else if (!passwordRegex.hasMatch(value)) {
-                    return 'At least 1 upper, lower case letter and 1 number or special character.';
+                    return 'At least 1 upper, lower case letter and 1 number.';
                   }
                   return null;
                 },
@@ -145,7 +145,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                 height: 8,
               ),
               const Text(
-                '8 characters minimum. Must contain at least 1 lowercase, 1 uppercase character, 1 number or 1 special character',
+                '8 characters minimum. Must contain at least 1 lowercase, 1 uppercase character and 1 number.',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -203,6 +203,9 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                     await _handleConfirm();
                   }
                 },
+              ),
+              const SizedBox(
+                height: 16,
               ),
             ],
           ),

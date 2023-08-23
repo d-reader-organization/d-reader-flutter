@@ -73,7 +73,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                 onValidate: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Field cannot be empty.';
-                  } else if (value.length < 3 || value.length > 20) {
+                  } else if (value.length < 2 || value.length > 20) {
                     return 'Username must be 3 to 20 characters long.';
                   } else if (!usernameRegex.hasMatch(value)) {
                     return 'Letters, numbers and dashes are allowed.';
@@ -82,7 +82,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                 },
               ),
               const Text(
-                'Must be 3 to 20 characters long. Letters, numbers and dashes are allowed.',
+                'Must be 2 to 20 characters long. Letters, numbers and dashes are allowed.',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -113,6 +113,9 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                     widget.onSuccess();
                   }
                 },
+              ),
+              const SizedBox(
+                height: 16,
               ),
             ],
           ),

@@ -194,6 +194,11 @@ class ProfileView extends HookConsumerWidget {
                       return Column(
                         children: [
                           CustomTextField(
+                            labelText: 'Email',
+                            hintText: user.email,
+                            isReadOnly: true,
+                          ),
+                          CustomTextField(
                             labelText: 'Username',
                             defaultValue:
                                 user.name.isNotEmpty ? user.name : null,
@@ -206,7 +211,7 @@ class ProfileView extends HookConsumerWidget {
                             },
                           ),
                           const Text(
-                            'Must be 3 to 20 characters long. Letters, numbers and dashes are allowed.',
+                            'Must be 2 to 20 characters long. Letters, numbers and dashes are allowed.',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -299,9 +304,105 @@ class ProfileView extends HookConsumerWidget {
                         '${Config.settingsAssetsPath}/light/logout.svg',
                     overrideColor: ColorPalette.dReaderRed,
                     onTap: () async {
-                      await ref.read(logoutProvider.future);
-                      if (context.mounted) {
-                        nextScreenCloseOthers(context, const WelcomeView());
+                      final result = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: ColorPalette.boxBackground300,
+                            contentPadding: EdgeInsets.zero,
+                            content: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 16,
+                                  ),
+                                  child: Text(
+                                    'Are you sure you want to log out?',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          return Navigator.pop(context, false);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              right: BorderSide(
+                                                color: ColorPalette
+                                                    .boxBackground200,
+                                                width: 1,
+                                              ),
+                                              top: BorderSide(
+                                                color: ColorPalette
+                                                    .boxBackground200,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'No',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          return Navigator.pop(context, true);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              top: BorderSide(
+                                                color: ColorPalette
+                                                    .boxBackground200,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Yes',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                      if (result != null && result) {
+                        await ref.read(logoutProvider.future);
+                        if (context.mounted) {
+                          nextScreenCloseOthers(context, const WelcomeView());
+                        }
                       }
                     },
                   ),

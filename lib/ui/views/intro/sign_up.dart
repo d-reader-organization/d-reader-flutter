@@ -34,22 +34,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(
-          50,
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 20,
+    return SafeArea(
+      child: Scaffold(
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(
+            50,
           ),
-          child: Heading(),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: Heading(),
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: Padding(
+        body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Consumer(
             builder: (context, ref, child) {
@@ -92,7 +91,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     },
                   ),
                   if (ref.watch(signUpDataProvider).isSuccess) ...[
-                    const SignUpStep2Verification(),
+                    SignUpStep2Verification(
+                      handleNext: () {
+                        _pageController.animateToPage(
+                          3,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      },
+                    ),
                     const SignUpStep3(),
                   ],
                 ],

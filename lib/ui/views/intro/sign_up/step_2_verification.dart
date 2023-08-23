@@ -1,12 +1,17 @@
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SignUpStep2Verification extends StatelessWidget {
-  const SignUpStep2Verification({super.key});
+  final Function() handleNext;
+  const SignUpStep2Verification({
+    super.key,
+    required this.handleNext,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +26,9 @@ class SignUpStep2Verification extends StatelessWidget {
             flex: 6,
             child: Column(
               children: [
+                const SizedBox(
+                  height: 16,
+                ),
                 SvgPicture.asset(
                   'assets/icons/envelope.svg',
                   colorFilter:
@@ -47,6 +55,20 @@ class SignUpStep2Verification extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: ColorPalette.greyscale100,
                   ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                RoundedButton(
+                  text: 'Got it',
+                  padding: 0,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                    letterSpacing: .2,
+                  ),
+                  onPressed: handleNext,
                 ),
               ],
             ),

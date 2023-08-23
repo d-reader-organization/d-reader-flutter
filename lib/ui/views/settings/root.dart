@@ -88,7 +88,8 @@ class SettingsRootView extends StatelessWidget {
             Consumer(
               builder: (context, ref, child) {
                 final userRole = ref.watch(environmentProvider).user?.role;
-                return userRole == UserRole.tester.name
+                return userRole == UserRole.tester.name ||
+                        ref.watch(environmentProvider).apiUrl.contains('dev')
                     ? SettingsCommonListTile(
                         leadingPath:
                             '${Config.settingsAssetsPath}/light/network.svg',

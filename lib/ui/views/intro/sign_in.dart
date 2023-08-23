@@ -140,7 +140,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       } else if (value.length < 8) {
                         return 'Password has to be minimum 8 characters length.';
                       } else if (!passwordRegex.hasMatch(value)) {
-                        return 'Password must contain at least 1 upper and lower case letter. Needs to have at least 1 number or special character.';
+                        return 'Password must contain at least 1 upper&lower case letter and 1 number.';
                       }
                       return null;
                     },

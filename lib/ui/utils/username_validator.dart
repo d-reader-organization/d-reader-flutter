@@ -6,7 +6,7 @@ String? validateUsername({required String? value, required WidgetRef ref}) {
     return "Please enter username.";
   } else if (value.length > 20) {
     return "Must be less than 20 characters.";
-  } else if (value.length < 3) {
+  } else if (value.length < 2) {
     return "Must be greater than 2 characters.";
   } else if (!usernameRegex.hasMatch(value)) {
     return "Usernames can only contain letters and numbers.";

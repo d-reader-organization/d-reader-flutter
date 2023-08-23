@@ -51,18 +51,20 @@ class SignUpStep3 extends ConsumerWidget {
           isLoading: false,
         ),
       );
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return DraggableScrollableSheet(
-            expand: false,
-            builder: (context, scrollController) {
-              return const InstallWalletBottomSheet();
-            },
-          );
-        },
-      );
+      if (context.mounted) {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) {
+            return DraggableScrollableSheet(
+              expand: false,
+              builder: (context, scrollController) {
+                return const InstallWalletBottomSheet();
+              },
+            );
+          },
+        );
+      }
     }
   }
 

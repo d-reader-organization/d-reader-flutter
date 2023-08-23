@@ -227,22 +227,24 @@ class WalletListScreen extends ConsumerWidget {
                 isLoading: false,
               ),
             );
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) {
-                return DraggableScrollableSheet(
-                  expand: false,
-                  initialChildSize: 0.65,
-                  minChildSize: 0.65,
-                  maxChildSize: 0.8,
-                  builder: (context, scrollController) {
-                    return const InstallWalletBottomSheet();
-                  },
-                );
-              },
-            );
+            if (context.mounted) {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) {
+                  return DraggableScrollableSheet(
+                    expand: false,
+                    initialChildSize: 0.65,
+                    minChildSize: 0.65,
+                    maxChildSize: 0.8,
+                    builder: (context, scrollController) {
+                      return const InstallWalletBottomSheet();
+                    },
+                  );
+                },
+              );
+            }
           }
         },
         size: const Size(double.infinity, 50),

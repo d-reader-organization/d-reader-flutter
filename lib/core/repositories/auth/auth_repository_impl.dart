@@ -85,7 +85,7 @@ class AuthRepositoryImpl implements AuthRepository {
       }).then((value) => value.data);
       return response != null ? AuthorizationResponse.fromJson(response) : null;
     } catch (exception, stackTrace) {
-      if (exception is DioError) {
+      if (exception is DioException) {
         final dynamic message = exception.response?.data?['message'];
         return message != null
             ? message is List
@@ -113,7 +113,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
       return response != null ? AuthorizationResponse.fromJson(response) : null;
     } catch (exception, stackTrace) {
-      if (exception is DioError) {
+      if (exception is DioException) {
         final dynamic message = exception.response?.data?['message'];
         return message != null
             ? message is List

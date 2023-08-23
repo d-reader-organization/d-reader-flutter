@@ -40,7 +40,7 @@ class UserRepositoryImpl implements UserRepository {
         .patch('/user/update/${payload.id}/avatar', data: formData)
         .then((value) => value.data)
         .onError((error, stackTrace) {
-      if (error is DioError) {
+      if (error is DioException) {
         return error.response?.data['message'];
       }
     });
@@ -69,13 +69,13 @@ class UserRepositoryImpl implements UserRepository {
       return value.data;
     }).onError((error, stackTrace) {
       Sentry.captureException(error);
-      if (error is DioError) {
+      if (error is DioException) {
         return error;
       }
     });
 
     return response != null
-        ? response is DioError
+        ? response is DioException
             ? response.response?.data['message'].toString()
             : UserModel.fromJson(response)
         : null;
@@ -120,7 +120,7 @@ class UserRepositoryImpl implements UserRepository {
         .then((value) {
       return 'OK';
     }).onError((error, stackTrace) {
-      if (error is DioError) {
+      if (error is DioException) {
         return error.response?.data['message'];
       }
       return error.toString();

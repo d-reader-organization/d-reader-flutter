@@ -22,7 +22,7 @@ Dio dio(DioRef ref) {
                 ref.watch(environmentProvider).jwtToken;
             return handler.next(options);
           },
-          onError: (DioError e, handler) async {
+          onError: (DioException e, handler) async {
             // if (e.response?.statusCode == 401) {
             //   // If a 401 response is received, refresh the access token
             //   String? newAccessToken = await dio

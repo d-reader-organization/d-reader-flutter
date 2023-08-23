@@ -40,7 +40,7 @@ class SignUpStep2Verification extends StatelessWidget {
                   height: 16,
                 ),
                 const Text(
-                  'Follow the instructions within to confirm and activate your account.',
+                  'Follow the simple instructions within the email to be eligible for rewards',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,

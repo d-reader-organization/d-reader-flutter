@@ -1,6 +1,8 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/chain_subscription_client.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -19,6 +21,16 @@ class WalletInfoScreen extends ConsumerWidget {
     required this.address,
     required this.name,
   });
+
+  Future _handleDisconnectWallet(BuildContext context, WidgetRef ref) async {
+    await ref.read(authRepositoryProvider).disconnectWallet(
+          address: address,
+        );
+    ref.invalidate(userWalletsProvider);
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -96,10 +108,13 @@ class WalletInfoScreen extends ConsumerWidget {
           const Divider(
             color: ColorPalette.boxBackground300,
           ),
-          const SettingsCommonListTile(
+          SettingsCommonListTile(
             title: 'Disconnect wallet',
             leadingPath: '${Config.settingsAssetsPath}/light/logout.svg',
             overrideColor: ColorPalette.dReaderRed,
+            onTap: () async {
+              await _handleDisconnectWallet(context, ref);
+            },
           ),
         ],
       ),

@@ -12,7 +12,6 @@ abstract class AuthRepository {
   });
   Future<void> disconnectWallet({
     required String address,
-    required String apiUrl,
   });
 
   Future<dynamic>? signIn({

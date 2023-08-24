@@ -60,14 +60,11 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> disconnectWallet({
     required String address,
-    required String apiUrl,
   }) async {
     try {
-      final Dio dio = Dio(BaseOptions(baseUrl: apiUrl));
-      await dio
+      await client
           .patch('/auth/wallet/disconnect/$address')
           .then((value) => value.data);
-      dio.close();
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
     }

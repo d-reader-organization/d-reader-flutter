@@ -113,21 +113,24 @@ class WalletListScreen extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Wallet ${index + 1}',
-                              style: topTextStyle,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              formatAddress(data[index].address, 4),
-                              style: bottomTextStyle,
-                            ),
-                          ],
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Wallet ${index + 1}',
+                                style: topTextStyle,
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                formatAddress(data[index].address, 4),
+                                style: bottomTextStyle,
+                              ),
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 48,
@@ -136,6 +139,7 @@ class WalletListScreen extends ConsumerWidget {
                           ),
                         ),
                         Expanded(
+                          flex: 2,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -155,7 +159,7 @@ class WalletListScreen extends ConsumerWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${formatLamportPrice((accountData.value?.lamports ?? 0))} \$ SOL',
+                                            '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$ SOL',
                                             style: bottomTextStyle,
                                           ),
                                         ],

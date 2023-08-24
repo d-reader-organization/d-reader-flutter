@@ -1,15 +1,19 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/providers/chain_subscription_client.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class WalletInfoScreen extends ConsumerWidget {
   final String address, name;
+
   const WalletInfoScreen({
     super.key,
     required this.address,
@@ -33,24 +37,27 @@ class WalletInfoScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         children: [
-          const Text(
-            '\$8.70',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          const Text(
-            '0.38055 SOL',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+          ref.watch(chainSubscriptionClientProvider(address)).when(
+            data: (data) {
+              return Text(
+                '\$ ${formatPriceWithSignificant(data?.lamports ?? 0)} SOL',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              );
+            },
+            error: (error, stackTrace) {
+              return const SizedBox();
+            },
+            loading: () {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: ColorPalette.boxBackground200,
+                ),
+              );
+            },
           ),
           const SizedBox(
             height: 16,
@@ -59,14 +66,31 @@ class WalletInfoScreen extends ConsumerWidget {
             labelText: 'Name',
             defaultValue: name,
           ),
-          CustomTextField(
-            labelText: 'Address',
-            isReadOnly: true,
-            hintText: formatAddress(address),
-            suffix: const Icon(
-              Icons.copy,
-              color: Colors.white,
-              size: 16,
+          GestureDetector(
+            onTap: () {
+              Clipboard.setData(
+                ClipboardData(
+                  text: address,
+                ),
+              ).then(
+                (value) => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Wallet address copied to clipboard",
+                    ),
+                  ),
+                ),
+              );
+            },
+            child: CustomTextField(
+              labelText: 'Address',
+              isReadOnly: true,
+              hintText: formatAddress(address),
+              suffix: const Icon(
+                Icons.copy,
+                color: Colors.white,
+                size: 16,
+              ),
             ),
           ),
           const Divider(

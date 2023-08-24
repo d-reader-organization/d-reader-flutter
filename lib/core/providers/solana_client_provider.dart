@@ -137,21 +137,18 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           signMessageResult.first.sublist(0, 64),
           publicKey: publicKey,
         ).bytes,
-        wallets: [
-          ...(currentWallets ?? []),
-          {
-            publicKey.toBase58(): WalletData(
-              authToken: result?.authToken ?? '',
-              signature: Signature(
-                signMessageResult.first.sublist(0, 64),
-                publicKey: publicKey,
-              ).toBase58(),
-            ),
-          },
-        ],
+        wallets: {
+          ...?currentWallets,
+          publicKey.toBase58(): WalletData(
+            authToken: result?.authToken ?? '',
+            signature: Signature(
+              signMessageResult.first.sublist(0, 64),
+              publicKey: publicKey,
+            ).toBase58(),
+          ),
+        },
       ),
     );
-    envNotifier.updateLastSelectedNetwork(cluster);
 
     await Future.wait(
       [
@@ -393,30 +390,23 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       cluster: ref.read(environmentProvider).solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
-    final wallets = ref.read(environmentProvider).wallets ?? [];
-    WalletData? currentWalletData;
-    for (int i = 0; i < wallets.length; ++i) {
-      final current = wallets[i]
-          [(ref.read(environmentProvider).publicKey?.toBase58() ?? '')];
-      if (current != null) {
-        currentWalletData = current;
-        break;
-      }
-    }
+    final walletsMap = ref.read(environmentProvider).wallets;
+    final currentWalletAddress =
+        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+    final currentItem = walletsMap?[currentWalletAddress];
 
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result?.authToken,
-            wallets: [
-              ...(wallets),
-              {
-                ref.read(environmentProvider).publicKey?.toBase58() ?? '':
-                    WalletData(
-                  authToken: result?.authToken ?? '',
-                  signature: currentWalletData?.signature ?? '',
-                )
-              },
-            ],
+            wallets: currentItem != null
+                ? {
+                    ...?walletsMap,
+                    currentWalletAddress: WalletData(
+                      authToken: result?.authToken ?? '',
+                      signature: currentItem.signature,
+                    ),
+                  }
+                : null,
           ),
         );
     return result != null;

@@ -46,6 +46,17 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     if (localStoreData != null) {
       var networkData = jsonDecode(localStoreData);
       final String? signature = networkData['signature'];
+      Map<String, dynamic>? storedWallets = networkData['wallets'] != null
+          ? jsonDecode(networkData['wallets'])
+          : null;
+      Map<String, WalletData>? wallets = storedWallets?.map(
+        (key, value) => MapEntry(
+          key,
+          WalletData.fromJson(
+            value,
+          ),
+        ),
+      );
       state = state.copyWith(
         apiUrl: networkData['apiUrl'],
         authToken: networkData['authToken'],
@@ -59,6 +70,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
         user: networkData['user'] != null
             ? UserModel.fromJson(jsonDecode(networkData['user']))
             : null,
+        wallets: wallets,
       );
     }
   }
@@ -77,13 +89,6 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       wallets: input.wallets,
       user: input.user,
     );
-
-    // localStore.put(
-    //   isDevnet ? 'dev-network' : 'prod-network',
-    //   jsonEncode(
-    //     state.toJson(),
-    //   ),
-    // );
 
     if (input.jwtToken != null) {
       localStore.put(Config.tokenKey, input.jwtToken);

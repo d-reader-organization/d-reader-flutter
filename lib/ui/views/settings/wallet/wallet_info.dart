@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/chain_subscription_client.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -26,6 +27,11 @@ class WalletInfoScreen extends ConsumerWidget {
     await ref.read(authRepositoryProvider).disconnectWallet(
           address: address,
         );
+    ref
+        .read(environmentProvider)
+        .wallets
+        ?.removeWhere((key, value) => key == address);
+    ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);
     if (context.mounted) {
       Navigator.pop(context);

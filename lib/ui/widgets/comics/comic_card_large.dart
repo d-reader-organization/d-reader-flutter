@@ -42,7 +42,7 @@ class ComicCardLarge extends StatelessWidget {
                   stops: [0, 2],
                 ),
                 borderRadius: BorderRadius.circular(
-                  16,
+                  8,
                 ),
               ),
             ),

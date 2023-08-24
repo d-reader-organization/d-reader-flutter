@@ -19,10 +19,7 @@ class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
   FutureOr<List<ListingModel>> build(ComicIssueModel arg) async {
     final listings = await ref.read(
       listedItemsProvider(
-        ListingsProviderArg(
-          issueId: arg.id,
-          query: 'skip=0&take=10',
-        ),
+        'comicIssueId=${arg.id}&skip=0&take=10',
       ).future,
     );
     final socket =
@@ -60,10 +57,7 @@ class ListingsAsyncNotifier extends AutoDisposeFamilyAsyncNotifier<
     isLoading = true;
     final newListings = await ref.read(
       listedItemsProvider(
-        ListingsProviderArg(
-          issueId: arg.id,
-          query: 'skip=${state.value?.length}&take=10',
-        ),
+        'comicIssueId=${arg.id}&skip=${state.value?.length}&take=10',
       ).future,
     );
     if (newListings.isEmpty) {

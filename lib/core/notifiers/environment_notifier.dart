@@ -1,6 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,35 +18,6 @@ final localStoreNetworkDataProvider =
     return localStoreData;
   },
 );
-
-// final environmentChangeProvider =
-//     FutureProvider.family<bool, String>((ref, cluster) async {
-//   final localStore = LocalStore.instance;
-//   bool isMainCluster = cluster == SolanaCluster.mainnet.value;
-//   final localStoreData = localStore
-//       .get(isMainCluster ? 'prod-network' : 'dev-network', defaultValue: null);
-
-//   if (localStoreData != null) {
-//     var networkData = jsonDecode(localStoreData);
-//     final String? signature = networkData['signature'];
-//     ref.read(environmentProvider.notifier).updateEnvironmentState(
-//           EnvironmentStateUpdateInput(
-//             authToken: networkData['authToken'],
-//             jwtToken: networkData['jwtToken'],
-//             refreshToken: networkData['refreshToken'],
-//             publicKey: Ed25519HDPublicKey.fromBase58(networkData['publicKey']),
-//             solanaCluster: cluster,
-//             signature: signature?.codeUnits,
-//           ),
-//         );
-//   } else {
-//     final response = await ref
-//         .read(solanaProvider.notifier)
-//         .authorizeAndSignMessage(cluster);
-//     return response == 'OK';
-//   }
-//   return true;
-// });
 
 final environmentProvider =
     StateNotifierProvider<EnvironmentNotifier, EnvironmentState>((ref) {
@@ -84,6 +56,9 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
             : null,
         solanaCluster: selectedNetwork,
         signature: signature?.codeUnits,
+        user: networkData['user'] != null
+            ? UserModel.fromJson(jsonDecode(networkData['user']))
+            : null,
       );
     }
   }
@@ -99,6 +74,8 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       solanaCluster: input.solanaCluster,
       publicKey: input.publicKey,
       signature: input.signature,
+      wallets: input.wallets,
+      user: input.user,
     );
 
     // localStore.put(
@@ -110,8 +87,8 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
 
     if (input.jwtToken != null) {
       localStore.put(Config.tokenKey, input.jwtToken);
-      putStateIntoLocalStore();
     }
+    putStateIntoLocalStore();
     return true;
   }
 

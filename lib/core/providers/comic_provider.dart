@@ -1,11 +1,14 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
-import 'package:d_reader_flutter/core/providers/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/comic/comic_repository_impl.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'comic_provider.g.dart';
 
 final comicRepositoryProvider = Provider<ComicRepositoryImpl>(
   (ref) {
@@ -15,9 +18,22 @@ final comicRepositoryProvider = Provider<ComicRepositoryImpl>(
   },
 );
 
-final comicsProvider =
-    FutureProvider.autoDispose.family<List<ComicModel>, String?>(
+final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
   (ref, queryString) async {
+    Timer? timer;
+
+    ref.onDispose(() {
+      timer?.cancel();
+    });
+    ref.onCancel(() {
+      timer = Timer(const Duration(seconds: 30), () {
+        ref.invalidateSelf();
+      });
+    });
+
+    ref.onResume(() {
+      timer?.cancel();
+    });
     return ref.read(comicRepositoryProvider).getComics(
         queryString: queryString != null && queryString.isNotEmpty
             ? queryString
@@ -58,11 +74,13 @@ final rateComicProvider = FutureProvider.autoDispose.family<dynamic, dynamic>(
   },
 );
 
-final ownedComicsProvider =
-    FutureProvider.autoDispose.family<List<ComicModel>, OwnedComicsArgs>(
-  (ref, arg) {
-    return ref
-        .read(comicRepositoryProvider)
-        .getOwnedComics(walletAddress: arg.walletAddress, query: arg.query);
-  },
-);
+@riverpod
+Future<List<ComicModel>> ownedComics(
+  Ref ref, {
+  required int userId,
+  required String query,
+}) {
+  return ref
+      .read(comicRepositoryProvider)
+      .getOwnedComics(userId: userId, query: query);
+}

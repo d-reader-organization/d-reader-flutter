@@ -1,8 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/intro/intro.dart';
+import 'package:d_reader_flutter/ui/views/intro/initial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -17,13 +16,11 @@ class _WelcomeViewState extends State<WelcomeView>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeInFadeOut;
-  bool shouldShowInitial = true;
+
   @override
   void initState() {
     super.initState();
-    final bool? hasSeenInitial =
-        LocalStore.instance.get(Config.hasSeenInitialKey);
-    shouldShowInitial = !(hasSeenInitial ?? false);
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2500),
@@ -35,9 +32,7 @@ class _WelcomeViewState extends State<WelcomeView>
       if (status == AnimationStatus.completed) {
         nextScreenReplace(
           context,
-          IntroView(
-            shouldShowInitial: shouldShowInitial,
-          ),
+          const InitialIntroScreen(),
         );
       } else if (status == AnimationStatus.dismissed) {
         _animationController.forward();
@@ -56,10 +51,38 @@ class _WelcomeViewState extends State<WelcomeView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
-      body: Center(
-        child: FadeTransition(
-          opacity: _fadeInFadeOut,
-          child: SvgPicture.asset(Config.logoAlphaPath),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Center(
+          child: FadeTransition(
+            opacity: _fadeInFadeOut,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(),
+                SvgPicture.asset(Config.whiteLogoPath),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: ColorPalette.dReaderYellow100,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      8,
+                    ),
+                  ),
+                  child: const Text(
+                    'alpha version',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: ColorPalette.dReaderYellow100,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final String? defaultValue, labelText;
-  final bool isReadOnly;
+  final bool isReadOnly, obscureText;
   final Widget? suffix;
   final Function()? onTap;
-  final Function(String value)? onChange;
+  final Function(String value)? onChange, onFieldSubmitted;
   final String? Function(String? value)? onValidate;
   final AutovalidateMode? autovalidateMode;
   final TextEditingController? controller;
@@ -18,13 +18,26 @@ class CustomTextField extends StatelessWidget {
     this.hintText = 'Name',
     this.defaultValue,
     this.isReadOnly = false,
+    this.obscureText = false,
     this.suffix,
     this.onTap,
     this.onChange,
     this.onValidate,
     this.autovalidateMode,
     this.controller,
+    this.onFieldSubmitted,
   });
+
+  OutlineInputBorder _outlineInputBorder({
+    required Color color,
+  }) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(
+        color: color,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +60,7 @@ class CustomTextField extends StatelessWidget {
           autovalidateMode: autovalidateMode,
           controller: controller,
           onTap: onTap,
+          obscureText: obscureText,
           initialValue: defaultValue,
           readOnly: isReadOnly,
           cursorColor: ColorPalette.dReaderYellow100,
@@ -59,14 +73,17 @@ class CustomTextField extends StatelessWidget {
               onChange!(value);
             }
           },
+          onFieldSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
             hintText: hintText,
             constraints: const BoxConstraints(
-              minHeight: 80,
-              maxHeight: 80,
+              maxHeight: 70,
+              minHeight: 70,
             ),
+            isDense: true,
             fillColor: ColorPalette.boxBackground200,
             filled: true,
+            contentPadding: const EdgeInsets.all(12),
             hintStyle: const TextStyle(
               color: ColorPalette.greyscale200,
               fontSize: 16,
@@ -77,31 +94,19 @@ class CustomTextField extends StatelessWidget {
             ),
             suffixIconConstraints:
                 const BoxConstraints(minWidth: 24, minHeight: 24),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                color: ColorPalette.boxBackground400,
-              ),
+            border: _outlineInputBorder(
+              color: ColorPalette.boxBackground400,
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                color: ColorPalette.boxBackground400,
-              ),
+            enabledBorder: _outlineInputBorder(
+              color: ColorPalette.boxBackground400,
             ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                color: ColorPalette.dReaderRed,
-              ),
+            focusedErrorBorder: _outlineInputBorder(
+              color: ColorPalette.dReaderRed,
             ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                color: ColorPalette.dReaderRed,
-              ),
+            errorBorder: _outlineInputBorder(
+              color: ColorPalette.dReaderRed,
             ),
-            errorMaxLines: 2,
+            errorMaxLines: 1,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(

@@ -18,7 +18,7 @@ class OwnedListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       ownedComicsAsyncProvider(
-        ref.watch(environmentProvider).publicKey?.toBase58() ?? '',
+        ref.watch(environmentProvider).user?.id ?? 0,
       ),
     );
 
@@ -29,37 +29,33 @@ class OwnedListView extends ConsumerWidget {
         : provider.when(
             data: (data) {
               if (data.isEmpty) {
-                return Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 32,
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset('assets/icons/bunny_in_the_hole.svg'),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Text(
+                      'Nothing to see in here!',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
                       ),
-                      SvgPicture.asset('assets/icons/bunny_in_the_hole.svg'),
-                      const SizedBox(
-                        height: 16,
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      'Buy comic episodes first',
+                      style: TextStyle(
+                        fontSize: 14,
+                        letterSpacing: 0.2,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.greyscale100,
                       ),
-                      const Text(
-                        'Nothing to see in here!',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      const Text(
-                        'Buy comic episodes first',
-                        style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 0.2,
-                          fontWeight: FontWeight.w500,
-                          color: ColorPalette.greyscale100,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               }
               Map<String, int> sortedLetters = sortAndGetLetterOccurences(data);
@@ -72,11 +68,7 @@ class OwnedListView extends ConsumerWidget {
                     if (maxScroll - currentScroll <= delta) {
                       ref
                           .read(ownedComicsAsyncProvider(
-                            ref
-                                    .read(environmentProvider)
-                                    .publicKey
-                                    ?.toBase58() ??
-                                '',
+                            ref.read(environmentProvider).user?.id ?? 0,
                           ).notifier)
                           .fetchNext();
                     }

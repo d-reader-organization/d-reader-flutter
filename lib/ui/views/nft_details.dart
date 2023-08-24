@@ -129,7 +129,7 @@ class Body extends StatelessWidget {
     showSnackBar(
       context: context,
       backgroundColor: ColorPalette.dReaderRed,
-      duration: 2000,
+      milisecondsDuration: 2000,
       text: 'Failed to open',
     );
   }
@@ -179,7 +179,7 @@ class Body extends StatelessWidget {
                         if (nft.isListed) {
                           await ref
                               .read(solanaProvider.notifier)
-                              .delist(mint: nft.address);
+                              .delist(nftAddress: nft.address);
                           ref.invalidate(nftProvider);
                           ref.read(globalStateProvider.notifier).state =
                               const GlobalState(isLoading: false);
@@ -239,6 +239,8 @@ class Body extends StatelessWidget {
                         final isSuccessful =
                             await ref.read(solanaProvider.notifier).useMint(
                                   nftAddress: nft.address,
+                                  ownerAddress: nft
+                                      .ownerAddress, // TODO: we have to make sure that we sign this action with the correct wallet (auth_token)
                                 );
                         if (context.mounted) {
                           _handleNftOpen(context, isSuccessful);
@@ -347,7 +349,7 @@ class Body extends StatelessWidget {
           Row(
             children: [
               Text(
-                formatAddress(nft.owner, 12),
+                formatAddress(nft.ownerAddress, 12),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(
@@ -362,7 +364,7 @@ class Body extends StatelessWidget {
                 onTap: () {
                   Clipboard.setData(
                     ClipboardData(
-                      text: nft.owner,
+                      text: nft.ownerAddress,
                     ),
                   ).then(
                     (value) => ScaffoldMessenger.of(context).showSnackBar(

@@ -82,9 +82,9 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
 
   @override
   Future<List<OwnedComicIssue>> getOwnedIssues(
-      {required String walletAddress, required String query}) async {
+      {required int id, required String query}) async {
     final response = await client
-        .get('/comic-issue/get/by-owner/$walletAddress?$query')
+        .get('/comic-issue/get/by-owner/$id?$query')
         .then((value) => value.data);
 
     return response != null

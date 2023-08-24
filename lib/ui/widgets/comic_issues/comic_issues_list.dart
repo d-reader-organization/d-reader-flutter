@@ -40,9 +40,9 @@ class ComicIssuesList extends ConsumerWidget {
               )
             : const Text('No issues found.');
       },
-      error: (err, stack) => Text(
-        'Error: $err',
-        style: const TextStyle(color: Colors.red),
+      error: (err, stack) => const Text(
+        "Couldn't fetch the data",
+        style: TextStyle(color: Colors.red),
       ),
       loading: () => SizedBox(
         height: 276,

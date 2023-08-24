@@ -132,6 +132,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                       .read(solanaProvider.notifier)
                                       .useMint(
                                         nftAddress: ownedNft.address,
+                                        ownerAddress: ownedNft.ownerAddress,
                                       );
                                   if (context.mounted) {
                                     Navigator.pop(context);
@@ -144,7 +145,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                     showSnackBar(
                                       context: context,
                                       backgroundColor: ColorPalette.dReaderRed,
-                                      duration: 2000,
+                                      milisecondsDuration: 2000,
                                       text: 'Failed to open',
                                     );
                                   }

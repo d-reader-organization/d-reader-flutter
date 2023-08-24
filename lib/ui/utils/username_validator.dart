@@ -1,15 +1,15 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 String? validateUsername({required String? value, required WidgetRef ref}) {
   if (value == null || value.isEmpty) {
     return "Please enter username.";
-  } else if (value.length > 32) {
-    return "Must be less than 32 characters.";
+  } else if (value.length > 20) {
+    return "Must be less than 20 characters.";
+  } else if (value.length < 2) {
+    return "Must be greater than 2 characters.";
   } else if (!usernameRegex.hasMatch(value)) {
     return "Usernames can only contain letters and numbers.";
   }
-  final result = ref.watch(isValidWalletNameValue);
-  return result ? null : '$value already taken.';
+  return null;
 }

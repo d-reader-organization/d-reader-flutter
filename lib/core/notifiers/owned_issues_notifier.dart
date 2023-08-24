@@ -1,31 +1,45 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final ownedIssuesAsyncProvider = AsyncNotifierProvider.autoDispose
-    .family<OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
+final ownedIssuesAsyncProvider = AsyncNotifierProvider.family<
+    OwnedIssuesAsyncNotifier, List<OwnedComicIssue>, String>(
   OwnedIssuesAsyncNotifier.new,
 );
 
 class OwnedIssuesAsyncNotifier
-    extends AutoDisposeFamilyAsyncNotifier<List<OwnedComicIssue>, String> {
+    extends FamilyAsyncNotifier<List<OwnedComicIssue>, String> {
   bool isEnd = false, isLoading = false;
   @override
   FutureOr<List<OwnedComicIssue>> build(String arg) async {
-    final (walletAddress, queryString) = getArgs();
+    final (userId, queryString) = getArgs();
+    Timer? timer;
 
+    ref.onDispose(() {
+      timer?.cancel();
+    });
+
+    ref.onCancel(() {
+      timer = Timer(const Duration(seconds: 30), () {
+        ref.invalidateSelf();
+      });
+    });
+
+    ref.onResume(() {
+      timer?.cancel();
+    });
     return await ref.read(ownedIssuesProvider(
-      OwnedIssuesArgs(
-        walletAddress: walletAddress,
-        query: 'skip=0&take=20&$queryString',
-      ),
+      userId: userId,
+      query: 'skip=0&take=20&$queryString',
     ).future);
   }
 
-  (String, String) getArgs() {
-    final [walletAddress, query] = arg.split('?');
-    return (walletAddress, query);
+  (int, String) getArgs() {
+    final [userId, query] = arg.split('?');
+    return (int.parse(userId), query);
   }
 
   fetchNext() async {
@@ -33,13 +47,11 @@ class OwnedIssuesAsyncNotifier
       return;
     }
     isLoading = true;
-    final (walletAddress, queryString) = getArgs();
+    final (userId, queryString) = getArgs();
     final newIssues = await ref.read(
       ownedIssuesProvider(
-        OwnedIssuesArgs(
-          walletAddress: walletAddress,
-          query: 'skip=${state.value?.length ?? 0}&take=20&$queryString',
-        ),
+        userId: userId,
+        query: 'skip=${state.value?.length ?? 0}&take=20&$queryString',
       ).future,
     );
     if (newIssues.isEmpty) {
@@ -49,13 +61,4 @@ class OwnedIssuesAsyncNotifier
     isLoading = false;
     state = AsyncValue.data([...?state.value, ...newIssues]);
   }
-}
-
-class OwnedIssuesArgs {
-  final String walletAddress, query;
-
-  OwnedIssuesArgs({
-    required this.walletAddress,
-    this.query = 'skip=0&take=20',
-  });
 }

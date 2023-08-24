@@ -2,26 +2,23 @@ import 'dart:io' show File;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/models/wallet.dart';
+import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_name_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
+import 'package:d_reader_flutter/ui/views/settings/reset_password.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
+import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
-import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -57,18 +54,18 @@ class ProfileView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(myWalletProvider);
+    final provider = ref.watch(myUserProvider);
     final globalHook = useGlobalState();
     return SettingsScaffold(
-      appBarTitle: 'Edit Profile',
+      appBarTitle: 'My Profile',
       bottomNavigationBar: Consumer(
         builder: (context, ref, child) {
-          final String walletName = ref.watch(walletNameProvider);
+          final String username = ref.watch(usernameTextProvider);
           return AnimatedOpacity(
-            opacity: walletName.isNotEmpty &&
-                    walletName.trim() != provider.value?.name
-                ? 1.0
-                : 0.0,
+            opacity:
+                username.isNotEmpty && username.trim() != provider.value?.name
+                    ? 1.0
+                    : 0.0,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
             child: Padding(
@@ -79,9 +76,9 @@ class ProfileView extends HookConsumerWidget {
                     child: CustomTextButton(
                       size: const Size(double.infinity, 40),
                       onPressed: () {
-                        final String walletName = ref.read(walletNameProvider);
-                        if (walletName.isNotEmpty) {
-                          ref.read(walletNameProvider.notifier).state = '';
+                        final String username = ref.read(usernameTextProvider);
+                        if (username.isNotEmpty) {
+                          ref.read(usernameTextProvider.notifier).state = '';
                         }
                       },
                       borderRadius: BorderRadius.circular(8),
@@ -96,42 +93,49 @@ class ProfileView extends HookConsumerWidget {
                       isLoading: ref.watch(globalStateProvider).isLoading,
                       size: const Size(double.infinity, 40),
                       onPressed: () async {
-                        final String walletName = ref.read(walletNameProvider);
-                        if (walletName.isNotEmpty) {
+                        final String username = ref.read(usernameTextProvider);
+                        if (username.isNotEmpty) {
                           final notifier =
                               ref.read(globalStateProvider.notifier);
-                          notifier.update(
-                            (state) => state.copyWith(
-                              isLoading: true,
-                            ),
-                          );
-                          final result = await ref.read(
-                            updateWalletProvider(
-                              UpdateWalletPayload(
-                                address: provider.value?.address ?? '',
-                                name: walletName,
+
+                          if (provider.value?.id != null) {
+                            notifier.update(
+                              (state) => state.copyWith(
+                                isLoading: true,
                               ),
-                            ).future,
-                          );
-                          notifier.update(
-                            (state) => state.copyWith(
-                              isLoading: false,
-                            ),
-                          );
-                          ref
-                              .read(walletNameProvider.notifier)
-                              .update((state) => '');
-                          ref.invalidate(myWalletProvider);
-                          if (context.mounted) {
-                            displaySnackBar(
-                              context: context,
-                              color: result != null
-                                  ? ColorPalette.dReaderGreen
-                                  : ColorPalette.dReaderRed,
-                              text: result != null
-                                  ? 'Your wallet has been updated.'
-                                  : 'Something went wrong',
                             );
+                            final updateResult = await ref
+                                .read(userRepositoryProvider)
+                                .updateUser(
+                                  UpdateUserPayload(
+                                    id: provider.value!.id,
+                                    email: provider.value?.email ?? '',
+                                    name: username,
+                                  ),
+                                );
+                            notifier.update(
+                              (state) => state.copyWith(
+                                isLoading: false,
+                              ),
+                            );
+                            ref
+                                .read(usernameTextProvider.notifier)
+                                .update((state) => '');
+                            ref.invalidate(myUserProvider);
+                            if (context.mounted) {
+                              displaySnackBar(
+                                context: context,
+                                duration: const Duration(
+                                  seconds: 2,
+                                ),
+                                color: updateResult is String
+                                    ? ColorPalette.dReaderRed
+                                    : ColorPalette.dReaderGreen,
+                                text: updateResult is String
+                                    ? updateResult
+                                    : 'Your username has been updated.',
+                              );
+                            }
                           }
                         }
                       },
@@ -146,8 +150,8 @@ class ProfileView extends HookConsumerWidget {
         },
       ),
       body: provider.when(
-        data: (wallet) {
-          if (wallet == null) {
+        data: (user) {
+          if (user == null) {
             return const SizedBox();
           }
           return Padding(
@@ -179,7 +183,7 @@ class ProfileView extends HookConsumerWidget {
                     height: 16,
                   ),
                   Avatar(
-                    wallet: wallet,
+                    user: user,
                     ref: ref,
                   ),
                   const SizedBox(
@@ -187,73 +191,36 @@ class ProfileView extends HookConsumerWidget {
                   ),
                   Consumer(
                     builder: (context, ref, child) {
-                      return CustomTextField(
-                        labelText: 'Username',
-                        defaultValue:
-                            wallet.name.isNotEmpty ? wallet.name : null,
-                        onValidate: (value) {
-                          return validateUsername(value: value, ref: ref);
-                        },
-                        onChange: (String value) {
-                          ref.read(walletNameProvider.notifier).state = value;
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  CustomTextField(
-                    labelText: 'Wallet address',
-                    defaultValue: formatAddress(wallet.address, 4),
-                    isReadOnly: true,
-                    suffix: SvgPicture.asset(
-                      '${Config.settingsAssetsPath}/bold/copy.svg',
-                    ),
-                    onTap: () {
-                      Clipboard.setData(ClipboardData(text: wallet.address))
-                          .then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Wallet address copied to clipboard",
+                      return Column(
+                        children: [
+                          CustomTextField(
+                            labelText: 'Email',
+                            hintText: user.email,
+                            isReadOnly: true,
+                          ),
+                          CustomTextField(
+                            labelText: 'Username',
+                            defaultValue:
+                                user.name.isNotEmpty ? user.name : null,
+                            onValidate: (value) {
+                              return validateUsername(value: value, ref: ref);
+                            },
+                            onChange: (String value) {
+                              ref.read(usernameTextProvider.notifier).state =
+                                  value;
+                            },
+                          ),
+                          const Text(
+                            'Must be 2 to 20 characters long. Letters, numbers and dashes are allowed.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: ColorPalette.greyscale200,
                             ),
                           ),
-                        );
-                      });
+                        ],
+                      );
                     },
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  CustomTextButton(
-                    size: const Size(double.infinity, 40),
-                    borderRadius: BorderRadius.circular(8),
-                    padding: EdgeInsets.zero,
-                    textColor: Colors.black,
-                    backgroundColor: ColorPalette.dReaderGreen,
-                    isLoading: ref.watch(privateLoadingProvider),
-                    onPressed: () async {
-                      final loadingNotifier =
-                          ref.read(privateLoadingProvider.notifier);
-                      loadingNotifier.update((state) => true);
-                      await ref.read(syncWalletProvider.future);
-                      ref.invalidate(walletAssetsProvider);
-                      loadingNotifier.update((state) => false);
-                      if (context.mounted) {
-                        displaySnackBar(
-                          context: context,
-                          color: ColorPalette.dReaderGreen,
-                          text: 'Done',
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Sync',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
                   ),
                   const SizedBox(
                     height: 8,
@@ -282,9 +249,13 @@ class ProfileView extends HookConsumerWidget {
                               : () async {
                                   globalHook.value = globalHook.value
                                       .copyWith(isLoading: true);
+                                  final lastAddress = ref
+                                      .read(environmentProvider)
+                                      .publicKey
+                                      ?.toBase58();
                                   final airdropResult = await ref
                                       .read(solanaProvider.notifier)
-                                      .requestAirdrop(wallet.address);
+                                      .requestAirdrop(lastAddress ?? '');
 
                                   globalHook.value = globalHook.value
                                       .copyWith(isLoading: false);
@@ -309,15 +280,129 @@ class ProfileView extends HookConsumerWidget {
                                 },
                         )
                       : const SizedBox(),
+                  const Divider(
+                    thickness: 1,
+                    color: ColorPalette.boxBackground200,
+                  ),
                   SettingsCommonListTile(
-                    title: 'Disconnect wallet',
+                    title: 'Reset password',
+                    leadingPath: 'assets/icons/reset_password.svg',
+                    overrideColor: Colors.white,
+                    overrideTrailing: const SizedBox(),
+                    onTap: () {
+                      nextScreenPush(
+                          context,
+                          ResetPasswordView(
+                            id: '${user.id}',
+                            email: user.email,
+                          ));
+                    },
+                  ),
+                  SettingsCommonListTile(
+                    title: 'Log out',
                     leadingPath:
                         '${Config.settingsAssetsPath}/light/logout.svg',
                     overrideColor: ColorPalette.dReaderRed,
                     onTap: () async {
-                      await ref.read(logoutProvider.future);
-                      if (context.mounted) {
-                        nextScreenCloseOthers(context, const WelcomeView());
+                      final result = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: ColorPalette.boxBackground300,
+                            contentPadding: EdgeInsets.zero,
+                            content: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 16,
+                                  ),
+                                  child: Text(
+                                    'Are you sure you want to log out?',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          return Navigator.pop(context, false);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              right: BorderSide(
+                                                color: ColorPalette
+                                                    .boxBackground200,
+                                                width: 1,
+                                              ),
+                                              top: BorderSide(
+                                                color: ColorPalette
+                                                    .boxBackground200,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'No',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          return Navigator.pop(context, true);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              top: BorderSide(
+                                                color: ColorPalette
+                                                    .boxBackground200,
+                                                width: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Yes',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                      if (result != null && result) {
+                        await ref.read(logoutProvider.future);
+                        if (context.mounted) {
+                          nextScreenCloseOthers(context, const WelcomeView());
+                        }
                       }
                     },
                   ),
@@ -338,33 +423,12 @@ class ProfileView extends HookConsumerWidget {
   }
 }
 
-class WalletSkeleton extends StatelessWidget {
-  const WalletSkeleton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        SkeletonRow(),
-        SizedBox(
-          height: 8,
-        ),
-        SkeletonRow(),
-        SizedBox(
-          height: 8,
-        ),
-        SkeletonRow(),
-      ],
-    );
-  }
-}
-
 class Avatar extends StatelessWidget {
-  final WalletModel wallet;
+  final UserModel user;
   final WidgetRef ref;
   const Avatar({
     super.key,
-    required this.wallet,
+    required this.user,
     required this.ref,
   });
 
@@ -376,43 +440,39 @@ class Avatar extends StatelessWidget {
         if (result != null) {
           File file = File(result.files.single.path ?? '');
 
-          final notifier = ref.read(globalStateProvider.notifier);
+          final notifier = ref.read(privateLoadingProvider.notifier);
           notifier.update(
-            (state) => state.copyWith(
-              isLoading: true,
-            ),
+            (state) => true,
           );
-          final response = await ref.read(
-            updateWalletAvatarProvider(
-              UpdateWalletPayload(
-                address: wallet.address,
-                avatar: file,
-              ),
-            ).future,
-          );
-          ref.invalidate(myWalletProvider);
+          final response = await ref.read(userRepositoryProvider).updateAvatar(
+                UpdateUserPayload(
+                  id: user.id,
+                  avatar: file,
+                ),
+              );
+          ref.invalidate(myUserProvider);
           Future.delayed(
             const Duration(milliseconds: 500),
             () {
-              notifier.update(
-                (state) => state.copyWith(
-                  isLoading: false,
-                ),
-              );
+              notifier.update((state) => false);
             },
           );
-          if (context.mounted && response != null) {
+          if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Your avatar has been uploaded.'),
-                duration: Duration(milliseconds: 500),
+              SnackBar(
+                content: Text(
+                  response is String
+                      ? response
+                      : 'Your avatar has been uploaded.',
+                ),
+                duration: const Duration(milliseconds: 500),
                 backgroundColor: ColorPalette.dReaderGreen,
               ),
             );
           }
         }
       },
-      child: ref.watch(globalStateProvider).isLoading
+      child: ref.watch(privateLoadingProvider)
           ? Center(
               child: Container(
                 height: 96,
@@ -423,12 +483,12 @@ class Avatar extends StatelessWidget {
                 ),
               ),
             )
-          : wallet.avatar.isNotEmpty
+          : user.avatar.isNotEmpty
               ? CircleAvatar(
                   radius: 48,
                   backgroundColor: ColorPalette.boxBackground300,
                   child: CachedNetworkImage(
-                    imageUrl: wallet.avatar,
+                    imageUrl: user.avatar,
                     imageBuilder: (context, imageProvider) {
                       return Container(
                         decoration: BoxDecoration(

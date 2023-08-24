@@ -16,14 +16,16 @@ class MintedItemRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final avatar = receipt.buyer.avatar ?? '';
+    final buyerName = receipt.buyer.name ?? '';
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       leading: CircleAvatar(
         maxRadius: 24,
         backgroundColor: ColorPalette.boxBackground200,
-        backgroundImage: receipt.buyer.avatar.isNotEmpty
+        backgroundImage: avatar.isNotEmpty
             ? CachedNetworkImageProvider(
-                receipt.buyer.avatar,
+                avatar,
               )
             : null,
       ),
@@ -34,7 +36,7 @@ class MintedItemRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              receipt.buyer.name,
+              buyerName,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

@@ -10,14 +10,16 @@ final mintingStatusProvider = StateProvider.family<void, String>(
   (ref, signature) {
     if (signature.isNotEmpty) {
       final client = createSolanaClient(
-          rpcUrl: ref.read(environmentProvider).solanaCluster ==
-                  SolanaCluster.devnet.value
-              ? Config.rpcUrlDevnet
-              : Config.rpcUrlMainnet);
+        rpcUrl: ref.read(environmentProvider).solanaCluster ==
+                SolanaCluster.devnet.value
+            ? Config.rpcUrlDevnet
+            : Config.rpcUrlMainnet,
+      );
+
       client
           .waitForSignatureStatus(
         signature,
-        status: Commitment.finalized,
+        status: Commitment.confirmed,
         timeout: const Duration(seconds: 15),
       )
           .then((value) {

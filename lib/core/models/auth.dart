@@ -1,14 +1,14 @@
-class AuthWallet {
+class AuthorizationResponse {
   String accessToken;
   String refreshToken;
 
-  AuthWallet({
+  AuthorizationResponse({
     required this.accessToken,
     required this.refreshToken,
   });
 
-  factory AuthWallet.fromJson(json) {
-    return AuthWallet(
+  factory AuthorizationResponse.fromJson(json) {
+    return AuthorizationResponse(
       accessToken: json['accessToken'],
       refreshToken: json['refreshToken'],
     );

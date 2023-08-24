@@ -3,7 +3,6 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
-import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -75,11 +74,25 @@ class DiscoverComicCard extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      AuthorVerified(
-                        authorName: comic.creator?.name ?? '',
-                        isVerified: comic.creator?.isVerified ?? false,
-                        textColor: ColorPalette.greyscale100,
-                        fontSize: 12,
+                      Row(
+                        children: [
+                          Text(
+                            comic.creator?.name ?? '',
+                            style: textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: ColorPalette.greyscale100,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          const Icon(
+                            Icons.verified,
+                            color: ColorPalette.dReaderYellow100,
+                            size: 14,
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 4,

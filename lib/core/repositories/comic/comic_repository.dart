@@ -9,7 +9,7 @@ abstract class ComicRepository {
     required int rating,
   });
   Future<List<ComicModel>> getOwnedComics({
-    required String walletAddress,
+    required int userId,
     required String query,
   });
 }

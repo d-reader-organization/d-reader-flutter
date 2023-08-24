@@ -5,12 +5,10 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
-import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_auth_provider.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +18,8 @@ import 'package:solana/base58.dart';
 import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
+
+const String missingWalletAppText = 'Missing wallet application.';
 
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
@@ -92,6 +92,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
     final session = await _getSession();
+    if (session == null) {
+      throw Exception(missingWalletAppText);
+    }
     final client = await session.start();
     final String cluster =
         overrideCluster ?? ref.read(environmentProvider).solanaCluster;
@@ -106,12 +109,16 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         ? Config.apiUrlDevnet
         : Config.apiUrl;
     final envNotifier = ref.read(environmentProvider.notifier);
-
+    final String jwtToken = ref.read(environmentProvider).jwtToken ?? '';
+    if (jwtToken.isEmpty) {
+      throw Exception('Missing jwt token');
+    }
     final signMessageResult = await _signMessage(
       client: client,
       signer: publicKey,
       overrideAuthToken: result?.authToken ?? '',
       apiUrl: apiUrl,
+      jwtToken: jwtToken,
     );
     if (signMessageResult is String || signMessageResult.isEmpty) {
       await session.close();
@@ -119,7 +126,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           ? signMessageResult
           : 'Failed to sign message.';
     }
-
+    final currentWallets = ref.read(environmentProvider).wallets;
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
@@ -130,6 +137,18 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           signMessageResult.first.sublist(0, 64),
           publicKey: publicKey,
         ).bytes,
+        wallets: [
+          ...(currentWallets ?? []),
+          {
+            publicKey.toBase58(): WalletData(
+              authToken: result?.authToken ?? '',
+              signature: Signature(
+                signMessageResult.first.sublist(0, 64),
+                publicKey: publicKey,
+              ).toBase58(),
+            ),
+          },
+        ],
       ),
     );
     envNotifier.updateLastSelectedNetwork(cluster);
@@ -137,10 +156,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     await Future.wait(
       [
         session.close(),
-        _getAndStoreToken(
+        _connectWallet(
           signedMessage: signMessageResult.first,
           publicKey: publicKey,
           apiUrl: apiUrl,
+          jwtToken: jwtToken,
         ),
       ],
     );
@@ -148,12 +168,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return 'OK';
   }
 
-  Future<void> _getAndStoreToken({
+  Future<void> _connectWallet({
     required Uint8List signedMessage,
     required Ed25519HDPublicKey publicKey,
     required String apiUrl,
+    required String jwtToken,
   }) async {
-    final response = await ref.read(authRepositoryProvider).connectWallet(
+    await ref.read(authRepositoryProvider).connectWallet(
           address: publicKey.toBase58(),
           encoding: base58encode(
             signedMessage.sublist(
@@ -162,39 +183,23 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             ),
           ),
           apiUrl: apiUrl,
+          jwtToken: jwtToken,
         );
-    if (response != null) {
-      ref.read(environmentProvider.notifier).updateEnvironmentState(
-            EnvironmentStateUpdateInput(
-              jwtToken: response.accessToken,
-              refreshToken: response.refreshToken,
-            ),
-          );
-      if (ref.read(environmentProvider).solanaCluster ==
-          SolanaCluster.devnet.value) {
-        await ref.read(networkChangeUpdateWallet(publicKey.toBase58()).future);
-      }
-    }
-  }
-
-  Future<void> deauthorize() async {
-    final authToken = ref.read(environmentProvider).authToken;
-    if (authToken == null) return;
-
-    final session = await _getSession();
-    final client = await session.start();
-
-    await client.deauthorize(authToken: authToken);
-    await session.close();
   }
 
   Future<bool> mint(String? candyMachineAddress) async {
     if (candyMachineAddress == null) {
       return false;
     }
-    final String? encodedNftTransaction = await ref
-        .read(candyMachineRepositoryProvider)
-        .constructNftTransaction(candyMachineAddress);
+    final minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
+    if (minterAddress == null) {
+      return false;
+    }
+    final String? encodedNftTransaction =
+        await ref.read(transactionRepositoryProvider).mintOneTransaction(
+              candyMachineAddress: candyMachineAddress,
+              minterAddress: minterAddress,
+            );
     if (encodedNftTransaction == null) {
       return false;
     }
@@ -202,12 +207,14 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> list({
+    required String sellerAddress,
     required String mintAccount,
     required int price,
     String printReceipt = 'false',
   }) async {
     final String? encodedTransaction =
-        await ref.read(auctionHouseRepositoryProvider).listItem(
+        await ref.read(transactionRepositoryProvider).listTransaction(
+              sellerAddress: sellerAddress,
               mintAccount: mintAccount,
               price: price,
               printReceipt: printReceipt,
@@ -219,10 +226,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> delist({
-    required String mint,
+    required String nftAddress,
   }) async {
-    final String? encodedTransaction =
-        await ref.read(auctionHouseRepositoryProvider).delistItem(mint: mint);
+    final String? encodedTransaction = await ref
+        .read(transactionRepositoryProvider)
+        .cancelListingTransaction(nftAddress: nftAddress);
     if (encodedTransaction == null) {
       return false;
     }
@@ -235,7 +243,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
     }
     final List<String> encodedTransactions =
-        await ref.read(auctionHouseRepositoryProvider).buyMultipleItems(query);
+        await ref.read(transactionRepositoryProvider).buyMultipleItems(query);
     if (encodedTransactions.isEmpty) {
       return false;
     }
@@ -250,16 +258,25 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return decodedTX.resign(signature);
   }
 
-  Future<bool> useMint({required String nftAddress}) async {
+  Future<bool> useMint({
+    required String nftAddress,
+    required String ownerAddress,
+  }) async {
     final String transaction = await ref
-        .read(candyMachineRepositoryProvider)
-        .useComicIssueNftTransaction(nftAddress);
+        .read(transactionRepositoryProvider)
+        .useComicIssueNftTransaction(
+          nftAddress: nftAddress,
+          ownerAddress: ownerAddress,
+        );
     return await _signAndSendTransactions([transaction]);
   }
 
   Future<bool> _signAndSendTransactions(
       List<String> encodedTransactions) async {
     final session = await _getSession();
+    if (session == null) {
+      throw Exception(missingWalletAppText);
+    }
     final client = await session.start();
 
     final signature = _getSignature();
@@ -317,8 +334,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   Signature? _getSignature() {
     final envState = ref.read(environmentProvider);
     return envState.signature != null && envState.publicKey != null
-        ? Signature(envState.signature?.codeUnits ?? [],
-            publicKey: envState.publicKey!)
+        ? Signature(
+            envState.signature?.codeUnits ?? [],
+            publicKey: envState.publicKey!,
+          )
         : null;
   }
 
@@ -327,11 +346,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required Ed25519HDPublicKey signer,
     required String overrideAuthToken,
     required String apiUrl,
+    required String jwtToken,
   }) async {
     if (await _doReauthorize(client, overrideAuthToken)) {
       final message = await ref.read(authRepositoryProvider).getOneTimePassword(
             address: signer.toBase58(),
             apiUrl: apiUrl,
+            jwtToken: jwtToken,
           );
       if (message is ApiError) {
         return message.message;
@@ -372,17 +393,40 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       cluster: ref.read(environmentProvider).solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
+    final wallets = ref.read(environmentProvider).wallets ?? [];
+    WalletData? currentWalletData;
+    for (int i = 0; i < wallets.length; ++i) {
+      final current = wallets[i]
+          [(ref.read(environmentProvider).publicKey?.toBase58() ?? '')];
+      if (current != null) {
+        currentWalletData = current;
+        break;
+      }
+    }
+
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result?.authToken,
+            wallets: [
+              ...(wallets),
+              {
+                ref.read(environmentProvider).publicKey?.toBase58() ?? '':
+                    WalletData(
+                  authToken: result?.authToken ?? '',
+                  signature: currentWalletData?.signature ?? '',
+                )
+              },
+            ],
           ),
         );
     return result != null;
   }
 
-  Future<LocalAssociationScenario> _getSession() async {
+  Future<LocalAssociationScenario?> _getSession() async {
     final session = await LocalAssociationScenario.create();
+
     session.startActivityForResult(null).ignore();
+
     return session;
   }
 }

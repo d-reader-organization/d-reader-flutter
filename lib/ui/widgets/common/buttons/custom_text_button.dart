@@ -5,7 +5,7 @@ class CustomTextButton extends StatelessWidget {
   final Widget child;
   final Color backgroundColor;
   final Color textColor;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Size size;
   final double fontSize;
   final bool isLoading;
@@ -16,7 +16,7 @@ class CustomTextButton extends StatelessWidget {
   const CustomTextButton({
     Key? key,
     required this.child,
-    required this.onPressed,
+    this.onPressed,
     this.backgroundColor = ColorPalette.dReaderYellow100,
     this.textColor = ColorPalette.appBackgroundColor,
     this.size = const Size(120, 27),

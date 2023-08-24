@@ -1,13 +1,16 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
-import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
-import 'package:d_reader_flutter/core/providers/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository_impl.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'comic_issue_provider.g.dart';
 
 final comicIssueRepository = Provider<ComicIssueRepositoryImpl>(
   (ref) {
@@ -17,8 +20,24 @@ final comicIssueRepository = Provider<ComicIssueRepositoryImpl>(
   },
 );
 
-final comicIssuesProvider = FutureProvider.autoDispose
-    .family<List<ComicIssueModel>, String?>((ref, queryString) async {
+final comicIssuesProvider =
+    FutureProvider.family<List<ComicIssueModel>, String?>(
+        (ref, queryString) async {
+  Timer? timer;
+
+  ref.onDispose(() {
+    timer?.cancel();
+  });
+  ref.onCancel(() {
+    timer = Timer(const Duration(seconds: 30), () {
+      ref.invalidateSelf();
+    });
+  });
+
+  ref.onResume(() {
+    timer?.cancel();
+  });
+
   return ref.read(comicIssueRepository).getComicIssues(
         queryString: queryString ??
             appendDefaultQuery(
@@ -67,11 +86,10 @@ final paginatedIssuesProvider = StateNotifierProvider.family<
   )..init();
 });
 
-final ownedIssuesProvider =
-    FutureProvider.autoDispose.family<List<OwnedComicIssue>, OwnedIssuesArgs>(
-  (ref, arg) {
-    return ref
-        .read(comicIssueRepository)
-        .getOwnedIssues(walletAddress: arg.walletAddress, query: arg.query);
-  },
-);
+@riverpod
+Future<List<OwnedComicIssue>> ownedIssues(Ref ref,
+    {required int userId, required String query}) {
+  return ref
+      .read(comicIssueRepository)
+      .getOwnedIssues(id: userId, query: query);
+}

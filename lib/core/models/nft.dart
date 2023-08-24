@@ -8,7 +8,7 @@ class NftModel {
       name,
       description,
       rarity,
-      owner;
+      ownerAddress;
   final double royalties;
   final bool isUsed, isSigned, isListed;
   final int comicIssueId;
@@ -20,7 +20,7 @@ class NftModel {
     required this.image,
     required this.name,
     required this.description,
-    required this.owner,
+    required this.ownerAddress,
     required this.royalties,
     required this.isUsed,
     required this.isSigned,
@@ -47,7 +47,7 @@ class NftModel {
       image: json['image'],
       name: json['name'],
       description: json['description'],
-      owner: json['owner'],
+      ownerAddress: json['ownerAddress'],
       royalties: json['royalties'] is int
           ? json['royalties'].toDouble()
           : json['royalties'],

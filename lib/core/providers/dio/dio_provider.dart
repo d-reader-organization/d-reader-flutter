@@ -1,10 +1,12 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:dio/dio.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'dio_provider.g.dart';
 
-final dioProvider = Provider<Dio>((ref) {
+@Riverpod(keepAlive: true)
+Dio dio(DioRef ref) {
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: ref.watch(environmentProvider).apiUrl,
@@ -20,7 +22,7 @@ final dioProvider = Provider<Dio>((ref) {
                 ref.watch(environmentProvider).jwtToken;
             return handler.next(options);
           },
-          onError: (DioError e, handler) async {
+          onError: (DioException e, handler) async {
             // if (e.response?.statusCode == 401) {
             //   // If a 401 response is received, refresh the access token
             //   String? newAccessToken = await dio
@@ -40,17 +42,17 @@ final dioProvider = Provider<Dio>((ref) {
             // temp production fix
             if (e.response?.statusCode == 401 ||
                 (e.response?.statusCode == 404 &&
-                    e.response?.requestOptions.path == '/wallet/get/me')) {
+                    e.response?.requestOptions.path == '/user/get/me')) {
               await LocalStore.instance.clear();
               ref.invalidate(environmentProvider);
               return;
             }
             Sentry.captureException(e);
-            Sentry.captureMessage(
-                e.response?.data['message'] ?? e.response?.data.toString());
+            Sentry.captureMessage(e.response?.data['message'].toString() ??
+                e.response?.data.toString());
             return handler.next(e);
           },
         ),
       ],
     );
-});
+}

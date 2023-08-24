@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/core/models/stateless_cover.dart';
 
 class ComicIssueModel {
   final int id, number, supply;
-  final String cover, description, slug, title;
+  final String cover, description, slug, title, comicSlug, creatorAddress;
   final bool isPopular, isFree;
   final String? candyMachineAddress;
   final double sellerFee;
@@ -41,6 +41,8 @@ class ComicIssueModel {
     this.collaborators,
     this.statelessCovers,
     this.statefulCovers,
+    required this.comicSlug,
+    required this.creatorAddress,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -104,6 +106,8 @@ class ComicIssueModel {
               ),
             )
           : [],
+      comicSlug: json['comicSlug'],
+      creatorAddress: json['creatorAddress'],
     );
   }
 }

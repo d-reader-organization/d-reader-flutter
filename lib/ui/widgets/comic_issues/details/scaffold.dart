@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
@@ -374,6 +375,12 @@ class BottomNavigation extends ConsumerWidget {
                         isLoading: ref.watch(globalStateProvider).isLoading,
                         onPressed: ref.read(selectedItemsProvider).isNotEmpty
                             ? () async {
+                                final activeWallet =
+                                    ref.read(environmentProvider).publicKey;
+                                if (activeWallet == null) {
+                                  throw Exception(
+                                      'There is no wallet selected');
+                                }
                                 List<BuyNftInput> selectedNftsInput = ref
                                     .read(selectedItemsProvider)
                                     .map(
@@ -381,8 +388,7 @@ class BottomNavigation extends ConsumerWidget {
                                         mintAccount: e.nftAddress,
                                         price: e.price,
                                         sellerAddress: e.seller.address,
-                                        buyerAddress:
-                                            '', // TODO: active (selected) wallet
+                                        buyerAddress: activeWallet.toBase58(),
                                       ),
                                     )
                                     .toList();

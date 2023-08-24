@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
@@ -21,25 +23,31 @@ class ListedItemRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedItems = ref.watch(selectedItemsProvider);
-    // final myWallet = ref.watch(myWalletProvider); TODO getUser
+    final myWallets = ref.watch(
+      userWalletsProvider(
+        id: ref.read(environmentProvider).user?.id,
+      ),
+    );
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       selected: selectedItems.contains(listing),
       selectedColor: ColorPalette.dReaderYellow100,
       selectedTileColor: ColorPalette.boxBackground300,
       splashColor: Colors.transparent,
-      onTap: null,
-      // onTap: myWallet.value?.address != listing.seller.address
-      //     ? () {
-      //         List<ListingModel> items = [...selectedItems];
-      //         if (selectedItems.contains(listing)) {
-      //           items.remove(listing);
-      //         } else {
-      //           items.add(listing);
-      //         }
-      //         ref.read(selectedItemsProvider.notifier).state = items;
-      //       }
-      //     : null,
+      onTap: myWallets.value != null &&
+              myWallets.value!.isNotEmpty &&
+              !myWallets.value!
+                  .any((element) => element.address == listing.seller.address)
+          ? () {
+              List<ListingModel> items = [...selectedItems];
+              if (selectedItems.contains(listing)) {
+                items.remove(listing);
+              } else {
+                items.add(listing);
+              }
+              ref.read(selectedItemsProvider.notifier).state = items;
+            }
+          : null,
       leading: CircleAvatar(
         maxRadius: 24,
         backgroundImage:

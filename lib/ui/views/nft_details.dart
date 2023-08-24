@@ -239,8 +239,7 @@ class Body extends StatelessWidget {
                         final isSuccessful =
                             await ref.read(solanaProvider.notifier).useMint(
                                   nftAddress: nft.address,
-                                  ownerAddress: nft
-                                      .ownerAddress, // TODO: we have to make sure that we sign this action with the correct wallet (auth_token)
+                                  ownerAddress: nft.ownerAddress,
                                 );
                         if (context.mounted) {
                           _handleNftOpen(context, isSuccessful);

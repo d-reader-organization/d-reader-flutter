@@ -2,6 +2,7 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
+import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
 class EnvironmentState {
@@ -48,6 +49,30 @@ class EnvironmentState {
     );
   }
 
+  EnvironmentState copyWithNullables({
+    UserModel? user,
+    required String apiUrl,
+    String? authToken,
+    String? jwtToken,
+    String? refreshToken,
+    required String solanaCluster,
+    List<int>? signature,
+    Ed25519HDPublicKey? publicKey,
+    Map<String, WalletData>? wallets,
+  }) {
+    return EnvironmentState(
+      user: user,
+      apiUrl: apiUrl,
+      authToken: authToken,
+      jwtToken: jwtToken,
+      refreshToken: refreshToken,
+      solanaCluster: solanaCluster,
+      publicKey: publicKey,
+      signature: signature != null ? String.fromCharCodes(signature) : null,
+      wallets: wallets,
+    );
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['apiUrl'] = apiUrl;
@@ -85,16 +110,18 @@ class EnvironmentStateUpdateInput {
   factory EnvironmentStateUpdateInput.fromDynamic(dynamic data) {
     final dynamic json = jsonDecode(data);
     final String? signature = json['signature'];
-
+    Map<String, WalletData>? wallets = walletsMapFromDynamic(json);
     return EnvironmentStateUpdateInput(
       apiUrl: json['apiUrl'],
       authToken: json['authToken'],
       jwtToken: json['jwtToken'],
       refreshToken: json['refreshToken'],
-      publicKey: Ed25519HDPublicKey.fromBase58(json['publicKey']),
+      publicKey: json['publicKey'] != null
+          ? Ed25519HDPublicKey.fromBase58(json['publicKey'])
+          : null,
       solanaCluster: json['solanaCluster'],
       signature: signature?.codeUnits,
-      wallets: json['wallets'] != null ? jsonDecode(json['wallets']) : null,
+      wallets: wallets,
       user: json['user'] != null
           ? UserModel.fromJson(
               jsonDecode(

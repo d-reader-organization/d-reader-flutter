@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart';
 
@@ -46,17 +47,7 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
     if (localStoreData != null) {
       var networkData = jsonDecode(localStoreData);
       final String? signature = networkData['signature'];
-      Map<String, dynamic>? storedWallets = networkData['wallets'] != null
-          ? jsonDecode(networkData['wallets'])
-          : null;
-      Map<String, WalletData>? wallets = storedWallets?.map(
-        (key, value) => MapEntry(
-          key,
-          WalletData.fromJson(
-            value,
-          ),
-        ),
-      );
+      Map<String, WalletData>? wallets = walletsMapFromDynamic(networkData);
       state = state.copyWith(
         apiUrl: networkData['apiUrl'],
         authToken: networkData['authToken'],
@@ -110,6 +101,17 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
 
   void updateLastSelectedNetwork(String selectedNetwork) {
     LocalStore.instance.put('last-network', selectedNetwork);
+  }
+
+  void updateForChangeNetwork({
+    required String cluster,
+    required String apiUrl,
+  }) {
+    state = state.copyWithNullables(
+      apiUrl: apiUrl,
+      solanaCluster: cluster,
+    );
+    putStateIntoLocalStore();
   }
 
   Future<void> clearDataFromLocalStore(String cluster) async {

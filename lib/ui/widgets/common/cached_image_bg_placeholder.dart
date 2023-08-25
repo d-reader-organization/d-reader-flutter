@@ -30,6 +30,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: imageUrl,
+      key: ValueKey(imageUrl),
       imageBuilder: (context, imageProvider) => Container(
         height: height,
         width: width,

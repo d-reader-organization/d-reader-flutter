@@ -1,9 +1,10 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/intro/initial.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/network_list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
@@ -29,6 +30,67 @@ class ChangeNetworkView extends ConsumerWidget {
     );
   }
 
+  _handleNetworkChange({
+    required BuildContext context,
+    required WidgetRef ref,
+    required String cluster,
+    required String dialogText,
+  }) async {
+    final isConfirmed = await _showDialog(
+          context: context,
+          subtitle: dialogText,
+          cluster: cluster,
+        ) ??
+        false;
+    if (isConfirmed) {
+      final dynamic localStoreData = ref.read(
+        localStoreNetworkDataProvider(cluster),
+      );
+      final bool isDevnetCluster = cluster == SolanaCluster.devnet.value;
+      ref.invalidate(environmentProvider);
+      final envNotifier = ref.read(environmentProvider.notifier);
+      envNotifier.updateForChangeNetwork(
+        cluster: cluster,
+        apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
+      );
+      if (localStoreData != null) {
+        bool isSuccessful =
+            ref.read(environmentProvider.notifier).updateEnvironmentState(
+                  EnvironmentStateUpdateInput.fromDynamic(
+                    localStoreData,
+                  ),
+                );
+        if (context.mounted) {
+          final snackbarText = isSuccessful
+              ? 'Network changed successfully'
+              : 'Network change failed.';
+          if (!isSuccessful) {
+            ref.read(environmentProvider.notifier).updateEnvironmentState(
+                  EnvironmentStateUpdateInput(
+                    solanaCluster: isDevnetCluster
+                        ? SolanaCluster.mainnet.value
+                        : SolanaCluster.devnet.value,
+                  ),
+                );
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(snackbarText),
+              backgroundColor: isSuccessful
+                  ? ColorPalette.dReaderGreen
+                  : ColorPalette.dReaderRed,
+            ),
+          );
+        }
+      } else {
+        ref.invalidate(scaffoldProvider);
+        if (context.mounted) {
+          nextScreenCloseOthers(context, const InitialIntroScreen());
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String selectedCluster = ref.watch(environmentProvider).solanaCluster;
@@ -40,58 +102,13 @@ class ChangeNetworkView extends ConsumerWidget {
             isSelected: selectedCluster == SolanaCluster.mainnet.value,
             onTap: () async {
               if (selectedCluster != SolanaCluster.mainnet.value) {
-                final isConfirmed = await _showDialog(
-                      context: context,
-                      subtitle:
-                          'Make sure your mobile wallet app is set to Mainnet before proceeding!',
-                      cluster: 'Mainnet',
-                    ) ??
-                    false;
-                if (isConfirmed) {
-                  final dynamic localStoreData = ref.read(
-                    localStoreNetworkDataProvider(SolanaCluster.mainnet.value),
-                  );
-                  bool isSuccessful = false;
-                  if (localStoreData != null) {
-                    isSuccessful = ref
-                        .read(environmentProvider.notifier)
-                        .updateEnvironmentState(
-                          EnvironmentStateUpdateInput.fromDynamic(
-                            localStoreData,
-                          ),
-                        );
-                  } else {
-                    isSuccessful = await ref
-                            .read(solanaProvider.notifier)
-                            .authorizeAndSignMessage(
-                                SolanaCluster.mainnet.value) ==
-                        'OK';
-                  }
-                  if (context.mounted) {
-                    final snackbarText = isSuccessful
-                        ? 'Network changed successfully'
-                        : 'Network change failed.';
-                    if (!isSuccessful) {
-                      ref
-                          .read(environmentProvider.notifier)
-                          .updateEnvironmentState(
-                            EnvironmentStateUpdateInput(
-                              solanaCluster: SolanaCluster.devnet.value,
-                            ),
-                          );
-                    } else {
-                      ref.invalidate(myUserProvider);
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(snackbarText),
-                        backgroundColor: isSuccessful
-                            ? ColorPalette.dReaderGreen
-                            : ColorPalette.dReaderRed,
-                      ),
-                    );
-                  }
-                }
+                await _handleNetworkChange(
+                  context: context,
+                  ref: ref,
+                  cluster: SolanaCluster.mainnet.value,
+                  dialogText:
+                      'Make sure your mobile wallet app is set to Mainnet before proceeding!',
+                );
               }
             },
           ),
@@ -103,59 +120,13 @@ class ChangeNetworkView extends ConsumerWidget {
             isSelected: selectedCluster == SolanaCluster.devnet.value,
             onTap: () async {
               if (selectedCluster != SolanaCluster.devnet.value) {
-                final isConfirmed = await _showDialog(
-                      context: context,
-                      subtitle:
-                          'Devnet is only used for testing purposes and assets don\'t have any value. Make sure your mobile wallet app is set to Devnet before proceeding!',
-                      cluster: 'Devnet',
-                    ) ??
-                    false;
-                if (isConfirmed) {
-                  final dynamic localStoreData = ref.read(
-                    localStoreNetworkDataProvider(SolanaCluster.devnet.value),
-                  );
-                  bool isSuccessful = false;
-                  if (localStoreData != null) {
-                    isSuccessful = ref
-                        .read(environmentProvider.notifier)
-                        .updateEnvironmentState(
-                          EnvironmentStateUpdateInput.fromDynamic(
-                            localStoreData,
-                          ),
-                        );
-                  } else {
-                    isSuccessful = await ref
-                            .read(solanaProvider.notifier)
-                            .authorizeAndSignMessage(
-                              SolanaCluster.devnet.value,
-                            ) ==
-                        'OK';
-                  }
-                  if (context.mounted) {
-                    final snackbarText = isSuccessful
-                        ? 'Network changed successfully'
-                        : 'Network change failed.';
-                    if (!isSuccessful) {
-                      ref
-                          .read(environmentProvider.notifier)
-                          .updateEnvironmentState(
-                            EnvironmentStateUpdateInput(
-                              solanaCluster: SolanaCluster.mainnet.value,
-                            ),
-                          );
-                    } else {
-                      ref.invalidate(myUserProvider);
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(snackbarText),
-                        backgroundColor: isSuccessful
-                            ? ColorPalette.dReaderGreen
-                            : ColorPalette.dReaderRed,
-                      ),
-                    );
-                  }
-                }
+                await _handleNetworkChange(
+                  context: context,
+                  ref: ref,
+                  cluster: SolanaCluster.devnet.value,
+                  dialogText:
+                      'Devnet is only used for testing purposes and assets don\'t have any value. Make sure your mobile wallet app is set to Devnet before proceeding!',
+                );
               }
             },
           ),

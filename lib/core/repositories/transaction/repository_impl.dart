@@ -78,12 +78,18 @@ class TransactionRepositoryImpl implements TransactionRepository {
     required String minterAddress,
     String? label,
   }) async {
-    return await client
-        .get(
-            '/transaction/mint-one?candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress&label=$label')
-        .then(
-          (value) => value.data,
-        );
+    try {
+      return await client
+          .get(
+              '/transaction/mint-one?candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress&label=$label')
+          .then(
+            (value) => value.data,
+          );
+    } catch (error) {
+      throw Exception(error is DioException
+          ? error.response?.data?.toString()
+          : error.toString());
+    }
   }
 
   @override

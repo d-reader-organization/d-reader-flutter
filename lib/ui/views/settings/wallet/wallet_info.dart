@@ -139,9 +139,9 @@ class WalletInfoScreen extends ConsumerWidget {
                 textStyle: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFFEBEDF3),
+                  color: ColorPalette.greyscale50,
                 ),
-                borderColor: const Color(0xFFEBEDF3),
+                borderColor: ColorPalette.greyscale50,
                 size: const Size(
                   0,
                   50,

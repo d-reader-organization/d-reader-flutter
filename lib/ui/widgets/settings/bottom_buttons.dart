@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,8 +29,8 @@ class SettingsButtonsBottom extends StatelessWidget {
               onPressed: onCancel,
               borderRadius: BorderRadius.circular(8),
               backgroundColor: Colors.transparent,
-              textColor: const Color(0xFFEBEDF3),
-              borderColor: const Color(0xFFEBEDF3),
+              textColor: ColorPalette.greyscale50,
+              borderColor: ColorPalette.greyscale50,
               child: Text(cancelText),
             ),
           ),

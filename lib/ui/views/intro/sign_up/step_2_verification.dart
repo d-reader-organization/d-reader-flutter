@@ -21,105 +21,98 @@ class SignUpStep2Verification extends StatelessWidget {
         horizontal: 8,
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            flex: 6,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 16,
+          const SizedBox(),
+          Column(
+            children: [
+              const SizedBox(
+                height: 16,
+              ),
+              SvgPicture.asset(
+                'assets/icons/envelope.svg',
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Check your mail',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
                 ),
-                SvgPicture.asset(
-                  'assets/icons/envelope.svg',
-                  colorFilter:
-                      const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'follow the simple instructions within the email to verify and become eligible for rewards',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: ColorPalette.greyscale100,
                 ),
-                const SizedBox(
-                  height: 16,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              RoundedButton(
+                text: 'Got it',
+                padding: 0,
+                textStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                  letterSpacing: .2,
                 ),
-                const Text(
-                  'Check your mail',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text(
-                  'Follow the simple instructions within the email to be eligible for rewards',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: ColorPalette.greyscale100,
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                RoundedButton(
-                  text: 'Got it',
-                  padding: 0,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    letterSpacing: .2,
-                  ),
-                  onPressed: handleNext,
-                ),
-              ],
-            ),
+                onPressed: handleNext,
+              ),
+            ],
           ),
-          const Spacer(
-            flex: 3,
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                const Text(
-                  "Didn't get the email?\nCheck your spam folder before resending",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: ColorPalette.greyscale200,
-                  ),
+          Column(
+            children: [
+              const Text(
+                "Didn't get the email?\nCheck your spam folder before resending",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: ColorPalette.greyscale200,
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return GestureDetector(
-                      onTap: () async {
-                        await ref.read(requestEmailVerificationProvider.future);
-                        if (context.mounted) {
-                          showSnackBar(
-                            context: context,
-                            text: 'Verification email has been resent.',
-                            milisecondsDuration: 2000,
-                            backgroundColor: ColorPalette.dReaderGreen,
-                          );
-                        }
-                      },
-                      child: const Text(
-                        'Resend email confirmation link',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: ColorPalette.dReaderYellow100,
-                        ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  return GestureDetector(
+                    onTap: () async {
+                      await ref.read(requestEmailVerificationProvider.future);
+                      if (context.mounted) {
+                        showSnackBar(
+                          context: context,
+                          text: 'Verification email has been resent.',
+                          milisecondsDuration: 2000,
+                          backgroundColor: ColorPalette.dReaderGreen,
+                        );
+                      }
+                    },
+                    child: const Text(
+                      'Resend email confirmation link',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.dReaderYellow100,
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

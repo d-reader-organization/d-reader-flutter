@@ -159,7 +159,7 @@ class WalletListScreen extends ConsumerWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$ SOL',
+                                            '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
                                             style: bottomTextStyle,
                                           ),
                                         ],

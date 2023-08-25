@@ -11,8 +11,8 @@ import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
+import 'package:d_reader_flutter/ui/views/intro/initial.dart';
 import 'package:d_reader_flutter/ui/views/settings/reset_password.dart';
-import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
@@ -402,7 +402,8 @@ class ProfileView extends HookConsumerWidget {
                       if (result != null && result) {
                         await ref.read(logoutProvider.future);
                         if (context.mounted) {
-                          nextScreenCloseOthers(context, const WelcomeView());
+                          nextScreenCloseOthers(
+                              context, const InitialIntroScreen());
                         }
                       }
                     },

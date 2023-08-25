@@ -70,144 +70,149 @@ class SignUpStep3 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 8,
-      ),
-      children: [
-        SvgPicture.asset(
-          '${Config.introAssetsPath}/splash_2.svg',
-          height: 320,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: ListView(
+        padding: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 8,
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 8.0,
-            horizontal: 32,
+        children: [
+          SvgPicture.asset(
+            '${Config.introAssetsPath}/splash_2.svg',
+            height: 320,
           ),
-          child: Text(
-            'Connect wallet',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+          const Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 32,
             ),
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        const Text(
-          'Connect with your wallet to store digital comics & other collectibles',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 12,
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: ColorPalette.boxBackground300,
-              ),
-              borderRadius: BorderRadius.circular(
-                8,
+            child: Text(
+              'Connect wallet',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SvgPicture.asset(
-                  '${Config.settingsAssetsPath}/light/wallet.svg',
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                const Text(
-                  'No wallet? Get it here',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
           ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: const Text(
-            'Why do I need a wallet?',
+          const SizedBox(
+            height: 16,
+          ),
+          const Text(
+            'Connect with your wallet to store digital comics & other collectibles',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: ColorPalette.dReaderYellow100,
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
           ),
-        ),
-        const SizedBox(
-          height: 48,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: RoundedButton(
-                text: 'Skip',
-                backgroundColor: Colors.transparent,
-                textColor: Colors.white,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+          const SizedBox(
+            height: 16,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 12,
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: ColorPalette.boxBackground300,
                 ),
-                borderColor: ColorPalette.boxBackground400,
-                size: const Size(
-                  0,
-                  50,
+                borderRadius: BorderRadius.circular(
+                  8,
                 ),
-                onPressed: () {
-                  nextScreenPush(
-                    context,
-                    const DReaderScaffold(),
-                  );
-                },
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    '${Config.settingsAssetsPath}/light/wallet.svg',
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  const Text(
+                    'No wallet? Get it here',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: RoundedButton(
-                text: 'Connect',
-                isLoading: ref.watch(globalStateProvider).isLoading,
-                backgroundColor: ColorPalette.dReaderYellow100,
-                textColor: Colors.black,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-                size: const Size(
-                  0,
-                  50,
-                ),
-                onPressed: () async {
-                  await _handleConnectWallet(ref, context);
-                },
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: const Text(
+              'Why do I need a wallet?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: ColorPalette.dReaderYellow100,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
             ),
-          ],
-        ),
-      ],
+          ),
+          const SizedBox(
+            height: 48,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: RoundedButton(
+                  text: 'Skip',
+                  backgroundColor: Colors.transparent,
+                  textColor: Colors.white,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  borderColor: ColorPalette.boxBackground400,
+                  size: const Size(
+                    0,
+                    50,
+                  ),
+                  onPressed: () {
+                    nextScreenPush(
+                      context,
+                      const DReaderScaffold(),
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: RoundedButton(
+                  text: 'Connect',
+                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  backgroundColor: ColorPalette.dReaderYellow100,
+                  textColor: Colors.black,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  size: const Size(
+                    0,
+                    50,
+                  ),
+                  onPressed: () async {
+                    await _handleConnectWallet(ref, context);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -42,6 +42,52 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     super.dispose();
   }
 
+  _handleLogin() async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    final response = await ref.read(
+      signInFutureProvider(
+        nameOrEmail: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      ).future,
+    );
+
+    if (context.mounted) {
+      if (response is String) {
+        globalNotifier.update(
+          (state) => state.copyWith(
+            isLoading: false,
+          ),
+        );
+        return showSnackBar(
+          context: context,
+          text: response,
+          backgroundColor: ColorPalette.dReaderRed,
+          milisecondsDuration: 1500,
+        );
+      }
+      final user = await ref.read(myUserProvider.future);
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      ref.read(environmentProvider.notifier).updateEnvironmentState(
+            EnvironmentStateUpdateInput(
+              user: user,
+            ),
+          );
+
+      if (context.mounted) {
+        nextScreenReplace(context, const DReaderScaffold());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,52 +236,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     ),
                     onPressed: () async {
                       if (_signInFormKey.currentState!.validate()) {
-                        final globalNotifier =
-                            ref.read(globalStateProvider.notifier);
-                        globalNotifier.update(
-                          (state) => state.copyWith(
-                            isLoading: true,
-                          ),
-                        );
-                        final response = await ref.read(
-                          signInFutureProvider(
-                            nameOrEmail: _emailController.text.trim(),
-                            password: _passwordController.text.trim(),
-                          ).future,
-                        );
-
-                        if (context.mounted) {
-                          if (response is String) {
-                            globalNotifier.update(
-                              (state) => state.copyWith(
-                                isLoading: false,
-                              ),
-                            );
-                            return showSnackBar(
-                              context: context,
-                              text: response,
-                              backgroundColor: ColorPalette.dReaderRed,
-                              milisecondsDuration: 1500,
-                            );
-                          }
-                          final user = await ref.read(myUserProvider.future);
-                          globalNotifier.update(
-                            (state) => state.copyWith(
-                              isLoading: false,
-                            ),
-                          );
-                          ref
-                              .read(environmentProvider.notifier)
-                              .updateEnvironmentState(
-                                EnvironmentStateUpdateInput(
-                                  user: user,
-                                ),
-                              );
-
-                          if (context.mounted) {
-                            nextScreenReplace(context, const DReaderScaffold());
-                          }
-                        }
+                        await _handleLogin();
                       }
                     },
                   ),

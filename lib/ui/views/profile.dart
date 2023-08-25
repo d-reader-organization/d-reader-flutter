@@ -226,7 +226,8 @@ class ProfileView extends HookConsumerWidget {
                     height: 8,
                   ),
                   ref.read(environmentProvider).solanaCluster ==
-                          SolanaCluster.devnet.value
+                              SolanaCluster.devnet.value &&
+                          ref.read(environmentProvider).publicKey != null
                       ? SettingsCommonListTile(
                           title: 'Airdrop \$SOL',
                           leadingPath:
@@ -488,6 +489,7 @@ class Avatar extends StatelessWidget {
                   radius: 48,
                   backgroundColor: ColorPalette.boxBackground300,
                   child: CachedNetworkImage(
+                    key: ValueKey(user.avatar),
                     imageUrl: user.avatar,
                     imageBuilder: (context, imageProvider) {
                       return Container(

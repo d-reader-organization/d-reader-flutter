@@ -38,6 +38,7 @@ class DiscoverComicCard extends StatelessWidget {
                 opacity: .4,
                 child: comic.logo.isNotEmpty
                     ? CachedNetworkImage(
+                        key: ValueKey(comic.logo),
                         imageUrl: comic.logo,
                       )
                     : null,

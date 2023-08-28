@@ -250,6 +250,7 @@ class WalletListScreen extends ConsumerWidget {
                     : 'Something went wrong',
               );
               if (isConnected) {
+                ref.invalidate(selectedWalletProvider);
                 ref.invalidate(userWalletsProvider);
               }
             }

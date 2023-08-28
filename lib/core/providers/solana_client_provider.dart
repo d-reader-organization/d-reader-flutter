@@ -325,6 +325,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         Sentry.captureException(exception, stackTrace: stackTrace);
       }
     }
+    await session.close();
     return false;
   }
 

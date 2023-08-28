@@ -43,7 +43,8 @@ class ReceiptNft {
 
 // This is same as Seller class
 class ReceiptBuyer {
-  final String? id, avatar, name;
+  final int? id;
+  final String? avatar, name;
   final String address;
 
   ReceiptBuyer({

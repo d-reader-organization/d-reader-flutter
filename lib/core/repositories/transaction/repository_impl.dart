@@ -81,7 +81,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
     try {
       return await client
           .get(
-              '/transaction/mint-one?candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress&label=$label')
+              '/transaction/mint-one?candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress&label=${label ?? 'public'}')
           .then(
             (value) => value.data,
           );

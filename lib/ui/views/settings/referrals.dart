@@ -53,12 +53,12 @@ class ReferralsView extends ConsumerWidget {
             ? ColorPalette.dReaderRed
             : ColorPalette.dReaderGreen,
       );
-      return Future.delayed(
-        const Duration(seconds: 1),
-        () {
-          Navigator.pop(context);
-        },
-      );
+      // return Future.delayed(
+      //   const Duration(seconds: 1),
+      //   () {
+      //     Navigator.pop(context);
+      //   },
+      // );
     }
   }
 

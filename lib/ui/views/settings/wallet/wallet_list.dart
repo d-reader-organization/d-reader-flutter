@@ -159,7 +159,7 @@ class WalletListScreen extends ConsumerWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$ SOL',
+                                            '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
                                             style: bottomTextStyle,
                                           ),
                                         ],
@@ -250,6 +250,7 @@ class WalletListScreen extends ConsumerWidget {
                     : 'Something went wrong',
               );
               if (isConnected) {
+                ref.invalidate(selectedWalletProvider);
                 ref.invalidate(userWalletsProvider);
               }
             }

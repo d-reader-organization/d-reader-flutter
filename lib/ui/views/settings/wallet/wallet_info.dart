@@ -58,7 +58,7 @@ class WalletInfoScreen extends ConsumerWidget {
           ref.watch(chainSubscriptionClientProvider(address)).when(
             data: (data) {
               return Text(
-                '\$ ${formatPriceWithSignificant(data?.lamports ?? 0)} SOL',
+                '${formatPriceWithSignificant(data?.lamports ?? 0)} \$SOL',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,
@@ -84,27 +84,27 @@ class WalletInfoScreen extends ConsumerWidget {
             labelText: 'Name',
             defaultValue: name,
           ),
-          GestureDetector(
-            onTap: () {
-              Clipboard.setData(
-                ClipboardData(
-                  text: address,
-                ),
-              ).then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "Wallet address copied to clipboard",
+          CustomTextField(
+            labelText: 'Address',
+            isReadOnly: true,
+            hintText: formatAddress(address),
+            suffix: GestureDetector(
+              onTap: () async {
+                await Clipboard.setData(
+                  ClipboardData(
+                    text: address,
+                  ),
+                ).then(
+                  (value) => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Wallet address copied to clipboard",
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-            child: CustomTextField(
-              labelText: 'Address',
-              isReadOnly: true,
-              hintText: formatAddress(address),
-              suffix: const Icon(
+                );
+              },
+              child: const Icon(
                 Icons.copy,
                 color: Colors.white,
                 size: 16,
@@ -139,9 +139,9 @@ class WalletInfoScreen extends ConsumerWidget {
                 textStyle: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFFEBEDF3),
+                  color: ColorPalette.greyscale50,
                 ),
-                borderColor: const Color(0xFFEBEDF3),
+                borderColor: ColorPalette.greyscale50,
                 size: const Size(
                   0,
                   50,

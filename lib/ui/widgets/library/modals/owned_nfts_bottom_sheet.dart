@@ -206,8 +206,8 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   borderRadius: BorderRadius.circular(8),
-                  textColor: const Color(0xFFEBEDF3),
-                  borderColor: const Color(0xFFEBEDF3),
+                  textColor: ColorPalette.greyscale50,
+                  borderColor: ColorPalette.greyscale50,
                   backgroundColor: Colors.transparent,
                   padding: const EdgeInsets.only(
                     top: 4,

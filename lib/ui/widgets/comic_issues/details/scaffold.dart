@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
@@ -351,9 +352,19 @@ class BottomNavigation extends ConsumerWidget {
                             final isSuccessful = await ref
                                 .read(solanaProvider.notifier)
                                 .mint(issue.candyMachineAddress);
-                            if (isSuccessful && context.mounted) {
-                              nextScreenPush(
-                                  context, const MintLoadingAnimation());
+                            if (context.mounted) {
+                              if (isSuccessful) {
+                                nextScreenPush(
+                                  context,
+                                  const MintLoadingAnimation(),
+                                );
+                              } else {
+                                showSnackBar(
+                                  context: context,
+                                  text: 'Something went wrong',
+                                  backgroundColor: ColorPalette.dReaderRed,
+                                );
+                              }
                             }
                             ref
                                 .read(globalStateProvider.notifier)

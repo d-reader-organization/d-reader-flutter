@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -47,6 +48,12 @@ Future<dynamic> signUpFuture(
           EnvironmentStateUpdateInput(
             jwtToken: result.accessToken,
             refreshToken: result.refreshToken,
+          ),
+        );
+    final user = await ref.read(userRepositoryProvider).myUser();
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
+          EnvironmentStateUpdateInput(
+            user: user,
           ),
         );
     return true;

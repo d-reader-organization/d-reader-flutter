@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/testhome.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
@@ -140,9 +141,10 @@ class MyApp extends ConsumerWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      home: ref.watch(environmentProvider).jwtToken != null
-          ? const DReaderScaffold()
-          : const WelcomeView(),
+      home: const TestHome(),
+      // home: ref.watch(environmentProvider).jwtToken != null
+      //     ? const DReaderScaffold()
+      //     : const WelcomeView(),
     );
   }
 }

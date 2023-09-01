@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -138,6 +139,14 @@ class SubmitButton extends ConsumerWidget {
               if (context.mounted) {
                 ref.invalidate(nftProvider);
                 Navigator.pop(context);
+                showSnackBar(
+                  context: context,
+                  text:
+                      response ? 'Listed successfully' : 'Failed to list item',
+                  backgroundColor: response
+                      ? ColorPalette.dReaderGreen
+                      : ColorPalette.dReaderRed,
+                );
               }
             }
           : null,

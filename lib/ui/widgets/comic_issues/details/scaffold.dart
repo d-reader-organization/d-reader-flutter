@@ -336,6 +336,31 @@ class BottomNavigation extends ConsumerWidget {
     required this.issue,
   });
 
+  _handleMint(BuildContext context, WidgetRef ref) async {
+    try {
+      final mintResult = await ref
+          .read(solanaProvider.notifier)
+          .mint(issue.candyMachineAddress);
+      if (context.mounted) {
+        if (mintResult is bool && mintResult) {
+          nextScreenPush(
+            context,
+            const MintLoadingAnimation(),
+          );
+        } else {
+          showSnackBar(
+            context: context,
+            text: mintResult is String ? mintResult : 'Something went wrong',
+            backgroundColor: ColorPalette.dReaderRed,
+          );
+        }
+      }
+      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+    } catch (error) {
+      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return issue.isFree
@@ -348,34 +373,7 @@ class BottomNavigation extends ConsumerWidget {
                       child: TransactionButton(
                         isLoading: ref.watch(globalStateProvider).isLoading,
                         onPressed: () async {
-                          try {
-                            final isSuccessful = await ref
-                                .read(solanaProvider.notifier)
-                                .mint(issue.candyMachineAddress);
-                            if (context.mounted) {
-                              if (isSuccessful) {
-                                nextScreenPush(
-                                  context,
-                                  const MintLoadingAnimation(),
-                                );
-                              } else {
-                                showSnackBar(
-                                  context: context,
-                                  text: 'Something went wrong',
-                                  backgroundColor: ColorPalette.dReaderRed,
-                                );
-                              }
-                            }
-                            ref
-                                .read(globalStateProvider.notifier)
-                                .state
-                                .copyWith(isLoading: false);
-                          } catch (error) {
-                            ref
-                                .read(globalStateProvider.notifier)
-                                .state
-                                .copyWith(isLoading: false);
-                          }
+                          await _handleMint(context, ref);
                         },
                         text: 'MINT',
                         price: issue.stats?.price,

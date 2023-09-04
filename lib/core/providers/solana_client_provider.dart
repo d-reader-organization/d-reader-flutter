@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -190,7 +191,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
     final minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
     if (minterAddress == null) {
-      return 'Please select wallet';
+      return 'Select/Connet wallet first';
     }
     final String? encodedNftTransaction =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(
@@ -363,7 +364,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           messages: [messageToBeSigned],
           addresses: [addresses],
         );
-        return result.signedPayloads;
+        return result.signedMessages;
       } catch (exception, stackTrace) {
         Sentry.captureException(exception, stackTrace: stackTrace);
       }
@@ -417,8 +418,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<LocalAssociationScenario?> _getSession() async {
-    final session = await LocalAssociationScenario.create();
+    final bool isWalletAvailable = await LocalAssociationScenario.isAvailable();
 
+    if (!isWalletAvailable) {
+      throw NoWalletFoundException(missingWalletAppText);
+    }
+
+    final session = await LocalAssociationScenario.create();
     session.startActivityForResult(null).ignore();
 
     return session;

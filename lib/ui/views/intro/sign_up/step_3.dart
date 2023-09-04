@@ -1,11 +1,12 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
-import 'package:d_reader_flutter/ui/widgets/common/install_wallet_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,19 +52,8 @@ class SignUpStep3 extends ConsumerWidget {
           isLoading: false,
         ),
       );
-      if (context.mounted) {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (context) {
-            return DraggableScrollableSheet(
-              expand: false,
-              builder: (context, scrollController) {
-                return const InstallWalletBottomSheet();
-              },
-            );
-          },
-        );
+      if (context.mounted && error is NoWalletFoundException) {
+        return triggerInstallWalletBottomSheet(context);
       }
     }
   }

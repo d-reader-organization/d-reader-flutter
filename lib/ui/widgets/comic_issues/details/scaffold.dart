@@ -1,6 +1,8 @@
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
@@ -358,6 +360,9 @@ class BottomNavigation extends ConsumerWidget {
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
     } catch (error) {
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      if (context.mounted && error is NoWalletFoundException) {
+        triggerInstallWalletBottomSheet(context);
+      }
     }
   }
 

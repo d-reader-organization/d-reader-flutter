@@ -121,13 +121,20 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       apiUrl: apiUrl,
       jwtToken: jwtToken,
     );
-    if (signMessageResult is String || signMessageResult.isEmpty) {
+    if (signMessageResult is String || signMessageResult == null) {
       await session.close();
       return signMessageResult is String
           ? signMessageResult
           : 'Failed to sign message.';
     }
+
+    if (signMessageResult is! SignedMessage) {
+      return 'No signed message';
+    }
+
     final currentWallets = ref.read(environmentProvider).wallets;
+    final signedMessage =
+        signMessageResult.signatures.first.toList().sublist(0, 64);
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
@@ -135,7 +142,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         solanaCluster: cluster,
         apiUrl: apiUrl,
         signature: Signature(
-          signMessageResult.first.sublist(0, 64),
+          signedMessage,
           publicKey: publicKey,
         ).bytes,
         wallets: {
@@ -143,19 +150,18 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           publicKey.toBase58(): WalletData(
             authToken: result?.authToken ?? '',
             signature: Signature(
-              signMessageResult.first.sublist(0, 64),
+              signedMessage,
               publicKey: publicKey,
             ).toBase58(),
           ),
         },
       ),
     );
-
     await Future.wait(
       [
         session.close(),
         _connectWallet(
-          signedMessage: signMessageResult.first,
+          signedMessage: signMessageResult.signatures.first,
           publicKey: publicKey,
           apiUrl: apiUrl,
           jwtToken: jwtToken,
@@ -364,12 +370,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           messages: [messageToBeSigned],
           addresses: [addresses],
         );
-        return result.signedMessages;
+        return result.signedMessages.first;
       } catch (exception, stackTrace) {
         Sentry.captureException(exception, stackTrace: stackTrace);
       }
     }
-    return [];
+    return null;
   }
 
   Future<bool> _doReauthorize(MobileWalletAdapterClient client,

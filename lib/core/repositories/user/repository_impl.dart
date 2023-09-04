@@ -155,11 +155,7 @@ class UserRepositoryImpl implements UserRepository {
       return response != null
           ? List<WalletModel>.from(
               response.map(
-                (item) => WalletModel.fromJson(
-                  {
-                    'address': item,
-                  },
-                ),
+                (item) => WalletModel.fromJson(item),
               ),
             )
           : [];

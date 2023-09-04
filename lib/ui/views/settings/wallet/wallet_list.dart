@@ -36,6 +36,23 @@ class WalletListScreen extends ConsumerWidget {
     color: ColorPalette.greyscale100,
   );
 
+  _handleWalletSelect(WidgetRef ref, String address) async {
+    ref.read(selectedWalletProvider.notifier).update(
+          (state) => address,
+        );
+    final signature =
+        ref.read(environmentProvider).wallets?[address]?.signature;
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
+          EnvironmentStateUpdateInput(
+            publicKey: Ed25519HDPublicKey.fromBase58(
+              address,
+            ),
+            signature: signature?.codeUnits,
+          ),
+        );
+    // to do if no signature/authToken prompt authorizeAndSignMessage
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final walletsProvider = ref.watch(
@@ -176,21 +193,7 @@ class WalletListScreen extends ConsumerWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  ref
-                                      .read(selectedWalletProvider.notifier)
-                                      .update(
-                                        (state) => data[index].address,
-                                      );
-                                  ref
-                                      .read(environmentProvider.notifier)
-                                      .updateEnvironmentState(
-                                        EnvironmentStateUpdateInput(
-                                          publicKey:
-                                              Ed25519HDPublicKey.fromBase58(
-                                            data[index].address,
-                                          ),
-                                        ),
-                                      );
+                                  _handleWalletSelect(ref, data[index].address);
                                 },
                                 child: Icon(
                                   ref.watch(selectedWalletProvider) ==

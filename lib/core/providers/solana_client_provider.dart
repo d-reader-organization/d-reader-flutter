@@ -184,13 +184,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         );
   }
 
-  Future<bool> mint(String? candyMachineAddress) async {
+  Future<dynamic> mint(String? candyMachineAddress) async {
     if (candyMachineAddress == null) {
-      return false;
+      return 'Candy machine not found.';
     }
     final minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
     if (minterAddress == null) {
-      return false;
+      return 'Please select wallet';
     }
     final String? encodedNftTransaction =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(
@@ -373,8 +373,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<bool> _doReauthorize(MobileWalletAdapterClient client,
       [String? overrideAuthToken]) async {
-    final authToken =
-        overrideAuthToken ?? ref.read(environmentProvider).authToken;
+    final envState = ref.read(environmentProvider);
+    final currentWalletAddress = envState.publicKey?.toBase58() ?? '';
+    final walletAuthToken = envState.wallets?[currentWalletAddress]?.authToken;
+
+    final authToken = overrideAuthToken ??
+        walletAuthToken ??
+        ref.read(environmentProvider).authToken;
     if (authToken == null) {
       return false;
     }
@@ -388,12 +393,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     result ??= await client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
-      cluster: ref.read(environmentProvider).solanaCluster,
+      cluster: envState.solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
-    final walletsMap = ref.read(environmentProvider).wallets;
-    final currentWalletAddress =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+    final walletsMap = envState.wallets;
     final currentItem = walletsMap?[currentWalletAddress];
 
     ref.read(environmentProvider.notifier).updateEnvironmentState(

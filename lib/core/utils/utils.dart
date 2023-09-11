@@ -2,6 +2,7 @@ import 'dart:convert' show jsonDecode;
 
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:solana/solana.dart';
+import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 SolanaClient createSolanaClient({required String rpcUrl}) {
   return SolanaClient(
@@ -28,4 +29,8 @@ Map<String, WalletData>? walletsMapFromDynamic(dynamic json) {
       ),
     ),
   );
+}
+
+Future<bool> isWalletAppAvailable() async {
+  return LocalAssociationScenario.isAvailable();
 }

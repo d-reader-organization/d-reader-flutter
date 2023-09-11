@@ -25,4 +25,5 @@ abstract class AuthRepository {
   });
 
   Future<String>? refreshToken(String refreshToken);
+  Future<dynamic> validateUsername(String username);
 }

@@ -91,10 +91,17 @@ class WalletListScreen extends ConsumerWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Text(
-                    'No wallet detected',
+                  Text(
+                    ref.watch(isWalletAvailableProvider).maybeWhen(
+                          data: (data) {
+                            return data
+                                ? 'No wallet detected'
+                                : 'No wallet installed';
+                          },
+                          orElse: () => '',
+                        ),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -272,9 +279,16 @@ class WalletListScreen extends ConsumerWidget {
         size: const Size(double.infinity, 50),
         isLoading: ref.watch(globalStateProvider).isLoading,
         padding: const EdgeInsets.all(16),
-        child: const Text(
-          'Add / Connect Wallet',
-          style: TextStyle(
+        child: Text(
+          ref.watch(isWalletAvailableProvider).maybeWhen(
+            data: (data) {
+              return data ? 'Connect Wallet' : 'Install wallet';
+            },
+            orElse: () {
+              return '';
+            },
+          ),
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
           ),

@@ -197,7 +197,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
     final minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
     if (minterAddress == null) {
-      return 'Select/Connet wallet first';
+      return 'Select/Connect wallet first';
     }
     final String? encodedNftTransaction =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(

@@ -58,8 +58,6 @@ class _SystemHash {
   }
 }
 
-typedef ResetPasswordRef = AutoDisposeFutureProviderRef<void>;
-
 /// See also [resetPassword].
 @ProviderFor(resetPassword)
 const resetPasswordProvider = ResetPasswordFamily();
@@ -106,10 +104,10 @@ class ResetPasswordFamily extends Family<AsyncValue<void>> {
 class ResetPasswordProvider extends AutoDisposeFutureProvider<void> {
   /// See also [resetPassword].
   ResetPasswordProvider({
-    required this.id,
-  }) : super.internal(
+    required String id,
+  }) : this._internal(
           (ref) => resetPassword(
-            ref,
+            ref as ResetPasswordRef,
             id: id,
           ),
           from: resetPasswordProvider,
@@ -121,9 +119,43 @@ class ResetPasswordProvider extends AutoDisposeFutureProvider<void> {
           dependencies: ResetPasswordFamily._dependencies,
           allTransitiveDependencies:
               ResetPasswordFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  ResetPasswordProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(ResetPasswordRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ResetPasswordProvider._internal(
+        (ref) => create(ref as ResetPasswordRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _ResetPasswordProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -137,6 +169,19 @@ class ResetPasswordProvider extends AutoDisposeFutureProvider<void> {
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin ResetPasswordRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _ResetPasswordProviderElement
+    extends AutoDisposeFutureProviderElement<void> with ResetPasswordRef {
+  _ResetPasswordProviderElement(super.provider);
+
+  @override
+  String get id => (origin as ResetPasswordProvider).id;
 }
 
 String _$requestEmailVerificationHash() =>
@@ -157,7 +202,6 @@ final requestEmailVerificationProvider =
 
 typedef RequestEmailVerificationRef = AutoDisposeFutureProviderRef<void>;
 String _$userWalletsHash() => r'1afcfc64ff6df8b289f0a0a18454116d3dcbe018';
-typedef UserWalletsRef = AutoDisposeFutureProviderRef<List<WalletModel>>;
 
 /// See also [userWallets].
 @ProviderFor(userWallets)
@@ -205,10 +249,10 @@ class UserWalletsFamily extends Family<AsyncValue<List<WalletModel>>> {
 class UserWalletsProvider extends AutoDisposeFutureProvider<List<WalletModel>> {
   /// See also [userWallets].
   UserWalletsProvider({
-    required this.id,
-  }) : super.internal(
+    required int? id,
+  }) : this._internal(
           (ref) => userWallets(
-            ref,
+            ref as UserWalletsRef,
             id: id,
           ),
           from: userWalletsProvider,
@@ -220,9 +264,43 @@ class UserWalletsProvider extends AutoDisposeFutureProvider<List<WalletModel>> {
           dependencies: UserWalletsFamily._dependencies,
           allTransitiveDependencies:
               UserWalletsFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  UserWalletsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final int? id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<WalletModel>> Function(UserWalletsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserWalletsProvider._internal(
+        (ref) => create(ref as UserWalletsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<WalletModel>> createElement() {
+    return _UserWalletsProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -238,8 +316,21 @@ class UserWalletsProvider extends AutoDisposeFutureProvider<List<WalletModel>> {
   }
 }
 
+mixin UserWalletsRef on AutoDisposeFutureProviderRef<List<WalletModel>> {
+  /// The parameter `id` of this provider.
+  int? get id;
+}
+
+class _UserWalletsProviderElement
+    extends AutoDisposeFutureProviderElement<List<WalletModel>>
+    with UserWalletsRef {
+  _UserWalletsProviderElement(super.provider);
+
+  @override
+  int? get id => (origin as UserWalletsProvider).id;
+}
+
 String _$userAssetsHash() => r'cb93a6f28c294d1404ee38b6c18c6ad0b56ea7bf';
-typedef UserAssetsRef = AutoDisposeFutureProviderRef<List<WalletAsset>>;
 
 /// See also [userAssets].
 @ProviderFor(userAssets)
@@ -287,10 +378,10 @@ class UserAssetsFamily extends Family<AsyncValue<List<WalletAsset>>> {
 class UserAssetsProvider extends AutoDisposeFutureProvider<List<WalletAsset>> {
   /// See also [userAssets].
   UserAssetsProvider({
-    required this.id,
-  }) : super.internal(
+    required int id,
+  }) : this._internal(
           (ref) => userAssets(
-            ref,
+            ref as UserAssetsRef,
             id: id,
           ),
           from: userAssetsProvider,
@@ -302,9 +393,43 @@ class UserAssetsProvider extends AutoDisposeFutureProvider<List<WalletAsset>> {
           dependencies: UserAssetsFamily._dependencies,
           allTransitiveDependencies:
               UserAssetsFamily._allTransitiveDependencies,
+          id: id,
         );
 
+  UserAssetsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
   final int id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<WalletAsset>> Function(UserAssetsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserAssetsProvider._internal(
+        (ref) => create(ref as UserAssetsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<WalletAsset>> createElement() {
+    return _UserAssetsProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -318,6 +443,20 @@ class UserAssetsProvider extends AutoDisposeFutureProvider<List<WalletAsset>> {
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin UserAssetsRef on AutoDisposeFutureProviderRef<List<WalletAsset>> {
+  /// The parameter `id` of this provider.
+  int get id;
+}
+
+class _UserAssetsProviderElement
+    extends AutoDisposeFutureProviderElement<List<WalletAsset>>
+    with UserAssetsRef {
+  _UserAssetsProviderElement(super.provider);
+
+  @override
+  int get id => (origin as UserAssetsProvider).id;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member

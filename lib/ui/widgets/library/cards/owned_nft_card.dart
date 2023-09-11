@@ -76,11 +76,17 @@ class OwnedNftCard extends ConsumerWidget {
                   ),
                   Row(
                     children: [
-                      const RoyaltyWidget(
-                        iconPath: 'assets/icons/mint_icon.svg',
-                        text: 'Mint',
-                        color: ColorPalette.dReaderGreen,
-                      ),
+                      nft.isUsed
+                          ? const RoyaltyWidget(
+                              iconPath: 'assets/icons/used_nft.svg',
+                              text: 'Used',
+                              color: ColorPalette.lightblue,
+                            )
+                          : const RoyaltyWidget(
+                              iconPath: 'assets/icons/mint_icon.svg',
+                              text: 'Mint',
+                              color: ColorPalette.dReaderGreen,
+                            ),
                       nft.isSigned
                           ? const RoyaltyWidget(
                               iconPath: 'assets/icons/signed_icon.svg',

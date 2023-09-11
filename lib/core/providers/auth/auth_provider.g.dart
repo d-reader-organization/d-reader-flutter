@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef SignInFutureRef = AutoDisposeFutureProviderRef<dynamic>;
-
 /// See also [signInFuture].
 @ProviderFor(signInFuture)
 const signInFutureProvider = SignInFutureFamily();
@@ -80,11 +78,11 @@ class SignInFutureFamily extends Family<AsyncValue<dynamic>> {
 class SignInFutureProvider extends AutoDisposeFutureProvider<dynamic> {
   /// See also [signInFuture].
   SignInFutureProvider({
-    required this.nameOrEmail,
-    required this.password,
-  }) : super.internal(
+    required String nameOrEmail,
+    required String password,
+  }) : this._internal(
           (ref) => signInFuture(
-            ref,
+            ref as SignInFutureRef,
             nameOrEmail: nameOrEmail,
             password: password,
           ),
@@ -97,10 +95,47 @@ class SignInFutureProvider extends AutoDisposeFutureProvider<dynamic> {
           dependencies: SignInFutureFamily._dependencies,
           allTransitiveDependencies:
               SignInFutureFamily._allTransitiveDependencies,
+          nameOrEmail: nameOrEmail,
+          password: password,
         );
+
+  SignInFutureProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.nameOrEmail,
+    required this.password,
+  }) : super.internal();
 
   final String nameOrEmail;
   final String password;
+
+  @override
+  Override overrideWith(
+    FutureOr<dynamic> Function(SignInFutureRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SignInFutureProvider._internal(
+        (ref) => create(ref as SignInFutureRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        nameOrEmail: nameOrEmail,
+        password: password,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<dynamic> createElement() {
+    return _SignInFutureProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -119,7 +154,25 @@ class SignInFutureProvider extends AutoDisposeFutureProvider<dynamic> {
   }
 }
 
-String _$signUpFutureHash() => r'7b106b5d3cf564afed07ee7d2f94b459bff99de4';
+mixin SignInFutureRef on AutoDisposeFutureProviderRef<dynamic> {
+  /// The parameter `nameOrEmail` of this provider.
+  String get nameOrEmail;
+
+  /// The parameter `password` of this provider.
+  String get password;
+}
+
+class _SignInFutureProviderElement
+    extends AutoDisposeFutureProviderElement<dynamic> with SignInFutureRef {
+  _SignInFutureProviderElement(super.provider);
+
+  @override
+  String get nameOrEmail => (origin as SignInFutureProvider).nameOrEmail;
+  @override
+  String get password => (origin as SignInFutureProvider).password;
+}
+
+String _$signUpFutureHash() => r'511439bfc7bd948497098cf3b55a9aedc18c1c77';
 
 /// See also [signUpFuture].
 @ProviderFor(signUpFuture)

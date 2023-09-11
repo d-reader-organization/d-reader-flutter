@@ -1,7 +1,10 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
@@ -35,12 +38,41 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
     super.dispose();
   }
 
+  _handleNext() async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+    if (_usernameFormKey.currentState!.validate()) {
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: true,
+        ),
+      );
+      final username = _usernameController.text.trim();
+      final result =
+          await ref.read(authRepositoryProvider).validateUsername(username);
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      if (result is String && context.mounted) {
+        return showSnackBar(
+          context: context,
+          text: result,
+          backgroundColor: ColorPalette.dReaderRed,
+          milisecondsDuration: 1500,
+        );
+      }
+      ref.read(signUpDataProvider.notifier).updateUsername(username);
+      widget.onSuccess();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         SvgPicture.asset(
-          '${Config.introAssetsPath}/splash_3.svg',
+          '${Config.introAssetsPath}/username.svg',
           height: 320,
         ),
         const Padding(
@@ -94,6 +126,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
               ),
               RoundedButton(
                 text: 'Next',
+                isLoading: ref.watch(globalStateProvider).isLoading,
                 padding: 0,
                 textStyle: const TextStyle(
                   fontSize: 14,
@@ -106,12 +139,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                   50,
                 ),
                 onPressed: () async {
-                  if (_usernameFormKey.currentState!.validate()) {
-                    ref.read(signUpDataProvider.notifier).updateUsername(
-                          _usernameController.text.trim(),
-                        );
-                    widget.onSuccess();
-                  }
+                  await _handleNext();
                 },
               ),
               const SizedBox(

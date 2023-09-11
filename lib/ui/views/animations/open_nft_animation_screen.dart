@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -79,8 +78,8 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
       ref.invalidate(ownedIssuesAsyncProvider);
       nextScreenReplace(
         context,
-        _SuccessAnimation(
-          nftAddress: nftAddress,
+        NftDetails(
+          address: nftAddress,
         ),
       );
     }
@@ -121,80 +120,6 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
               );
             }
           },
-        ),
-      ),
-    );
-  }
-}
-
-class _SuccessAnimation extends StatefulWidget {
-  final String nftAddress;
-
-  const _SuccessAnimation({
-    required this.nftAddress,
-  });
-
-  @override
-  State<_SuccessAnimation> createState() => _SuccessAnimationState();
-}
-
-class _SuccessAnimationState extends State<_SuccessAnimation>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-
-    Future.delayed(
-      const Duration(
-        milliseconds: 1000,
-      ),
-      () {
-        _animationController.forward();
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorPalette.appBackgroundColor,
-      body: FadeTransition(
-        opacity: _animationController,
-        child: Center(
-          child: CustomTextButton(
-            onPressed: () {
-              nextScreenReplace(
-                context,
-                NftDetails(
-                  address: widget.nftAddress,
-                ),
-              );
-            },
-            backgroundColor: ColorPalette.dReaderGreen,
-            padding: const EdgeInsets.all(16),
-            borderRadius: BorderRadius.circular(8),
-            child: const Text(
-              'Read now',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
-            ),
-          ),
         ),
       ),
     );

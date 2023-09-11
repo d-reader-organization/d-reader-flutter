@@ -76,140 +76,144 @@ class _EReaderViewState extends ConsumerState<EReaderView>
         }
         return true;
       },
-      child: Scaffold(
-        backgroundColor: ColorPalette.appBackgroundColor,
-        extendBodyBehindAppBar: true,
-        extendBody: true,
-        appBar: PreferredSize(
-          preferredSize: const Size(0, 64),
-          child: VisibilityAnimationAppBar(
-            title: issueProvider.value?.title ?? '',
-            centerTitle: false,
-            // actions: [
-            //   Padding(
-            //     padding: const EdgeInsets.only(right: 16.0),
-            //     child: Icon(
-            //       Icons.bookmark_outline_rounded,
-            //       color: ColorPalette.boxBackground400.withOpacity(0.6),
-            //     ),
-            //   ),
-            // ],
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: ColorPalette.appBackgroundColor,
+          extendBodyBehindAppBar: true,
+          extendBody: true,
+          appBar: PreferredSize(
+            preferredSize: const Size(0, 64),
+            child: VisibilityAnimationAppBar(
+              title: issueProvider.value?.title ?? '',
+              centerTitle: false,
+              // actions: [
+              //   Padding(
+              //     padding: const EdgeInsets.only(right: 16.0),
+              //     child: Icon(
+              //       Icons.bookmark_outline_rounded,
+              //       color: ColorPalette.boxBackground400.withOpacity(0.6),
+              //     ),
+              //   ),
+              // ],
+            ),
           ),
-        ),
-        body: pagesProvider.when(
-          data: (pages) {
-            bool canRead = (issueProvider.value?.isFree != null &&
-                    !issueProvider.value!.isFree) &&
-                (issueProvider.value?.myStats?.canRead != null &&
-                    issueProvider.value!.myStats!.canRead);
-            return GestureDetector(
-              onTap: () {
-                notifier.update((state) => !ref.read(isAppBarVisibleProvider));
-              },
-              onDoubleTapDown: (details) {
-                tapDownDetails = details;
-              },
-              onDoubleTap: () {
-                final position = tapDownDetails?.localPosition;
-                const double scale = 3;
-                final x = (-position!.dx) * (scale - 1);
-                final y = (-position.dy) * (scale - 1);
+          body: pagesProvider.when(
+            data: (pages) {
+              bool canRead = (issueProvider.value?.isFree != null &&
+                      !issueProvider.value!.isFree) &&
+                  (issueProvider.value?.myStats?.canRead != null &&
+                      issueProvider.value!.myStats!.canRead);
+              return GestureDetector(
+                onTap: () {
+                  notifier
+                      .update((state) => !ref.read(isAppBarVisibleProvider));
+                },
+                onDoubleTapDown: (details) {
+                  tapDownDetails = details;
+                },
+                onDoubleTap: () {
+                  final position = tapDownDetails?.localPosition;
+                  const double scale = 3;
+                  final x = (-position!.dx) * (scale - 1);
+                  final y = (-position.dy) * (scale - 1);
 
-                final zoomed = Matrix4.identity()
-                  ..translate(x, y)
-                  ..scale(scale);
-                final end = _transformationController.value.isIdentity()
-                    ? zoomed
-                    : Matrix4.identity();
+                  final zoomed = Matrix4.identity()
+                    ..translate(x, y)
+                    ..scale(scale);
+                  final end = _transformationController.value.isIdentity()
+                      ? zoomed
+                      : Matrix4.identity();
 
-                animation = Matrix4Tween(
-                  begin: _transformationController.value,
-                  end: end,
-                ).animate(
-                  CurveTween(curve: Curves.easeOut).animate(
-                    _animationController,
-                  ),
-                );
+                  animation = Matrix4Tween(
+                    begin: _transformationController.value,
+                    end: end,
+                  ).animate(
+                    CurveTween(curve: Curves.easeOut).animate(
+                      _animationController,
+                    ),
+                  );
 
-                _animationController.forward(from: 0);
-                if (ref.read(isPageByPageReadingMode)) {
-                  setState(() {
-                    _isPageChangeEnabled = end.getMaxScaleOnAxis() <= 1;
-                  });
-                }
-              },
-              child: ref.watch(isPageByPageReadingMode)
-                  ? PageView.builder(
-                      pageSnapping: true,
-                      physics: _isPageChangeEnabled
-                          ? const PageScrollPhysics()
-                          : const NeverScrollableScrollPhysics(),
-                      allowImplicitScrolling: true,
-                      itemCount: canRead ? pages.length : pages.length + 1,
-                      itemBuilder: (context, index) {
-                        return MyInteractiveViewer(
-                          minScale: 0.1,
-                          maxScale: 4,
-                          panEnabled: true,
-                          scaleEnabled: true,
-                          transformationController: _transformationController,
-                          onInteractionEnd: (scaleDetails) {
-                            double scale = _transformationController.value
-                                .getMaxScaleOnAxis();
-
-                            setState(() {
-                              _isPageChangeEnabled = scale <= 1;
-                            });
-                          },
-                          constrained: true,
-                          child: index == pages.length
-                              ? const PreviewImage()
-                              : CommonCachedImage(
-                                  fit: BoxFit.contain,
-                                  imageUrl: pages[index].image,
-                                ),
-                        );
-                      },
-                    )
-                  : MyInteractiveViewer(
-                      minScale: 0.1,
-                      maxScale: 4,
-                      panEnabled: true,
-                      transformationController: _transformationController,
-                      scaleEnabled: true,
-                      constrained: true,
-                      child: ListView.builder(
+                  _animationController.forward(from: 0);
+                  if (ref.read(isPageByPageReadingMode)) {
+                    setState(() {
+                      _isPageChangeEnabled = end.getMaxScaleOnAxis() <= 1;
+                    });
+                  }
+                },
+                child: ref.watch(isPageByPageReadingMode)
+                    ? PageView.builder(
+                        pageSnapping: true,
+                        physics: _isPageChangeEnabled
+                            ? const PageScrollPhysics()
+                            : const NeverScrollableScrollPhysics(),
+                        allowImplicitScrolling: true,
                         itemCount: canRead ? pages.length : pages.length + 1,
                         itemBuilder: (context, index) {
-                          return index == pages.length
-                              ? const PreviewImage()
-                              : CommonCachedImage(
-                                  placeholder: Container(
-                                    height: 400,
-                                    width: double.infinity,
-                                    color: ColorPalette.boxBackground300,
+                          return MyInteractiveViewer(
+                            minScale: 0.1,
+                            maxScale: 4,
+                            panEnabled: true,
+                            scaleEnabled: true,
+                            transformationController: _transformationController,
+                            onInteractionEnd: (scaleDetails) {
+                              double scale = _transformationController.value
+                                  .getMaxScaleOnAxis();
+
+                              setState(() {
+                                _isPageChangeEnabled = scale <= 1;
+                              });
+                            },
+                            constrained: true,
+                            child: index == pages.length
+                                ? const PreviewImage()
+                                : CommonCachedImage(
+                                    fit: BoxFit.contain,
+                                    imageUrl: pages[index].image,
                                   ),
-                                  imageUrl: pages[index].image,
-                                );
+                          );
                         },
+                      )
+                    : MyInteractiveViewer(
+                        minScale: 1,
+                        maxScale: 4,
+                        panEnabled: true,
+                        transformationController: _transformationController,
+                        scaleEnabled: true,
+                        constrained: true,
+                        child: ListView.builder(
+                          itemCount: canRead ? pages.length : pages.length + 1,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            return index == pages.length
+                                ? const PreviewImage()
+                                : CommonCachedImage(
+                                    placeholder: Container(
+                                      height: 400,
+                                      width: double.infinity,
+                                      color: ColorPalette.boxBackground300,
+                                    ),
+                                    imageUrl: pages[index].image,
+                                  );
+                          },
+                        ),
                       ),
-                    ),
-            );
-          },
-          error: (Object error, StackTrace stackTrace) {
-            return Text('Error in eReader: ${error.toString()}');
-          },
-          loading: () {
-            return const SkeletonCard(
-              width: double.infinity,
-              height: 400,
-            );
-          },
-        ),
-        bottomNavigationBar: EReaderBottomNavigation(
-          totalPages: pagesProvider.value?.length ?? 0,
-          rating: issueProvider.value?.stats?.averageRating ?? 0,
-          issueId: widget.issueId,
+              );
+            },
+            error: (Object error, StackTrace stackTrace) {
+              return Text('Error in eReader: ${error.toString()}');
+            },
+            loading: () {
+              return const SkeletonCard(
+                width: double.infinity,
+                height: 400,
+              );
+            },
+          ),
+          bottomNavigationBar: EReaderBottomNavigation(
+            totalPages: pagesProvider.value?.length ?? 0,
+            rating: issueProvider.value?.stats?.averageRating ?? 0,
+            issueId: widget.issueId,
+          ),
         ),
       ),
     );
@@ -236,6 +240,7 @@ class MyInteractiveViewer extends StatelessWidget {
   final double minScale, maxScale;
   final bool panEnabled, scaleEnabled, constrained;
   final void Function(ScaleEndDetails)? onInteractionEnd;
+  final void Function(ScaleStartDetails)? onInteractionStart;
   const MyInteractiveViewer({
     super.key,
     required this.child,
@@ -246,6 +251,7 @@ class MyInteractiveViewer extends StatelessWidget {
     this.scaleEnabled = false,
     this.constrained = false,
     this.onInteractionEnd,
+    this.onInteractionStart,
   });
 
   @override
@@ -258,6 +264,7 @@ class MyInteractiveViewer extends StatelessWidget {
       scaleEnabled: scaleEnabled,
       constrained: constrained,
       onInteractionEnd: onInteractionEnd,
+      onInteractionStart: onInteractionStart,
       child: child,
     );
   }

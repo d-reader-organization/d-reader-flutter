@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef GetWalletRef = AutoDisposeFutureProviderRef<WalletModel?>;
-
 /// See also [getWallet].
 @ProviderFor(getWallet)
 const getWalletProvider = GetWalletFamily();
@@ -77,10 +75,10 @@ class GetWalletFamily extends Family<AsyncValue<WalletModel?>> {
 class GetWalletProvider extends AutoDisposeFutureProvider<WalletModel?> {
   /// See also [getWallet].
   GetWalletProvider({
-    required this.address,
-  }) : super.internal(
+    required String address,
+  }) : this._internal(
           (ref) => getWallet(
-            ref,
+            ref as GetWalletRef,
             address: address,
           ),
           from: getWalletProvider,
@@ -91,9 +89,43 @@ class GetWalletProvider extends AutoDisposeFutureProvider<WalletModel?> {
                   : _$getWalletHash,
           dependencies: GetWalletFamily._dependencies,
           allTransitiveDependencies: GetWalletFamily._allTransitiveDependencies,
+          address: address,
         );
 
+  GetWalletProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.address,
+  }) : super.internal();
+
   final String address;
+
+  @override
+  Override overrideWith(
+    FutureOr<WalletModel?> Function(GetWalletRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetWalletProvider._internal(
+        (ref) => create(ref as GetWalletRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        address: address,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<WalletModel?> createElement() {
+    return _GetWalletProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -109,8 +141,20 @@ class GetWalletProvider extends AutoDisposeFutureProvider<WalletModel?> {
   }
 }
 
+mixin GetWalletRef on AutoDisposeFutureProviderRef<WalletModel?> {
+  /// The parameter `address` of this provider.
+  String get address;
+}
+
+class _GetWalletProviderElement
+    extends AutoDisposeFutureProviderElement<WalletModel?> with GetWalletRef {
+  _GetWalletProviderElement(super.provider);
+
+  @override
+  String get address => (origin as GetWalletProvider).address;
+}
+
 String _$accountInfoHash() => r'55bc7ead68aa7b6dc7f85aa6f2120f9658bfca3a';
-typedef AccountInfoRef = AutoDisposeFutureProviderRef<AccountResult>;
 
 /// See also [accountInfo].
 @ProviderFor(accountInfo)
@@ -158,10 +202,10 @@ class AccountInfoFamily extends Family<AsyncValue<AccountResult>> {
 class AccountInfoProvider extends AutoDisposeFutureProvider<AccountResult> {
   /// See also [accountInfo].
   AccountInfoProvider({
-    required this.address,
-  }) : super.internal(
+    required String address,
+  }) : this._internal(
           (ref) => accountInfo(
-            ref,
+            ref as AccountInfoRef,
             address: address,
           ),
           from: accountInfoProvider,
@@ -173,9 +217,43 @@ class AccountInfoProvider extends AutoDisposeFutureProvider<AccountResult> {
           dependencies: AccountInfoFamily._dependencies,
           allTransitiveDependencies:
               AccountInfoFamily._allTransitiveDependencies,
+          address: address,
         );
 
+  AccountInfoProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.address,
+  }) : super.internal();
+
   final String address;
+
+  @override
+  Override overrideWith(
+    FutureOr<AccountResult> Function(AccountInfoRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AccountInfoProvider._internal(
+        (ref) => create(ref as AccountInfoRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        address: address,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<AccountResult> createElement() {
+    return _AccountInfoProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -190,5 +268,35 @@ class AccountInfoProvider extends AutoDisposeFutureProvider<AccountResult> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin AccountInfoRef on AutoDisposeFutureProviderRef<AccountResult> {
+  /// The parameter `address` of this provider.
+  String get address;
+}
+
+class _AccountInfoProviderElement
+    extends AutoDisposeFutureProviderElement<AccountResult>
+    with AccountInfoRef {
+  _AccountInfoProviderElement(super.provider);
+
+  @override
+  String get address => (origin as AccountInfoProvider).address;
+}
+
+String _$isWalletAvailableHash() => r'd02c7e296799e42f1b199d19c392377e9fa8653a';
+
+/// See also [isWalletAvailable].
+@ProviderFor(isWalletAvailable)
+final isWalletAvailableProvider = AutoDisposeFutureProvider<bool>.internal(
+  isWalletAvailable,
+  name: r'isWalletAvailableProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$isWalletAvailableHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef IsWalletAvailableRef = AutoDisposeFutureProviderRef<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member

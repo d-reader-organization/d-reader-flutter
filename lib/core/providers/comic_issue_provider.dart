@@ -60,12 +60,10 @@ final rateComicIssueProvider =
     FutureProvider.autoDispose.family<dynamic, dynamic>(
   (ref, input) async {
     if (input['id'] != null) {
-      final result = await ref.read(comicIssueRepository).rateIssue(
+      await ref.read(comicIssueRepository).rateIssue(
             id: input['id'],
             rating: input['rating'],
           );
-
-      return result;
     }
   },
 );

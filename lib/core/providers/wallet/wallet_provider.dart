@@ -82,3 +82,8 @@ final selectedWalletProvider = StateProvider.autoDispose<String>(
     return latestWallet;
   },
 );
+
+@riverpod
+Future<bool> isWalletAvailable(Ref ref) {
+  return isWalletAppAvailable();
+}

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
@@ -9,9 +10,9 @@ import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/common/install_wallet_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -35,6 +36,23 @@ class WalletListScreen extends ConsumerWidget {
     fontWeight: FontWeight.w500,
     color: ColorPalette.greyscale100,
   );
+
+  _handleWalletSelect(WidgetRef ref, String address) async {
+    ref.read(selectedWalletProvider.notifier).update(
+          (state) => address,
+        );
+    final signature =
+        ref.read(environmentProvider).wallets?[address]?.signature;
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
+          EnvironmentStateUpdateInput(
+            publicKey: Ed25519HDPublicKey.fromBase58(
+              address,
+            ),
+            signature: signature?.codeUnits,
+          ),
+        );
+    // to do if no signature/authToken prompt authorizeAndSignMessage
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,10 +91,17 @@ class WalletListScreen extends ConsumerWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Text(
-                    'No wallet detected',
+                  Text(
+                    ref.watch(isWalletAvailableProvider).maybeWhen(
+                          data: (data) {
+                            return data
+                                ? 'No wallet detected'
+                                : 'No wallet installed';
+                          },
+                          orElse: () => '',
+                        ),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -176,21 +201,7 @@ class WalletListScreen extends ConsumerWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  ref
-                                      .read(selectedWalletProvider.notifier)
-                                      .update(
-                                        (state) => data[index].address,
-                                      );
-                                  ref
-                                      .read(environmentProvider.notifier)
-                                      .updateEnvironmentState(
-                                        EnvironmentStateUpdateInput(
-                                          publicKey:
-                                              Ed25519HDPublicKey.fromBase58(
-                                            data[index].address,
-                                          ),
-                                        ),
-                                      );
+                                  _handleWalletSelect(ref, data[index].address);
                                 },
                                 child: Icon(
                                   ref.watch(selectedWalletProvider) ==
@@ -260,32 +271,24 @@ class WalletListScreen extends ConsumerWidget {
                 isLoading: false,
               ),
             );
-            if (context.mounted) {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return DraggableScrollableSheet(
-                    expand: false,
-                    initialChildSize: 0.65,
-                    minChildSize: 0.65,
-                    maxChildSize: 0.8,
-                    builder: (context, scrollController) {
-                      return const InstallWalletBottomSheet();
-                    },
-                  );
-                },
-              );
+            if (context.mounted && error is NoWalletFoundException) {
+              return triggerInstallWalletBottomSheet(context);
             }
           }
         },
         size: const Size(double.infinity, 50),
         isLoading: ref.watch(globalStateProvider).isLoading,
         padding: const EdgeInsets.all(16),
-        child: const Text(
-          'Add / Connect Wallet',
-          style: TextStyle(
+        child: Text(
+          ref.watch(isWalletAvailableProvider).maybeWhen(
+            data: (data) {
+              return data ? 'Connect Wallet' : 'Install wallet';
+            },
+            orElse: () {
+              return '';
+            },
+          ),
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
           ),

@@ -1,6 +1,8 @@
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
@@ -336,6 +338,34 @@ class BottomNavigation extends ConsumerWidget {
     required this.issue,
   });
 
+  _handleMint(BuildContext context, WidgetRef ref) async {
+    try {
+      final mintResult = await ref
+          .read(solanaProvider.notifier)
+          .mint(issue.candyMachineAddress);
+      if (context.mounted) {
+        if (mintResult is bool && mintResult) {
+          nextScreenPush(
+            context,
+            const MintLoadingAnimation(),
+          );
+        } else {
+          showSnackBar(
+            context: context,
+            text: mintResult is String ? mintResult : 'Something went wrong',
+            backgroundColor: ColorPalette.dReaderRed,
+          );
+        }
+      }
+      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+    } catch (error) {
+      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      if (context.mounted && error is NoWalletFoundException) {
+        triggerInstallWalletBottomSheet(context);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return issue.isFree
@@ -348,34 +378,7 @@ class BottomNavigation extends ConsumerWidget {
                       child: TransactionButton(
                         isLoading: ref.watch(globalStateProvider).isLoading,
                         onPressed: () async {
-                          try {
-                            final isSuccessful = await ref
-                                .read(solanaProvider.notifier)
-                                .mint(issue.candyMachineAddress);
-                            if (context.mounted) {
-                              if (isSuccessful) {
-                                nextScreenPush(
-                                  context,
-                                  const MintLoadingAnimation(),
-                                );
-                              } else {
-                                showSnackBar(
-                                  context: context,
-                                  text: 'Something went wrong',
-                                  backgroundColor: ColorPalette.dReaderRed,
-                                );
-                              }
-                            }
-                            ref
-                                .read(globalStateProvider.notifier)
-                                .state
-                                .copyWith(isLoading: false);
-                          } catch (error) {
-                            ref
-                                .read(globalStateProvider.notifier)
-                                .state
-                                .copyWith(isLoading: false);
-                          }
+                          await _handleMint(context, ref);
                         },
                         text: 'MINT',
                         price: issue.stats?.price,

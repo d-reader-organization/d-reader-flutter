@@ -48,7 +48,7 @@ class SignUpStep2Verification extends StatelessWidget {
                 height: 16,
               ),
               const Text(
-                'follow the simple instructions within the email to verify and become eligible for rewards',
+                'Follow the simple instructions within the email to verify and become eligible for rewards. It might take up to 5 minutes to receive the mail',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -60,7 +60,7 @@ class SignUpStep2Verification extends StatelessWidget {
                 height: 16,
               ),
               RoundedButton(
-                text: 'Got it',
+                text: 'Next',
                 padding: 0,
                 textStyle: const TextStyle(
                   fontSize: 14,

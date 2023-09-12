@@ -222,27 +222,28 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                       ),
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
                     Text(
                       widget.nft.comicName,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
+                        color: ColorPalette.greyscale100,
                       ),
                     ),
                     const SizedBox(
-                      height: 4,
+                      height: 8,
                     ),
                     Text(
-                      'Congrats you own ${shortenNftName(widget.nft.name)}',
+                      'Congrats! You own ${shortenNftName(widget.nft.name)}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(
-                      height: 8,
+                      height: 16,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -274,15 +275,38 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
+                      child: CustomTextButton(
+                        backgroundColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                        borderColor: ColorPalette.greyscale50,
+                        textColor: Colors.white,
+                        size: const Size(0, 50),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Close',
+                        ),
+                      ),
+                    ),
+                    Expanded(
                       child: Consumer(
                         builder: (context, ref, child) {
                           final bool isLoading =
                               ref.watch(globalStateProvider).isLoading;
                           return CustomTextButton(
-                            backgroundColor: ColorPalette.dReaderYellow100,
-                            padding: const EdgeInsets.all(4),
+                            backgroundColor: ColorPalette.dReaderGreen,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
+                            ),
                             borderRadius: BorderRadius.circular(8),
                             textColor: Colors.black,
+                            size: const Size(0, 50),
                             isLoading: isLoading,
                             onPressed: isLoading
                                 ? null
@@ -305,20 +329,6 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                             ),
                           );
                         },
-                      ),
-                    ),
-                    Expanded(
-                      child: CustomTextButton(
-                        backgroundColor: ColorPalette.dReaderGreen,
-                        padding: const EdgeInsets.all(4),
-                        borderRadius: BorderRadius.circular(8),
-                        textColor: Colors.black,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'Done',
-                        ),
                       ),
                     ),
                   ],

@@ -69,7 +69,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
     return ListView(
       children: [
         SvgPicture.asset(
-          '${Config.introAssetsPath}/splash_3.svg',
+          '${Config.introAssetsPath}/password.svg',
           height: 320,
         ),
         const Padding(

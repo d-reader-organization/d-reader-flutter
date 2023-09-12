@@ -12,6 +12,7 @@ import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
+import 'package:d_reader_flutter/ui/widgets/library/buttons/info_button.dart';
 import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/owned_copies.dart';
 import 'package:flutter/material.dart';
@@ -54,8 +55,8 @@ class OwnedIssueCard extends ConsumerWidget {
       ),
     );
     final ownedNfts = await ref.read(nftsProvider(
-            'comicIssueId=$comicIssueId&ownerAddress=${ref.read(environmentProvider).publicKey?.toBase58()}')
-        .future);
+      'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
+    ).future);
     globalNotifier.update(
       (state) => state.copyWith(
         isLoading: false,
@@ -149,56 +150,32 @@ class OwnedIssueCard extends ConsumerWidget {
                         )
                       : OwnedCopies(copiesCount: issue.ownedCopiesCount),
                   const SizedBox(),
-                  GestureDetector(
-                    onTap: ref.watch(globalStateProvider).isLoading
-                        ? null
-                        : () async {
-                            final List<NftModel> ownedNfts =
-                                await fetchOwnedNfts(ref, '${issue.id}');
+                  InfoButton(
+                    isLoading: ref.watch(globalStateProvider).isLoading,
+                    onTap: () async {
+                      final List<NftModel> ownedNfts =
+                          await fetchOwnedNfts(ref, '${issue.id}');
 
-                            final int usedNftIndex = ownedNfts
-                                .indexWhere((element) => element.isUsed);
+                      final int usedNftIndex =
+                          ownedNfts.indexWhere((element) => element.isUsed);
 
-                            if (context.mounted &&
-                                (usedNftIndex > -1 || ownedNfts.length == 1)) {
-                              final properIndex =
-                                  usedNftIndex > -1 ? usedNftIndex : 0;
-                              return nextScreenPush(
-                                context,
-                                NftDetails(
-                                  address:
-                                      ownedNfts.elementAt(properIndex).address,
-                                ),
-                              );
-                            }
-                            final ComicIssueModel? comicIssue = await ref.read(
-                              comicIssueDetailsProvider(issue.id).future,
-                            );
-                            ref
-                                .read(selectedIssueInfoProvider.notifier)
-                                .update((state) => comicIssue);
-                          },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: ColorPalette.greyscale100,
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          8,
-                        ),
-                      ),
-                      child: const Text(
-                        'Info',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
+                      if (context.mounted && ownedNfts.length == 1) {
+                        final properIndex =
+                            usedNftIndex > -1 ? usedNftIndex : 0;
+                        return nextScreenPush(
+                          context,
+                          NftDetails(
+                            address: ownedNfts.elementAt(properIndex).address,
+                          ),
+                        );
+                      }
+                      final ComicIssueModel? comicIssue = await ref.read(
+                        comicIssueDetailsProvider(issue.id).future,
+                      );
+                      ref
+                          .read(selectedIssueInfoProvider.notifier)
+                          .update((state) => comicIssue);
+                    },
                   ),
                 ],
               ),

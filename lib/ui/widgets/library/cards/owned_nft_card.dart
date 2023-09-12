@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -6,6 +7,7 @@ import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
+import 'package:d_reader_flutter/ui/widgets/library/buttons/info_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -74,11 +76,17 @@ class OwnedNftCard extends ConsumerWidget {
                   ),
                   Row(
                     children: [
-                      const RoyaltyWidget(
-                        iconPath: 'assets/icons/mint_icon.svg',
-                        text: 'Mint',
-                        color: ColorPalette.dReaderGreen,
-                      ),
+                      nft.isUsed
+                          ? const RoyaltyWidget(
+                              iconPath: 'assets/icons/used_nft.svg',
+                              text: 'Used',
+                              color: ColorPalette.lightblue,
+                            )
+                          : const RoyaltyWidget(
+                              iconPath: 'assets/icons/mint_icon.svg',
+                              text: 'Mint',
+                              color: ColorPalette.dReaderGreen,
+                            ),
                       nft.isSigned
                           ? const RoyaltyWidget(
                               iconPath: 'assets/icons/signed_icon.svg',
@@ -87,6 +95,15 @@ class OwnedNftCard extends ConsumerWidget {
                             )
                           : const SizedBox(),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  InfoButton(
+                    isLoading: ref.watch(globalStateProvider).isLoading,
+                    onTap: () {
+                      nextScreenPush(context, NftDetails(address: nft.address));
+                    },
                   ),
                 ],
               ),

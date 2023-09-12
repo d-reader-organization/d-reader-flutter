@@ -65,11 +65,10 @@ final updateComicFavouriteProvider =
 final rateComicProvider = FutureProvider.autoDispose.family<dynamic, dynamic>(
   (ref, input) async {
     if (input['slug'] != null) {
-      final result = await ref.read(comicRepositoryProvider).rateComic(
+      await ref.read(comicRepositoryProvider).rateComic(
             slug: input['slug'],
             rating: input['rating'],
           );
-      return result;
     }
   },
 );

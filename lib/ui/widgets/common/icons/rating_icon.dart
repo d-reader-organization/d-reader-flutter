@@ -1,8 +1,6 @@
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rating_stars.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +26,7 @@ class RatingIcon extends ConsumerWidget {
     return GestureDetector(
       onTap: (issueId != null || comicSlug != null)
           ? () async {
-              final result = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (context) {
                   return ConfirmationDialog(
@@ -63,18 +61,6 @@ class RatingIcon extends ConsumerWidget {
                   );
                 },
               );
-
-              if (context.mounted && result != null) {
-                final isString = result is String;
-                showSnackBar(
-                  context: context,
-                  text: isString ? result : 'Submitted successfully.',
-                  milisecondsDuration: 3000,
-                  backgroundColor: isString
-                      ? ColorPalette.dReaderRed
-                      : ColorPalette.dReaderGreen,
-                );
-              }
             }
           : null,
       child: Row(

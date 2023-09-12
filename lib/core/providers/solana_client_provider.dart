@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -120,13 +121,20 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       apiUrl: apiUrl,
       jwtToken: jwtToken,
     );
-    if (signMessageResult is String || signMessageResult.isEmpty) {
+    if (signMessageResult is String || signMessageResult == null) {
       await session.close();
       return signMessageResult is String
           ? signMessageResult
           : 'Failed to sign message.';
     }
+
+    if (signMessageResult is! SignedMessage) {
+      return 'No signed message';
+    }
+
     final currentWallets = ref.read(environmentProvider).wallets;
+    final signedMessage =
+        signMessageResult.signatures.first.toList().sublist(0, 64);
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
@@ -134,7 +142,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         solanaCluster: cluster,
         apiUrl: apiUrl,
         signature: Signature(
-          signMessageResult.first.sublist(0, 64),
+          signedMessage,
           publicKey: publicKey,
         ).bytes,
         wallets: {
@@ -142,19 +150,18 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           publicKey.toBase58(): WalletData(
             authToken: result?.authToken ?? '',
             signature: Signature(
-              signMessageResult.first.sublist(0, 64),
+              signedMessage,
               publicKey: publicKey,
             ).toBase58(),
           ),
         },
       ),
     );
-
     await Future.wait(
       [
         session.close(),
         _connectWallet(
-          signedMessage: signMessageResult.first,
+          signedMessage: signMessageResult.signatures.first,
           publicKey: publicKey,
           apiUrl: apiUrl,
           jwtToken: jwtToken,
@@ -184,13 +191,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         );
   }
 
-  Future<bool> mint(String? candyMachineAddress) async {
+  Future<dynamic> mint(String? candyMachineAddress) async {
     if (candyMachineAddress == null) {
-      return false;
+      return 'Candy machine not found.';
     }
     final minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
     if (minterAddress == null) {
-      return false;
+      return 'Select/Connect wallet first';
     }
     final String? encodedNftTransaction =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(
@@ -363,18 +370,23 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           messages: [messageToBeSigned],
           addresses: [addresses],
         );
-        return result.signedPayloads;
+        return result.signedMessages.first;
       } catch (exception, stackTrace) {
         Sentry.captureException(exception, stackTrace: stackTrace);
       }
     }
-    return [];
+    return null;
   }
 
   Future<bool> _doReauthorize(MobileWalletAdapterClient client,
       [String? overrideAuthToken]) async {
-    final authToken =
-        overrideAuthToken ?? ref.read(environmentProvider).authToken;
+    final envState = ref.read(environmentProvider);
+    final currentWalletAddress = envState.publicKey?.toBase58() ?? '';
+    final walletAuthToken = envState.wallets?[currentWalletAddress]?.authToken;
+
+    final authToken = overrideAuthToken ??
+        walletAuthToken ??
+        ref.read(environmentProvider).authToken;
     if (authToken == null) {
       return false;
     }
@@ -388,12 +400,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     result ??= await client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
-      cluster: ref.read(environmentProvider).solanaCluster,
+      cluster: envState.solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
-    final walletsMap = ref.read(environmentProvider).wallets;
-    final currentWalletAddress =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+    final walletsMap = envState.wallets;
     final currentItem = walletsMap?[currentWalletAddress];
 
     ref.read(environmentProvider.notifier).updateEnvironmentState(
@@ -414,8 +424,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<LocalAssociationScenario?> _getSession() async {
-    final session = await LocalAssociationScenario.create();
+    final bool isWalletAvailable = await LocalAssociationScenario.isAvailable();
 
+    if (!isWalletAvailable) {
+      throw NoWalletFoundException(missingWalletAppText);
+    }
+
+    final session = await LocalAssociationScenario.create();
     session.startActivityForResult(null).ignore();
 
     return session;

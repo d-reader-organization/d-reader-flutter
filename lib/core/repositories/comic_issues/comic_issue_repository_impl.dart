@@ -65,7 +65,7 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
     required int id,
     required int rating,
   }) async {
-    final result = await client
+    await client
         .patch(
           '/comic-issue/rate/$id',
           data: {
@@ -76,8 +76,6 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
         .onError((error, stackTrace) {
           return error.toString();
         });
-
-    return result != null ? ComicIssueModel.fromJson(result) : result;
   }
 
   @override

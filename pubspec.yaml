@@ -24,9 +24,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
-  http: ^0.13.6
-  solana: ^0.29.1
-  solana_mobile_client: ^0.1.0+1
+  solana: ^0.30.0
+  solana_mobile_client: ^0.1.1
   carousel_slider: ^4.2.1
   skeleton_text: ^3.0.0
   font_awesome_flutter: ^10.4.0

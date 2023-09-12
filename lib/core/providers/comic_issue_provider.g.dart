@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef OwnedIssuesRef = AutoDisposeFutureProviderRef<List<OwnedComicIssue>>;
-
 /// See also [ownedIssues].
 @ProviderFor(ownedIssues)
 const ownedIssuesProvider = OwnedIssuesFamily();
@@ -81,11 +79,11 @@ class OwnedIssuesProvider
     extends AutoDisposeFutureProvider<List<OwnedComicIssue>> {
   /// See also [ownedIssues].
   OwnedIssuesProvider({
-    required this.userId,
-    required this.query,
-  }) : super.internal(
+    required int userId,
+    required String query,
+  }) : this._internal(
           (ref) => ownedIssues(
-            ref,
+            ref as OwnedIssuesRef,
             userId: userId,
             query: query,
           ),
@@ -98,10 +96,47 @@ class OwnedIssuesProvider
           dependencies: OwnedIssuesFamily._dependencies,
           allTransitiveDependencies:
               OwnedIssuesFamily._allTransitiveDependencies,
+          userId: userId,
+          query: query,
         );
+
+  OwnedIssuesProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.userId,
+    required this.query,
+  }) : super.internal();
 
   final int userId;
   final String query;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<OwnedComicIssue>> Function(OwnedIssuesRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: OwnedIssuesProvider._internal(
+        (ref) => create(ref as OwnedIssuesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        userId: userId,
+        query: query,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<OwnedComicIssue>> createElement() {
+    return _OwnedIssuesProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -118,6 +153,25 @@ class OwnedIssuesProvider
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin OwnedIssuesRef on AutoDisposeFutureProviderRef<List<OwnedComicIssue>> {
+  /// The parameter `userId` of this provider.
+  int get userId;
+
+  /// The parameter `query` of this provider.
+  String get query;
+}
+
+class _OwnedIssuesProviderElement
+    extends AutoDisposeFutureProviderElement<List<OwnedComicIssue>>
+    with OwnedIssuesRef {
+  _OwnedIssuesProviderElement(super.provider);
+
+  @override
+  int get userId => (origin as OwnedIssuesProvider).userId;
+  @override
+  String get query => (origin as OwnedIssuesProvider).query;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member

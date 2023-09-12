@@ -41,7 +41,7 @@ class ComicRepositoryImpl implements ComicRepository {
 
   @override
   Future rateComic({required String slug, required int rating}) async {
-    final result = await client
+    await client
         .patch(
           '/comic/rate/$slug',
           data: {
@@ -52,8 +52,6 @@ class ComicRepositoryImpl implements ComicRepository {
         .onError((error, stackTrace) {
           return error.toString();
         });
-
-    return result != null ? ComicModel.fromJson(result) : result;
   }
 
   @override

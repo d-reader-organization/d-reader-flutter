@@ -129,4 +129,14 @@ class AuthRepositoryImpl implements AuthRepository {
         .patch('/auth/user/refresh-token/$refreshToken')
         .then((value) => value.data);
   }
+
+  @override
+  Future<dynamic> validateUsername(String username) async {
+    try {
+      await client.get('/auth/user/validate-name/$username');
+      return true;
+    } catch (exception) {
+      return 'Username already taken.';
+    }
+  }
 }

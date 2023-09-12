@@ -60,7 +60,10 @@ class _WelcomeViewState extends State<WelcomeView>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(),
-                SvgPicture.asset(Config.whiteLogoPath),
+                SvgPicture.asset(
+                  Config.whiteLogoPath,
+                  height: 50,
+                ),
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(

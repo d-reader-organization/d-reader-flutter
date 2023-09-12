@@ -7,9 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class WalkthroughDialog extends StatelessWidget {
   final Function() onSubmit;
+  final String title, subtitle;
   const WalkthroughDialog({
     super.key,
     required this.onSubmit,
+    required this.title,
+    required this.subtitle,
   });
 
   @override
@@ -26,7 +29,7 @@ class WalkthroughDialog extends StatelessWidget {
       ),
       children: [
         SizedBox(
-          height: 140,
+          height: 100,
           child: Stack(
             children: [
               Positioned(
@@ -38,26 +41,26 @@ class WalkthroughDialog extends StatelessWidget {
                   ),
                   child: SvgPicture.asset(
                     'assets/images/logo-white.svg',
-                    height: 80,
+                    height: 60,
                   ),
                 ),
               ),
             ],
           ),
         ),
-        const Text(
-          'Some text',
+        Text(
+          title,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
         ),
-        const Text(
-          'Tap on the comic cover to get a quick preview or read it fully if you already own it.',
+        Text(
+          subtitle,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: ColorPalette.greyscale50,

@@ -21,6 +21,9 @@ class _TestHomeState extends State<TestHome> {
       if (!isAlreadyshown) {
         triggerWalkthroughDialog(
           context: context,
+          title: 'Some text',
+          subtitle:
+              'Tap on the comic cover to get a quick preview or read it fully if you already own it.',
           onSubmit: () {
             localStore.put(WalkthroughKeys.connectWallet.name, true);
             Navigator.pop(context);
@@ -38,6 +41,9 @@ class _TestHomeState extends State<TestHome> {
           onPressed: () {
             triggerWalkthroughDialog(
               context: context,
+              title: 'Some text',
+              subtitle:
+                  'Tap on the comic cover to get a quick preview or read it fully if you already own it.',
               onSubmit: () {
                 Navigator.pop(context);
               },

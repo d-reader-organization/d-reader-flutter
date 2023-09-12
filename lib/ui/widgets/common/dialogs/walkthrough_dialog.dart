@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class WalkthroughDialog extends StatelessWidget {
-  const WalkthroughDialog({super.key});
+  final Function() onSubmit;
+  const WalkthroughDialog({
+    super.key,
+    required this.onSubmit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +25,26 @@ class WalkthroughDialog extends StatelessWidget {
         ),
       ),
       children: [
+        SizedBox(
+          height: 140,
+          child: Stack(
+            children: [
+              Positioned(
+                bottom: 0,
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                    sigmaX: 2,
+                    sigmaY: 2,
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/images/logo-white.svg',
+                    height: 80,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         const Text(
           'Some text',
           textAlign: TextAlign.center,
@@ -40,9 +64,7 @@ class WalkthroughDialog extends StatelessWidget {
           ),
         ),
         CustomTextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: onSubmit,
           borderRadius: BorderRadius.circular(8),
           child: const Text(
             'Got it',
@@ -54,34 +76,6 @@ class WalkthroughDialog extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class BlurredImage extends StatelessWidget {
-  const BlurredImage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Stack(
-        children: [
-          Positioned(
-            bottom: 0,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                sigmaX: 2,
-                sigmaY: 2,
-              ),
-              child: SvgPicture.asset(
-                'assets/images/logo-white.svg',
-                height: 120,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

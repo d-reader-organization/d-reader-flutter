@@ -1,8 +1,10 @@
+import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/receipts_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_items.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/minted_items.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/scaffold.dart';
@@ -12,17 +14,41 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-class ComicIssueDetails extends ConsumerWidget {
+class ComicIssueDetails extends ConsumerStatefulWidget {
   final int id;
   const ComicIssueDetails({
-    Key? key,
+    super.key,
     required this.id,
-  }) : super(key: key);
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ComicIssueDetailsState();
+}
+
+class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      triggerWalkthroughDialogIfNeeded(
+        context: context,
+        key: WalkthroughKeys.issueDetails.name,
+        title: 'Learn how to buy',
+        subtitle: 'You will learn how to buy a comic episode',
+        onSubmit: () {
+          Navigator.pop(context);
+        },
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final AsyncValue<ComicIssueModel?> provider =
-        ref.watch(comicIssueDetailsProvider(id));
+        ref.watch(comicIssueDetailsProvider(
+      widget.id,
+    ));
     return provider.when(
       data: (issue) {
         if (issue == null) {

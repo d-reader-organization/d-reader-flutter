@@ -1,5 +1,7 @@
+import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_tab_persisent_header.dart';
 import 'package:d_reader_flutter/ui/widgets/library/tabs/owned.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,17 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
       if (_controller.indexIsChanging && _controller.previousIndex == 1) {
         _controller.index = 1;
       }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      triggerWalkthroughDialogIfNeeded(
+        context: context,
+        key: WalkthroughKeys.library.name,
+        title: 'Library',
+        subtitle: 'First time in library',
+        onSubmit: () {
+          Navigator.pop(context);
+        },
+      );
     });
   }
 

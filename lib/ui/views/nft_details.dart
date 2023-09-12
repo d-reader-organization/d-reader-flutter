@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
@@ -9,6 +10,7 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
@@ -32,7 +34,7 @@ const sectionHeadingStyle = TextStyle(
   fontWeight: FontWeight.w700,
 );
 
-class NftDetails extends ConsumerWidget {
+class NftDetails extends ConsumerStatefulWidget {
   final String address;
   const NftDetails({
     super.key,
@@ -40,8 +42,27 @@ class NftDetails extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(nftProvider(address));
+  ConsumerState<ConsumerStatefulWidget> createState() => _NftDetailsState();
+}
+
+class _NftDetailsState extends ConsumerState<NftDetails> {
+  @override
+  void initState() {
+    super.initState();
+    triggerWalkthroughDialogIfNeeded(
+      context: context,
+      key: WalkthroughKeys.nftDetails.name,
+      title: 'Tokenized asset',
+      subtitle: 'NFT',
+      onSubmit: () {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = ref.watch(nftProvider(widget.address));
 
     return provider.when(
       data: (nft) {

@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
-import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -28,25 +27,15 @@ class _SignUpStep3State extends ConsumerState<SignUpStep3> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final localStore = LocalStore.instance;
-      final isAlreadyshown =
-          localStore.get(WalkthroughKeys.connectWallet.name) != null;
-      if (!isAlreadyshown) {
-        Future.delayed(
-          const Duration(milliseconds: 850),
-          () {
-            triggerWalkthroughDialog(
-              context: context,
-              title: 'Connect wallet',
-              subtitle: 'Connect wallet instructions should be here',
-              onSubmit: () {
-                localStore.put(WalkthroughKeys.connectWallet.name, true);
-                Navigator.pop(context);
-              },
-            );
-          },
-        );
-      }
+      triggerWalkthroughDialogIfNeeded(
+        context: context,
+        key: WalkthroughKeys.connectWallet.name,
+        title: 'Connect wallet',
+        subtitle: 'Connect wallet instructions should be here',
+        onSubmit: () {
+          Navigator.pop(context);
+        },
+      );
     });
   }
 

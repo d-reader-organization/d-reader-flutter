@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AboutView extends StatelessWidget {
   const AboutView({super.key});
@@ -75,6 +76,16 @@ class AboutView extends StatelessWidget {
           ),
           SettingsCommonListTile(
             title: 'Twitter',
+            overrideLeading: Container(
+              margin: const EdgeInsets.only(top: 2),
+              child: SvgPicture.asset(
+                '${Config.settingsAssetsPath}/light/twitter.svg',
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
             leadingPath: '${Config.settingsAssetsPath}/light/twitter.svg',
             onTap: () {
               openUrl(Config.twitterUrl);
@@ -82,6 +93,16 @@ class AboutView extends StatelessWidget {
           ),
           SettingsCommonListTile(
             title: 'Discord',
+            overrideLeading: Container(
+              margin: const EdgeInsets.only(top: 4),
+              child: SvgPicture.asset(
+                '${Config.settingsAssetsPath}/light/discord.svg',
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
             leadingPath: '${Config.settingsAssetsPath}/light/discord.svg',
             onTap: () {
               openUrl(Config.discordUrl);

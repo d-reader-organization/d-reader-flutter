@@ -34,8 +34,9 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails> {
       triggerWalkthroughDialogIfNeeded(
         context: context,
         key: WalkthroughKeys.issueDetails.name,
-        title: 'Learn how to buy',
-        subtitle: 'You will learn how to buy a comic episode',
+        title:
+            'Hit the “preview” button to check out the comic! If you want to read the whole story, you’ll have to buy a copy',
+        subtitle: '',
         onSubmit: () {
           Navigator.pop(context);
         },

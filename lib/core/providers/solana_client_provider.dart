@@ -192,6 +192,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<dynamic> mint(String? candyMachineAddress) async {
+    final isWalletAvailable = await isWalletAppAvailable();
+    if (!isWalletAvailable) {
+      throw NoWalletFoundException('No wallet app installed.');
+    }
     if (candyMachineAddress == null) {
       return 'Candy machine not found.';
     }

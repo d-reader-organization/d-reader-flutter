@@ -7,12 +7,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class WalkthroughDialog extends StatelessWidget {
   final Function() onSubmit;
-  final String title, subtitle;
+  final String buttonText, title, subtitle;
   const WalkthroughDialog({
     super.key,
     required this.onSubmit,
     required this.title,
     required this.subtitle,
+    this.buttonText = 'Next',
   });
 
   @override
@@ -69,9 +70,9 @@ class WalkthroughDialog extends StatelessWidget {
         CustomTextButton(
           onPressed: onSubmit,
           borderRadius: BorderRadius.circular(8),
-          child: const Text(
-            'Got it',
-            style: TextStyle(
+          child: Text(
+            buttonText,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: Colors.black,

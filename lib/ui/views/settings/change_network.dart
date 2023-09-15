@@ -1,9 +1,13 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/views/intro/initial.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/network_list_tile.dart';
@@ -72,14 +76,19 @@ class ChangeNetworkView extends ConsumerWidget {
                         : SolanaCluster.devnet.value,
                   ),
                 );
+            return showSnackBar(
+              context: context,
+              text: snackbarText,
+              backgroundColor: ColorPalette.dReaderRed,
+            );
           }
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(snackbarText),
-              backgroundColor: isSuccessful
-                  ? ColorPalette.dReaderGreen
-                  : ColorPalette.dReaderRed,
-            ),
+          ref.invalidate(comicsProvider);
+          ref.invalidate(comicIssuesProvider);
+          ref.invalidate(creatorsProvider);
+          return showSnackBar(
+            context: context,
+            text: snackbarText,
+            backgroundColor: ColorPalette.dReaderGreen,
           );
         }
       } else {

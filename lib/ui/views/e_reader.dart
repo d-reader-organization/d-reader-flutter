@@ -184,15 +184,25 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                           itemCount: canRead ? pages.length : pages.length + 1,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
+                            ValueNotifier<int> valueNotifier =
+                                ValueNotifier(index);
                             return index == pages.length
                                 ? const PreviewImage()
-                                : CommonCachedImage(
-                                    placeholder: Container(
-                                      height: 400,
-                                      width: double.infinity,
-                                      color: ColorPalette.boxBackground300,
-                                    ),
-                                    imageUrl: pages[index].image,
+                                : ValueListenableBuilder(
+                                    valueListenable: valueNotifier,
+                                    builder: (context, value, child) {
+                                      return CommonCachedImage(
+                                        placeholder: Container(
+                                          height: 400,
+                                          width: double.infinity,
+                                          color: ColorPalette.boxBackground300,
+                                        ),
+                                        imageUrl: pages[index].image,
+                                        onError: () {
+                                          ++valueNotifier.value;
+                                        },
+                                      );
+                                    },
                                   );
                           },
                         ),

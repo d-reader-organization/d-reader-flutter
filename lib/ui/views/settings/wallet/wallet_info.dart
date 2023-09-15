@@ -82,6 +82,28 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
     }
   }
 
+  _syncWallet({
+    required BuildContext context,
+    required WidgetRef ref,
+    required String address,
+  }) async {
+    final notifier = ref.read(privateLoadingProvider.notifier);
+
+    notifier.update((state) => true);
+    await ref.read(syncWalletProvider(address).future);
+    notifier.update((state) => false);
+    ref.invalidate(userWalletsProvider);
+
+    if (context.mounted) {
+      showSnackBar(
+        context: context,
+        text: 'Wallet synced successfully',
+        backgroundColor: ColorPalette.dReaderGreen,
+        milisecondsDuration: 1000,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,6 +179,30 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           ),
           const Divider(
             color: ColorPalette.boxBackground300,
+          ),
+          SettingsCommonListTile(
+            title: 'Sync wallet',
+            leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
+            overrideColor: Colors.green,
+            overrideLeading: ref.watch(privateLoadingProvider)
+                ? const SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      color: ColorPalette.dReaderGreen,
+                    ),
+                  )
+                : null,
+            overrideTrailing: const SizedBox(),
+            onTap: ref.watch(globalStateProvider).isLoading
+                ? null
+                : () async {
+                    await _syncWallet(
+                      context: context,
+                      ref: ref,
+                      address: widget.address,
+                    );
+                  },
           ),
           SettingsCommonListTile(
             title: 'Disconnect wallet',

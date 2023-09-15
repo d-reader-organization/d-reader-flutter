@@ -7,7 +7,7 @@ class SettingsCommonListTile extends StatelessWidget {
   final String leadingPath;
   final Function()? onTap;
   final Color? overrideColor;
-  final Widget? overrideTrailing;
+  final Widget? overrideTrailing, overrideLeading;
   const SettingsCommonListTile({
     super.key,
     required this.title,
@@ -15,6 +15,7 @@ class SettingsCommonListTile extends StatelessWidget {
     this.onTap,
     this.overrideColor,
     this.overrideTrailing,
+    this.overrideLeading,
   });
 
   @override
@@ -24,13 +25,14 @@ class SettingsCommonListTile extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       textColor: overrideColor ?? color,
-      leading: SvgPicture.asset(
-        leadingPath,
-        colorFilter: ColorFilter.mode(
-          color,
-          BlendMode.srcIn,
-        ),
-      ),
+      leading: overrideLeading ??
+          SvgPicture.asset(
+            leadingPath,
+            colorFilter: ColorFilter.mode(
+              color,
+              BlendMode.srcIn,
+            ),
+          ),
       contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       title: Text(
         title,

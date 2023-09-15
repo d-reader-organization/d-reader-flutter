@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
@@ -83,7 +82,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           );
 
       if (context.mounted) {
-        nextScreenReplace(context, const DReaderScaffold());
+        nextScreenCloseOthers(context, const DReaderScaffold());
       }
     }
   }
@@ -183,10 +182,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     onValidate: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Field cannot be empty.';
-                      } else if (value.length < 8) {
-                        return 'Password has to be minimum 8 characters length.';
-                      } else if (!passwordRegex.hasMatch(value)) {
-                        return 'Password must contain at least 1 upper&lower case letter and 1 number.';
                       }
                       return null;
                     },

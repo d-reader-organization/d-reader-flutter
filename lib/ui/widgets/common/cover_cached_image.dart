@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CommonCachedImage extends StatelessWidget {
@@ -6,12 +7,14 @@ class CommonCachedImage extends StatelessWidget {
   final String? cacheKey;
   final BoxFit fit;
   final Widget? placeholder;
+  final Function()? onError;
   const CommonCachedImage({
     Key? key,
     required this.imageUrl,
     this.cacheKey,
     this.fit = BoxFit.cover,
     this.placeholder,
+    this.onError,
   }) : super(key: key);
 
   @override
@@ -26,11 +29,16 @@ class CommonCachedImage extends StatelessWidget {
             width: 200,
             color: Colors.grey,
           ),
-      errorWidget: (context, url, error) => Container(
-        height: 200,
-        width: 200,
-        color: Colors.red,
-      ),
+      errorWidget: (context, url, error) {
+        if (onError != null) {
+          onError!();
+        }
+        return Container(
+          height: 400,
+          width: 400,
+          color: ColorPalette.dReaderRed,
+        );
+      },
     );
   }
 }

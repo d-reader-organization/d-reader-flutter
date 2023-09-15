@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/library_utils.dart';
 import 'package:d_reader_flutter/ui/widgets/library/owned_comic_items.dart';
@@ -75,32 +76,44 @@ class OwnedListView extends ConsumerWidget {
                   }
                   return true;
                 },
-                child: ListView.separated(
-                  itemCount: sortedLetters.keys.length,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemBuilder: (context, index) {
-                    final (startAt, endAtLimit) =
-                        getSublistBorders(sortedLetters, index);
-                    return Container(
-                      margin: const EdgeInsets.only(
-                        top: 8,
-                        bottom: 8,
-                      ),
-                      child: OwnedComicItems(
-                        letter: sortedLetters.keys.elementAt(index),
-                        comics: data.sublist(
-                          startAt,
-                          endAtLimit,
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    if (ref.watch(environmentProvider).user?.id != null) {
+                      await ref
+                          .read(userRepositoryProvider)
+                          .syncWallets(ref.watch(environmentProvider).user!.id);
+                      ref.invalidate(ownedComicsAsyncProvider);
+                    }
+                  },
+                  backgroundColor: ColorPalette.dReaderYellow100,
+                  color: ColorPalette.appBackgroundColor,
+                  child: ListView.separated(
+                    itemCount: sortedLetters.keys.length,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    itemBuilder: (context, index) {
+                      final (startAt, endAtLimit) =
+                          getSublistBorders(sortedLetters, index);
+                      return Container(
+                        margin: const EdgeInsets.only(
+                          top: 8,
+                          bottom: 8,
                         ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(
-                      thickness: 1,
-                      color: ColorPalette.boxBackground300,
-                    );
-                  },
+                        child: OwnedComicItems(
+                          letter: sortedLetters.keys.elementAt(index),
+                          comics: data.sublist(
+                            startAt,
+                            endAtLimit,
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(
+                        thickness: 1,
+                        color: ColorPalette.boxBackground300,
+                      );
+                    },
+                  ),
                 ),
               );
             },

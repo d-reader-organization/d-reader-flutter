@@ -44,4 +44,26 @@ class WalletRepositoryImpl implements WalletRepository {
       throw Exception(exception);
     }
   }
+
+  @override
+  Future updateWallet({required String address, required String label}) async {
+    try {
+      final result = await client.patch('/wallet/update/$address', data: {
+        'label': label,
+      }).then((value) => value.data);
+      return result != null
+          ? WalletModel.fromJson(result)
+          : 'Failed to update wallet';
+    } catch (exception) {
+      if (exception is DioException) {
+        final dynamic message = exception.response?.data?['message'];
+        return message != null
+            ? message is List
+                ? message.join('. ')
+                : message
+            : exception.response?.data.toString();
+      }
+      throw Exception(exception);
+    }
+  }
 }

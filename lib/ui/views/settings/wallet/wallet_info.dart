@@ -4,9 +4,11 @@ import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/chain_subscription_client.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
@@ -14,23 +16,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class WalletInfoScreen extends ConsumerWidget {
+class WalletInfoScreen extends ConsumerStatefulWidget {
   final String address, name;
-
   const WalletInfoScreen({
     super.key,
     required this.address,
     required this.name,
   });
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _WalletInfoScreenState();
+}
+
+class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
+  final TextEditingController _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.name;
+  }
+
   Future _handleDisconnectWallet(BuildContext context, WidgetRef ref) async {
     await ref.read(authRepositoryProvider).disconnectWallet(
-          address: address,
+          address: widget.address,
         );
     ref
         .read(environmentProvider)
         .wallets
-        ?.removeWhere((key, value) => key == address);
+        ?.removeWhere((key, value) => key == widget.address);
     ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);
     if (context.mounted) {
@@ -38,14 +53,65 @@ class WalletInfoScreen extends ConsumerWidget {
     }
   }
 
+  _handleUpdateWallet(BuildContext context, WidgetRef ref) async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+
+    final result = await ref.read(walletRepositoryProvider).updateWallet(
+          address: widget.address,
+          label: _nameController.text.trim(),
+        );
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: false,
+      ),
+    );
+    ref.invalidate(userWalletsProvider);
+    if (context.mounted) {
+      return showSnackBar(
+        context: context,
+        text: result is String ? result : 'Wallet updated successfully',
+        backgroundColor: result is String
+            ? ColorPalette.dReaderRed
+            : ColorPalette.dReaderGreen,
+      );
+    }
+  }
+
+  _syncWallet({
+    required BuildContext context,
+    required WidgetRef ref,
+    required String address,
+  }) async {
+    final notifier = ref.read(privateLoadingProvider.notifier);
+
+    notifier.update((state) => true);
+    await ref.read(syncWalletProvider(address).future);
+    notifier.update((state) => false);
+    ref.invalidate(userWalletsProvider);
+
+    if (context.mounted) {
+      showSnackBar(
+        context: context,
+        text: 'Wallet synced successfully',
+        backgroundColor: ColorPalette.dReaderGreen,
+        milisecondsDuration: 1000,
+      );
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: Text(
-          name,
+          widget.name,
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
@@ -55,7 +121,7 @@ class WalletInfoScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         children: [
-          ref.watch(chainSubscriptionClientProvider(address)).when(
+          ref.watch(chainSubscriptionClientProvider(widget.address)).when(
             data: (data) {
               return Text(
                 '${formatPriceWithSignificant(data?.lamports ?? 0)} \$SOL',
@@ -82,17 +148,17 @@ class WalletInfoScreen extends ConsumerWidget {
           ),
           CustomTextField(
             labelText: 'Name',
-            defaultValue: name,
+            controller: _nameController,
           ),
           CustomTextField(
             labelText: 'Address',
             isReadOnly: true,
-            hintText: formatAddress(address),
+            hintText: formatAddress(widget.address),
             suffix: GestureDetector(
               onTap: () async {
                 await Clipboard.setData(
                   ClipboardData(
-                    text: address,
+                    text: widget.address,
                   ),
                 ).then(
                   (value) => ScaffoldMessenger.of(context).showSnackBar(
@@ -113,6 +179,30 @@ class WalletInfoScreen extends ConsumerWidget {
           ),
           const Divider(
             color: ColorPalette.boxBackground300,
+          ),
+          SettingsCommonListTile(
+            title: 'Sync wallet',
+            leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
+            overrideColor: Colors.green,
+            overrideLeading: ref.watch(privateLoadingProvider)
+                ? const SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      color: ColorPalette.dReaderGreen,
+                    ),
+                  )
+                : null,
+            overrideTrailing: const SizedBox(),
+            onTap: ref.watch(globalStateProvider).isLoading
+                ? null
+                : () async {
+                    await _syncWallet(
+                      context: context,
+                      ref: ref,
+                      address: widget.address,
+                    );
+                  },
           ),
           SettingsCommonListTile(
             title: 'Disconnect wallet',
@@ -163,7 +253,9 @@ class WalletInfoScreen extends ConsumerWidget {
                   0,
                   50,
                 ),
-                onPressed: () async {},
+                onPressed: () async {
+                  await _handleUpdateWallet(context, ref);
+                },
               ),
             ),
           ],

@@ -113,13 +113,16 @@ class WalletListScreen extends ConsumerWidget {
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {
+                final walletName = data[index].label.isNotEmpty
+                    ? data[index].label
+                    : 'Wallet ${index + 1}';
                 return GestureDetector(
                   onTap: () {
                     nextScreenPush(
                       context,
                       WalletInfoScreen(
                         address: data[index].address,
-                        name: 'Wallet ${index + 1}',
+                        name: walletName,
                       ),
                     );
                   },
@@ -144,7 +147,7 @@ class WalletListScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Wallet ${index + 1}',
+                                walletName,
                                 style: topTextStyle,
                               ),
                               const SizedBox(

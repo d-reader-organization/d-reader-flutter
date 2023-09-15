@@ -52,6 +52,34 @@ class ProfileView extends HookConsumerWidget {
     );
   }
 
+  syncWallets({
+    required BuildContext context,
+    required WidgetRef ref,
+    required int userId,
+  }) async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    await ref.read(userRepositoryProvider).syncWallets(userId);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: false,
+      ),
+    );
+
+    if (context.mounted) {
+      displaySnackBar(
+        context: context,
+        color: ColorPalette.dReaderGreen,
+        text: 'Assets synced successfully',
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(myUserProvider);
@@ -300,113 +328,145 @@ class ProfileView extends HookConsumerWidget {
                     },
                   ),
                   SettingsCommonListTile(
-                    title: 'Log out',
+                    title: 'Sync assets',
                     leadingPath:
-                        '${Config.settingsAssetsPath}/light/logout.svg',
-                    overrideColor: ColorPalette.dReaderRed,
-                    onTap: () async {
-                      final result = await showDialog<bool>(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            backgroundColor: ColorPalette.boxBackground300,
-                            contentPadding: EdgeInsets.zero,
-                            content: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 16,
-                                  ),
-                                  child: Text(
-                                    'Are you sure you want to log out?',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          return Navigator.pop(context, false);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: const BoxDecoration(
-                                            border: Border(
-                                              right: BorderSide(
-                                                color: ColorPalette
-                                                    .boxBackground200,
-                                                width: 1,
-                                              ),
-                                              top: BorderSide(
-                                                color: ColorPalette
-                                                    .boxBackground200,
-                                                width: 1,
-                                              ),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            'No',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          return Navigator.pop(context, true);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: const BoxDecoration(
-                                            border: Border(
-                                              top: BorderSide(
-                                                color: ColorPalette
-                                                    .boxBackground200,
-                                                width: 1,
-                                              ),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            'Yes',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                        '${Config.settingsAssetsPath}/light/wallet.svg',
+                    overrideColor: Colors.green,
+                    overrideLeading: ref.watch(globalStateProvider).isLoading
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: ColorPalette.dReaderGreen,
                             ),
-                          );
-                        },
-                      );
-                      if (result != null && result) {
-                        await ref.read(logoutProvider.future);
-                        if (context.mounted) {
-                          nextScreenCloseOthers(
-                              context, const InitialIntroScreen());
+                          )
+                        : null,
+                    overrideTrailing: const SizedBox(),
+                    onTap: ref.watch(globalStateProvider).isLoading
+                        ? null
+                        : () async {
+                            await syncWallets(
+                              context: context,
+                              ref: ref,
+                              userId: user.id,
+                            );
+                          },
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 2),
+                    child: SettingsCommonListTile(
+                      title: 'Log out',
+                      leadingPath:
+                          '${Config.settingsAssetsPath}/light/logout.svg',
+                      overrideColor: ColorPalette.dReaderRed,
+                      onTap: () async {
+                        final result = await showDialog<bool>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              backgroundColor: ColorPalette.boxBackground300,
+                              contentPadding: EdgeInsets.zero,
+                              content: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 16,
+                                    ),
+                                    child: Text(
+                                      'Are you sure you want to log out?',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            return Navigator.pop(
+                                              context,
+                                              false,
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                right: BorderSide(
+                                                  color: ColorPalette
+                                                      .boxBackground200,
+                                                  width: 1,
+                                                ),
+                                                top: BorderSide(
+                                                  color: ColorPalette
+                                                      .boxBackground200,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'No',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            return Navigator.pop(context, true);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                top: BorderSide(
+                                                  color: ColorPalette
+                                                      .boxBackground200,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Yes',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                        if (result != null && result) {
+                          await ref.read(logoutProvider.future);
+                          if (context.mounted) {
+                            nextScreenCloseOthers(
+                                context, const InitialIntroScreen());
+                          }
                         }
-                      }
-                    },
+                      },
+                    ),
                   ),
                 ],
               ),

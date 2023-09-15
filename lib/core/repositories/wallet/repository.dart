@@ -5,4 +5,6 @@ abstract class WalletRepository {
   Future<List<WalletAsset>> getAssets(String address);
   Future<dynamic> syncWallet(String address);
   Future<WalletModel?> getWallet(String address);
+  Future<dynamic> updateWallet(
+      {required String address, required String label});
 }

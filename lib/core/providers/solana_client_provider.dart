@@ -199,9 +199,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (candyMachineAddress == null) {
       return 'Candy machine not found.';
     }
-    final minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
+    String? minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
     if (minterAddress == null) {
-      return 'Select/Connect wallet first';
+      final result = await authorizeAndSignMessage();
+      minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
+      if (result != 'OK' || minterAddress == null) {
+        return 'Select/Connect wallet first';
+      }
     }
     final String? encodedNftTransaction =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(

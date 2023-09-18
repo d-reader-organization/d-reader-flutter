@@ -134,10 +134,12 @@ class WalletListScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(
                         8,
                       ),
-                      border: ref.watch(selectedWalletProvider) ==
-                              data[index].address
-                          ? Border.all(color: ColorPalette.dReaderYellow100)
-                          : null,
+                      border: Border.all(
+                        color: ref.watch(selectedWalletProvider) ==
+                                data[index].address
+                            ? ColorPalette.dReaderYellow100
+                            : ColorPalette.boxBackground300,
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -148,6 +150,8 @@ class WalletListScreen extends ConsumerWidget {
                             children: [
                               Text(
                                 walletName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: topTextStyle,
                               ),
                               const SizedBox(
@@ -285,7 +289,7 @@ class WalletListScreen extends ConsumerWidget {
         child: Text(
           ref.watch(isWalletAvailableProvider).maybeWhen(
             data: (data) {
-              return data ? 'Connect Wallet' : 'Install wallet';
+              return data ? 'Add / Connect Wallet' : 'Install wallet';
             },
             orElse: () {
               return '';

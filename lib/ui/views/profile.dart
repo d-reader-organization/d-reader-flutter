@@ -108,6 +108,7 @@ class ProfileView extends HookConsumerWidget {
                         if (username.isNotEmpty) {
                           ref.read(usernameTextProvider.notifier).state = '';
                         }
+                        Navigator.pop(context);
                       },
                       borderRadius: BorderRadius.circular(8),
                       backgroundColor: Colors.transparent,

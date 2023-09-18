@@ -12,6 +12,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/dto.dart';
 part 'wallet_provider.g.dart';
 
+final walletNameProvider = StateProvider.autoDispose<String>((ref) {
+  return '';
+});
+
 final walletRepositoryProvider = Provider<WalletRepositoryImpl>(
   (ref) {
     return WalletRepositoryImpl(

@@ -19,6 +19,7 @@ class _WhatIsWalletViewState extends State<WhatIsWalletView> {
 
   Future<void> _initData() async {
     whatIsAWalletText = await loadAsset();
+    setState(() {});
   }
 
   Future<String> loadAsset() async {

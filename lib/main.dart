@@ -27,6 +27,10 @@ void main() async {
     ],
   );
   await LocalStore().init();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: ColorPalette.appBackgroundColor,
+    systemNavigationBarColor: ColorPalette.appBackgroundColor,
+  ));
   if (kReleaseMode) {
     await SentryFlutter.init(
       (options) {

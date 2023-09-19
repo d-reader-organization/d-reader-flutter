@@ -249,15 +249,17 @@ class WalletListScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(8),
         onPressed: () async {
           final globalNotifier = ref.read(globalStateProvider.notifier);
-          globalNotifier.update(
-            (state) => state.copyWith(
-              isLoading: true,
-            ),
-          );
+
           try {
             final result = await ref
                 .read(solanaProvider.notifier)
-                .authorizeAndSignMessage();
+                .authorizeAndSignMessage(null, () {
+              globalNotifier.update(
+                (state) => state.copyWith(
+                  isLoading: true,
+                ),
+              );
+            });
 
             globalNotifier.update(
               (state) => state.copyWith(

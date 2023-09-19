@@ -91,7 +91,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     );
   }
 
-  Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
+  Future<String> authorizeAndSignMessage([
+    String? overrideCluster,
+    Function()? onStart,
+  ]) async {
     final session = await _getSession();
     if (session == null) {
       throw Exception(missingWalletAppText);
@@ -99,7 +102,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final client = await session.start();
     final String cluster =
         overrideCluster ?? ref.read(environmentProvider).solanaCluster;
-
+    if (onStart != null) {
+      onStart();
+    }
     final result = await _authorize(
       client: client,
       cluster: cluster,

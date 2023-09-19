@@ -21,15 +21,16 @@ class SignUpStep3 extends ConsumerWidget {
 
   Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
     final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-
     try {
-      final result =
-          await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+      final result = await ref
+          .read(solanaProvider.notifier)
+          .authorizeAndSignMessage(null, () {
+        globalNotifier.update(
+          (state) => state.copyWith(
+            isLoading: true,
+          ),
+        );
+      });
       globalNotifier.update(
         (state) => state.copyWith(
           isLoading: false,

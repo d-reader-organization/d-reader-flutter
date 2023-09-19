@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
+import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -99,8 +99,8 @@ class _EReaderViewState extends ConsumerState<EReaderView>
           ),
           body: pagesProvider.when(
             data: (pages) {
-              bool canRead = (issueProvider.value?.isFree != null &&
-                      !issueProvider.value!.isFree) &&
+              bool canRead = (issueProvider.value?.isFreeToRead != null &&
+                      !issueProvider.value!.isFreeToRead) &&
                   (issueProvider.value?.myStats?.canRead != null &&
                       issueProvider.value!.myStats!.canRead);
               return GestureDetector(

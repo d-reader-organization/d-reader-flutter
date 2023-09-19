@@ -10,9 +10,10 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/views/intro/initial.dart';
-import 'package:d_reader_flutter/ui/views/settings/reset_password.dart';
+import 'package:d_reader_flutter/ui/views/settings/profile/change_password.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
@@ -314,18 +315,40 @@ class ProfileView extends HookConsumerWidget {
                     thickness: 1,
                     color: ColorPalette.boxBackground200,
                   ),
+                  !user.isEmailVerified
+                      ? SettingsCommonListTile(
+                          title: 'Send verification email',
+                          leadingPath: 'assets/icons/reset_password.svg',
+                          overrideColor: Colors.white,
+                          overrideTrailing: const SizedBox(),
+                          onTap: () async {
+                            await ref
+                                .read(userRepositoryProvider)
+                                .requestEmailVerification();
+                            if (context.mounted) {
+                              showSnackBar(
+                                context: context,
+                                text: 'Verification email has been sent.',
+                                backgroundColor: ColorPalette.dReaderGreen,
+                                milisecondsDuration: 1200,
+                              );
+                            }
+                          },
+                        )
+                      : const SizedBox(),
                   SettingsCommonListTile(
-                    title: 'Reset password',
+                    title: 'Change password',
                     leadingPath: 'assets/icons/reset_password.svg',
                     overrideColor: Colors.white,
                     overrideTrailing: const SizedBox(),
                     onTap: () {
                       nextScreenPush(
-                          context,
-                          ResetPasswordView(
-                            id: '${user.id}',
-                            email: user.email,
-                          ));
+                        context,
+                        ChangePasswordView(
+                          userId: user.id,
+                          email: user.email,
+                        ),
+                      );
                     },
                   ),
                   SettingsCommonListTile(

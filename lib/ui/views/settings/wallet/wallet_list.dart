@@ -13,6 +13,7 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -95,8 +96,8 @@ class WalletListScreen extends ConsumerWidget {
                     ref.watch(isWalletAvailableProvider).maybeWhen(
                           data: (data) {
                             return data
-                                ? 'No wallet detected'
-                                : 'No wallet installed';
+                                ? 'No wallet connected'
+                                : 'No wallet detected';
                           },
                           orElse: () => '',
                         ),
@@ -107,6 +108,10 @@ class WalletListScreen extends ConsumerWidget {
                       color: Colors.white,
                     ),
                   ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const WhyDoINeedWalletWidget(),
                 ],
               );
             }

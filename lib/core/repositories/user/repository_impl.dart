@@ -183,4 +183,29 @@ class UserRepositoryImpl implements UserRepository {
       throw Exception(exception);
     }
   }
+
+  @override
+  Future<dynamic> updatePassword({
+    required int userId,
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    final result = await client
+        .patch('/user/update-password/$userId', data: {
+          'oldPassword': oldPassword,
+          'newPassword': newPassword,
+        })
+        .then((value) => value.data)
+        .onError((exception, stackTrace) {
+          if (exception is DioException) {
+            final dynamic message = exception.response?.data?['message'];
+            return message != null
+                ? message is List
+                    ? message.join('. ')
+                    : message
+                : exception.response?.data.toString();
+          }
+        });
+    return result;
+  }
 }

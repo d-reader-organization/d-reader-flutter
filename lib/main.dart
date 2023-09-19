@@ -68,6 +68,7 @@ class MyApp extends ConsumerWidget {
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             systemNavigationBarColor: ColorPalette.appBackgroundColor,
+            statusBarColor: ColorPalette.appBackgroundColor,
           ),
         ),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {

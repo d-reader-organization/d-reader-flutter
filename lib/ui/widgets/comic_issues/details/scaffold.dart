@@ -368,7 +368,7 @@ class BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return issue.isFree
+    return issue.isFreeToRead
         ? ReadButton(issue: issue)
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -617,21 +617,23 @@ class ListingStats extends ConsumerWidget {
         children: [
           StatsInfo(
             title: 'VOLUME',
-            stats: issue.isFree
+            stats: issue.isFreeToRead
                 ? '--'
                 : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
           ),
           StatsInfo(
             title: 'SUPPLY',
-            stats: issue.isFree ? '--' : '${issue.supply}',
+            stats: issue.isFreeToRead ? '--' : '${issue.supply}',
           ),
           StatsInfo(
             title: 'LISTED',
-            stats: issue.isFree ? '--' : '${collectionStats?.itemsListed ?? 0}',
+            stats: issue.isFreeToRead
+                ? '--'
+                : '${collectionStats?.itemsListed ?? 0}',
           ),
           StatsInfo(
             title: 'PRICE',
-            stats: issue.isFree
+            stats: issue.isFreeToRead
                 ? 'FREE'
                 : '${collectionStats?.floorPrice != null ? formatLamportPrice(collectionStats!.floorPrice) : '--'}◎',
             isLastItem: true,

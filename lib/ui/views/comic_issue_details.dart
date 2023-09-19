@@ -29,7 +29,7 @@ class ComicIssueDetails extends ConsumerWidget {
           return const SizedBox();
         }
         return ComicIssueDetailsScaffold(
-          loadMore: issue.isFree
+          loadMore: issue.isFreeToRead
               ? null
               : issue.candyMachineAddress != null
                   ? ref.read(receiptsAsyncProvider(issue).notifier).fetchNext
@@ -47,7 +47,7 @@ class ComicIssueDetails extends ConsumerWidget {
                         vertical: 4,
                         horizontal: 0,
                       ),
-                      child: issue.isFree
+                      child: issue.isFreeToRead
                           ? const SizedBox()
                           : Center(
                               child: issue.candyMachineAddress != null

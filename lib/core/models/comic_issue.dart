@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/core/models/stateless_cover.dart';
 class ComicIssueModel {
   final int id, number, supply;
   final String cover, description, slug, title, comicSlug, creatorAddress;
-  final bool isPopular, isFree;
+  final bool isPopular, isFreeToRead, isFullyUploaded;
   final String? candyMachineAddress;
   final double sellerFee;
   final DateTime releaseDate;
@@ -34,7 +34,8 @@ class ComicIssueModel {
     required this.isPopular,
     required this.releaseDate,
     required this.supply,
-    required this.isFree,
+    required this.isFreeToRead,
+    required this.isFullyUploaded,
     required this.sellerFee,
     required this.genres,
     this.candyMachineAddress,
@@ -66,7 +67,8 @@ class ComicIssueModel {
         json['releaseDate'],
       ),
       supply: json['supply'],
-      isFree: json['isFree'],
+      isFreeToRead: json['isFreeToRead'],
+      isFullyUploaded: json['isFullyUploaded'],
       candyMachineAddress: json['candyMachineAddress'],
       sellerFee:
           json['sellerFee'] is int ? json['sellerFee'] + .0 : json['sellerFee'],

@@ -26,26 +26,15 @@ class CreatorListTile extends StatelessWidget {
         height: 48,
       ),
       contentPadding: const EdgeInsets.all(4),
-      title: Row(
-        children: [
-          Expanded(
-            child: Text(
-              creator.name,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const Icon(
-            Icons.verified,
-            color: Colors.yellow,
-            size: 16,
-          ),
-        ],
+      title: Text(
+        creator.name,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        style: textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+          color: Colors.white,
+        ),
       ),
     );
   }

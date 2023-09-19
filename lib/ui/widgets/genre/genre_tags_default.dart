@@ -10,6 +10,12 @@ int getGenreLimit(double screenWidth) {
   return 4;
 }
 
+List<GenreModel> _genresWithMore(List<GenreModel> genres, int sublistLimit) =>
+    genres.sublist(0, sublistLimit)
+      ..add(
+        GenreModel(color: '', name: '', slug: 'dots', icon: ''),
+      );
+
 class GenreTagsDefault extends StatelessWidget {
   final List<GenreModel> genres;
   final bool withHorizontalScroll;
@@ -18,12 +24,6 @@ class GenreTagsDefault extends StatelessWidget {
     required this.genres,
     this.withHorizontalScroll = false,
   }) : super(key: key);
-
-  List<GenreModel> _genresWithMore(int sublistLimit) =>
-      genres.sublist(0, sublistLimit)
-        ..add(
-          GenreModel(color: '', name: '', slug: 'dots', icon: ''),
-        );
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class GenreTagsDefault extends StatelessWidget {
             spacing: 4,
             runSpacing: 4,
             children: (genres.length >= sublistLimit
-                    ? _genresWithMore(sublistLimit)
+                    ? _genresWithMore(genres, sublistLimit)
                     : genres)
                 .map(
                   (genre) => TagContainer(genre: genre),
@@ -65,7 +65,8 @@ class DiscoverGenreTagsDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: (genres.length > 3 ? genres.sublist(0, 3) : genres)
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: (genres.length > 2 ? _genresWithMore(genres, 2) : genres)
           .map(
             (genre) => TagContainer(
               genre: genre,

@@ -28,7 +28,7 @@ class ComicsListView extends ConsumerWidget {
           );
         }
         return SizedBox(
-          height: 276,
+          height: 226,
           child: ListView.builder(
             itemCount: data.length,
             shrinkWrap: true,

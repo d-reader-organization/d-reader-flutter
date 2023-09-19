@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/count_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,37 +22,23 @@ class FavouriteIconCount extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final favouriteHook = useCountState(
-      CountState(
-        count: favouritesCount,
-        isSelected: isFavourite,
-      ),
-    );
     return GestureDetector(
       onTap: slug != null || issueId != null
           ? () {
               if (issueId != null) {
                 ref.read(favouritiseComicIssueProvider(issueId!));
+                ref.invalidate(comicIssueDetailsProvider);
               } else if (slug != null) {
                 ref.read(updateComicFavouriteProvider(slug!));
                 ref.invalidate(comicSlugProvider);
               }
-
-              favouriteHook.value = favouriteHook.value.copyWith(
-                count: favouriteHook.value.isSelected
-                    ? favouriteHook.value.count - 1
-                    : favouriteHook.value.count + 1,
-                isSelected: !favouriteHook.value.isSelected,
-              );
             }
           : null,
       child: Row(
         children: [
           Icon(
-            favouriteHook.value.isSelected
-                ? CupertinoIcons.heart_fill
-                : CupertinoIcons.heart,
-            color: favouriteHook.value.isSelected
+            isFavourite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+            color: isFavourite
                 ? ColorPalette.dReaderRed
                 : ColorPalette.dReaderGrey,
             size: 16,
@@ -62,7 +47,7 @@ class FavouriteIconCount extends HookConsumerWidget {
             width: 4,
           ),
           Text(
-            favouriteHook.value.count.toString(),
+            favouritesCount.toString(),
             style: textTheme.labelMedium,
           ),
         ],

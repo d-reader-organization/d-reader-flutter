@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart'
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/reading_mode_icon.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class EReaderBottomNavigation extends ConsumerWidget {
   final int totalPages, favouritesCount, issueId;
   final double rating;
+  final bool isFavourite;
   const EReaderBottomNavigation({
     super.key,
     required this.totalPages,
     required this.issueId,
     required this.rating,
-    this.favouritesCount = 1550,
+    required this.favouritesCount,
+    required this.isFavourite,
   });
 
   @override
@@ -41,10 +44,22 @@ class EReaderBottomNavigation extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RatingIcon(
-                  initialRating: issue?.stats?.averageRating ?? 0,
-                  issueId: issueId,
-                  isRatedByMe: issue?.myStats?.rating != null,
+                Row(
+                  children: [
+                    RatingIcon(
+                      initialRating: issue?.stats?.averageRating ?? 0,
+                      issueId: issueId,
+                      isRatedByMe: issue?.myStats?.rating != null,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    FavouriteIconCount(
+                      favouritesCount: favouritesCount,
+                      isFavourite: isFavourite,
+                      issueId: issueId,
+                    ),
+                  ],
                 ),
                 Row(
                   children: [

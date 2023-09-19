@@ -75,25 +75,13 @@ class DiscoverComicCard extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            comic.creator?.name ?? '',
-                            style: textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: ColorPalette.greyscale100,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          const Icon(
-                            Icons.verified,
-                            color: ColorPalette.dReaderYellow100,
-                            size: 14,
-                          ),
-                        ],
+                      Text(
+                        comic.creator?.name ?? '',
+                        style: textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: ColorPalette.greyscale100,
+                        ),
                       ),
                       const SizedBox(
                         height: 4,
@@ -136,12 +124,8 @@ class DiscoverComicCard extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const NeverScrollableScrollPhysics(),
-                    child: DiscoverGenreTagsDefault(
-                      genres: comic.genres,
-                    ),
+                  DiscoverGenreTagsDefault(
+                    genres: comic.genres,
                   ),
                 ],
               ),

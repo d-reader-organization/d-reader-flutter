@@ -8,6 +8,7 @@ import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
+import 'package:d_reader_flutter/ui/widgets/e_reader/page_number_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -149,6 +150,8 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                         allowImplicitScrolling: true,
                         itemCount: canRead ? pages.length : pages.length + 1,
                         itemBuilder: (context, index) {
+                          ValueNotifier<int> valueNotifier =
+                              ValueNotifier(index);
                           return MyInteractiveViewer(
                             minScale: 0.1,
                             maxScale: 4,
@@ -158,7 +161,6 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             onInteractionEnd: (scaleDetails) {
                               double scale = _transformationController.value
                                   .getMaxScaleOnAxis();
-
                               setState(() {
                                 _isPageChangeEnabled = scale <= 1;
                               });
@@ -166,9 +168,40 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             constrained: true,
                             child: index == pages.length
                                 ? const PreviewImage()
-                                : CommonCachedImage(
-                                    fit: BoxFit.contain,
-                                    imageUrl: pages[index].image,
+                                : ValueListenableBuilder(
+                                    valueListenable: valueNotifier,
+                                    builder: (context, value, child) {
+                                      return Stack(
+                                        children: [
+                                          CommonCachedImage(
+                                            fit: BoxFit.contain,
+                                            placeholder: Container(
+                                              height: 400,
+                                              width: double.infinity,
+                                              color:
+                                                  ColorPalette.boxBackground300,
+                                            ),
+                                            imageUrl: pages[index].image,
+                                            onError: () {
+                                              ++valueNotifier.value;
+                                            },
+                                          ),
+                                          Positioned.fill(
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                top: 72,
+                                                right: 16,
+                                              ),
+                                              alignment: Alignment.topRight,
+                                              child: PageNumberWidget(
+                                                pageNumber:
+                                                    pages[index].pageNumber,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
                           );
                         },
@@ -191,16 +224,34 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                                 : ValueListenableBuilder(
                                     valueListenable: valueNotifier,
                                     builder: (context, value, child) {
-                                      return CommonCachedImage(
-                                        placeholder: Container(
-                                          height: 400,
-                                          width: double.infinity,
-                                          color: ColorPalette.boxBackground300,
-                                        ),
-                                        imageUrl: pages[index].image,
-                                        onError: () {
-                                          ++valueNotifier.value;
-                                        },
+                                      return Stack(
+                                        children: [
+                                          CommonCachedImage(
+                                            placeholder: Container(
+                                              height: 400,
+                                              width: double.infinity,
+                                              color:
+                                                  ColorPalette.boxBackground300,
+                                            ),
+                                            imageUrl: pages[index].image,
+                                            onError: () {
+                                              ++valueNotifier.value;
+                                            },
+                                          ),
+                                          Positioned.fill(
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                top: 72,
+                                                right: 16,
+                                              ),
+                                              alignment: Alignment.topRight,
+                                              child: PageNumberWidget(
+                                                pageNumber:
+                                                    pages[index].pageNumber,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       );
                                     },
                                   );
@@ -223,6 +274,8 @@ class _EReaderViewState extends ConsumerState<EReaderView>
             totalPages: pagesProvider.value?.length ?? 0,
             rating: issueProvider.value?.stats?.averageRating ?? 0,
             issueId: widget.issueId,
+            favouritesCount: issueProvider.value?.stats?.favouritesCount ?? 0,
+            isFavourite: issueProvider.value?.myStats?.isFavourite ?? false,
           ),
         ),
       ),

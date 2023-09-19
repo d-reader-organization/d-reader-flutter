@@ -26,7 +26,7 @@ class ComicIssuesList extends ConsumerWidget {
         }
         return data.isNotEmpty
             ? SizedBox(
-                height: 276,
+                height: 217,
                 child: ListView.builder(
                   itemCount: data.length,
                   shrinkWrap: true,

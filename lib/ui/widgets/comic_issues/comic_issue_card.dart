@@ -33,6 +33,7 @@ class ComicIssueCard extends StatelessWidget {
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               width: cardWidth,
+              bgImageFit: BoxFit.fill,
               padding: EdgeInsets.zero,
               foregroundDecoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),

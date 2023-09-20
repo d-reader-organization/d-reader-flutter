@@ -1,5 +1,7 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
+import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/widgets/common/search_bar_sliver.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_tab.dart';
@@ -39,6 +41,18 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
     super.dispose();
   }
 
+  _updateViewMode() async {
+    final viewMode = ref.read(viewModeProvider) == ViewMode.detailed
+        ? ViewMode.gallery
+        : ViewMode.detailed;
+
+    ref.read(viewModeProvider.notifier).update((state) => viewMode);
+    await LocalStore.instance.put(
+      viewModeStoreKey,
+      viewMode.name,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -59,12 +73,8 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      ref.read(viewModeProvider.notifier).update(
-                            (state) => state == ViewMode.detailed
-                                ? ViewMode.gallery
-                                : ViewMode.detailed,
-                          );
+                    onTap: () async {
+                      await _updateViewMode();
                     },
                     child: ref.watch(viewModeProvider) == ViewMode.detailed
                         ? SvgPicture.asset('assets/icons/category.svg')

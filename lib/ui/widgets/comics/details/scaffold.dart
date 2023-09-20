@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -6,14 +8,13 @@ import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicDetailsScaffold extends StatefulWidget {
@@ -82,8 +83,11 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
           preferredSize: const Size(0, 64),
           child: AnimatedAppBar(
             animation: _animation,
-            actions: const [
-              NotificationBadge(),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: SvgPicture.asset('assets/icons/more.svg'),
+              ),
             ],
           ),
         ),
@@ -120,46 +124,39 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  widget.comic.title,
-                                  style: textTheme.headlineLarge,
+                            ClipRect(
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 10,
+                                  sigmaY: 10,
                                 ),
-                                widget.comic.isPopular
-                                    ? const HotIcon()
-                                    : const SizedBox(),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        left: BorderSide(
-                                          width: 3,
-                                          color: ColorPalette.dReaderYellow100,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      widget.comic.flavorText,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        fontStyle: FontStyle.italic,
-                                      ),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    backgroundBlendMode: BlendMode.darken,
+                                    color: ColorPalette.boxBackground300,
+                                  ),
+                                  child: const Text(
+                                    'NEW EPISODES!',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: .2,
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            Text(
+                              widget.comic.title,
+                              style: textTheme.headlineLarge,
                             ),
                           ],
                         ),

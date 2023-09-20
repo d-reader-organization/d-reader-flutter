@@ -100,7 +100,7 @@ class MyApp extends ConsumerWidget {
           ),
           headlineLarge: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
           bodySmall: TextStyle(

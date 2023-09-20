@@ -367,7 +367,11 @@ class BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return issue.isFreeToRead
+    final bool canRead =
+        issue.myStats?.canRead != null && issue.myStats!.canRead;
+    final bool showReadButtonOnly =
+        issue.isFreeToRead && canRead && issue.candyMachineAddress == null;
+    return showReadButtonOnly
         ? ReadButton(issue: issue)
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,

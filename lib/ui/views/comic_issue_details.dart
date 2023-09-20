@@ -47,7 +47,8 @@ class ComicIssueDetails extends ConsumerWidget {
                         vertical: 4,
                         horizontal: 0,
                       ),
-                      child: issue.isFreeToRead
+                      child: issue.isFreeToRead &&
+                              issue.candyMachineAddress == null
                           ? const SizedBox()
                           : Center(
                               child: issue.candyMachineAddress != null

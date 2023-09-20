@@ -93,6 +93,9 @@ class ChangeNetworkView extends ConsumerWidget {
         }
       } else {
         ref.invalidate(scaffoldProvider);
+        ref.invalidate(comicsProvider);
+        ref.invalidate(comicIssuesProvider);
+        ref.invalidate(creatorsProvider);
         if (context.mounted) {
           nextScreenCloseOthers(context, const InitialIntroScreen());
         }

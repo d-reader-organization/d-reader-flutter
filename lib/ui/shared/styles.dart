@@ -7,6 +7,7 @@ InputDecoration searchInputDecoration({
   Widget? suffixIcon,
 }) {
   return InputDecoration(
+    contentPadding: const EdgeInsets.all(4),
     fillColor: ColorPalette.boxBackground200,
     filled: true,
     border: OutlineInputBorder(

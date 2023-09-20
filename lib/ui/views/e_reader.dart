@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/page_number_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EReaderView extends ConsumerStatefulWidget {
@@ -167,7 +168,14 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             },
                             constrained: true,
                             child: index == pages.length
-                                ? const PreviewImage()
+                                ? PreviewImage(
+                                    canRead:
+                                        issueProvider.value?.myStats?.canRead ??
+                                            false,
+                                    isFullyUploaded:
+                                        issueProvider.value?.isFullyUploaded ??
+                                            false,
+                                  )
                                 : ValueListenableBuilder(
                                     valueListenable: valueNotifier,
                                     builder: (context, value, child) {
@@ -220,7 +228,14 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             ValueNotifier<int> valueNotifier =
                                 ValueNotifier(index);
                             return index == pages.length
-                                ? const PreviewImage()
+                                ? PreviewImage(
+                                    canRead:
+                                        issueProvider.value?.myStats?.canRead ??
+                                            false,
+                                    isFullyUploaded:
+                                        issueProvider.value?.isFullyUploaded ??
+                                            false,
+                                  )
                                 : ValueListenableBuilder(
                                     valueListenable: valueNotifier,
                                     builder: (context, value, child) {
@@ -284,14 +299,63 @@ class _EReaderViewState extends ConsumerState<EReaderView>
 }
 
 class PreviewImage extends StatelessWidget {
-  const PreviewImage({super.key});
+  final bool canRead, isFullyUploaded;
+  const PreviewImage({
+    super.key,
+    required this.canRead,
+    required this.isFullyUploaded,
+  });
+
+  final textStyle = const TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      constraints: const BoxConstraints(minHeight: 200),
       padding: const EdgeInsets.all(16.0),
-      child: SvgPicture.asset(
-        'assets/icons/comic_preview.svg',
+      child: Stack(
+        children: [
+          SvgPicture.asset(
+            'assets/icons/comic_preview.svg',
+          ),
+          Positioned.fill(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Icon(
+                    FontAwesomeIcons.eyeSlash,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+                const Text(
+                  'This is a comic preview!',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                canRead
+                    ? const SizedBox()
+                    : Text(
+                        'To view all pages buy a full copy or become a monthly subscriber',
+                        style: textStyle,
+                      ),
+                isFullyUploaded
+                    ? const SizedBox()
+                    : Text(
+                        'This comic is not yet fully uploaded. New chapters might be added weekly or the comic is still in a presale phase',
+                        style: textStyle,
+                      ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

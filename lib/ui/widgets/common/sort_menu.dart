@@ -59,7 +59,7 @@ class SortMenu extends ConsumerWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(6.5),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: ColorPalette.boxBackground300,

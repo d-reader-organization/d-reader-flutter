@@ -589,7 +589,7 @@ class Avatar extends StatelessWidget {
                     },
                   ))
               : Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(8),
                   height: 96,
                   width: 96,
                   decoration: BoxDecoration(
@@ -600,6 +600,7 @@ class Avatar extends StatelessWidget {
                     ),
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset(
                         '${Config.settingsAssetsPath}/bold/image.svg',

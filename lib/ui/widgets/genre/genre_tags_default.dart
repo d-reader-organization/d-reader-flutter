@@ -71,6 +71,7 @@ class DiscoverGenreTagsDefault extends StatelessWidget {
             (genre) => TagContainer(
               genre: genre,
               color: ColorPalette.greyscale200,
+              withBorder: false,
             ),
           )
           .toList(),
@@ -81,9 +82,11 @@ class DiscoverGenreTagsDefault extends StatelessWidget {
 class TagContainer extends StatelessWidget {
   final GenreModel genre;
   final Color color;
+  final bool withBorder;
   const TagContainer({
     super.key,
     required this.genre,
+    this.withBorder = true,
     this.color = Colors.white,
   });
 
@@ -122,7 +125,16 @@ class TagContainer extends StatelessWidget {
                 ),
               ],
             )
-          : const EmptyGenreTag(),
+          : withBorder
+              ? const EmptyGenreTag()
+              : Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: const Icon(
+                    Icons.more_horiz_outlined,
+                    color: ColorPalette.boxBackground400,
+                    size: 15,
+                  ),
+                ),
     );
   }
 }

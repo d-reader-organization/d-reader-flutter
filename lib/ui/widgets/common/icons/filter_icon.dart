@@ -26,7 +26,7 @@ class FilterIcon extends ConsumerWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: ColorPalette.boxBackground200,
           borderRadius: BorderRadius.circular(
@@ -42,7 +42,7 @@ class FilterIcon extends ConsumerWidget {
           'assets/icons/filter.svg',
           colorFilter: isActive
               ? const ColorFilter.mode(
-                  Colors.white,
+                  ColorPalette.dReaderYellow100,
                   BlendMode.srcIn,
                 )
               : null,

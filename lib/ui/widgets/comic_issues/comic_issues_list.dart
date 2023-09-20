@@ -47,13 +47,13 @@ class ComicIssuesList extends ConsumerWidget {
         );
       },
       loading: () => SizedBox(
-        height: 276,
+        height: 217,
         child: ListView.builder(
           itemCount: 2,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => SkeletonCard(
-            height: 276,
+            height: 217,
             width: getCardWidth(MediaQuery.sizeOf(context).width),
           ),
         ),

@@ -1,9 +1,11 @@
+import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/common/search_bar_sliver.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_tab.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum DiscoverTabViewEnum { comics, issues, creators }
@@ -45,6 +47,32 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Discover',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      ref.read(viewModeProvider.notifier).update(
+                            (state) => state == ViewMode.detailed
+                                ? ViewMode.gallery
+                                : ViewMode.detailed,
+                          );
+                    },
+                    child: ref.watch(viewModeProvider) == ViewMode.detailed
+                        ? SvgPicture.asset('assets/icons/category.svg')
+                        : SvgPicture.asset('assets/icons/list.svg'),
+                  ),
+                ],
+              ),
+            ),
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SearchBarSliver(

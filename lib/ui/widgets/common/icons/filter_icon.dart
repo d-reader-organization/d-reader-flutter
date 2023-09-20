@@ -27,17 +27,6 @@ class FilterIcon extends ConsumerWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: ColorPalette.boxBackground200,
-          borderRadius: BorderRadius.circular(
-            8,
-          ),
-          border: isActive
-              ? Border.all(
-                  color: ColorPalette.dReaderYellow100,
-                )
-              : null,
-        ),
         child: SvgPicture.asset(
           'assets/icons/filter.svg',
           colorFilter: isActive

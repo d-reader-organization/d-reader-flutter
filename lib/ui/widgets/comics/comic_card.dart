@@ -79,7 +79,7 @@ class ComicCard extends ConsumerWidget {
                     Text(
                       comic.title,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      maxLines: 1,
                       style: textTheme.titleSmall,
                     ),
                     AuthorVerified(

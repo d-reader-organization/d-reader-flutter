@@ -10,8 +10,20 @@ InputDecoration searchInputDecoration({
     contentPadding: const EdgeInsets.all(4),
     fillColor: ColorPalette.boxBackground200,
     filled: true,
+    enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        width: 1,
+        color: ColorPalette.boxBackground400,
+      ),
+      borderRadius: BorderRadius.circular(
+        8,
+      ),
+    ),
     border: OutlineInputBorder(
-      borderSide: const BorderSide(width: 0, style: BorderStyle.none),
+      borderSide: const BorderSide(
+        width: 1,
+        color: ColorPalette.boxBackground400,
+      ),
       borderRadius: BorderRadius.circular(
         8,
       ),

@@ -3,9 +3,9 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/comic_card.dart';
 import 'package:flutter/material.dart';
 
-class ComicsResultsBuilder extends StatelessWidget {
+class ComicListBuilder extends StatelessWidget {
   final List<ComicModel> comics;
-  const ComicsResultsBuilder({
+  const ComicListBuilder({
     super.key,
     required this.comics,
   });

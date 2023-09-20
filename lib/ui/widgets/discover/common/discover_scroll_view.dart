@@ -2,11 +2,13 @@ import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
+import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/discover_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_gallery.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_list.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_list.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_list.dart';
@@ -38,16 +40,24 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
     super.dispose();
   }
 
-  getListSliver(String query) {
+  getListSliver({required String query, required bool isDetailedView}) {
     switch (widget.scrollListType) {
       case ScrollListType.comicList:
-        return ComicList(
-          provider: ref.read(
-            paginatedComicsProvider(
-              query,
-            ),
-          ),
-        );
+        return isDetailedView
+            ? ComicList(
+                provider: ref.read(
+                  paginatedComicsProvider(
+                    query,
+                  ),
+                ),
+              )
+            : ComicGallery(
+                provider: ref.read(
+                  paginatedComicsProvider(
+                    query,
+                  ),
+                ),
+              );
       case ScrollListType.issueList:
         return IssuesList(
           provider: ref.read(
@@ -83,7 +93,8 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
         query,
       ),
     );
-
+    final bool isDetailedView =
+        ref.watch(viewModeProvider) == ViewMode.detailed;
     _scrollController.addListener(() {
       double maxScroll = _scrollController.position.maxScrollExtent;
       double currentScroll = _scrollController.position.pixels;
@@ -102,7 +113,10 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
           delegate: SliverChildBuilderDelegate(
             childCount: 1,
             (context, index) {
-              return getListSliver(query);
+              return getListSliver(
+                query: query,
+                isDetailedView: isDetailedView,
+              );
             },
           ),
         ),

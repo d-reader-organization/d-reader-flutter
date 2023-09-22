@@ -1,13 +1,13 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_gallery_builder.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_gallery_builder.dart';
 import 'package:flutter/material.dart';
 
-class IssuesGallery extends StatelessWidget {
-  final PaginationState<ComicIssueModel> provider;
-  const IssuesGallery({
+class CreatorsGallery extends StatelessWidget {
+  final PaginationState<CreatorModel> provider;
+  const CreatorsGallery({
     super.key,
     required this.provider,
   });
@@ -15,41 +15,41 @@ class IssuesGallery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return provider.when(
-      data: (issues) {
-        return IssuesGalleryBuilder(issues: issues);
+      data: (creators) {
+        return CreatorsGalleryBuilder(creators: creators);
       },
       error: (err, stack) => Text(
         'Error: $err',
         style: const TextStyle(color: Colors.red),
       ),
-      loading: () => const IssuesGallerySkeleton(),
-      onGoingError: (List<ComicIssueModel> items, Object? e, StackTrace? stk) {
-        return IssuesGalleryBuilder(
-          issues: items,
+      loading: () => const CreatorsGallerySkeleton(),
+      onGoingError: (List<CreatorModel> items, Object? e, StackTrace? stk) {
+        return CreatorsGalleryBuilder(
+          creators: items,
         );
       },
-      onGoingLoading: (List<ComicIssueModel> items) {
-        return IssuesGalleryBuilder(
-          issues: items,
+      onGoingLoading: (List<CreatorModel> items) {
+        return CreatorsGalleryBuilder(
+          creators: items,
         );
       },
     );
   }
 }
 
-class IssuesGallerySkeleton extends StatelessWidget {
-  const IssuesGallerySkeleton({super.key});
+class CreatorsGallerySkeleton extends StatelessWidget {
+  const CreatorsGallerySkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 217,
+      height: 166,
       child: ListView.builder(
         itemCount: 2,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) => SkeletonCard(
-          height: 217,
+          height: 166,
           margin: const EdgeInsets.only(
             right: 16,
           ),

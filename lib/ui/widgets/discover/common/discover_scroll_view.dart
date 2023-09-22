@@ -10,6 +10,7 @@ import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_gallery.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_list.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_gallery.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_list.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_gallery.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_list.dart';
@@ -76,13 +77,21 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
                 ),
               );
       case ScrollListType.creatorList:
-        return CreatorsList(
-          provider: ref.read(
-            paginatedCreatorsProvider(
-              query,
-            ),
-          ),
-        );
+        return isDetailedView
+            ? CreatorsList(
+                provider: ref.read(
+                  paginatedCreatorsProvider(
+                    query,
+                  ),
+                ),
+              )
+            : CreatorsGallery(
+                provider: ref.read(
+                  paginatedCreatorsProvider(
+                    query,
+                  ),
+                ),
+              );
       case ScrollListType.collectiblesList:
         return ComicList(
           provider: ref.read(

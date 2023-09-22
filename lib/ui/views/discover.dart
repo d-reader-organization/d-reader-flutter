@@ -42,9 +42,6 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
   }
 
   _updateViewMode() async {
-    if (ref.read(tabBarProvider).selectedTabIndex == 2) {
-      return;
-    }
     final viewMode = ref.read(viewModeProvider) == ViewMode.detailed
         ? ViewMode.gallery
         : ViewMode.detailed;

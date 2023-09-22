@@ -68,6 +68,7 @@ class RatingIcon extends ConsumerWidget {
       child: isContainerWidget
           ? Container(
               padding: const EdgeInsets.all(8),
+              constraints: const BoxConstraints(minWidth: 64),
               decoration: BoxDecoration(
                 color: isRatedByMe
                     ? ColorPalette.dReaderYellow100.withOpacity(.4)
@@ -80,6 +81,7 @@ class RatingIcon extends ConsumerWidget {
                 ),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   isRatedByMe
                       ? SvgPicture.asset(

@@ -319,43 +319,16 @@ class _ComicIssueDetailsScaffoldState
                             ),
                           ),
                         ),
-                        // Expanded(
-                        //   flex: 2,
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       RatingIcon(
-                        //         initialRating:
-                        //             widget.issue.stats?.averageRating ?? 0,
-                        //         isRatedByMe:
-                        //             widget.issue.myStats?.rating != null,
-                        //         issueId: widget.issue.id,
-                        //         isContainerWidget: true,
-                        //       ),
-                        //       const SizedBox(
-                        //         width: 16,
-                        //       ),
-                        //       FavouriteIconCount(
-                        //         favouritesCount:
-                        //             widget.issue.stats?.favouritesCount ?? 0,
-                        //         isFavourite:
-                        //             widget.issue.myStats?.isFavourite ?? false,
-                        //         issueId: widget.issue.id,
-                        //         isContainerWidget: true,
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   ],
                 ),
               ),
-              widget.issue.candyMachineAddress != null
-                  ? CandyMachineStats(
-                      address: widget.issue.candyMachineAddress ?? '',
-                    )
-                  : ListingStats(issue: widget.issue),
+              // widget.issue.candyMachineAddress != null
+              //     ? CandyMachineStats(
+              //         address: widget.issue.candyMachineAddress ?? '',
+              //       )
+              //     : ListingStats(issue: widget.issue),
               const SizedBox(
                 height: 24,
               ),

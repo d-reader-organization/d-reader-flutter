@@ -38,6 +38,7 @@ class FavouriteIconCount extends HookConsumerWidget {
       child: isContainerWidget
           ? Container(
               padding: const EdgeInsets.all(8),
+              constraints: const BoxConstraints(minWidth: 64),
               decoration: BoxDecoration(
                 color: isFavourite
                     ? ColorPalette.dReaderRed.withOpacity(.4)
@@ -50,6 +51,7 @@ class FavouriteIconCount extends HookConsumerWidget {
                 ),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     isFavourite

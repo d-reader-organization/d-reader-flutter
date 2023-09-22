@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FavouriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
-  final bool isFavourite;
+  final bool isFavourite, isContainerWidget;
   final String? slug;
   final int? issueId;
 
@@ -17,6 +17,7 @@ class FavouriteIconCount extends HookConsumerWidget {
     required this.isFavourite,
     this.slug,
     this.issueId,
+    this.isContainerWidget = false,
   }) : super(key: key);
 
   @override
@@ -34,24 +35,61 @@ class FavouriteIconCount extends HookConsumerWidget {
               }
             }
           : null,
-      child: Row(
-        children: [
-          Icon(
-            isFavourite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-            color: isFavourite
-                ? ColorPalette.dReaderRed
-                : ColorPalette.dReaderGrey,
-            size: 16,
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          Text(
-            favouritesCount.toString(),
-            style: textTheme.labelMedium,
-          ),
-        ],
-      ),
+      child: isContainerWidget
+          ? Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isFavourite
+                    ? ColorPalette.dReaderRed.withOpacity(.4)
+                    : ColorPalette.appBackgroundColor,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: isFavourite
+                      ? Colors.transparent
+                      : ColorPalette.boxBackground400,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    isFavourite
+                        ? CupertinoIcons.heart_fill
+                        : CupertinoIcons.heart,
+                    color: isFavourite
+                        ? ColorPalette.dReaderRed
+                        : ColorPalette.dReaderGrey,
+                    size: 16,
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    favouritesCount.toString(),
+                    style: textTheme.labelMedium,
+                  ),
+                ],
+              ),
+            )
+          : Row(
+              children: [
+                Icon(
+                  isFavourite
+                      ? CupertinoIcons.heart_fill
+                      : CupertinoIcons.heart,
+                  color: isFavourite
+                      ? ColorPalette.dReaderRed
+                      : ColorPalette.dReaderGrey,
+                  size: 16,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  favouritesCount.toString(),
+                  style: textTheme.labelMedium,
+                ),
+              ],
+            ),
     );
   }
 }

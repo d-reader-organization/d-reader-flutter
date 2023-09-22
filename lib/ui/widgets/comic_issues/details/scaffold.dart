@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
@@ -12,7 +14,6 @@ import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
@@ -20,15 +21,16 @@ import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
-import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -106,6 +108,15 @@ class _ComicIssueDetailsScaffoldState
           child: AnimatedAppBar(
             animation: _animation,
             title: widget.issue.comic?.title,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 16,
+                  top: 4,
+                ),
+                child: SvgPicture.asset('assets/icons/more.svg'),
+              ),
+            ],
           ),
         ),
         extendBodyBehindAppBar: true,
@@ -120,111 +131,43 @@ class _ComicIssueDetailsScaffoldState
               Stack(
                 children: [
                   CachedImageBgPlaceholder(
-                    height: 320,
+                    height: 431,
                     imageUrl: widget.issue.cover,
                     overrideBorderRadius: BorderRadius.circular(0),
-                    foregroundDecoration: const BoxDecoration(
+                    foregroundDecoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
                           ColorPalette.appBackgroundColor,
-                          Colors.transparent,
+                          const Color(0xff181a20).withOpacity(.9),
                           ColorPalette.appBackgroundColor,
                         ],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        stops: [0.0, .6406, 1],
+                        stops: const [0.0, .6406, 1],
                       ),
                     ),
                   ),
                   Positioned.fill(
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            widget.issue.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: textTheme.headlineLarge,
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    'EP',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${widget.issue.number}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      Text(
-                                        '/${widget.issue.stats?.totalIssuesCount}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(),
+                        Container(
+                          height: 309,
+                          width: 214,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              8,
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                widget.issue.cover,
                               ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.menu_book,
-                                    color: Colors.white,
-                                    size: 16,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    '${widget.issue.stats?.totalPagesCount.toString()} pages',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.calendar_month,
-                                    size: 16,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    formatDate(widget.issue.releaseDate),
-                                    style: textTheme.labelMedium,
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -233,12 +176,99 @@ class _ComicIssueDetailsScaffoldState
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    TextWithViewMore(
-                      text: widget.issue.description,
-                      textAlign: TextAlign.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'EPISODE  ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: ColorPalette.greyscale100,
+                          ),
+                        ),
+                        Text(
+                          '${widget.issue.number}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          ' / ${widget.issue.stats?.totalIssuesCount}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: ColorPalette.greyscale100,
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 4,
+                    ),
+                    Text(
+                      widget.issue.title,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RatingIcon(
+                          initialRating: widget.issue.stats?.averageRating ?? 0,
+                          isRatedByMe: widget.issue.myStats?.rating != null,
+                          issueId: widget.issue.id,
+                          isContainerWidget: true,
+                        ),
+                        FavouriteIconCount(
+                          favouritesCount:
+                              widget.issue.stats?.favouritesCount ?? 0,
+                          isFavourite:
+                              widget.issue.myStats?.isFavourite ?? false,
+                          issueId: widget.issue.id,
+                          isContainerWidget: true,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${widget.issue.stats?.totalPagesCount} ',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Text(
+                              'pages',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: ColorPalette.greyscale100,
+                              ),
+                            ),
+                          ],
+                        ),
+                        MatureAudience(
+                          audienceType: widget.issue.comic?.audienceType ?? '',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      color: ColorPalette.boxBackground300,
+                    ),
+                    const SizedBox(
+                      height: 8,
                     ),
                     Row(
                       children: [
@@ -279,29 +309,43 @@ class _ComicIssueDetailsScaffoldState
                         ),
                         Expanded(
                           flex: 2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              RatingIcon(
-                                initialRating:
-                                    widget.issue.stats?.averageRating ?? 0,
-                                isRatedByMe:
-                                    widget.issue.myStats?.rating != null,
-                                issueId: widget.issue.id,
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              FavouriteIconCount(
-                                favouritesCount:
-                                    widget.issue.stats?.favouritesCount ?? 0,
-                                isFavourite:
-                                    widget.issue.myStats?.isFavourite ?? false,
-                                issueId: widget.issue.id,
-                              ),
-                            ],
+                          child: Text(
+                            formatDateFull(widget.issue.releaseDate),
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: ColorPalette.greyscale100,
+                            ),
                           ),
                         ),
+                        // Expanded(
+                        //   flex: 2,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       RatingIcon(
+                        //         initialRating:
+                        //             widget.issue.stats?.averageRating ?? 0,
+                        //         isRatedByMe:
+                        //             widget.issue.myStats?.rating != null,
+                        //         issueId: widget.issue.id,
+                        //         isContainerWidget: true,
+                        //       ),
+                        //       const SizedBox(
+                        //         width: 16,
+                        //       ),
+                        //       FavouriteIconCount(
+                        //         favouritesCount:
+                        //             widget.issue.stats?.favouritesCount ?? 0,
+                        //         isFavourite:
+                        //             widget.issue.myStats?.isFavourite ?? false,
+                        //         issueId: widget.issue.id,
+                        //         isContainerWidget: true,
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],

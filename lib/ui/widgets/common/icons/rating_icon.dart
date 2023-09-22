@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rating_stars.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +12,14 @@ class RatingIcon extends ConsumerWidget {
   final double initialRating;
   final int? issueId;
   final String? comicSlug;
-  final bool isRatedByMe;
+  final bool isRatedByMe, isContainerWidget;
   const RatingIcon({
     Key? key,
     required this.initialRating,
     this.isRatedByMe = false,
     this.issueId,
     this.comicSlug,
+    this.isContainerWidget = false,
   }) : super(key: key);
 
   @override
@@ -63,28 +65,65 @@ class RatingIcon extends ConsumerWidget {
               );
             }
           : null,
-      child: Row(
-        children: [
-          isRatedByMe
-              ? SvgPicture.asset(
-                  'assets/icons/star_bold.svg',
-                  width: 16,
-                  height: 16,
-                )
-              : SvgPicture.asset(
-                  'assets/icons/star_light.svg',
-                  width: 16,
-                  height: 16,
+      child: isContainerWidget
+          ? Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isRatedByMe
+                    ? ColorPalette.dReaderYellow100.withOpacity(.4)
+                    : ColorPalette.appBackgroundColor,
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: isRatedByMe
+                      ? Colors.transparent
+                      : ColorPalette.boxBackground400,
                 ),
-          const SizedBox(
-            width: 4,
-          ),
-          Text(
-            initialRating > 0.0 ? initialRating.toString() : '--',
-            style: textTheme.labelMedium,
-          ),
-        ],
-      ),
+              ),
+              child: Row(
+                children: [
+                  isRatedByMe
+                      ? SvgPicture.asset(
+                          'assets/icons/star_bold.svg',
+                          width: 16,
+                          height: 16,
+                        )
+                      : SvgPicture.asset(
+                          'assets/icons/star_light.svg',
+                          width: 16,
+                          height: 16,
+                        ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    initialRating > 0.0 ? initialRating.toString() : '--',
+                    style: textTheme.labelMedium,
+                  ),
+                ],
+              ),
+            )
+          : Row(
+              children: [
+                isRatedByMe
+                    ? SvgPicture.asset(
+                        'assets/icons/star_bold.svg',
+                        width: 16,
+                        height: 16,
+                      )
+                    : SvgPicture.asset(
+                        'assets/icons/star_light.svg',
+                        width: 16,
+                        height: 16,
+                      ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  initialRating > 0.0 ? initialRating.toString() : '--',
+                  style: textTheme.labelMedium,
+                ),
+              ],
+            ),
     );
   }
 }

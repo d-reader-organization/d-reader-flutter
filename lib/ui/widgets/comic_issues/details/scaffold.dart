@@ -138,7 +138,7 @@ class _ComicIssueDetailsScaffoldState
                       gradient: LinearGradient(
                         colors: [
                           ColorPalette.appBackgroundColor,
-                          const Color(0xff181a20).withOpacity(.9),
+                          const Color(0xff181a20).withOpacity(.8),
                           ColorPalette.appBackgroundColor,
                         ],
                         begin: Alignment.bottomCenter,

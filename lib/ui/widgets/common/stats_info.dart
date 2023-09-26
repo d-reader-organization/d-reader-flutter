@@ -18,7 +18,7 @@ class StatsInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
         decoration: isLastItem
             ? null
             : const BoxDecoration(

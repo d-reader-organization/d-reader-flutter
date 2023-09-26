@@ -355,7 +355,9 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                 child: TabBarView(
                   children: [
                     IssueAbout(issue: issue),
-                    const IssueListings(),
+                    IssueListings(
+                      issue: issue,
+                    ),
                   ],
                 ),
               ),

@@ -1,10 +1,12 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_items.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
@@ -27,13 +29,127 @@ class IssueListings extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        const Text('Filters'),
+        const ListingFilters(),
         const SizedBox(
           height: 16,
         ),
         ListedItems(
           issue: issue,
         ),
+      ],
+    );
+  }
+}
+
+class ListingFilters extends ConsumerStatefulWidget {
+  const ListingFilters({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _ListingFiltersState();
+}
+
+class _ListingFiltersState extends ConsumerState<ListingFilters> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+            decoration: InputDecoration(
+                constraints: const BoxConstraints(minHeight: 46),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: SvgPicture.asset(
+                    'assets/icons/search.svg',
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                filled: true,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
+                fillColor: ColorPalette.boxBackground200,
+                hintText: '#1203...',
+                hintStyle: const TextStyle(
+                  color: ColorPalette.greyscale200,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: ColorPalette.boxBackground400,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: ColorPalette.boxBackground400,
+                  ),
+                )),
+          ),
+        ),
+        const SizedBox(
+          width: 16,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              constraints: const BoxConstraints(minHeight: 46),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: ColorPalette.boxBackground200,
+                border: Border.all(
+                  color: ColorPalette.boxBackground400,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Text(
+                    'Price',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: .2,
+                    ),
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/arrow_down.svg',
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            Container(
+              constraints: const BoxConstraints(minHeight: 46),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: ColorPalette.boxBackground200,
+                border: Border.all(
+                  color: ColorPalette.boxBackground400,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/filter.svg',
+                colorFilter: const ColorFilter.mode(
+                  Colors.white,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }

@@ -20,7 +20,10 @@ class ListedItems extends ConsumerWidget {
     return provider.when(
       data: (listings) {
         if (listings.isEmpty) {
-          return const Text('No items listed.');
+          return const Text(
+            'No items listed.',
+            textAlign: TextAlign.center,
+          );
         }
         return ListView.separated(
           itemCount: listings.length,

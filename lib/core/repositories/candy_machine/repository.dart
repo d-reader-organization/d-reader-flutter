@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
+import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 
 abstract class CandyMachineRepository {
@@ -7,5 +8,9 @@ abstract class CandyMachineRepository {
   );
   Future<List<Receipt>> getReceipts({
     String? queryString,
+  });
+
+  Future<List<CandyMachineGroupModel>> getGroups({
+    required String query,
   });
 }

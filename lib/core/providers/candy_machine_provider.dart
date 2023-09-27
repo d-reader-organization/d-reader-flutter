@@ -4,6 +4,8 @@ import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'candy_machine_provider.g.dart';
 
 final candyMachineRepositoryProvider = Provider<CandyMachineRepositoryImpl>(
   (ref) {
@@ -29,3 +31,8 @@ final receiptsProvider = FutureProvider.autoDispose
         queryString: '${arg.query}&candyMachineAddress=${arg.address}',
       );
 });
+
+@riverpod
+candyMachineGroups(Ref ref, {required String query}) {
+  return ref.read(candyMachineRepositoryProvider).getGroups(query: query);
+}

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository.dart';
@@ -35,5 +36,22 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<List<CandyMachineGroupModel>> getGroups(
+      {required String query}) async {
+    final response = await client
+        .get('/candy-machine/get/groups?$query')
+        .then((value) => value.data);
+    return response != null
+        ? List<CandyMachineGroupModel>.from(
+            response.map(
+              (item) => CandyMachineGroupModel.fromJson(
+                item,
+              ),
+            ),
+          )
+        : [];
   }
 }

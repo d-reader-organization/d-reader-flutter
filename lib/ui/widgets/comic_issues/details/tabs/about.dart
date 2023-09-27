@@ -18,6 +18,8 @@ class IssueAbout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
+      physics: const PageScrollPhysics(),
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
         const Text(

@@ -393,6 +393,11 @@ class BottomNavigation extends ConsumerWidget {
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Expanded(
+                child: ReadButton(
+                  issue: issue,
+                ),
+              ),
               issue.candyMachineAddress != null
                   ? Expanded(
                       child: TransactionButton(
@@ -400,7 +405,7 @@ class BottomNavigation extends ConsumerWidget {
                         onPressed: () async {
                           await _handleMint(context, ref);
                         },
-                        text: 'MINT',
+                        text: 'Mint',
                         price: issue.stats?.price,
                       ),
                     )
@@ -439,16 +444,11 @@ class BottomNavigation extends ConsumerWidget {
                                     .copyWith(isLoading: false);
                               }
                             : null,
-                        text: 'BUY',
+                        text: 'Buy',
                         price: ref.watch(selectedItemsPrice),
                         isListing: true,
                       ),
                     ),
-              Expanded(
-                child: ReadButton(
-                  issue: issue,
-                ),
-              ),
             ],
           );
   }
@@ -474,6 +474,7 @@ class TransactionButton extends StatelessWidget {
     return CustomTextButton(
       size: const Size(150, 50),
       isLoading: isLoading,
+      fontSize: 16,
       borderRadius: const BorderRadius.all(
         Radius.circular(
           8,
@@ -520,7 +521,10 @@ class ReadButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomTextButton(
       size: const Size(150, 50),
-      backgroundColor: ColorPalette.dReaderGreen,
+      backgroundColor: Colors.transparent,
+      borderColor: ColorPalette.greyscale50,
+      textColor: ColorPalette.greyscale50,
+      fontSize: 16,
       borderRadius: const BorderRadius.all(
         Radius.circular(
           8,
@@ -548,7 +552,7 @@ class ReadButton extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  'READ',
+                  'Read',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -557,7 +561,7 @@ class ReadButton extends StatelessWidget {
               ],
             )
           : const Text(
-              'PREVIEW',
+              'Preview',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

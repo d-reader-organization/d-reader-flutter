@@ -80,25 +80,29 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                   AnimatedBuilder(
                     animation: _animation,
                     builder: (BuildContext context, Widget? child) {
-                      return SliverAppBar(
-                        pinned: true,
-                        backgroundColor: ColorPalette.appBackgroundColor,
-                        title: Text(
-                          '${issue.comic?.title}',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        actions: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              right: 16,
-                              top: 4,
+                      return SliverOverlapAbsorber(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                            context),
+                        sliver: SliverAppBar(
+                          pinned: true,
+                          backgroundColor: ColorPalette.appBackgroundColor,
+                          title: Text(
+                            '${issue.comic?.title}',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
                             ),
-                            child: SvgPicture.asset('assets/icons/more.svg'),
                           ),
-                        ],
+                          actions: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: 16,
+                                top: 4,
+                              ),
+                              child: SvgPicture.asset('assets/icons/more.svg'),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -326,21 +330,24 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                               ),
                             ),
                           ),
-                          const TabBar(
-                            dividerColor: ColorPalette.dReaderGrey,
-                            indicatorWeight: 4,
-                            indicatorColor: ColorPalette.dReaderYellow100,
-                            labelColor: ColorPalette.dReaderYellow100,
-                            unselectedLabelColor: ColorPalette.dReaderGrey,
-                            tabs: [
-                              Tab(
-                                text: 'About',
-                              ),
-                              Tab(
-                                text: 'Listings',
-                              ),
-                            ],
-                          ),
+                          issue.candyMachineAddress == null
+                              ? const TabBar(
+                                  dividerColor: ColorPalette.dReaderGrey,
+                                  indicatorWeight: 4,
+                                  indicatorColor: ColorPalette.dReaderYellow100,
+                                  labelColor: ColorPalette.dReaderYellow100,
+                                  unselectedLabelColor:
+                                      ColorPalette.dReaderGrey,
+                                  tabs: [
+                                    Tab(
+                                      text: 'About',
+                                    ),
+                                    Tab(
+                                      text: 'Listings',
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     ),
@@ -352,14 +359,16 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                   horizontal: 16,
                   vertical: 4,
                 ),
-                child: TabBarView(
-                  children: [
-                    IssueAbout(issue: issue),
-                    IssueListings(
-                      issue: issue,
-                    ),
-                  ],
-                ),
+                child: issue.candyMachineAddress != null
+                    ? IssueAbout(issue: issue)
+                    : TabBarView(
+                        children: [
+                          IssueAbout(issue: issue),
+                          IssueListings(
+                            issue: issue,
+                          ),
+                        ],
+                      ),
               ),
             ),
           ),

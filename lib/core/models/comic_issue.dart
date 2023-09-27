@@ -5,9 +5,9 @@ import 'package:d_reader_flutter/core/models/stateful_cover.dart';
 import 'package:d_reader_flutter/core/models/stateless_cover.dart';
 
 class ComicIssueModel {
-  final int id, number, supply;
+  final int id, number;
   final String cover, description, slug, title, comicSlug, creatorAddress;
-  final bool isPopular, isFreeToRead, isFullyUploaded;
+  final bool isPopular, isFreeToRead, isFullyUploaded, isSecondarySaleActive;
   final String? candyMachineAddress;
   final double sellerFee;
   final DateTime releaseDate;
@@ -33,7 +33,6 @@ class ComicIssueModel {
     required this.creator,
     required this.isPopular,
     required this.releaseDate,
-    required this.supply,
     required this.isFreeToRead,
     required this.isFullyUploaded,
     required this.sellerFee,
@@ -44,6 +43,7 @@ class ComicIssueModel {
     this.statefulCovers,
     required this.comicSlug,
     required this.creatorAddress,
+    required this.isSecondarySaleActive,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -66,7 +66,6 @@ class ComicIssueModel {
       releaseDate: DateTime.parse(
         json['releaseDate'],
       ),
-      supply: json['supply'],
       isFreeToRead: json['isFreeToRead'],
       isFullyUploaded: json['isFullyUploaded'],
       candyMachineAddress: json['candyMachineAddress'],
@@ -110,6 +109,7 @@ class ComicIssueModel {
           : [],
       comicSlug: json['comicSlug'],
       creatorAddress: json['creatorAddress'],
+      isSecondarySaleActive: json['isSecondarySaleActive'] ?? false,
     );
   }
 }

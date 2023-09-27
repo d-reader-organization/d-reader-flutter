@@ -2,9 +2,7 @@ import 'package:d_reader_flutter/core/models/nft.dart';
 
 class ListingModel {
   final int id;
-  final String nftAddress;
-  final String name;
-  final String cover;
+  final String nftAddress, name, cover, rarity;
   final List<NftAttribute> attributes;
   final Seller seller;
   final String tokenAddress;
@@ -23,23 +21,24 @@ class ListingModel {
     required this.price,
     required this.isUsed,
     required this.isSigned,
+    required this.rarity,
   });
 
   factory ListingModel.fromJson(Map<String, dynamic> json) {
     return ListingModel(
-      id: json['id'],
-      nftAddress: json['nftAddress'],
-      name: json['name'],
-      cover: json['cover'],
-      attributes: List<NftAttribute>.from(
-        json['attributes'].map((x) => NftAttribute.fromJson(x)),
-      ),
-      seller: Seller.fromJson(json['seller']),
-      tokenAddress: json['tokenAddress'],
-      price: json['price'],
-      isUsed: json['isUsed'],
-      isSigned: json['isSigned'],
-    );
+        id: json['id'],
+        nftAddress: json['nftAddress'],
+        name: json['name'],
+        cover: json['cover'],
+        attributes: List<NftAttribute>.from(
+          json['attributes'].map((x) => NftAttribute.fromJson(x)),
+        ),
+        seller: Seller.fromJson(json['seller']),
+        tokenAddress: json['tokenAddress'],
+        price: json['price'],
+        isUsed: json['isUsed'],
+        isSigned: json['isSigned'],
+        rarity: json['rarity']);
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +53,7 @@ class ListingModel {
     data['price'] = price;
     data['isUsed'] = isUsed;
     data['isSigned'] = isSigned;
+    data['rarity'] = rarity;
     return data;
   }
 }

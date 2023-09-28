@@ -386,8 +386,9 @@ class BottomNavigation extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool canRead =
         issue.myStats?.canRead != null && issue.myStats!.canRead;
-    final bool showReadButtonOnly =
-        issue.isFreeToRead && canRead && issue.candyMachineAddress == null;
+    final bool showReadButtonOnly = issue.isFreeToRead &&
+        canRead &&
+        issue.activeCandyMachineAddress == null;
     return showReadButtonOnly
         ? ReadButton(issue: issue)
         : Row(
@@ -398,7 +399,7 @@ class BottomNavigation extends ConsumerWidget {
                   issue: issue,
                 ),
               ),
-              issue.candyMachineAddress != null
+              issue.activeCandyMachineAddress != null
                   ? Expanded(
                       child: TransactionButton(
                         isLoading: ref.watch(globalStateProvider).isLoading,
@@ -409,46 +410,51 @@ class BottomNavigation extends ConsumerWidget {
                         price: issue.stats?.price,
                       ),
                     )
-                  : Expanded(
-                      child: TransactionButton(
-                        isLoading: ref.watch(globalStateProvider).isLoading,
-                        onPressed: ref.read(selectedItemsProvider).isNotEmpty
-                            ? () async {
-                                final activeWallet =
-                                    ref.read(environmentProvider).publicKey;
-                                if (activeWallet == null) {
-                                  throw Exception(
-                                      'There is no wallet selected');
-                                }
-                                List<BuyNftInput> selectedNftsInput = ref
+                  : issue.isSecondarySaleActive
+                      ? Expanded(
+                          child: TransactionButton(
+                            isLoading: ref.watch(globalStateProvider).isLoading,
+                            onPressed: ref
                                     .read(selectedItemsProvider)
-                                    .map(
-                                      (e) => BuyNftInput(
-                                        mintAccount: e.nftAddress,
-                                        price: e.price,
-                                        sellerAddress: e.seller.address,
-                                        buyerAddress: activeWallet.toBase58(),
-                                      ),
-                                    )
-                                    .toList();
-                                final isSuccessful = await ref
-                                    .read(solanaProvider.notifier)
-                                    .buyMultiple(selectedNftsInput);
-                                if (isSuccessful) {
-                                  ref.invalidate(listedItemsProvider);
-                                  ref.invalidate(userAssetsProvider);
-                                }
-                                ref
-                                    .read(globalStateProvider.notifier)
-                                    .state
-                                    .copyWith(isLoading: false);
-                              }
-                            : null,
-                        text: 'Buy',
-                        price: ref.watch(selectedItemsPrice),
-                        isListing: true,
-                      ),
-                    ),
+                                    .isNotEmpty
+                                ? () async {
+                                    final activeWallet =
+                                        ref.read(environmentProvider).publicKey;
+                                    if (activeWallet == null) {
+                                      throw Exception(
+                                          'There is no wallet selected');
+                                    }
+                                    List<BuyNftInput> selectedNftsInput = ref
+                                        .read(selectedItemsProvider)
+                                        .map(
+                                          (e) => BuyNftInput(
+                                            mintAccount: e.nftAddress,
+                                            price: e.price,
+                                            sellerAddress: e.seller.address,
+                                            buyerAddress:
+                                                activeWallet.toBase58(),
+                                          ),
+                                        )
+                                        .toList();
+                                    final isSuccessful = await ref
+                                        .read(solanaProvider.notifier)
+                                        .buyMultiple(selectedNftsInput);
+                                    if (isSuccessful) {
+                                      ref.invalidate(listedItemsProvider);
+                                      ref.invalidate(userAssetsProvider);
+                                    }
+                                    ref
+                                        .read(globalStateProvider.notifier)
+                                        .state
+                                        .copyWith(isLoading: false);
+                                  }
+                                : null,
+                            text: 'Buy',
+                            price: ref.watch(selectedItemsPrice),
+                            isListing: true,
+                          ),
+                        )
+                      : const SizedBox(),
             ],
           );
   }
@@ -645,10 +651,10 @@ class ListingStats extends ConsumerWidget {
                 ? '--'
                 : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
           ),
-          StatsInfo(
-            title: 'SUPPLY',
-            stats: issue.isFreeToRead ? '--' : '${issue.supply}',
-          ),
+          const StatsInfo(
+              title: 'SUPPLY',
+              stats: '--' //issue.isFreeToRead ? '--' : '${issue.supply}',
+              ),
           StatsInfo(
             title: 'LISTED',
             stats: issue.isFreeToRead

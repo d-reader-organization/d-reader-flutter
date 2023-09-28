@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/comic_details.dart';
-import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
+import 'package:d_reader_flutter/ui/views/comic_issue_details2.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
@@ -65,7 +65,7 @@ class Carousel extends ConsumerWidget {
                         } else if (carouselItem.comicIssueId != null) {
                           return nextScreenPush(
                               context,
-                              ComicIssueDetails(
+                              ComicIssueDetails2(
                                   id: carouselItem.comicIssueId!));
                         } else if (carouselItem.creatorSlug != null &&
                             carouselItem.creatorSlug!.isNotEmpty) {

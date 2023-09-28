@@ -124,8 +124,12 @@ class DiscoverComicCard extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
-                  DiscoverGenreTagsDefault(
-                    genres: comic.genres,
+                  SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: DiscoverGenreTagsDefault(
+                      genres: comic.genres,
+                    ),
                   ),
                 ],
               ),

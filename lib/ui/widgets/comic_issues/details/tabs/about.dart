@@ -1,15 +1,21 @@
+import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/collaborator.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/stateless_cover.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
-class IssueAbout extends StatelessWidget {
+class IssueAbout extends ConsumerWidget {
   final ComicIssueModel issue;
   const IssueAbout({
     super.key,
@@ -17,176 +23,41 @@ class IssueAbout extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
-        if (!issue.isSecondarySaleActive) ...[
-          const DecoratedContainer(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Artist mint',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: ColorPalette.greyscale200,
-                      radius: 6,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      'Ended',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: ColorPalette.greyscale200,
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  'Free',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
+        if (issue.activeCandyMachineAddress != null) ...[
+          FutureBuilder(
+            future: ref.read(
+              candyMachineGroupsProvider(
+                      query:
+                          'candyMachineAddress=${issue.activeCandyMachineAddress}&walletAddress=${ref.watch(environmentProvider).publicKey?.toBase58()}')
+                  .future,
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          DecoratedContainer(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      children: [
-                        Text(
-                          'Allowlist',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        CircleAvatar(
-                          backgroundColor: ColorPalette.dReaderYellow100,
-                          radius: 6,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          'Live',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: ColorPalette.dReaderYellow100,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SolanaPrice(
-                      price: issue.stats?.price?.toDouble(),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                LinearProgressIndicator(
-                  backgroundColor: ColorPalette.boxBackground300,
-                  minHeight: 8,
-                  valueColor: const AlwaysStoppedAnimation<Color>(
-                    ColorPalette.dReaderYellow100,
-                  ),
-                  value: 0.4,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total: 2000',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: ColorPalette.greyscale100,
-                      ),
-                    ),
-                    Text(
-                      '461 / 1000 Minted',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: ColorPalette.greyscale100,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          DecoratedContainer(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Row(
-                  children: [
-                    Text(
-                      'Public',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: ColorPalette.dReaderYellow300,
-                      radius: 6,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      'Starts in 11h 5m',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: ColorPalette.dReaderYellow300,
-                      ),
-                    ),
-                  ],
-                ),
-                SolanaPrice(
-                  price: issue.stats?.price?.toDouble(),
-                )
-              ],
-            ),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SizedBox();
+              }
+              final totalSupply = snapshot.data
+                      ?.firstWhere((element) => element.label == 'public')
+                      .supply ??
+                  0;
+              return Column(
+                children: snapshot.data?.map((candyMachineGroup) {
+                      return candyMachineGroup.isActive
+                          ? ActiveDecoratedContainer(
+                              candyMachineGroup: candyMachineGroup,
+                              totalSupply: totalSupply,
+                            )
+                          : NonActiveDecoratedContainer(
+                              candyMachineGroup: candyMachineGroup,
+                            );
+                    }).toList() ??
+                    [],
+              );
+            },
           ),
           const SizedBox(
             height: 16,
@@ -318,6 +189,159 @@ class RaritiesWidget extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class ActiveDecoratedContainer extends StatelessWidget {
+  final CandyMachineGroupModel candyMachineGroup;
+  final int totalSupply;
+  const ActiveDecoratedContainer({
+    super.key,
+    required this.candyMachineGroup,
+    required this.totalSupply,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedContainer(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    candyMachineGroup.displayLabel,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  const CircleAvatar(
+                    backgroundColor: ColorPalette.dReaderYellow100,
+                    radius: 6,
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  const Text(
+                    'Live',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: ColorPalette.dReaderYellow100,
+                    ),
+                  ),
+                ],
+              ),
+              SolanaPrice(
+                price: formatLamportPrice(
+                  candyMachineGroup.mintPrice.round(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          LinearProgressIndicator(
+            backgroundColor: ColorPalette.boxBackground300,
+            minHeight: 8,
+            valueColor: const AlwaysStoppedAnimation<Color>(
+              ColorPalette.dReaderYellow100,
+            ),
+            value: candyMachineGroup.itemsMinted / candyMachineGroup.supply,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total: $totalSupply',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: ColorPalette.greyscale100,
+                ),
+              ),
+              Text(
+                '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply} Minted',
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: ColorPalette.greyscale100,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NonActiveDecoratedContainer extends StatelessWidget {
+  final CandyMachineGroupModel candyMachineGroup;
+  const NonActiveDecoratedContainer({
+    super.key,
+    required this.candyMachineGroup,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isFutureMint = candyMachineGroup.startDate.isAfter(DateTime.now());
+    return DecoratedContainer(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Text(
+                candyMachineGroup.displayLabel,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              CircleAvatar(
+                backgroundColor: isFutureMint
+                    ? ColorPalette.dReaderYellow300
+                    : ColorPalette.greyscale200,
+                radius: 6,
+              ),
+              const SizedBox(
+                width: 4,
+              ),
+              Text(
+                isFutureMint
+                    ? 'Starts in ${DateFormat('H').format(candyMachineGroup.startDate)}h ${DateFormat('m').format(candyMachineGroup.startDate)}m'
+                    : 'Ended',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: isFutureMint
+                      ? ColorPalette.dReaderYellow300
+                      : ColorPalette.greyscale200,
+                ),
+              ),
+            ],
+          ),
+          SolanaPrice(
+            price: formatLamportPrice(
+              candyMachineGroup.mintPrice.round(),
+            ),
+          )
+        ],
       ),
     );
   }

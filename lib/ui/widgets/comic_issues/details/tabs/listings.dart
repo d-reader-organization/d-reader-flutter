@@ -99,7 +99,7 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
           children: [
             Container(
               constraints: const BoxConstraints(minHeight: 46),
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
               decoration: BoxDecoration(
                 color: ColorPalette.boxBackground200,
                 border: Border.all(
@@ -119,6 +119,7 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
                   ),
                   SvgPicture.asset(
                     'assets/icons/arrow_down.svg',
+                    height: 16,
                     colorFilter: const ColorFilter.mode(
                       Colors.white,
                       BlendMode.srcIn,
@@ -176,9 +177,9 @@ class ListingStats extends ConsumerWidget {
                 ? '--'
                 : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
           ),
-          StatsInfo(
+          const StatsInfo(
             title: 'SUPPLY',
-            stats: issue.isFreeToRead ? '--' : '${issue.supply}',
+            stats: '--', // issue.isFreeToRead ? '--' : '${issue.supply}',
           ),
           StatsInfo(
             title: 'LISTED',

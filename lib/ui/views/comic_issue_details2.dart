@@ -330,7 +330,8 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                               ),
                             ),
                           ),
-                          issue.candyMachineAddress == null
+                          issue.isSecondarySaleActive &&
+                                  issue.activeCandyMachineAddress == null
                               ? const TabBar(
                                   dividerColor: ColorPalette.dReaderGrey,
                                   indicatorWeight: 4,
@@ -359,16 +360,18 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                   horizontal: 16,
                   vertical: 4,
                 ),
-                child: issue.candyMachineAddress != null
+                child: issue.activeCandyMachineAddress != null
                     ? IssueAbout(issue: issue)
-                    : TabBarView(
-                        children: [
-                          IssueAbout(issue: issue),
-                          IssueListings(
-                            issue: issue,
-                          ),
-                        ],
-                      ),
+                    : issue.isSecondarySaleActive
+                        ? TabBarView(
+                            children: [
+                              IssueAbout(issue: issue),
+                              IssueListings(
+                                issue: issue,
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
               ),
             ),
           ),

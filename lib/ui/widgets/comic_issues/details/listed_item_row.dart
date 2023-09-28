@@ -3,8 +3,10 @@ import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -124,6 +126,10 @@ class ListingItem extends ConsumerWidget {
                             'assets/icons/signed_issue.svg',
                           )
                         : const SizedBox(),
+                    RarityWidget(
+                      rarity: listing.rarity.rarityEnum,
+                      iconPath: 'assets/icons/rarity.svg',
+                    ),
                   ],
                 ),
               ],

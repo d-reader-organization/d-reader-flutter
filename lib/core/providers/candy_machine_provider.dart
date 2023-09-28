@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
+import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
@@ -33,6 +34,9 @@ final receiptsProvider = FutureProvider.autoDispose
 });
 
 @riverpod
-candyMachineGroups(Ref ref, {required String query}) {
+Future<List<CandyMachineGroupModel>> candyMachineGroups(
+  Ref ref, {
+  required String query,
+}) {
   return ref.read(candyMachineRepositoryProvider).getGroups(query: query);
 }

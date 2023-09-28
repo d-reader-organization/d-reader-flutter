@@ -57,6 +57,9 @@ class ChangeNetworkView extends ConsumerWidget {
         cluster: cluster,
         apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
       );
+      ref.invalidate(comicsProvider);
+      ref.invalidate(comicIssuesProvider);
+      ref.invalidate(creatorsProvider);
       if (localStoreData != null) {
         bool isSuccessful =
             ref.read(environmentProvider.notifier).updateEnvironmentState(
@@ -82,9 +85,7 @@ class ChangeNetworkView extends ConsumerWidget {
               backgroundColor: ColorPalette.dReaderRed,
             );
           }
-          ref.invalidate(comicsProvider);
-          ref.invalidate(comicIssuesProvider);
-          ref.invalidate(creatorsProvider);
+
           return showSnackBar(
             context: context,
             text: snackbarText,
@@ -93,9 +94,7 @@ class ChangeNetworkView extends ConsumerWidget {
         }
       } else {
         ref.invalidate(scaffoldProvider);
-        ref.invalidate(comicsProvider);
-        ref.invalidate(comicIssuesProvider);
-        ref.invalidate(creatorsProvider);
+
         if (context.mounted) {
           nextScreenCloseOthers(context, const InitialIntroScreen());
         }

@@ -24,7 +24,7 @@ class CandyMachineGroupModel {
 
   factory CandyMachineGroupModel.fromJson(dynamic json) {
     return CandyMachineGroupModel(
-      mintPrice: double.tryParse(json['mintPrice']) ?? 0,
+      mintPrice: double.tryParse('${json['mintPrice']}') ?? 0,
       itemsMinted: json['itemsMinted'] ?? 0,
       mintLimit: json['mintLimit'] ?? 0,
       supply: json['supply'] ?? 0,

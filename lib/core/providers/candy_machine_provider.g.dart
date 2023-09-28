@@ -7,7 +7,7 @@ part of 'candy_machine_provider.dart';
 // **************************************************************************
 
 String _$candyMachineGroupsHash() =>
-    r'97ffc14a7418c2082bad9c9aab61745083d87bcf';
+    r'33a3aa82e67db082c9e949810f6db2a4ac4f5d23';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,7 +35,8 @@ class _SystemHash {
 const candyMachineGroupsProvider = CandyMachineGroupsFamily();
 
 /// See also [candyMachineGroups].
-class CandyMachineGroupsFamily extends Family<dynamic> {
+class CandyMachineGroupsFamily
+    extends Family<AsyncValue<List<CandyMachineGroupModel>>> {
   /// See also [candyMachineGroups].
   const CandyMachineGroupsFamily();
 
@@ -73,7 +74,8 @@ class CandyMachineGroupsFamily extends Family<dynamic> {
 }
 
 /// See also [candyMachineGroups].
-class CandyMachineGroupsProvider extends AutoDisposeProvider<dynamic> {
+class CandyMachineGroupsProvider
+    extends AutoDisposeFutureProvider<List<CandyMachineGroupModel>> {
   /// See also [candyMachineGroups].
   CandyMachineGroupsProvider({
     required String query,
@@ -108,7 +110,9 @@ class CandyMachineGroupsProvider extends AutoDisposeProvider<dynamic> {
 
   @override
   Override overrideWith(
-    dynamic Function(CandyMachineGroupsRef provider) create,
+    FutureOr<List<CandyMachineGroupModel>> Function(
+            CandyMachineGroupsRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -125,7 +129,8 @@ class CandyMachineGroupsProvider extends AutoDisposeProvider<dynamic> {
   }
 
   @override
-  AutoDisposeProviderElement<dynamic> createElement() {
+  AutoDisposeFutureProviderElement<List<CandyMachineGroupModel>>
+      createElement() {
     return _CandyMachineGroupsProviderElement(this);
   }
 
@@ -143,13 +148,15 @@ class CandyMachineGroupsProvider extends AutoDisposeProvider<dynamic> {
   }
 }
 
-mixin CandyMachineGroupsRef on AutoDisposeProviderRef<dynamic> {
+mixin CandyMachineGroupsRef
+    on AutoDisposeFutureProviderRef<List<CandyMachineGroupModel>> {
   /// The parameter `query` of this provider.
   String get query;
 }
 
 class _CandyMachineGroupsProviderElement
-    extends AutoDisposeProviderElement<dynamic> with CandyMachineGroupsRef {
+    extends AutoDisposeFutureProviderElement<List<CandyMachineGroupModel>>
+    with CandyMachineGroupsRef {
   _CandyMachineGroupsProviderElement(super.provider);
 
   @override

@@ -314,7 +314,7 @@ class PreviewImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 200),
+      constraints: const BoxConstraints(minHeight: 240),
       padding: const EdgeInsets.all(16.0),
       child: Stack(
         children: [
@@ -344,12 +344,14 @@ class PreviewImage extends StatelessWidget {
                     ? const SizedBox()
                     : Text(
                         'To view all pages buy a full copy or become a monthly subscriber',
+                        textAlign: TextAlign.center,
                         style: textStyle,
                       ),
                 isFullyUploaded
                     ? const SizedBox()
                     : Text(
                         'This comic is not yet fully uploaded. New chapters might be added weekly or the comic is still in a presale phase',
+                        textAlign: TextAlign.center,
                         style: textStyle,
                       ),
               ],

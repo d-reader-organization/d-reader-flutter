@@ -1,7 +1,5 @@
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
-import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,16 +14,6 @@ final candyMachineRepositoryProvider = Provider<CandyMachineRepositoryImpl>(
   },
 );
 
-final candyMachineProvider = FutureProvider.autoDispose
-    .family<CandyMachineModel?, String>((ref, address) async {
-  final result =
-      await ref.read(candyMachineRepositoryProvider).getCandyMachine(address);
-  if (result != null && (result.itemsMinted >= result.supply)) {
-    ref.invalidate(comicIssueDetailsProvider);
-  }
-  return result;
-});
-
 final receiptsProvider = FutureProvider.autoDispose
     .family<List<Receipt>, ReceiptsProviderArg>((ref, arg) {
   return ref.read(candyMachineRepositoryProvider).getReceipts(
@@ -34,9 +22,9 @@ final receiptsProvider = FutureProvider.autoDispose
 });
 
 @riverpod
-Future<List<CandyMachineGroupModel>> candyMachineGroups(
+Future<CandyMachineModel?> candyMachine(
   Ref ref, {
   required String query,
 }) {
-  return ref.read(candyMachineRepositoryProvider).getGroups(query: query);
+  return ref.read(candyMachineRepositoryProvider).getCandyMachine(query: query);
 }

@@ -67,7 +67,7 @@ class ComicIssueCard extends StatelessWidget {
                   Text(
                     issue.comic?.title ?? '',
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                    maxLines: 1,
                     style: textTheme.titleSmall?.copyWith(
                       color: ColorPalette.greyscale100,
                     ),

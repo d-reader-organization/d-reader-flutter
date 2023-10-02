@@ -31,7 +31,7 @@ class ComicIssueDetails extends ConsumerWidget {
         return ComicIssueDetailsScaffold(
           loadMore: issue.isFreeToRead
               ? null
-              : issue.candyMachineAddress != null
+              : issue.activeCandyMachineAddress != null
                   ? ref.read(receiptsAsyncProvider(issue).notifier).fetchNext
                   : ref.read(listingsAsyncProvider(issue).notifier).fetchNext,
           body: CustomScrollView(
@@ -48,10 +48,10 @@ class ComicIssueDetails extends ConsumerWidget {
                         horizontal: 0,
                       ),
                       child: issue.isFreeToRead &&
-                              issue.candyMachineAddress == null
+                              issue.activeCandyMachineAddress == null
                           ? const SizedBox()
                           : Center(
-                              child: issue.candyMachineAddress != null
+                              child: issue.activeCandyMachineAddress != null
                                   ? MintedItems(
                                       issue: issue,
                                     )

@@ -6,8 +6,7 @@ part of 'candy_machine_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$candyMachineGroupsHash() =>
-    r'33a3aa82e67db082c9e949810f6db2a4ac4f5d23';
+String _$candyMachineHash() => r'a73f460546b8a12880519390a3598efd6810d3e8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,28 +29,27 @@ class _SystemHash {
   }
 }
 
-/// See also [candyMachineGroups].
-@ProviderFor(candyMachineGroups)
-const candyMachineGroupsProvider = CandyMachineGroupsFamily();
+/// See also [candyMachine].
+@ProviderFor(candyMachine)
+const candyMachineProvider = CandyMachineFamily();
 
-/// See also [candyMachineGroups].
-class CandyMachineGroupsFamily
-    extends Family<AsyncValue<List<CandyMachineGroupModel>>> {
-  /// See also [candyMachineGroups].
-  const CandyMachineGroupsFamily();
+/// See also [candyMachine].
+class CandyMachineFamily extends Family<AsyncValue<CandyMachineModel?>> {
+  /// See also [candyMachine].
+  const CandyMachineFamily();
 
-  /// See also [candyMachineGroups].
-  CandyMachineGroupsProvider call({
+  /// See also [candyMachine].
+  CandyMachineProvider call({
     required String query,
   }) {
-    return CandyMachineGroupsProvider(
+    return CandyMachineProvider(
       query: query,
     );
   }
 
   @override
-  CandyMachineGroupsProvider getProviderOverride(
-    covariant CandyMachineGroupsProvider provider,
+  CandyMachineProvider getProviderOverride(
+    covariant CandyMachineProvider provider,
   ) {
     return call(
       query: provider.query,
@@ -70,33 +68,33 @@ class CandyMachineGroupsFamily
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'candyMachineGroupsProvider';
+  String? get name => r'candyMachineProvider';
 }
 
-/// See also [candyMachineGroups].
-class CandyMachineGroupsProvider
-    extends AutoDisposeFutureProvider<List<CandyMachineGroupModel>> {
-  /// See also [candyMachineGroups].
-  CandyMachineGroupsProvider({
+/// See also [candyMachine].
+class CandyMachineProvider
+    extends AutoDisposeFutureProvider<CandyMachineModel?> {
+  /// See also [candyMachine].
+  CandyMachineProvider({
     required String query,
   }) : this._internal(
-          (ref) => candyMachineGroups(
-            ref as CandyMachineGroupsRef,
+          (ref) => candyMachine(
+            ref as CandyMachineRef,
             query: query,
           ),
-          from: candyMachineGroupsProvider,
-          name: r'candyMachineGroupsProvider',
+          from: candyMachineProvider,
+          name: r'candyMachineProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$candyMachineGroupsHash,
-          dependencies: CandyMachineGroupsFamily._dependencies,
+                  : _$candyMachineHash,
+          dependencies: CandyMachineFamily._dependencies,
           allTransitiveDependencies:
-              CandyMachineGroupsFamily._allTransitiveDependencies,
+              CandyMachineFamily._allTransitiveDependencies,
           query: query,
         );
 
-  CandyMachineGroupsProvider._internal(
+  CandyMachineProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -110,14 +108,12 @@ class CandyMachineGroupsProvider
 
   @override
   Override overrideWith(
-    FutureOr<List<CandyMachineGroupModel>> Function(
-            CandyMachineGroupsRef provider)
-        create,
+    FutureOr<CandyMachineModel?> Function(CandyMachineRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: CandyMachineGroupsProvider._internal(
-        (ref) => create(ref as CandyMachineGroupsRef),
+      override: CandyMachineProvider._internal(
+        (ref) => create(ref as CandyMachineRef),
         from: from,
         name: null,
         dependencies: null,
@@ -129,14 +125,13 @@ class CandyMachineGroupsProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<List<CandyMachineGroupModel>>
-      createElement() {
-    return _CandyMachineGroupsProviderElement(this);
+  AutoDisposeFutureProviderElement<CandyMachineModel?> createElement() {
+    return _CandyMachineProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is CandyMachineGroupsProvider && other.query == query;
+    return other is CandyMachineProvider && other.query == query;
   }
 
   @override
@@ -148,19 +143,18 @@ class CandyMachineGroupsProvider
   }
 }
 
-mixin CandyMachineGroupsRef
-    on AutoDisposeFutureProviderRef<List<CandyMachineGroupModel>> {
+mixin CandyMachineRef on AutoDisposeFutureProviderRef<CandyMachineModel?> {
   /// The parameter `query` of this provider.
   String get query;
 }
 
-class _CandyMachineGroupsProviderElement
-    extends AutoDisposeFutureProviderElement<List<CandyMachineGroupModel>>
-    with CandyMachineGroupsRef {
-  _CandyMachineGroupsProviderElement(super.provider);
+class _CandyMachineProviderElement
+    extends AutoDisposeFutureProviderElement<CandyMachineModel?>
+    with CandyMachineRef {
+  _CandyMachineProviderElement(super.provider);
 
   @override
-  String get query => (origin as CandyMachineGroupsProvider).query;
+  String get query => (origin as CandyMachineProvider).query;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member

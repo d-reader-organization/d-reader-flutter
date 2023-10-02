@@ -31,7 +31,7 @@ class IssueAbout extends ConsumerWidget {
         if (issue.activeCandyMachineAddress != null) ...[
           FutureBuilder(
             future: ref.read(
-              candyMachineGroupsProvider(
+              candyMachineProvider(
                       query:
                           'candyMachineAddress=${issue.activeCandyMachineAddress}&walletAddress=${ref.watch(environmentProvider).publicKey?.toBase58()}')
                   .future,
@@ -40,16 +40,12 @@ class IssueAbout extends ConsumerWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SizedBox();
               }
-              final totalSupply = snapshot.data
-                      ?.firstWhere((element) => element.label == 'public')
-                      .supply ??
-                  0;
               return Column(
-                children: snapshot.data?.map((candyMachineGroup) {
+                children: snapshot.data?.groups.map((candyMachineGroup) {
                       return candyMachineGroup.isActive
                           ? ActiveDecoratedContainer(
                               candyMachineGroup: candyMachineGroup,
-                              totalSupply: totalSupply,
+                              totalSupply: snapshot.data?.supply ?? 0,
                             )
                           : NonActiveDecoratedContainer(
                               candyMachineGroup: candyMachineGroup,

@@ -1,10 +1,11 @@
 class CollectionStatsModel {
-  final int floorPrice, itemsListed, totalVolume;
+  final int floorPrice, itemsListed, totalVolume, supply;
 
   CollectionStatsModel({
     required this.totalVolume,
     required this.itemsListed,
     required this.floorPrice,
+    required this.supply,
   });
 
   factory CollectionStatsModel.fromJson(Map<String, dynamic> json) {
@@ -12,6 +13,7 @@ class CollectionStatsModel {
       totalVolume: json['totalVolume'],
       itemsListed: json['itemsListed'],
       floorPrice: json['floorPrice'],
+      supply: json['supply'],
     );
   }
 
@@ -20,6 +22,7 @@ class CollectionStatsModel {
     data['totalVolume'] = totalVolume;
     data['itemsListed'] = itemsListed;
     data['floorPrice'] = floorPrice;
+    data['supply'] = supply;
     return data;
   }
 }

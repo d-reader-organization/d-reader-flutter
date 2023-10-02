@@ -22,7 +22,7 @@ class ReceiptsAsyncNotifier
   FutureOr<List<Receipt>> build(ComicIssueModel arg) async {
     final receipts = await ref.read(
       receiptsProvider(ReceiptsProviderArg(
-        address: arg.candyMachineAddress ?? '',
+        address: arg.activeCandyMachineAddress ?? '',
       )).future,
     );
     final socket = ref
@@ -67,7 +67,7 @@ class ReceiptsAsyncNotifier
     final newReceipts = await ref.read(
       receiptsProvider(
         ReceiptsProviderArg(
-          address: arg.candyMachineAddress ?? '',
+          address: arg.activeCandyMachineAddress ?? '',
           query: 'skip=${state.value?.length}&take=10',
         ),
       ).future,

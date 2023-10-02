@@ -35,7 +35,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
-import 'package:timeago/timeago.dart' as timeago;
 
 class ComicIssueDetailsScaffold extends ConsumerStatefulWidget {
   final Widget body;
@@ -358,7 +357,7 @@ class BottomNavigation extends ConsumerWidget {
     try {
       final mintResult = await ref
           .read(solanaProvider.notifier)
-          .mint(issue.candyMachineAddress);
+          .mint(issue.activeCandyMachineAddress);
       if (context.mounted) {
         if (mintResult is bool && mintResult) {
           nextScreenPush(
@@ -586,19 +585,18 @@ class CandyMachineStats extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(candyMachineProvider(address));
+    final provider = ref.watch(candyMachineProvider(query: address));
     return provider.when(data: (candyMachine) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          StatsInfo(
-            title: 'ENDS IN',
-            stats: candyMachine?.endsAt != null
-                ? timeago.format(
-                    DateTime.parse(candyMachine?.endsAt ?? ''),
-                  )
-                : '∞',
-          ),
+          const StatsInfo(title: 'ENDS IN', stats: ''
+              // stats: candyMachine?.endsAt != null
+              //     ? timeago.format(
+              //         DateTime.parse(candyMachine?.endsAt ?? ''),
+              //       )
+              //     : '∞',
+              ),
           StatsInfo(
             title: 'SUPPLY',
             stats: candyMachine?.supply != null && candyMachine!.supply > 1000
@@ -609,11 +607,12 @@ class CandyMachineStats extends ConsumerWidget {
             title: 'MINTED',
             stats: '${candyMachine?.itemsMinted}',
           ),
-          StatsInfo(
+          const StatsInfo(
             title: 'PRICE',
-            stats: candyMachine?.baseMintPrice != null
-                ? '${formatPrice(formatLamportPrice(candyMachine?.baseMintPrice) ?? 0)}◎'
-                : '-.--◎',
+            stats: '-.--◎',
+            // stats: candyMachine?.baseMintPrice != null
+            //     ? '${formatPrice(formatLamportPrice(candyMachine?.baseMintPrice) ?? 0)}◎'
+            //     : '-.--◎',
             isLastItem: true,
           ),
         ],

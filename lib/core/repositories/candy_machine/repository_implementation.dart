@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository.dart';
@@ -10,14 +9,6 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
   CandyMachineRepositoryImpl({
     required this.client,
   });
-
-  @override
-  Future<CandyMachineModel?> getCandyMachine(String address) async {
-    final response = await client
-        .get('/candy-machine/get/$address')
-        .then((value) => value.data);
-    return response == null ? null : CandyMachineModel.fromJson(response);
-  }
 
   @override
   Future<List<Receipt>> getReceipts({String? queryString}) async {
@@ -39,19 +30,12 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
   }
 
   @override
-  Future<List<CandyMachineGroupModel>> getGroups(
-      {required String query}) async {
+  Future<CandyMachineModel?> getCandyMachine({
+    required String query,
+  }) async {
     final response = await client
-        .get('/candy-machine/get/groups?$query')
+        .get('/candy-machine/get?$query')
         .then((value) => value.data);
-    return response != null
-        ? List<CandyMachineGroupModel>.from(
-            response.map(
-              (item) => CandyMachineGroupModel.fromJson(
-                item,
-              ),
-            ),
-          )
-        : [];
+    return response != null ? CandyMachineModel.fromJson(response) : null;
   }
 }

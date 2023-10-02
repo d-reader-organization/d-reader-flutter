@@ -29,10 +29,10 @@ class IssueListings extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        const ListingFilters(),
-        const SizedBox(
-          height: 16,
-        ),
+        // const ListingFilters(),
+        // const SizedBox(
+        //   height: 16,
+        // ),
         ListedItems(
           issue: issue,
         ),
@@ -177,9 +177,11 @@ class ListingStats extends ConsumerWidget {
                 ? '--'
                 : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
           ),
-          const StatsInfo(
+          StatsInfo(
             title: 'SUPPLY',
-            stats: '--', // issue.isFreeToRead ? '--' : '${issue.supply}',
+            stats: issue.isSecondarySaleActive
+                ? '${collectionStats?.supply}'
+                : '--',
           ),
           StatsInfo(
             title: 'LISTED',

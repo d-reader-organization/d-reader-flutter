@@ -8,7 +8,7 @@ class ComicIssueModel {
   final int id, number;
   final String cover, description, slug, title, comicSlug, creatorAddress;
   final bool isPopular, isFreeToRead, isFullyUploaded, isSecondarySaleActive;
-  final String? candyMachineAddress, activeCandyMachineAddress;
+  final String? activeCandyMachineAddress;
   final double sellerFee;
   final DateTime releaseDate;
   final ComicIssueStats? stats;
@@ -37,7 +37,6 @@ class ComicIssueModel {
     required this.isFullyUploaded,
     required this.sellerFee,
     required this.genres,
-    this.candyMachineAddress,
     this.activeCandyMachineAddress,
     this.collaborators,
     this.statelessCovers,
@@ -69,7 +68,6 @@ class ComicIssueModel {
       ),
       isFreeToRead: json['isFreeToRead'],
       isFullyUploaded: json['isFullyUploaded'],
-      candyMachineAddress: json['candyMachineAddress'],
       activeCandyMachineAddress: json['activeCandyMachineAddress'],
       sellerFee:
           json['sellerFee'] is int ? json['sellerFee'] + .0 : json['sellerFee'],

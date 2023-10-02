@@ -1,5 +1,3 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -124,36 +122,36 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ClipRect(
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(
-                                  sigmaX: 10,
-                                  sigmaY: 10,
-                                ),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    backgroundBlendMode: BlendMode.darken,
-                                    color: ColorPalette.boxBackground300,
-                                  ),
-                                  child: const Text(
-                                    'NEW EPISODES!',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: .2,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
+                            // ClipRect(
+                            //   child: BackdropFilter(
+                            //     filter: ImageFilter.blur(
+                            //       sigmaX: 10,
+                            //       sigmaY: 10,
+                            //     ),
+                            //     child: Container(
+                            //       padding: const EdgeInsets.symmetric(
+                            //         horizontal: 6,
+                            //         vertical: 4,
+                            //       ),
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(4),
+                            //         backgroundBlendMode: BlendMode.darken,
+                            //         color: ColorPalette.boxBackground300,
+                            //       ),
+                            //       child: const Text(
+                            //         'NEW EPISODES!',
+                            //         style: TextStyle(
+                            //           fontSize: 12,
+                            //           fontWeight: FontWeight.w500,
+                            //           letterSpacing: .2,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // const SizedBox(
+                            //   height: 12,
+                            // ),
                             Text(
                               widget.comic.title,
                               style: textTheme.headlineLarge,

@@ -59,7 +59,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
           ),
           const Divider(
             thickness: 1,
-            color: ColorPalette.boxBackground400,
+            color: ColorPalette.greyscale300,
           ),
           Expanded(
             child: ListView.separated(
@@ -188,7 +188,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
               separatorBuilder: (context, index) {
                 return const Divider(
                   thickness: 1,
-                  color: ColorPalette.boxBackground400,
+                  color: ColorPalette.greyscale300,
                 );
               },
               itemCount: ownedNfts.length,
@@ -196,7 +196,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
           ),
           const Divider(
             thickness: 1,
-            color: ColorPalette.boxBackground400,
+            color: ColorPalette.greyscale300,
           ),
           Row(
             children: [

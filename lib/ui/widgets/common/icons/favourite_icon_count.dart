@@ -47,7 +47,7 @@ class FavouriteIconCount extends HookConsumerWidget {
                 border: Border.all(
                   color: isFavourite
                       ? Colors.transparent
-                      : ColorPalette.boxBackground400,
+                      : ColorPalette.greyscale300,
                 ),
               ),
               child: Row(
@@ -59,7 +59,7 @@ class FavouriteIconCount extends HookConsumerWidget {
                         : CupertinoIcons.heart,
                     color: isFavourite
                         ? ColorPalette.dReaderRed
-                        : ColorPalette.dReaderGrey,
+                        : ColorPalette.greyscale100,
                     size: 16,
                   ),
                   const SizedBox(

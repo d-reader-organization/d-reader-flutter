@@ -160,7 +160,7 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
                           ref.watch(obscureTextProvider)
                               ? FontAwesomeIcons.solidEye
                               : FontAwesomeIcons.solidEyeSlash,
-                          color: ColorPalette.boxBackground400,
+                          color: ColorPalette.greyscale300,
                           size: 20,
                         ),
                       ),
@@ -198,7 +198,7 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
                           ref.watch(obscureTextProvider)
                               ? FontAwesomeIcons.solidEye
                               : FontAwesomeIcons.solidEyeSlash,
-                          color: ColorPalette.boxBackground400,
+                          color: ColorPalette.greyscale300,
                           size: 20,
                         ),
                       ),

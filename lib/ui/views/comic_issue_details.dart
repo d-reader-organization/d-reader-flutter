@@ -103,7 +103,7 @@ class BodyHeader extends StatelessWidget {
               borderSide: const BorderSide(
                 width: 1,
                 style: BorderStyle.solid,
-                color: ColorPalette.boxBackground400,
+                color: ColorPalette.greyscale300,
               ),
               borderRadius: BorderRadius.circular(
                 6.0,
@@ -113,15 +113,15 @@ class BodyHeader extends StatelessWidget {
               borderSide: const BorderSide(
                 width: 1,
                 style: BorderStyle.solid,
-                color: ColorPalette.boxBackground400,
+                color: ColorPalette.greyscale300,
               ),
               borderRadius: BorderRadius.circular(
                 6.0,
               ),
             ),
             labelText: '#1203..',
-            labelStyle: const TextStyle(
-                fontSize: 12, color: ColorPalette.boxBackground400),
+            labelStyle:
+                const TextStyle(fontSize: 12, color: ColorPalette.greyscale300),
             constraints: const BoxConstraints(
                 maxHeight: 37, minHeight: 37, maxWidth: 150, minWidth: 150),
             prefixIcon: SvgPicture.asset(
@@ -135,8 +135,8 @@ class BodyHeader extends StatelessWidget {
         ),
         const DropdownWidget(),
         Theme(
-          data: Theme.of(context)
-              .copyWith(cardColor: ColorPalette.boxBackground400),
+          data:
+              Theme.of(context).copyWith(cardColor: ColorPalette.greyscale300),
           child: PopupMenuButton<String>(
             icon: const Icon(
               Icons.filter_list,

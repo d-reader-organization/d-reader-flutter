@@ -95,10 +95,10 @@ class CustomTextField extends StatelessWidget {
             suffixIconConstraints:
                 const BoxConstraints(minWidth: 24, minHeight: 24),
             border: _outlineInputBorder(
-              color: ColorPalette.boxBackground400,
+              color: ColorPalette.greyscale300,
             ),
             enabledBorder: _outlineInputBorder(
-              color: ColorPalette.boxBackground400,
+              color: ColorPalette.greyscale300,
             ),
             focusedErrorBorder: _outlineInputBorder(
               color: ColorPalette.dReaderRed,
@@ -110,7 +110,7 @@ class CustomTextField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: ColorPalette.boxBackground400,
+                color: ColorPalette.greyscale300,
               ),
             ),
           ),

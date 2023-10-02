@@ -9,7 +9,6 @@ abstract class ColorPalette {
   static const Color appBackgroundColor = Color(0xFF15171C);
   static const Color boxBackground200 = Color(0xFF1F222A);
   static const Color boxBackground300 = Color(0xFF2F333E);
-  static const Color boxBackground400 = Color(0xFF414756);
 
   static const Color dReaderGrey = Color(0xFFE0E0E0);
 
@@ -23,6 +22,7 @@ abstract class ColorPalette {
   static const Color greyscale50 = Color(0xFFEBEDF3);
   static const Color greyscale100 = Color(0xFFC2C5CE);
   static const Color greyscale200 = Color(0xFF777D8C);
+  static const Color greyscale300 = Color(0xFF414756);
 
   static const Color lightblue = Color(0xFF87C7E4);
 }

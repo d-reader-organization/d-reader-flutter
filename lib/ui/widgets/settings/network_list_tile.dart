@@ -19,8 +19,8 @@ class NetworkListTile extends StatelessWidget {
       splashColor: onTap != null ? ColorPalette.boxBackground300 : null,
       selected: isSelected,
       tileColor: ColorPalette.boxBackground300,
-      iconColor: onTap == null ? ColorPalette.boxBackground400 : Colors.white,
-      textColor: onTap == null ? ColorPalette.boxBackground400 : Colors.white,
+      iconColor: onTap == null ? ColorPalette.greyscale300 : Colors.white,
+      textColor: onTap == null ? ColorPalette.greyscale300 : Colors.white,
       selectedColor: ColorPalette.dReaderYellow100,
       selectedTileColor: ColorPalette.boxBackground300,
       shape: RoundedRectangleBorder(

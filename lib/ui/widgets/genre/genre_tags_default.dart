@@ -131,7 +131,7 @@ class TagContainer extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: const Icon(
                     Icons.more_horiz_outlined,
-                    color: ColorPalette.boxBackground400,
+                    color: ColorPalette.greyscale300,
                     size: 15,
                   ),
                 ),
@@ -148,10 +148,10 @@ class EmptyGenreTag extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: ColorPalette.boxBackground400, width: 1)),
+          border: Border.all(color: ColorPalette.greyscale300, width: 1)),
       child: const Icon(
         Icons.more_horiz_outlined,
-        color: ColorPalette.boxBackground400,
+        color: ColorPalette.greyscale300,
         size: 15,
       ),
     );

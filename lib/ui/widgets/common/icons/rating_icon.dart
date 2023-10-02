@@ -77,7 +77,7 @@ class RatingIcon extends ConsumerWidget {
                 border: Border.all(
                   color: isRatedByMe
                       ? Colors.transparent
-                      : ColorPalette.boxBackground400,
+                      : ColorPalette.greyscale300,
                 ),
               ),
               child: Row(

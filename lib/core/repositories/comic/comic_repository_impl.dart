@@ -71,4 +71,9 @@ class ComicRepositoryImpl implements ComicRepository {
           )
         : [];
   }
+
+  @override
+  Future<void> bookmarkComic(String slug) {
+    return client.patch('/comic/bookmark/$slug').then((value) => value.data);
+  }
 }

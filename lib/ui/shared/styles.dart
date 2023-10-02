@@ -13,7 +13,7 @@ InputDecoration searchInputDecoration({
     enabledBorder: OutlineInputBorder(
       borderSide: const BorderSide(
         width: 1,
-        color: ColorPalette.boxBackground400,
+        color: ColorPalette.greyscale300,
       ),
       borderRadius: BorderRadius.circular(
         8,
@@ -22,7 +22,7 @@ InputDecoration searchInputDecoration({
     border: OutlineInputBorder(
       borderSide: const BorderSide(
         width: 1,
-        color: ColorPalette.boxBackground400,
+        color: ColorPalette.greyscale300,
       ),
       borderRadius: BorderRadius.circular(
         8,

@@ -172,7 +172,7 @@ class WalletListScreen extends ConsumerWidget {
                         const SizedBox(
                           height: 48,
                           child: VerticalDivider(
-                            color: ColorPalette.boxBackground400,
+                            color: ColorPalette.greyscale300,
                           ),
                         ),
                         Expanded(
@@ -223,7 +223,7 @@ class WalletListScreen extends ConsumerWidget {
                                   color: ref.watch(selectedWalletProvider) ==
                                           data[index].address
                                       ? ColorPalette.dReaderYellow100
-                                      : ColorPalette.boxBackground400,
+                                      : ColorPalette.greyscale300,
                                 ),
                               ),
                             ],

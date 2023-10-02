@@ -80,13 +80,13 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
-                    color: ColorPalette.boxBackground400,
+                    color: ColorPalette.greyscale300,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
-                    color: ColorPalette.boxBackground400,
+                    color: ColorPalette.greyscale300,
                   ),
                 )),
           ),
@@ -103,7 +103,7 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
               decoration: BoxDecoration(
                 color: ColorPalette.boxBackground200,
                 border: Border.all(
-                  color: ColorPalette.boxBackground400,
+                  color: ColorPalette.greyscale300,
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -137,7 +137,7 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
               decoration: BoxDecoration(
                 color: ColorPalette.boxBackground200,
                 border: Border.all(
-                  color: ColorPalette.boxBackground400,
+                  color: ColorPalette.greyscale300,
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),

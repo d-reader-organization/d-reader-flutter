@@ -21,7 +21,7 @@ class SettingsCommonListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = overrideColor ??
-        (onTap == null ? ColorPalette.boxBackground400 : Colors.white);
+        (onTap == null ? ColorPalette.greyscale300 : Colors.white);
     return ListTile(
       onTap: onTap,
       textColor: overrideColor ?? color,

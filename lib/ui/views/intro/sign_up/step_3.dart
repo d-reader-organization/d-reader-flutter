@@ -170,7 +170,7 @@ class SignUpStep3 extends ConsumerWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
-                  borderColor: ColorPalette.boxBackground400,
+                  borderColor: ColorPalette.greyscale300,
                   size: const Size(
                     0,
                     50,

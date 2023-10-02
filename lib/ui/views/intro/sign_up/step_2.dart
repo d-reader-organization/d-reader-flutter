@@ -135,7 +135,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                       ref.watch(obscureTextProvider)
                           ? FontAwesomeIcons.solidEye
                           : FontAwesomeIcons.solidEyeSlash,
-                      color: ColorPalette.boxBackground400,
+                      color: ColorPalette.greyscale300,
                       size: 20,
                     ),
                   ),

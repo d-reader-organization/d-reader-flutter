@@ -25,7 +25,7 @@ class StatsInfo extends StatelessWidget {
                 border: Border(
                   right: BorderSide(
                     width: 1,
-                    color: ColorPalette.boxBackground400,
+                    color: ColorPalette.greyscale300,
                   ),
                 ),
               ),

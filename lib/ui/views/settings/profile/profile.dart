@@ -264,14 +264,14 @@ class ProfileView extends HookConsumerWidget {
                               '${Config.settingsAssetsPath}/light/arrow_down.svg',
                           overrideColor:
                               ref.watch(globalStateProvider).isLoading
-                                  ? ColorPalette.boxBackground400
+                                  ? ColorPalette.greyscale300
                                   : ColorPalette.dReaderGreen,
                           overrideTrailing: globalHook.value.isLoading
                               ? const SizedBox(
                                   height: 24,
                                   width: 24,
                                   child: CircularProgressIndicator(
-                                    color: ColorPalette.boxBackground400,
+                                    color: ColorPalette.greyscale300,
                                   ),
                                 )
                               : null,
@@ -595,7 +595,7 @@ class Avatar extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(64),
                     border: Border.all(
-                      color: ColorPalette.boxBackground400,
+                      color: ColorPalette.greyscale300,
                       width: 2,
                     ),
                   ),

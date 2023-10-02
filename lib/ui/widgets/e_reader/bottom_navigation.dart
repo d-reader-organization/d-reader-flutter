@@ -74,10 +74,10 @@ class EReaderBottomNavigation extends ConsumerWidget {
                     ),
                     Switch(
                       value: ref.watch(isPageByPageReadingMode),
-                      activeTrackColor: ColorPalette.boxBackground400,
+                      activeTrackColor: ColorPalette.greyscale300,
                       activeColor: Colors.white,
                       trackColor: const MaterialStatePropertyAll<Color>(
-                        ColorPalette.boxBackground400,
+                        ColorPalette.greyscale300,
                       ),
                       onChanged: (value) {
                         ref

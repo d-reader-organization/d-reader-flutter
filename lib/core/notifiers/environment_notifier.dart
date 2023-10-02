@@ -106,12 +106,18 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
   void updateForChangeNetwork({
     required String cluster,
     required String apiUrl,
+    Ed25519HDPublicKey? publicKey,
   }) {
     state = state.copyWithNullables(
       apiUrl: apiUrl,
       solanaCluster: cluster,
+      publicKey: publicKey,
     );
     putStateIntoLocalStore();
+  }
+
+  void clearPublicKey() {
+    state.publicKey = null;
   }
 
   Future<void> clearDataFromLocalStore(String cluster) async {

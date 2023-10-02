@@ -42,10 +42,11 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
     await ref.read(authRepositoryProvider).disconnectWallet(
           address: widget.address,
         );
-    ref
-        .read(environmentProvider)
-        .wallets
-        ?.removeWhere((key, value) => key == widget.address);
+    final envState = ref.read(environmentProvider);
+    envState.wallets?.removeWhere((key, value) => key == widget.address);
+    if (ref.read(environmentProvider).publicKey?.toBase58() == widget.address) {
+      ref.read(environmentProvider.notifier).clearPublicKey();
+    }
     ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);
     if (context.mounted) {

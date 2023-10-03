@@ -34,11 +34,10 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   final FilterId? selectedFilter = ref.read(selectedFilterProvider);
   final SortByEnum? selectedSortBy = ref.read(selectedSortByProvider);
   final SortDirection selectedSortDirection = ref.read(sortDirectionProvider);
-  final String tagFilter = selectedFilter != null
-      ? selectedFilter == FilterId.free
-          ? 'filterTag=free'
-          : 'filterTag=popular'
-      : '';
+  final String tagFilter = _filterPerType(
+    scrollListType: scrollListType,
+    selectedFilter: selectedFilter,
+  );
   final String sortByFilter =
       selectedSortBy != null ? getSortByQueryString(selectedSortBy) : '';
   final String sortDirection = getSortDirection(selectedSortDirection);
@@ -48,6 +47,21 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
       ? '$common${'nameSubstring=$search'}'
       : '$common${'titleSubstring=$search'}';
   return query;
+}
+
+String _filterPerType({
+  required ScrollListType scrollListType,
+  FilterId? selectedFilter,
+}) {
+  if (selectedFilter == null) {
+    return '';
+  }
+  if (scrollListType == ScrollListType.issueList) {
+    return selectedFilter == FilterId.free
+        ? 'filterTag=free'
+        : 'filterTag=popular';
+  }
+  return selectedFilter == FilterId.popular ? 'filterTag=popular' : '';
 }
 
 String adjustQueryString(String query) => query.isNotEmpty ? '$query&' : '';

@@ -1,6 +1,8 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
@@ -47,6 +49,14 @@ final registerWalletToSocketEvents = Provider(
       return ref
           .read(lastProcessedNftProvider.notifier)
           .update((state) => data['address']);
+    });
+    socket.on('wallet/$address/item-minted', (data) async {
+      final newReceipt = Receipt.fromJson(data);
+      ref.invalidate(candyMachineProvider);
+      ref
+          .read(lastProcessedNftProvider.notifier)
+          .update((state) => newReceipt.nft.address);
+      ref.invalidate(comicIssueDetailsProvider);
     });
   },
 );

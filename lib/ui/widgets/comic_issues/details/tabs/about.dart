@@ -24,111 +24,118 @@ class IssueAbout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      children: [
-        if (issue.activeCandyMachineAddress != null) ...[
-          FutureBuilder(
-            future: ref.read(
-              candyMachineProvider(
-                      query:
-                          'candyMachineAddress=${issue.activeCandyMachineAddress}&walletAddress=${ref.watch(environmentProvider).publicKey?.toBase58()}')
-                  .future,
+    return NotificationListener(
+      onNotification: (notification) {
+        return true;
+      },
+      child: ListView(
+        shrinkWrap: true,
+        physics: const PageScrollPhysics(),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        children: [
+          if (issue.activeCandyMachineAddress != null) ...[
+            FutureBuilder(
+              future: ref.read(
+                candyMachineProvider(
+                        query:
+                            'candyMachineAddress=${issue.activeCandyMachineAddress}&walletAddress=${ref.watch(environmentProvider).publicKey?.toBase58()}')
+                    .future,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                }
+                return Column(
+                  children: snapshot.data?.groups.map((candyMachineGroup) {
+                        return candyMachineGroup.isActive
+                            ? ActiveDecoratedContainer(
+                                candyMachineGroup: candyMachineGroup,
+                                totalSupply: snapshot.data?.supply ?? 0,
+                              )
+                            : NonActiveDecoratedContainer(
+                                candyMachineGroup: candyMachineGroup,
+                              );
+                      }).toList() ??
+                      [],
+                );
+              },
             ),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SizedBox();
-              }
-              return Column(
-                children: snapshot.data?.groups.map((candyMachineGroup) {
-                      return candyMachineGroup.isActive
-                          ? ActiveDecoratedContainer(
-                              candyMachineGroup: candyMachineGroup,
-                              totalSupply: snapshot.data?.supply ?? 0,
-                            )
-                          : NonActiveDecoratedContainer(
-                              candyMachineGroup: candyMachineGroup,
-                            );
-                    }).toList() ??
-                    [],
-              );
-            },
+            const SizedBox(
+              height: 16,
+            ),
+          ],
+          const Text(
+            'Genres',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
           ),
+          GenreTagsDefault(genres: issue.genres),
           const SizedBox(
             height: 16,
           ),
-        ],
-        const Text(
-          'Genres',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        GenreTagsDefault(genres: issue.genres),
-        const SizedBox(
-          height: 16,
-        ),
-        const Text(
-          'About',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        Text(
-          issue.description,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        if ((issue.statelessCovers?.length ?? 0) > 1) ...[
-          const SizedBox(
-            height: 8,
-          ),
-          const Divider(
-            thickness: 1,
-            color: ColorPalette.boxBackground300,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
           const Text(
-            'Rarities',
+            'About',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(
-            height: 8,
+            height: 4,
           ),
-          RaritiesWidget(covers: issue.statelessCovers!),
-        ],
-        if (issue.collaborators != null && issue.collaborators!.isNotEmpty) ...[
-          const SizedBox(
-            height: 16,
-          ),
-          const Text(
-            'Authors list',
-            style: TextStyle(
+          Text(
+            issue.description,
+            style: const TextStyle(
               fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          ...issue.collaborators!.map((author) {
-            return AuthorWidget(author: author);
-          }).toList(),
+          if ((issue.statelessCovers?.length ?? 0) > 1) ...[
+            const SizedBox(
+              height: 8,
+            ),
+            const Divider(
+              thickness: 1,
+              color: ColorPalette.boxBackground300,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            const Text(
+              'Rarities',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            RaritiesWidget(covers: issue.statelessCovers!),
+          ],
+          if (issue.collaborators != null &&
+              issue.collaborators!.isNotEmpty) ...[
+            const SizedBox(
+              height: 16,
+            ),
+            const Text(
+              'Authors list',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            ...issue.collaborators!.map((author) {
+              return AuthorWidget(author: author);
+            }).toList(),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

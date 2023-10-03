@@ -20,23 +20,29 @@ class IssueListings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        ListingStats(
-          issue: issue,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        // const ListingFilters(),
-        // const SizedBox(
-        //   height: 16,
-        // ),
-        ListedItems(
-          issue: issue,
-        ),
-      ],
+    return NotificationListener(
+      onNotification: (notification) {
+        return true;
+      },
+      child: ListView(
+        shrinkWrap: true,
+        physics: const PageScrollPhysics(),
+        children: [
+          ListingStats(
+            issue: issue,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          // const ListingFilters(),
+          // const SizedBox(
+          //   height: 16,
+          // ),
+          ListedItems(
+            issue: issue,
+          ),
+        ],
+      ),
     );
   }
 }

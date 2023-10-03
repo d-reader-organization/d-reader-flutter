@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -36,6 +37,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
   @override
   void initState() {
     super.initState();
+    ref.read(registerWalletToSocketEvents);
     _controller = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -74,8 +76,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
             ),
             body: NotificationListener(
               onNotification: (notification) {
-                if (notification is ScrollEndNotification &&
-                    notification.metrics.pixels != 0) {
+                if (notification is ScrollEndNotification) {
                   if (notification.metrics.pixels > 70) {
                     _controller.forward();
                   } else if (notification.metrics.pixels < 70) {
@@ -94,7 +95,8 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                         return SliverOverlapAbsorber(
                           handle:
                               NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                  context),
+                            context,
+                          ),
                           sliver: SliverAppBar(
                             pinned: true,
                             backgroundColor: _animation.value,

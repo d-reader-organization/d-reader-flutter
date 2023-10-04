@@ -16,7 +16,10 @@ class CreatorsGalleryBuilder extends StatelessWidget {
     return GridView.builder(
       itemCount: creators.length,
       primary: false,
-      padding: const EdgeInsets.only(left: 4),
+      padding: const EdgeInsets.only(
+        left: 4,
+        top: 8,
+      ),
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: isTablet ? 3 : 2,

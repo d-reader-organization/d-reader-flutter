@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
@@ -37,36 +38,37 @@ class ComicCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedImageBgPlaceholder(
-              imageUrl: comic.cover,
-              width: cardWidth,
-              bgImageFit: BoxFit.fill,
-              height: 134,
-              opacity: .4,
-              padding: EdgeInsets.zero,
-              overrideBorderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(
-                  8,
+            AspectRatio(
+              aspectRatio: comicAspectRatio,
+              child: CachedImageBgPlaceholder(
+                imageUrl: comic.cover,
+                bgImageFit: BoxFit.fill,
+                opacity: .4,
+                padding: EdgeInsets.zero,
+                overrideBorderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(
+                    8,
+                  ),
+                  topRight: Radius.circular(
+                    8,
+                  ),
                 ),
-                topRight: Radius.circular(
-                  8,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    comic.isPopular ? const HotIconSmall() : const SizedBox(),
+                    comic.logo.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: CachedNetworkImage(
+                              imageUrl: comic.logo,
+                            ),
+                          )
+                        : const SizedBox(),
+                    const SizedBox()
+                  ],
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  comic.isPopular ? const HotIconSmall() : const SizedBox(),
-                  comic.logo.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: CachedNetworkImage(
-                            imageUrl: comic.logo,
-                          ),
-                        )
-                      : const SizedBox(),
-                  const SizedBox()
-                ],
               ),
             ),
             Expanded(

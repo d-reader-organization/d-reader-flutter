@@ -6,7 +6,6 @@ import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_tab_pers
 import 'package:d_reader_flutter/ui/widgets/creators/header_sliver_list.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/collectibles/tab.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/comics/tab.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/tabs/issues/tab.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -30,7 +29,7 @@ class CreatorDetailsView extends ConsumerWidget {
             return const SizedBox();
           }
           return DefaultTabController(
-            length: 3,
+            length: 2,
             child: NestedScrollView(
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
@@ -46,9 +45,6 @@ class CreatorDetailsView extends ConsumerWidget {
                         text: 'Comics',
                       ),
                       Tab(
-                        text: 'Issues',
-                      ),
-                      Tab(
                         text: 'Collectibles',
                       ),
                     ],
@@ -58,9 +54,6 @@ class CreatorDetailsView extends ConsumerWidget {
               body: TabBarView(
                 children: [
                   CreatorComicsTab(
-                    creatorSlug: creator.slug,
-                  ),
-                  CreatorIssuesTab(
                     creatorSlug: creator.slug,
                   ),
                   const CreatorCollectiblesTab(),

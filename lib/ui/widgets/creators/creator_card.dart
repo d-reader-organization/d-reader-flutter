@@ -39,23 +39,28 @@ class CreatorCard extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CachedImageBgPlaceholder(
-                  imageUrl: creator.banner,
-                  bgImageFit: BoxFit.fill,
-                  height: 83,
-                  overrideBorderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(
-                      8,
-                    ),
-                    topRight: Radius.circular(
-                      8,
+                AspectRatio(
+                  aspectRatio: 1920 / 900,
+                  child: CachedImageBgPlaceholder(
+                    imageUrl: creator.banner,
+                    bgImageFit: BoxFit.fill,
+                    height: 83,
+                    overrideBorderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(
+                        8,
+                      ),
+                      topRight: Radius.circular(
+                        8,
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
-                    vertical: 8,
+                  padding: const EdgeInsets.only(
+                    right: 4,
+                    left: 4,
+                    bottom: 5,
+                    top: 8,
                   ),
                   child: Column(
                     children: [
@@ -87,11 +92,15 @@ class CreatorCard extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Container(
                   decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 3,
-                        color: ColorPalette.appBackgroundColor,
-                      ),
-                      borderRadius: BorderRadius.circular(64)),
+                    border: Border.all(
+                      width: 3,
+                      color: ColorPalette.appBackgroundColor,
+                    ),
+                    color: ColorPalette.appBackgroundColor,
+                    borderRadius: BorderRadius.circular(
+                      64,
+                    ),
+                  ),
                   child: CreatorAvatar(
                     avatar: creator.avatar,
                     slug: creator.slug,

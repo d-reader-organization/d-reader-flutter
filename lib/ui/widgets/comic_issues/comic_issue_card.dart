@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -34,29 +35,31 @@ class ComicIssueCard extends StatelessWidget {
         margin: const EdgeInsets.only(right: 16),
         child: Stack(
           children: [
-            CachedImageBgPlaceholder(
-              imageUrl: issue.cover,
-              width: cardWidth,
-              bgImageFit: BoxFit.fill,
-              padding: EdgeInsets.zero,
-              foregroundDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: const LinearGradient(
-                  colors: [
-                    ColorPalette.boxBackground200,
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  stops: [0.0, .5],
+            AspectRatio(
+              aspectRatio: comicIssueAspectRatio,
+              child: CachedImageBgPlaceholder(
+                imageUrl: issue.cover,
+                bgImageFit: BoxFit.fill,
+                padding: EdgeInsets.zero,
+                foregroundDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: const LinearGradient(
+                    colors: [
+                      ColorPalette.boxBackground200,
+                      Colors.transparent,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [0.0, .5],
+                  ),
                 ),
+                child: issue.isPopular
+                    ? const Align(
+                        alignment: Alignment.topLeft,
+                        child: HotIconSmall(),
+                      )
+                    : null,
               ),
-              child: issue.isPopular
-                  ? const Align(
-                      alignment: Alignment.topLeft,
-                      child: HotIconSmall(),
-                    )
-                  : null,
             ),
             Padding(
               padding: const EdgeInsets.all(12),

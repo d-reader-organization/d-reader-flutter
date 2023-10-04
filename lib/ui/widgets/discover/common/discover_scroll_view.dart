@@ -17,7 +17,7 @@ import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_list.dar
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DiscoverScrollView extends ConsumerStatefulWidget {
+class DiscoverScrollView extends ConsumerWidget {
   final StateNotifierProviderFamily<PaginationNotifier, PaginationState,
       String?> listenableProvider;
   final ScrollListType scrollListType;
@@ -28,22 +28,12 @@ class DiscoverScrollView extends ConsumerStatefulWidget {
     required this.scrollListType,
   });
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _DiscoverScrollViewState();
-}
-
-class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  getListSliver({required String query, required bool isDetailedView}) {
-    switch (widget.scrollListType) {
+  getListSliver({
+    required String query,
+    required bool isDetailedView,
+    required WidgetRef ref,
+  }) {
+    switch (scrollListType) {
       case ScrollListType.comicList:
         return isDetailedView
             ? ComicList(
@@ -104,46 +94,49 @@ class _DiscoverScrollViewState extends ConsumerState<DiscoverScrollView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final String query = getFilterQueryString(ref, widget.scrollListType);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final String query = getFilterQueryString(ref, scrollListType);
     final provider = ref.watch(
-      widget.listenableProvider(
+      listenableProvider(
         query,
       ),
     );
     final bool isDetailedView =
         ref.watch(viewModeProvider) == ViewMode.detailed;
-    _scrollController.addListener(() {
-      double maxScroll = _scrollController.position.maxScrollExtent;
-      double currentScroll = _scrollController.position.pixels;
-      double delta = MediaQuery.sizeOf(context).width * 0.2;
 
-      if (maxScroll - currentScroll <= delta) {
-        ref.read(widget.listenableProvider(query).notifier).fetchNext();
-      }
-    });
-
-    return CustomScrollView(
-      controller: _scrollController,
-      slivers: [
-        SliverList(
-          // figure out
-          delegate: SliverChildBuilderDelegate(
-            childCount: 1,
-            (context, index) {
-              return getListSliver(
-                query: query,
-                isDetailedView: isDetailedView,
-              );
-            },
+    return NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.sizeOf(context).width * 0.2;
+          if (maxScroll - currentScroll <= delta) {
+            ref.read(listenableProvider(query).notifier).fetchNext();
+          }
+        }
+        return true;
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: 1,
+              (context, index) {
+                return getListSliver(
+                  query: query,
+                  isDetailedView: isDetailedView,
+                  ref: ref,
+                );
+              },
+            ),
           ),
-        ),
-        OnGoingBottomWidget(provider: provider),
-        NoMoreItemsWidget(
-          listenableProvider: widget.listenableProvider,
-          query: query,
-        ),
-      ],
+          OnGoingBottomWidget(provider: provider),
+          NoMoreItemsWidget(
+            listenableProvider: listenableProvider,
+            query: query,
+          ),
+        ],
+      ),
     );
   }
 }

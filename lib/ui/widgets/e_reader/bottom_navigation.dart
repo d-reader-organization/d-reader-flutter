@@ -52,7 +52,7 @@ class EReaderBottomNavigation extends ConsumerWidget {
                       isRatedByMe: issue?.myStats?.rating != null,
                     ),
                     const SizedBox(
-                      width: 4,
+                      width: 8,
                     ),
                     FavouriteIconCount(
                       favouritesCount: favouritesCount,

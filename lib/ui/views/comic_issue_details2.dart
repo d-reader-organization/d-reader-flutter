@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/about.dart';
@@ -76,6 +77,14 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
             ),
             body: NotificationListener(
               onNotification: (notification) {
+                // if (notification is UserScrollNotification) {
+                //   if (notification.direction == ScrollDirection.forward) {
+                //     _controller.reverse();
+                //   } else if (notification.direction ==
+                //       ScrollDirection.reverse) {
+                //     _controller.forward();
+                //   }
+                // }
                 if (notification is ScrollEndNotification) {
                   if (notification.metrics.pixels > 70) {
                     _controller.forward();
@@ -101,11 +110,22 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                             pinned: true,
                             backgroundColor: _animation.value,
                             shadowColor: Colors.transparent,
-                            title: Text(
-                              '${issue.comic?.title}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
+                            centerTitle: true,
+                            title: GestureDetector(
+                              onTap: () {
+                                nextScreenPush(
+                                  context,
+                                  ComicDetails(
+                                    slug: issue.comicSlug,
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                '${issue.comic?.title}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                             // actions: [

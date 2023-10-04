@@ -37,6 +37,13 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
             ),
           ),
           Positioned.fill(
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              elevation: 0,
+            ),
+          ),
+          Positioned.fill(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,15 +25,19 @@ class FavouriteIconCount extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
-      onTap: slug != null || issueId != null
-          ? () {
+      onTap: (slug != null || issueId != null) &&
+              !ref.watch(privateLoadingProvider)
+          ? () async {
+              final loadingNotifier = ref.read(privateLoadingProvider.notifier);
+              loadingNotifier.update((state) => true);
               if (issueId != null) {
-                ref.read(favouritiseComicIssueProvider(issueId!));
+                await ref.read(favouritiseComicIssueProvider(issueId!).future);
                 ref.invalidate(comicIssueDetailsProvider);
               } else if (slug != null) {
-                ref.read(updateComicFavouriteProvider(slug!));
+                await ref.read(updateComicFavouriteProvider(slug!).future);
                 ref.invalidate(comicSlugProvider);
               }
+              loadingNotifier.update((state) => false);
             }
           : null,
       child: isContainerWidget

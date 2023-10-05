@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/unsorted/bookmark_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,10 +17,16 @@ class BookmarkIcon extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () async {
-        await ref.read(comicRepositoryProvider).bookmarkComic(slug);
-        ref.invalidate(comicSlugProvider);
-      },
+      onTap: ref.watch(bookmarkLoadingProvider)
+          ? null
+          : () async {
+              final loadingNotifier =
+                  ref.read(bookmarkLoadingProvider.notifier);
+              loadingNotifier.update((state) => true);
+              await ref.read(comicRepositoryProvider).bookmarkComic(slug);
+              loadingNotifier.update((state) => false);
+              ref.invalidate(comicSlugProvider);
+            },
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 8,

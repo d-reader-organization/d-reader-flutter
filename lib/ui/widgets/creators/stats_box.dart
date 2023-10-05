@@ -23,7 +23,7 @@ class StatsBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        color: ColorPalette.boxBackground300,
+        color: ColorPalette.greyscale400,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

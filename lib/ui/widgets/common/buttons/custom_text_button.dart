@@ -50,7 +50,7 @@ class CustomTextButton extends StatelessWidget {
           ),
           foregroundColor: textColor,
           textStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: ColorPalette.boxBackground200,
+                color: ColorPalette.greyscale500,
                 fontWeight: FontWeight.w700,
                 fontSize: fontSize,
               ),

@@ -98,7 +98,7 @@ class IssueAbout extends ConsumerWidget {
             ),
             const Divider(
               thickness: 1,
-              color: ColorPalette.boxBackground300,
+              color: ColorPalette.greyscale400,
             ),
             const SizedBox(
               height: 8,
@@ -254,7 +254,7 @@ class ActiveDecoratedContainer extends StatelessWidget {
             height: 16,
           ),
           LinearProgressIndicator(
-            backgroundColor: ColorPalette.boxBackground300,
+            backgroundColor: ColorPalette.greyscale400,
             minHeight: 8,
             valueColor: const AlwaysStoppedAnimation<Color>(
               ColorPalette.dReaderYellow100,
@@ -362,7 +362,7 @@ class DecoratedContainer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: ColorPalette.boxBackground200,
+        color: ColorPalette.greyscale500,
         borderRadius: BorderRadius.circular(8),
       ),
       child: child,

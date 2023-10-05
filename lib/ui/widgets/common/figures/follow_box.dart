@@ -40,7 +40,7 @@ class FollowBox extends HookConsumerWidget {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             width: 1,
-            color: ColorPalette.boxBackground300,
+            color: ColorPalette.greyscale400,
           ),
         ),
         child: Row(
@@ -77,13 +77,13 @@ class FollowBox extends HookConsumerWidget {
                 ),
                 color: followingHook.value.isSelected
                     ? ColorPalette.dReaderGrey
-                    : ColorPalette.boxBackground300,
+                    : ColorPalette.greyscale400,
               ),
               child: Text(
                 '${followingHook.value.count}',
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: followingHook.value.isSelected
-                          ? ColorPalette.boxBackground300
+                          ? ColorPalette.greyscale400
                           : ColorPalette.dReaderGrey,
                       fontWeight: FontWeight.w700,
                       fontSize: 16,

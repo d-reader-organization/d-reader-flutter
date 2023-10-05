@@ -81,7 +81,7 @@ class CustomTextField extends StatelessWidget {
               minHeight: 70,
             ),
             isDense: true,
-            fillColor: ColorPalette.boxBackground200,
+            fillColor: ColorPalette.greyscale500,
             filled: true,
             contentPadding: const EdgeInsets.all(12),
             hintStyle: const TextStyle(

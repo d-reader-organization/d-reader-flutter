@@ -22,7 +22,7 @@ class CollectibleCard extends StatelessWidget {
           foregroundDecoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [
-                ColorPalette.boxBackground200,
+                ColorPalette.greyscale500,
                 Colors.transparent,
               ],
               begin: Alignment.bottomCenter,

@@ -37,7 +37,7 @@ class SortMenu extends ConsumerWidget {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: ColorPalette.boxBackground300,
+                        color: ColorPalette.greyscale400,
                       ),
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(
@@ -62,7 +62,7 @@ class SortMenu extends ConsumerWidget {
                     padding: const EdgeInsets.all(6.5),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: ColorPalette.boxBackground300,
+                        color: ColorPalette.greyscale400,
                       ),
                       borderRadius: const BorderRadius.only(
                         bottomRight: Radius.circular(

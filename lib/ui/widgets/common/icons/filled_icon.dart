@@ -10,7 +10,7 @@ class FilledIcon extends StatelessWidget {
     Key? key,
     required this.iconData,
     required this.url,
-    this.backgroundColor = ColorPalette.boxBackground300,
+    this.backgroundColor = ColorPalette.greyscale400,
   }) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class FilledIcon extends StatelessWidget {
         padding: const EdgeInsets.all(6),
         margin: const EdgeInsets.only(left: 6),
         decoration: BoxDecoration(
-          color: ColorPalette.boxBackground300,
+          color: ColorPalette.greyscale400,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Icon(

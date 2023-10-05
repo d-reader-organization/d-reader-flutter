@@ -72,7 +72,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: ColorPalette.boxBackground300,
+            color: ColorPalette.greyscale400,
             borderRadius:
                 overrideBorderRadius ?? BorderRadius.circular(borderRadius),
           ),

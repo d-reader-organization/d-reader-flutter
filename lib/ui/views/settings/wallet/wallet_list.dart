@@ -135,7 +135,7 @@ class WalletListScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: ColorPalette.boxBackground300,
+                      color: ColorPalette.greyscale400,
                       borderRadius: BorderRadius.circular(
                         8,
                       ),
@@ -143,7 +143,7 @@ class WalletListScreen extends ConsumerWidget {
                         color: ref.watch(selectedWalletProvider) ==
                                 data[index].address
                             ? ColorPalette.dReaderYellow100
-                            : ColorPalette.boxBackground300,
+                            : ColorPalette.greyscale400,
                       ),
                     ),
                     child: Row(

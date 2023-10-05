@@ -23,7 +23,7 @@ class ComicListBuilder extends StatelessWidget {
       },
       separatorBuilder: (BuildContext context, int index) {
         return const Divider(
-          color: ColorPalette.boxBackground300,
+          color: ColorPalette.greyscale400,
           thickness: 1,
         );
       },

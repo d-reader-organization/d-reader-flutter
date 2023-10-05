@@ -39,7 +39,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: const BoxDecoration(
-        color: ColorPalette.boxBackground300,
+        color: ColorPalette.greyscale400,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),

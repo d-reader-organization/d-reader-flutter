@@ -22,7 +22,7 @@ class MintedItemRow extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       leading: CircleAvatar(
         maxRadius: 24,
-        backgroundColor: ColorPalette.boxBackground200,
+        backgroundColor: ColorPalette.greyscale500,
         backgroundImage: avatar.isNotEmpty
             ? CachedNetworkImageProvider(
                 avatar,

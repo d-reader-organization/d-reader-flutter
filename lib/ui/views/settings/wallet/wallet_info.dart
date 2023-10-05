@@ -140,7 +140,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             loading: () {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: ColorPalette.boxBackground200,
+                  color: ColorPalette.greyscale500,
                 ),
               );
             },
@@ -183,7 +183,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             ),
           ),
           const Divider(
-            color: ColorPalette.boxBackground300,
+            color: ColorPalette.greyscale400,
           ),
           SettingsCommonListTile(
             title: 'Sync wallet',

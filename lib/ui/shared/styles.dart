@@ -8,7 +8,7 @@ InputDecoration searchInputDecoration({
 }) {
   return InputDecoration(
     contentPadding: const EdgeInsets.all(4),
-    fillColor: ColorPalette.boxBackground200,
+    fillColor: ColorPalette.greyscale500,
     filled: true,
     enabledBorder: OutlineInputBorder(
       borderSide: const BorderSide(

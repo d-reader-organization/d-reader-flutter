@@ -29,7 +29,7 @@ class CreatorCard extends StatelessWidget {
       child: Container(
         width: width,
         decoration: BoxDecoration(
-          color: ColorPalette.boxBackground200,
+          color: ColorPalette.greyscale500,
           borderRadius: BorderRadius.circular(
             8,
           ),

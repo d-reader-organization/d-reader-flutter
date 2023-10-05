@@ -313,7 +313,7 @@ class ProfileView extends HookConsumerWidget {
                       : const SizedBox(),
                   const Divider(
                     thickness: 1,
-                    color: ColorPalette.boxBackground200,
+                    color: ColorPalette.greyscale500,
                   ),
                   !user.isEmailVerified
                       ? SettingsCommonListTile(
@@ -388,7 +388,7 @@ class ProfileView extends HookConsumerWidget {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              backgroundColor: ColorPalette.boxBackground300,
+                              backgroundColor: ColorPalette.greyscale400,
                               contentPadding: EdgeInsets.zero,
                               content: Column(
                                 mainAxisAlignment:
@@ -426,13 +426,13 @@ class ProfileView extends HookConsumerWidget {
                                             decoration: const BoxDecoration(
                                               border: Border(
                                                 right: BorderSide(
-                                                  color: ColorPalette
-                                                      .boxBackground200,
+                                                  color:
+                                                      ColorPalette.greyscale500,
                                                   width: 1,
                                                 ),
                                                 top: BorderSide(
-                                                  color: ColorPalette
-                                                      .boxBackground200,
+                                                  color:
+                                                      ColorPalette.greyscale500,
                                                   width: 1,
                                                 ),
                                               ),
@@ -458,8 +458,8 @@ class ProfileView extends HookConsumerWidget {
                                             decoration: const BoxDecoration(
                                               border: Border(
                                                 top: BorderSide(
-                                                  color: ColorPalette
-                                                      .boxBackground200,
+                                                  color:
+                                                      ColorPalette.greyscale500,
                                                   width: 1,
                                                 ),
                                               ),
@@ -572,7 +572,7 @@ class Avatar extends StatelessWidget {
           : user.avatar.isNotEmpty
               ? CircleAvatar(
                   radius: 48,
-                  backgroundColor: ColorPalette.boxBackground300,
+                  backgroundColor: ColorPalette.greyscale400,
                   child: CachedNetworkImage(
                     key: ValueKey(user.avatar),
                     imageUrl: user.avatar,

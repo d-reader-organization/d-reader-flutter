@@ -27,7 +27,7 @@ class CommonCachedImage extends StatelessWidget {
           Container(
             height: 200,
             width: 200,
-            color: ColorPalette.boxBackground300,
+            color: ColorPalette.greyscale400,
           ),
       errorWidget: (context, url, error) {
         if (onError != null) {
@@ -36,7 +36,7 @@ class CommonCachedImage extends StatelessWidget {
         return Container(
           height: 400,
           width: 400,
-          color: ColorPalette.boxBackground300,
+          color: ColorPalette.greyscale400,
         );
       },
     );

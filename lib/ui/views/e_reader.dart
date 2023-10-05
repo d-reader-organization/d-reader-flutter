@@ -186,8 +186,7 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                                             placeholder: Container(
                                               height: 400,
                                               width: double.infinity,
-                                              color:
-                                                  ColorPalette.boxBackground300,
+                                              color: ColorPalette.greyscale400,
                                             ),
                                             imageUrl: pages[index].image,
                                             onError: () {
@@ -245,8 +244,7 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                                             placeholder: Container(
                                               height: 400,
                                               width: double.infinity,
-                                              color:
-                                                  ColorPalette.boxBackground300,
+                                              color: ColorPalette.greyscale400,
                                             ),
                                             imageUrl: pages[index].image,
                                             onError: () {

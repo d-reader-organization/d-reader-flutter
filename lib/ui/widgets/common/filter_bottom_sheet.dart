@@ -177,7 +177,7 @@ class SectionDivider extends StatelessWidget {
         Divider(
           height: 1,
           thickness: 2,
-          color: ColorPalette.boxBackground300,
+          color: ColorPalette.greyscale400,
         ),
         SizedBox(
           height: 24,

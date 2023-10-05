@@ -28,8 +28,8 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
           Container(
             decoration: const BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                    color: ColorPalette.boxBackground300, width: 2.0),
+                bottom:
+                    BorderSide(color: ColorPalette.greyscale400, width: 2.0),
               ),
             ),
           ),

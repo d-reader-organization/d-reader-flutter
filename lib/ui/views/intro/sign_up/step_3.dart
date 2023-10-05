@@ -120,7 +120,7 @@ class SignUpStep3 extends ConsumerWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: ColorPalette.boxBackground300,
+                                    color: ColorPalette.greyscale400,
                                   ),
                                   borderRadius: BorderRadius.circular(
                                     8,

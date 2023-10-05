@@ -139,7 +139,7 @@ class Carousel extends ConsumerWidget {
                     shape: BoxShape.circle,
                     color: ref.watch(sliderDotsIndicatorPosition) == entry.key
                         ? const Color(0xFFD9D9D9)
-                        : ColorPalette.boxBackground300,
+                        : ColorPalette.greyscale400,
                   ),
                 );
               }).toList(),

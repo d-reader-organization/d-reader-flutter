@@ -25,7 +25,7 @@ class FilterContainer extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
           color: ref.watch(selectedFilterProvider) == id
-              ? ColorPalette.boxBackground200
+              ? ColorPalette.greyscale500
               : ColorPalette.appBackgroundColor,
           borderRadius: BorderRadius.circular(
             8,
@@ -33,7 +33,7 @@ class FilterContainer extends ConsumerWidget {
           border: Border.all(
             color: ref.watch(selectedFilterProvider) == id
                 ? ColorPalette.dReaderYellow100
-                : ColorPalette.boxBackground300,
+                : ColorPalette.greyscale400,
           ),
         ),
         child: Text(

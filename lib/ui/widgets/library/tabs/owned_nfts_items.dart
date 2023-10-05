@@ -73,7 +73,7 @@ class OwnedNftsItems extends ConsumerWidget {
                 ),
                 const Divider(
                   thickness: 1,
-                  color: ColorPalette.boxBackground200,
+                  color: ColorPalette.greyscale500,
                 ),
                 const SizedBox(
                   height: 4,
@@ -87,7 +87,7 @@ class OwnedNftsItems extends ConsumerWidget {
                   separatorBuilder: (context, index) {
                     return const Divider(
                       thickness: 1,
-                      color: ColorPalette.boxBackground200,
+                      color: ColorPalette.greyscale500,
                     );
                   },
                   itemCount: data.length,
@@ -143,7 +143,7 @@ class LoadingOwnedIssuesView extends StatelessWidget {
           ),
           const Divider(
             thickness: 1,
-            color: ColorPalette.boxBackground200,
+            color: ColorPalette.greyscale500,
           ),
           const SizedBox(
             height: 4,
@@ -206,7 +206,7 @@ class LoadingOwnedIssuesView extends StatelessWidget {
             separatorBuilder: (context, index) {
               return const Divider(
                 thickness: 1,
-                color: ColorPalette.boxBackground200,
+                color: ColorPalette.greyscale500,
               );
             },
             itemCount: 3,

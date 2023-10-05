@@ -45,7 +45,7 @@ class ComicIssueCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   gradient: const LinearGradient(
                     colors: [
-                      ColorPalette.boxBackground200,
+                      ColorPalette.greyscale500,
                       Colors.transparent,
                     ],
                     begin: Alignment.bottomCenter,

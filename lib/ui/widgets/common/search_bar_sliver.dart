@@ -81,7 +81,7 @@ class SearchBarSliver extends ConsumerWidget {
                   decoration: const BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        color: ColorPalette.boxBackground300,
+                        color: ColorPalette.greyscale400,
                         width: 2.0,
                       ),
                     ),

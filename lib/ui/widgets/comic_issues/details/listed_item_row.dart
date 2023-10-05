@@ -48,7 +48,7 @@ class ListingItem extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? ColorPalette.boxBackground200
+              ? ColorPalette.greyscale500
               : ColorPalette.appBackgroundColor,
           border: Border(
             left: BorderSide(
@@ -59,7 +59,7 @@ class ListingItem extends ConsumerWidget {
             ),
             bottom: const BorderSide(
               width: 1,
-              color: ColorPalette.boxBackground300,
+              color: ColorPalette.greyscale400,
             ),
           ),
         ),

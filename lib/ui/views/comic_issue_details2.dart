@@ -294,7 +294,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                             ),
                             const Divider(
                               thickness: 1,
-                              color: ColorPalette.boxBackground300,
+                              color: ColorPalette.greyscale400,
                             ),
                             const SizedBox(
                               height: 8,
@@ -369,7 +369,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                               decoration: const BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    color: ColorPalette.boxBackground300,
+                                    color: ColorPalette.greyscale400,
                                     width: 2.0,
                                   ),
                                 ),

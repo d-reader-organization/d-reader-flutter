@@ -64,7 +64,7 @@ class ComicInfoView extends StatelessWidget {
                 ),
                 const Divider(
                   thickness: 1,
-                  color: ColorPalette.boxBackground300,
+                  color: ColorPalette.greyscale400,
                 ),
                 const SizedBox(
                   height: 8,

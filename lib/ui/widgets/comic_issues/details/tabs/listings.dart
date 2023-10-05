@@ -76,7 +76,7 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
                 filled: true,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 4, vertical: 14),
-                fillColor: ColorPalette.boxBackground200,
+                fillColor: ColorPalette.greyscale500,
                 hintText: '#1203...',
                 hintStyle: const TextStyle(
                   color: ColorPalette.greyscale200,
@@ -107,7 +107,7 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
               constraints: const BoxConstraints(minHeight: 46),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
               decoration: BoxDecoration(
-                color: ColorPalette.boxBackground200,
+                color: ColorPalette.greyscale500,
                 border: Border.all(
                   color: ColorPalette.greyscale300,
                 ),
@@ -141,7 +141,7 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
               constraints: const BoxConstraints(minHeight: 46),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: ColorPalette.boxBackground200,
+                color: ColorPalette.greyscale500,
                 border: Border.all(
                   color: ColorPalette.greyscale300,
                 ),

@@ -110,7 +110,7 @@ class OwnedListView extends ConsumerWidget {
                     separatorBuilder: (BuildContext context, int index) {
                       return const Divider(
                         thickness: 1,
-                        color: ColorPalette.boxBackground300,
+                        color: ColorPalette.greyscale400,
                       );
                     },
                   ),

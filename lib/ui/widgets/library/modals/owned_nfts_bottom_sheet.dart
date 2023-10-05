@@ -28,7 +28,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
-        color: ColorPalette.boxBackground300,
+        color: ColorPalette.greyscale400,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -333,13 +333,15 @@ class PreviewImage extends StatelessWidget {
                     size: 24,
                   ),
                 ),
-                const Text(
-                  'This is a comic preview!',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                !canRead || !isFullyUploaded
+                    ? const Text(
+                        'This is a comic preview!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
+                    : const SizedBox(),
                 canRead
                     ? const SizedBox()
                     : Text(

@@ -5,8 +5,8 @@ import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/follow_box.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/stats_box_row.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CreatorDetailsHeaderSliverList extends StatelessWidget {
   final CreatorModel creator;
@@ -96,10 +96,30 @@ class StatsDescriptionWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FollowBox(
-                  followersCount: creator.stats?.followersCount ?? 0,
-                  isFollowing: creator.myStats?.isFollowing ?? false,
-                  slug: creator.slug,
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          width: 1,
+                          color: ColorPalette.greyscale400,
+                        ),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/coin.svg',
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    FollowBox(
+                      followersCount: creator.stats?.followersCount ?? 0,
+                      isFollowing: creator.myStats?.isFollowing ?? false,
+                      slug: creator.slug,
+                    ),
+                  ],
                 ),
                 SocialRow(
                   creator: creator,
@@ -112,26 +132,89 @@ class StatsDescriptionWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: StatsBoxRow(
-              totalVolume: double.parse('${creator.stats?.totalVolume ?? 0}'),
-              issuesCount: creator.stats?.comicIssuesCount ?? 0,
+            child: Column(
+              children: [
+                DescriptionText(
+                  text: creator.description,
+                  maxLines: 3,
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Divider(
+                  thickness: 1,
+                  color: ColorPalette.greyscale400,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: StatsBoxContainer(
+                        title: 'TOTAL VOLUME',
+                        value: creator.stats?.totalVolume ?? 0,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 50,
+                      child: VerticalDivider(
+                        thickness: 1,
+                        color: ColorPalette.greyscale400,
+                      ),
+                    ),
+                    Expanded(
+                      child: StatsBoxContainer(
+                        title: 'COMIC ISSUES',
+                        value: creator.stats?.comicIssuesCount ?? 0,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: DescriptionText(
-              text: creator.description,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(
-            height: 24,
           ),
         ],
       ),
+    );
+  }
+}
+
+class StatsBoxContainer extends StatelessWidget {
+  final String title;
+  final int value;
+  const StatsBoxContainer({
+    super.key,
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: ColorPalette.greyscale200,
+          ),
+        ),
+        const SizedBox(
+          height: 2,
+        ),
+        Text(
+          '$value',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

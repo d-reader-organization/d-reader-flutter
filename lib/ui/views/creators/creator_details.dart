@@ -36,6 +36,9 @@ class CreatorDetailsView extends ConsumerWidget {
                   CreatorDetailsHeaderSliverList(creator: creator),
                   StatsDescriptionWidget(creator: creator),
                   const CustomSliverTabPersistentHeader(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                    ),
                     tabs: [
                       Tab(
                         text: 'Comics',
@@ -47,13 +50,19 @@ class CreatorDetailsView extends ConsumerWidget {
                   ),
                 ];
               },
-              body: TabBarView(
-                children: [
-                  CreatorComicsTab(
-                    creatorSlug: creator.slug,
-                  ),
-                  const CreatorCollectiblesTab(),
-                ],
+              body: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                child: TabBarView(
+                  children: [
+                    CreatorComicsTab(
+                      creatorSlug: creator.slug,
+                    ),
+                    const CreatorCollectiblesTab(),
+                  ],
+                ),
               ),
             ),
           );

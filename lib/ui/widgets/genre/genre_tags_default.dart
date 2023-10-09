@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 int getGenreLimit(double screenWidth) {
-  if (screenWidth > 360) {
+  if (screenWidth > 400) {
     return 5;
+  } else if (screenWidth > 360) {
+    return 4;
   }
-  return 4;
+  return 3;
 }
 
 List<GenreModel> _genresWithMore(List<GenreModel> genres, int sublistLimit) =>

@@ -34,8 +34,10 @@ class FollowBox extends HookConsumerWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(4),
-        constraints: const BoxConstraints(minWidth: 148),
+        padding: const EdgeInsets.symmetric(
+          vertical: 4,
+          horizontal: 8,
+        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
@@ -46,34 +48,23 @@ class FollowBox extends HookConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.person_add,
-                  size: 20,
-                  color: ColorPalette.dReaderGrey,
-                ),
-                const SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  followingHook.value.isSelected ? 'Unfollow' : 'Follow',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: ColorPalette.dReaderGrey,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                ),
-                const SizedBox(
-                  width: 6,
-                ),
-              ],
+            Text(
+              followingHook.value.isSelected ? 'Unfollow' : 'Follow',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: ColorPalette.greyscale100,
+              ),
+            ),
+            const SizedBox(
+              width: 8,
             ),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+              constraints: const BoxConstraints(minWidth: 32),
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
-                  4,
+                  5,
                 ),
                 color: followingHook.value.isSelected
                     ? ColorPalette.dReaderGrey
@@ -81,13 +72,12 @@ class FollowBox extends HookConsumerWidget {
               ),
               child: Text(
                 '${followingHook.value.count}',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: followingHook.value.isSelected
-                          ? ColorPalette.greyscale400
-                          : ColorPalette.dReaderGrey,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                    ),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: ColorPalette.greyscale100,
+                ),
               ),
             )
           ],

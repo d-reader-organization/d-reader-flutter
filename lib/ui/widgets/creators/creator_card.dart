@@ -39,19 +39,16 @@ class CreatorCard extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AspectRatio(
-                  aspectRatio: 1920 / 900,
-                  child: CachedImageBgPlaceholder(
-                    imageUrl: creator.banner,
-                    bgImageFit: BoxFit.fill,
-                    height: 83,
-                    overrideBorderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(
-                        8,
-                      ),
-                      topRight: Radius.circular(
-                        8,
-                      ),
+                CachedImageBgPlaceholder(
+                  imageUrl: creator.banner,
+                  bgImageFit: BoxFit.fill,
+                  height: 83,
+                  overrideBorderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(
+                      8,
+                    ),
+                    topRight: Radius.circular(
+                      8,
                     ),
                   ),
                 ),

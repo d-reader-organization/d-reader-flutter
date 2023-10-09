@@ -146,7 +146,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                       child: Stack(
                         children: [
                           CachedImageBgPlaceholder(
-                            height: 381,
+                            height: 431,
                             imageUrl: issue.cover,
                             overrideBorderRadius: BorderRadius.circular(0),
                             foregroundDecoration: BoxDecoration(
@@ -168,7 +168,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                               children: [
                                 const SizedBox(),
                                 Container(
-                                  height: 309,
+                                  height: 304,
                                   width: 214,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(

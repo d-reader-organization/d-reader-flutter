@@ -196,7 +196,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         );
   }
 
-  Future<dynamic> mint(String? candyMachineAddress) async {
+  Future<dynamic> mint(String? candyMachineAddress, String? label) async {
     if (candyMachineAddress == null) {
       return 'Candy machine not found.';
     }
@@ -208,15 +208,24 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         return 'Select/Connect wallet first';
       }
     }
-    final String? encodedNftTransaction =
+    final List<dynamic> encodedNftTransactions =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(
               candyMachineAddress: candyMachineAddress,
               minterAddress: minterAddress,
+              label: label,
             );
-    if (encodedNftTransaction == null) {
+    if (encodedNftTransactions.isEmpty) {
       return false;
     }
-    return await _signAndSendTransactions([encodedNftTransaction]);
+    try {
+      for (String encodedTransaction in encodedNftTransactions) {
+        await _signAndSendTransactions([encodedTransaction]);
+      }
+      return true;
+    } catch (exception) {
+      Sentry.captureException(exception);
+      return false;
+    }
   }
 
   Future<bool> list({

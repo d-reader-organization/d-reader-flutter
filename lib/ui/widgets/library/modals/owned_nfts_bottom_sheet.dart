@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
@@ -16,11 +15,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OwnedNftsBottomSheet extends StatelessWidget {
   final List<NftModel> ownedNfts;
-  final OwnedComicIssue ownedIssue;
+  final int episodeNumber;
   const OwnedNftsBottomSheet({
     super.key,
     required this.ownedNfts,
-    required this.ownedIssue,
+    required this.episodeNumber,
   });
 
   @override
@@ -70,7 +69,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Episode ${ownedIssue.number}',
+                      'Episode $episodeNumber',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,

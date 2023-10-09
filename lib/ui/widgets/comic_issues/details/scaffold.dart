@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
+import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -29,6 +31,7 @@ import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
+import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -355,9 +358,18 @@ class BottomNavigation extends ConsumerWidget {
 
   _handleMint(BuildContext context, WidgetRef ref) async {
     try {
-      final mintResult = await ref
-          .read(solanaProvider.notifier)
-          .mint(issue.activeCandyMachineAddress);
+      final candyMachine = await ref.read(
+        candyMachineProvider(
+                query:
+                    'candyMachineAddress=${issue.activeCandyMachineAddress}&walletAddress=${ref.watch(environmentProvider).publicKey?.toBase58()}')
+            .future,
+      );
+      final mintResult = await ref.read(solanaProvider.notifier).mint(
+            issue.activeCandyMachineAddress,
+            candyMachine?.groups
+                .firstWhere((element) => element.isActive)
+                .label,
+          );
       if (context.mounted) {
         if (mintResult is bool && mintResult) {
           nextScreenPush(
@@ -515,15 +527,54 @@ class TransactionButton extends StatelessWidget {
   }
 }
 
-class ReadButton extends StatelessWidget {
+class ReadButton extends ConsumerWidget {
   final ComicIssueModel issue;
   const ReadButton({
     super.key,
     required this.issue,
   });
 
+  openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          minChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          maxChildSize: 0.8,
+          expand: false,
+          builder: (context, scrollController) {
+            return OwnedNftsBottomSheet(
+              ownedNfts: ownedNfts,
+              episodeNumber: issue.number,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    final ownedNfts = await ref.read(nftsProvider(
+      'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
+    ).future);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: false,
+      ),
+    );
+    return ownedNfts;
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return CustomTextButton(
       size: const Size(150, 50),
       backgroundColor: Colors.transparent,
@@ -535,15 +586,18 @@ class ReadButton extends StatelessWidget {
           8,
         ),
       ),
-      onPressed: () {
-        // if any of nfts is not opened, open modal bottom sheet and force user to open at least one
-        // if there are open nfts go to the Ereader
-        nextScreenPush(
-          context,
-          EReaderView(
-            issueId: issue.id,
-          ),
-        );
+      onPressed: () async {
+        final List<NftModel> ownedNfts =
+            await fetchOwnedNfts(ref, '${issue.id}');
+
+        final isAtLeastOneUsed = ownedNfts.any((nft) => nft.isUsed);
+
+        if (context.mounted) {
+          if (isAtLeastOneUsed) {
+            return nextScreenPush(context, EReaderView(issueId: issue.id));
+          }
+          openModalBottomSheet(context, ownedNfts);
+        }
       },
       child: issue.myStats?.canRead != null && issue.myStats!.canRead
           ? const Row(

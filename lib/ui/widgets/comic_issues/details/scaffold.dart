@@ -358,6 +358,12 @@ class BottomNavigation extends ConsumerWidget {
 
   _handleMint(BuildContext context, WidgetRef ref) async {
     try {
+      final currentWallet =
+          ref.watch(environmentProvider).publicKey?.toBase58();
+      if (currentWallet == null) {
+        await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+      }
+
       final candyMachine = await ref.read(
         candyMachineProvider(
                 query:

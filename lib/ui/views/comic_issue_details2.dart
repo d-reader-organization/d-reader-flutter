@@ -175,7 +175,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails2>
                                       8,
                                     ),
                                     image: DecorationImage(
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.cover,
                                       image: CachedNetworkImageProvider(
                                         issue.cover,
                                       ),

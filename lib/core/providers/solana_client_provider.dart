@@ -10,6 +10,7 @@ import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -162,6 +163,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         },
       ),
     );
+    ref.invalidate(registerWalletToSocketEvents);
+    ref.read(registerWalletToSocketEvents);
     await Future.wait(
       [
         session.close(),

@@ -53,7 +53,8 @@ class ComicDetails extends ConsumerWidget {
                   (context, index) {
                     return issuesProvider.when(
                       data: (List<ComicIssueModel> issues) {
-                        return ref.watch(viewModeProvider) == ViewMode.detailed
+                        return ref.watch(comicViewModeProvider) ==
+                                ViewMode.detailed
                             ? _IssuesList(issues: issues)
                             : IssuesGalleryBuilder(
                                 issues: issues,

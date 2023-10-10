@@ -41,7 +41,6 @@ class CreatorCard extends StatelessWidget {
               children: [
                 CachedImageBgPlaceholder(
                   imageUrl: creator.banner,
-                  bgImageFit: BoxFit.fill,
                   height: 83,
                   overrideBorderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(

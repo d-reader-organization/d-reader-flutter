@@ -212,25 +212,36 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          RatingIcon(
-                            initialRating:
-                                widget.comic.stats?.averageRating ?? 0,
-                            isRatedByMe: widget.comic.myStats?.rating != null,
-                            comicSlug: widget.comic.slug,
-                            isContainerWidget: true,
-                          ),
-                          FavouriteIconCount(
-                            favouritesCount:
-                                widget.comic.stats?.favouritesCount ?? 0,
-                            isFavourite:
-                                widget.comic.myStats?.isFavourite ?? false,
-                            slug: widget.comic.slug,
-                            isContainerWidget: true,
-                          ),
-                          BookmarkIcon(
-                            isBookmarked:
-                                widget.comic.myStats?.isBookmarked ?? false,
-                            slug: widget.comic.slug,
+                          Row(
+                            children: [
+                              RatingIcon(
+                                initialRating:
+                                    widget.comic.stats?.averageRating ?? 0,
+                                isRatedByMe:
+                                    widget.comic.myStats?.rating != null,
+                                comicSlug: widget.comic.slug,
+                                isContainerWidget: true,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              FavouriteIconCount(
+                                favouritesCount:
+                                    widget.comic.stats?.favouritesCount ?? 0,
+                                isFavourite:
+                                    widget.comic.myStats?.isFavourite ?? false,
+                                slug: widget.comic.slug,
+                                isContainerWidget: true,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              BookmarkIcon(
+                                isBookmarked:
+                                    widget.comic.myStats?.isBookmarked ?? false,
+                                slug: widget.comic.slug,
+                              ),
+                            ],
                           ),
                           MatureAudience(
                             audienceType: widget.comic.audienceType,
@@ -352,10 +363,13 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                 ],
               ),
             ),
+            const SizedBox(
+              height: 8,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 12.0,
-                vertical: 2,
+                vertical: 8,
               ),
               child: widget.body,
             )

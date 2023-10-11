@@ -581,6 +581,8 @@ class ReadButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bool showReadButton =
+        (issue.myStats?.canRead != null && issue.myStats!.canRead);
     return CustomTextButton(
       size: const Size(150, 50),
       backgroundColor: Colors.transparent,
@@ -592,20 +594,28 @@ class ReadButton extends ConsumerWidget {
           8,
         ),
       ),
-      onPressed: () async {
-        final List<NftModel> ownedNfts =
-            await fetchOwnedNfts(ref, '${issue.id}');
+      onPressed: showReadButton
+          ? () async {
+              if (issue.isFreeToRead) {
+                return nextScreenPush(context, EReaderView(issueId: issue.id));
+              }
+              final List<NftModel> ownedNfts =
+                  await fetchOwnedNfts(ref, '${issue.id}');
 
-        final isAtLeastOneUsed = ownedNfts.any((nft) => nft.isUsed);
+              final isAtLeastOneUsed = ownedNfts.any((nft) => nft.isUsed);
 
-        if (context.mounted) {
-          if (isAtLeastOneUsed) {
-            return nextScreenPush(context, EReaderView(issueId: issue.id));
-          }
-          openModalBottomSheet(context, ownedNfts);
-        }
-      },
-      child: issue.myStats?.canRead != null && issue.myStats!.canRead
+              if (context.mounted) {
+                if (isAtLeastOneUsed) {
+                  return nextScreenPush(
+                      context, EReaderView(issueId: issue.id));
+                }
+                openModalBottomSheet(context, ownedNfts);
+              }
+            }
+          : () {
+              nextScreenPush(context, EReaderView(issueId: issue.id));
+            },
+      child: showReadButton
           ? const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

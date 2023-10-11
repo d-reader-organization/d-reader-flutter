@@ -101,10 +101,14 @@ class _EReaderViewState extends ConsumerState<EReaderView>
           ),
           body: pagesProvider.when(
             data: (pages) {
-              bool canRead = (issueProvider.value?.isFreeToRead != null &&
-                      !issueProvider.value!.isFreeToRead) &&
-                  (issueProvider.value?.myStats?.canRead != null &&
-                      issueProvider.value!.myStats!.canRead);
+              if (issueProvider.value == null) {
+                return const SizedBox();
+              }
+              bool isFullyUploaded = issueProvider.value!.isFullyUploaded;
+              bool canRead = issueProvider.value!.myStats != null &&
+                  issueProvider.value!.myStats!.canRead;
+              bool showPreviewableImage = !canRead || !isFullyUploaded;
+
               return GestureDetector(
                 onTap: () {
                   notifier
@@ -149,7 +153,9 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             ? const PageScrollPhysics()
                             : const NeverScrollableScrollPhysics(),
                         allowImplicitScrolling: true,
-                        itemCount: canRead ? pages.length : pages.length + 1,
+                        itemCount: showPreviewableImage
+                            ? pages.length + 1
+                            : pages.length,
                         itemBuilder: (context, index) {
                           ValueNotifier<int> valueNotifier =
                               ValueNotifier(index);
@@ -169,12 +175,8 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             constrained: true,
                             child: index == pages.length
                                 ? PreviewImage(
-                                    canRead:
-                                        issueProvider.value?.myStats?.canRead ??
-                                            false,
-                                    isFullyUploaded:
-                                        issueProvider.value?.isFullyUploaded ??
-                                            false,
+                                    canRead: canRead,
+                                    isFullyUploaded: isFullyUploaded,
                                   )
                                 : ValueListenableBuilder(
                                     valueListenable: valueNotifier,
@@ -221,19 +223,17 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                         scaleEnabled: true,
                         constrained: true,
                         child: ListView.builder(
-                          itemCount: canRead ? pages.length : pages.length + 1,
+                          itemCount: showPreviewableImage
+                              ? pages.length + 1
+                              : pages.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             ValueNotifier<int> valueNotifier =
                                 ValueNotifier(index);
                             return index == pages.length
                                 ? PreviewImage(
-                                    canRead:
-                                        issueProvider.value?.myStats?.canRead ??
-                                            false,
-                                    isFullyUploaded:
-                                        issueProvider.value?.isFullyUploaded ??
-                                            false,
+                                    canRead: canRead,
+                                    isFullyUploaded: isFullyUploaded,
                                   )
                                 : ValueListenableBuilder(
                                     valueListenable: valueNotifier,

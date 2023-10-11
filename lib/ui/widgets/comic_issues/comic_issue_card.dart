@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
+import 'package:d_reader_flutter/ui/views/comic_issue_details2.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
@@ -22,7 +22,11 @@ class ComicIssueCard extends StatelessWidget {
     final double cardWidth = getCardWidth(MediaQuery.sizeOf(context).width);
     return GestureDetector(
       onTap: () {
-        nextScreenPush(context, ComicIssueDetails(id: issue.id));
+        nextScreenPush(
+            context,
+            ComicIssueDetails2(
+              id: issue.id,
+            ));
       },
       child: Container(
         width: cardWidth,
@@ -33,18 +37,25 @@ class ComicIssueCard extends StatelessWidget {
             CachedImageBgPlaceholder(
               imageUrl: issue.cover,
               width: cardWidth,
+              padding: EdgeInsets.zero,
               foregroundDecoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 gradient: const LinearGradient(
                   colors: [
-                    ColorPalette.boxBackground200,
+                    ColorPalette.greyscale500,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  stops: [0.0, .48],
+                  stops: [0.0, .5],
                 ),
               ),
+              child: issue.isPopular
+                  ? const Align(
+                      alignment: Alignment.topLeft,
+                      child: HotIconSmall(),
+                    )
+                  : null,
             ),
             Padding(
               padding: const EdgeInsets.all(12),
@@ -52,17 +63,10 @@ class ComicIssueCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  issue.isPopular
-                      ? const Row(
-                          children: [
-                            HotIconSmall(),
-                          ],
-                        )
-                      : const SizedBox(),
                   Text(
                     issue.comic?.title ?? '',
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                    maxLines: 1,
                     style: textTheme.titleSmall?.copyWith(
                       color: ColorPalette.greyscale100,
                     ),

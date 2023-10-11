@@ -10,9 +10,10 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/views/intro/initial.dart';
-import 'package:d_reader_flutter/ui/views/settings/reset_password.dart';
+import 'package:d_reader_flutter/ui/views/settings/profile/change_password.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
@@ -108,6 +109,7 @@ class ProfileView extends HookConsumerWidget {
                         if (username.isNotEmpty) {
                           ref.read(usernameTextProvider.notifier).state = '';
                         }
+                        Navigator.pop(context);
                       },
                       borderRadius: BorderRadius.circular(8),
                       backgroundColor: Colors.transparent,
@@ -262,14 +264,14 @@ class ProfileView extends HookConsumerWidget {
                               '${Config.settingsAssetsPath}/light/arrow_down.svg',
                           overrideColor:
                               ref.watch(globalStateProvider).isLoading
-                                  ? ColorPalette.boxBackground400
+                                  ? ColorPalette.greyscale300
                                   : ColorPalette.dReaderGreen,
                           overrideTrailing: globalHook.value.isLoading
                               ? const SizedBox(
                                   height: 24,
                                   width: 24,
                                   child: CircularProgressIndicator(
-                                    color: ColorPalette.boxBackground400,
+                                    color: ColorPalette.greyscale300,
                                   ),
                                 )
                               : null,
@@ -311,20 +313,42 @@ class ProfileView extends HookConsumerWidget {
                       : const SizedBox(),
                   const Divider(
                     thickness: 1,
-                    color: ColorPalette.boxBackground200,
+                    color: ColorPalette.greyscale500,
                   ),
+                  !user.isEmailVerified
+                      ? SettingsCommonListTile(
+                          title: 'Send verification email',
+                          leadingPath: 'assets/icons/reset_password.svg',
+                          overrideColor: Colors.white,
+                          overrideTrailing: const SizedBox(),
+                          onTap: () async {
+                            await ref
+                                .read(userRepositoryProvider)
+                                .requestEmailVerification();
+                            if (context.mounted) {
+                              showSnackBar(
+                                context: context,
+                                text: 'Verification email has been sent.',
+                                backgroundColor: ColorPalette.dReaderGreen,
+                                milisecondsDuration: 1200,
+                              );
+                            }
+                          },
+                        )
+                      : const SizedBox(),
                   SettingsCommonListTile(
-                    title: 'Reset password',
+                    title: 'Change password',
                     leadingPath: 'assets/icons/reset_password.svg',
                     overrideColor: Colors.white,
                     overrideTrailing: const SizedBox(),
                     onTap: () {
                       nextScreenPush(
-                          context,
-                          ResetPasswordView(
-                            id: '${user.id}',
-                            email: user.email,
-                          ));
+                        context,
+                        ChangePasswordView(
+                          userId: user.id,
+                          email: user.email,
+                        ),
+                      );
                     },
                   ),
                   SettingsCommonListTile(
@@ -364,7 +388,7 @@ class ProfileView extends HookConsumerWidget {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              backgroundColor: ColorPalette.boxBackground300,
+                              backgroundColor: ColorPalette.greyscale400,
                               contentPadding: EdgeInsets.zero,
                               content: Column(
                                 mainAxisAlignment:
@@ -402,13 +426,13 @@ class ProfileView extends HookConsumerWidget {
                                             decoration: const BoxDecoration(
                                               border: Border(
                                                 right: BorderSide(
-                                                  color: ColorPalette
-                                                      .boxBackground200,
+                                                  color:
+                                                      ColorPalette.greyscale500,
                                                   width: 1,
                                                 ),
                                                 top: BorderSide(
-                                                  color: ColorPalette
-                                                      .boxBackground200,
+                                                  color:
+                                                      ColorPalette.greyscale500,
                                                   width: 1,
                                                 ),
                                               ),
@@ -434,8 +458,8 @@ class ProfileView extends HookConsumerWidget {
                                             decoration: const BoxDecoration(
                                               border: Border(
                                                 top: BorderSide(
-                                                  color: ColorPalette
-                                                      .boxBackground200,
+                                                  color:
+                                                      ColorPalette.greyscale500,
                                                   width: 1,
                                                 ),
                                               ),
@@ -548,7 +572,7 @@ class Avatar extends StatelessWidget {
           : user.avatar.isNotEmpty
               ? CircleAvatar(
                   radius: 48,
-                  backgroundColor: ColorPalette.boxBackground300,
+                  backgroundColor: ColorPalette.greyscale400,
                   child: CachedNetworkImage(
                     key: ValueKey(user.avatar),
                     imageUrl: user.avatar,
@@ -565,17 +589,18 @@ class Avatar extends StatelessWidget {
                     },
                   ))
               : Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(8),
                   height: 96,
                   width: 96,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(64),
                     border: Border.all(
-                      color: ColorPalette.boxBackground400,
+                      color: ColorPalette.greyscale300,
                       width: 2,
                     ),
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SvgPicture.asset(
                         '${Config.settingsAssetsPath}/bold/image.svg',

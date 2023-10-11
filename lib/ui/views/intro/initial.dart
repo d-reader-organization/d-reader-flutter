@@ -62,7 +62,7 @@ class InitialIntroScreen extends StatelessWidget {
               text: 'Log in',
               backgroundColor: Colors.transparent,
               textColor: Colors.white,
-              borderColor: ColorPalette.boxBackground400,
+              borderColor: ColorPalette.greyscale300,
               size: const Size(
                 0,
                 50,

@@ -2,9 +2,13 @@ import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
+import 'package:d_reader_flutter/ui/utils/discover_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issue_card_large.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/details/scaffold.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_gallery_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -21,7 +25,7 @@ class ComicDetails extends ConsumerWidget {
     final AsyncValue<ComicModel?> provider = ref.watch(comicSlugProvider(slug));
     final issuesProvider = ref.watch(
       paginatedIssuesProvider(
-        'comicSlug=$slug&sortTag=latest&sortOrder=asc',
+        'comicSlug=$slug&sortTag=latest&sortOrder=${getSortDirection(ref.watch(comicSortDirectionProvider))}',
       ),
     );
 
@@ -34,7 +38,9 @@ class ComicDetails extends ConsumerWidget {
           comic: comic,
           loadMore: ref
               .read(
-                paginatedIssuesProvider('comicSlug=$slug').notifier,
+                paginatedIssuesProvider(
+                        'comicSlug=$slug&sortTag=latest&sortOrder=${getSortDirection(ref.watch(comicSortDirectionProvider))}')
+                    .notifier,
               )
               .fetchNext,
           body: CustomScrollView(
@@ -47,7 +53,12 @@ class ComicDetails extends ConsumerWidget {
                   (context, index) {
                     return issuesProvider.when(
                       data: (List<ComicIssueModel> issues) {
-                        return _IssuesList(issues: issues);
+                        return ref.watch(comicViewModeProvider) ==
+                                ViewMode.detailed
+                            ? _IssuesList(issues: issues)
+                            : IssuesGalleryBuilder(
+                                issues: issues,
+                              );
                       },
                       error: (Object? e, StackTrace? stk) {
                         Sentry.captureException(e, stackTrace: stk);

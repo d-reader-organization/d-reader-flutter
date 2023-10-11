@@ -197,7 +197,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           ref.watch(obscureTextProvider)
                               ? FontAwesomeIcons.solidEye
                               : FontAwesomeIcons.solidEyeSlash,
-                          color: ColorPalette.boxBackground400,
+                          color: ColorPalette.greyscale300,
                           size: 20,
                         ),
                       ),

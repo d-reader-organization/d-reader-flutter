@@ -86,6 +86,7 @@ class DReaderScaffold extends ConsumerWidget {
             child: body ??
                 PageView(
                   controller: ref.watch(scaffoldPageController),
+                  physics: const NeverScrollableScrollPhysics(),
                   onPageChanged: (index) {
                     ref
                         .read(scaffoldProvider.notifier)

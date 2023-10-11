@@ -34,7 +34,7 @@ class SkeletonCard extends StatelessWidget {
         foregroundDecoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              ColorPalette.boxBackground200,
+              ColorPalette.greyscale500,
               Colors.transparent,
             ],
             begin: Alignment.bottomCenter,

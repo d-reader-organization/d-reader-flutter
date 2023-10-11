@@ -25,7 +25,7 @@ class OnGoingBottomWidget extends StatelessWidget {
                 height: 24,
                 width: 24,
                 child: CircularProgressIndicator(
-                  color: ColorPalette.boxBackground200,
+                  color: ColorPalette.greyscale500,
                 ),
               ),
             );

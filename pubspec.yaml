@@ -3,7 +3,7 @@ description: dReader Flutter app.
 
 publish_to: 'none'
 
-version: 0.9.4+21 # dappStore: 0.9.8+8 google play: 0.9.4+21
+version: 0.9.9+9 # dappStore: 0.9.9+9 google play: 0.9.7+24
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -99,6 +99,7 @@ flutter:
     - assets/icons/settings_screen/light/
     - assets/icons/settings_screen/bold/
     - assets/icons/intro/
+    - assets/res/
     - .env    
 
   # An image asset can refer to one or more resolution-specific "variants", see

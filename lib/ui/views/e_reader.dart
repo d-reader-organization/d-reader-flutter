@@ -6,10 +6,12 @@ import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/common/cover_cached_image.dart';
+import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
+import 'package:d_reader_flutter/ui/widgets/e_reader/page_number_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class EReaderView extends ConsumerStatefulWidget {
@@ -99,10 +101,14 @@ class _EReaderViewState extends ConsumerState<EReaderView>
           ),
           body: pagesProvider.when(
             data: (pages) {
-              bool canRead = (issueProvider.value?.isFree != null &&
-                      !issueProvider.value!.isFree) &&
-                  (issueProvider.value?.myStats?.canRead != null &&
-                      issueProvider.value!.myStats!.canRead);
+              if (issueProvider.value == null) {
+                return const SizedBox();
+              }
+              bool isFullyUploaded = issueProvider.value!.isFullyUploaded;
+              bool canRead = issueProvider.value!.myStats != null &&
+                  issueProvider.value!.myStats!.canRead;
+              bool showPreviewableImage = !canRead || !isFullyUploaded;
+
               return GestureDetector(
                 onTap: () {
                   notifier
@@ -147,8 +153,12 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             ? const PageScrollPhysics()
                             : const NeverScrollableScrollPhysics(),
                         allowImplicitScrolling: true,
-                        itemCount: canRead ? pages.length : pages.length + 1,
+                        itemCount: showPreviewableImage
+                            ? pages.length + 1
+                            : pages.length,
                         itemBuilder: (context, index) {
+                          ValueNotifier<int> valueNotifier =
+                              ValueNotifier(index);
                           return MyInteractiveViewer(
                             minScale: 0.1,
                             maxScale: 4,
@@ -158,17 +168,49 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             onInteractionEnd: (scaleDetails) {
                               double scale = _transformationController.value
                                   .getMaxScaleOnAxis();
-
                               setState(() {
                                 _isPageChangeEnabled = scale <= 1;
                               });
                             },
                             constrained: true,
                             child: index == pages.length
-                                ? const PreviewImage()
-                                : CommonCachedImage(
-                                    fit: BoxFit.contain,
-                                    imageUrl: pages[index].image,
+                                ? PreviewImage(
+                                    canRead: canRead,
+                                    isFullyUploaded: isFullyUploaded,
+                                  )
+                                : ValueListenableBuilder(
+                                    valueListenable: valueNotifier,
+                                    builder: (context, value, child) {
+                                      return Stack(
+                                        children: [
+                                          CommonCachedImage(
+                                            fit: BoxFit.contain,
+                                            placeholder: Container(
+                                              height: 400,
+                                              width: double.infinity,
+                                              color: ColorPalette.greyscale400,
+                                            ),
+                                            imageUrl: pages[index].image,
+                                            onError: () {
+                                              ++valueNotifier.value;
+                                            },
+                                          ),
+                                          Positioned.fill(
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                top: 72,
+                                                right: 16,
+                                              ),
+                                              alignment: Alignment.topRight,
+                                              child: PageNumberWidget(
+                                                pageNumber:
+                                                    pages[index].pageNumber,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   ),
                           );
                         },
@@ -181,26 +223,48 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                         scaleEnabled: true,
                         constrained: true,
                         child: ListView.builder(
-                          itemCount: canRead ? pages.length : pages.length + 1,
+                          itemCount: showPreviewableImage
+                              ? pages.length + 1
+                              : pages.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             ValueNotifier<int> valueNotifier =
                                 ValueNotifier(index);
                             return index == pages.length
-                                ? const PreviewImage()
+                                ? PreviewImage(
+                                    canRead: canRead,
+                                    isFullyUploaded: isFullyUploaded,
+                                  )
                                 : ValueListenableBuilder(
                                     valueListenable: valueNotifier,
                                     builder: (context, value, child) {
-                                      return CommonCachedImage(
-                                        placeholder: Container(
-                                          height: 400,
-                                          width: double.infinity,
-                                          color: ColorPalette.boxBackground300,
-                                        ),
-                                        imageUrl: pages[index].image,
-                                        onError: () {
-                                          ++valueNotifier.value;
-                                        },
+                                      return Stack(
+                                        children: [
+                                          CommonCachedImage(
+                                            placeholder: Container(
+                                              height: 400,
+                                              width: double.infinity,
+                                              color: ColorPalette.greyscale400,
+                                            ),
+                                            imageUrl: pages[index].image,
+                                            onError: () {
+                                              ++valueNotifier.value;
+                                            },
+                                          ),
+                                          Positioned.fill(
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                top: 72,
+                                                right: 16,
+                                              ),
+                                              alignment: Alignment.topRight,
+                                              child: PageNumberWidget(
+                                                pageNumber:
+                                                    pages[index].pageNumber,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       );
                                     },
                                   );
@@ -223,6 +287,8 @@ class _EReaderViewState extends ConsumerState<EReaderView>
             totalPages: pagesProvider.value?.length ?? 0,
             rating: issueProvider.value?.stats?.averageRating ?? 0,
             issueId: widget.issueId,
+            favouritesCount: issueProvider.value?.stats?.favouritesCount ?? 0,
+            isFavourite: issueProvider.value?.myStats?.isFavourite ?? false,
           ),
         ),
       ),
@@ -231,14 +297,67 @@ class _EReaderViewState extends ConsumerState<EReaderView>
 }
 
 class PreviewImage extends StatelessWidget {
-  const PreviewImage({super.key});
+  final bool canRead, isFullyUploaded;
+  const PreviewImage({
+    super.key,
+    required this.canRead,
+    required this.isFullyUploaded,
+  });
+
+  final textStyle = const TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      constraints: const BoxConstraints(minHeight: 240),
       padding: const EdgeInsets.all(16.0),
-      child: SvgPicture.asset(
-        'assets/icons/comic_preview.svg',
+      child: Stack(
+        children: [
+          SvgPicture.asset(
+            'assets/icons/comic_preview.svg',
+          ),
+          Positioned.fill(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Icon(
+                    FontAwesomeIcons.eyeSlash,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ),
+                !canRead || !isFullyUploaded
+                    ? const Text(
+                        'This is a comic preview!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
+                    : const SizedBox(),
+                canRead
+                    ? const SizedBox()
+                    : Text(
+                        'To view all pages buy a full copy or become a monthly subscriber',
+                        textAlign: TextAlign.center,
+                        style: textStyle,
+                      ),
+                isFullyUploaded
+                    ? const SizedBox()
+                    : Text(
+                        'This comic is not yet fully uploaded. New chapters might be added weekly or the comic is still in a presale phase',
+                        textAlign: TextAlign.center,
+                        style: textStyle,
+                      ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -27,6 +27,10 @@ void main() async {
     ],
   );
   await LocalStore().init();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: ColorPalette.appBackgroundColor,
+    systemNavigationBarColor: ColorPalette.appBackgroundColor,
+  ));
   if (kReleaseMode) {
     await SentryFlutter.init(
       (options) {
@@ -68,6 +72,7 @@ class MyApp extends ConsumerWidget {
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             systemNavigationBarColor: ColorPalette.appBackgroundColor,
+            statusBarColor: ColorPalette.appBackgroundColor,
           ),
         ),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
@@ -95,7 +100,7 @@ class MyApp extends ConsumerWidget {
           ),
           headlineLarge: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
           bodySmall: TextStyle(

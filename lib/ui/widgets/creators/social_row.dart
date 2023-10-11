@@ -26,7 +26,7 @@ class SocialRow extends StatelessWidget {
                   padding: const EdgeInsets.all(6),
                   margin: const EdgeInsets.only(left: 6),
                   decoration: BoxDecoration(
-                    color: ColorPalette.boxBackground300,
+                    color: ColorPalette.greyscale400,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: SvgPicture.asset(

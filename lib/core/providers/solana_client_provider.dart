@@ -10,6 +10,7 @@ import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     );
   }
 
-  Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
+  Future<String> authorizeAndSignMessage([
+    String? overrideCluster,
+    Function()? onStart,
+  ]) async {
     final session = await _getSession();
     if (session == null) {
       throw Exception(missingWalletAppText);
@@ -99,7 +103,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final client = await session.start();
     final String cluster =
         overrideCluster ?? ref.read(environmentProvider).solanaCluster;
-
+    if (onStart != null) {
+      onStart();
+    }
     final result = await _authorize(
       client: client,
       cluster: cluster,
@@ -157,6 +163,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         },
       ),
     );
+    ref.invalidate(registerWalletToSocketEvents);
+    ref.read(registerWalletToSocketEvents);
     await Future.wait(
       [
         session.close(),
@@ -191,23 +199,36 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         );
   }
 
-  Future<dynamic> mint(String? candyMachineAddress) async {
+  Future<dynamic> mint(String? candyMachineAddress, String? label) async {
     if (candyMachineAddress == null) {
       return 'Candy machine not found.';
     }
-    final minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
+    String? minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
     if (minterAddress == null) {
-      return 'Select/Connect wallet first';
+      final result = await authorizeAndSignMessage();
+      minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
+      if (result != 'OK' || minterAddress == null) {
+        return 'Select/Connect wallet first';
+      }
     }
-    final String? encodedNftTransaction =
+    final List<dynamic> encodedNftTransactions =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(
               candyMachineAddress: candyMachineAddress,
               minterAddress: minterAddress,
+              label: label,
             );
-    if (encodedNftTransaction == null) {
+    if (encodedNftTransactions.isEmpty) {
       return false;
     }
-    return await _signAndSendTransactions([encodedNftTransaction]);
+    try {
+      for (String encodedTransaction in encodedNftTransactions) {
+        await _signAndSendTransactions([encodedTransaction]);
+      }
+      return true;
+    } catch (exception) {
+      Sentry.captureException(exception);
+      return false;
+    }
   }
 
   Future<bool> list({

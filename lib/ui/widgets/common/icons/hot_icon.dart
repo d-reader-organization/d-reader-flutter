@@ -50,38 +50,26 @@ class HotIconSmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: ColorPalette.dReaderYellow100,
-        ),
-        borderRadius: BorderRadius.circular(
-          4,
+      padding: const EdgeInsets.all(6),
+      decoration: const BoxDecoration(
+        color: ColorPalette.dReaderRed,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(
+            8,
+          ),
+          bottomRight: Radius.circular(
+            8,
+          ),
         ),
       ),
-      child: Row(
-        children: [
-          SvgPicture.asset(
-            'assets/icons/Hot.svg',
-            width: 14,
-            height: 14,
-            colorFilter: const ColorFilter.mode(
-              ColorPalette.dReaderYellow100,
-              BlendMode.srcIn,
-            ),
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          const Text(
-            'Hot',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: ColorPalette.dReaderYellow100,
-            ),
-          ),
-        ],
+      child: SvgPicture.asset(
+        'assets/icons/Hot.svg',
+        width: 14,
+        height: 14,
+        colorFilter: const ColorFilter.mode(
+          Colors.white,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }

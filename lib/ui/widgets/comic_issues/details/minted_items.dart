@@ -40,7 +40,7 @@ class MintedItems extends ConsumerWidget {
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Divider(
-              color: ColorPalette.boxBackground400,
+              color: ColorPalette.greyscale300,
             );
           },
         );

@@ -20,7 +20,10 @@ class ListedItems extends ConsumerWidget {
     return provider.when(
       data: (listings) {
         if (listings.isEmpty) {
-          return const Text('No items listed.');
+          return const Text(
+            'No items listed.',
+            textAlign: TextAlign.center,
+          );
         }
         return ListView.separated(
           itemCount: listings.length,
@@ -28,13 +31,13 @@ class ListedItems extends ConsumerWidget {
           shrinkWrap: true,
           primary: false,
           itemBuilder: (context, index) {
-            return ListedItemRow(
+            return ListingItem(
               listing: listings[index],
             );
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Divider(
-              color: ColorPalette.boxBackground400,
+              color: ColorPalette.greyscale300,
             );
           },
         );

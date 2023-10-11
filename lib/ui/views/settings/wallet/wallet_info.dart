@@ -42,10 +42,11 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
     await ref.read(authRepositoryProvider).disconnectWallet(
           address: widget.address,
         );
-    ref
-        .read(environmentProvider)
-        .wallets
-        ?.removeWhere((key, value) => key == widget.address);
+    final envState = ref.read(environmentProvider);
+    envState.wallets?.removeWhere((key, value) => key == widget.address);
+    if (ref.read(environmentProvider).publicKey?.toBase58() == widget.address) {
+      ref.read(environmentProvider.notifier).clearPublicKey();
+    }
     ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);
     if (context.mounted) {
@@ -70,6 +71,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
         isLoading: false,
       ),
     );
+    ref.invalidate(walletNameProvider);
     ref.invalidate(userWalletsProvider);
     if (context.mounted) {
       return showSnackBar(
@@ -138,7 +140,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             loading: () {
               return const Center(
                 child: CircularProgressIndicator(
-                  color: ColorPalette.boxBackground200,
+                  color: ColorPalette.greyscale500,
                 ),
               );
             },
@@ -149,6 +151,9 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           CustomTextField(
             labelText: 'Name',
             controller: _nameController,
+            onChange: (value) {
+              ref.read(walletNameProvider.notifier).update((state) => value);
+            },
           ),
           CustomTextField(
             labelText: 'Address',
@@ -178,7 +183,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             ),
           ),
           const Divider(
-            color: ColorPalette.boxBackground300,
+            color: ColorPalette.greyscale400,
           ),
           SettingsCommonListTile(
             title: 'Sync wallet',
@@ -214,51 +219,61 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 4,
-          vertical: 8,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: RoundedButton(
-                text: 'Cancel',
-                backgroundColor: Colors.transparent,
-                textColor: Colors.white,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: ColorPalette.greyscale50,
+      bottomNavigationBar: AnimatedOpacity(
+        opacity: ref.watch(walletNameProvider).isNotEmpty &&
+                ref.watch(walletNameProvider).trim() != widget.name
+            ? 1.0
+            : 0.0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 4,
+            vertical: 8,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: RoundedButton(
+                  text: 'Cancel',
+                  backgroundColor: Colors.transparent,
+                  textColor: Colors.white,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: ColorPalette.greyscale50,
+                  ),
+                  borderColor: ColorPalette.greyscale50,
+                  size: const Size(
+                    0,
+                    50,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                borderColor: ColorPalette.greyscale50,
-                size: const Size(
-                  0,
-                  50,
-                ),
-                onPressed: () {},
               ),
-            ),
-            Expanded(
-              child: RoundedButton(
-                text: 'Save',
-                isLoading: ref.watch(globalStateProvider).isLoading,
-                backgroundColor: ColorPalette.dReaderYellow100,
-                textColor: Colors.black,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: RoundedButton(
+                  text: 'Save',
+                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  backgroundColor: ColorPalette.dReaderYellow100,
+                  textColor: Colors.black,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  size: const Size(
+                    0,
+                    50,
+                  ),
+                  onPressed: () async {
+                    await _handleUpdateWallet(context, ref);
+                  },
                 ),
-                size: const Size(
-                  0,
-                  50,
-                ),
-                onPressed: () async {
-                  await _handleUpdateWallet(context, ref);
-                },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

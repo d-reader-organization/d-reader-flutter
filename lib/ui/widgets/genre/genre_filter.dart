@@ -35,7 +35,7 @@ class GenreFilter extends ConsumerWidget {
               ? getColorFromGenreString(genre.color)
               : null,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: ColorPalette.boxBackground300),
+          border: Border.all(color: ColorPalette.greyscale400),
         ),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         child: Column(

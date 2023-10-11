@@ -28,7 +28,7 @@ class ComicsListView extends ConsumerWidget {
           );
         }
         return SizedBox(
-          height: 276,
+          height: 226,
           child: ListView.builder(
             itemCount: data.length,
             shrinkWrap: true,
@@ -44,7 +44,7 @@ class ComicsListView extends ConsumerWidget {
         style: TextStyle(color: Colors.red),
       ),
       loading: () => SizedBox(
-        height: 276,
+        height: 226,
         child: ListView.builder(
           itemCount: 3,
           shrinkWrap: true,
@@ -52,7 +52,7 @@ class ComicsListView extends ConsumerWidget {
           itemBuilder: (context, index) => SkeletonCard(
             margin: const EdgeInsets.only(right: 16),
             width: getCardWidth(MediaQuery.sizeOf(context).width),
-            height: 276,
+            height: 226,
           ),
         ),
       ),

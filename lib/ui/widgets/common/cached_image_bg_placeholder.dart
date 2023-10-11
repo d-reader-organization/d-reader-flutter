@@ -11,6 +11,8 @@ class CachedImageBgPlaceholder extends StatelessWidget {
   final Decoration? foregroundDecoration;
   final BorderRadiusGeometry? overrideBorderRadius;
   final BoxFit bgImageFit;
+  final EdgeInsetsGeometry padding;
+  final Function()? onError;
 
   const CachedImageBgPlaceholder({
     Key? key,
@@ -24,6 +26,8 @@ class CachedImageBgPlaceholder extends StatelessWidget {
     this.bgImageFit = BoxFit.cover,
     this.opacity = 1,
     this.placeholder,
+    this.padding = const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+    this.onError,
   }) : super(key: key);
 
   @override
@@ -34,7 +38,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
       imageBuilder: (context, imageProvider) => Container(
         height: height,
         width: width,
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        padding: padding,
         foregroundDecoration: foregroundDecoration,
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -61,11 +65,14 @@ class CachedImageBgPlaceholder extends StatelessWidget {
           ),
       errorWidget: (context, url, error) {
         Sentry.captureException(error);
+        if (onError != null) {
+          onError!();
+        }
         return Container(
           height: height,
           width: width,
           decoration: BoxDecoration(
-            color: ColorPalette.dReaderRed,
+            color: ColorPalette.greyscale400,
             borderRadius:
                 overrideBorderRadius ?? BorderRadius.circular(borderRadius),
           ),

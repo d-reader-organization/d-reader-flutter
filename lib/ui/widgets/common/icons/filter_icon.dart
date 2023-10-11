@@ -26,23 +26,12 @@ class FilterIcon extends ConsumerWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: ColorPalette.boxBackground200,
-          borderRadius: BorderRadius.circular(
-            8,
-          ),
-          border: isActive
-              ? Border.all(
-                  color: ColorPalette.dReaderYellow100,
-                )
-              : null,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: SvgPicture.asset(
           'assets/icons/filter.svg',
           colorFilter: isActive
               ? const ColorFilter.mode(
-                  Colors.white,
+                  ColorPalette.dReaderYellow100,
                   BlendMode.srcIn,
                 )
               : null,

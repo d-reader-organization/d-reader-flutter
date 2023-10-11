@@ -26,7 +26,7 @@ class OwnedComicCard extends ConsumerWidget {
         width: cardWidth,
         constraints: const BoxConstraints(maxWidth: 190),
         decoration: BoxDecoration(
-          color: ColorPalette.boxBackground200,
+          color: ColorPalette.greyscale500,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(

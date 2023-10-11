@@ -11,14 +11,6 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
   });
 
   @override
-  Future<CandyMachineModel?> getCandyMachine(String address) async {
-    final response = await client
-        .get('/candy-machine/get/$address')
-        .then((value) => value.data);
-    return response == null ? null : CandyMachineModel.fromJson(response);
-  }
-
-  @override
   Future<List<Receipt>> getReceipts({String? queryString}) async {
     final response = await client
         .get('/candy-machine/get/receipts?$queryString')
@@ -35,5 +27,15 @@ class CandyMachineRepositoryImpl implements CandyMachineRepository {
         ),
       ),
     );
+  }
+
+  @override
+  Future<CandyMachineModel?> getCandyMachine({
+    required String query,
+  }) async {
+    final response = await client
+        .get('/candy-machine/get?$query')
+        .then((value) => value.data);
+    return response != null ? CandyMachineModel.fromJson(response) : null;
   }
 }

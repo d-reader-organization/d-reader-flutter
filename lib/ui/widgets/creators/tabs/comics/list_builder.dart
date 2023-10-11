@@ -18,7 +18,7 @@ class ComicsListBuilder extends StatelessWidget {
       physics: const PageScrollPhysics(),
       itemBuilder: (context, index) {
         return Container(
-          margin: const EdgeInsets.only(top: 24),
+          margin: const EdgeInsets.only(top: 16),
           child: ComicCardLarge(
             comic: comics[index],
           ),

@@ -8,6 +8,7 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,15 +21,16 @@ class SignUpStep3 extends ConsumerWidget {
 
   Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
     final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-
     try {
-      final result =
-          await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+      final result = await ref
+          .read(solanaProvider.notifier)
+          .authorizeAndSignMessage(null, () {
+        globalNotifier.update(
+          (state) => state.copyWith(
+            isLoading: true,
+          ),
+        );
+      });
       globalNotifier.update(
         (state) => state.copyWith(
           isLoading: false,
@@ -118,7 +120,7 @@ class SignUpStep3 extends ConsumerWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: ColorPalette.boxBackground300,
+                                    color: ColorPalette.greyscale400,
                                   ),
                                   borderRadius: BorderRadius.circular(
                                     8,
@@ -147,18 +149,7 @@ class SignUpStep3 extends ConsumerWidget {
                             const SizedBox(
                               height: 8,
                             ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Text(
-                                'Why do I need a wallet?',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: ColorPalette.dReaderYellow100,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
+                            const WhyDoINeedWalletWidget(),
                           ],
                         );
                 },
@@ -179,7 +170,7 @@ class SignUpStep3 extends ConsumerWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
-                  borderColor: ColorPalette.boxBackground400,
+                  borderColor: ColorPalette.greyscale300,
                   size: const Size(
                     0,
                     50,

@@ -13,6 +13,7 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -95,8 +96,8 @@ class WalletListScreen extends ConsumerWidget {
                     ref.watch(isWalletAvailableProvider).maybeWhen(
                           data: (data) {
                             return data
-                                ? 'No wallet detected'
-                                : 'No wallet installed';
+                                ? 'No wallet connected'
+                                : 'No wallet detected';
                           },
                           orElse: () => '',
                         ),
@@ -107,6 +108,10 @@ class WalletListScreen extends ConsumerWidget {
                       color: Colors.white,
                     ),
                   ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const WhyDoINeedWalletWidget(),
                 ],
               );
             }
@@ -130,14 +135,16 @@ class WalletListScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: ColorPalette.boxBackground300,
+                      color: ColorPalette.greyscale400,
                       borderRadius: BorderRadius.circular(
                         8,
                       ),
-                      border: ref.watch(selectedWalletProvider) ==
-                              data[index].address
-                          ? Border.all(color: ColorPalette.dReaderYellow100)
-                          : null,
+                      border: Border.all(
+                        color: ref.watch(selectedWalletProvider) ==
+                                data[index].address
+                            ? ColorPalette.dReaderYellow100
+                            : ColorPalette.greyscale400,
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -148,6 +155,8 @@ class WalletListScreen extends ConsumerWidget {
                             children: [
                               Text(
                                 walletName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: topTextStyle,
                               ),
                               const SizedBox(
@@ -163,7 +172,7 @@ class WalletListScreen extends ConsumerWidget {
                         const SizedBox(
                           height: 48,
                           child: VerticalDivider(
-                            color: ColorPalette.boxBackground400,
+                            color: ColorPalette.greyscale300,
                           ),
                         ),
                         Expanded(
@@ -214,7 +223,7 @@ class WalletListScreen extends ConsumerWidget {
                                   color: ref.watch(selectedWalletProvider) ==
                                           data[index].address
                                       ? ColorPalette.dReaderYellow100
-                                      : ColorPalette.boxBackground400,
+                                      : ColorPalette.greyscale300,
                                 ),
                               ),
                             ],
@@ -240,15 +249,17 @@ class WalletListScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(8),
         onPressed: () async {
           final globalNotifier = ref.read(globalStateProvider.notifier);
-          globalNotifier.update(
-            (state) => state.copyWith(
-              isLoading: true,
-            ),
-          );
+
           try {
             final result = await ref
                 .read(solanaProvider.notifier)
-                .authorizeAndSignMessage();
+                .authorizeAndSignMessage(null, () {
+              globalNotifier.update(
+                (state) => state.copyWith(
+                  isLoading: true,
+                ),
+              );
+            });
 
             globalNotifier.update(
               (state) => state.copyWith(
@@ -285,7 +296,7 @@ class WalletListScreen extends ConsumerWidget {
         child: Text(
           ref.watch(isWalletAvailableProvider).maybeWhen(
             data: (data) {
-              return data ? 'Connect Wallet' : 'Install wallet';
+              return data ? 'Add / Connect Wallet' : 'Install wallet';
             },
             orElse: () {
               return '';

@@ -39,7 +39,7 @@ class OwnedIssueCard extends ConsumerWidget {
           builder: (context, scrollController) {
             return OwnedNftsBottomSheet(
               ownedNfts: ownedNfts,
-              ownedIssue: issue,
+              episodeNumber: issue.number,
             );
           },
         );

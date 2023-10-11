@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_details.dart';
+import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -75,25 +75,13 @@ class DiscoverComicCard extends StatelessWidget {
                       const SizedBox(
                         height: 4,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            comic.creator?.name ?? '',
-                            style: textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: ColorPalette.greyscale100,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          const Icon(
-                            Icons.verified,
-                            color: ColorPalette.dReaderYellow100,
-                            size: 14,
-                          ),
-                        ],
+                      Text(
+                        comic.creator?.name ?? '',
+                        style: textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: ColorPalette.greyscale100,
+                        ),
                       ),
                       const SizedBox(
                         height: 4,
@@ -107,7 +95,7 @@ class DiscoverComicCard extends StatelessWidget {
                       ),
                       const Divider(
                         thickness: 1,
-                        color: ColorPalette.boxBackground300,
+                        color: ColorPalette.greyscale400,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,8 +125,8 @@ class DiscoverComicCard extends StatelessWidget {
                     height: 4,
                   ),
                   SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
                     physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
                     child: DiscoverGenreTagsDefault(
                       genres: comic.genres,
                     ),

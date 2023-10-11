@@ -16,13 +16,13 @@ class NetworkListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      splashColor: onTap != null ? ColorPalette.boxBackground300 : null,
+      splashColor: onTap != null ? ColorPalette.greyscale400 : null,
       selected: isSelected,
-      tileColor: ColorPalette.boxBackground300,
-      iconColor: onTap == null ? ColorPalette.boxBackground400 : Colors.white,
-      textColor: onTap == null ? ColorPalette.boxBackground400 : Colors.white,
+      tileColor: ColorPalette.greyscale400,
+      iconColor: onTap == null ? ColorPalette.greyscale300 : Colors.white,
+      textColor: onTap == null ? ColorPalette.greyscale300 : Colors.white,
       selectedColor: ColorPalette.dReaderYellow100,
-      selectedTileColor: ColorPalette.boxBackground300,
+      selectedTileColor: ColorPalette.greyscale400,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           8,

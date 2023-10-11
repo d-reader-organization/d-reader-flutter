@@ -1,19 +1,23 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/ui/views/comic_details/comic_info.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
+import 'package:d_reader_flutter/ui/widgets/common/icons/bookmark_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/notification_badge.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicDetailsScaffold extends StatefulWidget {
@@ -82,8 +86,20 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
           preferredSize: const Size(0, 64),
           child: AnimatedAppBar(
             animation: _animation,
-            actions: const [
-              NotificationBadge(),
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  nextScreenPush(
+                      context,
+                      ComicInfoView(
+                        comic: widget.comic,
+                      ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: SvgPicture.asset('assets/icons/more.svg'),
+                ),
+              ),
             ],
           ),
         ),
@@ -120,46 +136,39 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  widget.comic.title,
-                                  style: textTheme.headlineLarge,
-                                ),
-                                widget.comic.isPopular
-                                    ? const HotIcon()
-                                    : const SizedBox(),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        left: BorderSide(
-                                          width: 3,
-                                          color: ColorPalette.dReaderYellow100,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      widget.comic.flavorText,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            // ClipRect(
+                            //   child: BackdropFilter(
+                            //     filter: ImageFilter.blur(
+                            //       sigmaX: 10,
+                            //       sigmaY: 10,
+                            //     ),
+                            //     child: Container(
+                            //       padding: const EdgeInsets.symmetric(
+                            //         horizontal: 6,
+                            //         vertical: 4,
+                            //       ),
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(4),
+                            //         backgroundBlendMode: BlendMode.darken,
+                            //         color: ColorPalette.boxBackground300,
+                            //       ),
+                            //       child: const Text(
+                            //         'NEW EPISODES!',
+                            //         style: TextStyle(
+                            //           fontSize: 12,
+                            //           fontWeight: FontWeight.w500,
+                            //           letterSpacing: .2,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            // const SizedBox(
+                            //   height: 12,
+                            // ),
+                            Text(
+                              widget.comic.title,
+                              style: textTheme.headlineLarge,
                             ),
                           ],
                         ),
@@ -181,6 +190,14 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         text: widget.comic.description,
                         maxLines: 2,
                         textAlign: TextAlign.start,
+                        onLinkTap: () {
+                          nextScreenPush(
+                            context,
+                            ComicInfoView(
+                              comic: widget.comic,
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 12,
@@ -193,72 +210,92 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         height: 16,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            flex: 3,
-                            child: Consumer(builder: (context, ref, child) {
-                              return GestureDetector(
-                                onTap: () => nextScreenPush(
-                                  context,
-                                  CreatorDetailsView(
-                                    slug: widget.comic.creator?.slug ?? '',
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    CreatorAvatar(
-                                      avatar:
-                                          widget.comic.creator?.avatar ?? '',
-                                      radius: 24,
-                                      height: 32,
-                                      width: 32,
-                                      slug: widget.comic.creator?.slug ?? '',
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        widget.comic.creator?.name ?? '',
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
+                          Row(
+                            children: [
+                              RatingIcon(
+                                initialRating:
+                                    widget.comic.stats?.averageRating ?? 0,
+                                isRatedByMe:
+                                    widget.comic.myStats?.rating != null,
+                                comicSlug: widget.comic.slug,
+                                isContainerWidget: true,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              FavouriteIconCount(
+                                favouritesCount:
+                                    widget.comic.stats?.favouritesCount ?? 0,
+                                isFavourite:
+                                    widget.comic.myStats?.isFavourite ?? false,
+                                slug: widget.comic.slug,
+                                isContainerWidget: true,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              BookmarkIcon(
+                                isBookmarked:
+                                    widget.comic.myStats?.isBookmarked ?? false,
+                                slug: widget.comic.slug,
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                RatingIcon(
-                                  initialRating:
-                                      widget.comic.stats?.averageRating ?? 0,
-                                  isRatedByMe:
-                                      widget.comic.myStats?.rating != null,
-                                  comicSlug: widget.comic.slug,
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                FavouriteIconCount(
-                                  favouritesCount:
-                                      widget.comic.stats?.favouritesCount ?? 0,
-                                  isFavourite:
-                                      widget.comic.myStats?.isFavourite ??
-                                          false,
-                                  slug: widget.comic.slug,
-                                ),
-                              ],
-                            ),
+                          MatureAudience(
+                            audienceType: widget.comic.audienceType,
                           ),
                         ],
                       ),
                       const SizedBox(
-                        height: 24,
+                        height: 8,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: ColorPalette.greyscale400,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      GestureDetector(
+                        onTap: () => nextScreenPush(
+                          context,
+                          CreatorDetailsView(
+                            slug: widget.comic.creator?.slug ?? '',
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            CreatorAvatar(
+                              avatar: widget.comic.creator?.avatar ?? '',
+                              radius: 24,
+                              height: 32,
+                              width: 32,
+                              slug: widget.comic.creator?.slug ?? '',
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                widget.comic.creator?.name ?? '',
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: ColorPalette.greyscale400,
+                      ),
+                      const SizedBox(
+                        height: 8,
                       ),
                     ],
                   ),
@@ -294,16 +331,162 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                 ),
               ],
             ),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Issues',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  widget.comic.stats?.issuesCount != null &&
+                          widget.comic.stats!.issuesCount > 1
+                      ? const Row(
+                          children: [
+                            SortDirectionContainer(),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            ViewModeContainer(),
+                          ],
+                        )
+                      : const ViewModeContainer(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 12.0,
-                vertical: 2,
+                vertical: 8,
               ),
               child: widget.body,
             )
           ],
         ),
       ),
+    );
+  }
+}
+
+class BodyFilterAndSortContainer extends StatelessWidget {
+  final Widget child;
+  const BodyFilterAndSortContainer({
+    super.key,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        constraints: const BoxConstraints(
+          minHeight: 36,
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 4,
+        ),
+        decoration: BoxDecoration(
+          color: ColorPalette.greyscale500,
+          border: Border.all(
+            color: ColorPalette.greyscale300,
+          ),
+          borderRadius: BorderRadius.circular(
+            8,
+          ),
+        ),
+        child: child);
+  }
+}
+
+class SortDirectionContainer extends ConsumerWidget {
+  const SortDirectionContainer({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: () {
+        ref.read(comicSortDirectionProvider.notifier).update(
+              (state) => state == SortDirection.asc
+                  ? SortDirection.desc
+                  : SortDirection.asc,
+            );
+      },
+      child: BodyFilterAndSortContainer(
+        child: Row(
+          children: [
+            const Text(
+              'Ep No',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(
+              width: 4,
+            ),
+            ref.watch(comicSortDirectionProvider) == SortDirection.asc
+                ? SvgPicture.asset(
+                    'assets/icons/arrow_down.svg',
+                    height: 18,
+                    width: 18,
+                  )
+                : RotationTransition(
+                    turns: const AlwaysStoppedAnimation(
+                      180 / 360,
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/icons/arrow_down.svg',
+                      height: 18,
+                      width: 18,
+                    ),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ViewModeContainer extends ConsumerWidget {
+  const ViewModeContainer({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: () {
+        ref.read(viewModeProvider.notifier).update((state) =>
+            state == ViewMode.detailed ? ViewMode.gallery : ViewMode.detailed);
+      },
+      child: BodyFilterAndSortContainer(
+          child: Row(
+        children: [
+          const Text(
+            'View',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          ref.watch(viewModeProvider) == ViewMode.detailed
+              ? SvgPicture.asset('assets/icons/category.svg')
+              : SvgPicture.asset('assets/icons/list.svg'),
+        ],
+      )),
     );
   }
 }

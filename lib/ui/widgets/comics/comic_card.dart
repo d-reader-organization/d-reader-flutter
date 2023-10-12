@@ -57,8 +57,9 @@ class ComicCard extends ConsumerWidget {
                 children: [
                   comic.isPopular ? const HotIconSmall() : const SizedBox(),
                   comic.logo.isNotEmpty
-                      ? Padding(
+                      ? Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
+                          constraints: const BoxConstraints(maxHeight: 100),
                           child: CachedNetworkImage(
                             imageUrl: comic.logo,
                           ),

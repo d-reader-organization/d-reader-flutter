@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -466,7 +467,7 @@ class ViewModeContainer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        ref.read(viewModeProvider.notifier).update((state) =>
+        ref.read(comicViewModeProvider.notifier).update((state) =>
             state == ViewMode.detailed ? ViewMode.gallery : ViewMode.detailed);
       },
       child: BodyFilterAndSortContainer(
@@ -482,7 +483,7 @@ class ViewModeContainer extends ConsumerWidget {
           const SizedBox(
             width: 4,
           ),
-          ref.watch(viewModeProvider) == ViewMode.detailed
+          ref.watch(comicViewModeProvider) == ViewMode.detailed
               ? SvgPicture.asset('assets/icons/category.svg')
               : SvgPicture.asset('assets/icons/list.svg'),
         ],

@@ -203,15 +203,18 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       ),
                     ),
                   ),
-                  const Text(
-                    'Forgot password?',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ColorPalette.dReaderYellow100,
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: const Text(
+                  //     'Forgot password?',
+                  //     textAlign: TextAlign.right,
+                  //     style: TextStyle(
+                  //       fontSize: 14,
+                  //       fontWeight: FontWeight.w500,
+                  //       color: ColorPalette.dReaderYellow100,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 48,
                   ),

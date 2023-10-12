@@ -524,7 +524,8 @@ class TransactionButton extends StatelessWidget {
                   height: 10,
                 )
               : SolanaPrice(
-                  price: formatLamportPrice(price),
+                  price:
+                      price != null ? formatPriceWithSignificant(price!) : null,
                   textColor: Colors.black,
                 ),
         ],

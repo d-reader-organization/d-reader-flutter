@@ -127,7 +127,9 @@ class ComicIssueCardLarge extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SolanaPrice(
-                          price: formatLamportPrice(issue.stats?.price),
+                          price: issue.stats?.price != null
+                              ? formatPriceWithSignificant(issue.stats!.price!)
+                              : null,
                         ),
                         RatingIcon(
                           initialRating: issue.stats?.averageRating ?? 0,

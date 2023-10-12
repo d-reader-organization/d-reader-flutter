@@ -13,6 +13,7 @@ enum SortByEnum {
   viewers,
   followers,
   name,
+  published,
 }
 
 enum SortDirection { asc, desc }

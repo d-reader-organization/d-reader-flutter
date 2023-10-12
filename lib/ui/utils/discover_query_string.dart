@@ -4,20 +4,37 @@ import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-String getSortByQueryString(SortByEnum selected) {
-  if (selected == SortByEnum.latest) {
-    return 'sortTag=latest';
-  } else if (selected == SortByEnum.likes) {
-    return 'sortTag=likes';
-  } else if (selected == SortByEnum.rating) {
-    return 'sortTag=rating';
-  } else if (selected == SortByEnum.readers) {
-    return 'sortTag=readers';
-  } else if (selected == SortByEnum.viewers) {
-    return 'sortTag=viewers';
-  } else if (selected == SortByEnum.followers) {
-    return 'sortTag=followers';
+String getSortByQueryString(SortByEnum selected, ScrollListType type) {
+  if (type == ScrollListType.comicList) {
+    if (selected == SortByEnum.likes) {
+      return 'sortTag=likes';
+    } else if (selected == SortByEnum.rating) {
+      return 'sortTag=rating';
+    } else if (selected == SortByEnum.readers) {
+      return 'sortTag=readers';
+    } else if (selected == SortByEnum.viewers) {
+      return 'sortTag=viewers';
+    } else if (selected == SortByEnum.published) {
+      return 'sortTag=published';
+    }
+  } else if (type == ScrollListType.issueList) {
+    if (selected == SortByEnum.latest) {
+      return 'sortTag=latest';
+    } else if (selected == SortByEnum.likes) {
+      return 'sortTag=likes';
+    } else if (selected == SortByEnum.rating) {
+      return 'sortTag=rating';
+    } else if (selected == SortByEnum.readers) {
+      return 'sortTag=readers';
+    } else if (selected == SortByEnum.viewers) {
+      return 'sortTag=viewers';
+    }
+  } else if (type == ScrollListType.creatorList) {
+    if (selected == SortByEnum.followers) {
+      return 'sortTag=followers';
+    }
   }
+
   return '';
 }
 
@@ -38,8 +55,12 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
     scrollListType: scrollListType,
     selectedFilter: selectedFilter,
   );
-  final String sortByFilter =
-      selectedSortBy != null ? getSortByQueryString(selectedSortBy) : '';
+  final String sortByFilter = selectedSortBy != null
+      ? getSortByQueryString(
+          selectedSortBy,
+          scrollListType,
+        )
+      : '';
   final String sortDirection = getSortDirection(selectedSortDirection);
   final String common =
       'sortOrder=$sortDirection&${adjustQueryString(genreTags)}${adjustQueryString(sortByFilter)}${adjustQueryString(tagFilter)}';

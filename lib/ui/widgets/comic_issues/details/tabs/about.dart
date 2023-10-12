@@ -330,7 +330,7 @@ class NonActiveDecoratedContainer extends StatelessWidget {
               ),
               Text(
                 isFutureMint
-                    ? 'Starts in ${DateFormat('H').format(candyMachineGroup.startDate)}h ${DateFormat('m').format(candyMachineGroup.startDate)}m'
+                    ? 'Starts in ${DateFormat('H').format(candyMachineGroup.startDate.toLocal())}h ${DateFormat('m').format(candyMachineGroup.startDate.toLocal())}m'
                     : 'Ended',
                 style: TextStyle(
                   fontSize: 16,

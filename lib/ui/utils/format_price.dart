@@ -30,7 +30,7 @@ String formatPriceWithSignificant(int price) {
         }
         return indexOfNonZero < 0
             ? '0'
-            : formatted.substring(0, index + indexOfNonZero + 2);
+            : formatted.substring(0, index + indexOfNonZero + 1);
       }
     }
     return formatted;

@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
@@ -60,6 +61,7 @@ class ChangeNetworkView extends ConsumerWidget {
       ref.invalidate(comicsProvider);
       ref.invalidate(comicIssuesProvider);
       ref.invalidate(creatorsProvider);
+      ref.invalidate(carouselProvider);
       if (localStoreData != null) {
         bool isSuccessful =
             ref.read(environmentProvider.notifier).updateEnvironmentState(

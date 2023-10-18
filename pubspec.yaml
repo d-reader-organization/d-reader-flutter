@@ -3,7 +3,7 @@ description: dReader Flutter app.
 
 publish_to: 'none'
 
-version: 0.9.91+10 # dappStore: 0.9.91+10 google play: 0.9.71+25
+version: 0.9.72+26 # dappStore: 0.9.91+10 google play: 0.9.72+26
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -54,6 +54,7 @@ dependencies:
   video_player: ^2.7.0
   expandable_text: 2.3.0
   email_validator: ^2.1.17
+  power: ^0.5.0
 
 dev_dependencies:
   flutter_test:

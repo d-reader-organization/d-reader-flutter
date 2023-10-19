@@ -270,9 +270,8 @@ class WalletListScreen extends ConsumerWidget {
             if (context.mounted) {
               showSnackBar(
                 context: context,
-                text: isConnected
-                    ? 'Wallet has been connected.'
-                    : 'Something went wrong',
+                milisecondsDuration: 2000,
+                text: isConnected ? 'Wallet has been connected.' : result,
               );
               if (isConnected) {
                 ref.invalidate(selectedWalletProvider);

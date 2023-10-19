@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/follow_box.dart';
@@ -155,7 +156,11 @@ class StatsDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: StatsBoxContainer(
                         title: 'TOTAL VOLUME',
-                        value: creator.stats?.totalVolume ?? 0,
+                        value: creator.stats?.totalVolume != null
+                            ? formatPriceWithSignificant(
+                                creator.stats!.totalVolume,
+                              )
+                            : '-',
                       ),
                     ),
                     const SizedBox(
@@ -168,7 +173,7 @@ class StatsDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: StatsBoxContainer(
                         title: 'COMIC ISSUES',
-                        value: creator.stats?.comicIssuesCount ?? 0,
+                        value: '${creator.stats?.comicIssuesCount ?? '-'}',
                       ),
                     ),
                   ],
@@ -183,8 +188,7 @@ class StatsDescriptionWidget extends StatelessWidget {
 }
 
 class StatsBoxContainer extends StatelessWidget {
-  final String title;
-  final int value;
+  final String title, value;
   const StatsBoxContainer({
     super.key,
     required this.title,
@@ -207,7 +211,7 @@ class StatsBoxContainer extends StatelessWidget {
           height: 2,
         ),
         Text(
-          '$value',
+          value,
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,

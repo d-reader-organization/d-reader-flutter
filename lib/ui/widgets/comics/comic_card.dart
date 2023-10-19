@@ -37,37 +37,45 @@ class ComicCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedImageBgPlaceholder(
-              imageUrl: comic.cover,
-              width: cardWidth,
-              height: 134,
-              opacity: .4,
-              padding: EdgeInsets.zero,
-              overrideBorderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(
-                  8,
+            Stack(
+              children: [
+                CachedImageBgPlaceholder(
+                  imageUrl: comic.cover,
+                  width: cardWidth,
+                  height: 134,
+                  opacity: .4,
+                  padding: EdgeInsets.zero,
+                  overrideBorderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(
+                      8,
+                    ),
+                    topRight: Radius.circular(
+                      8,
+                    ),
+                  ),
                 ),
-                topRight: Radius.circular(
-                  8,
+                Positioned.fill(
+                  top: 0,
+                  left: 0,
+                  child: Stack(
+                    children: [
+                      comic.isPopular ? const HotIconSmall() : const SizedBox(),
+                      comic.logo.isNotEmpty
+                          ? Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl: comic.logo,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
                 ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  comic.isPopular ? const HotIconSmall() : const SizedBox(),
-                  comic.logo.isNotEmpty
-                      ? Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          constraints: const BoxConstraints(maxHeight: 100),
-                          child: CachedNetworkImage(
-                            imageUrl: comic.logo,
-                          ),
-                        )
-                      : const SizedBox(),
-                  const SizedBox()
-                ],
-              ),
+              ],
             ),
             Expanded(
               child: Padding(

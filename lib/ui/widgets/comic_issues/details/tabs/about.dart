@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/stateless_cover.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue/provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
@@ -47,14 +48,10 @@ class IssueAbout extends ConsumerWidget {
                 }
                 return Column(
                   children: snapshot.data?.groups.map((candyMachineGroup) {
-                        return candyMachineGroup.isActive
-                            ? ActiveDecoratedContainer(
-                                candyMachineGroup: candyMachineGroup,
-                                totalSupply: snapshot.data?.supply ?? 0,
-                              )
-                            : NonActiveDecoratedContainer(
-                                candyMachineGroup: candyMachineGroup,
-                              );
+                        return ExpandableDecoratedContainer(
+                          candyMachineGroup: candyMachineGroup,
+                          totalSupply: snapshot.data?.supply ?? 0,
+                        );
                       }).toList() ??
                       [],
                 );
@@ -200,154 +197,126 @@ class RaritiesWidget extends StatelessWidget {
   }
 }
 
-class ActiveDecoratedContainer extends StatelessWidget {
+class ExpandableDecoratedContainer extends ConsumerWidget {
   final CandyMachineGroupModel candyMachineGroup;
   final int totalSupply;
-  const ActiveDecoratedContainer({
+  const ExpandableDecoratedContainer({
     super.key,
     required this.candyMachineGroup,
     required this.totalSupply,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return DecoratedContainer(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFutureMint = candyMachineGroup.startDate.isAfter(DateTime.now());
+    return GestureDetector(
+      onTap: () {
+        ref.read(expandedCandyMachineGroup.notifier).update((state) =>
+            state != candyMachineGroup.label ? candyMachineGroup.label : '');
+      },
+      child: AnimatedContainer(
+        height: ref.watch(expandedCandyMachineGroup) == candyMachineGroup.label
+            ? 108
+            : 46,
+        duration: const Duration(milliseconds: 150),
+        margin: const EdgeInsets.only(bottom: 8),
+        child: DecoratedContainer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    candyMachineGroup.displayLabel,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                  Row(
+                    children: [
+                      Text(
+                        candyMachineGroup.displayLabel,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      CircleAvatar(
+                        backgroundColor: candyMachineGroup.isActive
+                            ? ColorPalette.dReaderYellow100
+                            : isFutureMint
+                                ? ColorPalette.dReaderYellow300
+                                : ColorPalette.greyscale200,
+                        radius: 6,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        candyMachineGroup.isActive
+                            ? 'Live'
+                            : isFutureMint
+                                ? 'Starts in ${DateFormat('H').format(candyMachineGroup.startDate.toLocal())}h ${DateFormat('m').format(candyMachineGroup.startDate.toLocal())}m'
+                                : 'Ended',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: candyMachineGroup.isActive
+                              ? ColorPalette.dReaderYellow100
+                              : isFutureMint
+                                  ? ColorPalette.dReaderYellow300
+                                  : ColorPalette.greyscale200,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SolanaPrice(
+                    price: formatLamportPrice(
+                      candyMachineGroup.mintPrice.round(),
                     ),
+                  )
+                ],
+              ),
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  LinearProgressIndicator(
+                    backgroundColor: ColorPalette.greyscale400,
+                    minHeight: 8,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      ColorPalette.dReaderYellow100,
+                    ),
+                    value: candyMachineGroup.itemsMinted /
+                        candyMachineGroup.supply,
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   const SizedBox(
-                    width: 4,
+                    height: 8,
                   ),
-                  const CircleAvatar(
-                    backgroundColor: ColorPalette.dReaderYellow100,
-                    radius: 6,
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  const Text(
-                    'Live',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: ColorPalette.dReaderYellow100,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total: $totalSupply',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: ColorPalette.greyscale100,
+                        ),
+                      ),
+                      Text(
+                        '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply} Minted',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: ColorPalette.greyscale100,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              SolanaPrice(
-                price: formatLamportPrice(
-                  candyMachineGroup.mintPrice.round(),
-                ),
-              ),
             ],
           ),
-          const SizedBox(
-            height: 16,
-          ),
-          LinearProgressIndicator(
-            backgroundColor: ColorPalette.greyscale400,
-            minHeight: 8,
-            valueColor: const AlwaysStoppedAnimation<Color>(
-              ColorPalette.dReaderYellow100,
-            ),
-            value: candyMachineGroup.itemsMinted / candyMachineGroup.supply,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Total: $totalSupply',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: ColorPalette.greyscale100,
-                ),
-              ),
-              Text(
-                '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply} Minted',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: ColorPalette.greyscale100,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class NonActiveDecoratedContainer extends StatelessWidget {
-  final CandyMachineGroupModel candyMachineGroup;
-  const NonActiveDecoratedContainer({
-    super.key,
-    required this.candyMachineGroup,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isFutureMint = candyMachineGroup.startDate.isAfter(DateTime.now());
-    return DecoratedContainer(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Text(
-                candyMachineGroup.displayLabel,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(
-                width: 4,
-              ),
-              CircleAvatar(
-                backgroundColor: isFutureMint
-                    ? ColorPalette.dReaderYellow300
-                    : ColorPalette.greyscale200,
-                radius: 6,
-              ),
-              const SizedBox(
-                width: 4,
-              ),
-              Text(
-                isFutureMint
-                    ? 'Starts in ${DateFormat('H').format(candyMachineGroup.startDate.toLocal())}h ${DateFormat('m').format(candyMachineGroup.startDate.toLocal())}m'
-                    : 'Ended',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: isFutureMint
-                      ? ColorPalette.dReaderYellow300
-                      : ColorPalette.greyscale200,
-                ),
-              ),
-            ],
-          ),
-          SolanaPrice(
-            price: formatLamportPrice(
-              candyMachineGroup.mintPrice.round(),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
@@ -362,13 +331,16 @@ class DecoratedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: ColorPalette.greyscale500,
-        borderRadius: BorderRadius.circular(8),
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: ColorPalette.greyscale500,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

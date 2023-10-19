@@ -1,17 +1,18 @@
 class WalletGroupModel {
-  final int itemsMinted, itemsRemaining;
+  final int itemsMinted;
+  final int? supply;
   final bool isEligible;
 
   WalletGroupModel({
     required this.itemsMinted,
-    required this.itemsRemaining,
+    this.supply,
     required this.isEligible,
   });
 
   factory WalletGroupModel.fromJson(dynamic json) {
     return WalletGroupModel(
       itemsMinted: json['itemsMinted'],
-      itemsRemaining: json['itemsRemaining'] ?? 0,
+      supply: json['supply'],
       isEligible: json['isEligible'],
     );
   }

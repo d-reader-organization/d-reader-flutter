@@ -48,15 +48,10 @@ class IssueAbout extends ConsumerWidget {
                 }
                 return Column(
                   children: snapshot.data?.groups.map((candyMachineGroup) {
-                        return candyMachineGroup.isActive
-                            ? ExpandableDecoratedContainer(
-                                candyMachineGroup: candyMachineGroup,
-                                totalSupply: snapshot.data?.supply ?? 0,
-                              )
-                            : ExpandableDecoratedContainer(
-                                candyMachineGroup: candyMachineGroup,
-                                totalSupply: snapshot.data?.supply ?? 0,
-                              );
+                        return ExpandableDecoratedContainer(
+                          candyMachineGroup: candyMachineGroup,
+                          totalSupply: snapshot.data?.supply ?? 0,
+                        );
                       }).toList() ??
                       [],
                 );

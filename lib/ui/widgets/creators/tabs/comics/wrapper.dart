@@ -19,11 +19,7 @@ class CreatorComicsWrapper extends StatelessWidget {
         if (comics.isEmpty) {
           return const Center(
             child: Text(
-              'Creator has no pubslihed comics yet',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
+              'No comics published yet',
             ),
           );
         }

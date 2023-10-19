@@ -9,7 +9,7 @@ enum ViewMode {
 
 final viewModeProvider = StateProvider<ViewMode>((ref) {
   final String? existingKey = LocalStore.instance.get(viewModeStoreKey);
-  return existingKey != null && existingKey == ViewMode.gallery.name
-      ? ViewMode.gallery
-      : ViewMode.detailed;
+  return existingKey != null && existingKey == ViewMode.detailed.name
+      ? ViewMode.detailed
+      : ViewMode.gallery;
 });

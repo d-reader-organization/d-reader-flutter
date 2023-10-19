@@ -61,14 +61,12 @@ class FollowBox extends HookConsumerWidget {
             ),
             Container(
               constraints: const BoxConstraints(minWidth: 32),
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
                   5,
                 ),
-                color: followingHook.value.isSelected
-                    ? ColorPalette.dReaderGrey
-                    : ColorPalette.greyscale400,
+                color: ColorPalette.greyscale400,
               ),
               child: Text(
                 '${followingHook.value.count}',

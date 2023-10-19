@@ -35,6 +35,11 @@ class CreatorDetailsView extends ConsumerWidget {
                 return [
                   CreatorDetailsHeaderSliverList(creator: creator),
                   StatsDescriptionWidget(creator: creator),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 8,
+                    ),
+                  ),
                   const CustomSliverTabPersistentHeader(
                     padding: EdgeInsets.symmetric(
                       horizontal: 12,

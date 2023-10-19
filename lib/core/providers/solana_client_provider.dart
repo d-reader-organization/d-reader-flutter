@@ -196,17 +196,23 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String apiUrl,
     required String jwtToken,
   }) async {
-    await ref.read(authRepositoryProvider).connectWallet(
-          address: publicKey.toBase58(),
-          encoding: base58encode(
-            signedMessage.sublist(
-              signedMessage.length - 64,
-              signedMessage.length,
+    try {
+      await ref.read(authRepositoryProvider).connectWallet(
+            address: publicKey.toBase58(),
+            encoding: base58encode(
+              signedMessage.sublist(
+                signedMessage.length - 64,
+                signedMessage.length,
+              ),
             ),
-          ),
-          apiUrl: apiUrl,
-          jwtToken: jwtToken,
-        );
+            apiUrl: apiUrl,
+            jwtToken: jwtToken,
+          );
+    } catch (exception, stackTrace) {
+      Sentry.captureMessage('Connect wallet exception $exception');
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception(exception);
+    }
   }
 
   Future<dynamic> mint(String? candyMachineAddress, String? label) async {

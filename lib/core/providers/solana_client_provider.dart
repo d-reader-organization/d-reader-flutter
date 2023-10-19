@@ -23,7 +23,7 @@ import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 const String missingWalletAppText = 'Missing wallet application.';
-// https://pub.dev/packages/power
+
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
   (ref) {

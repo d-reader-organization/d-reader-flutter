@@ -15,6 +15,8 @@ class InfoButton extends StatelessWidget {
     return GestureDetector(
       onTap: isLoading ? null : onTap,
       child: Container(
+        constraints:
+            const BoxConstraints(minWidth: 80, minHeight: 40, maxWidth: 80),
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
           vertical: 8,
@@ -27,13 +29,23 @@ class InfoButton extends StatelessWidget {
             8,
           ),
         ),
-        child: const Text(
-          'Info',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        child: isLoading
+            ? const Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: ColorPalette.greyscale100,
+                  ),
+                ),
+              )
+            : const Text(
+                'Info',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
       ),
     );
   }

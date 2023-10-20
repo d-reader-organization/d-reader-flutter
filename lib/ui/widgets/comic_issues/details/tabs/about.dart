@@ -46,15 +46,38 @@ class IssueAbout extends ConsumerWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox();
                 }
-                return Column(
-                  children: snapshot.data?.groups.map((candyMachineGroup) {
+                return Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Minting in progress',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        'Total: ${snapshot.data?.itemsMinted}/${snapshot.data?.supply}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.greyscale100,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  ...snapshot.data?.groups.map((candyMachineGroup) {
                         return ExpandableDecoratedContainer(
                           candyMachineGroup: candyMachineGroup,
                           totalSupply: snapshot.data?.supply ?? 0,
                         );
                       }).toList() ??
                       [],
-                );
+                ]);
               },
             ),
             const SizedBox(
@@ -239,14 +262,12 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                       const SizedBox(
                         width: 4,
                       ),
-                      CircleAvatar(
-                        backgroundColor: candyMachineGroup.isActive
-                            ? ColorPalette.dReaderYellow100
-                            : isFutureMint
-                                ? ColorPalette.dReaderYellow300
-                                : ColorPalette.greyscale200,
-                        radius: 6,
-                      ),
+                      candyMachineGroup.isActive
+                          ? const CircleAvatar(
+                              backgroundColor: ColorPalette.dReaderYellow100,
+                              radius: 6,
+                            )
+                          : const SizedBox(),
                       const SizedBox(
                         width: 4,
                       ),
@@ -283,8 +304,10 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                   LinearProgressIndicator(
                     backgroundColor: ColorPalette.greyscale400,
                     minHeight: 8,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      ColorPalette.dReaderYellow100,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      candyMachineGroup.isActive
+                          ? ColorPalette.dReaderYellow100
+                          : ColorPalette.greyscale200,
                     ),
                     value: candyMachineGroup.itemsMinted /
                         candyMachineGroup.supply,
@@ -297,17 +320,19 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Total: $totalSupply',
+                        'You minted: ${candyMachineGroup.wallet.itemsMinted}/${candyMachineGroup.wallet.supply ?? '∞'}',
                         style: const TextStyle(
                           fontSize: 14,
                           color: ColorPalette.greyscale100,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
-                        '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply} Minted',
+                        '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply}',
                         style: const TextStyle(
                           fontSize: 14,
                           color: ColorPalette.greyscale100,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],

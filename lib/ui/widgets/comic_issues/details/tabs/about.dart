@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue/provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
@@ -14,7 +15,6 @@ import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class IssueAbout extends ConsumerWidget {
   final ComicIssueModel issue;
@@ -43,9 +43,11 @@ class IssueAbout extends ConsumerWidget {
                     .future,
               ),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    snapshot.hasError) {
                   return const SizedBox();
                 }
+
                 return Column(children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,7 +233,8 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFutureMint = candyMachineGroup.startDate.isAfter(DateTime.now());
+    final isFutureMint = candyMachineGroup.startDate != null &&
+        candyMachineGroup.startDate!.isAfter(DateTime.now());
     return GestureDetector(
       onTap: () {
         ref.read(expandedCandyMachineGroup.notifier).update((state) =>
@@ -275,7 +278,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                         candyMachineGroup.isActive
                             ? 'Live'
                             : isFutureMint
-                                ? 'Starts in ${DateFormat('H').format(candyMachineGroup.startDate.toLocal())}h ${DateFormat('m').format(candyMachineGroup.startDate.toLocal())}m'
+                                ? 'Starts in ${formatDateInRelative(candyMachineGroup.startDate)}'
                                 : 'Ended',
                         style: TextStyle(
                           fontSize: 16,

@@ -21,10 +21,22 @@ final receiptsProvider = FutureProvider.autoDispose
       );
 });
 
+final candyMachineStateProvider = StateProvider<CandyMachineModel?>(
+  (ref) {
+    return null;
+  },
+);
+
 @riverpod
 Future<CandyMachineModel?> candyMachine(
   Ref ref, {
   required String query,
-}) {
-  return ref.read(candyMachineRepositoryProvider).getCandyMachine(query: query);
+}) async {
+  final result = await ref
+      .read(candyMachineRepositoryProvider)
+      .getCandyMachine(query: query);
+  if (result != null) {
+    ref.read(candyMachineStateProvider.notifier).update((state) => result);
+  }
+  return result;
 }

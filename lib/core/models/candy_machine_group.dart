@@ -4,7 +4,7 @@ class CandyMachineGroupModel {
   final double mintPrice;
   final int itemsMinted, mintLimit, supply;
   final String label, displayLabel, splTokenAddress;
-  final DateTime startDate, endDate;
+  final DateTime? startDate, endDate;
   final bool isActive;
   final WalletGroupModel wallet;
 
@@ -31,12 +31,16 @@ class CandyMachineGroupModel {
       label: json['label'],
       displayLabel: json['displayLabel'],
       splTokenAddress: json['splTokenAddress'],
-      startDate: DateTime.parse(
-        json['startDate'],
-      ),
-      endDate: DateTime.parse(
-        json['endDate'],
-      ),
+      startDate: json['startDate'] != null
+          ? DateTime.parse(
+              json['startDate'],
+            )
+          : null,
+      endDate: json['endDate'] != null
+          ? DateTime.parse(
+              json['endDate'],
+            )
+          : null,
       isActive: json['isActive'],
       wallet: WalletGroupModel.fromJson(
         json['wallet'],

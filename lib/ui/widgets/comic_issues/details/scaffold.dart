@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
@@ -363,18 +364,24 @@ class BottomNavigation extends ConsumerWidget {
       if (currentWallet == null) {
         await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
       }
-
-      final candyMachine = await ref.read(
-        candyMachineProvider(
-                query:
-                    'candyMachineAddress=${issue.activeCandyMachineAddress}&walletAddress=${ref.watch(environmentProvider).publicKey?.toBase58()}')
-            .future,
-      );
+      final candyMachine = ref.read(candyMachineStateProvider);
+      if (context.mounted && candyMachine == null) {
+        return showSnackBar(
+          context: context,
+          text: 'Failed to find active candy machine',
+          milisecondsDuration: 1500,
+        );
+      }
+      final activeGroup = getActiveGroup(candyMachine!.groups);
+      if (activeGroup == null && context.mounted) {
+        return showSnackBar(
+            context: context,
+            text: 'There is no active mint',
+            milisecondsDuration: 1500);
+      }
       final mintResult = await ref.read(solanaProvider.notifier).mint(
             issue.activeCandyMachineAddress,
-            candyMachine?.groups
-                .firstWhere((element) => element.isActive)
-                .label,
+            activeGroup?.label,
           );
       if (context.mounted) {
         if (mintResult is bool && mintResult) {

@@ -12,11 +12,13 @@ class InfoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final double width = screenWidth >= 360 ? 80 : 100;
     return GestureDetector(
       onTap: isLoading ? null : onTap,
       child: Container(
         constraints:
-            const BoxConstraints(minWidth: 80, minHeight: 40, maxWidth: 80),
+            BoxConstraints(minHeight: 40, minWidth: width, maxWidth: width),
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
           vertical: 8,

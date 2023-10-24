@@ -36,7 +36,7 @@ class CreatorRepositoryImpl implements CreatorRepository {
 
   @override
   Future<bool> followCreator(String slug) async {
-    await client.post('/creator/follow/$slug');
+    await client.patch('/creator/follow/$slug');
     return true;
   }
 }

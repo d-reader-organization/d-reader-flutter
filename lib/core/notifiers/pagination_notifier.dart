@@ -80,7 +80,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
       state = PaginationState.data(_items..addAll(result));
     } catch (e) {
       state = PaginationState.error(
-        'Error occured in fetching items',
+        e,
         StackTrace.fromString('PaginationNotifier.initialFetch()'),
       );
     }

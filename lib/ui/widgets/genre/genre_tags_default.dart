@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 int getGenreLimit(double screenWidth) {
-  if (screenWidth > 360) {
+  if (screenWidth > 400) {
     return 5;
+  } else if (screenWidth > 360) {
+    return 4;
   }
-  return 4;
+  return 3;
 }
+
+List<GenreModel> _genresWithMore(List<GenreModel> genres, int sublistLimit) =>
+    genres.sublist(0, sublistLimit)
+      ..add(
+        GenreModel(color: '', name: '', slug: 'dots', icon: ''),
+      );
 
 class GenreTagsDefault extends StatelessWidget {
   final List<GenreModel> genres;
@@ -18,12 +26,6 @@ class GenreTagsDefault extends StatelessWidget {
     required this.genres,
     this.withHorizontalScroll = false,
   }) : super(key: key);
-
-  List<GenreModel> _genresWithMore(int sublistLimit) =>
-      genres.sublist(0, sublistLimit)
-        ..add(
-          GenreModel(color: '', name: '', slug: 'dots', icon: ''),
-        );
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class GenreTagsDefault extends StatelessWidget {
             spacing: 4,
             runSpacing: 4,
             children: (genres.length >= sublistLimit
-                    ? _genresWithMore(sublistLimit)
+                    ? _genresWithMore(genres, sublistLimit)
                     : genres)
                 .map(
                   (genre) => TagContainer(genre: genre),
@@ -65,11 +67,13 @@ class DiscoverGenreTagsDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: (genres.length > 3 ? genres.sublist(0, 3) : genres)
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: (genres.length > 2 ? _genresWithMore(genres, 2) : genres)
           .map(
             (genre) => TagContainer(
               genre: genre,
               color: ColorPalette.greyscale200,
+              withBorder: false,
             ),
           )
           .toList(),
@@ -80,9 +84,11 @@ class DiscoverGenreTagsDefault extends StatelessWidget {
 class TagContainer extends StatelessWidget {
   final GenreModel genre;
   final Color color;
+  final bool withBorder;
   const TagContainer({
     super.key,
     required this.genre,
+    this.withBorder = true,
     this.color = Colors.white,
   });
 
@@ -121,7 +127,16 @@ class TagContainer extends StatelessWidget {
                 ),
               ],
             )
-          : const EmptyGenreTag(),
+          : withBorder
+              ? const EmptyGenreTag()
+              : Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: const Icon(
+                    Icons.more_horiz_outlined,
+                    color: ColorPalette.greyscale300,
+                    size: 15,
+                  ),
+                ),
     );
   }
 }
@@ -135,10 +150,10 @@ class EmptyGenreTag extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: ColorPalette.boxBackground400, width: 1)),
+          border: Border.all(color: ColorPalette.greyscale300, width: 1)),
       child: const Icon(
         Icons.more_horiz_outlined,
-        color: ColorPalette.boxBackground400,
+        color: ColorPalette.greyscale300,
         size: 15,
       ),
     );

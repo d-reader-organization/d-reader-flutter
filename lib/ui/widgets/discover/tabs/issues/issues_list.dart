@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_results_builder.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_list_builder.dart';
 import 'package:flutter/material.dart';
 
 class IssuesList extends StatelessWidget {
@@ -15,7 +15,7 @@ class IssuesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return provider.when(
       data: (issues) {
-        return IssuesResultsBuilder(issues: issues);
+        return IssuesListBuilder(issues: issues);
       },
       error: (err, stack) => Text(
         'Error: $err',
@@ -27,12 +27,12 @@ class IssuesList extends StatelessWidget {
         itemBuilder: (context, index) => const IssueListItemSkeleton(),
       ),
       onGoingError: (List<ComicIssueModel> items, Object? e, StackTrace? stk) {
-        return IssuesResultsBuilder(
+        return IssuesListBuilder(
           issues: items,
         );
       },
       onGoingLoading: (List<ComicIssueModel> items) {
-        return IssuesResultsBuilder(
+        return IssuesListBuilder(
           issues: items,
         );
       },

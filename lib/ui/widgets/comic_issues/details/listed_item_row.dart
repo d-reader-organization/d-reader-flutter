@@ -1,21 +1,21 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart' as fcm;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 
-class ListedItemRow extends ConsumerWidget {
+class ListingItem extends ConsumerWidget {
   final ListingModel listing;
-  const ListedItemRow({
+  const ListingItem({
     super.key,
     required this.listing,
   });
@@ -28,12 +28,8 @@ class ListedItemRow extends ConsumerWidget {
         id: ref.read(environmentProvider).user?.id,
       ),
     );
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      selected: selectedItems.contains(listing),
-      selectedColor: ColorPalette.dReaderYellow100,
-      selectedTileColor: ColorPalette.boxBackground300,
-      splashColor: Colors.transparent,
+    final bool isSelected = selectedItems.contains(listing);
+    return GestureDetector(
       onTap: myWallets.value != null &&
               myWallets.value!.isNotEmpty &&
               !myWallets.value!
@@ -48,71 +44,95 @@ class ListedItemRow extends ConsumerWidget {
               ref.read(selectedItemsProvider.notifier).state = items;
             }
           : null,
-      leading: CircleAvatar(
-        maxRadius: 24,
-        backgroundImage:
-            listing.seller.avatar != null && listing.seller.avatar!.isNotEmpty
-                ? CachedNetworkImageProvider(
-                    listing.seller.avatar!,
-                    cacheKey: listing.seller.address,
-                    cacheManager: fcm.CacheManager(
-                      fcm.Config(
-                        listing.seller.address,
-                        stalePeriod: const Duration(days: 1),
-                      ),
-                    ),
-                  )
-                : null,
-      ),
-      title: SizedBox(
-        height: 50,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              listing.seller.name != null && listing.seller.name!.isNotEmpty
-                  ? listing.seller.name!
-                  : formatAddress(listing.seller.address, 4),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(top: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? ColorPalette.greyscale500
+              : ColorPalette.appBackgroundColor,
+          border: Border(
+            left: BorderSide(
+              width: 1.5,
+              color: isSelected
+                  ? ColorPalette.dReaderYellow100
+                  : Colors.transparent,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            bottom: const BorderSide(
+              width: 1,
+              color: ColorPalette.greyscale400,
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  shortenNftName(listing.name),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
                 Row(
                   children: [
-                    Text(
-                      shortenNftName(listing.name),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                    SvgPicture.asset(
+                      'assets/icons/profile_bold.svg',
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
                       ),
                     ),
                     const SizedBox(
-                      width: 6,
+                      width: 4,
                     ),
-                    Row(
-                      children: [
-                        !listing.isUsed
-                            ? SvgPicture.asset(
-                                'assets/icons/mint_issue.svg',
-                              )
-                            : const SizedBox(),
-                        listing.isSigned
-                            ? SvgPicture.asset(
-                                'assets/icons/signed_issue.svg',
-                              )
-                            : const SizedBox(),
-                      ],
+                    Text(
+                      listing.seller.name != null &&
+                              listing.seller.name!.isNotEmpty
+                          ? listing.seller.name!
+                          : formatAddress(listing.seller.address, 4),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
                 SolanaPrice(
                   price: listing.price / lamportsPerSol,
                   priceDecimals: 4,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  children: [
+                    listing.isUsed
+                        ? SvgPicture.asset(
+                            'assets/icons/mint_issue.svg',
+                          )
+                        : const SizedBox(),
+                    listing.isSigned
+                        ? SvgPicture.asset(
+                            'assets/icons/signed_issue.svg',
+                          )
+                        : const SizedBox(),
+                    RarityWidget(
+                      rarity: listing.rarity.rarityEnum,
+                      iconPath: 'assets/icons/rarity.svg',
+                    ),
+                  ],
                 ),
               ],
             ),

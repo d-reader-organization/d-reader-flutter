@@ -10,6 +10,7 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,15 +42,16 @@ class _SignUpStep3State extends ConsumerState<SignUpStep3> {
 
   Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
     final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-
     try {
-      final result =
-          await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+      final result = await ref
+          .read(solanaProvider.notifier)
+          .authorizeAndSignMessage(null, () {
+        globalNotifier.update(
+          (state) => state.copyWith(
+            isLoading: true,
+          ),
+        );
+      });
       globalNotifier.update(
         (state) => state.copyWith(
           isLoading: false,
@@ -86,162 +88,161 @@ class _SignUpStep3State extends ConsumerState<SignUpStep3> {
       onWillPop: () async {
         return false;
       },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              SvgPicture.asset(
-                '${Config.introAssetsPath}/splash_2.svg',
-                height: 320,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 32,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                SvgPicture.asset(
+                  '${Config.introAssetsPath}/splash_2.svg',
+                  height: 320,
                 ),
-                child: Text(
-                  'Connect wallet',
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 32,
+                  ),
+                  child: Text(
+                    'Connect wallet',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Text(
+                  'Connect with your wallet to store digital comics & other collectibles',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text(
-                'Connect with your wallet to store digital comics & other collectibles',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                const SizedBox(
+                  height: 16,
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              ref.watch(isWalletAvailableProvider).maybeWhen(
-                data: (data) {
-                  return data
-                      ? const SizedBox()
-                      : Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 12,
-                                ),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: ColorPalette.boxBackground300,
-                                  ),
-                                  borderRadius: BorderRadius.circular(
-                                    8,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SvgPicture.asset(
-                                      '${Config.settingsAssetsPath}/light/wallet.svg',
+                ref.watch(isWalletAvailableProvider).maybeWhen(
+                  data: (data) {
+                    return data
+                        ? const SizedBox()
+                        : Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  await _handleConnectWallet(ref, context);
+                                },
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 12,
                                     ),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    const Text(
-                                      'No wallet? Get it here',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: ColorPalette.greyscale400,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                        8,
                                       ),
                                     ),
-                                  ],
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SvgPicture.asset(
+                                          '${Config.settingsAssetsPath}/light/wallet.svg',
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        const Text(
+                                          'No wallet? Get it here',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Text(
-                                'Why do I need a wallet?',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: ColorPalette.dReaderYellow100,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              const SizedBox(
+                                height: 8,
                               ),
-                            ),
-                          ],
-                        );
-                },
-                orElse: () {
-                  return const SizedBox();
-                },
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: RoundedButton(
-                  text: 'Skip',
-                  backgroundColor: Colors.transparent,
-                  textColor: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  borderColor: ColorPalette.boxBackground400,
-                  size: const Size(
-                    0,
-                    50,
-                  ),
-                  onPressed: () {
-                    nextScreenPush(
-                      context,
-                      const DReaderScaffold(),
-                    );
+                              const WhyDoINeedWalletWidget(),
+                            ],
+                          );
+                  },
+                  orElse: () {
+                    return const SizedBox();
                   },
                 ),
-              ),
-              Expanded(
-                child: RoundedButton(
-                  text: ref.watch(isWalletAvailableProvider).maybeWhen(
-                    data: (data) {
-                      return data ? 'Connect' : 'Install';
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: RoundedButton(
+                    text: 'Skip',
+                    backgroundColor: Colors.transparent,
+                    textColor: Colors.white,
+                    textStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    borderColor: ColorPalette.greyscale300,
+                    size: const Size(
+                      0,
+                      50,
+                    ),
+                    onPressed: () {
+                      nextScreenPush(
+                        context,
+                        const DReaderScaffold(),
+                      );
                     },
-                    orElse: () {
-                      return 'Connect';
-                    },
                   ),
-                  isLoading: ref.watch(globalStateProvider).isLoading,
-                  backgroundColor: ColorPalette.dReaderYellow100,
-                  textColor: Colors.black,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  size: const Size(
-                    0,
-                    50,
-                  ),
-                  onPressed: () async {
-                    await _handleConnectWallet(ref, context);
-                  },
                 ),
-              ),
-            ],
-          ),
-        ],
+                Expanded(
+                  child: RoundedButton(
+                    text: ref.watch(isWalletAvailableProvider).maybeWhen(
+                      data: (data) {
+                        return data ? 'Connect' : 'Install';
+                      },
+                      orElse: () {
+                        return 'Connect';
+                      },
+                    ),
+                    isLoading: ref.watch(globalStateProvider).isLoading,
+                    backgroundColor: ColorPalette.dReaderYellow100,
+                    textColor: Colors.black,
+                    textStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    size: const Size(
+                      0,
+                      50,
+                    ),
+                    onPressed: () async {
+                      await _handleConnectWallet(ref, context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

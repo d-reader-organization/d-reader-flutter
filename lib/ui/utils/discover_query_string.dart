@@ -4,20 +4,37 @@ import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-String getSortByQueryString(SortByEnum selected) {
-  if (selected == SortByEnum.latest) {
-    return 'sortTag=latest';
-  } else if (selected == SortByEnum.likes) {
-    return 'sortTag=likes';
-  } else if (selected == SortByEnum.rating) {
-    return 'sortTag=rating';
-  } else if (selected == SortByEnum.readers) {
-    return 'sortTag=readers';
-  } else if (selected == SortByEnum.viewers) {
-    return 'sortTag=viewers';
-  } else if (selected == SortByEnum.followers) {
-    return 'sortTag=followers';
+String getSortByQueryString(SortByEnum selected, ScrollListType type) {
+  if (type == ScrollListType.comicList) {
+    if (selected == SortByEnum.likes) {
+      return 'sortTag=likes';
+    } else if (selected == SortByEnum.rating) {
+      return 'sortTag=rating';
+    } else if (selected == SortByEnum.readers) {
+      return 'sortTag=readers';
+    } else if (selected == SortByEnum.viewers) {
+      return 'sortTag=viewers';
+    } else if (selected == SortByEnum.published) {
+      return 'sortTag=published';
+    }
+  } else if (type == ScrollListType.issueList) {
+    if (selected == SortByEnum.latest) {
+      return 'sortTag=latest';
+    } else if (selected == SortByEnum.likes) {
+      return 'sortTag=likes';
+    } else if (selected == SortByEnum.rating) {
+      return 'sortTag=rating';
+    } else if (selected == SortByEnum.readers) {
+      return 'sortTag=readers';
+    } else if (selected == SortByEnum.viewers) {
+      return 'sortTag=viewers';
+    }
+  } else if (type == ScrollListType.creatorList) {
+    if (selected == SortByEnum.followers) {
+      return 'sortTag=followers';
+    }
   }
+
   return '';
 }
 
@@ -34,13 +51,16 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   final FilterId? selectedFilter = ref.read(selectedFilterProvider);
   final SortByEnum? selectedSortBy = ref.read(selectedSortByProvider);
   final SortDirection selectedSortDirection = ref.read(sortDirectionProvider);
-  final String tagFilter = selectedFilter != null
-      ? selectedFilter == FilterId.free
-          ? 'filterTag=free'
-          : 'filterTag=popular'
+  final String tagFilter = _filterPerType(
+    scrollListType: scrollListType,
+    selectedFilter: selectedFilter,
+  );
+  final String sortByFilter = selectedSortBy != null
+      ? getSortByQueryString(
+          selectedSortBy,
+          scrollListType,
+        )
       : '';
-  final String sortByFilter =
-      selectedSortBy != null ? getSortByQueryString(selectedSortBy) : '';
   final String sortDirection = getSortDirection(selectedSortDirection);
   final String common =
       'sortOrder=$sortDirection&${adjustQueryString(genreTags)}${adjustQueryString(sortByFilter)}${adjustQueryString(tagFilter)}';
@@ -48,6 +68,21 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
       ? '$common${'nameSubstring=$search'}'
       : '$common${'titleSubstring=$search'}';
   return query;
+}
+
+String _filterPerType({
+  required ScrollListType scrollListType,
+  FilterId? selectedFilter,
+}) {
+  if (selectedFilter == null) {
+    return '';
+  }
+  if (scrollListType == ScrollListType.issueList) {
+    return selectedFilter == FilterId.free
+        ? 'filterTag=free'
+        : 'filterTag=popular';
+  }
+  return selectedFilter == FilterId.popular ? 'filterTag=popular' : '';
 }
 
 String adjustQueryString(String query) => query.isNotEmpty ? '$query&' : '';

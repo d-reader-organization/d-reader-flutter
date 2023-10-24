@@ -3,6 +3,7 @@ import 'dart:async' show Timer;
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/core/repositories/comic/comic_repository_impl.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
@@ -83,3 +84,9 @@ Future<List<ComicModel>> ownedComics(
       .read(comicRepositoryProvider)
       .getOwnedComics(userId: userId, query: query);
 }
+
+final comicViewModeProvider = StateProvider.autoDispose<ViewMode>(
+  (ref) {
+    return ViewMode.detailed;
+  },
+);

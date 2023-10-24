@@ -13,6 +13,7 @@ enum SortByEnum {
   viewers,
   followers,
   name,
+  published,
 }
 
 enum SortDirection { asc, desc }
@@ -32,5 +33,11 @@ final showAllGenresProvider = StateProvider.autoDispose<bool>((ref) {
 final sortDirectionProvider = StateProvider<SortDirection>(
   (ref) {
     return SortDirection.desc;
+  },
+);
+
+final comicSortDirectionProvider = StateProvider<SortDirection>(
+  (ref) {
+    return SortDirection.asc;
   },
 );

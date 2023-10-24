@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_item_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
@@ -41,21 +40,19 @@ class _ListedItemsState extends ConsumerState<ListedItems> {
     return provider.when(
       data: (listings) {
         if (listings.isEmpty) {
-          return const Text('No items listed.');
+          return const Text(
+            'No items listed.',
+            textAlign: TextAlign.center,
+          );
         }
-        return ListView.separated(
+        return ListView.builder(
           itemCount: listings.length,
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           primary: false,
           itemBuilder: (context, index) {
-            return ListedItemRow(
+            return ListingItem(
               listing: listings[index],
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              color: ColorPalette.boxBackground400,
             );
           },
         );

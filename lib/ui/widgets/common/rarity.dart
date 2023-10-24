@@ -18,12 +18,8 @@ class RarityWidget extends StatelessWidget {
     return rarity == NftRarity.none
         ? const SizedBox()
         : Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: isLarge ? 0 : 1,
-            ),
-            height: isLarge ? 40 : 24,
-            margin: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            height: isLarge ? 40 : 20,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(isLarge ? 6 : 4),
               border: Border.all(
@@ -32,10 +28,10 @@ class RarityWidget extends StatelessWidget {
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SvgPicture.asset(
                   iconPath,
-                  height: isLarge ? 14 : 10,
                   colorFilter: ColorFilter.mode(
                     rarity.color,
                     BlendMode.srcIn,

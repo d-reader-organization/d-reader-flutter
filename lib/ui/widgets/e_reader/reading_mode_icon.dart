@@ -20,7 +20,7 @@ class ReadingModeIcon extends StatelessWidget {
       child: SvgPicture.asset(
         iconPath,
         colorFilter: ColorFilter.mode(
-          isActive ? Colors.white : ColorPalette.boxBackground400,
+          isActive ? Colors.white : ColorPalette.greyscale300,
           BlendMode.srcIn,
         ),
       ),

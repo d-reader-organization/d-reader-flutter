@@ -12,9 +12,13 @@ class InfoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final double width = screenWidth >= 360 ? 80 : 100;
     return GestureDetector(
       onTap: isLoading ? null : onTap,
       child: Container(
+        constraints:
+            BoxConstraints(minHeight: 40, minWidth: width, maxWidth: width),
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
           vertical: 8,
@@ -27,13 +31,23 @@ class InfoButton extends StatelessWidget {
             8,
           ),
         ),
-        child: const Text(
-          'Info',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        child: isLoading
+            ? const Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: ColorPalette.greyscale100,
+                  ),
+                ),
+              )
+            : const Text(
+                'Info',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
       ),
     );
   }

@@ -130,7 +130,7 @@ class Heading extends ConsumerWidget {
           height: 16,
           width: 16,
           colorFilter: const ColorFilter.mode(
-            ColorPalette.boxBackground400,
+            ColorPalette.greyscale300,
             BlendMode.srcIn,
           ),
         ),
@@ -139,14 +139,14 @@ class Heading extends ConsumerWidget {
           title: 'Email & pass',
           color: ref.watch(signUpPageProvider) > 0
               ? Colors.white
-              : ColorPalette.boxBackground400,
+              : ColorPalette.greyscale300,
         ),
         SvgPicture.asset(
           'assets/icons/arrow_right.svg',
           height: 16,
           width: 16,
           colorFilter: const ColorFilter.mode(
-            ColorPalette.boxBackground400,
+            ColorPalette.greyscale300,
             BlendMode.srcIn,
           ),
         ),
@@ -155,7 +155,7 @@ class Heading extends ConsumerWidget {
           title: 'Wallet',
           color: ref.watch(signUpPageProvider) > 2
               ? Colors.white
-              : ColorPalette.boxBackground400,
+              : ColorPalette.greyscale300,
         ),
       ],
     );

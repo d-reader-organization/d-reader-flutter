@@ -7,10 +7,23 @@ InputDecoration searchInputDecoration({
   Widget? suffixIcon,
 }) {
   return InputDecoration(
-    fillColor: ColorPalette.boxBackground200,
+    contentPadding: const EdgeInsets.all(4),
+    fillColor: ColorPalette.greyscale500,
     filled: true,
+    enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        width: 1,
+        color: ColorPalette.greyscale300,
+      ),
+      borderRadius: BorderRadius.circular(
+        8,
+      ),
+    ),
     border: OutlineInputBorder(
-      borderSide: const BorderSide(width: 0, style: BorderStyle.none),
+      borderSide: const BorderSide(
+        width: 1,
+        color: ColorPalette.greyscale300,
+      ),
       borderRadius: BorderRadius.circular(
         8,
       ),

@@ -35,7 +35,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: ColorPalette.boxBackground400,
+              color: ColorPalette.greyscale300,
             ),
           ),
         ),
@@ -67,7 +67,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
         },
         dropdownStyleData: const DropdownStyleData(
           decoration: BoxDecoration(
-            color: ColorPalette.boxBackground400,
+            color: ColorPalette.greyscale300,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(
                 6,

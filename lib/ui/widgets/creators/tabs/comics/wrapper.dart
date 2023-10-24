@@ -16,6 +16,13 @@ class CreatorComicsWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return provider.when(
       data: (comics) {
+        if (comics.isEmpty) {
+          return const Center(
+            child: Text(
+              'No comics published yet',
+            ),
+          );
+        }
         return ComicsListBuilder(
           comics: comics,
         );

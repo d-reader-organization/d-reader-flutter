@@ -17,7 +17,7 @@ class FilterRadioButton extends ConsumerWidget {
     return RadioListTile(
       value: value,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      selectedTileColor: ColorPalette.boxBackground200,
+      selectedTileColor: ColorPalette.greyscale500,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           8,

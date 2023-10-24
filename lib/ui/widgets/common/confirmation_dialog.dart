@@ -21,7 +21,7 @@ class ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: ColorPalette.boxBackground300,
+      backgroundColor: ColorPalette.greyscale400,
       contentPadding: EdgeInsets.zero,
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,11 +72,11 @@ class ConfirmationDialog extends StatelessWidget {
                     decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(
-                          color: ColorPalette.boxBackground200,
+                          color: ColorPalette.greyscale500,
                           width: 1,
                         ),
                         top: BorderSide(
-                          color: ColorPalette.boxBackground200,
+                          color: ColorPalette.greyscale500,
                           width: 1,
                         ),
                       ),
@@ -126,7 +126,7 @@ class ConfirmationDialog extends StatelessWidget {
                         decoration: const BoxDecoration(
                           border: Border(
                             top: BorderSide(
-                              color: ColorPalette.boxBackground200,
+                              color: ColorPalette.greyscale500,
                               width: 1,
                             ),
                           ),

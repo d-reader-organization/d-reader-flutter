@@ -11,7 +11,6 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -162,13 +161,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CustomTextField(
-                    labelText: 'Email',
-                    hintText: 'Enter you email',
+                    labelText: 'Email / Username',
+                    hintText: 'Enter you email or username',
                     onValidate: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Field cannot be empty.';
-                      } else if (!EmailValidator.validate(value)) {
-                        return 'Invalid email.';
                       }
                       return null;
                     },
@@ -197,21 +194,24 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           ref.watch(obscureTextProvider)
                               ? FontAwesomeIcons.solidEye
                               : FontAwesomeIcons.solidEyeSlash,
-                          color: ColorPalette.boxBackground400,
+                          color: ColorPalette.greyscale300,
                           size: 20,
                         ),
                       ),
                     ),
                   ),
-                  const Text(
-                    'Forgot password?',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ColorPalette.dReaderYellow100,
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {},
+                  //   child: const Text(
+                  //     'Forgot password?',
+                  //     textAlign: TextAlign.right,
+                  //     style: TextStyle(
+                  //       fontSize: 14,
+                  //       fontWeight: FontWeight.w500,
+                  //       color: ColorPalette.dReaderYellow100,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 48,
                   ),

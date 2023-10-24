@@ -73,18 +73,19 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<String?> mintOneTransaction({
+  Future<List<dynamic>> mintOneTransaction({
     required String candyMachineAddress,
     required String minterAddress,
     String? label,
   }) async {
     try {
-      return await client
+      final result = await client
           .get(
               '/transaction/mint-one?candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress&label=${label ?? 'public'}')
           .then(
             (value) => value.data,
           );
+      return result ?? [];
     } catch (error) {
       throw Exception(error is DioException
           ? error.response?.data?.toString()

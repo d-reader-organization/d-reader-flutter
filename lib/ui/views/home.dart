@@ -39,7 +39,7 @@ class HomeView extends StatelessWidget {
                     height: 24,
                   ),
                   ComicsListView(
-                    query: 'skip=0&take=4&filterTag=popular',
+                    query: 'skip=0&take=12&filterTag=popular',
                   ),
                   SizedBox(
                     height: 32,
@@ -53,7 +53,7 @@ class HomeView extends StatelessWidget {
                     height: 24,
                   ),
                   ComicIssuesList(
-                    query: 'skip=0&take=20&sortTag=latest',
+                    query: 'skip=0&take=12&sortTag=latest',
                   ),
                   SizedBox(
                     height: 32,
@@ -78,7 +78,7 @@ class HomeView extends StatelessWidget {
                     height: 24,
                   ),
                   ComicsListView(
-                    query: 'skip=4&take=4',
+                    query: 'skip=0&take=12&sortTag=published&sortOrder=desc',
                   ),
                   SizedBox(
                     height: 32,
@@ -93,6 +93,21 @@ class HomeView extends StatelessWidget {
                   ),
                   ComicIssuesList(
                     query: 'skip=0&take=20&filterTag=free',
+                  ),
+                  SizedBox(
+                    height: 32,
+                  ),
+                  SectionHeading(
+                    title: 'Spicy action',
+                    initialTab: DiscoverTabViewEnum.comics,
+                    sort: SortByEnum.viewers,
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  ComicsListView(
+                    query:
+                        'skip=0&take=12&sortTag=viewers&sortOrder=desc&genreSlugs[]=action',
                   ),
                   SizedBox(
                     height: 32,

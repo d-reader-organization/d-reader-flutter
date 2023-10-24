@@ -973,6 +973,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  power:
+    dependency: "direct main"
+    description:
+      name: power
+      sha256: "21c70269019aacc538c79aca7b0723f5ea797a8d4281fca275a50c483f3de876"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
   process:
     dependency: transitive
     description:
@@ -1134,10 +1142,10 @@ packages:
     dependency: "direct main"
     description:
       name: solana_mobile_client
-      sha256: "72c763919fb2f4d2e07fb8ded53cd267002a52f90365e146c701140a5ebc8774"
+      sha256: "9e509085e23bdb39faaa61383f6f551cfa22d0ffeb0fbbe9d436cff541956c33"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.1+1"
   source_gen:
     dependency: transitive
     description:

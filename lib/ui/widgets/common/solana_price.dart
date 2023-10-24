@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:flutter/material.dart';
 
 class SolanaPrice extends StatelessWidget {
-  final double? price;
+  final dynamic price;
   final MainAxisAlignment mainAxisAlignment;
   final TextDirection? textDirection;
   final Color? textColor;
@@ -32,12 +32,14 @@ class SolanaPrice extends StatelessWidget {
           width: 4,
         ),
         Text(
-          price != null && price != 0.0
+          price != null && price is double && price != 0.0
               ? formatPrice(
                   price ?? 0,
                   priceDecimals,
                 )
-              : 'Free',
+              : price is String
+                  ? price
+                  : 'Free',
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: textColor,

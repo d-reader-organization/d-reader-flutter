@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
+import 'package:d_reader_flutter/ui/utils/pluralize_string.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_details.dart';
+import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/author_verified.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
@@ -30,30 +31,51 @@ class ComicCard extends ConsumerWidget {
         width: cardWidth,
         constraints: const BoxConstraints(maxWidth: 190),
         decoration: BoxDecoration(
-          color: ColorPalette.boxBackground200,
+          color: ColorPalette.greyscale500,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedImageBgPlaceholder(
-              imageUrl: comic.cover,
-              width: cardWidth,
-              height: 170,
-              opacity: .4,
-              overrideBorderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(
-                  8,
+            Stack(
+              children: [
+                CachedImageBgPlaceholder(
+                  imageUrl: comic.cover,
+                  width: cardWidth,
+                  height: 134,
+                  opacity: .4,
+                  padding: EdgeInsets.zero,
+                  overrideBorderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(
+                      8,
+                    ),
+                    topRight: Radius.circular(
+                      8,
+                    ),
+                  ),
                 ),
-                topRight: Radius.circular(
-                  8,
+                Positioned.fill(
+                  top: 0,
+                  left: 0,
+                  child: Stack(
+                    children: [
+                      comic.isPopular ? const HotIconSmall() : const SizedBox(),
+                      comic.logo.isNotEmpty
+                          ? Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl: comic.logo,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
                 ),
-              ),
-              child: comic.logo.isNotEmpty
-                  ? CachedNetworkImage(
-                      imageUrl: comic.logo,
-                    )
-                  : null,
+              ],
             ),
             Expanded(
               child: Padding(
@@ -62,41 +84,25 @@ class ComicCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          comic.title,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: textTheme.titleSmall,
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        AuthorVerified(
-                          authorName: comic.creator?.name ?? '',
-                          isVerified: comic.creator?.isVerified ?? false,
-                          fontSize: 14,
-                          textColor: ColorPalette.greyscale100,
-                        ),
-                      ],
+                    Text(
+                      comic.title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: textTheme.titleSmall,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${comic.stats?.issuesCount ?? 0} EP',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        comic.isPopular
-                            ? const HotIconSmall()
-                            : const SizedBox(),
-                      ],
+                    AuthorVerified(
+                      authorName: comic.creator?.name ?? '',
+                      isVerified: comic.creator?.isVerified ?? false,
+                      fontSize: 14,
+                      textColor: ColorPalette.greyscale100,
+                    ),
+                    Text(
+                      '${comic.stats?.issuesCount ?? 0} ${pluralizeString(comic.stats?.issuesCount ?? 0, 'EP')}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),

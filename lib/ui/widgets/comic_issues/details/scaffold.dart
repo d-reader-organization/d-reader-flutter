@@ -1,6 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
+import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
+import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
@@ -13,7 +18,6 @@ import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
@@ -21,20 +25,21 @@ import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
-import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
+import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
-import 'package:timeago/timeago.dart' as timeago;
 
 class ComicIssueDetailsScaffold extends ConsumerStatefulWidget {
   final Widget body;
@@ -107,6 +112,15 @@ class _ComicIssueDetailsScaffoldState
           child: AnimatedAppBar(
             animation: _animation,
             title: widget.issue.comic?.title,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: 16,
+                  top: 4,
+                ),
+                child: SvgPicture.asset('assets/icons/more.svg'),
+              ),
+            ],
           ),
         ),
         extendBodyBehindAppBar: true,
@@ -121,111 +135,43 @@ class _ComicIssueDetailsScaffoldState
               Stack(
                 children: [
                   CachedImageBgPlaceholder(
-                    height: 320,
+                    height: 431,
                     imageUrl: widget.issue.cover,
                     overrideBorderRadius: BorderRadius.circular(0),
-                    foregroundDecoration: const BoxDecoration(
+                    foregroundDecoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
                           ColorPalette.appBackgroundColor,
-                          Colors.transparent,
+                          const Color(0xff181a20).withOpacity(.8),
                           ColorPalette.appBackgroundColor,
                         ],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
-                        stops: [0.0, .6406, 1],
+                        stops: const [0.0, .6406, 1],
                       ),
                     ),
                   ),
                   Positioned.fill(
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            widget.issue.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: textTheme.headlineLarge,
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    'EP',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${widget.issue.number}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      Text(
-                                        '/${widget.issue.stats?.totalIssuesCount}',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(),
+                        Container(
+                          height: 309,
+                          width: 214,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              8,
+                            ),
+                            image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: CachedNetworkImageProvider(
+                                widget.issue.cover,
                               ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.menu_book,
-                                    color: Colors.white,
-                                    size: 16,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    '${widget.issue.stats?.totalPagesCount.toString()} pages',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.calendar_month,
-                                    size: 16,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    formatDate(widget.issue.releaseDate),
-                                    style: textTheme.labelMedium,
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -234,12 +180,99 @@ class _ComicIssueDetailsScaffoldState
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    TextWithViewMore(
-                      text: widget.issue.description,
-                      textAlign: TextAlign.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'EPISODE  ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: ColorPalette.greyscale100,
+                          ),
+                        ),
+                        Text(
+                          '${widget.issue.number}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          ' / ${widget.issue.stats?.totalIssuesCount}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: ColorPalette.greyscale100,
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(
                       height: 4,
+                    ),
+                    Text(
+                      widget.issue.title,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RatingIcon(
+                          initialRating: widget.issue.stats?.averageRating ?? 0,
+                          isRatedByMe: widget.issue.myStats?.rating != null,
+                          issueId: widget.issue.id,
+                          isContainerWidget: true,
+                        ),
+                        FavouriteIconCount(
+                          favouritesCount:
+                              widget.issue.stats?.favouritesCount ?? 0,
+                          isFavourite:
+                              widget.issue.myStats?.isFavourite ?? false,
+                          issueId: widget.issue.id,
+                          isContainerWidget: true,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '${widget.issue.stats?.totalPagesCount} ',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Text(
+                              'pages',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: ColorPalette.greyscale100,
+                              ),
+                            ),
+                          ],
+                        ),
+                        MatureAudience(
+                          audienceType: widget.issue.comic?.audienceType ?? '',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      color: ColorPalette.greyscale400,
+                    ),
+                    const SizedBox(
+                      height: 8,
                     ),
                     Row(
                       children: [
@@ -280,28 +313,14 @@ class _ComicIssueDetailsScaffoldState
                         ),
                         Expanded(
                           flex: 2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              RatingIcon(
-                                initialRating:
-                                    widget.issue.stats?.averageRating ?? 0,
-                                isRatedByMe:
-                                    widget.issue.myStats?.rating != null,
-                                issueId: widget.issue.id,
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              FavouriteIconCount(
-                                favouritesCount:
-                                    widget.issue.stats?.favouritesCount ?? 0,
-                                isFavourite:
-                                    widget.issue.myStats?.isFavourite ?? false,
-                                slug: widget.issue.slug,
-                                issueId: widget.issue.id,
-                              ),
-                            ],
+                          child: Text(
+                            formatDateFull(widget.issue.releaseDate),
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: ColorPalette.greyscale100,
+                            ),
                           ),
                         ),
                       ],
@@ -309,11 +328,11 @@ class _ComicIssueDetailsScaffoldState
                   ],
                 ),
               ),
-              widget.issue.candyMachineAddress != null
-                  ? CandyMachineStats(
-                      address: widget.issue.candyMachineAddress ?? '',
-                    )
-                  : ListingStats(issue: widget.issue),
+              // widget.issue.candyMachineAddress != null
+              //     ? CandyMachineStats(
+              //         address: widget.issue.candyMachineAddress ?? '',
+              //       )
+              //     : ListingStats(issue: widget.issue),
               const SizedBox(
                 height: 24,
               ),
@@ -341,9 +360,30 @@ class BottomNavigation extends ConsumerWidget {
 
   _handleMint(BuildContext context, WidgetRef ref) async {
     try {
-      final mintResult = await ref
-          .read(solanaProvider.notifier)
-          .mint(issue.candyMachineAddress);
+      final currentWallet =
+          ref.watch(environmentProvider).publicKey?.toBase58();
+      if (currentWallet == null) {
+        await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+      }
+      final candyMachine = ref.read(candyMachineStateProvider);
+      if (context.mounted && candyMachine == null) {
+        return showSnackBar(
+          context: context,
+          text: 'Failed to find active candy machine',
+          milisecondsDuration: 1500,
+        );
+      }
+      final activeGroup = getActiveGroup(candyMachine!.groups);
+      if (activeGroup == null && context.mounted) {
+        return showSnackBar(
+            context: context,
+            text: 'There is no active mint',
+            milisecondsDuration: 1500);
+      }
+      final mintResult = await ref.read(solanaProvider.notifier).mint(
+            issue.activeCandyMachineAddress,
+            activeGroup?.label,
+          );
       if (context.mounted) {
         if (mintResult is bool && mintResult) {
           nextScreenPush(
@@ -378,89 +418,100 @@ class BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return issue.isFree
+    final bool canRead =
+        issue.myStats?.canRead != null && issue.myStats!.canRead;
+    final bool showReadButtonOnly = issue.isFreeToRead &&
+        canRead &&
+        issue.activeCandyMachineAddress == null;
+    return showReadButtonOnly
         ? ReadButton(issue: issue)
         : Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              issue.candyMachineAddress != null
+              Expanded(
+                child: ReadButton(
+                  issue: issue,
+                ),
+              ),
+              issue.activeCandyMachineAddress != null
                   ? Expanded(
                       child: TransactionButton(
                         isLoading: ref.watch(globalStateProvider).isLoading,
                         onPressed: () async {
                           await _handleMint(context, ref);
                         },
-                        text: 'MINT',
+                        text: 'Mint',
                         price: issue.stats?.price,
                       ),
                     )
-                  : Expanded(
-                      child: TransactionButton(
-                        isLoading: ref.watch(globalStateProvider).isLoading,
-                        onPressed: ref.read(selectedItemsProvider).isNotEmpty
-                            ? () async {
-                                final activeWallet =
-                                    ref.read(environmentProvider).publicKey;
-                                if (activeWallet == null) {
-                                  throw Exception(
-                                      'There is no wallet selected');
-                                }
-                                List<BuyNftInput> selectedNftsInput = ref
+                  : issue.isSecondarySaleActive
+                      ? Expanded(
+                          child: TransactionButton(
+                            isLoading: ref.watch(globalStateProvider).isLoading,
+                            onPressed: ref
                                     .read(selectedItemsProvider)
-                                    .map(
-                                      (e) => BuyNftInput(
-                                        mintAccount: e.nftAddress,
-                                        price: e.price,
-                                        sellerAddress: e.seller.address,
-                                        buyerAddress: activeWallet.toBase58(),
-                                      ),
-                                    )
-                                    .toList();
-                                try {
-                                  final isSuccessful = await ref
-                                      .read(solanaProvider.notifier)
-                                      .buyMultiple(selectedNftsInput);
-                                  if (isSuccessful) {
-                                    ref.invalidate(listedItemsProvider);
-                                    ref.invalidate(userAssetsProvider);
+                                    .isNotEmpty
+                                ? () async {
+                                    final activeWallet =
+                                        ref.read(environmentProvider).publicKey;
+                                    if (activeWallet == null) {
+                                      throw Exception(
+                                        'There is no wallet selected',
+                                      );
+                                    }
+                                    List<BuyNftInput> selectedNftsInput = ref
+                                        .read(selectedItemsProvider)
+                                        .map(
+                                          (e) => BuyNftInput(
+                                            mintAccount: e.nftAddress,
+                                            price: e.price,
+                                            sellerAddress: e.seller.address,
+                                            buyerAddress:
+                                                activeWallet.toBase58(),
+                                          ),
+                                        )
+                                        .toList();
+                                    try {
+                                      final isSuccessful = await ref
+                                          .read(solanaProvider.notifier)
+                                          .buyMultiple(selectedNftsInput);
+                                      if (isSuccessful) {
+                                        ref.invalidate(listedItemsProvider);
+                                        ref.invalidate(userAssetsProvider);
+                                      }
+                                      ref
+                                          .read(globalStateProvider.notifier)
+                                          .state
+                                          .copyWith(isLoading: false);
+                                    } catch (exception) {
+                                      ref
+                                          .read(globalStateProvider.notifier)
+                                          .state
+                                          .copyWith(isLoading: false);
+                                      if (context.mounted &&
+                                          exception is NoWalletFoundException) {
+                                        triggerWalkthroughDialog(
+                                          context: context,
+                                          onSubmit: () {
+                                            Navigator.pop(context);
+                                            triggerInstallWalletBottomSheet(
+                                                context);
+                                          },
+                                          title:
+                                              'To buy a digital asset you need to have a digital wallet installed first.',
+                                          subtitle:
+                                              'Click "next" to set up a wallet',
+                                        );
+                                      }
+                                    }
                                   }
-                                  ref
-                                      .read(globalStateProvider.notifier)
-                                      .state
-                                      .copyWith(isLoading: false);
-                                } catch (error) {
-                                  ref
-                                      .read(globalStateProvider.notifier)
-                                      .state
-                                      .copyWith(isLoading: false);
-                                  if (context.mounted &&
-                                      error is NoWalletFoundException) {
-                                    triggerWalkthroughDialog(
-                                      context: context,
-                                      onSubmit: () {
-                                        Navigator.pop(context);
-                                        triggerInstallWalletBottomSheet(
-                                            context);
-                                      },
-                                      title:
-                                          'To buy a digital asset you need to have a digital wallet installed first.',
-                                      subtitle:
-                                          'Click "next" to set up a wallet',
-                                    );
-                                  }
-                                }
-                              }
-                            : null,
-                        text: 'BUY',
-                        price: ref.watch(selectedItemsPrice),
-                        isListing: true,
-                      ),
-                    ),
-              Expanded(
-                child: ReadButton(
-                  issue: issue,
-                ),
-              ),
+                                : null,
+                            text: 'Buy',
+                            price: ref.watch(selectedItemsPrice),
+                            isListing: true,
+                          ),
+                        )
+                      : const SizedBox(),
             ],
           );
   }
@@ -486,6 +537,7 @@ class TransactionButton extends StatelessWidget {
     return CustomTextButton(
       size: const Size(150, 50),
       isLoading: isLoading,
+      fontSize: 16,
       borderRadius: const BorderRadius.all(
         Radius.circular(
           8,
@@ -512,7 +564,8 @@ class TransactionButton extends StatelessWidget {
                   height: 10,
                 )
               : SolanaPrice(
-                  price: formatLamportPrice(price),
+                  price:
+                      price != null ? formatPriceWithSignificant(price!) : null,
                   textColor: Colors.black,
                 ),
         ],
@@ -521,34 +574,89 @@ class TransactionButton extends StatelessWidget {
   }
 }
 
-class ReadButton extends StatelessWidget {
+class ReadButton extends ConsumerWidget {
   final ComicIssueModel issue;
   const ReadButton({
     super.key,
     required this.issue,
   });
 
+  openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          minChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          maxChildSize: 0.8,
+          expand: false,
+          builder: (context, scrollController) {
+            return OwnedNftsBottomSheet(
+              ownedNfts: ownedNfts,
+              episodeNumber: issue.number,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    final ownedNfts = await ref.read(nftsProvider(
+      'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
+    ).future);
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: false,
+      ),
+    );
+    return ownedNfts;
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool showReadButton =
+        (issue.myStats?.canRead != null && issue.myStats!.canRead);
     return CustomTextButton(
       size: const Size(150, 50),
-      backgroundColor: ColorPalette.dReaderGreen,
+      backgroundColor: Colors.transparent,
+      borderColor: ColorPalette.greyscale50,
+      textColor: ColorPalette.greyscale50,
+      fontSize: 16,
       borderRadius: const BorderRadius.all(
         Radius.circular(
           8,
         ),
       ),
-      onPressed: () {
-        // if any of nfts is not opened, open modal bottom sheet and force user to open at least one
-        // if there are open nfts go to the Ereader
-        nextScreenPush(
-          context,
-          EReaderView(
-            issueId: issue.id,
-          ),
-        );
-      },
-      child: issue.myStats?.canRead != null && issue.myStats!.canRead
+      onPressed: showReadButton
+          ? () async {
+              if (issue.isFreeToRead) {
+                return nextScreenPush(context, EReaderView(issueId: issue.id));
+              }
+              final List<NftModel> ownedNfts =
+                  await fetchOwnedNfts(ref, '${issue.id}');
+
+              final isAtLeastOneUsed = ownedNfts.any((nft) => nft.isUsed);
+
+              if (context.mounted) {
+                if (isAtLeastOneUsed) {
+                  return nextScreenPush(
+                      context, EReaderView(issueId: issue.id));
+                }
+                openModalBottomSheet(context, ownedNfts);
+              }
+            }
+          : () {
+              nextScreenPush(context, EReaderView(issueId: issue.id));
+            },
+      child: showReadButton
           ? const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -560,7 +668,7 @@ class ReadButton extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  'READ',
+                  'Read',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -569,7 +677,7 @@ class ReadButton extends StatelessWidget {
               ],
             )
           : const Text(
-              'PREVIEW',
+              'Preview',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
@@ -588,19 +696,18 @@ class CandyMachineStats extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(candyMachineProvider(address));
+    final provider = ref.watch(candyMachineProvider(query: address));
     return provider.when(data: (candyMachine) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          StatsInfo(
-            title: 'ENDS IN',
-            stats: candyMachine?.endsAt != null
-                ? timeago.format(
-                    DateTime.parse(candyMachine?.endsAt ?? ''),
-                  )
-                : '∞',
-          ),
+          const StatsInfo(title: 'ENDS IN', stats: ''
+              // stats: candyMachine?.endsAt != null
+              //     ? timeago.format(
+              //         DateTime.parse(candyMachine?.endsAt ?? ''),
+              //       )
+              //     : '∞',
+              ),
           StatsInfo(
             title: 'SUPPLY',
             stats: candyMachine?.supply != null && candyMachine!.supply > 1000
@@ -611,11 +718,12 @@ class CandyMachineStats extends ConsumerWidget {
             title: 'MINTED',
             stats: '${candyMachine?.itemsMinted}',
           ),
-          StatsInfo(
+          const StatsInfo(
             title: 'PRICE',
-            stats: candyMachine?.baseMintPrice != null
-                ? '${formatPrice(formatLamportPrice(candyMachine?.baseMintPrice) ?? 0)}◎'
-                : '-.--◎',
+            stats: '-.--◎',
+            // stats: candyMachine?.baseMintPrice != null
+            //     ? '${formatPrice(formatLamportPrice(candyMachine?.baseMintPrice) ?? 0)}◎'
+            //     : '-.--◎',
             isLastItem: true,
           ),
         ],
@@ -649,21 +757,23 @@ class ListingStats extends ConsumerWidget {
         children: [
           StatsInfo(
             title: 'VOLUME',
-            stats: issue.isFree
+            stats: issue.isFreeToRead
                 ? '--'
                 : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
           ),
-          StatsInfo(
-            title: 'SUPPLY',
-            stats: issue.isFree ? '--' : '${issue.supply}',
-          ),
+          const StatsInfo(
+              title: 'SUPPLY',
+              stats: '--' //issue.isFreeToRead ? '--' : '${issue.supply}',
+              ),
           StatsInfo(
             title: 'LISTED',
-            stats: issue.isFree ? '--' : '${collectionStats?.itemsListed ?? 0}',
+            stats: issue.isFreeToRead
+                ? '--'
+                : '${collectionStats?.itemsListed ?? 0}',
           ),
           StatsInfo(
             title: 'PRICE',
-            stats: issue.isFree
+            stats: issue.isFreeToRead
                 ? 'FREE'
                 : '${collectionStats?.floorPrice != null ? formatLamportPrice(collectionStats!.floorPrice) : '--'}◎',
             isLastItem: true,

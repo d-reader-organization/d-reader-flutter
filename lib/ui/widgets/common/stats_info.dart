@@ -18,14 +18,14 @@ class StatsInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
         decoration: isLastItem
             ? null
             : const BoxDecoration(
                 border: Border(
                   right: BorderSide(
                     width: 1,
-                    color: ColorPalette.boxBackground400,
+                    color: ColorPalette.greyscale300,
                   ),
                 ),
               ),

@@ -6,6 +6,11 @@ abstract class UserRepository {
   Future<UserModel?> myUser();
   Future<dynamic> updateAvatar(UpdateUserPayload payload);
   Future<dynamic> updateUser(UpdateUserPayload payload);
+  Future<dynamic> updatePassword({
+    required int userId,
+    required String oldPassword,
+    required String newPassword,
+  });
   Future<bool> validateName(String name);
   Future<bool> validateEmail(String email);
   Future<String> updateReferrer(String referrer);

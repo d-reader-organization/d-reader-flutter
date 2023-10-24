@@ -106,7 +106,7 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                     child: Text(
                       'Favorites',
                       style: TextStyle(
-                        color: ColorPalette.boxBackground400,
+                        color: ColorPalette.greyscale300,
                       ),
                     ),
                   ),
@@ -117,7 +117,7 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                     child: Text(
                       'Creators',
                       style: TextStyle(
-                        color: ColorPalette.boxBackground400,
+                        color: ColorPalette.greyscale300,
                       ),
                     ),
                   ),

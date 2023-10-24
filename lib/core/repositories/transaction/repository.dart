@@ -1,5 +1,5 @@
 abstract class TransactionRepository {
-  Future<String?> mintOneTransaction({
+  Future<List<dynamic>> mintOneTransaction({
     required String candyMachineAddress,
     required String minterAddress,
     String? label,

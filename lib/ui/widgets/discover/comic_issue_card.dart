@@ -121,7 +121,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                     height: 2,
                   ),
                   const Divider(
-                    color: ColorPalette.boxBackground300,
+                    color: ColorPalette.greyscale400,
                     thickness: 1,
                   ),
                   Row(

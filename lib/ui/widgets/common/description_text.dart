@@ -15,7 +15,11 @@ class DescriptionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        letterSpacing: .2,
+      ),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,

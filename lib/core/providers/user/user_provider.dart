@@ -59,3 +59,15 @@ Future<List<WalletAsset>> userAssets(
 }) {
   return ref.read(userRepositoryProvider).userAssets(id);
 }
+
+final oldPasswordProvider = StateProvider.autoDispose<String>(
+  (ref) {
+    return '';
+  },
+);
+
+final newPasswordProvider = StateProvider.autoDispose<String>(
+  (ref) {
+    return '';
+  },
+);

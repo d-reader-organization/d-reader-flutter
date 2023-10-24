@@ -1,11 +1,9 @@
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/pluralize_string.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_details.dart';
+import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +16,6 @@ class ComicCardLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    final nameCharacterLimit = MediaQuery.sizeOf(context).width > 360 ? 22 : 19;
     return GestureDetector(
       onTap: () {
         nextScreenPush(context, ComicDetails(slug: comic.slug));
@@ -30,11 +26,11 @@ class ComicCardLarge extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 8),
             child: CachedImageBgPlaceholder(
               imageUrl: comic.cover,
-              height: 330,
+              height: 328,
               foregroundDecoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [
-                    ColorPalette.boxBackground200,
+                    ColorPalette.greyscale500,
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
@@ -51,87 +47,32 @@ class ComicCardLarge extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 28,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: comic.isCompleted
-                                ? const Color(0xFFC6E7C1)
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${comic.stats?.issuesCount} EPs${comic.isCompleted ? ' - ENDED' : ''}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const HotIcon(),
-                      ],
+                  Text(
+                    comic.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  comic.title.length > nameCharacterLimit
-                                      ? '${comic.title.substring(0, nameCharacterLimit)}...'
-                                      : comic.title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: textTheme.titleMedium
-                                      ?.copyWith(fontSize: 24),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                comic.isVerified
-                                    ? const Icon(
-                                        Icons.verified,
-                                        color: ColorPalette.dReaderYellow100,
-                                        size: 20,
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
-                            FavouriteIconCount(
-                              favouritesCount:
-                                  comic.stats?.favouritesCount ?? 0,
-                              isFavourite: comic.myStats?.isFavourite ?? false,
-                              slug: comic.slug,
-                            )
-                          ],
-                        ),
-                        DescriptionText(
-                          text: comic.description,
-                          textAlign: TextAlign.start,
-                        ),
-                        GenreTagsDefault(genres: comic.genres),
-                      ],
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    '${comic.stats?.issuesCount} ${pluralizeString(comic.stats?.issuesCount ?? 0, 'Episode')}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  GenreTagsDefault(genres: comic.genres),
                 ],
               ),
             ),

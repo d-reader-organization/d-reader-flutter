@@ -22,11 +22,11 @@ class ComicIssuesList extends ConsumerWidget {
     return comicIssues.when(
       data: (data) {
         if (onlyFree) {
-          data = data.where((element) => element.isFree).toList();
+          data = data.where((element) => element.isFreeToRead).toList();
         }
         return data.isNotEmpty
             ? SizedBox(
-                height: 276,
+                height: 217,
                 child: ListView.builder(
                   itemCount: data.length,
                   shrinkWrap: true,
@@ -40,18 +40,20 @@ class ComicIssuesList extends ConsumerWidget {
               )
             : const Text('No issues found.');
       },
-      error: (err, stack) => const Text(
-        "Couldn't fetch the data",
-        style: TextStyle(color: Colors.red),
-      ),
+      error: (err, stack) {
+        return const Text(
+          "Fetch data error occured.",
+          style: TextStyle(color: Colors.red),
+        );
+      },
       loading: () => SizedBox(
-        height: 276,
+        height: 217,
         child: ListView.builder(
           itemCount: 2,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => SkeletonCard(
-            height: 276,
+            height: 217,
             width: getCardWidth(MediaQuery.sizeOf(context).width),
           ),
         ),

@@ -10,10 +10,12 @@ import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:power/power.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/base58.dart';
 import 'package:solana/encoder.dart';
@@ -91,15 +93,29 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     );
   }
 
-  Future<String> authorizeAndSignMessage([String? overrideCluster]) async {
-    final session = await _getSession();
-    if (session == null) {
-      throw Exception(missingWalletAppText);
+  Future<String> authorizeAndSignMessage([
+    String? overrideCluster,
+    Function()? onStart,
+  ]) async {
+    late LocalAssociationScenario session;
+    try {
+      session = await _getSession();
+    } catch (exception) {
+      if (exception is LowPowerModeException) {
+        return exception.cause;
+      } else if (exception is NoWalletFoundException) {
+        return exception.cause;
+      }
+      Sentry.captureException(exception);
+      return 'Something went wrong.';
     }
+
     final client = await session.start();
     final String cluster =
         overrideCluster ?? ref.read(environmentProvider).solanaCluster;
-
+    if (onStart != null) {
+      onStart();
+    }
     final result = await _authorize(
       client: client,
       cluster: cluster,
@@ -157,6 +173,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         },
       ),
     );
+    ref.invalidate(registerWalletToSocketEvents);
+    ref.read(registerWalletToSocketEvents);
     await Future.wait(
       [
         session.close(),
@@ -178,24 +196,26 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String apiUrl,
     required String jwtToken,
   }) async {
-    await ref.read(authRepositoryProvider).connectWallet(
-          address: publicKey.toBase58(),
-          encoding: base58encode(
-            signedMessage.sublist(
-              signedMessage.length - 64,
-              signedMessage.length,
+    try {
+      await ref.read(authRepositoryProvider).connectWallet(
+            address: publicKey.toBase58(),
+            encoding: base58encode(
+              signedMessage.sublist(
+                signedMessage.length - 64,
+                signedMessage.length,
+              ),
             ),
-          ),
-          apiUrl: apiUrl,
-          jwtToken: jwtToken,
-        );
+            apiUrl: apiUrl,
+            jwtToken: jwtToken,
+          );
+    } catch (exception, stackTrace) {
+      Sentry.captureMessage('Connect wallet exception $exception');
+      Sentry.captureException(exception, stackTrace: stackTrace);
+      throw Exception(exception);
+    }
   }
 
-  Future<dynamic> mint(String? candyMachineAddress) async {
-    final isWalletAvailable = await isWalletAppAvailable();
-    if (!isWalletAvailable) {
-      throw NoWalletFoundException('No wallet app installed.');
-    }
+  Future<dynamic> mint(String? candyMachineAddress, String? label) async {
     if (candyMachineAddress == null) {
       return 'Candy machine not found.';
     }
@@ -207,15 +227,88 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         return 'Select/Connect wallet first';
       }
     }
-    final String? encodedNftTransaction =
+    final List<dynamic> encodedNftTransactions =
         await ref.read(transactionRepositoryProvider).mintOneTransaction(
               candyMachineAddress: candyMachineAddress,
               minterAddress: minterAddress,
+              label: label,
             );
-    if (encodedNftTransaction == null) {
+    if (encodedNftTransactions.isEmpty) {
       return false;
     }
-    return await _signAndSendTransactions([encodedNftTransaction]);
+    return _signAndSendMint(encodedNftTransactions);
+  }
+
+  Future<dynamic> _signAndSendMint(List encodedNftTransactions) async {
+    late LocalAssociationScenario session;
+    try {
+      session = await _getSession();
+    } catch (exception) {
+      if (exception is LowPowerModeException) {
+        return exception.cause;
+      } else if (exception is NoWalletFoundException) {
+        return exception.cause;
+      }
+      Sentry.captureException(exception);
+      return 'Something went wrong.';
+    }
+
+    final client = await session.start();
+
+    final signature = _getSignature();
+    ref.read(globalStateProvider.notifier).state.copyWith(isLoading: true);
+
+    if (await _doReauthorize(client) && signature != null) {
+      List<SignedTx> resignedTransactions = encodedNftTransactions
+          .map(
+            (encoded) => _decodeAndResign(
+              encodedTransaction: encoded,
+              signature: signature,
+            ),
+          )
+          .toList();
+
+      try {
+        final response = await client.signTransactions(
+          transactions: resignedTransactions.map((resignedTransaction) {
+            return base64Decode(resignedTransaction.encode());
+          }).toList(),
+        );
+        await session.close();
+        if (response.signedPayloads.isNotEmpty) {
+          final client = createSolanaClient(
+            rpcUrl: ref.read(environmentProvider).solanaCluster ==
+                    SolanaCluster.devnet.value
+                ? Config.rpcUrlDevnet
+                : Config.rpcUrlMainnet,
+          );
+
+          final signedTx = SignedTx.fromBytes(
+            response.signedPayloads.first.toList(),
+          );
+          final sendTransactionResult = await client.rpcClient.sendTransaction(
+            signedTx.encode(),
+            preflightCommitment: Commitment.confirmed,
+          );
+          ref.read(globalStateProvider.notifier).update(
+                (state) => state.copyWith(
+                  isLoading: false,
+                  isMinting: true,
+                ),
+              );
+          ref.read(mintingStatusProvider(sendTransactionResult));
+          return true;
+        }
+      } catch (exception, stackTrace) {
+        await session.close();
+        Sentry.captureException(exception, stackTrace: stackTrace);
+        if (exception is JsonRpcException) {
+          return exception.message;
+        }
+      }
+    }
+    await session.close();
+    return false;
   }
 
   Future<bool> list({
@@ -283,12 +376,21 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return await _signAndSendTransactions([transaction]);
   }
 
-  Future<bool> _signAndSendTransactions(
+  Future<dynamic> _signAndSendTransactions(
       List<String> encodedTransactions) async {
-    final session = await _getSession();
-    if (session == null) {
-      throw Exception(missingWalletAppText);
+    late LocalAssociationScenario session;
+    try {
+      session = await _getSession();
+    } catch (exception) {
+      if (exception is LowPowerModeException) {
+        return exception.cause;
+      } else if (exception is NoWalletFoundException) {
+        return exception.cause;
+      }
+      Sentry.captureException(exception);
+      return 'Something went wrong.';
     }
+
     final client = await session.start();
 
     final signature = _getSignature();
@@ -338,6 +440,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       } catch (exception, stackTrace) {
         await session.close();
         Sentry.captureException(exception, stackTrace: stackTrace);
+        if (exception is JsonRpcException) {
+          return exception.message;
+        }
       }
     }
     await session.close();
@@ -348,7 +453,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final envState = ref.read(environmentProvider);
     return envState.signature != null && envState.publicKey != null
         ? Signature(
-            envState.signature?.codeUnits ?? [],
+            envState.signature?.codeUnits.sublist(0, 64) ?? [],
             publicKey: envState.publicKey!,
           )
         : null;
@@ -361,7 +466,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String apiUrl,
     required String jwtToken,
   }) async {
-    if (await _doReauthorize(client, overrideAuthToken)) {
+    if (await _doReauthorize(client, overrideAuthToken, signer.toBase58())) {
       final message = await ref.read(authRepositoryProvider).getOneTimePassword(
             address: signer.toBase58(),
             apiUrl: apiUrl,
@@ -387,9 +492,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> _doReauthorize(MobileWalletAdapterClient client,
-      [String? overrideAuthToken]) async {
+      [String? overrideAuthToken, String? overrideSigner]) async {
     final envState = ref.read(environmentProvider);
-    final currentWalletAddress = envState.publicKey?.toBase58() ?? '';
+    final currentWalletAddress =
+        overrideSigner ?? envState.publicKey?.toBase58() ?? '';
     final walletAuthToken = envState.wallets?[currentWalletAddress]?.authToken;
 
     final authToken = overrideAuthToken ??
@@ -431,9 +537,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return result != null;
   }
 
-  Future<LocalAssociationScenario?> _getSession() async {
+  Future<LocalAssociationScenario> _getSession() async {
     final bool isWalletAvailable = await LocalAssociationScenario.isAvailable();
-
+    final bool isLowPowerMode = await Power.isLowPowerMode;
+    if (isLowPowerMode) {
+      throw LowPowerModeException('Cannot use wallet in the power save mode.');
+    }
     if (!isWalletAvailable) {
       throw NoWalletFoundException(missingWalletAppText);
     }

@@ -6,10 +6,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
   final List<Widget> children;
   final TabController? controller;
+  final EdgeInsets? padding;
   const CustomSliverTabBar({
     Key? key,
     required this.children,
     this.controller,
+    this.padding = const EdgeInsets.symmetric(horizontal: 4.0),
   }) : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: padding,
       margin: const EdgeInsets.only(bottom: 16),
       color: ColorPalette.appBackgroundColor,
       child: Stack(
@@ -28,8 +30,8 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
           Container(
             decoration: const BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                    color: ColorPalette.boxBackground300, width: 2.0),
+                bottom:
+                    BorderSide(color: ColorPalette.greyscale400, width: 2.0),
               ),
             ),
           ),

@@ -6,12 +6,13 @@ class TextWithViewMore extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final int maxLines;
-
+  final Function()? onLinkTap;
   const TextWithViewMore({
     Key? key,
     required this.text,
     this.textAlign = TextAlign.start,
     this.maxLines = 2,
+    this.onLinkTap,
   }) : super(key: key);
 
   @override
@@ -21,6 +22,7 @@ class TextWithViewMore extends StatelessWidget {
       maxLines: 2,
       expandText: 'view more',
       collapseText: 'view less',
+      onLinkTap: onLinkTap,
       linkEllipsis: false,
       linkStyle:
           const TextStyle(fontSize: 16, color: ColorPalette.dReaderYellow100),

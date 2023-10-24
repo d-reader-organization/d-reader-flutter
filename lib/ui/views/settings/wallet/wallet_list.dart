@@ -39,20 +39,25 @@ class WalletListScreen extends ConsumerWidget {
   );
 
   _handleWalletSelect(WidgetRef ref, String address) async {
+    final signature =
+        ref.read(environmentProvider).wallets?[address]?.signature;
+    final walletAuthToken =
+        ref.read(environmentProvider).wallets![address]?.authToken;
+    if (signature == null) {
+      return await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+    }
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
+          EnvironmentStateUpdateInput(
+              publicKey: Ed25519HDPublicKey.fromBase58(
+                address,
+              ),
+              signature: signature.codeUnits,
+              authToken: walletAuthToken),
+        );
+    ;
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
         );
-    final signature =
-        ref.read(environmentProvider).wallets?[address]?.signature;
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
-          EnvironmentStateUpdateInput(
-            publicKey: Ed25519HDPublicKey.fromBase58(
-              address,
-            ),
-            signature: signature?.codeUnits,
-          ),
-        );
-    // to do if no signature/authToken prompt authorizeAndSignMessage
   }
 
   @override

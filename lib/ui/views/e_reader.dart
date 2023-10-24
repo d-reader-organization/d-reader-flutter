@@ -174,9 +174,11 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             },
                             constrained: true,
                             child: index == pages.length
-                                ? PreviewImage(
-                                    canRead: canRead,
-                                    isFullyUploaded: isFullyUploaded,
+                                ? Center(
+                                    child: PreviewImage(
+                                      canRead: canRead,
+                                      isFullyUploaded: isFullyUploaded,
+                                    ),
                                   )
                                 : ValueListenableBuilder(
                                     valueListenable: valueNotifier,

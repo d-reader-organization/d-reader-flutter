@@ -97,6 +97,21 @@ class HomeView extends StatelessWidget {
                   SizedBox(
                     height: 32,
                   ),
+                  SectionHeading(
+                    title: 'Spicy action',
+                    initialTab: DiscoverTabViewEnum.comics,
+                    sort: SortByEnum.viewers,
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  ComicsListView(
+                    query:
+                        'skip=0&take=12&sortTag=viewers&sortOrder=desc&genreSlugs[]=action',
+                  ),
+                  SizedBox(
+                    height: 32,
+                  ),
                 ],
               ),
             ),

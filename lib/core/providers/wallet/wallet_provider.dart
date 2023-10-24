@@ -26,7 +26,7 @@ final walletRepositoryProvider = Provider<WalletRepositoryImpl>(
   },
 );
 
-final registerWalletToSocketEvents = Provider(
+final registerWalletToSocketEvents = Provider.autoDispose(
   (ref) {
     final socket = ref
         .read(

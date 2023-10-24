@@ -83,7 +83,8 @@ class Attribute {
 }
 
 class Seller {
-  final String? id, avatar, name;
+  final int? id;
+  final String? avatar, name;
   final String address;
 
   Seller({

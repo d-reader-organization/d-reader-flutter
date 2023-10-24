@@ -302,6 +302,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       } catch (exception, stackTrace) {
         await session.close();
         Sentry.captureException(exception, stackTrace: stackTrace);
+        if (exception is JsonRpcException) {
+          return exception.message;
+        }
       }
     }
     await session.close();
@@ -437,6 +440,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       } catch (exception, stackTrace) {
         await session.close();
         Sentry.captureException(exception, stackTrace: stackTrace);
+        if (exception is JsonRpcException) {
+          return exception.message;
+        }
       }
     }
     await session.close();
@@ -447,7 +453,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final envState = ref.read(environmentProvider);
     return envState.signature != null && envState.publicKey != null
         ? Signature(
-            envState.signature?.codeUnits ?? [],
+            envState.signature?.codeUnits.sublist(0, 64) ?? [],
             publicKey: envState.publicKey!,
           )
         : null;
@@ -460,7 +466,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String apiUrl,
     required String jwtToken,
   }) async {
-    if (await _doReauthorize(client, overrideAuthToken)) {
+    if (await _doReauthorize(client, overrideAuthToken, signer.toBase58())) {
       final message = await ref.read(authRepositoryProvider).getOneTimePassword(
             address: signer.toBase58(),
             apiUrl: apiUrl,
@@ -486,9 +492,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> _doReauthorize(MobileWalletAdapterClient client,
-      [String? overrideAuthToken]) async {
+      [String? overrideAuthToken, String? overrideSigner]) async {
     final envState = ref.read(environmentProvider);
-    final currentWalletAddress = envState.publicKey?.toBase58() ?? '';
+    final currentWalletAddress =
+        overrideSigner ?? envState.publicKey?.toBase58() ?? '';
     final walletAuthToken = envState.wallets?[currentWalletAddress]?.authToken;
 
     final authToken = overrideAuthToken ??

@@ -38,6 +38,6 @@ final sortDirectionProvider = StateProvider<SortDirection>(
 
 final comicSortDirectionProvider = StateProvider<SortDirection>(
   (ref) {
-    return SortDirection.desc;
+    return SortDirection.asc;
   },
 );

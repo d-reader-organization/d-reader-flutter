@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_item_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,7 @@ class ListedItems extends ConsumerWidget {
             textAlign: TextAlign.center,
           );
         }
-        return ListView.separated(
+        return ListView.builder(
           itemCount: listings.length,
           padding: EdgeInsets.zero,
           shrinkWrap: true,
@@ -33,11 +32,6 @@ class ListedItems extends ConsumerWidget {
           itemBuilder: (context, index) {
             return ListingItem(
               listing: listings[index],
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              color: ColorPalette.greyscale300,
             );
           },
         );

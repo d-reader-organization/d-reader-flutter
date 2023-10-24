@@ -343,16 +343,23 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> buyMultiple(List<BuyNftInput> input) async {
-    Map<String, String> query = {};
-    for (int i = 0; i < input.length; ++i) {
-      query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
-    }
-    final List<String> encodedTransactions =
-        await ref.read(transactionRepositoryProvider).buyMultipleItems(query);
-    if (encodedTransactions.isEmpty) {
+    try {
+      Map<String, String> query = {};
+      for (int i = 0; i < input.length; ++i) {
+        query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
+      }
+      final List<String> encodedTransactions =
+          await ref.read(transactionRepositoryProvider).buyMultipleItems(query);
+      if (encodedTransactions.isEmpty) {
+        return false;
+      }
+      return await _signAndSendTransactions(encodedTransactions);
+    } catch (exception) {
+      if (exception is NoWalletFoundException) {
+        throw NoWalletFoundException(exception.cause);
+      }
       return false;
     }
-    return await _signAndSendTransactions(encodedTransactions);
   }
 
   SignedTx _decodeAndResign({

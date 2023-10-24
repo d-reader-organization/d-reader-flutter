@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
@@ -281,6 +282,7 @@ class WalletListScreen extends ConsumerWidget {
               if (isConnected) {
                 ref.invalidate(selectedWalletProvider);
                 ref.invalidate(userWalletsProvider);
+                ref.invalidate(ownedComicsAsyncProvider);
               }
             }
           } catch (error) {

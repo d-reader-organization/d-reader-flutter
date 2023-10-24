@@ -440,6 +440,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       } catch (exception, stackTrace) {
         await session.close();
         Sentry.captureException(exception, stackTrace: stackTrace);
+        if (exception is JsonRpcException) {
+          return exception.message;
+        }
       }
     }
     await session.close();

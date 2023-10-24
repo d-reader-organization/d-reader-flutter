@@ -43,7 +43,7 @@ class WalletListScreen extends ConsumerWidget {
     final signature =
         ref.read(environmentProvider).wallets?[address]?.signature;
     final walletAuthToken =
-        ref.read(environmentProvider).wallets![address]?.authToken;
+        ref.read(environmentProvider).wallets?[address]?.authToken;
     if (signature == null) {
       return await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
     }
@@ -55,7 +55,6 @@ class WalletListScreen extends ConsumerWidget {
               signature: signature.codeUnits,
               authToken: walletAuthToken),
         );
-    ;
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
         );

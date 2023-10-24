@@ -46,6 +46,7 @@ class ListingItem extends ConsumerWidget {
           : null,
       child: Container(
         padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
           color: isSelected
               ? ColorPalette.greyscale500
@@ -67,6 +68,7 @@ class ListingItem extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   shortenNftName(listing.name),

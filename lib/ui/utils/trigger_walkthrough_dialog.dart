@@ -40,6 +40,7 @@ triggerWalkthroughDialog({
   required String title,
   required String subtitle,
   required String assetPath,
+  String buttonText = 'Got it!',
   Widget? bottomWidget,
 }) {
   return showDialog(
@@ -51,6 +52,7 @@ triggerWalkthroughDialog({
         title: title,
         subtitle: subtitle,
         bottomWidget: bottomWidget,
+        buttonText: buttonText,
       );
     },
   );

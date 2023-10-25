@@ -9,4 +9,5 @@ enum WalkthroughKeys {
   changeNetwork,
   lowPowerMode,
   verifyEmail,
+  unwrap,
 }

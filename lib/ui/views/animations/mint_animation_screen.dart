@@ -1,14 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -183,6 +186,19 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
     super.dispose();
   }
 
+  _handleUnwrap({required WidgetRef ref}) async {
+    final isSuccessful = await ref.read(solanaProvider.notifier).useMint(
+          nftAddress: widget.nft.address,
+          ownerAddress: widget.nft.ownerAddress,
+        );
+    if (context.mounted && isSuccessful) {
+      nextScreenReplace(
+        context,
+        const OpenNftAnimation(),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -317,18 +333,96 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                             onPressed: isLoading
                                 ? null
                                 : () async {
-                                    final isSuccessful = await ref
-                                        .read(solanaProvider.notifier)
-                                        .useMint(
-                                          nftAddress: widget.nft.address,
-                                          ownerAddress: widget.nft.ownerAddress,
-                                        );
-                                    if (context.mounted && isSuccessful) {
-                                      nextScreenReplace(
-                                        context,
-                                        const OpenNftAnimation(),
-                                      );
+                                    final shouldTriggerDialog = LocalStore
+                                            .instance
+                                            .get(WalkthroughKeys.unwrap.name) ==
+                                        null;
+                                    if (!shouldTriggerDialog) {
+                                      return await _handleUnwrap(ref: ref);
                                     }
+
+                                    bool isChecked = false;
+                                    return triggerWalkthroughDialog(
+                                      context: context,
+                                      buttonText: 'Unwrap',
+                                      onSubmit: () async {
+                                        if (isChecked) {
+                                          LocalStore.instance.put(
+                                              WalkthroughKeys.unwrap, true);
+                                        }
+                                        await _handleUnwrap(ref: ref);
+                                      },
+                                      title: 'Comic unwraping',
+                                      subtitle:
+                                          'By unwrapping the comic, you will be able to read it. If you decide to leave it wrapped, it might hold a bigger collecting value.',
+                                      bottomWidget: StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              setState(
+                                                () {
+                                                  isChecked = !isChecked;
+                                                },
+                                              );
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Theme(
+                                                  data: ThemeData(
+                                                    unselectedWidgetColor:
+                                                        ColorPalette
+                                                            .greyscale300,
+                                                  ),
+                                                  child: Transform.scale(
+                                                    scale: 1.2,
+                                                    child: Checkbox(
+                                                      value: isChecked,
+                                                      checkColor: ColorPalette
+                                                          .dReaderYellow100,
+                                                      fillColor:
+                                                          const MaterialStatePropertyAll<
+                                                              Color>(
+                                                        ColorPalette
+                                                            .greyscale500,
+                                                      ),
+                                                      onChanged: (value) {
+                                                        setState(
+                                                          () {
+                                                            isChecked =
+                                                                !isChecked;
+                                                          },
+                                                        );
+                                                      },
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                          6,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 2,
+                                                ),
+                                                const Text(
+                                                  'Don\'t ask me again',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      assetPath: '',
+                                    );
                                   },
                             child: const Text(
                               'Unwrap',

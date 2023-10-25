@@ -12,8 +12,8 @@ class WalkthroughDialog extends StatelessWidget {
     required this.assetPath,
     required this.title,
     required this.subtitle,
+    required this.buttonText,
     this.bottomWidget,
-    this.buttonText = 'Got it!',
   });
 
   @override
@@ -29,12 +29,14 @@ class WalkthroughDialog extends StatelessWidget {
         ),
       ),
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.asset(
-            assetPath,
+        if (assetPath.isNotEmpty) ...[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              assetPath,
+            ),
           ),
-        ),
+        ],
         Text(
           title,
           textAlign: TextAlign.center,
@@ -55,6 +57,9 @@ class WalkthroughDialog extends StatelessWidget {
             fontWeight: FontWeight.w500,
             color: ColorPalette.greyscale50,
           ),
+        ),
+        const SizedBox(
+          height: 8,
         ),
         CustomTextButton(
           onPressed: onSubmit,

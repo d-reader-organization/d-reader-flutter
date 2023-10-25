@@ -24,11 +24,9 @@ class NftModalBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
-  final TextEditingController _textEditingController = TextEditingController();
-
+  String priceInputValue = '';
   @override
   void dispose() {
-    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -72,7 +70,11 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextField(
-                controller: _textEditingController,
+                onChanged: (value) {
+                  setState(() {
+                    priceInputValue = value;
+                  });
+                },
                 keyboardType: const TextInputType.numberWithOptions(),
                 decoration: const InputDecoration(
                   labelText: 'List Price',
@@ -96,9 +98,11 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
           SubmitButton(
             sellerAddress: widget.nft.ownerAddress,
             mintAccount: widget.nft.address,
-            price: _safeParse(
-              _textEditingController.text,
-            ),
+            price: priceInputValue.isNotEmpty
+                ? _safeParse(
+                    priceInputValue,
+                  )
+                : null,
           ),
         ],
       ),

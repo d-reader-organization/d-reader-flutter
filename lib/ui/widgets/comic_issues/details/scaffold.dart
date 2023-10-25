@@ -514,6 +514,14 @@ class BottomNavigation extends ConsumerWidget {
                                           .read(globalStateProvider.notifier)
                                           .state
                                           .copyWith(isLoading: false);
+                                      if (context.mounted) {
+                                        showSnackBar(
+                                          context: context,
+                                          text: 'Success!',
+                                          backgroundColor:
+                                              ColorPalette.dReaderGreen,
+                                        );
+                                      }
                                     } catch (exception) {
                                       ref
                                           .read(globalStateProvider.notifier)

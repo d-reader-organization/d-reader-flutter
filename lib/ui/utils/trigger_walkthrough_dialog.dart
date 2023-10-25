@@ -15,10 +15,10 @@ triggerWalkthroughDialogIfNeeded({
   final localStore = LocalStore.instance;
   final isAlreadyshown = localStore.get(key) != null;
   if (!isAlreadyshown) {
-    Future.delayed(
+    return Future.delayed(
       const Duration(milliseconds: 850),
       () {
-        triggerWalkthroughDialog(
+        return triggerWalkthroughDialog(
           context: context,
           title: title,
           subtitle: subtitle,

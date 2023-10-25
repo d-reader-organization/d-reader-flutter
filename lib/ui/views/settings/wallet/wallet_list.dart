@@ -1,3 +1,5 @@
+import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
@@ -119,212 +121,229 @@ class WalletListScreen extends ConsumerWidget {
         id: userId,
       ),
     );
-
-    return Scaffold(
-      appBar: AppBar(
-        shadowColor: Colors.transparent,
-        backgroundColor: Colors.transparent,
-        title: const Text(
-          'Wallet',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+    return walletsProvider.when(
+      data: (data) {
+        return Scaffold(
+          appBar: AppBar(
+            shadowColor: Colors.transparent,
+            backgroundColor: Colors.transparent,
+            title: const Text(
+              'Wallet',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: walletsProvider.when(
-          data: (data) {
-            if (data.isEmpty) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SvgPicture.asset(
-                    'assets/icons/intro/splash_2.svg',
-                    height: 281,
-                    width: 238,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    ref.watch(isWalletAvailableProvider).maybeWhen(
-                          data: (data) {
-                            return data
-                                ? 'No wallet connected'
-                                : 'No wallet detected';
-                          },
-                          orElse: () => '',
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: data.isEmpty
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/intro/splash_2.svg',
+                        height: 281,
+                        width: 238,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        ref.watch(isWalletAvailableProvider).maybeWhen(
+                              data: (data) {
+                                return data
+                                    ? 'No wallet connected'
+                                    : 'No wallet detected';
+                              },
+                              orElse: () => '',
+                            ),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
                         ),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const WhyDoINeedWalletWidget(),
-                ],
-              );
-            }
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final walletName = data[index].label.isNotEmpty
-                    ? data[index].label
-                    : 'Wallet ${index + 1}';
-                return GestureDetector(
-                  onTap: () {
-                    nextScreenPush(
-                      context,
-                      WalletInfoScreen(
-                        address: data[index].address,
-                        name: walletName,
                       ),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      color: ColorPalette.greyscale400,
-                      borderRadius: BorderRadius.circular(
-                        8,
+                      const SizedBox(
+                        height: 8,
                       ),
-                      border: Border.all(
-                        color: ref.watch(selectedWalletProvider) ==
-                                data[index].address
-                            ? ColorPalette.dReaderYellow100
-                            : ColorPalette.greyscale400,
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      const WhyDoINeedWalletWidget(),
+                    ],
+                  )
+                : ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final walletName = data[index].label.isNotEmpty
+                          ? data[index].label
+                          : 'Wallet ${index + 1}';
+                      return GestureDetector(
+                        onTap: () {
+                          nextScreenPush(
+                            context,
+                            WalletInfoScreen(
+                              address: data[index].address,
+                              name: walletName,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            color: ColorPalette.greyscale400,
+                            borderRadius: BorderRadius.circular(
+                              8,
+                            ),
+                            border: Border.all(
+                              color: ref.watch(selectedWalletProvider) ==
+                                      data[index].address
+                                  ? ColorPalette.dReaderYellow100
+                                  : ColorPalette.greyscale400,
+                            ),
+                          ),
+                          child: Row(
                             children: [
-                              Text(
-                                walletName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: topTextStyle,
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      walletName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: topTextStyle,
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(
+                                      formatAddress(data[index].address, 4),
+                                      style: bottomTextStyle,
+                                    ),
+                                  ],
+                                ),
                               ),
                               const SizedBox(
-                                height: 8,
+                                height: 48,
+                                child: VerticalDivider(
+                                  color: ColorPalette.greyscale300,
+                                ),
                               ),
-                              Text(
-                                formatAddress(data[index].address, 4),
-                                style: bottomTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 48,
-                          child: VerticalDivider(
-                            color: ColorPalette.greyscale300,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ref
-                                      .watch(
-                                    accountInfoProvider(
-                                      address: data[index].address,
-                                    ),
-                                  )
-                                      .when(
-                                    data: (accountData) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
-                                            style: bottomTextStyle,
+                              Expanded(
+                                flex: 2,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ref
+                                            .watch(
+                                          accountInfoProvider(
+                                            address: data[index].address,
                                           ),
-                                        ],
-                                      );
-                                    },
-                                    error: (error, stackTrace) {
-                                      return const SizedBox();
-                                    },
-                                    loading: () {
-                                      return const SizedBox();
-                                    },
-                                  ),
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  _handleWalletSelect(ref, data[index].address);
-                                },
-                                child: Icon(
-                                  ref.watch(selectedWalletProvider) ==
-                                          data[index].address
-                                      ? Icons.circle
-                                      : Icons.circle_outlined,
-                                  color: ref.watch(selectedWalletProvider) ==
-                                          data[index].address
-                                      ? ColorPalette.dReaderYellow100
-                                      : ColorPalette.greyscale300,
+                                        )
+                                            .when(
+                                          data: (accountData) {
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
+                                                  style: bottomTextStyle,
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                          error: (error, stackTrace) {
+                                            return const SizedBox();
+                                          },
+                                          loading: () {
+                                            return const SizedBox();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _handleWalletSelect(
+                                            ref, data[index].address);
+                                      },
+                                      child: Icon(
+                                        ref.watch(selectedWalletProvider) ==
+                                                data[index].address
+                                            ? Icons.circle
+                                            : Icons.circle_outlined,
+                                        color:
+                                            ref.watch(selectedWalletProvider) ==
+                                                    data[index].address
+                                                ? ColorPalette.dReaderYellow100
+                                                : ColorPalette.greyscale300,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
+          ),
+          bottomNavigationBar: CustomTextButton(
+            borderRadius: BorderRadius.circular(8),
+            onPressed: () async {
+              if (data.isNotEmpty) {
+                await triggerWalkthroughDialogIfNeeded(
+                  context: context,
+                  key: WalkthroughKeys.multipleWallet.name,
+                  title: 'Another wallet',
+                  subtitle:
+                      'When connecting multiple wallets to dReader bare in mind to always match the wallet selected on dReader with the wallet selected in your mobile wallet app',
+                  assetPath: '$walkthroughAssetsPath/multiple_wallet.jpg',
+                  onSubmit: () {
+                    Navigator.pop(context);
+                  },
                 );
-              },
-            );
-          },
-          error: (error, stackTrace) {
-            Sentry.captureException(error, stackTrace: stackTrace);
-            return const Center(
-              child: Text('Something went wrong'),
-            );
-          },
-          loading: () => const SizedBox(),
-        ),
-      ),
-      bottomNavigationBar: CustomTextButton(
-        borderRadius: BorderRadius.circular(8),
-        onPressed: () async {
-          await _handleWalletConnect(context: context, ref: ref);
-        },
-        size: const Size(double.infinity, 50),
-        isLoading: ref.watch(globalStateProvider).isLoading,
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          ref.watch(isWalletAvailableProvider).maybeWhen(
-            data: (data) {
-              return data ? 'Add / Connect Wallet' : 'Install wallet';
+              }
+              if (context.mounted) {
+                await _handleWalletConnect(context: context, ref: ref);
+              }
             },
-            orElse: () {
-              return '';
-            },
+            size: const Size(double.infinity, 50),
+            isLoading: ref.watch(globalStateProvider).isLoading,
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              ref.watch(isWalletAvailableProvider).maybeWhen(
+                data: (data) {
+                  return data ? 'Add / Connect Wallet' : 'Install wallet';
+                },
+                orElse: () {
+                  return '';
+                },
+              ),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           ),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ),
+        );
+      },
+      error: (error, stackTrace) {
+        Sentry.captureException(error, stackTrace: stackTrace);
+        return const Center(
+          child: Text('Something went wrong'),
+        );
+      },
+      loading: () => const SizedBox(),
     );
   }
 }

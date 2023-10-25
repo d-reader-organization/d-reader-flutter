@@ -1,10 +1,12 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
+import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -35,72 +37,96 @@ class ChangeNetworkView extends ConsumerWidget {
     );
   }
 
+  _doChangeNetworkProcess({
+    required BuildContext context,
+    required WidgetRef ref,
+    required String cluster,
+    required String dialogText,
+  }) {
+    final dynamic localStoreData = ref.read(
+      localStoreNetworkDataProvider(cluster),
+    );
+    final bool isDevnetCluster = cluster == SolanaCluster.devnet.value;
+    ref.invalidate(environmentProvider);
+    final envNotifier = ref.read(environmentProvider.notifier);
+    envNotifier.updateForChangeNetwork(
+      cluster: cluster,
+      apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
+    );
+    if (localStoreData != null) {
+      bool isSuccessful =
+          ref.read(environmentProvider.notifier).updateEnvironmentState(
+                EnvironmentStateUpdateInput.fromDynamic(
+                  localStoreData,
+                ),
+              );
+      if (context.mounted) {
+        final snackbarText = isSuccessful
+            ? 'Network changed successfully'
+            : 'Network change failed.';
+        if (!isSuccessful) {
+          ref.read(environmentProvider.notifier).updateEnvironmentState(
+                EnvironmentStateUpdateInput(
+                  solanaCluster: isDevnetCluster
+                      ? SolanaCluster.mainnet.value
+                      : SolanaCluster.devnet.value,
+                ),
+              );
+          return showSnackBar(
+            context: context,
+            text: snackbarText,
+            backgroundColor: ColorPalette.dReaderRed,
+          );
+        }
+        ref.invalidate(comicsProvider);
+        ref.invalidate(comicIssuesProvider);
+        ref.invalidate(creatorsProvider);
+        ref.invalidate(carouselProvider);
+        return showSnackBar(
+          context: context,
+          text: snackbarText,
+          backgroundColor: ColorPalette.dReaderGreen,
+        );
+      }
+    } else {
+      ref.invalidate(scaffoldProvider);
+      if (context.mounted) {
+        nextScreenCloseOthers(context, const InitialIntroScreen());
+      }
+    }
+  }
+
   _handleNetworkChange({
     required BuildContext context,
     required WidgetRef ref,
     required String cluster,
     required String dialogText,
   }) async {
+    final isAlreadyShown =
+        LocalStore.instance.get(WalkthroughKeys.changeNetwork.name) != null;
+    if (isAlreadyShown) {
+      return _doChangeNetworkProcess(
+        context: context,
+        ref: ref,
+        cluster: cluster,
+        dialogText: dialogText,
+      );
+    }
+
     final isConfirmed = await _showDialog(
           context: context,
           subtitle: dialogText,
           cluster: cluster,
         ) ??
         false;
-    if (isConfirmed) {
-      final dynamic localStoreData = ref.read(
-        localStoreNetworkDataProvider(cluster),
-      );
-      final bool isDevnetCluster = cluster == SolanaCluster.devnet.value;
-      ref.invalidate(environmentProvider);
-      final envNotifier = ref.read(environmentProvider.notifier);
-      envNotifier.updateForChangeNetwork(
+    if (isConfirmed && context.mounted) {
+      LocalStore.instance.put(WalkthroughKeys.changeNetwork.name, true);
+      _doChangeNetworkProcess(
+        context: context,
+        ref: ref,
         cluster: cluster,
-        apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
+        dialogText: dialogText,
       );
-      ref.invalidate(comicsProvider);
-      ref.invalidate(comicIssuesProvider);
-      ref.invalidate(creatorsProvider);
-      ref.invalidate(carouselProvider);
-      if (localStoreData != null) {
-        bool isSuccessful =
-            ref.read(environmentProvider.notifier).updateEnvironmentState(
-                  EnvironmentStateUpdateInput.fromDynamic(
-                    localStoreData,
-                  ),
-                );
-        if (context.mounted) {
-          final snackbarText = isSuccessful
-              ? 'Network changed successfully'
-              : 'Network change failed.';
-          if (!isSuccessful) {
-            ref.read(environmentProvider.notifier).updateEnvironmentState(
-                  EnvironmentStateUpdateInput(
-                    solanaCluster: isDevnetCluster
-                        ? SolanaCluster.mainnet.value
-                        : SolanaCluster.devnet.value,
-                  ),
-                );
-            return showSnackBar(
-              context: context,
-              text: snackbarText,
-              backgroundColor: ColorPalette.dReaderRed,
-            );
-          }
-
-          return showSnackBar(
-            context: context,
-            text: snackbarText,
-            backgroundColor: ColorPalette.dReaderGreen,
-          );
-        }
-      } else {
-        ref.invalidate(scaffoldProvider);
-
-        if (context.mounted) {
-          nextScreenCloseOthers(context, const InitialIntroScreen());
-        }
-      }
     }
   }
 

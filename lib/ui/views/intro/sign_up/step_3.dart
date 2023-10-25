@@ -15,9 +15,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SignUpStep3 extends ConsumerWidget {
-  const SignUpStep3({
-    super.key,
-  });
+  const SignUpStep3({super.key});
 
   Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
     final globalNotifier = ref.read(globalStateProvider.notifier);

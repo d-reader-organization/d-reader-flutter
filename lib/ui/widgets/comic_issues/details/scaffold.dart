@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
@@ -8,6 +9,7 @@ import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
@@ -400,10 +402,49 @@ class BottomNavigation extends ConsumerWidget {
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
     } catch (error) {
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      if (context.mounted) {
+        if (error is NoWalletFoundException) {
+          return _showWalkthroughDialog(context: context, ref: ref);
+        } else if (error is LowPowerModeException) {
+          return triggerLowPowerModeDialog(context);
+        }
+      }
       if (context.mounted && error is NoWalletFoundException) {
-        triggerInstallWalletBottomSheet(context);
+        _showWalkthroughDialog(context: context, ref: ref);
       }
     }
+  }
+
+  _showWalkthroughDialog({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    triggerWalkthroughDialog(
+      context: context,
+      bottomWidget: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: const Text(
+          'Cancel',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            decoration: TextDecoration.underline,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      onSubmit: () {
+        Navigator.pop(context);
+        triggerInstallWalletBottomSheet(context);
+      },
+      assetPath: '$walkthroughAssetsPath/install_wallet.jpg',
+      title: 'Install a wallet',
+      subtitle:
+          'To buy a digital asset you need to have a digital wallet installed first. Click “Next” to set up a wallet!',
+    );
   }
 
   @override
@@ -446,7 +487,8 @@ class BottomNavigation extends ConsumerWidget {
                                         ref.read(environmentProvider).publicKey;
                                     if (activeWallet == null) {
                                       throw Exception(
-                                          'There is no wallet selected');
+                                        'There is no wallet selected',
+                                      );
                                     }
                                     List<BuyNftInput> selectedNftsInput = ref
                                         .read(selectedItemsProvider)
@@ -460,17 +502,34 @@ class BottomNavigation extends ConsumerWidget {
                                           ),
                                         )
                                         .toList();
-                                    final isSuccessful = await ref
-                                        .read(solanaProvider.notifier)
-                                        .buyMultiple(selectedNftsInput);
-                                    if (isSuccessful) {
-                                      ref.invalidate(listedItemsProvider);
-                                      ref.invalidate(userAssetsProvider);
+                                    try {
+                                      final isSuccessful = await ref
+                                          .read(solanaProvider.notifier)
+                                          .buyMultiple(selectedNftsInput);
+                                      if (isSuccessful) {
+                                        ref.invalidate(listedItemsProvider);
+                                        ref.invalidate(userAssetsProvider);
+                                      }
+                                      ref
+                                          .read(globalStateProvider.notifier)
+                                          .state
+                                          .copyWith(isLoading: false);
+                                    } catch (exception) {
+                                      ref
+                                          .read(globalStateProvider.notifier)
+                                          .state
+                                          .copyWith(isLoading: false);
+                                      if (context.mounted) {
+                                        if (exception
+                                            is NoWalletFoundException) {
+                                          _showWalkthroughDialog(
+                                              context: context, ref: ref);
+                                        } else if (exception
+                                            is LowPowerModeException) {
+                                          triggerLowPowerModeDialog(context);
+                                        }
+                                      }
                                     }
-                                    ref
-                                        .read(globalStateProvider.notifier)
-                                        .state
-                                        .copyWith(isLoading: false);
                                   }
                                 : null,
                             text: 'Buy',

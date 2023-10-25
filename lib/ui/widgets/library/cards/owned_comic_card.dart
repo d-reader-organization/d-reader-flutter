@@ -35,6 +35,7 @@ class OwnedComicCard extends ConsumerWidget {
             CachedImageBgPlaceholder(
               height: 125,
               imageUrl: comic.cover,
+              width: cardWidth,
               opacity: .4,
               overrideBorderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),

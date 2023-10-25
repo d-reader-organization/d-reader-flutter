@@ -58,7 +58,6 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(comicIssueDetailsProvider(widget.id));
-
     return provider.when(
       data: (issue) {
         if (issue == null) {
@@ -66,6 +65,10 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
         }
         return DefaultTabController(
           length: 2,
+          initialIndex: issue.isSecondarySaleActive &&
+                  issue.activeCandyMachineAddress == null
+              ? ref.read(lastSelectedTabIndex)
+              : 0,
           child: Scaffold(
             backgroundColor: ColorPalette.appBackgroundColor,
             extendBodyBehindAppBar: true,
@@ -377,7 +380,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                             ),
                             issue.isSecondarySaleActive &&
                                     issue.activeCandyMachineAddress == null
-                                ? const TabBar(
+                                ? TabBar(
                                     dividerColor: ColorPalette.dReaderGrey,
                                     indicatorWeight: 4,
                                     indicatorColor:
@@ -385,7 +388,12 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                     labelColor: ColorPalette.dReaderYellow100,
                                     unselectedLabelColor:
                                         ColorPalette.dReaderGrey,
-                                    tabs: [
+                                    onTap: (value) {
+                                      ref
+                                          .read(lastSelectedTabIndex.notifier)
+                                          .update((state) => value);
+                                    },
+                                    tabs: const [
                                       Tab(
                                         text: 'About',
                                       ),

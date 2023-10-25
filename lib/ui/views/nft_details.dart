@@ -50,30 +50,37 @@ class NftDetails extends ConsumerWidget {
         }
         return Scaffold(
           backgroundColor: ColorPalette.appBackgroundColor,
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                backgroundColor: Colors.transparent,
-                title: Text(
-                  shortenNftName(nft.name),
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-              ),
-              SliverPadding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                sliver: SliverToBoxAdapter(
-                  child: NfTCard(
-                    comicName: nft.comicName,
-                    imageUrl: nft.image,
-                    issueName: nft.comicIssueName,
+          body: RefreshIndicator(
+            backgroundColor: ColorPalette.dReaderYellow100,
+            color: ColorPalette.appBackgroundColor,
+            onRefresh: () async {
+              ref.invalidate(nftProvider);
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  backgroundColor: Colors.transparent,
+                  title: Text(
+                    shortenNftName(nft.name),
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: Body(nft: nft),
-              ),
-            ],
+                SliverPadding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  sliver: SliverToBoxAdapter(
+                    child: NfTCard(
+                      comicName: nft.comicName,
+                      imageUrl: nft.image,
+                      issueName: nft.comicIssueName,
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Body(nft: nft),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -180,9 +187,9 @@ class Body extends StatelessWidget {
                           await ref
                               .read(solanaProvider.notifier)
                               .delist(nftAddress: nft.address);
-                          ref.invalidate(nftProvider);
                           ref.read(globalStateProvider.notifier).state =
                               const GlobalState(isLoading: false);
+                          ref.invalidate(nftProvider);
                           return;
                         }
                         showModalBottomSheet(

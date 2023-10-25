@@ -101,11 +101,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     try {
       session = await _getSession();
     } catch (exception) {
-      if (exception is LowPowerModeException) {
-        return exception.cause;
-      } else if (exception is NoWalletFoundException) {
-        return exception.cause;
+      if (exception is LowPowerModeException ||
+          exception is NoWalletFoundException) {
+        rethrow;
       }
+
       Sentry.captureException(exception);
       return 'Something went wrong.';
     }
@@ -244,10 +244,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     try {
       session = await _getSession();
     } catch (exception) {
-      if (exception is LowPowerModeException) {
-        return exception.cause;
-      } else if (exception is NoWalletFoundException) {
-        return exception.cause;
+      if (exception is LowPowerModeException ||
+          exception is NoWalletFoundException) {
+        rethrow;
       }
       Sentry.captureException(exception);
       return 'Something went wrong.';
@@ -317,17 +316,26 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required int price,
     String printReceipt = 'false',
   }) async {
-    final String? encodedTransaction =
-        await ref.read(transactionRepositoryProvider).listTransaction(
-              sellerAddress: sellerAddress,
-              mintAccount: mintAccount,
-              price: price,
-              printReceipt: printReceipt,
-            );
-    if (encodedTransaction == null) {
+    try {
+      final String? encodedTransaction =
+          await ref.read(transactionRepositoryProvider).listTransaction(
+                sellerAddress: sellerAddress,
+                mintAccount: mintAccount,
+                price: price,
+                printReceipt: printReceipt,
+              );
+      if (encodedTransaction == null) {
+        return false;
+      }
+      return await _signAndSendTransactions([encodedTransaction]);
+    } catch (exception) {
+      if (exception is LowPowerModeException ||
+          exception is NoWalletFoundException) {
+        rethrow;
+      }
+      Sentry.captureException(exception);
       return false;
     }
-    return await _signAndSendTransactions([encodedTransaction]);
   }
 
   Future<bool> delist({
@@ -355,8 +363,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       }
       return await _signAndSendTransactions(encodedTransactions);
     } catch (exception) {
-      if (exception is NoWalletFoundException) {
-        throw NoWalletFoundException(exception.cause);
+      if (exception is LowPowerModeException ||
+          exception is NoWalletFoundException) {
+        rethrow;
       }
       return false;
     }
@@ -389,10 +398,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     try {
       session = await _getSession();
     } catch (exception) {
-      if (exception is LowPowerModeException) {
-        return exception.cause;
-      } else if (exception is NoWalletFoundException) {
-        return exception.cause;
+      if (exception is LowPowerModeException ||
+          exception is NoWalletFoundException) {
+        rethrow;
       }
       Sentry.captureException(exception);
       return 'Something went wrong.';

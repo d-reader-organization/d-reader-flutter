@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
@@ -401,19 +402,49 @@ class BottomNavigation extends ConsumerWidget {
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
     } catch (error) {
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      if (context.mounted) {
+        if (error is NoWalletFoundException) {
+          return _showWalkthroughDialog(context: context, ref: ref);
+        } else if (error is LowPowerModeException) {
+          return triggerLowPowerModeDialog(context);
+        }
+      }
       if (context.mounted && error is NoWalletFoundException) {
-        triggerWalkthroughDialog(
-          context: context,
-          onSubmit: () {
-            Navigator.pop(context);
-            triggerInstallWalletBottomSheet(context);
-          },
-          title:
-              'To buy a digital asset you need to have a digital wallet installed first.',
-          subtitle: 'Click "next" to set up a wallet',
-        );
+        _showWalkthroughDialog(context: context, ref: ref);
       }
     }
+  }
+
+  _showWalkthroughDialog({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    triggerWalkthroughDialog(
+      context: context,
+      bottomWidget: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: const Text(
+          'Cancel',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            decoration: TextDecoration.underline,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      onSubmit: () {
+        Navigator.pop(context);
+        triggerInstallWalletBottomSheet(context);
+      },
+      assetPath: '$walkthroughAssetsPath/install_wallet.jpg',
+      title: 'Install a wallet',
+      subtitle:
+          'To buy a digital asset you need to have a digital wallet installed first. Click “Next” to set up a wallet!',
+    );
   }
 
   @override
@@ -488,20 +519,15 @@ class BottomNavigation extends ConsumerWidget {
                                           .read(globalStateProvider.notifier)
                                           .state
                                           .copyWith(isLoading: false);
-                                      if (context.mounted &&
-                                          exception is NoWalletFoundException) {
-                                        triggerWalkthroughDialog(
-                                          context: context,
-                                          onSubmit: () {
-                                            Navigator.pop(context);
-                                            triggerInstallWalletBottomSheet(
-                                                context);
-                                          },
-                                          title:
-                                              'To buy a digital asset you need to have a digital wallet installed first.',
-                                          subtitle:
-                                              'Click "next" to set up a wallet',
-                                        );
+                                      if (context.mounted) {
+                                        if (exception
+                                            is NoWalletFoundException) {
+                                          _showWalkthroughDialog(
+                                              context: context, ref: ref);
+                                        } else if (exception
+                                            is LowPowerModeException) {
+                                          triggerLowPowerModeDialog(context);
+                                        }
                                       }
                                     }
                                   }

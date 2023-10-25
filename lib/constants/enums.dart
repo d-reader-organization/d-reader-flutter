@@ -7,4 +7,6 @@ enum WalkthroughKeys {
   secondarySale,
   nftDetails,
   changeNetwork,
+  lowPowerMode,
+  verifyEmail,
 }

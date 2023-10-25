@@ -7,3 +7,5 @@ const String issueLastSelectedTabKey = 'issue_last_selected_tab';
 const double comicIssueAspectRatio = 690 / 1000;
 const double comicAspectRatio = 1000 / 900;
 const double creatorBannerAspectratio = 1920 / 900;
+
+const String walkthroughAssetsPath = 'assets/images/walkthrough';

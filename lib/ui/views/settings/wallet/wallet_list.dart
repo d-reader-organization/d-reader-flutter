@@ -12,6 +12,7 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
@@ -58,6 +59,57 @@ class WalletListScreen extends ConsumerWidget {
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
         );
+  }
+
+  _handleWalletConnect({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) async {
+    final globalNotifier = ref.read(globalStateProvider.notifier);
+
+    try {
+      final result = await ref
+          .read(solanaProvider.notifier)
+          .authorizeAndSignMessage(null, () {
+        globalNotifier.update(
+          (state) => state.copyWith(
+            isLoading: true,
+          ),
+        );
+      });
+
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      final bool isConnected = result == 'OK';
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          milisecondsDuration: 2000,
+          text: isConnected ? 'Wallet has been connected.' : result,
+        );
+        if (isConnected) {
+          ref.invalidate(selectedWalletProvider);
+          ref.invalidate(userWalletsProvider);
+          ref.invalidate(ownedComicsAsyncProvider);
+        }
+      }
+    } catch (exception) {
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      if (context.mounted) {
+        if (exception is LowPowerModeException) {
+          return triggerLowPowerModeDialog(context);
+        } else if (exception is NoWalletFoundException) {
+          return triggerInstallWalletBottomSheet(context);
+        }
+      }
+    }
   }
 
   @override
@@ -253,47 +305,7 @@ class WalletListScreen extends ConsumerWidget {
       bottomNavigationBar: CustomTextButton(
         borderRadius: BorderRadius.circular(8),
         onPressed: () async {
-          final globalNotifier = ref.read(globalStateProvider.notifier);
-
-          try {
-            final result = await ref
-                .read(solanaProvider.notifier)
-                .authorizeAndSignMessage(null, () {
-              globalNotifier.update(
-                (state) => state.copyWith(
-                  isLoading: true,
-                ),
-              );
-            });
-
-            globalNotifier.update(
-              (state) => state.copyWith(
-                isLoading: false,
-              ),
-            );
-            final bool isConnected = result == 'OK';
-            if (context.mounted) {
-              showSnackBar(
-                context: context,
-                milisecondsDuration: 2000,
-                text: isConnected ? 'Wallet has been connected.' : result,
-              );
-              if (isConnected) {
-                ref.invalidate(selectedWalletProvider);
-                ref.invalidate(userWalletsProvider);
-                ref.invalidate(ownedComicsAsyncProvider);
-              }
-            }
-          } catch (error) {
-            globalNotifier.update(
-              (state) => state.copyWith(
-                isLoading: false,
-              ),
-            );
-            if (context.mounted && error is NoWalletFoundException) {
-              return triggerInstallWalletBottomSheet(context);
-            }
-          }
+          await _handleWalletConnect(context: context, ref: ref);
         },
         size: const Size(double.infinity, 50),
         isLoading: ref.watch(globalStateProvider).isLoading,

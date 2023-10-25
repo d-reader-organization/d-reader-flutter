@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
@@ -8,7 +7,6 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
-import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
@@ -16,29 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SignUpStep3 extends ConsumerStatefulWidget {
+class SignUpStep3 extends ConsumerWidget {
   const SignUpStep3({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpStep3State();
-}
-
-class _SignUpStep3State extends ConsumerState<SignUpStep3> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      triggerWalkthroughDialogIfNeeded(
-        context: context,
-        key: WalkthroughKeys.connectWallet.name,
-        title: 'Connect wallet',
-        subtitle: 'Connect wallet instructions should be here',
-        onSubmit: () {
-          Navigator.pop(context);
-        },
-      );
-    });
-  }
 
   Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
     final globalNotifier = ref.read(globalStateProvider.notifier);
@@ -83,7 +60,7 @@ class _SignUpStep3State extends ConsumerState<SignUpStep3> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       onWillPop: () async {
         return false;

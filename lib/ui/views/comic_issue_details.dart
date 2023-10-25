@@ -1,11 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/scaffold.dart';
@@ -41,18 +39,6 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
   void initState() {
     super.initState();
     ref.read(registerWalletToSocketEvents);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      triggerWalkthroughDialogIfNeeded(
-        context: context,
-        key: WalkthroughKeys.issueDetails.name,
-        title:
-            'Hit the “preview” button to check out the comic! If you want to read the whole story, you’ll have to buy a copy',
-        subtitle: '',
-        onSubmit: () {
-          Navigator.pop(context);
-        },
-      );
-    });
     _controller = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,

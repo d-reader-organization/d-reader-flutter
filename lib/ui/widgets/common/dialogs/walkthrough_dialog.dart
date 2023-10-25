@@ -1,19 +1,19 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class WalkthroughDialog extends StatelessWidget {
   final Function() onSubmit;
-  final String buttonText, title, subtitle;
+  final String assetPath, buttonText, title, subtitle;
+  final Widget? bottomWidget;
   const WalkthroughDialog({
     super.key,
     required this.onSubmit,
+    required this.assetPath,
     required this.title,
     required this.subtitle,
-    this.buttonText = 'Next',
+    this.bottomWidget,
+    this.buttonText = 'Got it!',
   });
 
   @override
@@ -29,24 +29,10 @@ class WalkthroughDialog extends StatelessWidget {
         ),
       ),
       children: [
-        SizedBox(
-          height: 100,
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(
-                    sigmaX: 2,
-                    sigmaY: 2,
-                  ),
-                  child: SvgPicture.asset(
-                    'assets/images/logo-white.svg',
-                    height: 60,
-                  ),
-                ),
-              ),
-            ],
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.asset(
+            assetPath,
           ),
         ),
         Text(
@@ -57,6 +43,9 @@ class WalkthroughDialog extends StatelessWidget {
             fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
+        ),
+        const SizedBox(
+          height: 8,
         ),
         Text(
           subtitle,
@@ -79,6 +68,12 @@ class WalkthroughDialog extends StatelessWidget {
             ),
           ),
         ),
+        if (bottomWidget != null) ...[
+          const SizedBox(
+            height: 8,
+          ),
+          bottomWidget!,
+        ],
       ],
     );
   }

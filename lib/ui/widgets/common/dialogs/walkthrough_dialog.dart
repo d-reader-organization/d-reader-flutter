@@ -22,7 +22,7 @@ class WalkthroughDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.all(
         16,
       ),
-      backgroundColor: ColorPalette.boxBackground300,
+      backgroundColor: ColorPalette.greyscale400,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
           8,

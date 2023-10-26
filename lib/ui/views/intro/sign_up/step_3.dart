@@ -65,35 +65,35 @@ class SignUpStep3 extends ConsumerWidget {
       onWillPop: () async {
         return false;
       },
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                SvgPicture.asset(
-                  '${Config.introAssetsPath}/splash_2.svg',
-                  height: 320,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              SvgPicture.asset(
+                '${Config.introAssetsPath}/wallet.svg',
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 32,
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 32,
-                  ),
-                  child: Text(
-                    'Connect wallet',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                child: Text(
+                  'Connect wallet',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text(
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
                   'Connect with your wallet to store digital comics & other collectibles',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -101,125 +101,122 @@ class SignUpStep3 extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                ref.watch(isWalletAvailableProvider).maybeWhen(
-                  data: (data) {
-                    return data
-                        ? const SizedBox()
-                        : Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  await _handleConnectWallet(ref, context);
-                                },
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 12,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              ref.watch(isWalletAvailableProvider).maybeWhen(
+                data: (data) {
+                  return data
+                      ? const SizedBox()
+                      : Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                await _handleConnectWallet(ref, context);
+                              },
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: ColorPalette.greyscale400,
                                     ),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: ColorPalette.greyscale400,
+                                    borderRadius: BorderRadius.circular(
+                                      8,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SvgPicture.asset(
+                                        '${Config.settingsAssetsPath}/light/wallet.svg',
                                       ),
-                                      borderRadius: BorderRadius.circular(
-                                        8,
+                                      const SizedBox(
+                                        width: 8,
                                       ),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        SvgPicture.asset(
-                                          '${Config.settingsAssetsPath}/light/wallet.svg',
+                                      const Text(
+                                        'No wallet? Get it here',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        const Text(
-                                          'No wallet? Get it here',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              const WhyDoINeedWalletWidget(),
-                            ],
-                          );
-                  },
-                  orElse: () {
-                    return const SizedBox();
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            const WhyDoINeedWalletWidget(),
+                          ],
+                        );
+                },
+                orElse: () {
+                  return const SizedBox();
+                },
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: RoundedButton(
+                  text: 'Skip',
+                  backgroundColor: Colors.transparent,
+                  textColor: Colors.white,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  borderColor: ColorPalette.greyscale300,
+                  size: const Size(
+                    0,
+                    50,
+                  ),
+                  onPressed: () {
+                    nextScreenPush(
+                      context,
+                      const DReaderScaffold(),
+                    );
                   },
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: RoundedButton(
-                    text: 'Skip',
-                    backgroundColor: Colors.transparent,
-                    textColor: Colors.white,
-                    textStyle: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    borderColor: ColorPalette.greyscale300,
-                    size: const Size(
-                      0,
-                      50,
-                    ),
-                    onPressed: () {
-                      nextScreenPush(
-                        context,
-                        const DReaderScaffold(),
-                      );
+              ),
+              Expanded(
+                child: RoundedButton(
+                  text: ref.watch(isWalletAvailableProvider).maybeWhen(
+                    data: (data) {
+                      return data ? 'Connect' : 'Install';
+                    },
+                    orElse: () {
+                      return 'Connect';
                     },
                   ),
-                ),
-                Expanded(
-                  child: RoundedButton(
-                    text: ref.watch(isWalletAvailableProvider).maybeWhen(
-                      data: (data) {
-                        return data ? 'Connect' : 'Install';
-                      },
-                      orElse: () {
-                        return 'Connect';
-                      },
-                    ),
-                    isLoading: ref.watch(globalStateProvider).isLoading,
-                    backgroundColor: ColorPalette.dReaderYellow100,
-                    textColor: Colors.black,
-                    textStyle: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    size: const Size(
-                      0,
-                      50,
-                    ),
-                    onPressed: () async {
-                      await _handleConnectWallet(ref, context);
-                    },
+                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  backgroundColor: ColorPalette.dReaderYellow100,
+                  textColor: Colors.black,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
                   ),
+                  size: const Size(
+                    0,
+                    50,
+                  ),
+                  onPressed: () async {
+                    await _handleConnectWallet(ref, context);
+                  },
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -36,76 +36,73 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(
-            50,
+        extendBodyBehindAppBar: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(
+            56,
           ),
-          child: Padding(
-            padding: EdgeInsets.only(
+          child: Container(
+            margin: const EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.only(
               left: 16,
               right: 16,
             ),
-            child: Heading(),
+            child: const Heading(),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Consumer(
-            builder: (context, ref, child) {
-              return PageView(
-                controller: _pageController,
-                physics: ref.watch(signUpPageProvider) > 2
-                    ? const NeverScrollableScrollPhysics()
-                    : null,
-                onPageChanged: (value) {
-                  ref
-                      .read(signUpPageProvider.notifier)
-                      .update((state) => value);
-                },
-                children: [
-                  SignUpStep1(
-                    onSuccess: () {
+        body: Consumer(
+          builder: (context, ref, child) {
+            return PageView(
+              controller: _pageController,
+              physics: ref.watch(signUpPageProvider) > 2
+                  ? const NeverScrollableScrollPhysics()
+                  : null,
+              onPageChanged: (value) {
+                ref.read(signUpPageProvider.notifier).update((state) => value);
+              },
+              children: [
+                SignUpStep1(
+                  onSuccess: () {
+                    _pageController.animateToPage(
+                      1,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                ),
+                SignUpStep2(
+                  onSuccess: () {
+                    ref.read(signUpDataProvider.notifier).updateSucces(true);
+                    _pageController.animateToPage(
+                      2,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  onFail: (text) {
+                    showSnackBar(
+                      context: context,
+                      text: text,
+                      backgroundColor: ColorPalette.dReaderRed,
+                      milisecondsDuration: 2000,
+                    );
+                  },
+                ),
+                if (ref.watch(signUpDataProvider).isSuccess) ...[
+                  SignUpStep2Verification(
+                    handleNext: () {
                       _pageController.animateToPage(
-                        1,
+                        3,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,
                       );
                     },
                   ),
-                  SignUpStep2(
-                    onSuccess: () {
-                      ref.read(signUpDataProvider.notifier).updateSucces(true);
-                      _pageController.animateToPage(
-                        2,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                    onFail: (text) {
-                      showSnackBar(
-                        context: context,
-                        text: text,
-                        backgroundColor: ColorPalette.dReaderRed,
-                        milisecondsDuration: 2000,
-                      );
-                    },
-                  ),
-                  if (ref.watch(signUpDataProvider).isSuccess) ...[
-                    SignUpStep2Verification(
-                      handleNext: () {
-                        _pageController.animateToPage(
-                          3,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      },
-                    ),
-                    const SignUpStep3(),
-                  ],
+                  const SignUpStep3(),
                 ],
-              );
-            },
-          ),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -130,7 +127,7 @@ class Heading extends ConsumerWidget {
           height: 16,
           width: 16,
           colorFilter: const ColorFilter.mode(
-            ColorPalette.greyscale300,
+            ColorPalette.greyscale200,
             BlendMode.srcIn,
           ),
         ),
@@ -139,14 +136,14 @@ class Heading extends ConsumerWidget {
           title: 'Email & pass',
           color: ref.watch(signUpPageProvider) > 0
               ? Colors.white
-              : ColorPalette.greyscale300,
+              : ColorPalette.greyscale200,
         ),
         SvgPicture.asset(
           'assets/icons/arrow_right.svg',
           height: 16,
           width: 16,
           colorFilter: const ColorFilter.mode(
-            ColorPalette.greyscale300,
+            ColorPalette.greyscale200,
             BlendMode.srcIn,
           ),
         ),
@@ -155,7 +152,7 @@ class Heading extends ConsumerWidget {
           title: 'Wallet',
           color: ref.watch(signUpPageProvider) > 2
               ? Colors.white
-              : ColorPalette.greyscale300,
+              : ColorPalette.greyscale200,
         ),
       ],
     );

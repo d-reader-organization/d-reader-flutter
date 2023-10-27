@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/discover_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
@@ -116,26 +117,38 @@ class DiscoverScrollView extends ConsumerWidget {
         }
         return true;
       },
-      child: CustomScrollView(
-        slivers: [
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: 1,
-              (context, index) {
-                return getListSliver(
-                  query: query,
-                  isDetailedView: isDetailedView,
-                  ref: ref,
-                );
-              },
+      child: RefreshIndicator(
+        onRefresh: () async {
+          if (scrollListType == ScrollListType.comicList) {
+            ref.invalidate(paginatedComicsProvider);
+          } else if (scrollListType == ScrollListType.issueList) {
+            ref.invalidate(paginatedIssuesProvider);
+          }
+          ref.invalidate(paginatedCreatorsProvider);
+        },
+        backgroundColor: ColorPalette.dReaderYellow100,
+        color: ColorPalette.appBackgroundColor,
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                childCount: 1,
+                (context, index) {
+                  return getListSliver(
+                    query: query,
+                    isDetailedView: isDetailedView,
+                    ref: ref,
+                  );
+                },
+              ),
             ),
-          ),
-          OnGoingBottomWidget(provider: provider),
-          NoMoreItemsWidget(
-            listenableProvider: listenableProvider,
-            query: query,
-          ),
-        ],
+            OnGoingBottomWidget(provider: provider),
+            NoMoreItemsWidget(
+              listenableProvider: listenableProvider,
+              query: query,
+            ),
+          ],
+        ),
       ),
     );
   }

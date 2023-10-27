@@ -1,4 +1,9 @@
+import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_list.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
@@ -7,115 +12,125 @@ import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends ConsumerWidget {
   const HomeView({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            MintingProgressWidget(),
-            Carousel(),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 12.0,
-                right: 12,
-                top: 8.0,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(carouselProvider);
+          ref.invalidate(comicsProvider);
+          ref.invalidate(comicIssuesProvider);
+          ref.invalidate(creatorProvider);
+        },
+        backgroundColor: ColorPalette.dReaderYellow100,
+        color: ColorPalette.appBackgroundColor,
+        child: const SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              MintingProgressWidget(),
+              Carousel(),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 12.0,
+                  right: 12,
+                  top: 8.0,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 24,
+                    ),
+                    SectionHeading(
+                      title: 'Popular Comics',
+                      initialTab: DiscoverTabViewEnum.comics,
+                      filter: FilterId.popular,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    ComicsListView(
+                      query: 'skip=0&take=12&filterTag=popular',
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    SectionHeading(
+                      title: 'New Episodes',
+                      initialTab: DiscoverTabViewEnum.issues,
+                      sort: SortByEnum.latest,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    ComicIssuesList(
+                      query: 'skip=0&take=12&sortTag=latest',
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    SectionHeading(
+                      title: 'Top Creators',
+                      initialTab: DiscoverTabViewEnum.creators,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    CreatorsGrid(query: 'skip=0&take=4'),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    SectionHeading(
+                      title: 'New Comics',
+                      initialTab: DiscoverTabViewEnum.comics,
+                      sort: SortByEnum.latest,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    ComicsListView(
+                      query: 'skip=0&take=12&sortTag=published&sortOrder=desc',
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    SectionHeading(
+                      title: 'Free Episodes',
+                      initialTab: DiscoverTabViewEnum.issues,
+                      filter: FilterId.free,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    ComicIssuesList(
+                      query: 'skip=0&take=20&filterTag=free',
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    SectionHeading(
+                      title: 'Spicy action',
+                      initialTab: DiscoverTabViewEnum.comics,
+                      sort: SortByEnum.viewers,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    ComicsListView(
+                      query:
+                          'skip=0&take=12&sortTag=viewers&sortOrder=desc&genreSlugs[]=action',
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 24,
-                  ),
-                  SectionHeading(
-                    title: 'Popular Comics',
-                    initialTab: DiscoverTabViewEnum.comics,
-                    filter: FilterId.popular,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  ComicsListView(
-                    query: 'skip=0&take=12&filterTag=popular',
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  SectionHeading(
-                    title: 'New Episodes',
-                    initialTab: DiscoverTabViewEnum.issues,
-                    sort: SortByEnum.latest,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  ComicIssuesList(
-                    query: 'skip=0&take=12&sortTag=latest',
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  SectionHeading(
-                    title: 'Top Creators',
-                    initialTab: DiscoverTabViewEnum.creators,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  CreatorsGrid(query: 'skip=0&take=4'),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  SectionHeading(
-                    title: 'New Comics',
-                    initialTab: DiscoverTabViewEnum.comics,
-                    sort: SortByEnum.latest,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  ComicsListView(
-                    query: 'skip=0&take=12&sortTag=published&sortOrder=desc',
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  SectionHeading(
-                    title: 'Free Episodes',
-                    initialTab: DiscoverTabViewEnum.issues,
-                    filter: FilterId.free,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  ComicIssuesList(
-                    query: 'skip=0&take=20&filterTag=free',
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  SectionHeading(
-                    title: 'Spicy action',
-                    initialTab: DiscoverTabViewEnum.comics,
-                    sort: SortByEnum.viewers,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  ComicsListView(
-                    query:
-                        'skip=0&take=12&sortTag=viewers&sortOrder=desc&genreSlugs[]=action',
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

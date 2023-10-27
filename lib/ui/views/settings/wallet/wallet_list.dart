@@ -172,129 +172,137 @@ class WalletListScreen extends ConsumerWidget {
                       const WhyDoINeedWalletWidget(),
                     ],
                   )
-                : ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      final walletName = data[index].label.isNotEmpty
-                          ? data[index].label
-                          : 'Wallet ${index + 1}';
-                      return GestureDetector(
-                        onTap: () {
-                          nextScreenPush(
-                            context,
-                            WalletInfoScreen(
-                              address: data[index].address,
-                              name: walletName,
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          margin: const EdgeInsets.only(bottom: 16),
-                          decoration: BoxDecoration(
-                            color: ColorPalette.greyscale400,
-                            borderRadius: BorderRadius.circular(
-                              8,
-                            ),
-                            border: Border.all(
-                              color: ref.watch(selectedWalletProvider) ==
-                                      data[index].address
-                                  ? ColorPalette.dReaderYellow100
-                                  : ColorPalette.greyscale400,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      walletName,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: topTextStyle,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      formatAddress(data[index].address, 4),
-                                      style: bottomTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 48,
-                                child: VerticalDivider(
-                                  color: ColorPalette.greyscale300,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ref
-                                            .watch(
-                                          accountInfoProvider(
-                                            address: data[index].address,
-                                          ),
-                                        )
-                                            .when(
-                                          data: (accountData) {
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
-                                                  style: bottomTextStyle,
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                          error: (error, stackTrace) {
-                                            return const SizedBox();
-                                          },
-                                          loading: () {
-                                            return const SizedBox();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _handleWalletSelect(
-                                            ref, data[index].address);
-                                      },
-                                      child: Icon(
-                                        ref.watch(selectedWalletProvider) ==
-                                                data[index].address
-                                            ? Icons.circle
-                                            : Icons.circle_outlined,
-                                        color:
-                                            ref.watch(selectedWalletProvider) ==
-                                                    data[index].address
-                                                ? ColorPalette.dReaderYellow100
-                                                : ColorPalette.greyscale300,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                : RefreshIndicator(
+                    onRefresh: () async {
+                      ref.invalidate(userWalletsProvider);
                     },
+                    backgroundColor: ColorPalette.dReaderYellow100,
+                    color: ColorPalette.appBackgroundColor,
+                    child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final walletName = data[index].label.isNotEmpty
+                            ? data[index].label
+                            : 'Wallet ${index + 1}';
+                        return GestureDetector(
+                          onTap: () {
+                            nextScreenPush(
+                              context,
+                              WalletInfoScreen(
+                                address: data[index].address,
+                                name: walletName,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            margin: const EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              color: ColorPalette.greyscale400,
+                              borderRadius: BorderRadius.circular(
+                                8,
+                              ),
+                              border: Border.all(
+                                color: ref.watch(selectedWalletProvider) ==
+                                        data[index].address
+                                    ? ColorPalette.dReaderYellow100
+                                    : ColorPalette.greyscale400,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        walletName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: topTextStyle,
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        formatAddress(data[index].address, 4),
+                                        style: bottomTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 48,
+                                  child: VerticalDivider(
+                                    color: ColorPalette.greyscale300,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ref
+                                              .watch(
+                                            accountInfoProvider(
+                                              address: data[index].address,
+                                            ),
+                                          )
+                                              .when(
+                                            data: (accountData) {
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
+                                                    style: bottomTextStyle,
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                            error: (error, stackTrace) {
+                                              return const SizedBox();
+                                            },
+                                            loading: () {
+                                              return const SizedBox();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _handleWalletSelect(
+                                              ref, data[index].address);
+                                        },
+                                        child: Icon(
+                                          ref.watch(selectedWalletProvider) ==
+                                                  data[index].address
+                                              ? Icons.circle
+                                              : Icons.circle_outlined,
+                                          color: ref.watch(
+                                                      selectedWalletProvider) ==
+                                                  data[index].address
+                                              ? ColorPalette.dReaderYellow100
+                                              : ColorPalette.greyscale300,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
           ),
           bottomNavigationBar: CustomTextButton(

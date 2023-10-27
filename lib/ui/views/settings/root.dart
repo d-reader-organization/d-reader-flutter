@@ -12,6 +12,7 @@ import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_list.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsRootView extends StatelessWidget {
   const SettingsRootView({
@@ -72,6 +73,7 @@ class SettingsRootView extends StatelessWidget {
               onTap: () {
                 openUrl(
                   Config.privacyPolicyUrl,
+                  LaunchMode.inAppWebView,
                 );
               },
             ),

@@ -47,12 +47,14 @@ class SocialRow extends StatelessWidget {
             ? FilledIcon(
                 iconData: FontAwesomeIcons.instagram,
                 url: creator.instagram,
+                shouldOpenApplication: true,
               )
             : const SizedBox(),
         creator.twitter.isNotEmpty
             ? FilledIcon(
                 iconData: FontAwesomeIcons.twitter,
                 url: creator.twitter,
+                shouldOpenApplication: true,
               )
             : const SizedBox(),
       ],

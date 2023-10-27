@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutView extends StatelessWidget {
   const AboutView({super.key});
@@ -60,14 +61,14 @@ class AboutView extends StatelessWidget {
             title: 'Help Center',
             leadingPath: '${Config.settingsAssetsPath}/light/info_square.svg',
             onTap: () {
-              openUrl(Config.helpCenterLink);
+              openUrl(Config.helpCenterLink, LaunchMode.inAppWebView);
             },
           ),
           SettingsCommonListTile(
             title: 'Privacy Policy',
             leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
             onTap: () {
-              openUrl(Config.privacyPolicyUrl);
+              openUrl(Config.privacyPolicyUrl, LaunchMode.inAppWebView);
             },
           ),
           const SettingsCommonListTile(
@@ -88,7 +89,7 @@ class AboutView extends StatelessWidget {
             ),
             leadingPath: '${Config.settingsAssetsPath}/light/twitter.svg',
             onTap: () {
-              openUrl(Config.twitterUrl);
+              openUrl(Config.twitterUrl, LaunchMode.externalApplication);
             },
           ),
           SettingsCommonListTile(
@@ -105,7 +106,7 @@ class AboutView extends StatelessWidget {
             ),
             leadingPath: '${Config.settingsAssetsPath}/light/discord.svg',
             onTap: () {
-              openUrl(Config.discordUrl);
+              openUrl(Config.discordUrl, LaunchMode.externalApplication);
             },
           ),
         ],

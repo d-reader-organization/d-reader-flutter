@@ -174,7 +174,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       ),
     );
     ref.invalidate(registerWalletToSocketEvents);
-    ref.read(registerWalletToSocketEvents);
     await Future.wait(
       [
         session.close(),

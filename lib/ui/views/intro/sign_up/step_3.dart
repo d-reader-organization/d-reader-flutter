@@ -72,6 +72,7 @@ class SignUpStep3 extends ConsumerWidget {
             children: [
               SvgPicture.asset(
                 '${Config.introAssetsPath}/wallet.svg',
+                fit: BoxFit.fitWidth,
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(

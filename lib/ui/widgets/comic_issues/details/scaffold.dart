@@ -721,59 +721,6 @@ class ReadButton extends ConsumerWidget {
   }
 }
 
-class CandyMachineStats extends ConsumerWidget {
-  final String address;
-  const CandyMachineStats({
-    super.key,
-    required this.address,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(candyMachineProvider(query: address));
-    return provider.when(data: (candyMachine) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const StatsInfo(title: 'ENDS IN', stats: ''
-              // stats: candyMachine?.endsAt != null
-              //     ? timeago.format(
-              //         DateTime.parse(candyMachine?.endsAt ?? ''),
-              //       )
-              //     : '∞',
-              ),
-          StatsInfo(
-            title: 'SUPPLY',
-            stats: candyMachine?.supply != null && candyMachine!.supply > 1000
-                ? '${candyMachine.supply / 1000}K'
-                : '${candyMachine?.supply}',
-          ),
-          StatsInfo(
-            title: 'MINTED',
-            stats: '${candyMachine?.itemsMinted}',
-          ),
-          const StatsInfo(
-            title: 'PRICE',
-            stats: '-.--◎',
-            // stats: candyMachine?.baseMintPrice != null
-            //     ? '${formatPrice(formatLamportPrice(candyMachine?.baseMintPrice) ?? 0)}◎'
-            //     : '-.--◎',
-            isLastItem: true,
-          ),
-        ],
-      );
-    }, error: (Object error, StackTrace stackTrace) {
-      Sentry.captureException(error, stackTrace: stackTrace);
-      return const Text('Something went wrong in candy machine stats');
-    }, loading: () {
-      return const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: SkeletonRow(),
-      );
-    });
-  }
-}
-
 class ListingStats extends ConsumerWidget {
   final ComicIssueModel issue;
   const ListingStats({

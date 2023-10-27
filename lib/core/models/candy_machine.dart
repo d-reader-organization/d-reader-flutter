@@ -16,7 +16,7 @@ class CandyMachineModel {
     return CandyMachineModel(
         address: json['address'],
         supply: json['supply'],
-        itemsMinted: json['itemsMinted'],
+        itemsMinted: json['itemsMinted'] ?? 0,
         groups: json['groups'] != null
             ? List.from(
                 json['groups'].map(

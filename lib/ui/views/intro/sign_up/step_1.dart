@@ -74,6 +74,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
       children: [
         SvgPicture.asset(
           '${Config.introAssetsPath}/username.svg',
+          fit: BoxFit.fitWidth,
         ),
         const Padding(
           padding: EdgeInsets.symmetric(

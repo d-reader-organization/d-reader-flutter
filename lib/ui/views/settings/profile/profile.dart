@@ -3,10 +3,8 @@ import 'dart:io' show File;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -84,7 +82,6 @@ class ProfileView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(myUserProvider);
-    final globalHook = useGlobalState();
     return SettingsScaffold(
       appBarTitle: 'My Profile',
       bottomNavigationBar: Consumer(
@@ -255,62 +252,6 @@ class ProfileView extends HookConsumerWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  ref.read(environmentProvider).solanaCluster ==
-                              SolanaCluster.devnet.value &&
-                          ref.read(environmentProvider).publicKey != null
-                      ? SettingsCommonListTile(
-                          title: 'Airdrop \$SOL',
-                          leadingPath:
-                              '${Config.settingsAssetsPath}/light/arrow_down.svg',
-                          overrideColor:
-                              ref.watch(globalStateProvider).isLoading
-                                  ? ColorPalette.greyscale300
-                                  : ColorPalette.dReaderGreen,
-                          overrideTrailing: globalHook.value.isLoading
-                              ? const SizedBox(
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(
-                                    color: ColorPalette.greyscale300,
-                                  ),
-                                )
-                              : null,
-                          onTap: globalHook.value.isLoading
-                              ? null
-                              : () async {
-                                  globalHook.value = globalHook.value
-                                      .copyWith(isLoading: true);
-                                  final lastAddress = ref
-                                      .read(environmentProvider)
-                                      .publicKey
-                                      ?.toBase58();
-                                  final airdropResult = await ref
-                                      .read(solanaProvider.notifier)
-                                      .requestAirdrop(lastAddress ?? '');
-
-                                  globalHook.value = globalHook.value
-                                      .copyWith(isLoading: false);
-                                  if (context.mounted) {
-                                    bool isSuccessful =
-                                        airdropResult?.contains('SOL') ?? false;
-                                    final Color snackBarColor = isSuccessful
-                                        ? ColorPalette.dReaderGreen
-                                        : ColorPalette.dReaderRed;
-                                    return displaySnackBar(
-                                      context: context,
-                                      color: snackBarColor,
-                                      text: isSuccessful
-                                          ? airdropResult ??
-                                              "Successfully airdropped 2 \$SOL "
-                                          : 'Failed to airdrop 2 \$SOL',
-                                      duration: const Duration(
-                                        seconds: 2,
-                                      ),
-                                    );
-                                  }
-                                },
-                        )
-                      : const SizedBox(),
                   const Divider(
                     thickness: 1,
                     color: ColorPalette.greyscale500,

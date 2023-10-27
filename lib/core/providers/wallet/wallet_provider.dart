@@ -42,7 +42,9 @@ final registerWalletToSocketEvents = Provider.autoDispose(
     socket.connect();
     final String address =
         ref.read(environmentProvider).publicKey?.toBase58() ?? '';
-
+    if (address.isEmpty) {
+      return;
+    }
     socket.on('wallet/$address/item-used', (data) {
       ref.invalidate(ownedIssuesProvider);
       ref.invalidate(nftProvider);

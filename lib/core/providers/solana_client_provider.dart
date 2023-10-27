@@ -281,14 +281,16 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
                 ? Config.rpcUrlDevnet
                 : Config.rpcUrlMainnet,
           );
-
-          final signedTx = SignedTx.fromBytes(
-            response.signedPayloads.first.toList(),
-          );
-          final sendTransactionResult = await client.rpcClient.sendTransaction(
-            signedTx.encode(),
-            preflightCommitment: Commitment.confirmed,
-          );
+          String sendTransactionResult = '';
+          for (final signedPayload in response.signedPayloads) {
+            final signedTx = SignedTx.fromBytes(
+              signedPayload.toList(),
+            );
+            sendTransactionResult = await client.rpcClient.sendTransaction(
+              signedTx.encode(),
+              preflightCommitment: Commitment.confirmed,
+            );
+          }
           ref.read(globalStateProvider.notifier).update(
                 (state) => state.copyWith(
                   isLoading: false,

@@ -5,8 +5,10 @@ import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue/provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
@@ -396,6 +398,7 @@ class BottomNavigation extends ConsumerWidget {
         await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
         final walletAddress =
             ref.read(environmentProvider).publicKey?.toBase58();
+        ref.invalidate(registerWalletToSocketEvents);
         candyMachineState = await ref.read(
           candyMachineProvider(
                   query:
@@ -429,6 +432,8 @@ class BottomNavigation extends ConsumerWidget {
         if (!isUserEligibleToMint && context.mounted) {
           return showSnackBar(
             context: context,
+            milisecondsDuration: 2000,
+            backgroundColor: ColorPalette.greyscale300,
             text:
                 'Wallet address ${formatAddress(walletAddress, 3)} is not eligible for minting',
           );
@@ -523,7 +528,7 @@ class BottomNavigation extends ConsumerWidget {
                           await _handleMint(context, ref);
                         },
                         text: 'Mint',
-                        price: issue.stats?.price,
+                        price: ref.watch(activeMintPrice),
                       ),
                     )
                   : issue.isSecondarySaleActive

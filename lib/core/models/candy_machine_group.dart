@@ -1,8 +1,7 @@
 import 'package:d_reader_flutter/core/models/wallet_group.dart';
 
 class CandyMachineGroupModel {
-  final double mintPrice;
-  final int itemsMinted, mintLimit, supply;
+  final int itemsMinted, mintLimit, mintPrice, supply;
   final String label, displayLabel, splTokenAddress;
   final DateTime? startDate, endDate;
   final bool isActive;
@@ -24,7 +23,7 @@ class CandyMachineGroupModel {
 
   factory CandyMachineGroupModel.fromJson(dynamic json) {
     return CandyMachineGroupModel(
-      mintPrice: double.tryParse('${json['mintPrice']}') ?? 0,
+      mintPrice: json['mintPrice'] ?? 0,
       itemsMinted: json['itemsMinted'] ?? 0,
       mintLimit: json['mintLimit'] ?? 0,
       supply: json['supply'] ?? 0,

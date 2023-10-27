@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/core/models/candy_machine.dart';
+import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
+import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
@@ -359,28 +362,79 @@ class BottomNavigation extends ConsumerWidget {
     required this.issue,
   });
 
+  Future<bool> _isWalletEligible({
+    required String walletAddress,
+    required CandyMachineGroupModel activeGroup,
+    required WidgetRef ref,
+    required BuildContext context,
+  }) async {
+    bool isUserEligibleToMint = activeGroup.wallet.isEligible;
+    if (!isUserEligibleToMint) {
+      final result = await ref.read(
+        candyMachineProvider(
+                query:
+                    'candyMachineAddress=${issue.activeCandyMachineAddress}${walletAddress.isNotEmpty ? '&walletAddress=$walletAddress' : ''}')
+            .future,
+      );
+      final newActiveGroup = getActiveGroup(result?.groups ?? []);
+      if (newActiveGroup != null &&
+          !newActiveGroup.wallet.isEligible &&
+          context.mounted) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   _handleMint(BuildContext context, WidgetRef ref) async {
     try {
       final currentWallet =
           ref.watch(environmentProvider).publicKey?.toBase58();
+      CandyMachineModel? candyMachineState =
+          ref.read(candyMachineStateProvider);
       if (currentWallet == null) {
         await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+        final walletAddress =
+            ref.read(environmentProvider).publicKey?.toBase58();
+        candyMachineState = await ref.read(
+          candyMachineProvider(
+                  query:
+                      'candyMachineAddress=${issue.activeCandyMachineAddress}${walletAddress != null && walletAddress.isNotEmpty ? '&walletAddress=$walletAddress' : ''}')
+              .future,
+        );
       }
-      final candyMachine = ref.read(candyMachineStateProvider);
-      if (context.mounted && candyMachine == null) {
+      if (context.mounted && candyMachineState == null) {
         return showSnackBar(
           context: context,
-          text: 'Failed to find active candy machine',
+          text: 'Failed to find candy machine',
           milisecondsDuration: 1500,
         );
       }
-      final activeGroup = getActiveGroup(candyMachine!.groups);
+      final activeGroup = getActiveGroup(candyMachineState!.groups);
       if (activeGroup == null && context.mounted) {
         return showSnackBar(
             context: context,
             text: 'There is no active mint',
             milisecondsDuration: 1500);
       }
+      if (context.mounted) {
+        final walletAddress =
+            ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+        bool isUserEligibleToMint = await _isWalletEligible(
+          walletAddress: walletAddress,
+          activeGroup: activeGroup!,
+          ref: ref,
+          context: context,
+        );
+        if (!isUserEligibleToMint && context.mounted) {
+          return showSnackBar(
+            context: context,
+            text:
+                'Wallet address ${formatAddress(walletAddress, 3)} is not eligible for minting',
+          );
+        }
+      }
+
       final mintResult = await ref.read(solanaProvider.notifier).mint(
             issue.activeCandyMachineAddress,
             activeGroup?.label,
@@ -408,9 +462,6 @@ class BottomNavigation extends ConsumerWidget {
         } else if (error is LowPowerModeException) {
           return triggerLowPowerModeDialog(context);
         }
-      }
-      if (context.mounted && error is NoWalletFoundException) {
-        _showWalkthroughDialog(context: context, ref: ref);
       }
     }
   }

@@ -126,8 +126,8 @@ class Body extends StatelessWidget {
     required this.nft,
   });
 
-  _handleNftOpen(BuildContext context, bool isSuccessful) {
-    if (isSuccessful) {
+  _handleNftOpen(BuildContext context, dynamic openResponse) {
+    if (openResponse is bool && openResponse) {
       return nextScreenPush(
         context,
         const OpenNftAnimation(),
@@ -137,7 +137,7 @@ class Body extends StatelessWidget {
       context: context,
       backgroundColor: ColorPalette.dReaderRed,
       milisecondsDuration: 2000,
-      text: 'Failed to open',
+      text: openResponse is String ? openResponse : 'Failed to open',
     );
   }
 
@@ -243,13 +243,13 @@ class Body extends StatelessWidget {
                             ),
                           );
                         }
-                        final isSuccessful =
+                        final result =
                             await ref.read(solanaProvider.notifier).useMint(
                                   nftAddress: nft.address,
                                   ownerAddress: nft.ownerAddress,
                                 );
                         if (context.mounted) {
-                          _handleNftOpen(context, isSuccessful);
+                          _handleNftOpen(context, result);
                         }
                       },
                     ),

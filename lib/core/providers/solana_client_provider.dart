@@ -380,7 +380,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return decodedTX.resign(signature);
   }
 
-  Future<bool> useMint({
+  Future<dynamic> useMint({
     required String nftAddress,
     required String ownerAddress,
   }) async {

@@ -5,7 +5,7 @@ Future<void> openUrl(String url) async {
   if (await canLaunchUrl(parsedUrl)) {
     await launchUrl(
       parsedUrl,
-      mode: LaunchMode.externalNonBrowserApplication,
+      mode: LaunchMode.platformDefault,
     );
   } else {
     throw 'Could not open the url: $url';

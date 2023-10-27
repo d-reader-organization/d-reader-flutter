@@ -39,7 +39,8 @@ abstract class Config {
   static const String introAssetsPath = 'assets/icons/intro';
   static const String faviconPath = 'assets/icons/favicon.ico';
   static const String hasSeenInitialKey = 'hasSeenInitial';
-  static const String helpCenterLink = "https://forms.gle/AeoduUiBaXzB1DNm8";
+  static const String helpCenterLink =
+      "https://docs.google.com/forms/d/e/1FAIpQLSefq-KgefpgmINtOUxJIKEBppcMQL4W7F8RLXreaLdHnFOZsg/viewform";
   static const String privacyPolicyUrl =
       "https://github.com/d-reader-organization/.github/blob/main/PRIVACY_POLICY";
   static const String twitterUrl = 'https://twitter.com/dReaderApp';

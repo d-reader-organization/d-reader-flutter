@@ -432,9 +432,11 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
       },
       error: (err, stack) {
         Sentry.captureException(err, stackTrace: stack);
-        return const Text(
-          'Something went wrong',
-          style: TextStyle(color: Colors.red),
+        return const Center(
+          child: Text(
+            'Failed to fetch data',
+            style: TextStyle(color: Colors.red),
+          ),
         );
       },
       loading: () => const SizedBox(),

@@ -10,7 +10,7 @@ class WhatIsWalletView extends StatefulWidget {
 
 class _WhatIsWalletViewState extends State<WhatIsWalletView> {
   String whatIsAWalletText = '';
-
+  String whyDoINeedAWalletText = '';
   @override
   void initState() {
     super.initState();
@@ -18,13 +18,19 @@ class _WhatIsWalletViewState extends State<WhatIsWalletView> {
   }
 
   Future<void> _initData() async {
-    whatIsAWalletText = await loadAsset();
+    whatIsAWalletText = await loadWhatIsAWalletAsset();
+    whyDoINeedAWalletText = await loadWhyDoINeedAWalletAsset();
     setState(() {});
   }
 
-  Future<String> loadAsset() async {
-    return await DefaultAssetBundle.of(context)
+  Future<String> loadWhatIsAWalletAsset() async {
+    return DefaultAssetBundle.of(context)
         .loadString('assets/res/what_is_a_wallet.txt');
+  }
+
+  Future<String> loadWhyDoINeedAWalletAsset() async {
+    return DefaultAssetBundle.of(context)
+        .loadString('assets/res/why_do_i_need_a_wallet.txt');
   }
 
   @override
@@ -63,6 +69,26 @@ class _WhatIsWalletViewState extends State<WhatIsWalletView> {
                 ),
                 SelectableText(
                   whatIsAWalletText,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                const Text(
+                  'Why do I need a wallet?',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                SelectableText(
+                  whyDoINeedAWalletText,
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white,

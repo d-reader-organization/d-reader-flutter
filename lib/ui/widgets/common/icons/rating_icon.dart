@@ -73,11 +73,7 @@ class RatingIcon extends ConsumerWidget {
         ),
       ),
       onSubmit: () {
-        _triggerSendVerificationEmail(
-          context: context,
-          ref: ref,
-          isResending: false,
-        );
+        Navigator.pop(context);
       },
     );
   }

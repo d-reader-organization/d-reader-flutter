@@ -70,10 +70,11 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.zero,
       children: [
         SvgPicture.asset(
           '${Config.introAssetsPath}/username.svg',
-          height: 320,
+          fit: BoxFit.fitWidth,
         ),
         const Padding(
           padding: EdgeInsets.symmetric(
@@ -93,59 +94,62 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
         const SizedBox(
           height: 16,
         ),
-        Form(
-          key: _usernameFormKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomTextField(
-                labelText: 'Username',
-                hintText: 'e.g Bun-Bun',
-                controller: _usernameController,
-                onValidate: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Field cannot be empty.';
-                  } else if (value.length < 2 || value.length > 20) {
-                    return 'Username must be 3 to 20 characters long.';
-                  } else if (!usernameRegex.hasMatch(value)) {
-                    return 'Letters, numbers and dashes are allowed.';
-                  }
-                  return null;
-                },
-              ),
-              const Text(
-                'Must be 2 to 20 characters long. Letters, numbers and dashes are allowed.',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: ColorPalette.greyscale200,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            key: _usernameFormKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CustomTextField(
+                  labelText: 'Username',
+                  hintText: 'e.g Bun-Bun',
+                  controller: _usernameController,
+                  onValidate: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Field cannot be empty.';
+                    } else if (value.length < 2 || value.length > 20) {
+                      return 'Username must be 3 to 20 characters long.';
+                    } else if (!usernameRegex.hasMatch(value)) {
+                      return 'Letters, numbers and dashes are allowed.';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              const SizedBox(
-                height: 48,
-              ),
-              RoundedButton(
-                text: 'Next',
-                isLoading: ref.watch(globalStateProvider).isLoading,
-                padding: 0,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  letterSpacing: .2,
+                const Text(
+                  'Must be 2 to 20 characters long. Letters, numbers and dashes are allowed.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: ColorPalette.greyscale200,
+                  ),
                 ),
-                size: const Size(
-                  double.infinity,
-                  50,
+                const SizedBox(
+                  height: 48,
                 ),
-                onPressed: () async {
-                  await _handleNext();
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-            ],
+                RoundedButton(
+                  text: 'Next',
+                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  padding: 0,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                    letterSpacing: .2,
+                  ),
+                  size: const Size(
+                    double.infinity,
+                    50,
+                  ),
+                  onPressed: () async {
+                    await _handleNext();
+                  },
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+              ],
+            ),
           ),
         ),
       ],

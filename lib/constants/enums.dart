@@ -10,4 +10,5 @@ enum WalkthroughKeys {
   lowPowerMode,
   verifyEmail,
   unwrap,
+  multipleWallet,
 }

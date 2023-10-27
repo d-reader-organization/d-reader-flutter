@@ -25,6 +25,7 @@ class IssueAbout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final walletAddress = ref.watch(environmentProvider).publicKey?.toBase58();
     return NotificationListener(
       onNotification: (notification) {
         return true;
@@ -39,7 +40,7 @@ class IssueAbout extends ConsumerWidget {
               future: ref.read(
                 candyMachineProvider(
                         query:
-                            'candyMachineAddress=${issue.activeCandyMachineAddress}&walletAddress=${ref.watch(environmentProvider).publicKey?.toBase58()}')
+                            'candyMachineAddress=${issue.activeCandyMachineAddress}${walletAddress != null && walletAddress.isNotEmpty ? '&walletAddress=$walletAddress' : ''}')
                     .future,
               ),
               builder: (context, snapshot) {

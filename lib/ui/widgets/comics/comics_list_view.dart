@@ -39,10 +39,12 @@ class ComicsListView extends ConsumerWidget {
           ),
         );
       },
-      error: (err, stack) => const Text(
-        "Couldn't fetch the data",
-        style: TextStyle(color: Colors.red),
-      ),
+      error: (err, stack) {
+        return const Text(
+          "Couldn't fetch the data",
+          style: TextStyle(color: Colors.red),
+        );
+      },
       loading: () => SizedBox(
         height: 226,
         child: ListView.builder(

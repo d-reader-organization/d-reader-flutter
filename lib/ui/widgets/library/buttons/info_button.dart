@@ -13,7 +13,7 @@ class InfoButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final double width = screenWidth >= 360 ? 80 : 100;
+    final double width = screenWidth >= 360 ? 100 : 124;
     return GestureDetector(
       onTap: isLoading ? null : onTap,
       child: Container(
@@ -43,6 +43,7 @@ class InfoButton extends StatelessWidget {
               )
             : const Text(
                 'Info',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,

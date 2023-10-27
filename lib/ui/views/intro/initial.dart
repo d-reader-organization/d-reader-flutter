@@ -13,27 +13,34 @@ class InitialIntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Column(
+      extendBodyBehindAppBar: true,
+      body: Column(
         children: [
           Expanded(
-            flex: 2,
-            child: IntroImage(
-              imagePath: '${Config.introAssetsPath}/splash_1.svg',
+            flex: 6,
+            child: Container(
+              margin: const EdgeInsets.only(top: 24),
+              child: SvgPicture.asset(
+                '${Config.introAssetsPath}/welcome.svg',
+                fit: BoxFit.fitWidth,
+              ),
             ),
           ),
-          Expanded(
-            flex: 1,
+          const Expanded(
+            flex: 4,
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Join the comic revolution!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
+                      height: 1.2,
                       fontSize: 32,
                       fontWeight: FontWeight.w700,
                     ),
@@ -88,37 +95,6 @@ class InitialIntroScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class IntroImage extends StatelessWidget {
-  final String imagePath;
-  const IntroImage({
-    super.key,
-    required this.imagePath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          foregroundDecoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF565441),
-                Color.fromRGBO(86, 84, 65, 0),
-              ],
-            ),
-          ),
-        ),
-        SvgPicture.asset(
-          imagePath,
-        )
-      ],
     );
   }
 }

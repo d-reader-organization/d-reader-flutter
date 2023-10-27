@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
+import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';
@@ -82,13 +83,22 @@ class ListingItem extends ConsumerWidget {
                 ),
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/icons/profile_bold.svg',
-                      colorFilter: const ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                    listing.seller.avatar != null &&
+                            listing.seller.avatar!.isNotEmpty
+                        ? CircleAvatar(
+                            maxRadius: 24,
+                            backgroundColor: ColorPalette.greyscale500,
+                            child: CommonCachedImage(
+                              imageUrl: listing.seller.avatar!,
+                            ),
+                          )
+                        : SvgPicture.asset(
+                            'assets/icons/profile_bold.svg',
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
+                          ),
                     const SizedBox(
                       width: 4,
                     ),

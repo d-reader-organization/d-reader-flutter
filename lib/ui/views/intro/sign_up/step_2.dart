@@ -67,10 +67,11 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.zero,
       children: [
         SvgPicture.asset(
-          '${Config.introAssetsPath}/password.svg',
-          height: 320,
+          '${Config.introAssetsPath}/email_pass.svg',
+          fit: BoxFit.fitWidth,
         ),
         const Padding(
           padding: EdgeInsets.symmetric(
@@ -90,124 +91,127 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
         const SizedBox(
           height: 16,
         ),
-        Form(
-          key: _step2FormKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomTextField(
-                labelText: 'Email',
-                hintText: 'Enter you email',
-                onValidate: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Field cannot be empty.';
-                  } else if (!EmailValidator.validate(value)) {
-                    return 'Invalid email.';
-                  }
-                  return null;
-                },
-                controller: _emailController,
-              ),
-              CustomTextField(
-                labelText: 'Password',
-                hintText: 'Set your password',
-                controller: _passwordController,
-                obscureText: ref.watch(obscureTextProvider),
-                onValidate: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Field cannot be empty.';
-                  } else if (value.length < 8) {
-                    return 'Password has to be minimum 8 characters length.';
-                  } else if (!passwordRegex.hasMatch(value)) {
-                    return 'At least 1 upper, lower case letter and 1 number.';
-                  }
-                  return null;
-                },
-                suffix: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      ref
-                          .read(obscureTextProvider.notifier)
-                          .update((state) => !state);
-                    },
-                    child: Icon(
-                      ref.watch(obscureTextProvider)
-                          ? FontAwesomeIcons.solidEye
-                          : FontAwesomeIcons.solidEyeSlash,
-                      color: ColorPalette.greyscale300,
-                      size: 20,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            key: _step2FormKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CustomTextField(
+                  labelText: 'Email',
+                  hintText: 'Enter you email',
+                  onValidate: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Field cannot be empty.';
+                    } else if (!EmailValidator.validate(value)) {
+                      return 'Invalid email.';
+                    }
+                    return null;
+                  },
+                  controller: _emailController,
+                ),
+                CustomTextField(
+                  labelText: 'Password',
+                  hintText: 'Set your password',
+                  controller: _passwordController,
+                  obscureText: ref.watch(obscureTextProvider),
+                  onValidate: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Field cannot be empty.';
+                    } else if (value.length < 8) {
+                      return 'Password has to be minimum 8 characters length.';
+                    } else if (!passwordRegex.hasMatch(value)) {
+                      return 'At least 1 upper, lower case letter and 1 number.';
+                    }
+                    return null;
+                  },
+                  suffix: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(obscureTextProvider.notifier)
+                            .update((state) => !state);
+                      },
+                      child: Icon(
+                        ref.watch(obscureTextProvider)
+                            ? FontAwesomeIcons.solidEye
+                            : FontAwesomeIcons.solidEyeSlash,
+                        color: ColorPalette.greyscale300,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Text(
-                '8 characters minimum. Must contain at least 1 lowercase, 1 uppercase character and 1 number.',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: ColorPalette.greyscale200,
+                const SizedBox(
+                  height: 8,
                 ),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              RichText(
-                text: const TextSpan(
-                  text: 'By clicking on confirm you accept our ',
+                const Text(
+                  '8 characters minimum. Must contain at least 1 lowercase, 1 uppercase character and 1 number.',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: ColorPalette.greyscale200,
                   ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Privacy Policy',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: ColorPalette.dReaderYellow100,
-                      ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                RichText(
+                  text: const TextSpan(
+                    text: 'By clicking on confirm you accept our ',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: ColorPalette.greyscale200,
                     ),
-                  ],
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Privacy Policy',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.dReaderYellow100,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 48,
-              ),
-              RoundedButton(
-                text: 'Confirm',
-                padding: 0,
-                isLoading: ref.watch(globalStateProvider).isLoading,
-                textStyle: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  letterSpacing: .2,
+                const SizedBox(
+                  height: 48,
                 ),
-                size: const Size(
-                  double.infinity,
-                  50,
+                RoundedButton(
+                  text: 'Confirm',
+                  padding: 0,
+                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  textStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                    letterSpacing: .2,
+                  ),
+                  size: const Size(
+                    double.infinity,
+                    50,
+                  ),
+                  onPressed: () async {
+                    if (_step2FormKey.currentState!.validate()) {
+                      ref
+                          .read(signUpDataProvider.notifier)
+                          .updateEmailAndPassword(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                          );
+                      await _handleConfirm();
+                    }
+                  },
                 ),
-                onPressed: () async {
-                  if (_step2FormKey.currentState!.validate()) {
-                    ref
-                        .read(signUpDataProvider.notifier)
-                        .updateEmailAndPassword(
-                          email: _emailController.text.trim(),
-                          password: _passwordController.text.trim(),
-                        );
-                    await _handleConfirm();
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-            ],
+                const SizedBox(
+                  height: 16,
+                ),
+              ],
+            ),
           ),
         ),
       ],

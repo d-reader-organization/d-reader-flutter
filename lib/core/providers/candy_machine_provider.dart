@@ -40,9 +40,7 @@ Future<CandyMachineModel?> candyMachine(
   if (result != null) {
     ref.read(candyMachineStateProvider.notifier).update((state) => result);
     final activeGroup = getActiveGroup(result.groups);
-    ref
-        .read(activeMintPrice.notifier)
-        .update((state) => activeGroup?.mintPrice ?? 0);
+    ref.read(activeCandyMachineGroup.notifier).update((state) => activeGroup);
     ref
         .read(expandedCandyMachineGroup.notifier)
         .update((state) => activeGroup?.label ?? '');

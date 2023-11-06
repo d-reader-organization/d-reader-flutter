@@ -219,23 +219,28 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       return 'Candy machine not found.';
     }
     String? minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
-    if (minterAddress == null) {
-      final result = await authorizeAndSignMessage();
-      minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
-      if (result != 'OK' || minterAddress == null) {
-        return 'Select/Connect wallet first';
+    try {
+      if (minterAddress == null) {
+        final result = await authorizeAndSignMessage();
+        minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
+        if (result != 'OK' || minterAddress == null) {
+          return 'Select/Connect wallet first';
+        }
       }
+
+      final List<dynamic> encodedNftTransactions =
+          await ref.read(transactionRepositoryProvider).mintOneTransaction(
+                candyMachineAddress: candyMachineAddress,
+                minterAddress: minterAddress,
+                label: label,
+              );
+      if (encodedNftTransactions.isEmpty) {
+        return false;
+      }
+      return _signAndSendMint(encodedNftTransactions);
+    } catch (exception) {
+      rethrow;
     }
-    final List<dynamic> encodedNftTransactions =
-        await ref.read(transactionRepositoryProvider).mintOneTransaction(
-              candyMachineAddress: candyMachineAddress,
-              minterAddress: minterAddress,
-              label: label,
-            );
-    if (encodedNftTransactions.isEmpty) {
-      return false;
-    }
-    return _signAndSendMint(encodedNftTransactions);
   }
 
   Future<dynamic> _signAndSendMint(List encodedNftTransactions) async {

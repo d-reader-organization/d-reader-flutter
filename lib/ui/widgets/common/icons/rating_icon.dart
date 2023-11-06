@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
@@ -124,9 +125,21 @@ class RatingIcon extends ConsumerWidget {
       onTap: (issueId != null || comicSlug != null)
           ? () async {
               UserModel? user = ref.read(environmentProvider).user;
-              if (user != null && !user.isEmailVerified && context.mounted) {
-                return _showVerificationWalkthroughDialog(
-                    context: context, ref: ref);
+              if (user != null && !user.isEmailVerified) {
+                final result = await ref.read(userRepositoryProvider).myUser();
+                final bool isVerified =
+                    result != null && result.isEmailVerified;
+                if (!isVerified && context.mounted) {
+                  return _showVerificationWalkthroughDialog(
+                    context: context,
+                    ref: ref,
+                  );
+                }
+                ref.read(environmentProvider.notifier).updateEnvironmentState(
+                      EnvironmentStateUpdateInput(
+                        user: result,
+                      ),
+                    );
               }
               if (context.mounted) {
                 await _triggerRatingDialog(context: context, ref: ref);

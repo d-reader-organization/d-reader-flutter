@@ -388,6 +388,18 @@ class BottomNavigation extends ConsumerWidget {
     return true;
   }
 
+  _checkIsVerifiedEmail({required WidgetRef ref}) async {
+    final envUser = ref.read(environmentProvider).user;
+
+    if (envUser != null && !envUser.isEmailVerified) {
+      final user = await ref.read(myUserProvider.future);
+      if (user != null && !user.isEmailVerified) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   _handleMint(BuildContext context, WidgetRef ref) async {
     try {
       final currentWallet =
@@ -420,12 +432,18 @@ class BottomNavigation extends ConsumerWidget {
             text: 'There is no active mint',
             milisecondsDuration: 1500);
       }
+      if (activeGroup!.label == dFreeLabel) {
+        bool isVerified = await _checkIsVerifiedEmail(ref: ref);
+        if (!isVerified && context.mounted) {
+          return triggerVerificationDialog(context, ref);
+        }
+      }
       if (context.mounted) {
         final walletAddress =
             ref.read(environmentProvider).publicKey?.toBase58() ?? '';
         bool isUserEligibleToMint = await _isWalletEligible(
           walletAddress: walletAddress,
-          activeGroup: activeGroup!,
+          activeGroup: activeGroup,
           ref: ref,
           context: context,
         );
@@ -442,10 +460,11 @@ class BottomNavigation extends ConsumerWidget {
 
       final mintResult = await ref.read(solanaProvider.notifier).mint(
             issue.activeCandyMachineAddress,
-            activeGroup?.label,
+            activeGroup.label,
           );
       if (context.mounted) {
         if (mintResult is bool && mintResult) {
+          ref.invalidate(nftsProvider);
           nextScreenPush(
             context,
             const MintLoadingAnimation(),
@@ -467,6 +486,12 @@ class BottomNavigation extends ConsumerWidget {
         } else if (error is LowPowerModeException) {
           return triggerLowPowerModeDialog(context);
         }
+        showSnackBar(
+          context: context,
+          text: error is BadRequestException ? error.cause : error.toString(),
+          milisecondsDuration: 2000,
+          backgroundColor: ColorPalette.dReaderRed,
+        );
       }
     }
   }
@@ -528,7 +553,8 @@ class BottomNavigation extends ConsumerWidget {
                           await _handleMint(context, ref);
                         },
                         text: 'Mint',
-                        price: ref.watch(activeMintPrice),
+                        price:
+                            ref.watch(activeCandyMachineGroup)?.mintPrice ?? 0,
                       ),
                     )
                   : issue.isSecondarySaleActive

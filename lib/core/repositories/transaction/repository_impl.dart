@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/repositories/transaction/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -86,10 +87,13 @@ class TransactionRepositoryImpl implements TransactionRepository {
             (value) => value.data,
           );
       return result ?? [];
-    } catch (error) {
-      throw Exception(error is DioException
-          ? error.response?.data?.toString()
-          : error.toString());
+    } catch (exception) {
+      if (exception is DioException) {
+        final message = exception.response?.data['message'] ??
+            exception.response?.data.toString();
+        throw BadRequestException(message);
+      }
+      throw Exception(exception.toString());
     }
   }
 

@@ -11,4 +11,5 @@ enum WalkthroughKeys {
   verifyEmail,
   unwrap,
   multipleWallet,
+  firstMint,
 }

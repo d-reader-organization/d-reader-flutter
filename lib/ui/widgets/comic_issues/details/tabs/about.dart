@@ -294,9 +294,11 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                     ],
                   ),
                   SolanaPrice(
-                    price: formatPriceWithSignificant(
-                      candyMachineGroup.mintPrice.round(),
-                    ),
+                    price: candyMachineGroup.mintPrice > 0
+                        ? formatPriceWithSignificant(
+                            candyMachineGroup.mintPrice.round(),
+                          )
+                        : null,
                   )
                 ],
               ),

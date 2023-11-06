@@ -21,7 +21,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: Xr3NVe5tBpEJb8RFTiGUrm8EmYqxELTGx5QAjDd8e1R
+  address: 47dHu4oNfRW7eXFacet1CGUtuJ9wpS2ZzVECT6K1ij49
   media:
     - purpose: icon
       uri: ./512x512_rounded.png
@@ -43,7 +43,7 @@ release:
       long_description: >-
         Platform for discovering, trading, collecting, and reading digital
         graphic novels
-      new_in_version: Fix websocket connection issues
+      new_in_version: Request user to verify account before mint
       saga_features: Exclusive early access, free/discounted collectible comics
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader

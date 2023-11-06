@@ -1,7 +1,11 @@
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dialogs/walkthrough_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart' show WidgetRef;
 
 triggerWalkthroughDialogIfNeeded({
   required BuildContext context,
@@ -10,13 +14,14 @@ triggerWalkthroughDialogIfNeeded({
   required String subtitle,
   required String assetPath,
   required Function() onSubmit,
+  int durationInMiliseconds = 850,
   Widget? bottomWidget,
 }) {
   final localStore = LocalStore.instance;
   final isAlreadyshown = localStore.get(key) != null;
   if (!isAlreadyshown) {
     return Future.delayed(
-      const Duration(milliseconds: 850),
+      Duration(milliseconds: durationInMiliseconds),
       () {
         return triggerWalkthroughDialog(
           context: context,
@@ -67,6 +72,26 @@ triggerLowPowerModeDialog(BuildContext context) {
         'Your device is in low power mode. Deactivate it to enable connection and signing',
     onSubmit: () {
       Navigator.pop(context);
+    },
+  );
+}
+
+triggerVerificationDialog(BuildContext context, WidgetRef ref) {
+  return triggerWalkthroughDialog(
+    context: context,
+    title: 'Verify your email',
+    subtitle:
+        'This sale is currently only available for new verified users. To become eligible make sure to verify your email. Don\'t forget to check your spam!',
+    assetPath: '$walkthroughAssetsPath/verify_email.jpg',
+    onSubmit: () {
+      ref.read(requestEmailVerificationProvider.future);
+      Navigator.pop(context);
+      showSnackBar(
+        context: context,
+        text: 'Verification email has been sent.',
+        milisecondsDuration: 2000,
+        backgroundColor: ColorPalette.dReaderGreen,
+      );
     },
   );
 }

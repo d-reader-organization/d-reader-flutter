@@ -5,7 +5,7 @@ class CandyMachineGroupModel {
   final String label, displayLabel, splTokenAddress;
   final DateTime? startDate, endDate;
   final bool isActive;
-  final WalletGroupModel wallet;
+  final WalletGroupModel? wallet;
 
   CandyMachineGroupModel({
     required this.mintPrice,
@@ -18,7 +18,7 @@ class CandyMachineGroupModel {
     required this.startDate,
     required this.endDate,
     required this.isActive,
-    required this.wallet,
+    this.wallet,
   });
 
   factory CandyMachineGroupModel.fromJson(dynamic json) {
@@ -41,9 +41,11 @@ class CandyMachineGroupModel {
             )
           : null,
       isActive: json['isActive'],
-      wallet: WalletGroupModel.fromJson(
-        json['wallet'],
-      ),
+      wallet: json['wallet'] != null
+          ? WalletGroupModel.fromJson(
+              json['wallet'],
+            )
+          : null,
     );
   }
 }

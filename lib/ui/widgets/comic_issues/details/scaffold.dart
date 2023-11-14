@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
@@ -370,7 +371,10 @@ class BottomNavigation extends ConsumerWidget {
     required WidgetRef ref,
     required BuildContext context,
   }) async {
-    bool isUserEligibleToMint = activeGroup.wallet.isEligible;
+    if (activeGroup.wallet == null) {
+      return false;
+    }
+    bool isUserEligibleToMint = activeGroup.wallet!.isEligible;
     if (!isUserEligibleToMint) {
       final result = await ref.read(
         candyMachineProvider(
@@ -380,7 +384,7 @@ class BottomNavigation extends ConsumerWidget {
       );
       final newActiveGroup = getActiveGroup(result?.groups ?? []);
       if (newActiveGroup != null &&
-          !newActiveGroup.wallet.isEligible &&
+          !newActiveGroup.wallet!.isEligible &&
           context.mounted) {
         return false;
       }
@@ -550,7 +554,20 @@ class BottomNavigation extends ConsumerWidget {
                       child: TransactionButton(
                         isLoading: ref.watch(globalStateProvider).isLoading,
                         onPressed: () async {
-                          await _handleMint(context, ref);
+                          await triggerWalkthroughDialogIfNeeded(
+                            context: context,
+                            key: WalkthroughKeys.firstMint.name,
+                            title: 'Caution',
+                            subtitle:
+                                'If you are using Phantom make sure that the wallet selected withing dReader under Settings -> Wallets is also selected withing the Phantom mobile wallet application',
+                            assetPath: '$walkthroughAssetsPath/add.jpg',
+                            onSubmit: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                          if (context.mounted) {
+                            await _handleMint(context, ref);
+                          }
                         },
                         text: 'Mint',
                         price:
@@ -680,8 +697,9 @@ class TransactionButton extends StatelessWidget {
                   height: 10,
                 )
               : SolanaPrice(
-                  price:
-                      price != null ? formatPriceWithSignificant(price!) : null,
+                  price: price != null && price! > 0
+                      ? formatPriceWithSignificant(price!)
+                      : null,
                   textColor: Colors.black,
                 ),
         ],

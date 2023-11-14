@@ -21,7 +21,7 @@ String formatDateInRelative(DateTime? date) {
   const secondsPerMinute = 60;
 
   if (difference.inDays > 0) {
-    final hoursLeft = difference.inHours - hoursPerDay;
+    final hoursLeft = difference.inHours - (hoursPerDay * difference.inDays);
     return '${difference.inDays}d ${hoursLeft}h';
   } else if (difference.inHours > 0) {
     final minutesLeft =

@@ -326,7 +326,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'You minted: ${candyMachineGroup.wallet.itemsMinted}/${candyMachineGroup.wallet.supply ?? '∞'}',
+                        'You minted: ${candyMachineGroup.wallet?.itemsMinted ?? 0}/${candyMachineGroup.wallet?.supply ?? '∞'}',
                         style: const TextStyle(
                           fontSize: 14,
                           color: ColorPalette.greyscale100,

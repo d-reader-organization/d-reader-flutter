@@ -82,6 +82,8 @@ class ChangeNetworkView extends ConsumerWidget {
         ref.invalidate(comicIssuesProvider);
         ref.invalidate(creatorsProvider);
         ref.invalidate(carouselProvider);
+        ref.invalidate(paginatedIssuesProvider);
+        ref.invalidate(paginatedComicsProvider);
         return showSnackBar(
           context: context,
           text: snackbarText,

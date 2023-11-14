@@ -11,7 +11,7 @@ class WalletGroupModel {
 
   factory WalletGroupModel.fromJson(dynamic json) {
     return WalletGroupModel(
-      itemsMinted: json['itemsMinted'],
+      itemsMinted: json['itemsMinted'] ?? 0,
       supply: json['supply'],
       isEligible: json['isEligible'],
     );

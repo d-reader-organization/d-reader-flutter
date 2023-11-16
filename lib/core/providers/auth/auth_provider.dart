@@ -13,8 +13,8 @@ final authRepositoryProvider = Provider<AuthRepositoryImpl>((ref) {
 });
 
 @riverpod
-Future<dynamic> signInFuture(
-  SignInFutureRef ref, {
+Future<dynamic> signIn(
+  SignInRef ref, {
   required String nameOrEmail,
   required String password,
 }) async {

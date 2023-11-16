@@ -17,6 +17,7 @@ import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,21 +43,44 @@ class WalletListScreen extends ConsumerWidget {
     color: ColorPalette.greyscale100,
   );
 
-  _handleWalletSelect(WidgetRef ref, String address) async {
+  _handleWalletSelect({
+    required WidgetRef ref,
+    required BuildContext context,
+    required String address,
+  }) async {
     final signature =
         ref.read(environmentProvider).wallets?[address]?.signature;
     final walletAuthToken =
         ref.read(environmentProvider).wallets?[address]?.authToken;
-    if (signature == null) {
-      return await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+    if (signature == null || walletAuthToken == null) {
+      final shouldAuthorize = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return ConfirmationDialog(
+                title: '',
+                subtitle:
+                    'Wallet ${formatAddress(address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
+              );
+            },
+          ) ??
+          false;
+      if (!shouldAuthorize) {
+        return;
+      }
+
+      await ref.read(solanaProvider.notifier).authorizeWithOnComplete();
+      ref.read(selectedWalletProvider.notifier).update((state) =>
+          ref.read(environmentProvider).publicKey?.toBase58() ?? address);
+      return ref.invalidate(userWalletsProvider);
     }
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
-              publicKey: Ed25519HDPublicKey.fromBase58(
-                address,
-              ),
-              signature: signature.codeUnits,
-              authToken: walletAuthToken),
+            publicKey: Ed25519HDPublicKey.fromBase58(
+              address,
+            ),
+            signature: signature.codeUnits,
+            authToken: walletAuthToken,
+          ),
         );
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
@@ -280,7 +304,10 @@ class WalletListScreen extends ConsumerWidget {
                                       GestureDetector(
                                         onTap: () {
                                           _handleWalletSelect(
-                                              ref, data[index].address);
+                                            ref: ref,
+                                            context: context,
+                                            address: data[index].address,
+                                          );
                                         },
                                         child: Icon(
                                           ref.watch(selectedWalletProvider) ==

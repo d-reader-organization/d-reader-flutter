@@ -560,7 +560,7 @@ class BottomNavigation extends ConsumerWidget {
                             title: 'Caution',
                             subtitle:
                                 'If you are using Phantom make sure that the wallet selected withing dReader under Settings -> Wallets is also selected withing the Phantom mobile wallet application',
-                            assetPath: '$walkthroughAssetsPath/add.jpg',
+                            assetPath: '$walkthroughAssetsPath/add_wallet.jpg',
                             onSubmit: () {
                               Navigator.pop(context);
                             },

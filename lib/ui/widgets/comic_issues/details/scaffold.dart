@@ -559,7 +559,7 @@ class BottomNavigation extends ConsumerWidget {
                             key: WalkthroughKeys.firstMint.name,
                             title: 'Caution',
                             subtitle:
-                                'If you are using Phantom make sure that the wallet selected withing dReader under Settings -> Wallets is also selected withing the Phantom mobile wallet application',
+                                'If you\'re using Phantom wallet make sure that the same wallet is selected within dReader and is active in the Phantom mobile app. In other words, if wallet A is selected on dReader but wallet B is active Phantom, you might experience issues',
                             assetPath: '$walkthroughAssetsPath/add_wallet.jpg',
                             onSubmit: () {
                               Navigator.pop(context);

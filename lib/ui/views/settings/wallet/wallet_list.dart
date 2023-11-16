@@ -48,11 +48,9 @@ class WalletListScreen extends ConsumerWidget {
     required BuildContext context,
     required String address,
   }) async {
-    final signature =
-        ref.read(environmentProvider).wallets?[address]?.signature;
     final walletAuthToken =
         ref.read(environmentProvider).wallets?[address]?.authToken;
-    if (signature == null || walletAuthToken == null) {
+    if (walletAuthToken == null) {
       final shouldAuthorize = await showDialog<bool>(
             context: context,
             builder: (context) {
@@ -78,7 +76,6 @@ class WalletListScreen extends ConsumerWidget {
             publicKey: Ed25519HDPublicKey.fromBase58(
               address,
             ),
-            signature: signature.codeUnits,
             authToken: walletAuthToken,
           ),
         );

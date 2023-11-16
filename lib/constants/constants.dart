@@ -9,3 +9,5 @@ const double comicAspectRatio = 1000 / 900;
 const double creatorBannerAspectratio = 1920 / 900;
 
 const String walkthroughAssetsPath = 'assets/images/walkthrough';
+const String missingWalletAppText = 'Missing wallet application.';
+const String powerSaveModeText = 'Cannot use wallet in the power save mode.';

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
@@ -22,8 +23,6 @@ import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
-const String missingWalletAppText = 'Missing wallet application.';
-
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
   (ref) {
@@ -33,16 +32,8 @@ final solanaProvider =
 
 @immutable // preferred to use immutable states
 class SolanaClientState {
+  // remove this
   const SolanaClientState();
-}
-
-extension ResignTx on SignedTx {
-  SignedTx resign(Signature newSignature) => SignedTx(
-        signatures: signatures.toList()
-          ..removeAt(0)
-          ..insert(0, newSignature),
-        compiledMessage: compiledMessage,
-      );
 }
 
 class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
@@ -81,6 +72,19 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
   }
 
+  /* 
+  1. Wallet aaa...aaa is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet? - Wallet list screen
+  - Trigger dialog with text above
+  - Create method that will do Authorize only and store auth result in Environment. Double check if it does update Local store (both public key and wallets property)
+
+  2. Remove resign method and test if everything works. - DONE
+
+  3. When auth token missing, trigger authorize and sign message in the SAME wallet session. (sign message ONLY if wallet is not authorized on Backend)
+  - Refactor each method to do authorize if needed (same session)
+  - Basically when user start mint/lint/delist/buy:
+  -- No Wallet Scenario/Wallet is there, but no auth token - user clicks on mint, if there is no wallet address present, trigger authorize & signmessage(if needed) in the same wallet session.
+  */
+
   Future<AuthorizationResult?> _authorize({
     required MobileWalletAdapterClient client,
     required String cluster,
@@ -91,6 +95,93 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       cluster: cluster,
       iconUri: Uri.file(Config.faviconPath),
     );
+  }
+
+  Future<String> authorizeWithOnComplete([
+    String? overrideCluster,
+    Function()? onStart,
+    Future Function()? onComplete,
+  ]) async {
+    late LocalAssociationScenario session;
+    try {
+      session = await _getSession();
+    } catch (exception) {
+      if (exception is LowPowerModeException ||
+          exception is NoWalletFoundException) {
+        rethrow;
+      }
+
+      Sentry.captureException(exception);
+      return 'Something went wrong.';
+    }
+
+    final client = await session.start();
+    final String cluster =
+        overrideCluster ?? ref.read(environmentProvider).solanaCluster;
+    if (onStart != null) {
+      onStart();
+    }
+    final result = await _authorize(
+      client: client,
+      cluster: cluster,
+    );
+    if (result == null) {
+      return 'Failed to authorize wallet.';
+    }
+    final publicKey = Ed25519HDPublicKey(result.publicKey);
+    final apiUrl = cluster == SolanaCluster.devnet.value
+        ? Config.apiUrlDevnet
+        : Config.apiUrl;
+    final envNotifier = ref.read(environmentProvider.notifier);
+    final String jwtToken = ref.read(environmentProvider).jwtToken ?? '';
+    if (jwtToken.isEmpty) {
+      throw Exception('Missing jwt token');
+    }
+    final signMessageResult = await _signMessage(
+      client: client,
+      signer: publicKey,
+      overrideAuthToken: result.authToken,
+      apiUrl: apiUrl,
+      jwtToken: jwtToken,
+    );
+    if (signMessageResult is String || signMessageResult == null) {
+      await session.close();
+      return signMessageResult is String
+          ? signMessageResult
+          : 'Failed to sign message.';
+    }
+
+    if (signMessageResult is! SignedMessage) {
+      return 'No signed message';
+    }
+
+    final currentWallets = ref.read(environmentProvider).wallets;
+    envNotifier.updateEnvironmentState(
+      EnvironmentStateUpdateInput(
+        publicKey: publicKey,
+        authToken: result.authToken,
+        solanaCluster: cluster,
+        apiUrl: apiUrl,
+        wallets: {
+          ...?currentWallets,
+          publicKey.toBase58(): WalletData(
+            authToken: result.authToken,
+          ),
+        },
+      ),
+    );
+    ref.invalidate(registerWalletToSocketEvents);
+    await _connectWallet(
+      signedMessage: signMessageResult.signatures.first,
+      publicKey: publicKey,
+      apiUrl: apiUrl,
+      jwtToken: jwtToken,
+    );
+    if (onComplete != null) {
+      await onComplete();
+    }
+    await session.close();
+    return 'OK';
   }
 
   Future<String> authorizeAndSignMessage([
@@ -149,26 +240,16 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
 
     final currentWallets = ref.read(environmentProvider).wallets;
-    final signedMessage =
-        signMessageResult.signatures.first.toList().sublist(0, 64);
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
         authToken: result?.authToken,
         solanaCluster: cluster,
         apiUrl: apiUrl,
-        signature: Signature(
-          signedMessage,
-          publicKey: publicKey,
-        ).bytes,
         wallets: {
           ...?currentWallets,
           publicKey.toBase58(): WalletData(
             authToken: result?.authToken ?? '',
-            signature: Signature(
-              signedMessage,
-              publicKey: publicKey,
-            ).toBase58(),
           ),
         },
       ),
@@ -221,7 +302,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     String? minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
     try {
       if (minterAddress == null) {
-        final result = await authorizeAndSignMessage();
+        final result =
+            await authorizeAndSignMessage(); // update this call to be authorizeAndSignWithOnComplete. On complete should be bottom part.
         minterAddress = ref.read(environmentProvider).publicKey?.toBase58();
         if (result != 'OK' || minterAddress == null) {
           return 'Select/Connect wallet first';
@@ -258,23 +340,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
     final client = await session.start();
 
-    final signature = _getSignature();
     ref.read(globalStateProvider.notifier).state.copyWith(isLoading: true);
 
-    if (await _doReauthorize(client) && signature != null) {
-      List<SignedTx> resignedTransactions = encodedNftTransactions
-          .map(
-            (encoded) => _decodeAndResign(
-              encodedTransaction: encoded,
-              signature: signature,
-            ),
-          )
-          .toList();
-
+    if (await _doReauthorize(client)) {
       try {
         final response = await client.signTransactions(
-          transactions: resignedTransactions.map((resignedTransaction) {
-            return base64Decode(resignedTransaction.encode());
+          transactions: encodedNftTransactions.map((transaction) {
+            return base64Decode(transaction);
           }).toList(),
         );
         await session.close();
@@ -323,6 +395,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     String printReceipt = 'false',
   }) async {
     try {
+      // update method to check for public key
       final String? encodedTransaction =
           await ref.read(transactionRepositoryProvider).listTransaction(
                 sellerAddress: sellerAddress,
@@ -345,6 +418,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> delist({
+    // check for wallet. authorizeAndSignWithComplete
     required String nftAddress,
   }) async {
     final String? encodedTransaction = await ref
@@ -357,6 +431,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<bool> buyMultiple(List<BuyNftInput> input) async {
+    // check for wallet, authorizeAndSignWithComplete
     try {
       Map<String, String> query = {};
       for (int i = 0; i < input.length; ++i) {
@@ -377,18 +452,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
   }
 
-  SignedTx _decodeAndResign({
-    required String encodedTransaction,
-    required Signature signature,
-  }) {
-    final decodedTX = SignedTx.decode(encodedTransaction);
-    return decodedTX.resign(signature);
-  }
-
   Future<dynamic> useMint({
     required String nftAddress,
     required String ownerAddress,
   }) async {
+    // authoirze and sign with complete
     final String transaction = await ref
         .read(transactionRepositoryProvider)
         .useComicIssueNftTransaction(
@@ -413,24 +481,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
 
     final client = await session.start();
-
-    final signature = _getSignature();
     ref.read(globalStateProvider.notifier).state.copyWith(isLoading: true);
 
-    if (await _doReauthorize(client) && signature != null) {
-      List<SignedTx> resignedTransactions = encodedTransactions
-          .map(
-            (encoded) => _decodeAndResign(
-              encodedTransaction: encoded,
-              signature: signature,
-            ),
-          )
-          .toList();
-
+    if (await _doReauthorize(client)) {
       try {
         final response = await client.signTransactions(
-          transactions: resignedTransactions.map((resignedTransaction) {
-            return base64Decode(resignedTransaction.encode());
+          transactions: encodedTransactions.map((transaction) {
+            return base64Decode(transaction);
           }).toList(),
         );
         await session.close();
@@ -468,16 +525,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
     await session.close();
     return false;
-  }
-
-  Signature? _getSignature() {
-    final envState = ref.read(environmentProvider);
-    return envState.signature != null && envState.publicKey != null
-        ? Signature(
-            envState.signature?.codeUnits.sublist(0, 64) ?? [],
-            publicKey: envState.publicKey!,
-          )
-        : null;
   }
 
   Future<dynamic> _signMessage({
@@ -539,21 +586,14 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       iconUri: Uri.file(Config.faviconPath),
     );
     final walletsMap = envState.wallets;
-    final currentItem = walletsMap?[currentWalletAddress];
 
     ref.read(environmentProvider.notifier).updateEnvironmentState(
-          EnvironmentStateUpdateInput(
-            authToken: result?.authToken,
-            wallets: currentItem != null
-                ? {
-                    ...?walletsMap,
-                    currentWalletAddress: WalletData(
-                      authToken: result?.authToken ?? '',
-                      signature: currentItem.signature,
-                    ),
-                  }
-                : null,
-          ),
+          EnvironmentStateUpdateInput(authToken: result?.authToken, wallets: {
+            ...?walletsMap,
+            currentWalletAddress: WalletData(
+              authToken: result?.authToken ?? '',
+            ),
+          }),
         );
     return result != null;
   }
@@ -562,7 +602,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final bool isWalletAvailable = await LocalAssociationScenario.isAvailable();
     final bool isLowPowerMode = await Power.isLowPowerMode;
     if (isLowPowerMode) {
-      throw LowPowerModeException('Cannot use wallet in the power save mode.');
+      throw LowPowerModeException(powerSaveModeText);
     }
     if (!isWalletAvailable) {
       throw NoWalletFoundException(missingWalletAppText);

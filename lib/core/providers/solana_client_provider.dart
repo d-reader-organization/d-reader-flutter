@@ -150,6 +150,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         authToken: result.authToken,
       );
     }
+    ref.invalidate(registerWalletToSocketEvents);
+    ref.read(registerWalletToSocketEvents);
     return 'OK';
   }
 

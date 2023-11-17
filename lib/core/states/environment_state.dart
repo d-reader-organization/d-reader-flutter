@@ -123,6 +123,7 @@ class EnvironmentStateUpdateInput {
 }
 
 class WalletData {
+  // TODO think of removing this to be backward compatible
   final String authToken;
 
   WalletData({

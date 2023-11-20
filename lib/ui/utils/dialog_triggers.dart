@@ -1,3 +1,5 @@
+import 'package:d_reader_flutter/core/models/exceptions.dart';
+import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/install_wallet_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -18,4 +20,12 @@ triggerInstallWalletBottomSheet(BuildContext context) {
       );
     },
   );
+}
+
+triggerLowPowerOrNoWallet(BuildContext context, dynamic exception) {
+  if (exception is LowPowerModeException) {
+    return triggerLowPowerModeDialog(context);
+  } else if (exception is NoWalletFoundException) {
+    return triggerInstallWalletBottomSheet(context);
+  }
 }

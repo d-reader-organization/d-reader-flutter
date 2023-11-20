@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -183,28 +184,49 @@ class Body extends StatelessWidget {
                                   color: ColorPalette.greyscale200),
                             ),
                       onPressed: () async {
-                        if (nft.isListed) {
-                          await ref
-                              .read(solanaProvider.notifier)
-                              .delist(nftAddress: nft.address);
-                          ref.read(globalStateProvider.notifier).state =
-                              const GlobalState(isLoading: false);
-                          ref.invalidate(nftProvider);
-                          return;
-                        }
-                        showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                bottom: MediaQuery.viewInsetsOf(context).bottom,
-                              ),
-                              child: NftModalBottomSheet(nft: nft),
+                        try {
+                          if (nft.isListed) {
+                            final result = await ref
+                                .read(solanaProvider.notifier)
+                                .delist(nftAddress: nft.address);
+                            ref.read(globalStateProvider.notifier).state =
+                                const GlobalState(isLoading: false);
+                            ref.invalidate(nftProvider);
+                            if (result is bool && result && context.mounted) {
+                              showSnackBar(
+                                context: context,
+                                text: 'Successfully delisted',
+                                backgroundColor: ColorPalette.dReaderGreen,
+                              );
+                            }
+                            return;
+                          }
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.viewInsetsOf(context).bottom,
+                                ),
+                                child: NftModalBottomSheet(nft: nft),
+                              );
+                            },
+                          );
+                        } catch (exception) {
+                          if (context.mounted) {
+                            return triggerLowPowerOrNoWallet(
+                              context,
+                              exception,
                             );
-                          },
-                        );
+                          }
+                          Sentry.captureException(
+                            exception,
+                            stackTrace: 'NftDetails -> List/Delist failed',
+                          );
+                        }
                       },
                     ),
                   );
@@ -243,13 +265,26 @@ class Body extends StatelessWidget {
                             ),
                           );
                         }
-                        final result =
-                            await ref.read(solanaProvider.notifier).useMint(
-                                  nftAddress: nft.address,
-                                  ownerAddress: nft.ownerAddress,
-                                );
-                        if (context.mounted) {
-                          _handleNftOpen(context, result);
+                        try {
+                          final result =
+                              await ref.read(solanaProvider.notifier).useMint(
+                                    nftAddress: nft.address,
+                                    ownerAddress: nft.ownerAddress,
+                                  );
+                          if (context.mounted) {
+                            _handleNftOpen(context, result);
+                          }
+                        } catch (exception) {
+                          if (context.mounted) {
+                            return triggerLowPowerOrNoWallet(
+                              context,
+                              exception,
+                            );
+                          }
+                          Sentry.captureException(
+                            exception,
+                            stackTrace: 'Use mint in NFT Details failed',
+                          );
                         }
                       },
                     ),

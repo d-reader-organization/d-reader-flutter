@@ -19,11 +19,11 @@ import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
+import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/format_date.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
@@ -680,14 +680,10 @@ class BottomNavigation extends ConsumerWidget {
                                           .state
                                           .copyWith(isLoading: false);
                                       if (context.mounted) {
-                                        if (exception
-                                            is NoWalletFoundException) {
-                                          _showWalkthroughDialog(
-                                              context: context, ref: ref);
-                                        } else if (exception
-                                            is LowPowerModeException) {
-                                          triggerLowPowerModeDialog(context);
-                                        }
+                                        return triggerLowPowerOrNoWallet(
+                                          context,
+                                          exception,
+                                        );
                                       }
                                     }
                                   }

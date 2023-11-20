@@ -76,31 +76,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
   }
 
-  /* 
-  1. Wallet aaa...aaa is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet? - Wallet list screen
-  - Trigger dialog with text above
-  - Create method that will do Authorize only and store auth result in Environment. Double check if it does update Local store (both public key and wallets property)
-
-  2. Remove resign method and test if everything works. - DONE
-
-  3. When auth token missing, trigger authorize and sign message in the SAME wallet session. (sign message ONLY if wallet is not authorized on Backend)
-  - Refactor each method to do authorize if needed (same session)
-  - Basically when user start mint/lint/delist/buy:
-  -- No Wallet Scenario/Wallet is there, but no auth token - user clicks on mint, if there is no wallet address present, trigger authorize & signmessage(if needed) in the same wallet session.
-  */
-
-  /* 
-  - Each case should have almost the same flow:
-  - User clicks on Mint/Buy/List:
-  - If there is no envState.publicKey (that means no auth token and no selected wallet), get my wallets and pick one if they are existing. If not, authorize and do the mint.
-  - I'm a user, going to mint, I have auth token, trigger mint without authorize. I don't ahve auth token, get wallets, no wallets, authorizeAndSignMessage + mint. I dont have autoh token, but I have wallets, authorize and mint.
-
-
-1. Case 1 - user has auth token and is connected to backend - working good.
-2. Case 2 - No auth token but user is on backend - working fine I would say
-3. Case 3 - no auth, no backend - authorize and sign message + mint in the same session!  
-  */
-
   Future<AuthorizationResult?> _authorize({
     required MobileWalletAdapterClient client,
     required String cluster,
@@ -210,9 +185,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
 
     String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
-    if (walletAddress != null && onComplete != null) {
+    if (walletAddress != null) {
       try {
-        return await onComplete(await session.start(), session);
+        return onComplete != null
+            ? await onComplete(await session.start(), session)
+            : 'OK';
       } catch (exception) {
         await session.close();
         rethrow;
@@ -453,25 +430,32 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return false;
   }
 
-  Future<bool> list({
+  Future<dynamic> list({
     required String sellerAddress,
     required String mintAccount,
     required int price,
     String printReceipt = 'false',
   }) async {
     try {
-      // update method to check for public key
-      final String? encodedTransaction =
-          await ref.read(transactionRepositoryProvider).listTransaction(
-                sellerAddress: sellerAddress,
-                mintAccount: mintAccount,
-                price: price,
-                printReceipt: printReceipt,
-              );
-      if (encodedTransaction == null) {
-        return false;
-      }
-      return await _signAndSendTransactions([encodedTransaction]);
+      return await authorizeIfNeededWithOnComplete(
+        onComplete: (client, session) async {
+          final String? encodedTransaction =
+              await ref.read(transactionRepositoryProvider).listTransaction(
+                    sellerAddress: sellerAddress,
+                    mintAccount: mintAccount,
+                    price: price,
+                    printReceipt: printReceipt,
+                  );
+          if (encodedTransaction == null) {
+            return false;
+          }
+          return await _signAndSendTransactions(
+            client: client,
+            session: session,
+            encodedTransactions: [encodedTransaction],
+          );
+        },
+      );
     } catch (exception) {
       if (exception is LowPowerModeException ||
           exception is NoWalletFoundException) {
@@ -482,37 +466,62 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
   }
 
-  Future<bool> delist({
-    // check for wallet. authorizeAndSignWithComplete
+  Future<dynamic> delist({
     required String nftAddress,
   }) async {
-    final String? encodedTransaction = await ref
-        .read(transactionRepositoryProvider)
-        .cancelListingTransaction(nftAddress: nftAddress);
-    if (encodedTransaction == null) {
-      return false;
-    }
-    return await _signAndSendTransactions([encodedTransaction]);
-  }
-
-  Future<bool> buyMultiple(List<BuyNftInput> input) async {
-    // check for wallet, authorizeAndSignWithComplete
     try {
-      Map<String, String> query = {};
-      for (int i = 0; i < input.length; ++i) {
-        query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
-      }
-      final List<String> encodedTransactions =
-          await ref.read(transactionRepositoryProvider).buyMultipleItems(query);
-      if (encodedTransactions.isEmpty) {
-        return false;
-      }
-      return await _signAndSendTransactions(encodedTransactions);
+      return await authorizeIfNeededWithOnComplete(
+        onComplete: (client, session) async {
+          final String? encodedTransaction = await ref
+              .read(transactionRepositoryProvider)
+              .cancelListingTransaction(nftAddress: nftAddress);
+          if (encodedTransaction == null) {
+            return false;
+          }
+          return await _signAndSendTransactions(
+            client: client,
+            session: session,
+            encodedTransactions: [encodedTransaction],
+          );
+        },
+      );
     } catch (exception) {
       if (exception is LowPowerModeException ||
           exception is NoWalletFoundException) {
         rethrow;
       }
+      Sentry.captureException(exception, stackTrace: 'delist failed.');
+      return false;
+    }
+  }
+
+  Future<bool> buyMultiple(List<BuyNftInput> input) async {
+    try {
+      return await authorizeIfNeededWithOnComplete(
+        onComplete: (client, session) async {
+          Map<String, String> query = {};
+          for (int i = 0; i < input.length; ++i) {
+            query["instantBuyParams[$i]"] = jsonEncode(input[i].toJson());
+          }
+          final List<String> encodedTransactions = await ref
+              .read(transactionRepositoryProvider)
+              .buyMultipleItems(query);
+          if (encodedTransactions.isEmpty) {
+            return false;
+          }
+          return await _signAndSendTransactions(
+            client: client,
+            session: session,
+            encodedTransactions: encodedTransactions,
+          );
+        },
+      );
+    } catch (exception) {
+      if (exception is LowPowerModeException ||
+          exception is NoWalletFoundException) {
+        rethrow;
+      }
+      Sentry.captureException(exception, stackTrace: 'buy multiple failed.');
       return false;
     }
   }
@@ -521,31 +530,37 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required String nftAddress,
     required String ownerAddress,
   }) async {
-    // authoirze and sign with complete
-    final String transaction = await ref
-        .read(transactionRepositoryProvider)
-        .useComicIssueNftTransaction(
-          nftAddress: nftAddress,
-          ownerAddress: ownerAddress,
-        );
-    return await _signAndSendTransactions([transaction]);
-  }
-
-  Future<dynamic> _signAndSendTransactions(
-      List<String> encodedTransactions) async {
-    late LocalAssociationScenario session;
     try {
-      session = await _getSession();
+      return await authorizeIfNeededWithOnComplete(
+        onComplete: (client, session) async {
+          final String transaction = await ref
+              .read(transactionRepositoryProvider)
+              .useComicIssueNftTransaction(
+                nftAddress: nftAddress,
+                ownerAddress: ownerAddress,
+              );
+          return await _signAndSendTransactions(
+            client: client,
+            session: session,
+            encodedTransactions: [transaction],
+          );
+        },
+      );
     } catch (exception) {
       if (exception is LowPowerModeException ||
           exception is NoWalletFoundException) {
         rethrow;
       }
-      Sentry.captureException(exception);
-      return 'Something went wrong.';
+      Sentry.captureException(exception, stackTrace: 'Failed to use mint');
+      return false;
     }
+  }
 
-    final client = await session.start();
+  Future<dynamic> _signAndSendTransactions({
+    required MobileWalletAdapterClient client,
+    required LocalAssociationScenario session,
+    required List<String> encodedTransactions,
+  }) async {
     ref.read(globalStateProvider.notifier).state.copyWith(isLoading: true);
 
     if (await _doReauthorize(client)) {
@@ -555,7 +570,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             return base64Decode(transaction);
           }).toList(),
         );
-        await session.close();
         if (response.signedPayloads.isNotEmpty) {
           final client = createSolanaClient(
             rpcUrl: ref.read(environmentProvider).solanaCluster ==
@@ -578,6 +592,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
                 ),
               );
           ref.read(mintingStatusProvider(sendTransactionResult));
+          await session.close();
           return true;
         }
       } catch (exception, stackTrace) {

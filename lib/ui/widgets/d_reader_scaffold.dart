@@ -60,13 +60,18 @@ class DReaderScaffold extends ConsumerWidget {
     }
   }
 
-  EdgeInsets _bodyPadding(int screenIndex) {
+  EdgeInsets _bodyPadding({
+    required int screenIndex,
+    bool hasBetaAccess = false,
+  }) {
     if (screenIndex == 0) {
       return EdgeInsets.zero;
     } else if (screenIndex == 3) {
       return const EdgeInsets.symmetric(horizontal: 12);
     }
-    return const EdgeInsets.only(left: 12.0, right: 12, top: 8.0);
+    return hasBetaAccess
+        ? const EdgeInsets.only(left: 12.0, right: 12, top: 8.0)
+        : EdgeInsets.zero;
   }
 
   @override
@@ -82,7 +87,11 @@ class DReaderScaffold extends ConsumerWidget {
                 SolanaCluster.devnet.value,
           ),
           body: Padding(
-            padding: _bodyPadding(ref.watch(scaffoldProvider).navigationIndex),
+            padding: _bodyPadding(
+              screenIndex: ref.watch(scaffoldProvider).navigationIndex,
+              hasBetaAccess: ref.watch(environmentProvider).user != null &&
+                  ref.watch(environmentProvider).user!.hasBetaAccess,
+            ),
             child: body ??
                 PageView(
                   controller: ref.watch(scaffoldPageController),

@@ -1,9 +1,9 @@
 import 'dart:io' show File;
 
 class UserModel {
-  final int id;
+  final int id, referralsRemaining;
   final String email, avatar, name, role;
-  final bool isEmailVerified;
+  final bool isEmailVerified, hasBetaAccess;
 
   UserModel({
     required this.id,
@@ -12,6 +12,8 @@ class UserModel {
     required this.avatar,
     required this.role,
     required this.isEmailVerified,
+    required this.hasBetaAccess,
+    required this.referralsRemaining,
   });
 
   factory UserModel.fromJson(dynamic json) {
@@ -22,6 +24,8 @@ class UserModel {
       name: json['name'],
       role: json['role'],
       isEmailVerified: json['isEmailVerified'],
+      hasBetaAccess: json['hasBetaAccess'] ?? false,
+      referralsRemaining: json['referralsRemaining'] ?? 0,
     );
   }
 
@@ -33,6 +37,8 @@ class UserModel {
     data['avatar'] = avatar;
     data['role'] = role;
     data['isEmailVerified'] = isEmailVerified;
+    data['hasBetaAccess'] = hasBetaAccess;
+    data['referralsRemaining'] = referralsRemaining;
     return data;
   }
 }

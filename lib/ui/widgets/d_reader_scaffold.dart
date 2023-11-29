@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/ui/views/settings/root.dart';
 import 'package:d_reader_flutter/ui/widgets/beta_access_wrapper.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/test_mode_widget.dart';
+import 'package:d_reader_flutter/ui/widgets/referrals/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -121,5 +122,21 @@ class DReaderScaffold extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class BetaBottomNavigation extends ConsumerWidget {
+  final Widget child;
+  const BetaBottomNavigation({
+    super.key,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(environmentProvider).user?.hasBetaAccess != null &&
+            !ref.watch(environmentProvider).user!.hasBetaAccess
+        ? const ReferralBottomNavigation()
+        : child;
   }
 }

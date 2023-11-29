@@ -27,6 +27,10 @@ import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
+final isOpeningSessionProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
   (ref) {
@@ -679,6 +683,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<LocalAssociationScenario> _getSession() async {
+    ref.read(isOpeningSessionProvider.notifier).update((state) => true);
     final bool isWalletAvailable = await LocalAssociationScenario.isAvailable();
     final bool isLowPowerMode = await Power.isLowPowerMode;
     if (isLowPowerMode) {
@@ -690,7 +695,12 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
     final session = await LocalAssociationScenario.create();
     session.startActivityForResult(null).ignore();
-
+    Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        ref.read(isOpeningSessionProvider.notifier).update((state) => false);
+      },
+    );
     return session;
   }
 

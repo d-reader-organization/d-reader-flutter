@@ -606,22 +606,25 @@ class BottomNavigation extends ConsumerWidget {
                   ? Expanded(
                       child: TransactionButton(
                         isLoading: ref.watch(globalStateProvider).isLoading,
-                        onPressed: () async {
-                          await triggerWalkthroughDialogIfNeeded(
-                            context: context,
-                            key: WalkthroughKeys.firstMint.name,
-                            title: 'Caution',
-                            subtitle:
-                                'If you\'re using Phantom wallet make sure that the same wallet is selected within dReader and is active in the Phantom mobile app. In other words, if wallet A is selected on dReader but wallet B is active Phantom, you might experience issues',
-                            assetPath: '$walkthroughAssetsPath/add_wallet.jpg',
-                            onSubmit: () {
-                              Navigator.pop(context);
-                            },
-                          );
-                          if (context.mounted) {
-                            await _handleMint(context, ref);
-                          }
-                        },
+                        onPressed: ref.watch(isOpeningSessionProvider)
+                            ? null
+                            : () async {
+                                await triggerWalkthroughDialogIfNeeded(
+                                  context: context,
+                                  key: WalkthroughKeys.firstMint.name,
+                                  title: 'Caution',
+                                  subtitle:
+                                      'If you\'re using Phantom wallet make sure that the same wallet is selected within dReader and is active in the Phantom mobile app. In other words, if wallet A is selected on dReader but wallet B is active Phantom, you might experience issues',
+                                  assetPath:
+                                      '$walkthroughAssetsPath/add_wallet.jpg',
+                                  onSubmit: () {
+                                    Navigator.pop(context);
+                                  },
+                                );
+                                if (context.mounted) {
+                                  await _handleMint(context, ref);
+                                }
+                              },
                         text: 'Mint',
                         price:
                             ref.watch(activeCandyMachineGroup)?.mintPrice ?? 0,
@@ -632,8 +635,9 @@ class BottomNavigation extends ConsumerWidget {
                           child: TransactionButton(
                             isLoading: ref.watch(globalStateProvider).isLoading,
                             onPressed: ref
-                                    .read(selectedItemsProvider)
-                                    .isNotEmpty
+                                        .read(selectedItemsProvider)
+                                        .isNotEmpty &&
+                                    !ref.watch(isOpeningSessionProvider)
                                 ? () async {
                                     final activeWallet =
                                         ref.read(environmentProvider).publicKey;

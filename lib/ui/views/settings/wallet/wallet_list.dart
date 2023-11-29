@@ -326,24 +326,26 @@ class WalletListScreen extends ConsumerWidget {
           ),
           bottomNavigationBar: CustomTextButton(
             borderRadius: BorderRadius.circular(8),
-            onPressed: () async {
-              if (data.isNotEmpty) {
-                await triggerWalkthroughDialogIfNeeded(
-                  context: context,
-                  key: WalkthroughKeys.multipleWallet.name,
-                  title: 'Another wallet',
-                  subtitle:
-                      'When connecting multiple wallets to dReader bare in mind to always match the wallet selected on dReader with the wallet selected in your mobile wallet app',
-                  assetPath: '$walkthroughAssetsPath/multiple_wallet.jpg',
-                  onSubmit: () {
-                    Navigator.pop(context);
+            onPressed: ref.watch(isOpeningSessionProvider)
+                ? null
+                : () async {
+                    if (data.isNotEmpty) {
+                      await triggerWalkthroughDialogIfNeeded(
+                        context: context,
+                        key: WalkthroughKeys.multipleWallet.name,
+                        title: 'Another wallet',
+                        subtitle:
+                            'When connecting multiple wallets to dReader bare in mind to always match the wallet selected on dReader with the wallet selected in your mobile wallet app',
+                        assetPath: '$walkthroughAssetsPath/multiple_wallet.jpg',
+                        onSubmit: () {
+                          Navigator.pop(context);
+                        },
+                      );
+                    }
+                    if (context.mounted) {
+                      await _handleWalletConnect(context: context, ref: ref);
+                    }
                   },
-                );
-              }
-              if (context.mounted) {
-                await _handleWalletConnect(context: context, ref: ref);
-              }
-            },
             size: const Size(double.infinity, 50),
             isLoading: ref.watch(globalStateProvider).isLoading,
             padding: const EdgeInsets.all(16),

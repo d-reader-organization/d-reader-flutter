@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
-import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -9,14 +8,15 @@ import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/format_address.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/utils/trigger_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,21 +42,41 @@ class WalletListScreen extends ConsumerWidget {
     color: ColorPalette.greyscale100,
   );
 
-  _handleWalletSelect(WidgetRef ref, String address) async {
-    final signature =
-        ref.read(environmentProvider).wallets?[address]?.signature;
+  _handleWalletSelect({
+    required WidgetRef ref,
+    required BuildContext context,
+    required String address,
+  }) async {
     final walletAuthToken =
         ref.read(environmentProvider).wallets?[address]?.authToken;
-    if (signature == null) {
-      return await ref.read(solanaProvider.notifier).authorizeAndSignMessage();
+    if (walletAuthToken == null) {
+      final shouldAuthorize = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return ConfirmationDialog(
+                title: '',
+                subtitle:
+                    'Wallet ${formatAddress(address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
+              );
+            },
+          ) ??
+          false;
+      if (!shouldAuthorize) {
+        return;
+      }
+
+      await ref.read(solanaProvider.notifier).authorizeIfNeededWithOnComplete();
+      ref.read(selectedWalletProvider.notifier).update((state) =>
+          ref.read(environmentProvider).publicKey?.toBase58() ?? address);
+      return ref.invalidate(userWalletsProvider);
     }
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
-              publicKey: Ed25519HDPublicKey.fromBase58(
-                address,
-              ),
-              signature: signature.codeUnits,
-              authToken: walletAuthToken),
+            publicKey: Ed25519HDPublicKey.fromBase58(
+              address,
+            ),
+            authToken: walletAuthToken,
+          ),
         );
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
@@ -105,11 +125,7 @@ class WalletListScreen extends ConsumerWidget {
         ),
       );
       if (context.mounted) {
-        if (exception is LowPowerModeException) {
-          return triggerLowPowerModeDialog(context);
-        } else if (exception is NoWalletFoundException) {
-          return triggerInstallWalletBottomSheet(context);
-        }
+        return triggerLowPowerOrNoWallet(context, exception);
       }
     }
   }
@@ -280,7 +296,10 @@ class WalletListScreen extends ConsumerWidget {
                                       GestureDetector(
                                         onTap: () {
                                           _handleWalletSelect(
-                                              ref, data[index].address);
+                                            ref: ref,
+                                            context: context,
+                                            address: data[index].address,
+                                          );
                                         },
                                         child: Icon(
                                           ref.watch(selectedWalletProvider) ==

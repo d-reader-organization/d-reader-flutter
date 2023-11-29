@@ -1,8 +1,10 @@
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/user/repository_impl.dart';
+import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_provider.g.dart';
@@ -17,6 +19,11 @@ UserRepositoryImpl userRepository(UserRepositoryRef ref) {
 @riverpod
 Future<UserModel?> myUser(MyUserRef ref) async {
   final UserModel? user = await ref.read(userRepositoryProvider).myUser();
+  ref.read(environmentProvider.notifier).updateEnvironmentState(
+        EnvironmentStateUpdateInput(
+          user: user,
+        ),
+      );
   return user;
 }
 

@@ -48,7 +48,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       ),
     );
     final response = await ref.read(
-      signInFutureProvider(
+      signInProvider(
         nameOrEmail: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       ).future,

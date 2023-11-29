@@ -42,7 +42,7 @@ abstract class Config {
   static const String helpCenterLink =
       "https://docs.google.com/forms/d/e/1FAIpQLSefq-KgefpgmINtOUxJIKEBppcMQL4W7F8RLXreaLdHnFOZsg/viewform";
   static const String privacyPolicyUrl =
-      "https://github.com/d-reader-organization/.github/blob/main/PRIVACY_POLICY";
+      "https://raw.githubusercontent.com/d-reader-organization/.github/main/PRIVACY_POLICY.md";
   static const String twitterUrl = 'https://twitter.com/dReaderApp';
   static const String discordUrl = 'https://discord.gg/rrZsRvC9mh';
   static const String localStoreName = 'local_store';

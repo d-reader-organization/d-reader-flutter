@@ -75,7 +75,7 @@ class _WelcomeViewState extends State<WelcomeView>
                     ),
                   ),
                   child: const Text(
-                    'alpha version',
+                    'beta version',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,

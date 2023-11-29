@@ -8,7 +8,6 @@ import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 
 class NftModalBottomSheet extends ConsumerStatefulWidget {
@@ -130,27 +129,33 @@ class SubmitButton extends ConsumerWidget {
       isLoading: ref.watch(globalStateProvider).isLoading,
       onPressed: price != null
           ? () async {
-              final response = await ref.read(solanaProvider.notifier).list(
-                    sellerAddress: sellerAddress,
-                    mintAccount: mintAccount,
-                    price: (price! * lamportsPerSol).round(),
+              try {
+                final response = await ref.read(solanaProvider.notifier).list(
+                      sellerAddress: sellerAddress,
+                      mintAccount: mintAccount,
+                      price: (price! * lamportsPerSol).round(),
+                    );
+                ref
+                    .read(globalStateProvider.notifier)
+                    .state
+                    .copyWith(isLoading: false);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ref.invalidate(nftProvider);
+                  showSnackBar(
+                    context: context,
+                    text: response is bool && response
+                        ? 'Listed successfully'
+                        : response is String
+                            ? response
+                            : 'Failed to list item',
+                    backgroundColor: response is bool && response
+                        ? ColorPalette.dReaderGreen
+                        : ColorPalette.dReaderRed,
                   );
-              ref
-                  .read(globalStateProvider.notifier)
-                  .state
-                  .copyWith(isLoading: false);
-              Sentry.captureMessage('List item response: $response');
-              if (context.mounted) {
-                ref.invalidate(nftProvider);
-                Navigator.pop(context);
-                showSnackBar(
-                  context: context,
-                  text:
-                      response ? 'Listed successfully' : 'Failed to list item',
-                  backgroundColor: response
-                      ? ColorPalette.dReaderGreen
-                      : ColorPalette.dReaderRed,
-                );
+                }
+              } catch (exception) {
+                rethrow;
               }
             }
           : null,

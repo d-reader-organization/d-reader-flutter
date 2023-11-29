@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -127,26 +128,37 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                             builder: (context, ref, child) {
                               return GestureDetector(
                                 onTap: () async {
-                                  final isSuccessful = await ref
-                                      .read(solanaProvider.notifier)
-                                      .useMint(
-                                        nftAddress: ownedNft.address,
-                                        ownerAddress: ownedNft.ownerAddress,
-                                      );
-                                  if (context.mounted) {
-                                    Navigator.pop(context);
-                                    if (isSuccessful) {
-                                      return nextScreenPush(
-                                        context,
-                                        const OpenNftAnimation(),
+                                  try {
+                                    final isSuccessful = await ref
+                                        .read(solanaProvider.notifier)
+                                        .useMint(
+                                          nftAddress: ownedNft.address,
+                                          ownerAddress: ownedNft.ownerAddress,
+                                        );
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                      if (isSuccessful) {
+                                        return nextScreenPush(
+                                          context,
+                                          const OpenNftAnimation(),
+                                        );
+                                      }
+                                      showSnackBar(
+                                        context: context,
+                                        backgroundColor:
+                                            ColorPalette.dReaderRed,
+                                        milisecondsDuration: 2000,
+                                        text: 'Failed to open',
                                       );
                                     }
-                                    showSnackBar(
-                                      context: context,
-                                      backgroundColor: ColorPalette.dReaderRed,
-                                      milisecondsDuration: 2000,
-                                      text: 'Failed to open',
-                                    );
+                                  } catch (exception) {
+                                    if (context.mounted) {
+                                      Navigator.pop(context);
+                                      return triggerLowPowerOrNoWallet(
+                                        context,
+                                        exception,
+                                      );
+                                    }
                                   }
                                 },
                                 child: Align(

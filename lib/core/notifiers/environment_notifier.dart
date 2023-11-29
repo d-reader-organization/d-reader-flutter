@@ -46,7 +46,6 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
 
     if (localStoreData != null) {
       var networkData = jsonDecode(localStoreData);
-      final String? signature = networkData['signature'];
       Map<String, WalletData>? wallets = walletsMapFromDynamic(networkData);
       state = state.copyWith(
         apiUrl: networkData['apiUrl'],
@@ -57,7 +56,6 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
             ? Ed25519HDPublicKey.fromBase58(networkData['publicKey'])
             : null,
         solanaCluster: selectedNetwork,
-        signature: signature?.codeUnits,
         user: networkData['user'] != null
             ? UserModel.fromJson(jsonDecode(networkData['user']))
             : null,
@@ -76,7 +74,6 @@ class EnvironmentNotifier extends StateNotifier<EnvironmentState> {
       refreshToken: input.refreshToken,
       solanaCluster: input.solanaCluster,
       publicKey: input.publicKey,
-      signature: input.signature,
       wallets: input.wallets,
       user: input.user,
     );

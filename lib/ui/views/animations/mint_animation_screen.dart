@@ -348,8 +348,11 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                                       onSubmit: () async {
                                         if (isChecked) {
                                           LocalStore.instance.put(
-                                              WalkthroughKeys.unwrap, true);
+                                            WalkthroughKeys.unwrap.name,
+                                            true,
+                                          );
                                         }
+                                        Navigator.pop(context);
                                         await _handleUnwrap(ref: ref);
                                       },
                                       title: 'Comic unwraping',

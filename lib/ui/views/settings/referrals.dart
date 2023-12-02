@@ -32,7 +32,8 @@ class ReferralsView extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        Sentry.captureException(error, stackTrace: stackTrace);
+        Sentry.captureException(error,
+            stackTrace: 'referrals fail ${stackTrace.toString()}');
         return const Text('');
       },
       loading: () {

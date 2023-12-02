@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ReferralBody extends ConsumerWidget {
   final bool onlyInput;
@@ -142,7 +141,6 @@ class ReferralBody extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        Sentry.captureException(error, stackTrace: stackTrace);
         return const SizedBox();
       },
       loading: () {

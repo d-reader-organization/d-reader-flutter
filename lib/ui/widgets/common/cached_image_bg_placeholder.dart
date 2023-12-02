@@ -64,7 +64,8 @@ class CachedImageBgPlaceholder extends StatelessWidget {
             foregroundDecoration: foregroundDecoration,
           ),
       errorWidget: (context, url, error) {
-        Sentry.captureException(error);
+        Sentry.captureException(error,
+            stackTrace: 'Cached image bg placeholder.');
         if (onError != null) {
           onError!();
         }

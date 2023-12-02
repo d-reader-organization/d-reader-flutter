@@ -329,9 +329,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             apiUrl: apiUrl,
             jwtToken: jwtToken,
           );
-    } catch (exception, stackTrace) {
-      Sentry.captureMessage('Connect wallet exception $exception');
-      Sentry.captureException(exception, stackTrace: stackTrace);
+    } catch (exception) {
       throw Exception(exception);
     }
   }
@@ -422,9 +420,10 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           await session.close();
           return true;
         }
-      } catch (exception, stackTrace) {
+      } catch (exception) {
         await session.close();
-        Sentry.captureException(exception, stackTrace: stackTrace);
+        Sentry.captureException(exception,
+            stackTrace: 'Failed to sign and send mint.');
         if (exception is JsonRpcException) {
           return exception.message;
         }
@@ -465,7 +464,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           exception is NoWalletFoundException) {
         rethrow;
       }
-      Sentry.captureException(exception);
+      Sentry.captureException(exception, stackTrace: 'Failed to list.');
       return false;
     }
   }

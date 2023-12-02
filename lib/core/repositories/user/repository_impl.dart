@@ -68,7 +68,8 @@ class UserRepositoryImpl implements UserRepository {
     ).then((value) {
       return value.data;
     }).onError((error, stackTrace) {
-      Sentry.captureException(error);
+      Sentry.captureException(error,
+          stackTrace: 'failed update user.${stackTrace.toString()}');
       if (error is DioException) {
         return error;
       }
@@ -160,7 +161,8 @@ class UserRepositoryImpl implements UserRepository {
             )
           : [];
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(exception,
+          stackTrace: 'Get user wallets ${stackTrace.toString()}');
       throw Exception(exception);
     }
   }
@@ -179,7 +181,8 @@ class UserRepositoryImpl implements UserRepository {
             )
           : [];
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(exception,
+          stackTrace: 'User assets: ${stackTrace.toString()}');
       throw Exception(exception);
     }
   }

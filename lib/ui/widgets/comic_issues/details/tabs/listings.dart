@@ -8,7 +8,6 @@ import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 
 class IssueListings extends StatelessWidget {
@@ -205,7 +204,6 @@ class ListingStats extends ConsumerWidget {
         ],
       );
     }, error: (Object error, StackTrace stackTrace) {
-      Sentry.captureException(error, stackTrace: stackTrace);
       return const Text('Something went wrong in candy machine stats');
     }, loading: () {
       return const Padding(

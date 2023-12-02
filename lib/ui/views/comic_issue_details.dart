@@ -42,7 +42,6 @@ import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_she
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ComicIssueDetails extends ConsumerStatefulWidget {
   final int id;
@@ -457,7 +456,6 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
         );
       },
       error: (err, stack) {
-        Sentry.captureException(err, stackTrace: stack);
         return const Center(
           child: Text(
             'Failed to fetch data',

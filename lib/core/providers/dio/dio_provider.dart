@@ -47,9 +47,13 @@ Dio dio(DioRef ref) {
               ref.invalidate(environmentProvider);
               return;
             }
-            Sentry.captureException(e);
-            Sentry.captureMessage(e.response?.data['message'].toString() ??
-                e.response?.data.toString());
+            dynamic message = e.response?.data?['message'];
+            message = message != null
+                ? message is List
+                    ? message.join('. ')
+                    : message
+                : e.response?.data.toString();
+            Sentry.captureMessage(message, level: SentryLevel.error);
             return handler.next(e);
           },
         ),

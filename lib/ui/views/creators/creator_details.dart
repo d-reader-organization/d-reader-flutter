@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/ui/widgets/creators/tabs/collectibles/tab.dart'
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/comics/tab.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CreatorDetailsView extends ConsumerWidget {
   final String slug;
@@ -73,7 +72,6 @@ class CreatorDetailsView extends ConsumerWidget {
           );
         },
         error: (err, stack) {
-          Sentry.captureException(err, stackTrace: stack);
           return const Center(
             child: Text(
               'Something went wrong',

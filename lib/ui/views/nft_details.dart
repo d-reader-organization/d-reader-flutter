@@ -25,7 +25,6 @@ import 'package:d_reader_flutter/ui/widgets/nft/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 const sectionHeadingStyle = TextStyle(
   color: Color(0xFF777D8C),
@@ -86,7 +85,6 @@ class NftDetails extends ConsumerWidget {
         );
       },
       error: (Object error, StackTrace stackTrace) {
-        Sentry.captureException(error, stackTrace: stackTrace);
         return const Text('Something went wrong in nft details.');
       },
       loading: () {
@@ -212,11 +210,6 @@ class Body extends StatelessWidget {
                                     exception,
                                   );
                                 }
-                                Sentry.captureException(
-                                  exception,
-                                  stackTrace:
-                                      'NftDetails -> List/Delist failed',
-                                );
                               }
                             },
                       child: nft.isListed
@@ -287,10 +280,6 @@ class Body extends StatelessWidget {
                               exception,
                             );
                           }
-                          Sentry.captureException(
-                            exception,
-                            stackTrace: 'Use mint in NFT Details failed',
-                          );
                         }
                       },
                     ),

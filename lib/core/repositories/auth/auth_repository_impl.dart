@@ -54,20 +54,17 @@ class AuthRepositoryImpl implements AuthRepository {
       dio.close();
     } catch (exception, stackTrace) {
       Sentry.captureException(exception, stackTrace: stackTrace);
+      rethrow;
     }
   }
 
   @override
   Future<void> disconnectWallet({
     required String address,
-  }) async {
-    try {
-      await client
-          .patch('/auth/wallet/disconnect/$address')
-          .then((value) => value.data);
-    } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
-    }
+  }) {
+    return client
+        .patch('/auth/wallet/disconnect/$address')
+        .then((value) => value.data);
   }
 
   @override
@@ -90,7 +87,10 @@ class AuthRepositoryImpl implements AuthRepository {
                 : message
             : exception.response?.data.toString();
       }
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(
+        exception,
+        stackTrace: 'Failed to sign in $stackTrace',
+      );
       return null;
     }
   }
@@ -118,7 +118,10 @@ class AuthRepositoryImpl implements AuthRepository {
                 : message
             : exception.response?.data.toString();
       }
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(
+        exception,
+        stackTrace: 'Failed to sign up $stackTrace',
+      );
       return null;
     }
   }

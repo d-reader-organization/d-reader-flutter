@@ -10,7 +10,6 @@ import 'package:d_reader_flutter/ui/widgets/library/tabs/owned_nfts_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class OwnedListView extends ConsumerWidget {
   const OwnedListView({super.key});
@@ -118,7 +117,6 @@ class OwnedListView extends ConsumerWidget {
               );
             },
             error: (error, stackTrace) {
-              Sentry.captureException(error, stackTrace: stackTrace);
               return const Center(
                 child: Text('Nothing to see in here.'),
               );

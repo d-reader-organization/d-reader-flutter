@@ -40,7 +40,8 @@ class WalletRepositoryImpl implements WalletRepository {
           await client.get('/wallet/get/$address').then((value) => value.data);
       return response != null ? WalletModel.fromJson(response) : null;
     } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+      Sentry.captureException(exception,
+          stackTrace: 'failed to get wallet ${stackTrace.toString()}');
       throw Exception(exception);
     }
   }

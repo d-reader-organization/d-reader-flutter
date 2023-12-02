@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_item_row
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ListedItems extends ConsumerWidget {
   final ComicIssueModel issue;
@@ -37,8 +36,7 @@ class ListedItems extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        Sentry.captureException(error, stackTrace: stackTrace);
-        return const Text('Something went wrong');
+        return const Text('Failed to fetch data');
       },
       loading: () {
         return const Padding(

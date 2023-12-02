@@ -20,7 +20,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProfileView extends HookConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -439,8 +438,7 @@ class ProfileView extends HookConsumerWidget {
           );
         },
         error: (Object error, StackTrace stackTrace) {
-          Sentry.captureException(error, stackTrace: stackTrace);
-          return const Text('Something went wrong');
+          return const Text('Failed to fetch data');
         },
         loading: () {
           return const SizedBox();

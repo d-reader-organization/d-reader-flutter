@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/library/cards/owned_issue_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class OwnedIssuesItems extends ConsumerWidget {
   final ComicModel comic;
@@ -89,7 +88,6 @@ class OwnedIssuesItems extends ConsumerWidget {
         );
       },
       error: (Object error, StackTrace stackTrace) {
-        Sentry.captureException(error, stackTrace: stackTrace);
         return const Center(
           child: Text('Nothing to see in here.'),
         );

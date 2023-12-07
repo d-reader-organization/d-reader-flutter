@@ -182,7 +182,7 @@ class SignUpStep3 extends ConsumerWidget {
                     50,
                   ),
                   onPressed: () {
-                    nextScreenPush(
+                    nextScreenCloseOthers(
                       context,
                       const DReaderScaffold(),
                     );

@@ -334,7 +334,7 @@ class WalletListScreen extends ConsumerWidget {
                         key: WalkthroughKeys.multipleWallet.name,
                         title: 'Another wallet',
                         subtitle:
-                            'When connecting multiple wallets to dReader bare in mind to always match the wallet selected on dReader with the wallet selected in your mobile wallet app',
+                            'When connecting multiple wallets to dReader bare in mind to always match the wallet selected on dReader with the mobile wallet app which holds its private keys',
                         assetPath: '$walkthroughAssetsPath/multiple_wallet.jpg',
                         onSubmit: () {
                           Navigator.pop(context);

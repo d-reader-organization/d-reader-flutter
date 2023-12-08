@@ -18,6 +18,7 @@ abstract class UserRepository {
   Future<void> resetPassword(
     String id,
   );
+  Future<dynamic> requestPasswordReset(String email);
   Future<void> requestEmailVerification();
   Future<List<WalletModel>> userWallets(int id);
   Future<List<WalletAsset>> userAssets(int id);

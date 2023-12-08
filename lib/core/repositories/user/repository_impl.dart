@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
@@ -210,5 +211,20 @@ class UserRepositoryImpl implements UserRepository {
           }
         });
     return result;
+  }
+
+  @override
+  Future<dynamic> requestPasswordReset(String email) async {
+    try {
+      await client
+          .patch('/user/request-password-reset', data: {'email': email});
+    } catch (exception) {
+      if (exception is DioException) {
+        final message = exception.response?.data['message'] ??
+            exception.response?.data.toString();
+        throw BadRequestException(message);
+      }
+      throw Exception(exception);
+    }
   }
 }

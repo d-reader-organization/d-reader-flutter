@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
@@ -607,18 +606,6 @@ class BottomNavigation extends ConsumerWidget {
                         onPressed: ref.watch(isOpeningSessionProvider)
                             ? null
                             : () async {
-                                await triggerWalkthroughDialogIfNeeded(
-                                  context: context,
-                                  key: WalkthroughKeys.firstMint.name,
-                                  title: 'Caution',
-                                  subtitle:
-                                      'If you\'re using Phantom wallet make sure that the same wallet is selected within dReader and is active in the Phantom mobile app. In other words, if wallet A is selected on dReader but wallet B is active Phantom, you might experience issues',
-                                  assetPath:
-                                      '$walkthroughAssetsPath/add_wallet.jpg',
-                                  onSubmit: () {
-                                    Navigator.pop(context);
-                                  },
-                                );
                                 if (context.mounted) {
                                   await _handleMint(context, ref);
                                 }

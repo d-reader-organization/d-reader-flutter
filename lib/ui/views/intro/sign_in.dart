@@ -8,6 +8,7 @@ import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/ui/views/intro/request_reset_password.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
@@ -200,18 +201,20 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       ),
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {},
-                  //   child: const Text(
-                  //     'Forgot password?',
-                  //     textAlign: TextAlign.right,
-                  //     style: TextStyle(
-                  //       fontSize: 14,
-                  //       fontWeight: FontWeight.w500,
-                  //       color: ColorPalette.dReaderYellow100,
-                  //     ),
-                  //   ),
-                  // ),
+                  GestureDetector(
+                    onTap: () {
+                      nextScreenPush(context, const RequestResetPasswordView());
+                    },
+                    child: const Text(
+                      'Forgot password?',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.dReaderYellow100,
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 48,
                   ),

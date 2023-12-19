@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
@@ -47,24 +46,25 @@ class SignUpStep3 extends ConsumerWidget {
           const DReaderScaffold(),
         );
       }
-    } catch (error) {
+    } catch (exception) {
       globalNotifier.update(
         (state) => state.copyWith(
           isLoading: false,
         ),
       );
-      if (context.mounted && error is NoWalletFoundException) {
-        return triggerInstallWalletBottomSheet(context);
+      if (context.mounted) {
+        return triggerLowPowerOrNoWallet(
+          context,
+          exception,
+        );
       }
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

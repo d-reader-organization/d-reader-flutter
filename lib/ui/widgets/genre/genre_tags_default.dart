@@ -20,11 +20,12 @@ List<GenreModel> _genresWithMore(List<GenreModel> genres, int sublistLimit) =>
 
 class GenreTagsDefault extends StatelessWidget {
   final List<GenreModel> genres;
-  final bool withHorizontalScroll;
+  final bool ignoreSublist, withHorizontalScroll;
   const GenreTagsDefault({
     Key? key,
     required this.genres,
     this.withHorizontalScroll = false,
+    this.ignoreSublist = false,
   }) : super(key: key);
 
   @override
@@ -47,9 +48,13 @@ class GenreTagsDefault extends StatelessWidget {
         : Wrap(
             spacing: 4,
             runSpacing: 4,
-            children: (genres.length >= sublistLimit
-                    ? _genresWithMore(genres, sublistLimit)
-                    : genres)
+            children: [
+              ...(ignoreSublist
+                  ? genres
+                  : (genres.length >= sublistLimit
+                      ? _genresWithMore(genres, sublistLimit)
+                      : genres))
+            ]
                 .map(
                   (genre) => TagContainer(genre: genre),
                 )

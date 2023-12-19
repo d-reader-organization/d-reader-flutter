@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
@@ -14,12 +16,23 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:upgrader/upgrader.dart';
 
 PackageInfo? packageInfo;
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   packageInfo = await PackageInfo.fromPlatform();
+  HttpOverrides.global = MyHttpOverrides();
   await Future.wait(
     [
       dotenv.load(fileName: ".env"),
@@ -40,6 +53,7 @@ void main() async {
       appRunner: initApp,
     );
   } else {
+    await Upgrader.clearSavedSettings();
     initApp();
   }
 }
@@ -69,10 +83,31 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'dReader',
       theme: ThemeData(
+        useMaterial3: false,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             systemNavigationBarColor: ColorPalette.appBackgroundColor,
             statusBarColor: ColorPalette.appBackgroundColor,
+          ),
+        ),
+        dialogTheme: const DialogTheme(
+          backgroundColor: ColorPalette.greyscale400,
+          contentTextStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+          titleTextStyle: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+        textButtonTheme: const TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: MaterialStatePropertyAll(
+              ColorPalette.dReaderYellow100,
+            ),
           ),
         ),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {

@@ -3,6 +3,7 @@ import 'dart:io' show File;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
@@ -290,31 +291,34 @@ class ProfileView extends HookConsumerWidget {
                       );
                     },
                   ),
-                  SettingsCommonListTile(
-                    title: 'Sync assets',
-                    leadingPath:
-                        '${Config.settingsAssetsPath}/light/wallet.svg',
-                    overrideColor: Colors.green,
-                    overrideLeading: ref.watch(globalStateProvider).isLoading
-                        ? const SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: CircularProgressIndicator(
-                              color: ColorPalette.dReaderGreen,
-                            ),
-                          )
-                        : null,
-                    overrideTrailing: const SizedBox(),
-                    onTap: ref.watch(globalStateProvider).isLoading
-                        ? null
-                        : () async {
-                            await syncWallets(
-                              context: context,
-                              ref: ref,
-                              userId: user.id,
-                            );
-                          },
-                  ),
+                  ref.read(environmentProvider).wallets != null
+                      ? SettingsCommonListTile(
+                          title: 'Sync assets',
+                          leadingPath:
+                              '${Config.settingsAssetsPath}/light/wallet.svg',
+                          overrideColor: Colors.green,
+                          overrideLeading:
+                              ref.watch(globalStateProvider).isLoading
+                                  ? const SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: CircularProgressIndicator(
+                                        color: ColorPalette.dReaderGreen,
+                                      ),
+                                    )
+                                  : null,
+                          overrideTrailing: const SizedBox(),
+                          onTap: ref.watch(globalStateProvider).isLoading
+                              ? null
+                              : () async {
+                                  await syncWallets(
+                                    context: context,
+                                    ref: ref,
+                                    userId: user.id,
+                                  );
+                                },
+                        )
+                      : const SizedBox(),
                   Container(
                     margin: const EdgeInsets.only(left: 2),
                     child: SettingsCommonListTile(

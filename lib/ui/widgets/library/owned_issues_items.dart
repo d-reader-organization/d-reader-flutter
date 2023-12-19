@@ -27,10 +27,10 @@ class OwnedIssuesItems extends ConsumerWidget {
         if (data.isEmpty) {
           return const Text('Something went wrong.');
         }
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
             ref.invalidate(selectedOwnedComicProvider);
-            return false;
           },
           child: SingleChildScrollView(
             child: Column(

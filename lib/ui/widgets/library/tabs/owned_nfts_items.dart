@@ -28,10 +28,10 @@ class OwnedNftsItems extends ConsumerWidget {
         if (data.isEmpty) {
           return const Text('No data.');
         }
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
             ref.invalidate(selectedIssueInfoProvider);
-            return false;
           },
           child: SingleChildScrollView(
             child: Column(

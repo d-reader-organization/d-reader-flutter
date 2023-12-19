@@ -80,6 +80,7 @@ class ComicInfoView extends StatelessWidget {
                 ),
                 GenreTagsDefault(
                   genres: comic.genres,
+                  ignoreSublist: true,
                 ),
               ],
             ),

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
@@ -12,6 +14,7 @@ import 'package:d_reader_flutter/ui/widgets/common/test_mode_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/referrals/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:upgrader/upgrader.dart';
 
 class DReaderScaffold extends ConsumerWidget {
   final Widget? body;
@@ -77,48 +80,58 @@ class DReaderScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: ColorPalette.appBackgroundColor,
-          appBar: _appBar(
-            navigationIndex: ref.watch(scaffoldProvider).navigationIndex,
-            isDevnet: ref.watch(environmentProvider).solanaCluster ==
-                SolanaCluster.devnet.value,
-          ),
-          body: Padding(
-            padding: _bodyPadding(
-              screenIndex: ref.watch(scaffoldProvider).navigationIndex,
-              hasBetaAccess: ref.watch(environmentProvider).user != null &&
-                  ref.watch(environmentProvider).user!.hasBetaAccess,
+    return UpgradeAlert(
+      upgrader: Upgrader(
+        canDismissDialog: true,
+        showReleaseNotes: false,
+        debugDisplayOnce: true,
+        dialogStyle: Platform.isIOS
+            ? UpgradeDialogStyle.cupertino
+            : UpgradeDialogStyle.material,
+      ),
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: ColorPalette.appBackgroundColor,
+            appBar: _appBar(
+              navigationIndex: ref.watch(scaffoldProvider).navigationIndex,
+              isDevnet: ref.watch(environmentProvider).solanaCluster ==
+                  SolanaCluster.devnet.value,
             ),
-            child: body ??
-                PageView(
-                  controller: ref.watch(scaffoldPageController),
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (index) {
-                    ref
-                        .read(scaffoldProvider.notifier)
-                        .setNavigationIndex(index);
-                  },
-                  children: const [
-                    BetaAccessWrapper(
-                      child: HomeView(),
-                    ),
-                    BetaAccessWrapper(
-                      child: DiscoverView(),
-                    ),
-                    BetaAccessWrapper(
-                      child: NewLibraryView(),
-                    ),
-                    SettingsRootView(),
-                  ],
-                ),
+            body: Padding(
+              padding: _bodyPadding(
+                screenIndex: ref.watch(scaffoldProvider).navigationIndex,
+                hasBetaAccess: ref.watch(environmentProvider).user != null &&
+                    ref.watch(environmentProvider).user!.hasBetaAccess,
+              ),
+              child: body ??
+                  PageView(
+                    controller: ref.watch(scaffoldPageController),
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (index) {
+                      ref
+                          .read(scaffoldProvider.notifier)
+                          .setNavigationIndex(index);
+                    },
+                    children: const [
+                      BetaAccessWrapper(
+                        child: HomeView(),
+                      ),
+                      BetaAccessWrapper(
+                        child: DiscoverView(),
+                      ),
+                      BetaAccessWrapper(
+                        child: NewLibraryView(),
+                      ),
+                      SettingsRootView(),
+                    ],
+                  ),
+            ),
+            extendBody: false,
+            bottomNavigationBar:
+                showBottomNavigation ? const CustomBottomNavigationBar() : null,
           ),
-          extendBody: false,
-          bottomNavigationBar:
-              showBottomNavigation ? const CustomBottomNavigationBar() : null,
         ),
       ),
     );

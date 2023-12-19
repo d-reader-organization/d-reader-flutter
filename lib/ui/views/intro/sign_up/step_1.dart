@@ -59,7 +59,6 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
           context: context,
           text: result,
           backgroundColor: ColorPalette.dReaderRed,
-          milisecondsDuration: 1500,
         );
       }
       ref.read(signUpDataProvider.notifier).updateUsername(username);

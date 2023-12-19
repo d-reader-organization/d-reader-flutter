@@ -10,9 +10,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReferralBody extends ConsumerWidget {
   final bool onlyInput;
+  final Widget? child;
   const ReferralBody({
     super.key,
     this.onlyInput = false,
+    this.child,
   });
 
   @override
@@ -55,7 +57,7 @@ class ReferralBody extends ConsumerWidget {
               ),
               if (!user.hasBetaAccess) ...[
                 const Text(
-                  'Type in the username, email, or wallet address from your referrer to unlock all the features',
+                  'Type in the username or the wallet address from your referrer to claim beta access',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -78,51 +80,7 @@ class ReferralBody extends ConsumerWidget {
                 ),
               ],
               if (!onlyInput) ...[
-                if (user.referralsRemaining > 0) ...[
-                  GestureDetector(
-                    onTap: () {
-                      Clipboard.setData(
-                        ClipboardData(
-                          text:
-                              'https://dreader.app/register?referrer=${user.name}',
-                        ),
-                      ).then(
-                        (value) => ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: ColorPalette.dReaderGreen,
-                            content: Text(
-                              "Referral link copied to clipboard",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.copy,
-                          color: ColorPalette.dReaderYellow100,
-                          size: 16,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          'Copy my referral link',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: ColorPalette.dReaderYellow100,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                if (user.referralsRemaining >= 0) ...[
                   const SizedBox(
                     height: 16,
                   ),
@@ -135,7 +93,66 @@ class ReferralBody extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const Text(
+                  'Fully onboarding 2 people to the platform will make you eligible for a free comic mint! \'Fully\' means that the users have verified their email and connected a wallet.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Clipboard.setData(
+                      ClipboardData(
+                        text:
+                            'https://dreader.app/register?referrer=${user.name}',
+                      ),
+                    ).then(
+                      (value) => ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: ColorPalette.dReaderGreen,
+                          content: Text(
+                            "Referral link copied to clipboard",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.copy,
+                        color: ColorPalette.dReaderYellow100,
+                        size: 16,
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        'Copy my referral link',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: ColorPalette.dReaderYellow100,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
+              if (child != null) ...[child!],
             ],
           ),
         );
@@ -144,7 +161,14 @@ class ReferralBody extends ConsumerWidget {
         return const SizedBox();
       },
       loading: () {
-        return const SizedBox();
+        return Container(
+          margin: const EdgeInsets.only(top: 32),
+          child: const Center(
+            child: CircularProgressIndicator(
+              color: ColorPalette.dReaderYellow100,
+            ),
+          ),
+        );
       },
     );
   }

@@ -135,7 +135,9 @@ class TransactionRepositoryImpl implements TransactionRepository {
           .then((value) => value.data);
       return transaction;
     } catch (error) {
-      Sentry.captureException(error, stackTrace: 'Use comic issue nft');
+      Sentry.captureException(error,
+          stackTrace:
+              'Use comic issue nftAddress $nftAddress, owner $ownerAddress');
       throw Exception('Failed to get transaction from API');
     }
   }

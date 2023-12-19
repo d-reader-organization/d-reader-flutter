@@ -47,7 +47,6 @@ handleSave(BuildContext context, WidgetRef ref, String referrer) async {
     showSnackBar(
       context: context,
       text: updateResult is String ? updateResult : 'Referral code claimed',
-      milisecondsDuration: 2000,
       backgroundColor: updateResult is String
           ? ColorPalette.dReaderRed
           : ColorPalette.dReaderGreen,

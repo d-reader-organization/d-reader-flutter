@@ -270,7 +270,6 @@ class ProfileView extends HookConsumerWidget {
                                 context: context,
                                 text: 'Verification email has been sent.',
                                 backgroundColor: ColorPalette.dReaderGreen,
-                                milisecondsDuration: 1200,
                               );
                             }
                           },

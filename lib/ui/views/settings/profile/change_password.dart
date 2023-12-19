@@ -64,7 +64,6 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
         text: isFailure ? result : 'Password has been changed.',
         backgroundColor:
             isFailure ? ColorPalette.dReaderRed : ColorPalette.dReaderGreen,
-        milisecondsDuration: 1200,
       );
       if (!isFailure) {
         Future.delayed(

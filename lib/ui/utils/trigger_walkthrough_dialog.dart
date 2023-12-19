@@ -89,7 +89,6 @@ triggerVerificationDialog(BuildContext context, WidgetRef ref) {
       showSnackBar(
         context: context,
         text: 'Verification email has been sent.',
-        milisecondsDuration: 2000,
         backgroundColor: ColorPalette.dReaderGreen,
       );
     },

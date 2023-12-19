@@ -35,9 +35,11 @@ class ComicInfoView extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                CachedImageBgPlaceholder(
-                  height: 232,
-                  imageUrl: comic.cover,
+                AspectRatio(
+                  aspectRatio: 10 / 9,
+                  child: CachedImageBgPlaceholder(
+                    imageUrl: comic.cover,
+                  ),
                 ),
                 const SizedBox(
                   height: 16,

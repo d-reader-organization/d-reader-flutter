@@ -52,8 +52,9 @@ class AuthRepositoryImpl implements AuthRepository {
           )
           .then((value) => value.data);
       dio.close();
-    } catch (exception, stackTrace) {
-      Sentry.captureException(exception, stackTrace: stackTrace);
+    } catch (exception) {
+      Sentry.captureException(exception,
+          stackTrace: 'Failed to connect wallet with address $address');
       rethrow;
     }
   }
@@ -139,7 +140,15 @@ class AuthRepositoryImpl implements AuthRepository {
       await client.get('/auth/user/validate-name/$username');
       return true;
     } catch (exception) {
-      return 'Username already taken.';
+      if (exception is! DioException) {
+        return 'Username already taken.';
+      }
+      final dynamic message = exception.response?.data?['message'];
+      return message != null
+          ? message is List
+              ? message.join('. ')
+              : message
+          : exception.response?.data.toString();
     }
   }
 }

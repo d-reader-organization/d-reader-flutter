@@ -135,7 +135,6 @@ class Body extends StatelessWidget {
     showSnackBar(
       context: context,
       backgroundColor: ColorPalette.dReaderRed,
-      milisecondsDuration: 2000,
       text: openResponse is String ? openResponse : 'Failed to open',
     );
   }

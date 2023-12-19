@@ -66,7 +66,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           context: context,
           text: response,
           backgroundColor: ColorPalette.dReaderRed,
-          milisecondsDuration: 1500,
         );
       }
       final user = await ref.read(myUserProvider.future);

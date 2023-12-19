@@ -84,7 +84,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       context: context,
                       text: text,
                       backgroundColor: ColorPalette.dReaderRed,
-                      milisecondsDuration: 2000,
                     );
                   },
                 ),

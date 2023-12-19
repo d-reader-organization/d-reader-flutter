@@ -21,7 +21,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: yuBeQq8KaFHWPmHyGNECyHYRDFLt7eepvVRcEJKoiJp
+  address: Fs6nr7PCMbNHiCWzDJoFf8Tt1DLPPMrxXxBFsQVQes9m
   media:
     - purpose: icon
       uri: ./512x512_rounded.png
@@ -43,7 +43,7 @@ release:
       long_description: >-
         Platform for discovering, trading, collecting, and reading digital
         graphic novels
-      new_in_version: Forgot password feature
+      new_in_version: Improve toast display, logs
       saga_features: Exclusive early access, free/discounted collectible comics
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader

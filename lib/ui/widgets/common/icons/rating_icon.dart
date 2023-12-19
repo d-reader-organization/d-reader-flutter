@@ -39,7 +39,6 @@ class RatingIcon extends ConsumerWidget {
     showSnackBar(
       context: context,
       text: 'Verification email has been ${isResending ? 'resent' : 'sent'}.',
-      milisecondsDuration: 2000,
       backgroundColor: ColorPalette.dReaderGreen,
     );
   }

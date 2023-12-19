@@ -123,7 +123,6 @@ class _RequestResetPasswordViewState extends State<RequestResetPasswordView> {
                             context: context,
                             text: 'Reset password mail has been sent.',
                             backgroundColor: ColorPalette.dReaderGreen,
-                            milisecondsDuration: 2000,
                           );
                         }
                       } catch (exception) {
@@ -138,7 +137,6 @@ class _RequestResetPasswordViewState extends State<RequestResetPasswordView> {
                             context: context,
                             text: exception.cause,
                             backgroundColor: ColorPalette.dReaderRed,
-                            milisecondsDuration: 2000,
                           );
                         }
                       }

@@ -41,6 +41,7 @@ import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_she
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ComicIssueDetails extends ConsumerStatefulWidget {
   final int id;
@@ -494,18 +495,21 @@ class BottomNavigation extends ConsumerWidget {
         return showSnackBar(
           context: context,
           text: 'Failed to find candy machine',
-          milisecondsDuration: 1500,
         );
       }
       final activeGroup = getActiveGroup(candyMachineState!.groups);
       if (activeGroup == null && context.mounted) {
         return showSnackBar(
-            context: context,
-            text: 'There is no active mint',
-            milisecondsDuration: 1500);
+          context: context,
+          text: 'There is no active mint',
+        );
       }
       if (activeGroup!.label == dFreeLabel) {
         bool isVerified = await _checkIsVerifiedEmail(ref: ref);
+        final user = ref.read(environmentProvider).user;
+        Sentry.captureMessage(
+          'dFree: User ${user?.email} - isVerified: $isVerified',
+        );
         if (!isVerified && context.mounted) {
           return triggerVerificationDialog(context, ref);
         }
@@ -527,7 +531,6 @@ class BottomNavigation extends ConsumerWidget {
             context: context,
             text: mintResult is String ? mintResult : 'Something went wrong',
             backgroundColor: ColorPalette.dReaderRed,
-            milisecondsDuration: 2000,
           );
         }
       }
@@ -543,7 +546,6 @@ class BottomNavigation extends ConsumerWidget {
         showSnackBar(
           context: context,
           text: error is BadRequestException ? error.cause : error.toString(),
-          milisecondsDuration: 2000,
           backgroundColor: ColorPalette.dReaderRed,
         );
       }

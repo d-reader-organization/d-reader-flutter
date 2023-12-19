@@ -356,6 +356,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           );
           if (!isWalletEligibleForMint) {
             await session.close();
+            Sentry.captureMessage(
+                'User with email: ${ref.read(environmentProvider).user?.email} and wallet $address is not eligible for minting.');
             return 'Wallet address ${formatAddress(address, 3)} is not eligible for minting';
           }
 
@@ -377,6 +379,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         },
       );
     } catch (exception) {
+      Sentry.captureException(
+        exception,
+        stackTrace:
+            'authorizeIfNeededWithOnComplete: ${ref.read(environmentProvider).user?.email}',
+      );
       rethrow;
     }
   }
@@ -422,8 +429,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         }
       } catch (exception) {
         await session.close();
-        Sentry.captureException(exception,
-            stackTrace: 'Failed to sign and send mint.');
+        Sentry.captureException(
+          exception,
+          stackTrace:
+              'User with ${ref.read(environmentProvider).user?.email} failed to sign and send mint.',
+        );
         if (exception is JsonRpcException) {
           return exception.message;
         }
@@ -464,7 +474,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           exception is NoWalletFoundException) {
         rethrow;
       }
-      Sentry.captureException(exception, stackTrace: 'Failed to list.');
+      Sentry.captureException(exception,
+          stackTrace:
+              'List failed. Seller $sellerAddress, mintAccount $mintAccount - user with ${ref.read(environmentProvider).user?.email}');
       return false;
     }
   }
@@ -493,7 +505,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           exception is NoWalletFoundException) {
         rethrow;
       }
-      Sentry.captureException(exception, stackTrace: 'delist failed.');
+      Sentry.captureException(exception,
+          stackTrace:
+              'Delist failed for ${ref.read(environmentProvider).user?.email}.');
       return false;
     }
   }
@@ -524,7 +538,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           exception is NoWalletFoundException) {
         rethrow;
       }
-      Sentry.captureException(exception, stackTrace: 'buy multiple failed.');
+      Sentry.captureException(exception,
+          stackTrace:
+              'Buy multiple failed for ${ref.read(environmentProvider).user?.email}');
       return false;
     }
   }
@@ -554,7 +570,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           exception is NoWalletFoundException) {
         rethrow;
       }
-      Sentry.captureException(exception, stackTrace: 'Failed to use mint');
+      Sentry.captureException(exception,
+          stackTrace:
+              'Failed to use mint: nftAddress $nftAddress, owner: $ownerAddress. User: ${ref.read(environmentProvider).user?.email}');
       return false;
     }
   }
@@ -598,9 +616,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           await session.close();
           return true;
         }
-      } catch (exception, stackTrace) {
+      } catch (exception) {
         await session.close();
-        Sentry.captureException(exception, stackTrace: stackTrace);
+        Sentry.captureException(exception,
+            stackTrace:
+                'sign and send transaction: ${ref.read(environmentProvider).user?.email}');
         if (exception is JsonRpcException) {
           return exception.message;
         }
@@ -682,7 +702,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   }
 
   Future<LocalAssociationScenario> _getSession() async {
-    ref.read(isOpeningSessionProvider.notifier).update((state) => true);
     final bool isWalletAvailable = await LocalAssociationScenario.isAvailable();
     final bool isLowPowerMode = await Power.isLowPowerMode;
     if (isLowPowerMode) {
@@ -691,7 +710,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (!isWalletAvailable) {
       throw NoWalletFoundException(missingWalletAppText);
     }
-
+    ref.read(isOpeningSessionProvider.notifier).update((state) => true);
     final session = await LocalAssociationScenario.create();
     session.startActivityForResult(null).ignore();
     Future.delayed(

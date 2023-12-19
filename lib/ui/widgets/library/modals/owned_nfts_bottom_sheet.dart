@@ -147,7 +147,6 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                         context: context,
                                         backgroundColor:
                                             ColorPalette.dReaderRed,
-                                        milisecondsDuration: 2000,
                                         text: 'Failed to open',
                                       );
                                     }

@@ -95,7 +95,6 @@ class SignUpStep2Verification extends StatelessWidget {
                         showSnackBar(
                           context: context,
                           text: 'Verification email has been resent.',
-                          milisecondsDuration: 2000,
                           backgroundColor: ColorPalette.dReaderGreen,
                         );
                       }

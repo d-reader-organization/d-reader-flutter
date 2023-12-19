@@ -27,75 +27,75 @@ class BetaAccessWrapper extends ConsumerWidget {
               children: [
                 Column(
                   children: [
-                    const ReferralBody(
+                    ReferralBody(
                       onlyInput: true,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: ColorPalette.greyscale500,
-                        borderRadius: BorderRadius.circular(
-                          8,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: ColorPalette.greyscale500,
+                          borderRadius: BorderRadius.circular(
+                            8,
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        children: [
-                          const Text(
-                            'How to get code?',
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          const Text(
-                            'Connect with us on social media to find if any invite codes are available!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: ColorPalette.greyscale100,
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Don\'t have the code?',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: BetaButton(
-                                  iconPath:
-                                      '${Config.settingsAssetsPath}/light/twitter.svg',
-                                  labelText: 'Twitter',
-                                  onPressed: () {
-                                    openUrl(
-                                      Config.twitterUrl,
-                                      LaunchMode.externalApplication,
-                                    );
-                                  },
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            const Text(
+                              'Find a referrer or connect with us on social media to find if there any invite codes available!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: ColorPalette.greyscale100,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: BetaButton(
+                                    iconPath:
+                                        '${Config.settingsAssetsPath}/light/twitter.svg',
+                                    labelText: 'Twitter',
+                                    onPressed: () {
+                                      openUrl(
+                                        Config.twitterUrl,
+                                        LaunchMode.externalApplication,
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Expanded(
-                                child: BetaButton(
-                                  iconPath:
-                                      '${Config.settingsAssetsPath}/light/discord.svg',
-                                  labelText: 'Discord',
-                                  onPressed: () {
-                                    openUrl(
-                                      Config.discordUrl,
-                                      LaunchMode.externalApplication,
-                                    );
-                                  },
+                                const SizedBox(
+                                  width: 8,
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                Expanded(
+                                  child: BetaButton(
+                                    iconPath:
+                                        '${Config.settingsAssetsPath}/light/discord.svg',
+                                    labelText: 'Discord',
+                                    onPressed: () {
+                                      openUrl(
+                                        Config.discordUrl,
+                                        LaunchMode.externalApplication,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

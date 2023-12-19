@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:dio/dio.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'dio_provider.g.dart';
 
@@ -53,7 +52,6 @@ Dio dio(DioRef ref) {
                     ? message.join('. ')
                     : message
                 : e.response?.data.toString();
-            Sentry.captureMessage(message, level: SentryLevel.error);
             return handler.next(e);
           },
         ),

@@ -103,7 +103,6 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
         context: context,
         text: 'Wallet synced successfully',
         backgroundColor: ColorPalette.dReaderGreen,
-        milisecondsDuration: 1000,
       );
     }
   }

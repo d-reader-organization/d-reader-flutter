@@ -80,7 +80,6 @@ class ResetPasswordView extends StatelessWidget {
                 showSnackBar(
                   context: context,
                   text: 'Instructions have been sent.',
-                  milisecondsDuration: 2000,
                   backgroundColor: ColorPalette.dReaderGreen,
                 );
               },

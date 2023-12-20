@@ -12,7 +12,6 @@ import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
@@ -200,13 +199,13 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       }
     }
 
-    final wallets = await ref.read(
-      userWalletsProvider(id: ref.read(environmentProvider).user?.id).future,
-    );
+    // final wallets = await ref.read(
+    //   userWalletsProvider(id: ref.read(environmentProvider).user?.id).future,
+    // );
     final client = await session.start();
     final result = await _authorizeAndSignIfNeeded(
       client: client,
-      shouldSignMessage: wallets.isEmpty,
+      shouldSignMessage: true, // until figure out
     );
 
     if (result != 'OK') {

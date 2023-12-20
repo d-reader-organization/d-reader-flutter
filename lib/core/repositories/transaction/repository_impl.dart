@@ -89,9 +89,11 @@ class TransactionRepositoryImpl implements TransactionRepository {
       return result ?? [];
     } catch (exception) {
       if (exception is DioException) {
-        final message = exception.response?.data['message'] ??
-            exception.response?.data.toString();
-        throw BadRequestException(message);
+        final message =
+            exception.response?.data['message'] ?? exception.error != null
+                ? exception.error!.toString()
+                : exception.response?.data.toString() ?? '';
+        throw BadRequestException('$message - failed mint one');
       }
       throw Exception(exception.toString());
     }

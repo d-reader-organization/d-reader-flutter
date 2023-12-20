@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
-import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
+import 'package:d_reader_flutter/ui/widgets/app_update_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +16,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:upgrader/upgrader.dart';
 
 PackageInfo? packageInfo;
 
@@ -53,7 +52,6 @@ void main() async {
       appRunner: initApp,
     );
   } else {
-    await Upgrader.clearSavedSettings();
     initApp();
   }
 }
@@ -181,7 +179,7 @@ class MyApp extends ConsumerWidget {
         Locale('en', ''),
       ],
       home: ref.watch(environmentProvider).jwtToken != null
-          ? const DReaderScaffold()
+          ? const AppUpdateWrapper()
           : const WelcomeView(),
     );
   }

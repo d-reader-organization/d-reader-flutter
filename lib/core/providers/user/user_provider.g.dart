@@ -21,7 +21,7 @@ final userRepositoryProvider = AutoDisposeProvider<UserRepositoryImpl>.internal(
 );
 
 typedef UserRepositoryRef = AutoDisposeProviderRef<UserRepositoryImpl>;
-String _$myUserHash() => r'dcce5ba0c551bc148791914a301b1ef5f6f25323';
+String _$myUserHash() => r'6795348f1c14fdf15e034a31193b5fd0211ae2b7';
 
 /// See also [myUser].
 @ProviderFor(myUser)
@@ -459,4 +459,4 @@ class _UserAssetsProviderElement
   int get id => (origin as UserAssetsProvider).id;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -6,7 +6,7 @@ part of 'dio_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'747044ecdabdb7bddccb3795d7c8c223ee038161';
+String _$dioHash() => r'6931ab55d48f3faeb225485db94a45e966868a80';
 
 /// See also [dio].
 @ProviderFor(dio)
@@ -21,4 +21,4 @@ final dioProvider = Provider<Dio>.internal(
 
 typedef DioRef = ProviderRef<Dio>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

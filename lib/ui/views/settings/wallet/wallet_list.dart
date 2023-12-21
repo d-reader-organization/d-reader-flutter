@@ -17,12 +17,10 @@ import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
 class WalletListScreen extends ConsumerWidget {
@@ -372,46 +370,7 @@ class WalletListScreen extends ConsumerWidget {
         );
       },
       loading: () {
-        return Scaffold(
-          appBar: AppBar(
-            shadowColor: Colors.transparent,
-            backgroundColor: Colors.transparent,
-            leading: SkeletonAnimation(
-              shimmerDuration: 1000,
-              child: Center(
-                child: Container(
-                  height: 32,
-                  width: 32,
-                  decoration: BoxDecoration(
-                    color: ColorPalette.dReaderGrey,
-                    borderRadius: BorderRadius.circular(
-                      16,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            title: SkeletonAnimation(
-              shimmerDuration: 1000,
-              child: Container(
-                height: 32,
-                width: 96,
-                color: ColorPalette.dReaderGrey,
-              ),
-            ),
-          ),
-          body: const Padding(
-            padding: EdgeInsets.all(
-              16,
-            ),
-            child: Column(
-              children: [
-                SkeletonRow(),
-                SkeletonRow(),
-              ],
-            ),
-          ),
-        );
+        return const SizedBox();
       },
     );
   }

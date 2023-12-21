@@ -344,42 +344,48 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
           MobileWalletAdapterClient client,
           LocalAssociationScenario session,
         ) async {
-          final address = ref.read(environmentProvider).publicKey?.toBase58();
-          if (address == null) {
-            await session.close();
-            return 'Missing wallet address';
-          }
-          final isWalletEligibleForMint = await _isWalletEligibleForMint(
-            candyMachineAddress: candyMachineAddress,
-            walletAddress: address,
-          );
-          if (!isWalletEligibleForMint) {
-            await session.close();
-            Sentry.captureMessage(
-                'User with email: ${ref.read(environmentProvider).user?.email} and wallet $address is not eligible for minting.');
-            return 'Wallet address ${formatAddress(address, 3)} is not eligible for minting';
-          }
+          if (await _doReauthorize(client)) {
+            final walletAddress =
+                ref.read(environmentProvider).publicKey?.toBase58();
+            if (walletAddress == null) {
+              await session.close();
+              return 'Missing wallet';
+            }
+            final isWalletEligibleForMint = await _isWalletEligibleForMint(
+              candyMachineAddress: candyMachineAddress,
+              walletAddress: walletAddress,
+            );
+            if (!isWalletEligibleForMint) {
+              await session.close();
+              Sentry.captureMessage(
+                  'User with email: ${ref.read(environmentProvider).user?.email} and wallet $walletAddress is not eligible for minting.');
+              return 'Wallet address ${formatAddress(walletAddress, 3)} is not eligible for minting';
+            }
 
-          final List<dynamic> encodedNftTransactions =
-              await ref.read(transactionRepositoryProvider).mintOneTransaction(
-                    candyMachineAddress: candyMachineAddress,
-                    minterAddress: address,
-                    label: label,
-                  );
-          if (encodedNftTransactions.isEmpty) {
-            await session.close();
-            return false;
+            final List<dynamic> encodedNftTransactions = await ref
+                .read(transactionRepositoryProvider)
+                .mintOneTransaction(
+                  candyMachineAddress: candyMachineAddress,
+                  minterAddress: walletAddress,
+                  label: label,
+                );
+            if (encodedNftTransactions.isEmpty) {
+              await session.close();
+              return false;
+            }
+            return _signAndSendMint(
+              encodedNftTransactions: encodedNftTransactions,
+              client: client,
+              session: session,
+            );
           }
-          return _signAndSendMint(
-            encodedNftTransactions: encodedNftTransactions,
-            client: client,
-            session: session,
-          );
+          await session.close();
+          return false;
         },
       );
     } catch (exception) {
       Sentry.captureException(
-        exception,
+        exception is BadRequestException ? exception.cause : exception,
         stackTrace:
             'authorizeIfNeededWithOnComplete: ${ref.read(environmentProvider).user?.email}',
       );
@@ -392,54 +398,52 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required MobileWalletAdapterClient client,
     required LocalAssociationScenario session,
   }) async {
-    if (await _doReauthorize(client)) {
-      try {
-        final response = await client.signTransactions(
-          transactions: encodedNftTransactions.map((transaction) {
-            return base64Decode(transaction);
-          }).toList(),
+    try {
+      final response = await client.signTransactions(
+        transactions: encodedNftTransactions.map((transaction) {
+          return base64Decode(transaction);
+        }).toList(),
+      );
+      if (response.signedPayloads.isNotEmpty) {
+        final client = createSolanaClient(
+          rpcUrl: ref.read(environmentProvider).solanaCluster ==
+                  SolanaCluster.devnet.value
+              ? Config.rpcUrlDevnet
+              : Config.rpcUrlMainnet,
         );
-        if (response.signedPayloads.isNotEmpty) {
-          final client = createSolanaClient(
-            rpcUrl: ref.read(environmentProvider).solanaCluster ==
-                    SolanaCluster.devnet.value
-                ? Config.rpcUrlDevnet
-                : Config.rpcUrlMainnet,
+        String sendTransactionResult = '';
+        for (final signedPayload in response.signedPayloads) {
+          final signedTx = SignedTx.fromBytes(
+            signedPayload.toList(),
           );
-          String sendTransactionResult = '';
-          for (final signedPayload in response.signedPayloads) {
-            final signedTx = SignedTx.fromBytes(
-              signedPayload.toList(),
-            );
-            sendTransactionResult = await client.rpcClient.sendTransaction(
-              signedTx.encode(),
-              preflightCommitment: Commitment.confirmed,
-            );
-          }
-          ref.read(globalStateProvider.notifier).update(
-                (state) => state.copyWith(
-                  isLoading: false,
-                  isMinting: true,
-                ),
-              );
-          ref.read(mintingStatusProvider(sendTransactionResult));
-          await session.close();
-          return true;
+          sendTransactionResult = await client.rpcClient.sendTransaction(
+            signedTx.encode(),
+            preflightCommitment: Commitment.confirmed,
+          );
         }
-      } catch (exception) {
+        ref.read(globalStateProvider.notifier).update(
+              (state) => state.copyWith(
+                isLoading: false,
+                isMinting: true,
+              ),
+            );
+        ref.read(mintingStatusProvider(sendTransactionResult));
         await session.close();
-        Sentry.captureException(
-          exception,
-          stackTrace:
-              'User with ${ref.read(environmentProvider).user?.email} failed to sign and send mint.',
-        );
-        if (exception is JsonRpcException) {
-          return exception.message;
-        }
+        return true;
       }
+    } catch (exception) {
+      await session.close();
+      Sentry.captureException(
+        exception,
+        stackTrace:
+            'User with ${ref.read(environmentProvider).user?.email} failed to sign and send mint.',
+      );
+      if (exception is JsonRpcException) {
+        return exception.message;
+      }
+      await session.close();
+      return false;
     }
-    await session.close();
-    return false;
   }
 
   Future<dynamic> list({
@@ -661,18 +665,56 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     return null;
   }
 
+  Future<bool> _authorizeAndStore({
+    required MobileWalletAdapterClient client,
+  }) async {
+    final envState = ref.read(environmentProvider);
+    final result = await _authorize(
+      client: client,
+      cluster: envState.solanaCluster,
+    );
+
+    if (result == null) {
+      return false;
+    }
+    final currentWalletAddress =
+        Ed25519HDPublicKey(result.publicKey).toBase58();
+    final walletsMap = envState.wallets;
+    ref.read(selectedWalletProvider.notifier).update(
+          (state) => currentWalletAddress,
+        );
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
+          EnvironmentStateUpdateInput(
+            authToken: result.authToken,
+            wallets: {
+              ...?walletsMap,
+              currentWalletAddress: WalletData(
+                authToken: result.authToken,
+              ),
+            },
+          ),
+        );
+    ref.invalidate(registerWalletToSocketEvents);
+    ref.read(registerWalletToSocketEvents);
+    return true;
+  }
+
   Future<bool> _doReauthorize(MobileWalletAdapterClient client,
       [String? overrideAuthToken, String? overrideSigner]) async {
     final envState = ref.read(environmentProvider);
-    final currentWalletAddress =
-        overrideSigner ?? envState.publicKey?.toBase58() ?? '';
+    String? currentWalletAddress =
+        overrideSigner ?? envState.publicKey?.toBase58();
+
+    if (currentWalletAddress == null) {
+      return await _authorizeAndStore(client: client);
+    }
     final walletAuthToken = envState.wallets?[currentWalletAddress]?.authToken;
 
     final authToken = overrideAuthToken ??
         walletAuthToken ??
         ref.read(environmentProvider).authToken;
     if (authToken == null) {
-      return false;
+      return await _authorizeAndStore(client: client);
     }
     var result = await client.reauthorize(
       identityUri: Uri.parse('https://dreader.io/'),
@@ -680,24 +722,36 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       authToken: authToken,
       iconUri: Uri.file(Config.faviconPath),
     );
-
     result ??= await client.authorize(
       identityUri: Uri.parse('https://dreader.io/'),
       identityName: 'dReader',
       cluster: envState.solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
+    if (result == null) {
+      return false;
+    }
+    final publicKey = Ed25519HDPublicKey(result.publicKey);
+    final address = publicKey.toBase58();
     final walletsMap = envState.wallets;
-
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
-          EnvironmentStateUpdateInput(authToken: result?.authToken, wallets: {
-            ...?walletsMap,
-            currentWalletAddress: WalletData(
-              authToken: result?.authToken ?? '',
-            ),
-          }),
+    ref.read(selectedWalletProvider.notifier).update(
+          (state) => address,
         );
-    return result != null;
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
+          EnvironmentStateUpdateInput(
+            authToken: result.authToken,
+            publicKey: publicKey,
+            wallets: {
+              ...?walletsMap,
+              address: WalletData(
+                authToken: result.authToken,
+              ),
+            },
+          ),
+        );
+    ref.invalidate(registerWalletToSocketEvents);
+    ref.read(registerWalletToSocketEvents);
+    return true;
   }
 
   Future<LocalAssociationScenario> _getSession() async {

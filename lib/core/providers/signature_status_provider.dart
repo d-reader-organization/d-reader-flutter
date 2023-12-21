@@ -20,7 +20,7 @@ final mintingStatusProvider = StateProvider.family<void, String>(
           .waitForSignatureStatus(
         signature,
         status: Commitment.confirmed,
-        timeout: const Duration(seconds: 8),
+        timeout: const Duration(seconds: 10),
       )
           .then((value) {
         Future.delayed(const Duration(milliseconds: 2500), () {
@@ -32,7 +32,8 @@ final mintingStatusProvider = StateProvider.family<void, String>(
               );
         });
       }).onError((error, stackTrace) {
-        Sentry.captureException(error, stackTrace: stackTrace);
+        Sentry.captureException(error,
+            stackTrace: 'Signature status provider $signature');
         ref.read(globalStateProvider.notifier).update(
               (state) => state.copyWith(
                 isLoading: false,

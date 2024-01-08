@@ -357,8 +357,6 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             );
             if (!isWalletEligibleForMint) {
               await session.close();
-              Sentry.captureMessage(
-                  'User with email: ${ref.read(environmentProvider).user?.email} and wallet $walletAddress is not eligible for minting.');
               return 'Wallet address ${formatAddress(walletAddress, 3)} is not eligible for minting';
             }
 

@@ -357,7 +357,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                                       },
                                       title: 'Comic unwraping',
                                       subtitle:
-                                          'By unwrapping the comic, you will be able to read it. If you decide to leave it wrapped, it might hold a bigger collecting value.',
+                                          'By unwrapping the comic, you will be able to read it. This action is irreversible and will make the comic lose the mint condition.',
                                       bottomWidget: StatefulBuilder(
                                         builder: (context, setState) {
                                           return GestureDetector(

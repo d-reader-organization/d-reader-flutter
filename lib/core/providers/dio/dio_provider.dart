@@ -46,12 +46,6 @@ Dio dio(DioRef ref) {
               ref.invalidate(environmentProvider);
               return;
             }
-            dynamic message = e.response?.data?['message'];
-            message = message != null
-                ? message is List
-                    ? message.join('. ')
-                    : message
-                : e.response?.data.toString();
             return handler.next(e);
           },
         ),

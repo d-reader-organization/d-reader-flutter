@@ -109,6 +109,13 @@ class SettingsRootView extends StatelessWidget {
                 nextScreenPush(context, const AboutView());
               },
             ),
+            SettingsCommonListTile(
+              title: 'FAQ',
+              leadingPath: '${Config.settingsAssetsPath}/light/info_square.svg',
+              onTap: () {
+                openUrl('https://dreader.app/faq');
+              },
+            ),
           ],
         ),
       ),

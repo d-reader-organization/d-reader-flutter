@@ -173,7 +173,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                   CustomTextField(
                     labelText: 'Password',
-                    hintText: 'Set your password',
+                    hintText: 'Enter your password',
                     controller: _passwordController,
                     obscureText: ref.watch(obscureTextProvider),
                     onValidate: (value) {

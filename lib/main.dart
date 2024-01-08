@@ -101,13 +101,6 @@ class MyApp extends ConsumerWidget {
             color: Colors.white,
           ),
         ),
-        textButtonTheme: const TextButtonThemeData(
-          style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll(
-              ColorPalette.dReaderYellow100,
-            ),
-          ),
-        ),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),

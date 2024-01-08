@@ -20,6 +20,7 @@ abstract class UserRepository {
   );
   Future<dynamic> requestPasswordReset(String email);
   Future<void> requestEmailVerification();
+  Future<void> requestChangeEmail(String newEmail);
   Future<List<WalletModel>> userWallets(int id);
   Future<List<WalletAsset>> userAssets(int id);
 }

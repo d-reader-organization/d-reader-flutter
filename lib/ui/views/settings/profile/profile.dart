@@ -12,6 +12,7 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
 import 'package:d_reader_flutter/ui/views/intro/initial.dart';
+import 'package:d_reader_flutter/ui/views/settings/profile/change_email.dart';
 import 'package:d_reader_flutter/ui/views/settings/profile/change_password.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -275,7 +276,15 @@ class ProfileView extends HookConsumerWidget {
                             }
                           },
                         )
-                      : const SizedBox(),
+                      : SettingsCommonListTile(
+                          title: 'Change email address',
+                          leadingPath: 'assets/icons/reset_password.svg',
+                          overrideColor: Colors.white,
+                          overrideTrailing: const SizedBox(),
+                          onTap: () {
+                            nextScreenPush(context, const ChangeEmailView());
+                          },
+                        ),
                   SettingsCommonListTile(
                     title: 'Change password',
                     leadingPath: 'assets/icons/reset_password.svg',

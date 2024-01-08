@@ -217,12 +217,29 @@ class UserRepositoryImpl implements UserRepository {
   Future<dynamic> requestPasswordReset(String email) async {
     try {
       await client
-          .patch('/user/request-password-reset', data: {'email': email});
+          .patch('/user/request-password-reset', data: {'nameOrEmail': email});
     } catch (exception) {
       if (exception is DioException) {
         final message = exception.response?.data['message'] ??
             exception.response?.data.toString();
-        throw BadRequestException(message);
+        throw BadRequestException(
+            message is String ? message : message.toString());
+      }
+      throw Exception(exception);
+    }
+  }
+
+  @override
+  Future<void> requestChangeEmail(String newEmail) async {
+    try {
+      await client
+          .patch('/user/request-email-change', data: {"newEmail": newEmail});
+    } catch (exception) {
+      if (exception is DioException) {
+        final message = exception.response?.data['message'] ??
+            exception.response?.data.toString();
+        throw BadRequestException(
+            message is String ? message : message.toString());
       }
       throw Exception(exception);
     }

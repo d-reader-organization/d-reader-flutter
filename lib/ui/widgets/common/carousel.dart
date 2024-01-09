@@ -111,6 +111,7 @@ class Carousel extends ConsumerWidget {
                               children: [
                                 Text(
                                   carouselItem.subtitle,
+                                  textAlign: TextAlign.center,
                                   style: textTheme.bodySmall,
                                 ),
                                 const SizedBox(
@@ -118,6 +119,7 @@ class Carousel extends ConsumerWidget {
                                 ),
                                 Text(
                                   carouselItem.title,
+                                  textAlign: TextAlign.center,
                                   style: textTheme.headlineLarge,
                                 ),
                               ],

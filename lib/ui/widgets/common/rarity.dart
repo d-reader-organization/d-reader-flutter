@@ -18,7 +18,10 @@ class RarityWidget extends StatelessWidget {
     return rarity == NftRarity.none
         ? const SizedBox()
         : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
+            padding: EdgeInsets.symmetric(
+              horizontal: 6,
+              vertical: isLarge ? 0 : 1,
+            ),
             height: isLarge ? 40 : 24,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(isLarge ? 6 : 4),

@@ -5,8 +5,8 @@ import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue/provider.dart';
@@ -37,7 +37,6 @@ import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.da
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
-import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -649,20 +648,24 @@ class BottomNavigation extends ConsumerWidget {
                                       final isSuccessful = await ref
                                           .read(solanaProvider.notifier)
                                           .buyMultiple(selectedNftsInput);
-                                      if (isSuccessful) {
-                                        ref.invalidate(listedItemsProvider);
-                                        ref.invalidate(userAssetsProvider);
-                                      }
                                       ref
                                           .read(globalStateProvider.notifier)
                                           .state
                                           .copyWith(isLoading: false);
+                                      if (isSuccessful) {
+                                        ref.invalidate(listedItemsProvider);
+                                        ref.invalidate(listingsAsyncProvider);
+                                        ref.invalidate(userAssetsProvider);
+                                      }
                                       if (context.mounted) {
                                         showSnackBar(
                                           context: context,
-                                          text: 'Success!',
-                                          backgroundColor:
-                                              ColorPalette.dReaderGreen,
+                                          text: isSuccessful
+                                              ? 'Success!'
+                                              : 'Failed to buy item/items.',
+                                          backgroundColor: isSuccessful
+                                              ? ColorPalette.dReaderGreen
+                                              : ColorPalette.dReaderRed,
                                         );
                                       }
                                     } catch (exception) {
@@ -755,49 +758,8 @@ class ReadButton extends ConsumerWidget {
     required this.issue,
   });
 
-  openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
-          minChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
-          maxChildSize: 0.8,
-          expand: false,
-          builder: (context, scrollController) {
-            return OwnedNftsBottomSheet(
-              ownedNfts: ownedNfts,
-              episodeNumber: issue.number,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    final ownedNfts = await ref.read(nftsProvider(
-      'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
-    ).future);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    return ownedNfts;
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool showReadButton =
-        (issue.myStats?.canRead != null && issue.myStats!.canRead);
     return CustomTextButton(
       size: const Size(150, 50),
       backgroundColor: Colors.transparent,
@@ -809,54 +771,33 @@ class ReadButton extends ConsumerWidget {
           8,
         ),
       ),
-      onPressed: showReadButton
-          ? () async {
-              if (issue.isFreeToRead) {
-                return nextScreenPush(context, EReaderView(issueId: issue.id));
-              }
-              final List<NftModel> ownedNfts =
-                  await fetchOwnedNfts(ref, '${issue.id}');
-
-              final isAtLeastOneUsed = ownedNfts.any((nft) => nft.isUsed);
-
-              if (context.mounted) {
-                if (isAtLeastOneUsed) {
-                  return nextScreenPush(
-                      context, EReaderView(issueId: issue.id));
-                }
-                openModalBottomSheet(context, ownedNfts);
-              }
-            }
-          : () {
-              nextScreenPush(context, EReaderView(issueId: issue.id));
-            },
-      child: showReadButton
-          ? const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  FontAwesomeIcons.glasses,
-                  size: 14,
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Read',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                )
-              ],
-            )
-          : const Text(
-              'Preview',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
+      onPressed: () {
+        nextScreenPush(
+          context,
+          EReaderView(
+            issueId: issue.id,
+          ),
+        );
+      },
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            FontAwesomeIcons.glasses,
+            size: 14,
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Text(
+            'Read',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
             ),
+          )
+        ],
+      ),
     );
   }
 }

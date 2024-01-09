@@ -24,7 +24,7 @@ class CustomTextButton extends StatelessWidget {
     this.isLoading = false,
     this.borderRadius = const BorderRadius.all(
       Radius.circular(
-        32,
+        8,
       ),
     ),
     this.padding = const EdgeInsets.all(8),

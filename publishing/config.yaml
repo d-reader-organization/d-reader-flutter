@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: EmBMVM4vidKDALqPYQgpmg6h36zXtFvfRmegpjYwXqdB
+  address: A12dfuUhkM1FK78ZxPQuM826GxMCGJXLS6ArS172sq26
   media:
     - purpose: icon
       uri: ./512x512_rounded.png
@@ -39,7 +39,7 @@ release:
       name: dReader
       short_description: Digital comic book store
       long_description: Platform for discovering, trading, collecting, and reading digital graphic novels
-      new_in_version: Change email, app logo and additional ux changes
+      new_in_version: Remove preview button and move all logic to e reader screen
       saga_features: Exclusive early access, free/discounted collectible comics
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader

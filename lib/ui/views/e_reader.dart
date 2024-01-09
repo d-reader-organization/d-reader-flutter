@@ -1,18 +1,25 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
+import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/page_number_widget.dart';
+import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class EReaderView extends ConsumerStatefulWidget {
   final int issueId;
@@ -185,6 +192,9 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                                       child: PreviewImage(
                                         canRead: canRead,
                                         isFullyUploaded: isFullyUploaded,
+                                        issueId: widget.issueId,
+                                        issueNumber:
+                                            issueProvider.value!.number,
                                       ),
                                     )
                                   : ValueListenableBuilder(
@@ -244,6 +254,8 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                                   ? PreviewImage(
                                       canRead: canRead,
                                       isFullyUploaded: isFullyUploaded,
+                                      issueId: widget.issueId,
+                                      issueNumber: issueProvider.value!.number,
                                     )
                                   : ValueListenableBuilder(
                                       valueListenable: valueNotifier,
@@ -310,16 +322,40 @@ class _EReaderViewState extends ConsumerState<EReaderView>
 
 class PreviewImage extends StatelessWidget {
   final bool canRead, isFullyUploaded;
+  final int issueId, issueNumber;
   const PreviewImage({
     super.key,
     required this.canRead,
     required this.isFullyUploaded,
+    required this.issueId,
+    required this.issueNumber,
   });
 
   final textStyle = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
   );
+
+  openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          minChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          maxChildSize: 0.8,
+          expand: false,
+          builder: (context, scrollController) {
+            return OwnedNftsBottomSheet(
+              ownedNfts: ownedNfts,
+              episodeNumber: issueNumber,
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -359,6 +395,55 @@ class PreviewImage extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: textStyle,
                       ),
+                Consumer(
+                  builder: (context, ref, child) {
+                    final ownedNfts = ref.watch(
+                      nftsProvider(
+                        'comicIssueId=$issueId&userId=${ref.read(environmentProvider).user?.id}',
+                      ),
+                    );
+
+                    return ownedNfts.when(
+                      data: (data) {
+                        if (data.isEmpty) {
+                          return const SizedBox();
+                        }
+
+                        final isAtLeastOneUsed = data.any((nft) => nft.isUsed);
+                        return isAtLeastOneUsed && canRead
+                            ? const SizedBox()
+                            : CustomTextButton(
+                                backgroundColor: ColorPalette.dReaderYellow100,
+                                fontSize: 16,
+                                isLoading: ref.watch(privateLoadingProvider),
+                                textColor: Colors.black,
+                                onPressed: () {
+                                  final privateLoadingNotifier =
+                                      ref.read(privateLoadingProvider.notifier);
+                                  privateLoadingNotifier
+                                      .update((state) => true);
+                                  openModalBottomSheet(context, data);
+                                  privateLoadingNotifier
+                                      .update((state) => false);
+                                },
+                                child: const Text(
+                                  'Unwrap',
+                                ),
+                              );
+                      },
+                      error: (error, stackTrace) {
+                        Sentry.captureException(
+                          error,
+                          stackTrace: 'eReader owned Nfts: $stackTrace',
+                        );
+                        return const SizedBox();
+                      },
+                      loading: () {
+                        return const SizedBox();
+                      },
+                    );
+                  },
+                ),
                 isFullyUploaded
                     ? const SizedBox()
                     : Text(

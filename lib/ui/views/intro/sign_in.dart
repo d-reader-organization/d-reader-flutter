@@ -163,6 +163,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   CustomTextField(
                     labelText: 'Email / Username',
                     hintText: 'Enter you email or username',
+                    autoFillHints: const [
+                      AutofillHints.email,
+                      AutofillHints.username,
+                    ],
                     onValidate: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Field cannot be empty.';
@@ -174,6 +178,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   CustomTextField(
                     labelText: 'Password',
                     hintText: 'Enter your password',
+                    autoFillHints: const [
+                      AutofillHints.password,
+                    ],
                     controller: _passwordController,
                     obscureText: ref.watch(obscureTextProvider),
                     onValidate: (value) {

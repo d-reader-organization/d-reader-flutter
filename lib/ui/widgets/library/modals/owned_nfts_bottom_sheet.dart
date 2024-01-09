@@ -136,7 +136,6 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                           ownerAddress: ownedNft.ownerAddress,
                                         );
                                     if (context.mounted) {
-                                      Navigator.pop(context);
                                       if (isSuccessful) {
                                         return nextScreenPush(
                                           context,

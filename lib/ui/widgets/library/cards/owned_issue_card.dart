@@ -15,7 +15,6 @@ import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.d
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:d_reader_flutter/ui/widgets/library/buttons/info_button.dart';
-import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
 import 'package:d_reader_flutter/ui/widgets/royalties/owned_copies.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -27,27 +26,6 @@ class OwnedIssueCard extends ConsumerWidget {
     super.key,
     required this.issue,
   });
-
-  openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
-          minChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
-          maxChildSize: 0.8,
-          expand: false,
-          builder: (context, scrollController) {
-            return OwnedNftsBottomSheet(
-              ownedNfts: ownedNfts,
-              episodeNumber: issue.number,
-            );
-          },
-        );
-      },
-    );
-  }
 
   fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
     final globalNotifier = ref.read(globalStateProvider.notifier);
@@ -70,22 +48,14 @@ class OwnedIssueCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: ref.watch(globalStateProvider).isLoading
-          ? null
-          : () async {
-              final List<NftModel> ownedNfts =
-                  await fetchOwnedNfts(ref, '${issue.id}');
-
-              final isAtLeastOneUsed = ownedNfts.any((nft) => nft.isUsed);
-
-              if (context.mounted) {
-                if (isAtLeastOneUsed) {
-                  return nextScreenPush(
-                      context, EReaderView(issueId: issue.id));
-                }
-                openModalBottomSheet(context, ownedNfts);
-              }
-            },
+      onTap: () {
+        return nextScreenPush(
+          context,
+          EReaderView(
+            issueId: issue.id,
+          ),
+        );
+      },
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 130,

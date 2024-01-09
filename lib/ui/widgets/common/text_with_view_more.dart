@@ -19,7 +19,7 @@ class TextWithViewMore extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpandableText(
       text,
-      maxLines: 2,
+      maxLines: maxLines,
       expandText: 'view more',
       collapseText: 'view less',
       onLinkTap: onLinkTap,

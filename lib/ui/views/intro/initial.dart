@@ -15,6 +15,7 @@ class InitialIntroScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             flex: 6,

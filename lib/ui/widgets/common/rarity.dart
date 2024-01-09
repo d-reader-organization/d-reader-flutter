@@ -19,7 +19,7 @@ class RarityWidget extends StatelessWidget {
         ? const SizedBox()
         : Container(
             padding: const EdgeInsets.symmetric(horizontal: 6),
-            height: isLarge ? 40 : 20,
+            height: isLarge ? 40 : 24,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(isLarge ? 6 : 4),
               border: Border.all(

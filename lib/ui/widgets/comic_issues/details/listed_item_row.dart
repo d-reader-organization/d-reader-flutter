@@ -85,11 +85,17 @@ class ListingItem extends ConsumerWidget {
                   children: [
                     listing.seller.avatar != null &&
                             listing.seller.avatar!.isNotEmpty
-                        ? CircleAvatar(
-                            maxRadius: 24,
-                            backgroundColor: ColorPalette.greyscale500,
-                            child: CommonCachedImage(
-                              imageUrl: listing.seller.avatar!,
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(32),
+                            child: Container(
+                              width: 32,
+                              height: 32,
+                              decoration: const BoxDecoration(
+                                color: ColorPalette.greyscale500,
+                              ),
+                              child: CommonCachedImage(
+                                imageUrl: listing.seller.avatar!,
+                              ),
                             ),
                           )
                         : SvgPicture.asset(

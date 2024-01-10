@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/core/models/collaborator.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
@@ -236,6 +237,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isFutureMint = candyMachineGroup.startDate != null &&
         candyMachineGroup.startDate!.isAfter(DateTime.now());
+    final candyMachineState = ref.watch(candyMachineStateProvider);
     return GestureDetector(
       onTap: () {
         ref.read(expandedCandyMachineGroup.notifier).update((state) =>
@@ -334,7 +336,9 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply}',
+                        candyMachineGroup.label == publicGroupLabel
+                            ? '${candyMachineState?.itemsMinted ?? candyMachineGroup.itemsMinted} / ${candyMachineState?.supply ?? candyMachineGroup.supply}'
+                            : '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply}',
                         style: const TextStyle(
                           fontSize: 14,
                           color: ColorPalette.greyscale100,

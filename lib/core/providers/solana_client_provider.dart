@@ -217,7 +217,11 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       onStart();
     }
     try {
-      return onComplete != null ? await onComplete(client, session) : 'OK';
+      if (onComplete != null) {
+        return await onComplete(client, session);
+      }
+      await session.close();
+      return 'OK';
     } catch (exception) {
       await session.close();
       rethrow;

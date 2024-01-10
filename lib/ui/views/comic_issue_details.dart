@@ -589,7 +589,8 @@ class BottomNavigation extends ConsumerWidget {
         issue.myStats?.canRead != null && issue.myStats!.canRead;
     final bool showReadButtonOnly = issue.isFreeToRead &&
         canRead &&
-        issue.activeCandyMachineAddress == null;
+        issue.activeCandyMachineAddress == null &&
+        !issue.isSecondarySaleActive;
     return showReadButtonOnly
         ? ReadButton(issue: issue)
         : Row(

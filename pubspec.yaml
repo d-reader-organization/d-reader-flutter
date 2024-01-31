@@ -3,7 +3,7 @@ description: dReader Flutter app.
 
 publish_to: 'none'
 
-version: 1.1.6+31 # dappStore: 1.1.6+31 google play: 1.1.6+52
+version: 1.1.7+32 # dappStore: 1.1.7+32 google play: 1.1.7+53
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -57,6 +57,9 @@ dependencies:
   power: ^0.5.0
   collection: ^1.17.2
   upgrader: ^8.4.0
+  firebase_messaging: ^14.7.10
+  firebase_core: ^2.24.2
+  flutter_local_notifications: ^16.3.0
 
 dev_dependencies:
   flutter_test:

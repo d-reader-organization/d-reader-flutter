@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/core/services/notification.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/welcome.dart';
 import 'package:d_reader_flutter/ui/widgets/app_update_wrapper.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +18,19 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options_prod.dart';
+
+final GlobalKey<NavigatorState> navigatorKeyProd = GlobalKey<NavigatorState>();
+
+// Defines a top-level named handler which background/terminated messages will call
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  NotificationService notificationsService = NotificationService();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await notificationsService.initNotificationsHandler();
+  notificationsService.displayNotification(message);
+}
 
 PackageInfo? packageInfo;
 
@@ -39,6 +54,10 @@ void main() async {
     ],
   );
   await LocalStore().init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: ColorPalette.appBackgroundColor,
     systemNavigationBarColor: ColorPalette.appBackgroundColor,
@@ -80,6 +99,10 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'dReader',
+      onGenerateRoute: (settings) {
+        return null;
+      },
+      navigatorKey: navigatorKeyProd,
       theme: ThemeData(
         useMaterial3: false,
         appBarTheme: const AppBarTheme(

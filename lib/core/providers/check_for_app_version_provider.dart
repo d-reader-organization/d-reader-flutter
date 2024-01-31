@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
+import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
-import 'package:d_reader_flutter/main.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:upgrader/upgrader.dart';
@@ -12,6 +12,7 @@ const String appCheckKey = 'app_check_date';
 Future<bool> shouldTriggerAppVersionUpdate(Ref ref) async {
   final localStore = LocalStore.instance;
   final DateTime? lastCheck = localStore.get(appCheckKey, defaultValue: null);
+  final packageInfo = await ref.read(packageInfoProvider.future);
   final bool ignoreCheck = lastCheck != null &&
       !lastCheck.isBefore(DateTime.now().subtract(const Duration(days: 2)));
   if (ignoreCheck) {
@@ -22,16 +23,13 @@ Future<bool> shouldTriggerAppVersionUpdate(Ref ref) async {
     DateTime.now(),
   );
 
-  if (packageInfo?.packageName == null) {
-    return false;
-  }
-  final storeVersion = await getStoreVersion(packageInfo!.packageName);
+  final storeVersion = await getStoreVersion(packageInfo.packageName);
   if (storeVersion == null) {
     return false;
   }
-  final currentVersion = packageInfo!.version;
+
   return _areDifferentVersions(
-    currentVersion: currentVersion,
+    currentVersion: packageInfo.version,
     storeVersion: storeVersion,
   );
 }

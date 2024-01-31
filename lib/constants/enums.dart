@@ -13,3 +13,21 @@ enum WalkthroughKeys {
   multipleWallet,
   firstMint,
 }
+
+enum NotificationDataKey {
+  comicIssueId,
+  comicSlug,
+  creatorSlug,
+  nftAddress,
+}
+
+extension NotificationDataKeyString on NotificationDataKey {
+  static const keyStringValues = {
+    NotificationDataKey.comicIssueId: 'comicIssueId',
+    NotificationDataKey.comicSlug: 'comicSlug',
+    NotificationDataKey.creatorSlug: 'creatorSlug',
+    NotificationDataKey.nftAddress: 'nftAddress'
+  };
+
+  String get stringValue => keyStringValues[this] ?? 'None';
+}

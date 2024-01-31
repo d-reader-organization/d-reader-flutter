@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' show ValueNotifier;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 ValueNotifier<GlobalState> useGlobalState<T>() {
   final result = useState<GlobalState>(const GlobalState(isLoading: false));
@@ -40,3 +41,7 @@ final privateLoadingProvider = StateProvider<bool>(
     return false;
   },
 );
+
+final packageInfoProvider = FutureProvider<PackageInfo>((ref) async {
+  return await PackageInfo.fromPlatform();
+});

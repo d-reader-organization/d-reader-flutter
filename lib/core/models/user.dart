@@ -4,6 +4,7 @@ class UserModel {
   final int id, referralsRemaining;
   final String email, avatar, name, role;
   final bool isEmailVerified, hasBetaAccess;
+  final List<String> deviceTokens;
 
   UserModel({
     required this.id,
@@ -14,6 +15,7 @@ class UserModel {
     required this.isEmailVerified,
     required this.hasBetaAccess,
     required this.referralsRemaining,
+    required this.deviceTokens,
   });
 
   factory UserModel.fromJson(dynamic json) {
@@ -26,6 +28,7 @@ class UserModel {
       isEmailVerified: json['isEmailVerified'],
       hasBetaAccess: json['hasBetaAccess'] ?? false,
       referralsRemaining: json['referralsRemaining'] ?? 0,
+      deviceTokens: List<String>.from(json['deviceTokens']),
     );
   }
 
@@ -39,6 +42,7 @@ class UserModel {
     data['isEmailVerified'] = isEmailVerified;
     data['hasBetaAccess'] = hasBetaAccess;
     data['referralsRemaining'] = referralsRemaining;
+    data['deviceTokens'] = deviceTokens;
     return data;
   }
 }

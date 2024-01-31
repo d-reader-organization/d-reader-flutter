@@ -25,4 +25,6 @@ abstract class ColorPalette {
   static const Color greyscale500 = Color(0xFF1F222A);
 
   static const Color lightblue = Color(0xFF87C7E4);
+
+  static const Color notificationBgColor = Color(0xFF7a8294);
 }

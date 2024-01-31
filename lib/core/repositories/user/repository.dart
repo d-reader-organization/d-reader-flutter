@@ -23,4 +23,5 @@ abstract class UserRepository {
   Future<void> requestChangeEmail(String newEmail);
   Future<List<WalletModel>> userWallets(int id);
   Future<List<WalletAsset>> userAssets(int id);
+  Future<void> insertFcmToken(String fcmToken);
 }

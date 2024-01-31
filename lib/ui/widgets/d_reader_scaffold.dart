@@ -1,6 +1,8 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/fcm/notification_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
+import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
@@ -13,16 +15,50 @@ import 'package:d_reader_flutter/ui/widgets/referrals/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DReaderScaffold extends ConsumerWidget {
+class DReaderScaffold extends ConsumerStatefulWidget {
   final Widget? body;
   final bool showBottomNavigation;
   final bool showSearchIcon;
+
   const DReaderScaffold({
     super.key,
     this.showBottomNavigation = true,
     this.showSearchIcon = false,
     this.body,
   });
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _DReaderScaffoldState();
+}
+
+class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
+  @override
+  void initState() {
+    super.initState();
+    initNotifications();
+  }
+
+  Future<void> initNotifications() async {
+    final notificationService = ref.read(notificationServiceProvider);
+    await notificationService.requestNotificationPermission();
+    final fcmToken = await notificationService.getFCMToken();
+    final user = ref.read(environmentProvider).user;
+    if (fcmToken != null &&
+        user != null &&
+        !user.deviceTokens.contains(fcmToken)) {
+      await ref.read(userRepositoryProvider).insertFcmToken(fcmToken);
+    }
+    await notificationService.subscribeToTopic('broadcast');
+    await notificationService.initNotificationsHandler();
+    await Future.wait(
+      [
+        notificationService.initForegroundNotificationsHandler(),
+        notificationService.initBackgroundNotificationsActionHandler(),
+        notificationService.initTerminatedNotificationsActionHandler()
+      ],
+    );
+  }
 
   _appBar({
     required int navigationIndex,
@@ -76,7 +112,7 @@ class DReaderScaffold extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: SafeArea(
@@ -93,7 +129,7 @@ class DReaderScaffold extends ConsumerWidget {
               hasBetaAccess: ref.watch(environmentProvider).user != null &&
                   ref.watch(environmentProvider).user!.hasBetaAccess,
             ),
-            child: body ??
+            child: widget.body ??
                 PageView(
                   controller: ref.watch(scaffoldPageController),
                   physics: const NeverScrollableScrollPhysics(),
@@ -117,8 +153,9 @@ class DReaderScaffold extends ConsumerWidget {
                 ),
           ),
           extendBody: false,
-          bottomNavigationBar:
-              showBottomNavigation ? const CustomBottomNavigationBar() : null,
+          bottomNavigationBar: widget.showBottomNavigation
+              ? const CustomBottomNavigationBar()
+              : null,
         ),
       ),
     );

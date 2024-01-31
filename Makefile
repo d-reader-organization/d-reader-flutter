@@ -31,17 +31,17 @@ all: build-dev build-prod build-prod-apk
 
 build-dev:
 	flutter clean && \
-	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_DEV) --dart-define=apiUrlDevnet=$(API_URL_DEV_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor dev && \
+	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_DEV) --dart-define=apiUrlDevnet=$(API_URL_DEV_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor dev --target lib/main_dev.dart && \
 	mv ./build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk ./apks/dReader-dev.apk
 
 build-prod:
 	flutter clean && \
-	flutter build appbundle --release --dart-define=apiUrl=$(API_URL_PROD) --dart-define=apiUrlDevnet=$(API_URL_PROD_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor prod && \
+	flutter build appbundle --release --dart-define=apiUrl=$(API_URL_PROD) --dart-define=apiUrlDevnet=$(API_URL_PROD_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor prod --target lib/main_prod.dart && \
 	mv ./build/app/outputs/bundle/prodRelease/app-prod-release.aab ./apks/dReader.aab
 
 build-prod-apk:
 	flutter clean && \
-	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_PROD) --dart-define=apiUrlDevnet=$(API_URL_PROD_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor prod && \
+	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_PROD) --dart-define=apiUrlDevnet=$(API_URL_PROD_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor prod --target lib/main_prod.dart && \
 	mv ./build/app/outputs/flutter-apk/app-armeabi-v7a-prod-release.apk ./apks/dReader.apk
 
 start-saga-release:

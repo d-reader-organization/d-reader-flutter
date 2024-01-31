@@ -244,4 +244,9 @@ class UserRepositoryImpl implements UserRepository {
       throw Exception(exception);
     }
   }
+
+  @override
+  Future<void> insertFcmToken(String fcmToken) async {
+    await client.post('/user/device/$fcmToken');
+  }
 }

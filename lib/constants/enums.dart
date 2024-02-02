@@ -19,6 +19,7 @@ enum NotificationDataKey {
   comicSlug,
   creatorSlug,
   nftAddress,
+  externalUrl,
 }
 
 extension NotificationDataKeyString on NotificationDataKey {
@@ -26,8 +27,9 @@ extension NotificationDataKeyString on NotificationDataKey {
     NotificationDataKey.comicIssueId: 'comicIssueId',
     NotificationDataKey.comicSlug: 'comicSlug',
     NotificationDataKey.creatorSlug: 'creatorSlug',
-    NotificationDataKey.nftAddress: 'nftAddress'
+    NotificationDataKey.nftAddress: 'nftAddress',
+    NotificationDataKey.externalUrl: 'externalUrl'
   };
 
-  String get stringValue => keyStringValues[this] ?? 'None';
+  String get stringValue => keyStringValues[this] ?? '';
 }

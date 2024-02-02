@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/main_dev.dart' show navigatorKeyDev;
 import 'package:d_reader_flutter/main_prod.dart' show navigatorKeyProd;
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:flutter/services.dart' show appFlavor;
 import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
@@ -12,6 +13,8 @@ import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 handleNotificationAction(Map payload) {
   final navigatorKey = appFlavor == 'prod' ? navigatorKeyProd : navigatorKeyDev;
@@ -49,6 +52,11 @@ handleNotificationAction(Map payload) {
         ),
       ),
     );
+  } else if (payload.containsKey(NotificationDataKey.externalUrl.stringValue)) {
+    return openUrl(
+      payload[NotificationDataKey.externalUrl.stringValue],
+      LaunchMode.externalApplication,
+    );
   }
 }
 
@@ -62,15 +70,19 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   Future<void> requestNotificationPermission() async {
-    await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    try {
+      await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+    } catch (exception, stackTrace) {
+      Sentry.captureException(exception, stackTrace: stackTrace);
+    }
   }
 
   // Inits handler that will displays notifications

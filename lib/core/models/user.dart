@@ -28,7 +28,9 @@ class UserModel {
       isEmailVerified: json['isEmailVerified'],
       hasBetaAccess: json['hasBetaAccess'] ?? false,
       referralsRemaining: json['referralsRemaining'] ?? 0,
-      deviceTokens: List<String>.from(json['deviceTokens']),
+      deviceTokens: json['deviceTokens'] != null
+          ? List<String>.from(json['deviceTokens'])
+          : [],
     );
   }
 

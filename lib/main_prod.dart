@@ -27,7 +27,13 @@ final GlobalKey<NavigatorState> navigatorKeyProd = GlobalKey<NavigatorState>();
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   NotificationService notificationsService = NotificationService();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (exception, stackTrace) {
+    Sentry.captureException(exception, stackTrace: stackTrace);
+  }
   await notificationsService.initNotificationsHandler();
   notificationsService.displayNotification(message);
 }
@@ -54,9 +60,14 @@ void main() async {
     ],
   );
   await LocalStore().init();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (exception, stackTrace) {
+    Sentry.captureException(exception, stackTrace: stackTrace);
+  }
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: ColorPalette.appBackgroundColor,

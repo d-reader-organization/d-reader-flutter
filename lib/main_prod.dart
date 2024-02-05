@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
@@ -16,7 +14,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options_prod.dart';
@@ -38,21 +35,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   notificationsService.displayNotification(message);
 }
 
-PackageInfo? packageInfo;
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  packageInfo = await PackageInfo.fromPlatform();
-  HttpOverrides.global = MyHttpOverrides();
   await Future.wait(
     [
       dotenv.load(fileName: ".env"),

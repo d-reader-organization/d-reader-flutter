@@ -16,7 +16,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options_dev.dart';
@@ -32,8 +31,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   notificationsService.displayNotification(message);
 }
 
-PackageInfo? packageInfo;
-
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -45,7 +42,6 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  packageInfo = await PackageInfo.fromPlatform();
   HttpOverrides.global = MyHttpOverrides();
   await Future.wait(
     [

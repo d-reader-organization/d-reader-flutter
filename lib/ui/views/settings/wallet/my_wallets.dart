@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_notifier.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -86,46 +87,28 @@ class MyWalletsScreen extends ConsumerWidget {
     required BuildContext context,
     required WidgetRef ref,
   }) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-
-    try {
-      final result = await ref
-          .read(solanaProvider.notifier)
-          .authorizeAndSignMessage(null, () {
-        globalNotifier.update(
-          (state) => state.copyWith(
-            isLoading: true,
-          ),
-        );
-      });
-
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
-      final bool isConnected = result == 'OK';
-      if (context.mounted) {
+    await ref.read(walletControllerProvider.notifier).connectWallet(
+      onSuccess: () {
         showSnackBar(
           context: context,
-          text: isConnected ? 'Wallet has been connected.' : result,
+          text: 'Wallet has been connected',
+          backgroundColor: ColorPalette.dReaderGreen,
         );
-        if (isConnected) {
-          ref.invalidate(selectedWalletProvider);
-          ref.invalidate(userWalletsProvider);
-          ref.invalidate(ownedComicsAsyncProvider);
-        }
-      }
-    } catch (exception) {
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
-      if (context.mounted) {
-        return triggerLowPowerOrNoWallet(context, exception);
-      }
-    }
+        ref.invalidate(selectedWalletProvider);
+        ref.invalidate(userWalletsProvider);
+        ref.invalidate(ownedComicsAsyncProvider);
+      },
+      onFail: (String result) {
+        showSnackBar(
+          context: context,
+          text: result,
+          backgroundColor: ColorPalette.dReaderRed,
+        );
+      },
+      onError: (exception) {
+        triggerLowPowerOrNoWallet(context, exception);
+      },
+    );
   }
 
   @override

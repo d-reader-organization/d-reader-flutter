@@ -46,6 +46,7 @@ Future<dynamic> signUpFuture(
         username: signUpData.username,
       );
   if (result is AuthorizationResponse) {
+    ref.read(authRouteProvider.notifier).login();
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             jwtToken: result.accessToken,

@@ -1,11 +1,8 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -38,51 +35,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  _handleLogin() async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    final response = await ref.read(
-      signInProvider(
-        nameOrEmail: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      ).future,
-    );
-
-    if (context.mounted) {
-      if (response is String) {
-        globalNotifier.update(
-          (state) => state.copyWith(
-            isLoading: false,
-          ),
-        );
-        return showSnackBar(
-          context: context,
-          text: response,
-          backgroundColor: ColorPalette.dReaderRed,
-        );
-      }
-      final user = await ref.read(myUserProvider.future);
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
-      ref.read(environmentProvider.notifier).updateEnvironmentState(
-            EnvironmentStateUpdateInput(
-              user: user,
-            ),
-          );
-
-      if (context.mounted) {
-        nextScreenCloseOthers(context: context, path: RoutePath.home);
-      }
-    }
   }
 
   @override
@@ -243,7 +195,21 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     ),
                     onPressed: () async {
                       if (_signInFormKey.currentState!.validate()) {
-                        await _handleLogin();
+                        await ref.read(authControllerProvider.notifier).signIn(
+                              nameOrEmail: _emailController.text.trim(),
+                              password: _passwordController.text.trim(),
+                              onSuccess: () {
+                                nextScreenCloseOthers(
+                                    context: context, path: RoutePath.home);
+                              },
+                              onFail: (String? message) {
+                                showSnackBar(
+                                  context: context,
+                                  text: message ?? 'Something went wrong',
+                                  backgroundColor: ColorPalette.dReaderRed,
+                                );
+                              },
+                            );
                       }
                     },
                   ),

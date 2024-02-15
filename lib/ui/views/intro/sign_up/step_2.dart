@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -44,24 +44,6 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  _handleConfirm() async {
-    final notifier = ref.read(globalStateProvider.notifier);
-    notifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    final result = await ref.read(signUpFutureProvider.future);
-    final bool isSuccess = result is bool && result;
-
-    notifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    isSuccess ? widget.onSuccess() : widget.onFail(result);
   }
 
   @override
@@ -203,7 +185,10 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
                           );
-                      await _handleConfirm();
+                      await ref.read(authControllerProvider.notifier).signUp(
+                            onSuccess: widget.onSuccess,
+                            onFail: widget.onFail,
+                          );
                     }
                   },
                 ),

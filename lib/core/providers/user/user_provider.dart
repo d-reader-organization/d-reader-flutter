@@ -28,16 +28,6 @@ Future<UserModel?> myUser(MyUserRef ref) async {
 }
 
 @riverpod
-Future<void> resetPassword(
-  ResetPasswordRef ref, {
-  required String id,
-}) async {
-  await ref.read(userRepositoryProvider).resetPassword(
-        id,
-      );
-}
-
-@riverpod
 Future<void> requestEmailVerification(RequestEmailVerificationRef ref) async {
   await ref.read(userRepositoryProvider).requestEmailVerification();
 }

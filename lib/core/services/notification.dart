@@ -1,7 +1,7 @@
 import 'dart:convert' show jsonEncode, jsonDecode;
 
 import 'package:d_reader_flutter/constants/enums.dart';
-import 'package:d_reader_flutter/main_dev.dart' show navigatorKeyDev;
+import 'package:d_reader_flutter/core/providers/router_provider.dart';
 import 'package:d_reader_flutter/main_prod.dart' show navigatorKeyProd;
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
@@ -17,7 +17,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 handleNotificationAction(Map payload) {
-  final navigatorKey = appFlavor == 'prod' ? navigatorKeyProd : navigatorKeyDev;
+  final navigatorKey =
+      appFlavor == 'prod' ? navigatorKeyProd : routerNavigatorKey;
   if (payload.containsKey(NotificationDataKey.comicIssueId.stringValue)) {
     return navigatorKey.currentState!.push(
       MaterialPageRoute(
@@ -186,7 +187,6 @@ class NotificationService {
   // If so, update new token in DB
   Future<String?> getFCMToken() async {
     final token = await messaging.getToken();
-    // For demo purposes
     return token;
   }
 

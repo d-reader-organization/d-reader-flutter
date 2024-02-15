@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
@@ -8,7 +9,6 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
-import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -42,8 +42,8 @@ class SignUpStep3 extends ConsumerWidget {
           );
         }
         nextScreenCloseOthers(
-          context,
-          const DReaderScaffold(),
+          context: context,
+          path: RoutePath.home,
         );
       }
     } catch (exception) {
@@ -183,8 +183,8 @@ class SignUpStep3 extends ConsumerWidget {
                   ),
                   onPressed: () {
                     nextScreenCloseOthers(
-                      context,
-                      const DReaderScaffold(),
+                      context: context,
+                      path: RoutePath.home,
                     );
                   },
                 ),

@@ -1,13 +1,9 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/settings/profile/profile.dart';
-import 'package:d_reader_flutter/ui/views/settings/about.dart';
-import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
-import 'package:d_reader_flutter/ui/views/settings/referrals.dart';
-import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_list.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -35,7 +31,10 @@ class SettingsRootView extends StatelessWidget {
               leadingPath: '${Config.settingsAssetsPath}/light/user.svg',
               title: 'My profile',
               onTap: () {
-                nextScreenPush(context, const ProfileView());
+                nextScreenPush(
+                  context: context,
+                  path: RoutePath.profile,
+                );
               },
             ),
             Consumer(
@@ -47,10 +46,8 @@ class SettingsRootView extends StatelessWidget {
                     final user = ref.read(environmentProvider).user;
                     if (context.mounted && user != null) {
                       nextScreenPush(
-                        context,
-                        WalletListScreen(
-                          userId: user.id,
-                        ),
+                        context: context,
+                        path: '${RoutePath.myWallets}/${user.id}',
                       );
                     }
                   },
@@ -81,8 +78,8 @@ class SettingsRootView extends StatelessWidget {
               title: 'Referrals',
               onTap: () {
                 nextScreenPush(
-                  context,
-                  const ReferralsView(),
+                  context: context,
+                  path: RoutePath.referrals,
                 );
               },
             ),
@@ -96,7 +93,10 @@ class SettingsRootView extends StatelessWidget {
                             '${Config.settingsAssetsPath}/light/network.svg',
                         title: 'Change Network',
                         onTap: () {
-                          nextScreenPush(context, const ChangeNetworkView());
+                          nextScreenPush(
+                            context: context,
+                            path: RoutePath.changeNetwork,
+                          );
                         },
                       )
                     : const SizedBox();
@@ -106,7 +106,10 @@ class SettingsRootView extends StatelessWidget {
               leadingPath: '${Config.settingsAssetsPath}/light/bun_bun.svg',
               title: 'About dReader',
               onTap: () {
-                nextScreenPush(context, const AboutView());
+                nextScreenPush(
+                  context: context,
+                  path: RoutePath.about,
+                );
               },
             ),
             SettingsCommonListTile(

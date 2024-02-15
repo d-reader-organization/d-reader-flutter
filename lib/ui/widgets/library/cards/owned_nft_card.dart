@@ -1,10 +1,10 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
-import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:d_reader_flutter/ui/widgets/library/buttons/info_button.dart';
@@ -23,7 +23,10 @@ class OwnedNftCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        nextScreenPush(context, NftDetails(address: nft.address));
+        nextScreenPush(
+          context: context,
+          path: '${RoutePath.nftDetails}/${nft.address}',
+        );
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
@@ -102,7 +105,10 @@ class OwnedNftCard extends ConsumerWidget {
                   InfoButton(
                     isLoading: ref.watch(globalStateProvider).isLoading,
                     onTap: () {
-                      nextScreenPush(context, NftDetails(address: nft.address));
+                      nextScreenPush(
+                        context: context,
+                        path: '${RoutePath.nftDetails}/${nft.address}',
+                      );
                     },
                   ),
                 ],

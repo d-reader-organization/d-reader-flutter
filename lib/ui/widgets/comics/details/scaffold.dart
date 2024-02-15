@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
@@ -5,8 +6,6 @@ import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_details/comic_info.dart';
-import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
@@ -91,10 +90,10 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
               GestureDetector(
                 onTap: () {
                   nextScreenPush(
-                      context,
-                      ComicInfoView(
-                        comic: widget.comic,
-                      ));
+                    context: context,
+                    path: RoutePath.comicDetailsInfo,
+                    extra: widget.comic,
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16),
@@ -193,10 +192,9 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         textAlign: TextAlign.start,
                         onLinkTap: () {
                           nextScreenPush(
-                            context,
-                            ComicInfoView(
-                              comic: widget.comic,
-                            ),
+                            context: context,
+                            path: RoutePath.comicDetailsInfo,
+                            extra: widget.comic,
                           );
                         },
                       ),
@@ -260,12 +258,13 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         height: 8,
                       ),
                       GestureDetector(
-                        onTap: () => nextScreenPush(
-                          context,
-                          CreatorDetailsView(
-                            slug: widget.comic.creator?.slug ?? '',
-                          ),
-                        ),
+                        onTap: () {
+                          nextScreenPush(
+                            context: context,
+                            path:
+                                '${RoutePath.creatorDetails}/${widget.comic.creator?.slug}',
+                          );
+                        },
                         child: Row(
                           children: [
                             CreatorAvatar(

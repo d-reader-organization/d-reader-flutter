@@ -7,7 +7,7 @@ part of 'check_for_app_version_provider.dart';
 // **************************************************************************
 
 String _$shouldTriggerAppVersionUpdateHash() =>
-    r'65b59e60f1a5bfeb686ac38553878bb58f3ff1dd';
+    r'cf02aa244afa604c309e9800fdf0391073a88384';
 
 /// See also [shouldTriggerAppVersionUpdate].
 @ProviderFor(shouldTriggerAppVersionUpdate)

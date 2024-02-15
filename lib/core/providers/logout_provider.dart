@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/router_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
@@ -17,6 +18,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
     LocalStore.instance.delete(Config.hasSeenInitialKey),
     LocalStore.instance.clear(),
   ]);
+  ref.read(authRouteProvider).logout();
   await ref
       .read(environmentProvider.notifier)
       .clearDataFromLocalStore(currentNetwork);

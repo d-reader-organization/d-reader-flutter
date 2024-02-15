@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
@@ -8,10 +9,8 @@ import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/views/intro/request_reset_password.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
-import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -81,7 +80,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           );
 
       if (context.mounted) {
-        nextScreenCloseOthers(context, const DReaderScaffold());
+        nextScreenCloseOthers(context: context, path: RoutePath.home);
       }
     }
   }
@@ -209,7 +208,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      nextScreenPush(context, const RequestResetPasswordView());
+                      nextScreenPush(
+                        context: context,
+                        path: RoutePath.requestRessetPassword,
+                        homeSubRoute: false,
+                      );
                     },
                     child: const Text(
                       'Forgot password?',

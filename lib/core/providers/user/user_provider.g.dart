@@ -35,7 +35,24 @@ final myUserProvider = AutoDisposeFutureProvider<UserModel?>.internal(
 );
 
 typedef MyUserRef = AutoDisposeFutureProviderRef<UserModel?>;
-String _$resetPasswordHash() => r'f20a47dc7a505ed5f152a27c2d21ed3fabd280dc';
+String _$requestEmailVerificationHash() =>
+    r'08c61e6ada0b3a731d6fe0b69e0302cfab4f1ecd';
+
+/// See also [requestEmailVerification].
+@ProviderFor(requestEmailVerification)
+final requestEmailVerificationProvider =
+    AutoDisposeFutureProvider<void>.internal(
+  requestEmailVerification,
+  name: r'requestEmailVerificationProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$requestEmailVerificationHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef RequestEmailVerificationRef = AutoDisposeFutureProviderRef<void>;
+String _$userWalletsHash() => r'1afcfc64ff6df8b289f0a0a18454116d3dcbe018';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -57,151 +74,6 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
-
-/// See also [resetPassword].
-@ProviderFor(resetPassword)
-const resetPasswordProvider = ResetPasswordFamily();
-
-/// See also [resetPassword].
-class ResetPasswordFamily extends Family<AsyncValue<void>> {
-  /// See also [resetPassword].
-  const ResetPasswordFamily();
-
-  /// See also [resetPassword].
-  ResetPasswordProvider call({
-    required String id,
-  }) {
-    return ResetPasswordProvider(
-      id: id,
-    );
-  }
-
-  @override
-  ResetPasswordProvider getProviderOverride(
-    covariant ResetPasswordProvider provider,
-  ) {
-    return call(
-      id: provider.id,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'resetPasswordProvider';
-}
-
-/// See also [resetPassword].
-class ResetPasswordProvider extends AutoDisposeFutureProvider<void> {
-  /// See also [resetPassword].
-  ResetPasswordProvider({
-    required String id,
-  }) : this._internal(
-          (ref) => resetPassword(
-            ref as ResetPasswordRef,
-            id: id,
-          ),
-          from: resetPasswordProvider,
-          name: r'resetPasswordProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$resetPasswordHash,
-          dependencies: ResetPasswordFamily._dependencies,
-          allTransitiveDependencies:
-              ResetPasswordFamily._allTransitiveDependencies,
-          id: id,
-        );
-
-  ResetPasswordProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.id,
-  }) : super.internal();
-
-  final String id;
-
-  @override
-  Override overrideWith(
-    FutureOr<void> Function(ResetPasswordRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: ResetPasswordProvider._internal(
-        (ref) => create(ref as ResetPasswordRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        id: id,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeFutureProviderElement<void> createElement() {
-    return _ResetPasswordProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is ResetPasswordProvider && other.id == id;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-mixin ResetPasswordRef on AutoDisposeFutureProviderRef<void> {
-  /// The parameter `id` of this provider.
-  String get id;
-}
-
-class _ResetPasswordProviderElement
-    extends AutoDisposeFutureProviderElement<void> with ResetPasswordRef {
-  _ResetPasswordProviderElement(super.provider);
-
-  @override
-  String get id => (origin as ResetPasswordProvider).id;
-}
-
-String _$requestEmailVerificationHash() =>
-    r'08c61e6ada0b3a731d6fe0b69e0302cfab4f1ecd';
-
-/// See also [requestEmailVerification].
-@ProviderFor(requestEmailVerification)
-final requestEmailVerificationProvider =
-    AutoDisposeFutureProvider<void>.internal(
-  requestEmailVerification,
-  name: r'requestEmailVerificationProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$requestEmailVerificationHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef RequestEmailVerificationRef = AutoDisposeFutureProviderRef<void>;
-String _$userWalletsHash() => r'1afcfc64ff6df8b289f0a0a18454116d3dcbe018';
 
 /// See also [userWallets].
 @ProviderFor(userWallets)

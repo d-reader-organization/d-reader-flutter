@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-void nextScreenPush(BuildContext context, Widget page) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+void nextScreenPush({
+  required BuildContext context,
+  required String path,
+  bool homeSubRoute = true,
+  Object? extra,
+}) {
+  context.push(homeSubRoute ? '/$path' : path, extra: extra);
 }
 
-void nextScreenCloseOthers(BuildContext context, Widget page) {
-  Navigator.pushAndRemoveUntil(
-      context, MaterialPageRoute(builder: (context) => page), (route) => false);
+void nextScreenCloseOthers({
+  required BuildContext context,
+  required String path,
+}) {
+  while (context.canPop()) {
+    context.pop();
+  }
+  context.pushReplacement(path);
 }
 
-void nextScreenReplace(BuildContext context, Widget page) {
-  Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => page));
+void nextScreenReplace({
+  required BuildContext context,
+  required String path,
+  required bool homeSubRoute,
+  Object? extra,
+}) {
+  context.pushReplacement(
+    homeSubRoute ? '/$path' : path,
+    extra: extra,
+  );
 }

@@ -1,8 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_in.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_up.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -76,7 +75,11 @@ class InitialIntroScreen extends StatelessWidget {
                 50,
               ),
               onPressed: () {
-                nextScreenPush(context, const SignInScreen());
+                nextScreenPush(
+                  context: context,
+                  path: RoutePath.signIn,
+                  homeSubRoute: false,
+                );
               },
             ),
           ),
@@ -90,7 +93,11 @@ class InitialIntroScreen extends StatelessWidget {
                 50,
               ),
               onPressed: () {
-                nextScreenPush(context, const SignUpScreen());
+                nextScreenPush(
+                  context: context,
+                  path: RoutePath.signUp,
+                  homeSubRoute: false,
+                );
               },
             ),
           ),

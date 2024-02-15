@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
@@ -10,9 +11,6 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
-import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
-import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
@@ -128,8 +126,8 @@ class Body extends StatelessWidget {
   _handleNftOpen(BuildContext context, dynamic openResponse) {
     if (openResponse is bool && openResponse) {
       return nextScreenPush(
-        context,
-        const OpenNftAnimation(),
+        context: context,
+        path: RoutePath.openNftAnimation,
       );
     }
     showSnackBar(
@@ -257,10 +255,8 @@ class Body extends StatelessWidget {
                       onPressed: () async {
                         if (nft.isUsed) {
                           return nextScreenPush(
-                            context,
-                            EReaderView(
-                              issueId: nft.comicIssueId,
-                            ),
+                            context: context,
+                            path: '${RoutePath.eReader}/${nft.comicIssueId}',
                           );
                         }
                         try {
@@ -468,10 +464,8 @@ class Body extends StatelessWidget {
             textColor: Colors.white,
             onPressed: () {
               nextScreenPush(
-                context,
-                ComicIssueDetails(
-                  id: nft.comicIssueId,
-                ),
+                context: context,
+                path: '${RoutePath.comicIssueDetails}/${nft.comicIssueId}',
               );
             },
           ),

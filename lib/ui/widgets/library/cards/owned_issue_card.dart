@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
@@ -9,8 +10,6 @@ import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/e_reader.dart';
-import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
@@ -49,11 +48,9 @@ class OwnedIssueCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
-        return nextScreenPush(
-          context,
-          EReaderView(
-            issueId: issue.id,
-          ),
+        nextScreenPush(
+          context: context,
+          path: '${RoutePath.eReader}/${issue.id}',
         );
       },
       behavior: HitTestBehavior.opaque,
@@ -140,10 +137,9 @@ class OwnedIssueCard extends ConsumerWidget {
                         final properIndex =
                             usedNftIndex > -1 ? usedNftIndex : 0;
                         return nextScreenPush(
-                          context,
-                          NftDetails(
-                            address: ownedNfts.elementAt(properIndex).address,
-                          ),
+                          context: context,
+                          path:
+                              '${RoutePath.nftDetails}/${ownedNfts.elementAt(properIndex).address}',
                         );
                       }
                       final ComicIssueModel? comicIssue = await ref.read(

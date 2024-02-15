@@ -1,12 +1,8 @@
-import 'dart:io';
-
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/router_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/core/services/notification.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/views/welcome.dart';
-import 'package:d_reader_flutter/ui/widgets/app_update_wrapper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +16,6 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options_dev.dart';
 
-final GlobalKey<NavigatorState> navigatorKeyDev = GlobalKey<NavigatorState>();
-
 // Defines a top-level named handler which background/terminated messages will call
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -31,18 +25,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   notificationsService.displayNotification(message);
 }
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HttpOverrides.global = MyHttpOverrides();
   await Future.wait(
     [
       dotenv.load(fileName: ".env"),
@@ -93,12 +77,13 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    final router = ref.watch(routerProvider);
+    return MaterialApp.router(
       title: 'dReader',
-      onGenerateRoute: (settings) {
-        return null;
-      },
-      navigatorKey: navigatorKeyDev,
+      routerConfig: router,
+      // routeInformationParser: router.routeInformationParser,
+      // routerDelegate: router.routerDelegate,
+      // routeInformationProvider: router.routeInformationProvider,
       theme: ThemeData(
         useMaterial3: false,
         appBarTheme: const AppBarTheme(
@@ -190,9 +175,6 @@ class MyApp extends ConsumerWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      home: ref.watch(environmentProvider).jwtToken != null
-          ? const AppUpdateWrapper()
-          : const WelcomeView(),
     );
   }
 }

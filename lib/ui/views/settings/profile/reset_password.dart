@@ -71,7 +71,7 @@ class ResetPasswordView extends StatelessWidget {
                     isLoading: true,
                   ),
                 );
-                ref.read(resetPasswordProvider(id: id));
+                ref.read(userRepositoryProvider).requestPasswordReset(email);
                 globalNotifier.update(
                   (state) => state.copyWith(
                     isLoading: false,

@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -22,7 +22,10 @@ class DiscoverComicCard extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
-        nextScreenPush(context, ComicDetails(slug: comic.slug));
+        nextScreenPush(
+          context: context,
+          path: '${RoutePath.comicDetails}/${comic.slug}',
+        );
       },
       behavior: HitTestBehavior.opaque,
       child: Container(

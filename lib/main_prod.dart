@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/core/services/notification.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/views/welcome.dart';
+import 'package:d_reader_flutter/ui/views/splash.dart';
 import 'package:d_reader_flutter/ui/widgets/app_update_wrapper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -191,7 +191,7 @@ class MyApp extends ConsumerWidget {
       ],
       home: ref.watch(environmentProvider).jwtToken != null
           ? const AppUpdateWrapper()
-          : const WelcomeView(),
+          : const SplashView(),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
+import 'package:d_reader_flutter/core/providers/router_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository_impl.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
@@ -23,6 +24,7 @@ Future<dynamic> signIn(
         password: password,
       );
   if (result is AuthorizationResponse) {
+    ref.read(authRouteProvider).login();
     return ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             jwtToken: result.accessToken,

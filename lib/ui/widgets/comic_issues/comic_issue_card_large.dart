@@ -1,8 +1,8 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -22,7 +22,10 @@ class ComicIssueCardLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        nextScreenPush(context, ComicIssueDetails(id: issue.id));
+        nextScreenPush(
+          context: context,
+          path: '${RoutePath.comicIssueDetails}/${issue.id}',
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(top: 8),

@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
@@ -11,7 +12,6 @@ import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/views/intro/initial.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/network_list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
@@ -93,7 +93,7 @@ class ChangeNetworkView extends ConsumerWidget {
     } else {
       ref.invalidate(scaffoldProvider);
       if (context.mounted) {
-        nextScreenCloseOthers(context, const InitialIntroScreen());
+        nextScreenCloseOthers(context: context, path: RoutePath.initial);
       }
     }
   }

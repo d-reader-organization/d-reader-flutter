@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
@@ -12,8 +13,6 @@ import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
-import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
-import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
@@ -81,10 +80,10 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
         const Duration(milliseconds: 1000),
         () {
           nextScreenReplace(
-            context,
-            DoneMintingAnimation(
-              nft: nft,
-            ),
+            context: context,
+            path: RoutePath.doneMinting,
+            homeSubRoute: true,
+            extra: nft,
           );
         },
       );
@@ -193,8 +192,9 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
         );
     if (context.mounted && isSuccessful) {
       nextScreenReplace(
-        context,
-        const OpenNftAnimation(),
+        context: context,
+        path: RoutePath.openNftAnimation,
+        homeSubRoute: true,
       );
     }
   }
@@ -224,10 +224,9 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
               child: GestureDetector(
                 onTap: () {
                   nextScreenReplace(
-                    context,
-                    NftDetails(
-                      address: widget.nft.address,
-                    ),
+                    context: context,
+                    path: '${RoutePath.nftDetails}/${widget.nft.address}',
+                    homeSubRoute: true,
                   );
                 },
                 child: Column(

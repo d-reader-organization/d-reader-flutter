@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
@@ -7,7 +8,6 @@ import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -77,11 +77,11 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
       ref.invalidate(ownedComicsAsyncProvider);
       ref.invalidate(ownedIssuesAsyncProvider);
       ref.invalidate(comicIssuePagesProvider);
+      ref.invalidate(comicIssueDetailsProvider);
       nextScreenReplace(
-        context,
-        NftDetails(
-          address: nftAddress,
-        ),
+        context: context,
+        path: '${RoutePath.nftDetails}/$nftAddress',
+        homeSubRoute: true,
       );
     }
   }

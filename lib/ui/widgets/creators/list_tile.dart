@@ -1,6 +1,6 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,10 @@ class CreatorListTile extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return ListTile(
       onTap: () {
-        nextScreenPush(context, CreatorDetailsView(slug: creator.slug));
+        nextScreenPush(
+          context: context,
+          path: '${RoutePath.creatorDetails}/${creator.slug}',
+        );
       },
       leading: CreatorAvatar(
         avatar: creator.avatar,

@@ -8,7 +8,6 @@ import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_list.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
-import 'package:d_reader_flutter/ui/widgets/common/minting_progress.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,6 @@ class HomeView extends ConsumerWidget {
         child: const SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              MintingProgressWidget(),
               Carousel(),
               Padding(
                 padding: EdgeInsets.only(

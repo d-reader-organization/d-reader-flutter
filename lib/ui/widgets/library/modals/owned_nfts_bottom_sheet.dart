@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -6,12 +7,11 @@ import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
-import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OwnedNftsBottomSheet extends StatelessWidget {
@@ -137,9 +137,10 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                         );
                                     if (context.mounted) {
                                       if (isSuccessful) {
+                                        context.pop();
                                         return nextScreenPush(
-                                          context,
-                                          const OpenNftAnimation(),
+                                          context: context,
+                                          path: RoutePath.openNftAnimation,
                                         );
                                       }
                                       showSnackBar(
@@ -233,10 +234,9 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                   textColor: Colors.black,
                   onPressed: () {
                     nextScreenPush(
-                      context,
-                      NftDetails(
-                        address: ownedNfts.first.address,
-                      ),
+                      context: context,
+                      path:
+                          '${RoutePath.nftDetails}/${ownedNfts.first.address}',
                     );
                   },
                   padding: const EdgeInsets.only(

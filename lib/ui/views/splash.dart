@@ -1,19 +1,18 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/intro/initial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class WelcomeView extends StatefulWidget {
-  const WelcomeView({Key? key}) : super(key: key);
+class SplashView extends StatefulWidget {
+  const SplashView({Key? key}) : super(key: key);
 
   @override
-  State<WelcomeView> createState() => _WelcomeViewState();
+  State<SplashView> createState() => _SplashViewState();
 }
 
-class _WelcomeViewState extends State<WelcomeView>
-    with TickerProviderStateMixin {
+class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeInFadeOut;
 
@@ -31,8 +30,9 @@ class _WelcomeViewState extends State<WelcomeView>
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         nextScreenReplace(
-          context,
-          const InitialIntroScreen(),
+          context: context,
+          path: RoutePath.initial,
+          homeSubRoute: false,
         );
       } else if (status == AnimationStatus.dismissed) {
         _animationController.forward();

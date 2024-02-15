@@ -1,13 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/carousel.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
-import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
-import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
@@ -64,19 +62,24 @@ class Carousel extends ConsumerWidget {
                           );
                         } else if (carouselItem.comicSlug != null &&
                             carouselItem.comicSlug!.isNotEmpty) {
-                          return nextScreenPush(context,
-                              ComicDetails(slug: carouselItem.comicSlug!));
+                          return nextScreenPush(
+                            context: context,
+                            path:
+                                '${RoutePath.comicDetails}/${carouselItem.comicSlug}',
+                          );
                         } else if (carouselItem.comicIssueId != null) {
                           return nextScreenPush(
-                              context,
-                              ComicIssueDetails(
-                                  id: carouselItem.comicIssueId!));
+                            context: context,
+                            path:
+                                '${RoutePath.comicIssueDetails}/${carouselItem.comicIssueId}',
+                          );
                         } else if (carouselItem.creatorSlug != null &&
                             carouselItem.creatorSlug!.isNotEmpty) {
                           return nextScreenPush(
-                              context,
-                              CreatorDetailsView(
-                                  slug: carouselItem.creatorSlug!));
+                            context: context,
+                            path:
+                                '${RoutePath.creatorDetails}/${carouselItem.creatorSlug}',
+                          );
                         }
                       },
                       child: Stack(

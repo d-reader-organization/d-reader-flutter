@@ -1,11 +1,11 @@
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/views/settings/profile/reset_password.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
@@ -226,11 +226,9 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
             GestureDetector(
               onTap: () {
                 nextScreenPush(
-                  context,
-                  ResetPasswordView(
-                    id: '${widget.userId}',
-                    email: widget.email,
-                  ),
+                  context: context,
+                  path:
+                      '${RoutePath.resetPassword}?userId=${widget.userId}&email=${widget.email}',
                 );
               },
               child: const Text(

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
@@ -24,10 +25,6 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
-import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
-import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
-import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
-import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/about.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/listings.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -141,10 +138,9 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                             title: GestureDetector(
                               onTap: () {
                                 nextScreenPush(
-                                  context,
-                                  ComicDetails(
-                                    slug: issue.comicSlug,
-                                  ),
+                                  context: context,
+                                  path:
+                                      '${RoutePath.comicDetails}/${issue.comicSlug}',
                                 );
                               },
                               child: Text(
@@ -331,12 +327,13 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                 Expanded(
                                   flex: 3,
                                   child: GestureDetector(
-                                    onTap: () => nextScreenPush(
-                                      context,
-                                      CreatorDetailsView(
-                                        slug: issue.creator.slug,
-                                      ),
-                                    ),
+                                    onTap: () {
+                                      nextScreenPush(
+                                        context: context,
+                                        path:
+                                            '${RoutePath.creatorDetails}/${issue.creator.slug}',
+                                      );
+                                    },
                                     child: Row(
                                       children: [
                                         CreatorAvatar(
@@ -522,8 +519,8 @@ class BottomNavigation extends ConsumerWidget {
         if (mintResult is bool && mintResult) {
           ref.invalidate(nftsProvider);
           nextScreenPush(
-            context,
-            const MintLoadingAnimation(),
+            context: context,
+            path: RoutePath.mintLoadingAnimation,
           );
         } else {
           showSnackBar(
@@ -774,10 +771,8 @@ class ReadButton extends ConsumerWidget {
       ),
       onPressed: () {
         nextScreenPush(
-          context,
-          EReaderView(
-            issueId: issue.id,
-          ),
+          context: context,
+          path: '${RoutePath.eReader}/${issue.id}',
         );
       },
       child: const Row(

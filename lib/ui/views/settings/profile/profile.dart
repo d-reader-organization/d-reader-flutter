@@ -2,6 +2,7 @@ import 'dart:io' show File;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -11,9 +12,6 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/username_validator.dart';
-import 'package:d_reader_flutter/ui/views/intro/initial.dart';
-import 'package:d_reader_flutter/ui/views/settings/profile/change_email.dart';
-import 'package:d_reader_flutter/ui/views/settings/profile/change_password.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
@@ -282,7 +280,10 @@ class ProfileView extends HookConsumerWidget {
                           overrideColor: Colors.white,
                           overrideTrailing: const SizedBox(),
                           onTap: () {
-                            nextScreenPush(context, const ChangeEmailView());
+                            nextScreenPush(
+                              context: context,
+                              path: RoutePath.changeEmail,
+                            );
                           },
                         ),
                   SettingsCommonListTile(
@@ -292,11 +293,9 @@ class ProfileView extends HookConsumerWidget {
                     overrideTrailing: const SizedBox(),
                     onTap: () {
                       nextScreenPush(
-                        context,
-                        ChangePasswordView(
-                          userId: user.id,
-                          email: user.email,
-                        ),
+                        context: context,
+                        path:
+                            '${RoutePath.changePassword}?userId=${user.id}&email=${user.email}',
                       );
                     },
                   ),
@@ -438,7 +437,9 @@ class ProfileView extends HookConsumerWidget {
                           await ref.read(logoutProvider.future);
                           if (context.mounted) {
                             nextScreenCloseOthers(
-                                context, const InitialIntroScreen());
+                              context: context,
+                              path: RoutePath.initial,
+                            );
                           }
                         }
                       },

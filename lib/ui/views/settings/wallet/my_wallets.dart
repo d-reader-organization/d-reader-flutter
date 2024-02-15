@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
@@ -14,7 +15,6 @@ import 'package:d_reader_flutter/ui/utils/format_price.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
-import 'package:d_reader_flutter/ui/views/settings/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
@@ -23,9 +23,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
-class WalletListScreen extends ConsumerWidget {
+class MyWalletsScreen extends ConsumerWidget {
   final int userId;
-  const WalletListScreen({
+  const MyWalletsScreen({
     super.key,
     required this.userId,
   });
@@ -201,11 +201,9 @@ class WalletListScreen extends ConsumerWidget {
                         return GestureDetector(
                           onTap: () {
                             nextScreenPush(
-                              context,
-                              WalletInfoScreen(
-                                address: data[index].address,
-                                name: walletName,
-                              ),
+                              context: context,
+                              path:
+                                  '${RoutePath.walletInfo}?address=${data[index].address}&name=$walletName',
                             );
                           },
                           child: Container(

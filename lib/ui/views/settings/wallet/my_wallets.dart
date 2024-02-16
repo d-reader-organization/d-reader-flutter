@@ -11,8 +11,7 @@ import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
@@ -56,7 +55,7 @@ class MyWalletsScreen extends ConsumerWidget {
               return ConfirmationDialog(
                 title: '',
                 subtitle:
-                    'Wallet ${formatAddress(address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
+                    'Wallet ${Formatter.formatAddress(address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
               );
             },
           ) ??
@@ -222,7 +221,8 @@ class MyWalletsScreen extends ConsumerWidget {
                                         height: 8,
                                       ),
                                       Text(
-                                        formatAddress(data[index].address, 4),
+                                        Formatter.formatAddress(
+                                            data[index].address, 4),
                                         style: bottomTextStyle,
                                       ),
                                     ],
@@ -257,7 +257,7 @@ class MyWalletsScreen extends ConsumerWidget {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    '${formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
+                                                    '${Formatter.formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
                                                     style: bottomTextStyle,
                                                   ),
                                                 ],

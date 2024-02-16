@@ -16,7 +16,7 @@ import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:power/power.dart';
@@ -361,7 +361,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             );
             if (!isWalletEligibleForMint) {
               await session.close();
-              return 'Wallet address ${formatAddress(walletAddress, 3)} is not eligible for minting';
+              return 'Wallet address ${Formatter.formatAddress(walletAddress, 3)} is not eligible for minting';
             }
 
             final List<dynamic> encodedNftTransactions = await ref

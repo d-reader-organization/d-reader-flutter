@@ -1,17 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/carousel.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
-import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class Carousel extends ConsumerWidget {
   const Carousel({Key? key}) : super(key: key);
@@ -54,33 +50,12 @@ class Carousel extends ConsumerWidget {
                   .map(
                     (carouselItem) => GestureDetector(
                       onTap: () {
-                        if (carouselItem.externalLink != null &&
-                            carouselItem.externalLink!.isNotEmpty) {
-                          openUrl(
-                            carouselItem.externalLink!,
-                            LaunchMode.inAppWebView,
-                          );
-                        } else if (carouselItem.comicSlug != null &&
-                            carouselItem.comicSlug!.isNotEmpty) {
-                          return nextScreenPush(
-                            context: context,
-                            path:
-                                '${RoutePath.comicDetails}/${carouselItem.comicSlug}',
-                          );
-                        } else if (carouselItem.comicIssueId != null) {
-                          return nextScreenPush(
-                            context: context,
-                            path:
-                                '${RoutePath.comicIssueDetails}/${carouselItem.comicIssueId}',
-                          );
-                        } else if (carouselItem.creatorSlug != null &&
-                            carouselItem.creatorSlug!.isNotEmpty) {
-                          return nextScreenPush(
-                            context: context,
-                            path:
-                                '${RoutePath.creatorDetails}/${carouselItem.creatorSlug}',
-                          );
-                        }
+                        ref
+                            .read(carouselControllerProvider.notifier)
+                            .handleItemTap(
+                              carouselItem: carouselItem,
+                              context: context,
+                            );
                       },
                       child: Stack(
                         children: [

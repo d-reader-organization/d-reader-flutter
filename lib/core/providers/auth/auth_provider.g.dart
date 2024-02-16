@@ -171,7 +171,7 @@ class _SignInProviderElement extends AutoDisposeFutureProviderElement<dynamic>
   String get password => (origin as SignInProvider).password;
 }
 
-String _$signUpFutureHash() => r'511439bfc7bd948497098cf3b55a9aedc18c1c77';
+String _$signUpFutureHash() => r'db66049ad43c3a42c4b5fcc5927160e53955ac03';
 
 /// See also [signUpFuture].
 @ProviderFor(signUpFuture)

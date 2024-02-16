@@ -6,8 +6,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -324,7 +323,7 @@ class Body extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          '${formatPrice(nft.royalties)}%',
+                          '${Formatter.formatPrice(nft.royalties)}%',
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: ColorPalette.dReaderBlue,
@@ -380,7 +379,7 @@ class Body extends StatelessWidget {
           Row(
             children: [
               Text(
-                formatAddress(nft.ownerAddress, 12),
+                Formatter.formatAddress(nft.ownerAddress, 12),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(
@@ -423,7 +422,7 @@ class Body extends StatelessWidget {
           Row(
             children: [
               Text(
-                formatAddress(nft.address, 12),
+                Formatter.formatAddress(nft.address, 12),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(

@@ -8,3 +8,5 @@ dReader Flutter app.
 
 Google: make build-prod && upload apks/dReader.aab
 Test: make build-dev && upload apks/dReader-dev.apk
+
+dart run build_runner watch  

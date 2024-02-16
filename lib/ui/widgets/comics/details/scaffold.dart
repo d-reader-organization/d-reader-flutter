@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
@@ -308,7 +308,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                 StatsInfo(
                   title: 'VOLUME',
                   stats:
-                      '${formatLamportPrice(widget.comic.stats?.totalVolume) ?? 0}◎',
+                      '${Formatter.formatLamportPrice(widget.comic.stats?.totalVolume) ?? 0}◎',
                 ),
                 StatsInfo(
                   title: 'ISSUES',

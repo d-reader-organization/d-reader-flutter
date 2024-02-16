@@ -20,8 +20,7 @@ import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
-import 'package:d_reader_flutter/ui/utils/format_date.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
@@ -363,7 +362,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                 Expanded(
                                   flex: 2,
                                   child: Text(
-                                    formatDateFull(issue.releaseDate),
+                                    Formatter.formatDateFull(issue.releaseDate),
                                     textAlign: TextAlign.end,
                                     style: const TextStyle(
                                       fontSize: 16,
@@ -598,7 +597,7 @@ class BottomNavigation extends ConsumerWidget {
                   issue: issue,
                 ),
               ),
-              issue.activeCandyMachineAddress != null
+              ref.watch(activeCandyMachineGroup) != null
                   ? Expanded(
                       child: TransactionButton(
                         isLoading: ref.watch(globalStateProvider).isLoading,
@@ -739,7 +738,7 @@ class TransactionButton extends StatelessWidget {
                 )
               : SolanaPrice(
                   price: price != null && price! > 0
-                      ? formatPriceWithSignificant(price!)
+                      ? Formatter.formatPriceWithSignificant(price!)
                       : null,
                   textColor: Colors.black,
                 ),

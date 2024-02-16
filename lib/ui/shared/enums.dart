@@ -17,7 +17,7 @@ enum NftRarity {
   legendary,
 }
 
-extension RarityValue on NftRarity {
+extension RarityExtension on NftRarity {
   static const rarityNames = {
     NftRarity.none: 'None',
     NftRarity.common: 'Common',
@@ -28,6 +28,17 @@ extension RarityValue on NftRarity {
   };
 
   String get name => rarityNames[this] ?? 'None';
+
+  static const rarityColors = {
+    NftRarity.none: Colors.transparent,
+    NftRarity.common: Colors.white,
+    NftRarity.uncommon: ColorPalette.dReaderYellow400,
+    NftRarity.rare: Color(0xFF3926B4),
+    NftRarity.epic: Color(0xFFC413E0),
+    NftRarity.legendary: Color(0xFF8377F2),
+  };
+
+  Color get color => rarityColors[this] ?? Colors.white;
 }
 
 extension RarityFromString on String {
@@ -40,17 +51,4 @@ extension RarityFromString on String {
     'Legendary': NftRarity.legendary,
   };
   NftRarity get rarityEnum => rarities[this] ?? NftRarity.none;
-}
-
-extension RarityColor on NftRarity {
-  static const rarityColors = {
-    NftRarity.none: Colors.transparent,
-    NftRarity.common: Colors.white,
-    NftRarity.uncommon: ColorPalette.dReaderYellow400,
-    NftRarity.rare: Color(0xFF3926B4),
-    NftRarity.epic: Color(0xFFC413E0),
-    NftRarity.legendary: Color(0xFF8377F2),
-  };
-
-  Color get color => rarityColors[this] ?? Colors.white;
 }

@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:flutter/material.dart';
 
 class SolanaPrice extends StatelessWidget {
@@ -33,7 +33,7 @@ class SolanaPrice extends StatelessWidget {
         ),
         Text(
           price != null && price is double && price != 0.0
-              ? formatPrice(
+              ? Formatter.formatPrice(
                   price ?? 0,
                   priceDecimals,
                 )

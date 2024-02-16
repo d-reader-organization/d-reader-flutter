@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
@@ -112,7 +112,7 @@ class ListingItem extends ConsumerWidget {
                       listing.seller.name != null &&
                               listing.seller.name!.isNotEmpty
                           ? listing.seller.name!
-                          : formatAddress(listing.seller.address, 4),
+                          : Formatter.formatAddress(listing.seller.address, 4),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,

@@ -7,8 +7,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
@@ -128,7 +127,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           ref.watch(chainSubscriptionClientProvider(widget.address)).when(
             data: (data) {
               return Text(
-                '${formatPriceWithSignificant(data?.lamports ?? 0)} \$SOL',
+                '${Formatter.formatPriceWithSignificant(data?.lamports ?? 0)} \$SOL',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,
@@ -160,7 +159,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           CustomTextField(
             labelText: 'Address',
             isReadOnly: true,
-            hintText: formatAddress(widget.address),
+            hintText: Formatter.formatAddress(widget.address),
             suffix: GestureDetector(
               onTap: () async {
                 await Clipboard.setData(

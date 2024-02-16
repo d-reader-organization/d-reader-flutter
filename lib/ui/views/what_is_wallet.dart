@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class WhatIsWalletView extends StatefulWidget {
   const WhatIsWalletView({super.key});
@@ -46,7 +47,7 @@ class _WhatIsWalletViewState extends State<WhatIsWalletView> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   child: const Icon(
                     Icons.close,

@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ChangePasswordView extends ConsumerStatefulWidget {
@@ -69,7 +70,7 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
         Future.delayed(
           const Duration(seconds: 1),
           () {
-            Navigator.pop(context);
+            context.pop();
           },
         );
       }

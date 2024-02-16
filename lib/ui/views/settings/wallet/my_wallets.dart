@@ -20,6 +20,7 @@ import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
@@ -317,7 +318,7 @@ class MyWalletsScreen extends ConsumerWidget {
                             'When connecting multiple wallets to dReader bare in mind to always match the wallet selected on dReader with the mobile wallet app which holds its private keys',
                         assetPath: '$walkthroughAssetsPath/multiple_wallet.jpg',
                         onSubmit: () {
-                          Navigator.pop(context);
+                          context.pop();
                         },
                       );
                     }

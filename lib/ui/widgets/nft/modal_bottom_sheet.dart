@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 
@@ -140,7 +141,7 @@ class SubmitButton extends ConsumerWidget {
                     .state
                     .copyWith(isLoading: false);
                 if (context.mounted) {
-                  Navigator.pop(context);
+                  context.pop();
                   ref.invalidate(nftProvider);
                   showSnackBar(
                     context: context,

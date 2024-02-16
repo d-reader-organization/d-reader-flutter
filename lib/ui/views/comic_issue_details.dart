@@ -35,6 +35,7 @@ import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -555,7 +556,7 @@ class BottomNavigation extends ConsumerWidget {
       context: context,
       bottomWidget: GestureDetector(
         onTap: () {
-          Navigator.pop(context);
+          context.pop();
         },
         child: const Text(
           'Cancel',
@@ -569,7 +570,7 @@ class BottomNavigation extends ConsumerWidget {
         ),
       ),
       onSubmit: () {
-        Navigator.pop(context);
+        context.pop();
         triggerInstallWalletBottomSheet(context);
       },
       assetPath: '$walkthroughAssetsPath/install_wallet.jpg',

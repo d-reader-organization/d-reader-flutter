@@ -17,6 +17,7 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.da
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
@@ -44,7 +45,8 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     );
     _animationController.forward();
     _controller = VideoPlayerController.asset(
-        'assets/animation_files/loading-animation.mp4');
+      'assets/animation_files/loading-animation.mp4',
+    );
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     _controller.play();
@@ -58,7 +60,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
         }
       } else if (!isMinting && !isMinted) {
         _controller.pause();
-        Navigator.pop(context);
+        context.pop();
       }
     });
   }
@@ -307,7 +309,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                         textColor: Colors.white,
                         size: const Size(0, 50),
                         onPressed: () {
-                          Navigator.pop(context);
+                          context.pop();
                         },
                         child: const Text(
                           'Close',
@@ -351,7 +353,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                                             true,
                                           );
                                         }
-                                        Navigator.pop(context);
+                                        context.pop();
                                         await _handleUnwrap(ref: ref);
                                       },
                                       title: 'Comic unwraping',

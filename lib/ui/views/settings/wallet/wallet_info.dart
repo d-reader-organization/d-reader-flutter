@@ -15,6 +15,7 @@ import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class WalletInfoScreen extends StatefulHookConsumerWidget {
@@ -51,7 +52,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
     ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);
     if (context.mounted) {
-      Navigator.pop(context);
+      context.pop();
     }
   }
 
@@ -308,7 +309,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                     50,
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                 ),
               ),

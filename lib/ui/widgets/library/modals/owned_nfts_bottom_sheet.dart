@@ -152,7 +152,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                                     }
                                   } catch (exception) {
                                     if (context.mounted) {
-                                      Navigator.pop(context);
+                                      context.pop();
                                       return triggerLowPowerOrNoWallet(
                                         context,
                                         exception,
@@ -213,7 +213,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
               Expanded(
                 child: CustomTextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   borderRadius: BorderRadius.circular(8),
                   textColor: ColorPalette.greyscale50,

@@ -19,6 +19,7 @@ import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfileView extends HookConsumerWidget {
@@ -105,7 +106,7 @@ class ProfileView extends HookConsumerWidget {
                         if (username.isNotEmpty) {
                           ref.read(usernameTextProvider.notifier).state = '';
                         }
-                        Navigator.pop(context);
+                        context.pop();
                       },
                       borderRadius: BorderRadius.circular(8),
                       backgroundColor: Colors.transparent,
@@ -367,8 +368,7 @@ class ProfileView extends HookConsumerWidget {
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () {
-                                            return Navigator.pop(
-                                              context,
+                                            return context.pop(
                                               false,
                                             );
                                           },
@@ -402,7 +402,7 @@ class ProfileView extends HookConsumerWidget {
                                       Expanded(
                                         child: GestureDetector(
                                           onTap: () {
-                                            return Navigator.pop(context, true);
+                                            return context.pop(true);
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.all(12),

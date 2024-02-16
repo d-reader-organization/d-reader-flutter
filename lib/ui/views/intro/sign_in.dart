@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
@@ -51,7 +52,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               alignment: Alignment.centerLeft,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                 },
                 child: const Icon(
                   Icons.arrow_back,

@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dialogs/walkthrough_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart' show WidgetRef;
 
 triggerWalkthroughDialogIfNeeded({
@@ -71,7 +72,7 @@ triggerLowPowerModeDialog(BuildContext context) {
     subtitle:
         'Your device is in low power mode. Deactivate it to enable connection and signing',
     onSubmit: () {
-      Navigator.pop(context);
+      context.pop();
     },
   );
 }
@@ -85,7 +86,7 @@ triggerVerificationDialog(BuildContext context, WidgetRef ref) {
     assetPath: '$walkthroughAssetsPath/verify_email.jpg',
     onSubmit: () {
       ref.read(requestEmailVerificationProvider.future);
-      Navigator.pop(context);
+      context.pop();
       showSnackBar(
         context: context,
         text: 'Verification email has been sent.',

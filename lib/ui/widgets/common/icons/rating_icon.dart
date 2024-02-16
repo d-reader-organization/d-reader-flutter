@@ -13,6 +13,7 @@ import 'package:d_reader_flutter/ui/widgets/common/confirmation_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rating_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class RatingIcon extends ConsumerWidget {
@@ -35,7 +36,7 @@ class RatingIcon extends ConsumerWidget {
     bool isResending = false,
   }) {
     ref.read(requestEmailVerificationProvider.future);
-    Navigator.pop(context);
+    context.pop();
     showSnackBar(
       context: context,
       text: 'Verification email has been ${isResending ? 'resent' : 'sent'}.',
@@ -73,7 +74,7 @@ class RatingIcon extends ConsumerWidget {
         ),
       ),
       onSubmit: () {
-        Navigator.pop(context);
+        context.pop();
       },
     );
   }

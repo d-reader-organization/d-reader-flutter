@@ -1,10 +1,9 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/chain_subscription_client.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_notifier.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
@@ -38,73 +37,6 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
   void initState() {
     super.initState();
     _nameController.text = widget.name;
-  }
-
-  Future _handleDisconnectWallet(BuildContext context, WidgetRef ref) async {
-    await ref.read(authRepositoryProvider).disconnectWallet(
-          address: widget.address,
-        );
-    final envState = ref.read(environmentProvider);
-    envState.wallets?.removeWhere((key, value) => key == widget.address);
-    if (ref.read(environmentProvider).publicKey?.toBase58() == widget.address) {
-      ref.read(environmentProvider.notifier).clearPublicKey();
-    }
-    ref.read(environmentProvider.notifier).putStateIntoLocalStore();
-    ref.invalidate(userWalletsProvider);
-    if (context.mounted) {
-      context.pop();
-    }
-  }
-
-  _handleUpdateWallet(BuildContext context, WidgetRef ref) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-
-    final result = await ref.read(walletRepositoryProvider).updateWallet(
-          address: widget.address,
-          label: _nameController.text.trim(),
-        );
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    ref.invalidate(walletNameProvider);
-    ref.invalidate(userWalletsProvider);
-    if (context.mounted) {
-      return showSnackBar(
-        context: context,
-        text: result is String ? result : 'Wallet updated successfully',
-        backgroundColor: result is String
-            ? ColorPalette.dReaderRed
-            : ColorPalette.dReaderGreen,
-      );
-    }
-  }
-
-  _syncWallet({
-    required BuildContext context,
-    required WidgetRef ref,
-    required String address,
-  }) async {
-    final notifier = ref.read(privateLoadingProvider.notifier);
-
-    notifier.update((state) => true);
-    await ref.read(syncWalletProvider(address).future);
-    notifier.update((state) => false);
-    ref.invalidate(userWalletsProvider);
-
-    if (context.mounted) {
-      showSnackBar(
-        context: context,
-        text: 'Wallet synced successfully',
-        backgroundColor: ColorPalette.dReaderGreen,
-      );
-    }
   }
 
   @override
@@ -168,13 +100,12 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                     text: widget.address,
                   ),
                 ).then(
-                  (value) => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Wallet address copied to clipboard",
-                      ),
-                    ),
-                  ),
+                  (value) {
+                    showSnackBar(
+                      context: context,
+                      text: "Wallet address copied to clipboard",
+                    );
+                  },
                 );
               },
               child: const Icon(
@@ -203,12 +134,17 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             overrideTrailing: const SizedBox(),
             onTap: ref.watch(globalStateProvider).isLoading
                 ? null
-                : () async {
-                    await _syncWallet(
-                      context: context,
-                      ref: ref,
-                      address: widget.address,
-                    );
+                : () {
+                    ref.read(walletControllerProvider.notifier).syncWallet(
+                          address: widget.address,
+                          callback: () {
+                            showSnackBar(
+                              context: context,
+                              text: 'Wallet synced successfully',
+                              backgroundColor: ColorPalette.dReaderGreen,
+                            );
+                          },
+                        );
                   },
           ),
           if (ref.read(environmentProvider).solanaCluster ==
@@ -274,7 +210,12 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             leadingPath: '${Config.settingsAssetsPath}/light/logout.svg',
             overrideColor: ColorPalette.dReaderRed,
             onTap: () async {
-              await _handleDisconnectWallet(context, ref);
+              await ref
+                  .read(walletControllerProvider.notifier)
+                  .handleDisconnectWallet(
+                    address: widget.address,
+                    callback: context.pop,
+                  );
             },
           ),
         ],
@@ -328,7 +269,23 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                     50,
                   ),
                   onPressed: () async {
-                    await _handleUpdateWallet(context, ref);
+                    await ref
+                        .read(walletControllerProvider.notifier)
+                        .handleUpdateWallet(
+                          address: widget.address,
+                          label: _nameController.text.trim(),
+                          callback: (result) {
+                            showSnackBar(
+                              context: context,
+                              text: result is String
+                                  ? result
+                                  : 'Wallet updated successfully',
+                              backgroundColor: result is String
+                                  ? ColorPalette.dReaderRed
+                                  : ColorPalette.dReaderGreen,
+                            );
+                          },
+                        );
                   },
                 ),
               ),

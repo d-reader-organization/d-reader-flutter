@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'wallet_notifier.dart';
+part of 'change_network.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$walletControllerHash() => r'f9eefae00919ed81e69549d3a160a93478408d46';
+String _$changeNetworkControllerHash() =>
+    r'97f42476c090a71500c4d1d3c9942a0614e99e19';
 
-/// See also [WalletController].
-@ProviderFor(WalletController)
-final walletControllerProvider =
-    AutoDisposeAsyncNotifierProvider<WalletController, void>.internal(
-  WalletController.new,
-  name: r'walletControllerProvider',
+/// See also [ChangeNetworkController].
+@ProviderFor(ChangeNetworkController)
+final changeNetworkControllerProvider =
+    AutoDisposeAsyncNotifierProvider<ChangeNetworkController, void>.internal(
+  ChangeNetworkController.new,
+  name: r'changeNetworkControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$walletControllerHash,
+      : _$changeNetworkControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$WalletController = AutoDisposeAsyncNotifier<void>;
+typedef _$ChangeNetworkController = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

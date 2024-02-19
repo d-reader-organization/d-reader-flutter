@@ -1,14 +1,12 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_notifier.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
@@ -22,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:solana/solana.dart' show Ed25519HDPublicKey;
 
 class MyWalletsScreen extends ConsumerWidget {
   final int userId;
@@ -41,75 +38,6 @@ class MyWalletsScreen extends ConsumerWidget {
     fontWeight: FontWeight.w500,
     color: ColorPalette.greyscale100,
   );
-
-  _handleWalletSelect({
-    required WidgetRef ref,
-    required BuildContext context,
-    required String address,
-  }) async {
-    final walletAuthToken =
-        ref.read(environmentProvider).wallets?[address]?.authToken;
-    if (walletAuthToken == null) {
-      final shouldAuthorize = await showDialog<bool>(
-            context: context,
-            builder: (context) {
-              return ConfirmationDialog(
-                title: '',
-                subtitle:
-                    'Wallet ${Formatter.formatAddress(address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
-              );
-            },
-          ) ??
-          false;
-      if (!shouldAuthorize) {
-        return;
-      }
-
-      await ref.read(solanaProvider.notifier).authorizeIfNeededWithOnComplete();
-      ref.read(selectedWalletProvider.notifier).update((state) =>
-          ref.read(environmentProvider).publicKey?.toBase58() ?? address);
-      return ref.invalidate(userWalletsProvider);
-    }
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
-          EnvironmentStateUpdateInput(
-            publicKey: Ed25519HDPublicKey.fromBase58(
-              address,
-            ),
-            authToken: walletAuthToken,
-          ),
-        );
-    ref.read(selectedWalletProvider.notifier).update(
-          (state) => address,
-        );
-  }
-
-  _handleWalletConnect({
-    required BuildContext context,
-    required WidgetRef ref,
-  }) async {
-    await ref.read(walletControllerProvider.notifier).connectWallet(
-      onSuccess: () {
-        showSnackBar(
-          context: context,
-          text: 'Wallet has been connected',
-          backgroundColor: ColorPalette.dReaderGreen,
-        );
-        ref.invalidate(selectedWalletProvider);
-        ref.invalidate(userWalletsProvider);
-        ref.invalidate(ownedComicsAsyncProvider);
-      },
-      onFail: (String result) {
-        showSnackBar(
-          context: context,
-          text: result,
-          backgroundColor: ColorPalette.dReaderRed,
-        );
-      },
-      onError: (exception) {
-        triggerLowPowerOrNoWallet(context, exception);
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -275,11 +203,25 @@ class MyWalletsScreen extends ConsumerWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          _handleWalletSelect(
-                                            ref: ref,
-                                            context: context,
-                                            address: data[index].address,
-                                          );
+                                          ref
+                                              .read(walletControllerProvider
+                                                  .notifier)
+                                              .handleWalletSelect(
+                                                address: data[index].address,
+                                                onAuthorizeNeeded: () async {
+                                                  return await showDialog<bool>(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return ConfirmationDialog(
+                                                            title: '',
+                                                            subtitle:
+                                                                'Wallet ${Formatter.formatAddress(data[index].address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
+                                                          );
+                                                        },
+                                                      ) ??
+                                                      false;
+                                                },
+                                              );
                                         },
                                         child: Icon(
                                           ref.watch(selectedWalletProvider) ==
@@ -322,9 +264,30 @@ class MyWalletsScreen extends ConsumerWidget {
                         },
                       );
                     }
-                    if (context.mounted) {
-                      await _handleWalletConnect(context: context, ref: ref);
-                    }
+                    await ref
+                        .read(walletControllerProvider.notifier)
+                        .connectWallet(
+                      onSuccess: () {
+                        showSnackBar(
+                          context: context,
+                          text: 'Wallet has been connected',
+                          backgroundColor: ColorPalette.dReaderGreen,
+                        );
+                        ref.invalidate(selectedWalletProvider);
+                        ref.invalidate(userWalletsProvider);
+                        ref.invalidate(ownedComicsAsyncProvider);
+                      },
+                      onFail: (String result) {
+                        showSnackBar(
+                          context: context,
+                          text: result,
+                          backgroundColor: ColorPalette.dReaderRed,
+                        );
+                      },
+                      onError: (exception) {
+                        triggerLowPowerOrNoWallet(context, exception);
+                      },
+                    );
                   },
             size: const Size(double.infinity, 50),
             isLoading: ref.watch(globalStateProvider).isLoading,

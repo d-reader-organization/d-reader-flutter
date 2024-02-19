@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -41,40 +42,29 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
   }
 
   _handlePasswordChange() async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    final result = await ref.read(userRepositoryProvider).updatePassword(
+    await ref.read(profileControllerProvider.notifier).changePassword(
           userId: widget.userId,
           oldPassword: _oldPasswordController.text.trim(),
           newPassword: _newPasswordController.text.trim(),
-        );
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    if (context.mounted) {
-      final isFailure = result is String && result.isNotEmpty;
-      showSnackBar(
-        context: context,
-        text: isFailure ? result : 'Password has been changed.',
-        backgroundColor:
-            isFailure ? ColorPalette.dReaderRed : ColorPalette.dReaderGreen,
-      );
-      if (!isFailure) {
-        Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            context.pop();
+          callback: (result) {
+            final isFailure = result is String && result.isNotEmpty;
+            showSnackBar(
+              context: context,
+              text: isFailure ? result : 'Password has been changed.',
+              backgroundColor: isFailure
+                  ? ColorPalette.dReaderRed
+                  : ColorPalette.dReaderGreen,
+            );
+            if (!isFailure) {
+              Future.delayed(
+                const Duration(seconds: 1),
+                () {
+                  context.pop();
+                },
+              );
+            }
           },
         );
-      }
-    }
   }
 
   @override

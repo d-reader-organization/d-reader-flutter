@@ -1,5 +1,3 @@
-import 'dart:io' show File;
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
@@ -7,6 +5,7 @@ import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
+import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -16,7 +15,6 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.da
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -24,60 +22,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfileView extends HookConsumerWidget {
   const ProfileView({Key? key}) : super(key: key);
-
-  displaySnackBar({
-    required BuildContext context,
-    required Color color,
-    required String text,
-    Duration duration = const Duration(seconds: 1),
-  }) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: color),
-          borderRadius: BorderRadius.circular(
-            8,
-          ),
-        ),
-        duration: duration,
-        closeIconColor: Colors.white,
-        showCloseIcon: true,
-        content: Text(
-          text,
-          style: TextStyle(color: color),
-        ),
-      ),
-    );
-  }
-
-  syncWallets({
-    required BuildContext context,
-    required WidgetRef ref,
-    required int userId,
-  }) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    await ref.read(userRepositoryProvider).syncWallets(userId);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-
-    if (context.mounted) {
-      displaySnackBar(
-        context: context,
-        color: ColorPalette.dReaderGreen,
-        text: 'Assets synced successfully',
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,50 +64,23 @@ class ProfileView extends HookConsumerWidget {
                       isLoading: ref.watch(globalStateProvider).isLoading,
                       size: const Size(double.infinity, 40),
                       onPressed: () async {
-                        final String username = ref.read(usernameTextProvider);
-                        if (username.isNotEmpty) {
-                          final notifier =
-                              ref.read(globalStateProvider.notifier);
-
-                          if (provider.value?.id != null) {
-                            notifier.update(
-                              (state) => state.copyWith(
-                                isLoading: true,
-                              ),
-                            );
-                            final updateResult = await ref
-                                .read(userRepositoryProvider)
-                                .updateUser(
-                                  UpdateUserPayload(
-                                    id: provider.value!.id,
-                                    email: provider.value?.email ?? '',
-                                    name: username,
-                                  ),
-                                );
-                            notifier.update(
-                              (state) => state.copyWith(
-                                isLoading: false,
-                              ),
-                            );
-                            ref
-                                .read(usernameTextProvider.notifier)
-                                .update((state) => '');
-                            ref.invalidate(myUserProvider);
-                            if (context.mounted) {
-                              displaySnackBar(
-                                context: context,
-                                duration: const Duration(
-                                  seconds: 2,
-                                ),
-                                color: updateResult is String
-                                    ? ColorPalette.dReaderRed
-                                    : ColorPalette.dReaderGreen,
-                                text: updateResult is String
-                                    ? updateResult
-                                    : 'Your username has been updated.',
+                        if (provider.value != null) {
+                          await ref
+                              .read(profileControllerProvider.notifier)
+                              .changeUsername(
+                                user: provider.value!,
+                                callback: (result) {
+                                  showSnackBar(
+                                    context: context,
+                                    backgroundColor: result is String
+                                        ? ColorPalette.dReaderRed
+                                        : ColorPalette.dReaderGreen,
+                                    text: result is String
+                                        ? result
+                                        : 'Your username has been updated.',
+                                  );
+                                },
                               );
-                            }
-                          }
                         }
                       },
                       borderRadius: BorderRadius.circular(8),
@@ -319,12 +236,20 @@ class ProfileView extends HookConsumerWidget {
                           overrideTrailing: const SizedBox(),
                           onTap: ref.watch(globalStateProvider).isLoading
                               ? null
-                              : () async {
-                                  await syncWallets(
-                                    context: context,
-                                    ref: ref,
-                                    userId: user.id,
-                                  );
+                              : () {
+                                  ref
+                                      .read(profileControllerProvider.notifier)
+                                      .syncUserWallets(
+                                        userId: user.id,
+                                        callback: () {
+                                          showSnackBar(
+                                            context: context,
+                                            backgroundColor:
+                                                ColorPalette.dReaderGreen,
+                                            text: 'Assets synced successfully',
+                                          );
+                                        },
+                                      );
                                 },
                         )
                       : const SizedBox(),
@@ -474,41 +399,18 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles();
-        if (result != null) {
-          File file = File(result.files.single.path ?? '');
-
-          final notifier = ref.read(privateLoadingProvider.notifier);
-          notifier.update(
-            (state) => true,
-          );
-          final response = await ref.read(userRepositoryProvider).updateAvatar(
-                UpdateUserPayload(
-                  id: user.id,
-                  avatar: file,
-                ),
-              );
-          ref.invalidate(myUserProvider);
-          Future.delayed(
-            const Duration(milliseconds: 500),
-            () {
-              notifier.update((state) => false);
-            },
-          );
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  response is String
-                      ? response
+        await ref.read(profileControllerProvider.notifier).uploadAvatar(
+              userId: user.id,
+              callback: (result) {
+                showSnackBar(
+                  context: context,
+                  text: result is String
+                      ? result
                       : 'Your avatar has been uploaded.',
-                ),
-                duration: const Duration(milliseconds: 500),
-                backgroundColor: ColorPalette.dReaderGreen,
-              ),
+                  backgroundColor: ColorPalette.dReaderGreen,
+                );
+              },
             );
-          }
-        }
       },
       child: ref.watch(privateLoadingProvider)
           ? Center(
@@ -539,7 +441,8 @@ class Avatar extends StatelessWidget {
                         ),
                       );
                     },
-                  ))
+                  ),
+                )
               : Container(
                   padding: const EdgeInsets.all(8),
                   height: 96,

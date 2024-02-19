@@ -6,7 +6,7 @@ part of 'animation_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$animationNotifierHash() => r'7dcf2760e563bc97336f73d2e34d05782d70c4f1';
+String _$animationNotifierHash() => r'f070b7583402a4e15720ffd786433d06cec233b5';
 
 /// See also [AnimationNotifier].
 @ProviderFor(AnimationNotifier)

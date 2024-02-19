@@ -95,15 +95,6 @@ class _EReaderViewState extends ConsumerState<EReaderView>
             child: VisibilityAnimationAppBar(
               title: issueProvider.value?.title ?? '',
               centerTitle: false,
-              // actions: [
-              //   Padding(
-              //     padding: const EdgeInsets.only(right: 16.0),
-              //     child: Icon(
-              //       Icons.bookmark_outline_rounded,
-              //       color: ColorPalette.boxBackground400.withOpacity(0.6),
-              //     ),
-              //   ),
-              // ],
             ),
           ),
           body: RefreshIndicator(

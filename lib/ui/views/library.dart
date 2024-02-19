@@ -67,20 +67,6 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     return;
-                        //   },
-                        //   child: SvgPicture.asset(
-                        //     'assets/icons/search.svg',
-                        //     width: 24,
-                        //     height: 24,
-                        //     colorFilter: const ColorFilter.mode(
-                        //       Colors.white,
-                        //       BlendMode.srcIn,
-                        //     ),
-                        //   ),
-                        // ),
                       ]),
                 ),
                 leadingWidth: double.infinity,

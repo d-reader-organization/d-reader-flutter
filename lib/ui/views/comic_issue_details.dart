@@ -2,23 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
-import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
-import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
+import 'package:d_reader_flutter/core/providers/comic_issue/comic_issue_controller.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue/provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -37,7 +30,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ComicIssueDetails extends ConsumerStatefulWidget {
   final int id;
@@ -471,84 +463,7 @@ class BottomNavigation extends ConsumerWidget {
     required this.issue,
   });
 
-  _checkIsVerifiedEmail({required WidgetRef ref}) async {
-    final envUser = ref.read(environmentProvider).user;
-
-    if (envUser != null && !envUser.isEmailVerified) {
-      final user = await ref.read(myUserProvider.future);
-      if (user != null && !user.isEmailVerified) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  _handleMint(BuildContext context, WidgetRef ref) async {
-    try {
-      CandyMachineModel? candyMachineState =
-          ref.read(candyMachineStateProvider);
-      if (context.mounted && candyMachineState == null) {
-        return showSnackBar(
-          context: context,
-          text: 'Failed to find candy machine',
-        );
-      }
-      final activeGroup = getActiveGroup(candyMachineState!.groups);
-      if (activeGroup == null && context.mounted) {
-        return showSnackBar(
-          context: context,
-          text: 'There is no active mint',
-        );
-      }
-      if (activeGroup!.label == dFreeLabel) {
-        bool isVerified = await _checkIsVerifiedEmail(ref: ref);
-        final user = ref.read(environmentProvider).user;
-        Sentry.captureMessage(
-          'dFree: User ${user?.email} - isVerified: $isVerified',
-        );
-        if (!isVerified && context.mounted) {
-          return triggerVerificationDialog(context, ref);
-        }
-      }
-
-      final mintResult = await ref.read(solanaProvider.notifier).mint(
-            issue.activeCandyMachineAddress,
-            activeGroup.label,
-          );
-      if (context.mounted) {
-        if (mintResult is bool && mintResult) {
-          ref.invalidate(nftsProvider);
-          nextScreenPush(
-            context: context,
-            path: RoutePath.mintLoadingAnimation,
-          );
-        } else {
-          showSnackBar(
-            context: context,
-            text: mintResult is String ? mintResult : 'Something went wrong',
-            backgroundColor: ColorPalette.dReaderRed,
-          );
-        }
-      }
-      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
-    } catch (error) {
-      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
-      if (context.mounted) {
-        if (error is NoWalletFoundException) {
-          return _showWalkthroughDialog(context: context, ref: ref);
-        } else if (error is LowPowerModeException) {
-          return triggerLowPowerModeDialog(context);
-        }
-        showSnackBar(
-          context: context,
-          text: error is BadRequestException ? error.cause : error.toString(),
-          backgroundColor: ColorPalette.dReaderRed,
-        );
-      }
-    }
-  }
-
-  _showWalkthroughDialog({
+  void _showWalkthroughDialog({
     required BuildContext context,
     required WidgetRef ref,
   }) {
@@ -605,9 +520,48 @@ class BottomNavigation extends ConsumerWidget {
                         onPressed: ref.watch(isOpeningSessionProvider)
                             ? null
                             : () async {
-                                if (context.mounted) {
-                                  await _handleMint(context, ref);
-                                }
+                                await ref
+                                    .read(comicIssueControllerProvider.notifier)
+                                    .handleMint(
+                                  displaySnackbar: ({
+                                    required String text,
+                                    bool isError = false,
+                                  }) {
+                                    showSnackBar(
+                                      context: context,
+                                      text: text,
+                                      backgroundColor: isError
+                                          ? ColorPalette.dReaderRed
+                                          : ColorPalette.greyscale300,
+                                    );
+                                  },
+                                  triggerVerificationDialog: () {
+                                    return triggerVerificationDialog(
+                                        context, ref);
+                                  },
+                                  onSuccessMint: () {
+                                    nextScreenPush(
+                                      context: context,
+                                      path: RoutePath.mintLoadingAnimation,
+                                    );
+                                  },
+                                  onException: (exception) {
+                                    if (exception is NoWalletFoundException) {
+                                      return _showWalkthroughDialog(
+                                          context: context, ref: ref);
+                                    } else if (exception
+                                        is LowPowerModeException) {
+                                      return triggerLowPowerModeDialog(context);
+                                    }
+                                    showSnackBar(
+                                      context: context,
+                                      text: exception is BadRequestException
+                                          ? exception.cause
+                                          : exception.toString(),
+                                      backgroundColor: ColorPalette.dReaderRed,
+                                    );
+                                  },
+                                );
                               },
                         text: 'Mint',
                         price:
@@ -618,68 +572,35 @@ class BottomNavigation extends ConsumerWidget {
                       ? Expanded(
                           child: TransactionButton(
                             isLoading: ref.watch(globalStateProvider).isLoading,
-                            onPressed: ref
-                                        .read(selectedItemsProvider)
-                                        .isNotEmpty &&
-                                    !ref.watch(isOpeningSessionProvider)
-                                ? () async {
-                                    final activeWallet =
-                                        ref.read(environmentProvider).publicKey;
-                                    if (activeWallet == null) {
-                                      throw Exception(
-                                        'There is no wallet selected',
-                                      );
-                                    }
-                                    List<BuyNftInput> selectedNftsInput = ref
-                                        .read(selectedItemsProvider)
-                                        .map(
-                                          (e) => BuyNftInput(
-                                            mintAccount: e.nftAddress,
-                                            price: e.price,
-                                            sellerAddress: e.seller.address,
-                                            buyerAddress:
-                                                activeWallet.toBase58(),
-                                          ),
-                                        )
-                                        .toList();
-                                    try {
-                                      final isSuccessful = await ref
-                                          .read(solanaProvider.notifier)
-                                          .buyMultiple(selectedNftsInput);
-                                      ref
-                                          .read(globalStateProvider.notifier)
-                                          .state
-                                          .copyWith(isLoading: false);
-                                      if (isSuccessful) {
-                                        ref.invalidate(listedItemsProvider);
-                                        ref.invalidate(listingsAsyncProvider);
-                                        ref.invalidate(userAssetsProvider);
-                                      }
-                                      if (context.mounted) {
-                                        showSnackBar(
-                                          context: context,
-                                          text: isSuccessful
-                                              ? 'Success!'
-                                              : 'Failed to buy item/items.',
-                                          backgroundColor: isSuccessful
-                                              ? ColorPalette.dReaderGreen
-                                              : ColorPalette.dReaderRed,
+                            onPressed:
+                                ref.read(selectedItemsProvider).isNotEmpty &&
+                                        !ref.watch(isOpeningSessionProvider)
+                                    ? () async {
+                                        await ref
+                                            .read(comicIssueControllerProvider
+                                                .notifier)
+                                            .handleBuy(
+                                          displaySnackBar: ({
+                                            required String text,
+                                            required bool isSuccess,
+                                          }) {
+                                            showSnackBar(
+                                              context: context,
+                                              text: text,
+                                              backgroundColor: isSuccess
+                                                  ? ColorPalette.dReaderGreen
+                                                  : ColorPalette.dReaderRed,
+                                            );
+                                          },
+                                          onException: (exception) {
+                                            triggerLowPowerOrNoWallet(
+                                              context,
+                                              exception,
+                                            );
+                                          },
                                         );
                                       }
-                                    } catch (exception) {
-                                      ref
-                                          .read(globalStateProvider.notifier)
-                                          .state
-                                          .copyWith(isLoading: false);
-                                      if (context.mounted) {
-                                        return triggerLowPowerOrNoWallet(
-                                          context,
-                                          exception,
-                                        );
-                                      }
-                                    }
-                                  }
-                                : null,
+                                    : null,
                             text: 'Buy',
                             price: ref.watch(selectedItemsPrice),
                             isListing: true,

@@ -40,7 +40,7 @@ triggerWalkthroughDialogIfNeeded({
   }
 }
 
-triggerWalkthroughDialog({
+void triggerWalkthroughDialog({
   required BuildContext context,
   required Function() onSubmit,
   required String title,
@@ -48,8 +48,8 @@ triggerWalkthroughDialog({
   required String assetPath,
   String buttonText = 'Got it!',
   Widget? bottomWidget,
-}) {
-  return showDialog(
+}) async {
+  return await showDialog(
     context: context,
     builder: (context) {
       return WalkthroughDialog(
@@ -64,7 +64,7 @@ triggerWalkthroughDialog({
   );
 }
 
-triggerLowPowerModeDialog(BuildContext context) {
+void triggerLowPowerModeDialog(BuildContext context) {
   return triggerWalkthroughDialog(
     context: context,
     assetPath: '$walkthroughAssetsPath/power_saving.jpg',
@@ -77,7 +77,7 @@ triggerLowPowerModeDialog(BuildContext context) {
   );
 }
 
-triggerVerificationDialog(BuildContext context, WidgetRef ref) {
+void triggerVerificationDialog(BuildContext context, WidgetRef ref) {
   return triggerWalkthroughDialog(
     context: context,
     title: 'Verify your email',

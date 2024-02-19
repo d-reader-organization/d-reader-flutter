@@ -165,48 +165,43 @@ class Body extends StatelessWidget {
                       onPressed: ref.watch(isOpeningSessionProvider)
                           ? null
                           : () async {
-                              try {
-                                if (nft.isListed) {
-                                  final result = await ref
-                                      .read(solanaProvider.notifier)
-                                      .delist(nftAddress: nft.address);
-                                  ref.read(globalStateProvider.notifier).state =
-                                      const GlobalState(isLoading: false);
-                                  ref.invalidate(nftProvider);
-                                  if (result is bool &&
-                                      result &&
-                                      context.mounted) {
-                                    showSnackBar(
-                                      context: context,
-                                      text: 'Successfully delisted',
-                                      backgroundColor:
-                                          ColorPalette.dReaderGreen,
-                                    );
-                                  }
-                                  return;
-                                }
-                                showModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: Colors.transparent,
-                                  isScrollControlled: true,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: MediaQuery.viewInsetsOf(context)
-                                            .bottom,
-                                      ),
-                                      child: NftModalBottomSheet(nft: nft),
-                                    );
-                                  },
-                                );
-                              } catch (exception) {
-                                if (context.mounted) {
-                                  return triggerLowPowerOrNoWallet(
-                                    context,
-                                    exception,
+                              await ref
+                                  .read(nftControllerProvider.notifier)
+                                  .listOrDelist(
+                                    nft: nft,
+                                    triggerListBottomSheet: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        isScrollControlled: true,
+                                        builder: (context) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                              bottom: MediaQuery.viewInsetsOf(
+                                                      context)
+                                                  .bottom,
+                                            ),
+                                            child:
+                                                NftModalBottomSheet(nft: nft),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    delistCallback: () {
+                                      showSnackBar(
+                                        context: context,
+                                        text: 'Successfully delisted',
+                                        backgroundColor:
+                                            ColorPalette.dReaderGreen,
+                                      );
+                                    },
+                                    onException: (exception) {
+                                      triggerLowPowerOrNoWallet(
+                                        context,
+                                        exception,
+                                      );
+                                    },
                                   );
-                                }
-                              }
                             },
                       child: nft.isListed
                           ? const Text(
@@ -258,23 +253,18 @@ class Body extends StatelessWidget {
                             path: '${RoutePath.eReader}/${nft.comicIssueId}',
                           );
                         }
-                        try {
-                          final result =
-                              await ref.read(solanaProvider.notifier).useMint(
-                                    nftAddress: nft.address,
-                                    ownerAddress: nft.ownerAddress,
-                                  );
-                          if (context.mounted) {
-                            _handleNftOpen(context, result);
-                          }
-                        } catch (exception) {
-                          if (context.mounted) {
-                            return triggerLowPowerOrNoWallet(
-                              context,
-                              exception,
+                        await ref.read(nftControllerProvider.notifier).openNft(
+                              nft: nft,
+                              onOpen: (result) {
+                                _handleNftOpen(context, result);
+                              },
+                              onException: (exception) {
+                                triggerLowPowerOrNoWallet(
+                                  context,
+                                  exception,
+                                );
+                              },
                             );
-                          }
-                        }
                       },
                     ),
                   );

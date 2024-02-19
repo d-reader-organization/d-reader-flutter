@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
@@ -80,6 +81,13 @@ class AuthController extends _$AuthController {
     onSuccess();
   }
 
+  Future<void> handleResendVerification({
+    required Function() callback,
+  }) async {
+    await ref.read(requestEmailVerificationProvider.future);
+    callback();
+  }
+
   Future<void> signUp({
     required Function() onSuccess,
     required Function(String message) onFail,
@@ -99,5 +107,35 @@ class AuthController extends _$AuthController {
       ),
     );
     isSuccess ? onSuccess() : onFail(result);
+  }
+
+  Future<void> handleRequestResetPassword({
+    required String email,
+    required Function() onSuccess,
+    required Function(String cause) onException,
+  }) async {
+    globalNotifier.update(
+      (state) => state.copyWith(
+        isLoading: true,
+      ),
+    );
+    try {
+      await ref.read(userRepositoryProvider).requestPasswordReset(email);
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      onSuccess();
+    } catch (exception) {
+      globalNotifier.update(
+        (state) => state.copyWith(
+          isLoading: false,
+        ),
+      );
+      if (exception is BadRequestException) {
+        onException(exception.cause);
+      }
+    }
   }
 }

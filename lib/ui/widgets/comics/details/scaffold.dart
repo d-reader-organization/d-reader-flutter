@@ -136,36 +136,6 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // ClipRect(
-                            //   child: BackdropFilter(
-                            //     filter: ImageFilter.blur(
-                            //       sigmaX: 10,
-                            //       sigmaY: 10,
-                            //     ),
-                            //     child: Container(
-                            //       padding: const EdgeInsets.symmetric(
-                            //         horizontal: 6,
-                            //         vertical: 4,
-                            //       ),
-                            //       decoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(4),
-                            //         backgroundBlendMode: BlendMode.darken,
-                            //         color: ColorPalette.boxBackground300,
-                            //       ),
-                            //       child: const Text(
-                            //         'NEW EPISODES!',
-                            //         style: TextStyle(
-                            //           fontSize: 12,
-                            //           fontWeight: FontWeight.w500,
-                            //           letterSpacing: .2,
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            // const SizedBox(
-                            //   height: 12,
-                            // ),
                             Text(
                               widget.comic.title,
                               style: textTheme.headlineLarge,
@@ -390,23 +360,24 @@ class BodyFilterAndSortContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        constraints: const BoxConstraints(
-          minHeight: 36,
+      constraints: const BoxConstraints(
+        minHeight: 36,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 4,
+      ),
+      decoration: BoxDecoration(
+        color: ColorPalette.greyscale500,
+        border: Border.all(
+          color: ColorPalette.greyscale300,
         ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 4,
+        borderRadius: BorderRadius.circular(
+          8,
         ),
-        decoration: BoxDecoration(
-          color: ColorPalette.greyscale500,
-          border: Border.all(
-            color: ColorPalette.greyscale300,
-          ),
-          borderRadius: BorderRadius.circular(
-            8,
-          ),
-        ),
-        child: child);
+      ),
+      child: child,
+    );
   }
 }
 

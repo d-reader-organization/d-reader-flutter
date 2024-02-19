@@ -1,6 +1,5 @@
-import 'package:d_reader_flutter/core/models/exceptions.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
@@ -100,46 +99,25 @@ class _RequestResetPasswordViewState extends State<RequestResetPasswordView> {
                   ),
                   onPressed: () async {
                     if (_resetPasswordFormKey.currentState!.validate()) {
-                      final globalNotifier =
-                          ref.read(globalStateProvider.notifier);
-                      globalNotifier.update(
-                        (state) => state.copyWith(
-                          isLoading: true,
-                        ),
-                      );
-                      try {
-                        await ref
-                            .read(userRepositoryProvider)
-                            .requestPasswordReset(
-                              _emailController.value.text.trim(),
-                            );
-                        globalNotifier.update(
-                          (state) => state.copyWith(
-                            isLoading: false,
-                          ),
-                        );
-                        if (context.mounted) {
-                          showSnackBar(
-                            context: context,
-                            text: 'Reset password mail has been sent.',
-                            backgroundColor: ColorPalette.dReaderGreen,
+                      await ref
+                          .read(authControllerProvider.notifier)
+                          .handleRequestResetPassword(
+                            email: _emailController.value.text.trim(),
+                            onSuccess: () {
+                              showSnackBar(
+                                context: context,
+                                text: 'Reset password mail has been sent.',
+                                backgroundColor: ColorPalette.dReaderGreen,
+                              );
+                            },
+                            onException: (cause) {
+                              showSnackBar(
+                                context: context,
+                                text: cause,
+                                backgroundColor: ColorPalette.dReaderRed,
+                              );
+                            },
                           );
-                        }
-                      } catch (exception) {
-                        globalNotifier.update(
-                          (state) => state.copyWith(
-                            isLoading: false,
-                          ),
-                        );
-                        if (exception is BadRequestException &&
-                            context.mounted) {
-                          showSnackBar(
-                            context: context,
-                            text: exception.cause,
-                            backgroundColor: ColorPalette.dReaderRed,
-                          );
-                        }
-                      }
                     }
                   },
                 );

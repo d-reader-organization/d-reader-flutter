@@ -1,9 +1,5 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
-import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/core/providers/animation/animation_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -45,46 +41,29 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
     _controller.play();
 
     _controller.addListener(() {
-      final bool isMinting = ref.watch(globalStateProvider).isMinting != null &&
-          ref.watch(globalStateProvider).isMinting!;
-      final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
-
-      if (_controller.value.isPlaying) {
-        if (isMinted) {
-          _handleMintedCase();
-        } else if (!isMinting && !isMinted) {
-          _controller.pause();
-          context.pop();
-          showSnackBar(
+      ref.read(animationNotifierProvider.notifier).mintOpenListener(
             context: context,
-            text: 'Internal server error.',
-            backgroundColor: ColorPalette.dReaderRed,
+            videoPlayerController: _controller,
+            animationController: _animationController,
+            onSuccess: (String nftAddress) {
+              nextScreenReplace(
+                context: context,
+                path: '${RoutePath.nftDetails}/$nftAddress',
+                homeSubRoute: true,
+              );
+            },
+            onFail: () {
+              _controller.pause();
+              context.pop();
+              showSnackBar(
+                context: context,
+                text: 'Internal server error.',
+                backgroundColor: ColorPalette.dReaderRed,
+              );
+              return;
+            },
           );
-          return;
-        }
-      }
     });
-  }
-
-  _handleMintedCase() {
-    _controller.pause();
-    _animationController.reverse(
-      from: 1,
-    );
-    final String? nftAddress = ref.read(lastProcessedNftProvider);
-    if (context.mounted && nftAddress != null) {
-      ref.invalidate(lastProcessedNftProvider);
-      ref.invalidate(nftsProvider);
-      ref.invalidate(ownedComicsAsyncProvider);
-      ref.invalidate(ownedIssuesAsyncProvider);
-      ref.invalidate(comicIssuePagesProvider);
-      ref.invalidate(comicIssueDetailsProvider);
-      nextScreenReplace(
-        context: context,
-        path: '${RoutePath.nftDetails}/$nftAddress',
-        homeSubRoute: true,
-      );
-    }
   }
 
   @override

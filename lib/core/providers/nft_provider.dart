@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/repositories/nft/repository_impl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:solana/solana.dart' show lamportsPerSol;
 part 'nft_provider.g.dart';
 
 final nftRepositoryProvider = Provider<NftRepositoryImpl>(
@@ -56,26 +57,21 @@ class NftController extends _$NftController {
     globalNotifier = ref.read(globalStateProvider.notifier);
   }
 
-  Future<void> listOrDelist({
+  Future<void> delist({
     required NftModel nft,
-    required void Function() triggerListBottomSheet,
-    required void Function() delistCallback,
+    required void Function() callback,
     required void Function(Object exception) onException,
   }) async {
     try {
-      if (nft.isListed) {
-        final result = await ref
-            .read(solanaProvider.notifier)
-            .delist(nftAddress: nft.address);
-        ref.read(globalStateProvider.notifier).state =
-            const GlobalState(isLoading: false);
-        ref.invalidate(nftProvider);
-        if (result is bool && result) {
-          delistCallback();
-        }
-        return;
+      final result = await ref
+          .read(solanaProvider.notifier)
+          .delist(nftAddress: nft.address);
+      ref.read(globalStateProvider.notifier).state =
+          const GlobalState(isLoading: false);
+      ref.invalidate(nftProvider);
+      if (result is bool && result) {
+        callback();
       }
-      triggerListBottomSheet();
     } catch (exception) {
       onException(exception);
     }
@@ -94,6 +90,25 @@ class NftController extends _$NftController {
       onOpen(result);
     } catch (exception) {
       onException(exception);
+    }
+  }
+
+  Future<void> listNft({
+    required String sellerAddress,
+    required String mintAccount,
+    required double price,
+    required void Function(dynamic result) callback,
+  }) async {
+    try {
+      final response = await ref.read(solanaProvider.notifier).list(
+            sellerAddress: sellerAddress,
+            mintAccount: mintAccount,
+            price: (price * lamportsPerSol).round(),
+          );
+      globalNotifier.update((state) => state.copyWith(isLoading: false));
+      callback(response);
+    } catch (exception) {
+      rethrow;
     }
   }
 }

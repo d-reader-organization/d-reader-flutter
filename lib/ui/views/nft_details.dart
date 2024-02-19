@@ -165,43 +165,41 @@ class Body extends StatelessWidget {
                       onPressed: ref.watch(isOpeningSessionProvider)
                           ? null
                           : () async {
-                              await ref
-                                  .read(nftControllerProvider.notifier)
-                                  .listOrDelist(
-                                    nft: nft,
-                                    triggerListBottomSheet: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        backgroundColor: Colors.transparent,
-                                        isScrollControlled: true,
-                                        builder: (context) {
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                              bottom: MediaQuery.viewInsetsOf(
-                                                      context)
-                                                  .bottom,
-                                            ),
-                                            child:
-                                                NftModalBottomSheet(nft: nft),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    delistCallback: () {
-                                      showSnackBar(
-                                        context: context,
-                                        text: 'Successfully delisted',
-                                        backgroundColor:
-                                            ColorPalette.dReaderGreen,
-                                      );
-                                    },
-                                    onException: (exception) {
-                                      triggerLowPowerOrNoWallet(
-                                        context,
-                                        exception,
-                                      );
-                                    },
+                              if (nft.isListed) {
+                                return await ref
+                                    .read(nftControllerProvider.notifier)
+                                    .delist(
+                                      nft: nft,
+                                      callback: () {
+                                        showSnackBar(
+                                          context: context,
+                                          text: 'Successfully delisted',
+                                          backgroundColor:
+                                              ColorPalette.dReaderGreen,
+                                        );
+                                      },
+                                      onException: (exception) {
+                                        triggerLowPowerOrNoWallet(
+                                          context,
+                                          exception,
+                                        );
+                                      },
+                                    );
+                              }
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.transparent,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: MediaQuery.viewInsetsOf(context)
+                                          .bottom,
+                                    ),
+                                    child: NftModalBottomSheet(nft: nft),
                                   );
+                                },
+                              );
                             },
                       child: nft.isListed
                           ? const Text(

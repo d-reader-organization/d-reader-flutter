@@ -1,12 +1,7 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/core/providers/library/owned_controller.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -25,24 +20,6 @@ class OwnedIssueCard extends ConsumerWidget {
     super.key,
     required this.issue,
   });
-
-  fetchOwnedNfts(WidgetRef ref, String comicIssueId) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
-    final ownedNfts = await ref.read(nftsProvider(
-      'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
-    ).future);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    return ownedNfts;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -126,28 +103,18 @@ class OwnedIssueCard extends ConsumerWidget {
                   const SizedBox(),
                   InfoButton(
                     isLoading: ref.watch(globalStateProvider).isLoading,
-                    onTap: () async {
-                      final List<NftModel> ownedNfts =
-                          await fetchOwnedNfts(ref, '${issue.id}');
-
-                      final int usedNftIndex =
-                          ownedNfts.indexWhere((element) => element.isUsed);
-
-                      if (context.mounted && ownedNfts.length == 1) {
-                        final properIndex =
-                            usedNftIndex > -1 ? usedNftIndex : 0;
-                        return nextScreenPush(
-                          context: context,
-                          path:
-                              '${RoutePath.nftDetails}/${ownedNfts.elementAt(properIndex).address}',
-                        );
-                      }
-                      final ComicIssueModel? comicIssue = await ref.read(
-                        comicIssueDetailsProvider(issue.id).future,
-                      );
+                    onTap: () {
                       ref
-                          .read(selectedIssueInfoProvider.notifier)
-                          .update((state) => comicIssue);
+                          .read(ownedControllerProvider.notifier)
+                          .handleIssueInfoTap(
+                            comicIssueId: issue.id,
+                            goToNftDetails: (nftAddress) {
+                              return nextScreenPush(
+                                context: context,
+                                path: '${RoutePath.nftDetails}/$nftAddress',
+                              );
+                            },
+                          );
                     },
                   ),
                 ],

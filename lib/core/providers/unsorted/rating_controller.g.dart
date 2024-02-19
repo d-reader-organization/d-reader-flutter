@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'nft_provider.dart';
+part of 'rating_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$nftControllerHash() => r'2dd10ba7423bd831a4ad8b23b38cf5974f09b47f';
+String _$ratingControllerHash() => r'52400f1d5baf2f91afb365076007b3dd27c76713';
 
-/// See also [NftController].
-@ProviderFor(NftController)
-final nftControllerProvider =
-    AutoDisposeAsyncNotifierProvider<NftController, void>.internal(
-  NftController.new,
-  name: r'nftControllerProvider',
+/// See also [RatingController].
+@ProviderFor(RatingController)
+final ratingControllerProvider =
+    AutoDisposeAsyncNotifierProvider<RatingController, void>.internal(
+  RatingController.new,
+  name: r'ratingControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$nftControllerHash,
+      : _$ratingControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$NftController = AutoDisposeAsyncNotifier<void>;
+typedef _$RatingController = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

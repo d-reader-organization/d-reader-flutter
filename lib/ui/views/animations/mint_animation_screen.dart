@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/animation/animation_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
@@ -166,17 +165,17 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
   }
 
   _handleUnwrap({required WidgetRef ref}) async {
-    final isSuccessful = await ref.read(solanaProvider.notifier).useMint(
+    await ref.read(animationNotifierProvider.notifier).handleNftUnwrap(
           nftAddress: widget.nft.address,
           ownerAddress: widget.nft.ownerAddress,
+          onSuccess: () {
+            nextScreenReplace(
+              context: context,
+              path: RoutePath.openNftAnimation,
+              homeSubRoute: true,
+            );
+          },
         );
-    if (context.mounted && isSuccessful) {
-      nextScreenReplace(
-        context: context,
-        path: RoutePath.openNftAnimation,
-        homeSubRoute: true,
-      );
-    }
   }
 
   @override

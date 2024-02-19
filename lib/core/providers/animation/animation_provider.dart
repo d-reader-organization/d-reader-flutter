@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -101,6 +102,20 @@ class AnimationNotifier extends _$AnimationNotifier {
       ref.invalidate(comicIssuePagesProvider);
       ref.invalidate(comicIssueDetailsProvider);
       onSuccess(nftAddress);
+    }
+  }
+
+  handleNftUnwrap({
+    required String nftAddress,
+    required String ownerAddress,
+    required Function() onSuccess,
+  }) async {
+    final isSuccessful = await ref.read(solanaProvider.notifier).useMint(
+          nftAddress: nftAddress,
+          ownerAddress: ownerAddress,
+        );
+    if (isSuccessful) {
+      onSuccess();
     }
   }
 }

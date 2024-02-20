@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/library/owned_controller.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
@@ -129,30 +129,29 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                               return GestureDetector(
                                 onTap: () async {
                                   try {
-                                    final isSuccessful = await ref
-                                        .read(solanaProvider.notifier)
-                                        .useMint(
-                                          nftAddress: ownedNft.address,
-                                          ownerAddress: ownedNft.ownerAddress,
+                                    await ref
+                                        .read(ownedControllerProvider.notifier)
+                                        .handleOpenNft(
+                                          ownedNft: ownedNft,
+                                          onSuccess: () {
+                                            context.pop();
+                                            return nextScreenPush(
+                                              context: context,
+                                              path: RoutePath.openNftAnimation,
+                                            );
+                                          },
+                                          onFail: (message) {
+                                            showSnackBar(
+                                              context: context,
+                                              backgroundColor:
+                                                  ColorPalette.dReaderRed,
+                                              text: message,
+                                            );
+                                          },
                                         );
-                                    if (context.mounted) {
-                                      if (isSuccessful) {
-                                        context.pop();
-                                        return nextScreenPush(
-                                          context: context,
-                                          path: RoutePath.openNftAnimation,
-                                        );
-                                      }
-                                      showSnackBar(
-                                        context: context,
-                                        backgroundColor:
-                                            ColorPalette.dReaderRed,
-                                        text: 'Failed to open',
-                                      );
-                                    }
                                   } catch (exception) {
                                     if (context.mounted) {
-                                      Navigator.pop(context);
+                                      context.pop();
                                       return triggerLowPowerOrNoWallet(
                                         context,
                                         exception,
@@ -213,7 +212,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
               Expanded(
                 child: CustomTextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   borderRadius: BorderRadius.circular(8),
                   textColor: ColorPalette.greyscale50,

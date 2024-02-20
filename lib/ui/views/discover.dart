@@ -46,18 +46,6 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
     super.dispose();
   }
 
-  _updateViewMode() async {
-    final viewMode = ref.read(viewModeProvider) == ViewMode.detailed
-        ? ViewMode.gallery
-        : ViewMode.detailed;
-
-    ref.read(viewModeProvider.notifier).update((state) => viewMode);
-    await LocalStore.instance.put(
-      viewModeStoreKey,
-      viewMode.name,
-    );
-  }
-
   void _submitHandler(WidgetRef ref) {
     String search = ref.read(searchProvider).searchController.text.trim();
     ref.read(searchProvider.notifier).updateSearchValue(search);
@@ -86,7 +74,18 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
                     ),
                     GestureDetector(
                       onTap: () async {
-                        await _updateViewMode();
+                        final viewMode =
+                            ref.read(viewModeProvider) == ViewMode.detailed
+                                ? ViewMode.gallery
+                                : ViewMode.detailed;
+
+                        ref
+                            .read(viewModeProvider.notifier)
+                            .update((state) => viewMode);
+                        await LocalStore.instance.put(
+                          viewModeStoreKey,
+                          viewMode.name,
+                        );
                       },
                       child: ref.watch(viewModeProvider) == ViewMode.detailed
                           ? SvgPicture.asset('assets/icons/category.svg')

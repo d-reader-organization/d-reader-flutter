@@ -18,10 +18,6 @@ class HotIcon extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // const Icon(
-          //   Icons.local_fire_department_rounded,
-          //   color: ColorPalette.appBackgroundColor,
-          // ),
           SvgPicture.asset(
             'assets/icons/Hot.svg',
             colorFilter: const ColorFilter.mode(

@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/core/providers/wallet/wallet_notifier.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
@@ -17,48 +17,27 @@ class SignUpStep3 extends ConsumerWidget {
   const SignUpStep3({super.key});
 
   Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    try {
-      final result = await ref
-          .read(solanaProvider.notifier)
-          .authorizeAndSignMessage(null, () {
-        globalNotifier.update(
-          (state) => state.copyWith(
-            isLoading: true,
-          ),
-        );
-      });
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
-      if (context.mounted) {
-        if (result != 'OK') {
-          return showSnackBar(
-            context: context,
-            text: result,
-            backgroundColor: ColorPalette.dReaderRed,
-          );
-        }
+    await ref.read(walletControllerProvider.notifier).connectWallet(
+      onSuccess: () {
         nextScreenCloseOthers(
           context: context,
           path: RoutePath.home,
         );
-      }
-    } catch (exception) {
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
-      if (context.mounted) {
-        return triggerLowPowerOrNoWallet(
+      },
+      onFail: (String result) {
+        showSnackBar(
+          context: context,
+          text: result,
+          backgroundColor: ColorPalette.dReaderRed,
+        );
+      },
+      onError: (exception) {
+        triggerLowPowerOrNoWallet(
           context,
           exception,
         );
-      }
-    }
+      },
+    );
   }
 
   @override

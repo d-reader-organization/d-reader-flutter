@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/ui/widgets/genre/expandable_list.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FilterBottomSheet extends ConsumerWidget {
@@ -40,7 +41,7 @@ class FilterBottomSheet extends ConsumerWidget {
             actions: [
               GestureDetector(
                   onTap: () {
-                    return Navigator.pop(context);
+                    context.pop();
                   },
                   child: const Icon(
                     Icons.close,
@@ -138,7 +139,7 @@ class FilterBottomSheet extends ConsumerWidget {
           ref.invalidate(paginatedComicsProvider);
           ref.invalidate(paginatedIssuesProvider);
           ref.invalidate(paginatedCreatorsProvider);
-          Navigator.pop(context);
+          context.pop();
         },
       ),
     );

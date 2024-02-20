@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -65,23 +65,18 @@ class ResetPasswordView extends StatelessWidget {
               isLoading: ref.watch(globalStateProvider).isLoading,
               padding: EdgeInsets.zero,
               onPressed: () {
-                final globalNotifier = ref.read(globalStateProvider.notifier);
-                globalNotifier.update(
-                  (state) => state.copyWith(
-                    isLoading: true,
-                  ),
-                );
-                ref.read(userRepositoryProvider).requestPasswordReset(email);
-                globalNotifier.update(
-                  (state) => state.copyWith(
-                    isLoading: false,
-                  ),
-                );
-                showSnackBar(
-                  context: context,
-                  text: 'Instructions have been sent.',
-                  backgroundColor: ColorPalette.dReaderGreen,
-                );
+                ref
+                    .read(profileControllerProvider.notifier)
+                    .sendResetPasswordInstructions(
+                      email: email,
+                      callback: (String result) {
+                        showSnackBar(
+                          context: context,
+                          text: result,
+                          backgroundColor: ColorPalette.dReaderGreen,
+                        );
+                      },
+                    );
               },
               size: const Size(
                 double.infinity,

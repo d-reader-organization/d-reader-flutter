@@ -81,9 +81,6 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'dReader',
       routerConfig: router,
-      // routeInformationParser: router.routeInformationParser,
-      // routerDelegate: router.routerDelegate,
-      // routeInformationProvider: router.routeInformationProvider,
       theme: ThemeData(
         useMaterial3: false,
         appBarTheme: const AppBarTheme(

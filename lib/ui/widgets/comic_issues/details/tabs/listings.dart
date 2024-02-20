@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_items.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
@@ -198,7 +198,7 @@ class ListingStats extends ConsumerWidget {
             title: 'FLOOR',
             stats: issue.isFreeToRead
                 ? 'FREE'
-                : '${collectionStats?.floorPrice != null ? formatLamportPrice(collectionStats!.floorPrice) : '--'}◎',
+                : '${collectionStats?.floorPrice != null ? Formatter.formatLamportPrice(collectionStats!.floorPrice) : '--'}◎',
             isLastItem: true,
           ),
         ],

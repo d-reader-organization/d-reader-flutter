@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ConfirmationDialog extends StatelessWidget {
@@ -65,7 +66,7 @@ class ConfirmationDialog extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    return Navigator.pop(context);
+                    return context.pop();
                   },
                   child: Container(
                     padding: const EdgeInsets.all(12),
@@ -115,8 +116,7 @@ class ConfirmationDialog extends StatelessWidget {
                         }
 
                         if (context.mounted) {
-                          return Navigator.pop(
-                            context,
+                          return context.pop(
                             onTap != null ? result : true,
                           );
                         }

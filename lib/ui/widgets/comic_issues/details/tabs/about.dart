@@ -8,8 +8,7 @@ import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue/provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
-import 'package:d_reader_flutter/ui/utils/format_date.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
@@ -281,7 +280,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                         candyMachineGroup.isActive
                             ? 'Live'
                             : isFutureMint
-                                ? 'Starts in ${formatDateInRelative(candyMachineGroup.startDate)}'
+                                ? 'Starts in ${Formatter.formatDateInRelative(candyMachineGroup.startDate)}'
                                 : 'Ended',
                         style: TextStyle(
                           fontSize: 16,
@@ -297,7 +296,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                   ),
                   SolanaPrice(
                     price: candyMachineGroup.mintPrice > 0
-                        ? formatPriceWithSignificant(
+                        ? Formatter.formatPriceWithSignificant(
                             candyMachineGroup.mintPrice.round(),
                           )
                         : null,

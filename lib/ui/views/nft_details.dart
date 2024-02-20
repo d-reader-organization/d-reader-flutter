@@ -6,8 +6,7 @@ import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
-import 'package:d_reader_flutter/ui/utils/format_address.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -166,48 +165,41 @@ class Body extends StatelessWidget {
                       onPressed: ref.watch(isOpeningSessionProvider)
                           ? null
                           : () async {
-                              try {
-                                if (nft.isListed) {
-                                  final result = await ref
-                                      .read(solanaProvider.notifier)
-                                      .delist(nftAddress: nft.address);
-                                  ref.read(globalStateProvider.notifier).state =
-                                      const GlobalState(isLoading: false);
-                                  ref.invalidate(nftProvider);
-                                  if (result is bool &&
-                                      result &&
-                                      context.mounted) {
-                                    showSnackBar(
-                                      context: context,
-                                      text: 'Successfully delisted',
-                                      backgroundColor:
-                                          ColorPalette.dReaderGreen,
+                              if (nft.isListed) {
+                                return await ref
+                                    .read(nftControllerProvider.notifier)
+                                    .delist(
+                                      nft: nft,
+                                      callback: () {
+                                        showSnackBar(
+                                          context: context,
+                                          text: 'Successfully delisted',
+                                          backgroundColor:
+                                              ColorPalette.dReaderGreen,
+                                        );
+                                      },
+                                      onException: (exception) {
+                                        triggerLowPowerOrNoWallet(
+                                          context,
+                                          exception,
+                                        );
+                                      },
                                     );
-                                  }
-                                  return;
-                                }
-                                showModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: Colors.transparent,
-                                  isScrollControlled: true,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: MediaQuery.viewInsetsOf(context)
-                                            .bottom,
-                                      ),
-                                      child: NftModalBottomSheet(nft: nft),
-                                    );
-                                  },
-                                );
-                              } catch (exception) {
-                                if (context.mounted) {
-                                  return triggerLowPowerOrNoWallet(
-                                    context,
-                                    exception,
-                                  );
-                                }
                               }
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.transparent,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: MediaQuery.viewInsetsOf(context)
+                                          .bottom,
+                                    ),
+                                    child: NftModalBottomSheet(nft: nft),
+                                  );
+                                },
+                              );
                             },
                       child: nft.isListed
                           ? const Text(
@@ -259,23 +251,18 @@ class Body extends StatelessWidget {
                             path: '${RoutePath.eReader}/${nft.comicIssueId}',
                           );
                         }
-                        try {
-                          final result =
-                              await ref.read(solanaProvider.notifier).useMint(
-                                    nftAddress: nft.address,
-                                    ownerAddress: nft.ownerAddress,
-                                  );
-                          if (context.mounted) {
-                            _handleNftOpen(context, result);
-                          }
-                        } catch (exception) {
-                          if (context.mounted) {
-                            return triggerLowPowerOrNoWallet(
-                              context,
-                              exception,
+                        await ref.read(nftControllerProvider.notifier).openNft(
+                              nft: nft,
+                              onOpen: (result) {
+                                _handleNftOpen(context, result);
+                              },
+                              onException: (exception) {
+                                triggerLowPowerOrNoWallet(
+                                  context,
+                                  exception,
+                                );
+                              },
                             );
-                          }
-                        }
                       },
                     ),
                   );
@@ -324,7 +311,7 @@ class Body extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          '${formatPrice(nft.royalties)}%',
+                          '${Formatter.formatPrice(nft.royalties)}%',
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: ColorPalette.dReaderBlue,
@@ -380,7 +367,7 @@ class Body extends StatelessWidget {
           Row(
             children: [
               Text(
-                formatAddress(nft.ownerAddress, 12),
+                Formatter.formatAddress(nft.ownerAddress, 12),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(
@@ -423,7 +410,7 @@ class Body extends StatelessWidget {
           Row(
             children: [
               Text(
-                formatAddress(nft.address, 12),
+                Formatter.formatAddress(nft.address, 12),
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(

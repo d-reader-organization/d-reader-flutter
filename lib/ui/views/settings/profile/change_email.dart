@@ -1,6 +1,5 @@
-import 'package:d_reader_flutter/core/models/exceptions.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -75,41 +74,24 @@ class _ChangeEmailViewState extends ConsumerState<ChangeEmailView> {
             if (!_newEmailFormKey.currentState!.validate()) {
               return;
             }
-            final globalNotifier = ref.read(globalStateProvider.notifier);
-            globalNotifier.update(
-              (state) => state.copyWith(isLoading: true),
-            );
-            try {
-              await ref
-                  .read(userRepositoryProvider)
-                  .requestChangeEmail(_newEmailController.text.trim());
-              globalNotifier.update(
-                (state) => state.copyWith(
-                  isLoading: false,
-                ),
-              );
-              if (context.mounted) {
-                showSnackBar(
-                  context: context,
-                  text:
-                      'Verification mail sent to your new email address. Please check spam',
-                  backgroundColor: ColorPalette.dReaderGreen,
+            await ref.read(profileControllerProvider.notifier).changeEmail(
+                  newEmail: _newEmailController.text.trim(),
+                  onSuccess: () {
+                    showSnackBar(
+                      context: context,
+                      text:
+                          'Verification mail sent to your new email address. Please check spam',
+                      backgroundColor: ColorPalette.dReaderGreen,
+                    );
+                  },
+                  onBadRequestException: (cause) {
+                    showSnackBar(
+                      context: context,
+                      text: cause,
+                      backgroundColor: ColorPalette.dReaderRed,
+                    );
+                  },
                 );
-              }
-            } catch (exception) {
-              globalNotifier.update(
-                (state) => state.copyWith(
-                  isLoading: false,
-                ),
-              );
-              if (exception is BadRequestException && context.mounted) {
-                showSnackBar(
-                  context: context,
-                  text: exception.cause,
-                  backgroundColor: ColorPalette.dReaderRed,
-                );
-              }
-            }
           },
           borderRadius: BorderRadius.circular(8),
           child: const Text('Submit'),

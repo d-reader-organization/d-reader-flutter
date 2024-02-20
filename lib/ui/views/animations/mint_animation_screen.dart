@@ -2,11 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
-import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
+import 'package:d_reader_flutter/core/providers/animation/animation_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
@@ -17,6 +14,7 @@ import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.da
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
@@ -44,50 +42,31 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     );
     _animationController.forward();
     _controller = VideoPlayerController.asset(
-        'assets/animation_files/loading-animation.mp4');
+      'assets/animation_files/loading-animation.mp4',
+    );
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     _controller.play();
     _controller.addListener(() async {
-      final bool isMinting = ref.watch(globalStateProvider).isMinting != null &&
-          ref.watch(globalStateProvider).isMinting!;
-      final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
-      if (_controller.value.isPlaying) {
-        if (isMinted) {
-          await _handleMintedCase();
-        }
-      } else if (!isMinting && !isMinted) {
-        _controller.pause();
-        Navigator.pop(context);
-      }
-    });
-  }
-
-  _handleMintedCase() async {
-    _controller.pause();
-    _animationController.reverse(
-      from: 1,
-    );
-    final nft = await ref
-        .read(nftProvider(ref.watch(lastProcessedNftProvider)!).future);
-
-    if (context.mounted && nft != null) {
-      ref.invalidate(lastProcessedNftProvider);
-      ref.invalidate(ownedComicsAsyncProvider);
-      ref.invalidate(ownedIssuesAsyncProvider);
-      ref.invalidate(nftsProvider);
-      await Future.delayed(
-        const Duration(milliseconds: 1000),
-        () {
-          nextScreenReplace(
+      await ref.read(animationNotifierProvider.notifier).mintLoadingListener(
             context: context,
-            path: RoutePath.doneMinting,
-            homeSubRoute: true,
-            extra: nft,
+            videoPlayerController: _controller,
+            animationController: _animationController,
+            onSuccess: (NftModel nft) async {
+              await Future.delayed(
+                const Duration(milliseconds: 1000),
+                () {
+                  nextScreenReplace(
+                    context: context,
+                    path: RoutePath.doneMinting,
+                    homeSubRoute: true,
+                    extra: nft,
+                  );
+                },
+              );
+            },
           );
-        },
-      );
-    }
+    });
   }
 
   @override
@@ -186,17 +165,17 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
   }
 
   _handleUnwrap({required WidgetRef ref}) async {
-    final isSuccessful = await ref.read(solanaProvider.notifier).useMint(
+    await ref.read(animationNotifierProvider.notifier).handleNftUnwrap(
           nftAddress: widget.nft.address,
           ownerAddress: widget.nft.ownerAddress,
+          onSuccess: () {
+            nextScreenReplace(
+              context: context,
+              path: RoutePath.openNftAnimation,
+              homeSubRoute: true,
+            );
+          },
         );
-    if (context.mounted && isSuccessful) {
-      nextScreenReplace(
-        context: context,
-        path: RoutePath.openNftAnimation,
-        homeSubRoute: true,
-      );
-    }
   }
 
   @override
@@ -307,7 +286,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                         textColor: Colors.white,
                         size: const Size(0, 50),
                         onPressed: () {
-                          Navigator.pop(context);
+                          context.pop();
                         },
                         child: const Text(
                           'Close',
@@ -351,7 +330,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                                             true,
                                           );
                                         }
-                                        Navigator.pop(context);
+                                        context.pop();
                                         await _handleUnwrap(ref: ref);
                                       },
                                       title: 'Comic unwraping',

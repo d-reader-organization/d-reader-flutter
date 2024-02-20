@@ -2,13 +2,12 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:solana/solana.dart' show lamportsPerSol;
 
 class NftModalBottomSheet extends ConsumerStatefulWidget {
   final NftModel nft;
@@ -95,8 +94,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
             ],
           ),
           SubmitButton(
-            sellerAddress: widget.nft.ownerAddress,
-            mintAccount: widget.nft.address,
+            nft: widget.nft,
             price: priceInputValue.isNotEmpty
                 ? _safeParse(
                     priceInputValue,
@@ -112,13 +110,11 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
 double? _safeParse(String input) => double.tryParse(input);
 
 class SubmitButton extends ConsumerWidget {
-  final String sellerAddress;
-  final String mintAccount;
+  final NftModel nft;
   final double? price;
   const SubmitButton({
     super.key,
-    required this.sellerAddress,
-    required this.mintAccount,
+    required this.nft,
     this.price,
   });
 
@@ -130,30 +126,25 @@ class SubmitButton extends ConsumerWidget {
       onPressed: price != null
           ? () async {
               try {
-                final response = await ref.read(solanaProvider.notifier).list(
-                      sellerAddress: sellerAddress,
-                      mintAccount: mintAccount,
-                      price: (price! * lamportsPerSol).round(),
+                await ref.read(nftControllerProvider.notifier).listNft(
+                      sellerAddress: nft.ownerAddress,
+                      mintAccount: nft.address,
+                      price: price!,
+                      callback: (result) {
+                        context.pop();
+                        showSnackBar(
+                          context: context,
+                          text: result is bool && result
+                              ? 'Listed successfully'
+                              : result is String
+                                  ? result
+                                  : 'Failed to list item',
+                          backgroundColor: result is bool && result
+                              ? ColorPalette.dReaderGreen
+                              : ColorPalette.dReaderRed,
+                        );
+                      },
                     );
-                ref
-                    .read(globalStateProvider.notifier)
-                    .state
-                    .copyWith(isLoading: false);
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  ref.invalidate(nftProvider);
-                  showSnackBar(
-                    context: context,
-                    text: response is bool && response
-                        ? 'Listed successfully'
-                        : response is String
-                            ? response
-                            : 'Failed to list item',
-                    backgroundColor: response is bool && response
-                        ? ColorPalette.dReaderGreen
-                        : ColorPalette.dReaderRed,
-                  );
-                }
               } catch (exception) {
                 rethrow;
               }

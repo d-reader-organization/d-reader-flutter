@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
@@ -89,15 +89,18 @@ class SignUpStep2Verification extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   return GestureDetector(
-                    onTap: () async {
-                      await ref.read(requestEmailVerificationProvider.future);
-                      if (context.mounted) {
-                        showSnackBar(
-                          context: context,
-                          text: 'Verification email has been resent.',
-                          backgroundColor: ColorPalette.dReaderGreen,
-                        );
-                      }
+                    onTap: () {
+                      ref
+                          .read(authControllerProvider.notifier)
+                          .handleResendVerification(
+                        callback: () {
+                          showSnackBar(
+                            context: context,
+                            text: 'Verification email has been resent.',
+                            backgroundColor: ColorPalette.dReaderGreen,
+                          );
+                        },
+                      );
                     },
                     child: const Text(
                       'Resend email confirmation link',

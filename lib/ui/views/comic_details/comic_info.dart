@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ComicInfoView extends StatelessWidget {
   final ComicModel comic;
@@ -24,7 +25,7 @@ class ComicInfoView extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   child: const Icon(
                     Icons.close,

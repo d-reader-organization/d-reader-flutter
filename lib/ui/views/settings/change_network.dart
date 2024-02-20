@@ -1,14 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/core/providers/comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/creator_provider.dart';
-import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
-import 'package:d_reader_flutter/core/services/local_store.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/core/providers/settings/change_network.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -21,115 +14,44 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ChangeNetworkView extends ConsumerWidget {
   const ChangeNetworkView({super.key});
 
-  Future<bool?> _showDialog({
-    required BuildContext context,
-    required String subtitle,
-    required String cluster,
-  }) {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return ConfirmationDialog(
-          title: 'Warning, switching to $cluster',
-          subtitle: subtitle,
-        );
-      },
-    );
-  }
-
-  _doChangeNetworkProcess({
-    required BuildContext context,
-    required WidgetRef ref,
-    required String cluster,
-    required String dialogText,
-  }) {
-    final dynamic localStoreData = ref.read(
-      localStoreNetworkDataProvider(cluster),
-    );
-    final bool isDevnetCluster = cluster == SolanaCluster.devnet.value;
-    ref.invalidate(environmentProvider);
-    final envNotifier = ref.read(environmentProvider.notifier);
-    envNotifier.updateForChangeNetwork(
-      cluster: cluster,
-      apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
-    );
-    if (localStoreData != null) {
-      bool isSuccessful =
-          ref.read(environmentProvider.notifier).updateEnvironmentState(
-                EnvironmentStateUpdateInput.fromDynamic(
-                  localStoreData,
-                ),
-              );
-      if (context.mounted) {
-        final snackbarText = isSuccessful
-            ? 'Network changed successfully'
-            : 'Network change failed.';
-        if (!isSuccessful) {
-          ref.read(environmentProvider.notifier).updateEnvironmentState(
-                EnvironmentStateUpdateInput(
-                  solanaCluster: isDevnetCluster
-                      ? SolanaCluster.mainnet.value
-                      : SolanaCluster.devnet.value,
-                ),
-              );
-          return showSnackBar(
-            context: context,
-            text: snackbarText,
-            backgroundColor: ColorPalette.dReaderRed,
-          );
-        }
-        ref.invalidate(comicsProvider);
-        ref.invalidate(comicIssuesProvider);
-        ref.invalidate(creatorsProvider);
-        ref.invalidate(carouselProvider);
-        ref.invalidate(paginatedIssuesProvider);
-        ref.invalidate(paginatedComicsProvider);
-        return showSnackBar(
-          context: context,
-          text: snackbarText,
-          backgroundColor: ColorPalette.dReaderGreen,
-        );
-      }
-    } else {
-      ref.invalidate(scaffoldProvider);
-      if (context.mounted) {
-        nextScreenCloseOthers(context: context, path: RoutePath.initial);
-      }
-    }
-  }
-
-  _handleNetworkChange({
+  Future<void> _handleNetworkChange({
     required BuildContext context,
     required WidgetRef ref,
     required String cluster,
     required String dialogText,
   }) async {
-    final isAlreadyShown =
-        LocalStore.instance.get(WalkthroughKeys.changeNetwork.name) != null;
-    if (isAlreadyShown) {
-      return _doChangeNetworkProcess(
-        context: context,
-        ref: ref,
-        cluster: cluster,
-        dialogText: dialogText,
-      );
-    }
-
-    final isConfirmed = await _showDialog(
-          context: context,
-          subtitle: dialogText,
+    await ref
+        .read(changeNetworkControllerProvider.notifier)
+        .handleNetworkChange(
           cluster: cluster,
-        ) ??
-        false;
-    if (isConfirmed && context.mounted) {
-      LocalStore.instance.put(WalkthroughKeys.changeNetwork.name, true);
-      _doChangeNetworkProcess(
-        context: context,
-        ref: ref,
-        cluster: cluster,
-        dialogText: dialogText,
-      );
-    }
+          dialogText: dialogText,
+          showConfirmDialog: (
+              {required String cluster, required String subtitle}) async {
+            return await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return ConfirmationDialog(
+                      title: 'Warning, switching to $cluster',
+                      subtitle: subtitle,
+                    );
+                  },
+                ) ??
+                false;
+          },
+          triggerChangeDialog: (
+              {required bool isSuccess, required String text}) {
+            showSnackBar(
+              context: context,
+              text: text,
+              backgroundColor: isSuccess
+                  ? ColorPalette.dReaderGreen
+                  : ColorPalette.dReaderRed,
+            );
+          },
+          triggerScreenChange: () {
+            nextScreenCloseOthers(context: context, path: RoutePath.initial);
+          },
+        );
   }
 
   @override

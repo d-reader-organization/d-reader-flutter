@@ -1,13 +1,12 @@
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/format_price.dart';
+import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/follow_box.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/social_row.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CreatorDetailsHeaderSliverList extends StatelessWidget {
   final CreatorModel creator;
@@ -99,22 +98,22 @@ class StatsDescriptionWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          width: 1,
-                          color: ColorPalette.greyscale400,
-                        ),
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/icons/coin.svg',
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    // Container(
+                    //   padding: const EdgeInsets.all(8),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(8),
+                    //     border: Border.all(
+                    //       width: 1,
+                    //       color: ColorPalette.greyscale400,
+                    //     ),
+                    //   ),
+                    //   child: SvgPicture.asset(
+                    //     'assets/icons/coin.svg',
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   width: 8,
+                    // ),
                     FollowBox(
                       followersCount: creator.stats?.followersCount ?? 0,
                       isFollowing: creator.myStats?.isFollowing ?? false,
@@ -157,7 +156,7 @@ class StatsDescriptionWidget extends StatelessWidget {
                       child: StatsBoxContainer(
                         title: 'TOTAL VOLUME',
                         value: creator.stats?.totalVolume != null
-                            ? formatPriceWithSignificant(
+                            ? Formatter.formatPriceWithSignificant(
                                 creator.stats!.totalVolume,
                               )
                             : '-',

@@ -1,8 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/fcm/notification_provider.dart';
+import 'package:d_reader_flutter/core/providers/notification/notification_controller.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
@@ -40,24 +39,7 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
   }
 
   Future<void> initNotifications() async {
-    final notificationService = ref.read(notificationServiceProvider);
-    await notificationService.requestNotificationPermission();
-    final fcmToken = await notificationService.getFCMToken();
-    final user = ref.read(environmentProvider).user;
-    if (fcmToken != null &&
-        user != null &&
-        !user.deviceTokens.contains(fcmToken)) {
-      await ref.read(userRepositoryProvider).insertFcmToken(fcmToken);
-    }
-    await notificationService.subscribeToTopic('broadcast');
-    await notificationService.initNotificationsHandler();
-    await Future.wait(
-      [
-        notificationService.initForegroundNotificationsHandler(),
-        notificationService.initBackgroundNotificationsActionHandler(),
-        notificationService.initTerminatedNotificationsActionHandler()
-      ],
-    );
+    await ref.read(notificationControllerProvider.notifier).init();
   }
 
   _appBar({

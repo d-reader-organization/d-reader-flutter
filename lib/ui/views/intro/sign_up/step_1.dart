@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
+import 'package:d_reader_flutter/core/providers/auth/auth_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -38,31 +38,19 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
     super.dispose();
   }
 
-  _handleNext() async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
+  _handleNext() {
     if (_usernameFormKey.currentState!.validate()) {
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: true,
-        ),
-      );
-      final username = _usernameController.text.trim();
-      final result =
-          await ref.read(authRepositoryProvider).validateUsername(username);
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
-      if (result is String && context.mounted) {
-        return showSnackBar(
-          context: context,
-          text: result,
-          backgroundColor: ColorPalette.dReaderRed,
-        );
-      }
-      ref.read(signUpDataProvider.notifier).updateUsername(username);
-      widget.onSuccess();
+      ref.read(authControllerProvider.notifier).handleSignUpStep1(
+            username: _usernameController.text.trim(),
+            onSuccess: widget.onSuccess,
+            onFail: (String message) {
+              showSnackBar(
+                context: context,
+                text: message,
+                backgroundColor: ColorPalette.dReaderRed,
+              );
+            },
+          );
     }
   }
 
@@ -140,9 +128,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                     double.infinity,
                     50,
                   ),
-                  onPressed: () async {
-                    await _handleNext();
-                  },
+                  onPressed: _handleNext,
                 ),
                 const SizedBox(
                   height: 16,

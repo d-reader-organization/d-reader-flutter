@@ -66,13 +66,20 @@ class NftController extends _$NftController {
       final result = await ref
           .read(solanaProvider.notifier)
           .delist(nftAddress: nft.address);
-      ref.read(globalStateProvider.notifier).state =
-          const GlobalState(isLoading: false);
-      ref.invalidate(nftProvider);
+
+      globalNotifier.update((state) => state.copyWith(isLoading: false));
+
       if (result is bool && result) {
-        callback();
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+          () {
+            callback();
+            ref.invalidate(nftProvider);
+          },
+        );
       }
     } catch (exception) {
+      globalNotifier.update((state) => state.copyWith(isLoading: false));
       onException(exception);
     }
   }
@@ -106,8 +113,16 @@ class NftController extends _$NftController {
             price: (price * lamportsPerSol).round(),
           );
       globalNotifier.update((state) => state.copyWith(isLoading: false));
-      callback(response);
+
+      await Future.delayed(
+        const Duration(milliseconds: 500),
+        () {
+          callback(response);
+          ref.invalidate(nftProvider);
+        },
+      );
     } catch (exception) {
+      globalNotifier.update((state) => state.copyWith(isLoading: false));
       rethrow;
     }
   }

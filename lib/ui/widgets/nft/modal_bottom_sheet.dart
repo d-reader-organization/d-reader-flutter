@@ -94,8 +94,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
             ],
           ),
           SubmitButton(
-            sellerAddress: widget.nft.ownerAddress,
-            mintAccount: widget.nft.address,
+            nft: widget.nft,
             price: priceInputValue.isNotEmpty
                 ? _safeParse(
                     priceInputValue,
@@ -111,13 +110,11 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
 double? _safeParse(String input) => double.tryParse(input);
 
 class SubmitButton extends ConsumerWidget {
-  final String sellerAddress;
-  final String mintAccount;
+  final NftModel nft;
   final double? price;
   const SubmitButton({
     super.key,
-    required this.sellerAddress,
-    required this.mintAccount,
+    required this.nft,
     this.price,
   });
 
@@ -130,12 +127,11 @@ class SubmitButton extends ConsumerWidget {
           ? () async {
               try {
                 await ref.read(nftControllerProvider.notifier).listNft(
-                      sellerAddress: sellerAddress,
-                      mintAccount: mintAccount,
+                      sellerAddress: nft.ownerAddress,
+                      mintAccount: nft.address,
                       price: price!,
                       callback: (result) {
                         context.pop();
-                        ref.invalidate(nftProvider);
                         showSnackBar(
                           context: context,
                           text: result is bool && result

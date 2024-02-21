@@ -133,15 +133,17 @@ class ListingItem extends ConsumerWidget {
                 ),
                 Row(
                   children: [
-                    if (!listing.isUsed) ...[
-                      const ConditionContainer(
-                        borderColor: ColorPalette.dReaderGreen,
-                        icon: 'assets/icons/mint_icon.svg',
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                    ],
+                    ConditionContainer(
+                      borderColor: listing.isUsed
+                          ? ColorPalette.lightblue
+                          : ColorPalette.dReaderGreen,
+                      icon: listing.isUsed
+                          ? 'assets/icons/used_nft.svg'
+                          : 'assets/icons/mint_icon.svg',
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
                     if (listing.isSigned) ...[
                       const ConditionContainer(
                         borderColor: ColorPalette.dReaderOrange,

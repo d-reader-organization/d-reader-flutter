@@ -1,10 +1,8 @@
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/providers/router_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/core/services/notification.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/views/splash.dart';
-import 'package:d_reader_flutter/ui/widgets/app_update_wrapper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +15,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options_prod.dart';
-
-final GlobalKey<NavigatorState> navigatorKeyProd = GlobalKey<NavigatorState>();
 
 // Defines a top-level named handler which background/terminated messages will call
 @pragma('vm:entry-point')
@@ -92,12 +88,10 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    final router = ref.watch(routerProvider);
+    return MaterialApp.router(
       title: 'dReader',
-      onGenerateRoute: (settings) {
-        return null;
-      },
-      navigatorKey: navigatorKeyProd,
+      routerConfig: router,
       theme: ThemeData(
         useMaterial3: false,
         appBarTheme: const AppBarTheme(
@@ -189,9 +183,6 @@ class MyApp extends ConsumerWidget {
       supportedLocales: const [
         Locale('en', ''),
       ],
-      home: ref.watch(environmentProvider).jwtToken != null
-          ? const AppUpdateWrapper()
-          : const SplashView(),
     );
   }
 }

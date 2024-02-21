@@ -1,7 +1,8 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
+import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_item_row.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -14,7 +15,7 @@ class ListedItems extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(listingsAsyncProvider(issue));
+    final provider = ref.watch(listingsPaginatedProvider(issue));
     return provider.when(
       data: (listings) {
         if (listings.isEmpty) {
@@ -23,25 +24,50 @@ class ListedItems extends ConsumerWidget {
             textAlign: TextAlign.center,
           );
         }
-        return ListView.builder(
-          itemCount: listings.length,
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          primary: false,
-          itemBuilder: (context, index) {
-            return ListingItem(
-              listing: listings[index],
-            );
-          },
-        );
+        return ListedItemsBuilder(listings: listings);
       },
       error: (error, stackTrace) {
         return const Text('Failed to fetch data');
       },
       loading: () {
-        return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: SkeletonRow(),
+        return const Center(
+          child: SizedBox(
+            height: 24,
+            width: 24,
+            child: CircularProgressIndicator(
+              color: ColorPalette.greyscale500,
+            ),
+          ),
+        );
+      },
+      onGoingLoading: (List<ListingModel> listings) {
+        return ListedItemsBuilder(listings: listings);
+      },
+      onGoingError: (listings, e, stk) {
+        return ListedItemsBuilder(listings: listings);
+      },
+    );
+  }
+}
+
+class ListedItemsBuilder extends StatelessWidget {
+  final List<ListingModel> listings;
+  const ListedItemsBuilder({
+    super.key,
+    required this.listings,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: listings.length,
+      padding: EdgeInsets.zero,
+      physics: const PageScrollPhysics(),
+      shrinkWrap: true,
+      primary: false,
+      itemBuilder: (context, index) {
+        return ListingItem(
+          listing: listings[index],
         );
       },
     );

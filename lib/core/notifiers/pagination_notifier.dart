@@ -1,6 +1,13 @@
 import 'package:d_reader_flutter/core/states/pagination_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+abstract class IPaginationNotifier {
+  void init();
+  Future<void> fetchNext();
+  Future<void> initialFetch();
+  String buildQueryString();
+}
+
 class PaginationArgs {
   final int skip;
   final int take;
@@ -21,7 +28,8 @@ class PaginationArgs {
   }
 }
 
-class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
+class PaginationNotifier<T> extends StateNotifier<PaginationState<T>>
+    implements IPaginationNotifier {
   final Future<List<T>> Function({String? queryString}) fetch;
   final String? query;
 
@@ -32,20 +40,24 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
 
   final List<T> _items = [];
   PaginationArgs args = PaginationArgs(skip: 0, take: 8);
-  bool isEnd = false;
+  bool isEnd = false, initialFetchDone = false;
 
+  @override
   void init() {
-    _initialFetch();
+    initialFetch();
   }
 
+  @override
   fetchNext() async {
-    if (isEnd || state == PaginationState.onGoingLoading(_items)) {
+    if (isEnd ||
+        state == PaginationState.onGoingLoading(_items) ||
+        !initialFetchDone) {
       return;
     }
     state = PaginationState.onGoingLoading(_items);
 
     try {
-      final result = await fetch(queryString: _buildyQueryString());
+      final result = await fetch(queryString: buildQueryString());
       if (result.length < args.take) {
         isEnd = true;
         state = PaginationState.data(_items..addAll(result));
@@ -65,9 +77,10 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
     }
   }
 
-  _initialFetch() async {
+  @override
+  initialFetch() async {
     try {
-      final result = await fetch(queryString: _buildyQueryString());
+      final result = await fetch(queryString: buildQueryString());
       if (result.isEmpty || result.length < args.take) {
         isEnd = true;
         state = PaginationState.data(_items..addAll(result));
@@ -78,6 +91,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
         take: args.take,
       );
       state = PaginationState.data(_items..addAll(result));
+      initialFetchDone = true;
     } catch (e) {
       state = PaginationState.error(
         e,
@@ -86,7 +100,8 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>> {
     }
   }
 
-  String _buildyQueryString() {
+  @override
+  String buildQueryString() {
     return 'skip=${args.skip * args.take}&take=${args.take}&$query';
   }
 }

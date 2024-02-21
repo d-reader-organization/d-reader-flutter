@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/core/models/listed_item.dart';
 
 abstract class AuctionHouseRepository {
   Future<List<ListingModel>> getListedItems({
-    required String query,
+    String? queryString,
   });
   Future<CollectionStatsModel?> getCollectionStatus({required int issueId});
 }

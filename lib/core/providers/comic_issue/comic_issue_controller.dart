@@ -114,11 +114,11 @@ class ComicIssueController extends _$ComicIssueController {
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
       if (isSuccessful) {
         ref.invalidate(listedItemsProvider);
-        ref.invalidate(listingsAsyncProvider);
+        ref.invalidate(listingsPaginatedProvider);
         ref.invalidate(userAssetsProvider);
       }
       displaySnackBar(
-        text: isSuccessful ? 'Success!' : 'Failed to buy item/items.',
+        text: isSuccessful ? 'Success!' : 'Failed to buy item(s).',
         isSuccess: isSuccessful,
       );
     } catch (exception) {

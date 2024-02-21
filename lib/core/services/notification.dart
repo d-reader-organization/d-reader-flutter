@@ -2,10 +2,8 @@ import 'dart:convert' show jsonEncode, jsonDecode;
 
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/providers/router_provider.dart';
-import 'package:d_reader_flutter/main_prod.dart' show navigatorKeyProd;
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
-import 'package:flutter/services.dart' show appFlavor;
 import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';
 import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
@@ -17,10 +15,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 handleNotificationAction(Map payload) {
-  final navigatorKey =
-      appFlavor == 'prod' ? navigatorKeyProd : routerNavigatorKey;
   if (payload.containsKey(NotificationDataKey.comicIssueId.stringValue)) {
-    return navigatorKey.currentState!.push(
+    return routerNavigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => ComicIssueDetails(
           id: int.parse(
@@ -30,7 +26,7 @@ handleNotificationAction(Map payload) {
       ),
     );
   } else if (payload.containsKey(NotificationDataKey.comicSlug.stringValue)) {
-    return navigatorKey.currentState!.push(
+    return routerNavigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => ComicDetails(
           slug: payload[NotificationDataKey.comicSlug.stringValue],
@@ -38,7 +34,7 @@ handleNotificationAction(Map payload) {
       ),
     );
   } else if (payload.containsKey(NotificationDataKey.creatorSlug.stringValue)) {
-    return navigatorKey.currentState!.push(
+    return routerNavigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => CreatorDetailsView(
           slug: payload[NotificationDataKey.creatorSlug.stringValue],
@@ -46,7 +42,7 @@ handleNotificationAction(Map payload) {
       ),
     );
   } else if (payload.containsKey(NotificationDataKey.nftAddress.stringValue)) {
-    return navigatorKey.currentState!.push(
+    return routerNavigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => NftDetails(
           address: payload[NotificationDataKey.nftAddress.stringValue],

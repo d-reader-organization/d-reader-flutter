@@ -1,16 +1,18 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_items.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
+import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 
-class IssueListings extends StatelessWidget {
+class IssueListings extends ConsumerWidget {
   final ComicIssueModel issue;
   const IssueListings({
     super.key,
@@ -18,14 +20,21 @@ class IssueListings extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return NotificationListener(
       onNotification: (notification) {
+        if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.sizeOf(context).width * 0.2;
+          if (maxScroll - currentScroll <= delta) {
+            ref.read(listingsPaginatedProvider(issue).notifier).fetchNext();
+          }
+        }
         return true;
       },
       child: ListView(
         shrinkWrap: true,
-        physics: const PageScrollPhysics(),
         children: [
           ListingStats(
             issue: issue,
@@ -39,6 +48,14 @@ class IssueListings extends StatelessWidget {
           // ),
           ListedItems(
             issue: issue,
+          ),
+          OnGoingBottomWidget(
+            provider: ref.watch(
+              listingsPaginatedProvider(
+                issue,
+              ),
+            ),
+            sliverWidget: false,
           ),
         ],
       ),

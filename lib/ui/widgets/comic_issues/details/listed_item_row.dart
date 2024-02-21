@@ -47,7 +47,6 @@ class ListingItem extends ConsumerWidget {
           : null,
       child: Container(
         padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.only(top: 8),
         decoration: BoxDecoration(
           color: isSelected
               ? ColorPalette.greyscale500
@@ -134,16 +133,24 @@ class ListingItem extends ConsumerWidget {
                 ),
                 Row(
                   children: [
-                    listing.isUsed
-                        ? SvgPicture.asset(
-                            'assets/icons/mint_issue.svg',
-                          )
-                        : const SizedBox(),
-                    listing.isSigned
-                        ? SvgPicture.asset(
-                            'assets/icons/signed_issue.svg',
-                          )
-                        : const SizedBox(),
+                    if (!listing.isUsed) ...[
+                      const ConditionContainer(
+                        borderColor: ColorPalette.dReaderGreen,
+                        icon: 'assets/icons/mint_icon.svg',
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                    ],
+                    if (listing.isSigned) ...[
+                      const ConditionContainer(
+                        borderColor: ColorPalette.dReaderOrange,
+                        icon: 'assets/icons/signed_icon.svg',
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                    ],
                     RarityWidget(
                       rarity: listing.rarity.rarityEnum,
                       iconPath: 'assets/icons/rarity.svg',
@@ -154,6 +161,35 @@ class ListingItem extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ConditionContainer extends StatelessWidget {
+  final Color borderColor;
+  final String icon;
+
+  const ConditionContainer({
+    super.key,
+    required this.borderColor,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: borderColor,
+        ),
+      ),
+      child: SvgPicture.asset(
+        icon,
+        height: 16,
+        width: 16,
       ),
     );
   }

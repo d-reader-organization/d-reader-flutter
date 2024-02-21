@@ -32,7 +32,6 @@ class IssueAbout extends ConsumerWidget {
       },
       child: ListView(
         shrinkWrap: true,
-        physics: const PageScrollPhysics(),
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
           if (issue.activeCandyMachineAddress != null) ...[
@@ -336,8 +335,15 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                       ),
                       Text(
                         candyMachineGroup.label == publicGroupLabel
-                            ? '${candyMachineState?.itemsMinted ?? candyMachineGroup.itemsMinted} / ${candyMachineState?.supply ?? candyMachineGroup.supply}'
-                            : '${candyMachineGroup.itemsMinted} / ${candyMachineGroup.supply}',
+                            ? mintNumbersText(
+                                itemsMinted: candyMachineState?.itemsMinted ??
+                                    candyMachineGroup.itemsMinted,
+                                totalSupply: candyMachineState?.supply ??
+                                    candyMachineGroup.supply)
+                            : mintNumbersText(
+                                itemsMinted: candyMachineGroup.itemsMinted,
+                                totalSupply: candyMachineGroup.supply,
+                              ),
                         style: const TextStyle(
                           fontSize: 14,
                           color: ColorPalette.greyscale100,
@@ -354,6 +360,10 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
       ),
     );
   }
+}
+
+String mintNumbersText({required int itemsMinted, required int totalSupply}) {
+  return '${itemsMinted > totalSupply ? totalSupply : itemsMinted}/$totalSupply';
 }
 
 class DecoratedContainer extends StatelessWidget {

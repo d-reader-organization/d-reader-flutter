@@ -12,10 +12,10 @@ class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
 
   @override
   Future<List<ListingModel>> getListedItems({
-    required String query,
+    String? queryString,
   }) async {
     final response = await client
-        .get('/auction-house/get/listed-items?$query')
+        .get('/auction-house/get/listed-items?$queryString')
         .then((value) => value.data);
     if (response == null) {
       return [];

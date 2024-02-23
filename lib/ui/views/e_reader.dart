@@ -8,10 +8,10 @@ import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
+import 'package:d_reader_flutter/ui/widgets/common/image_widgets/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/e_reader/page_number_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';

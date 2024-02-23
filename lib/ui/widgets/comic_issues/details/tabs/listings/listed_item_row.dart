@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
-import 'package:d_reader_flutter/ui/widgets/common/common_cached_image.dart';
+import 'package:d_reader_flutter/ui/widgets/common/image_widgets/common_cached_image.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
 import 'package:flutter/material.dart';

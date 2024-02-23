@@ -121,12 +121,13 @@ class CreatorListHeader extends StatelessWidget {
   final commonTextStyle = const TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w500,
+    color: ColorPalette.greyscale200,
   );
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 4.0,
+      padding: const EdgeInsets.only(
+        bottom: 8.0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
+import 'package:d_reader_flutter/ui/utils/pluralize_string.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
@@ -17,6 +18,7 @@ class CreatorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = getCardWidth(MediaQuery.sizeOf(context).width);
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(
@@ -62,16 +64,14 @@ class CreatorCard extends StatelessWidget {
                         creator.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: textTheme.titleMedium,
                       ),
                       Text(
-                        '${creator.stats?.followersCount ?? 0} Followers',
-                        style: const TextStyle(
-                          fontSize: 16,
+                        '${creator.stats?.followersCount ?? 0} ${pluralizeString(
+                          creator.stats?.followersCount ?? 0,
+                          'Follower',
+                        )}',
+                        style: textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w500,
                           color: ColorPalette.greyscale100,
                         ),
@@ -98,8 +98,8 @@ class CreatorCard extends StatelessWidget {
                   child: CreatorAvatar(
                     avatar: creator.avatar,
                     slug: creator.slug,
-                    width: 64,
-                    height: 64,
+                    width: 48,
+                    height: 48,
                   ),
                 ),
               ),

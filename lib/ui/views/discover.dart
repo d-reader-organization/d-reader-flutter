@@ -61,16 +61,13 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
           return [
             SliverToBoxAdapter(
               child: Container(
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 32),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Discover',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -98,8 +95,8 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
             SliverPersistentHeader(
               pinned: true,
               delegate: CustomSliverAppBarDelegate(
-                minHeight: 116,
-                maxHeight: 116,
+                minHeight: 134,
+                maxHeight: 134,
                 child: Container(
                   color: ColorPalette.appBackgroundColor,
                   child: Column(
@@ -123,7 +120,7 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
                             icon: SvgPicture.asset(
                               'assets/icons/search.svg',
                               colorFilter: const ColorFilter.mode(
-                                ColorPalette.dReaderGrey,
+                                ColorPalette.greyscale200,
                                 BlendMode.srcIn,
                               ),
                             ),
@@ -133,6 +130,9 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
                         onFieldSubmitted: (value) {
                           _submitHandler(ref);
                         },
+                      ),
+                      const SizedBox(
+                        height: 16,
                       ),
                       CustomSliverTabBar(
                         controller: _controller,

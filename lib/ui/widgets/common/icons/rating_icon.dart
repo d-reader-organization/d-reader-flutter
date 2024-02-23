@@ -65,7 +65,9 @@ class RatingIcon extends ConsumerWidget {
                   ),
                   Text(
                     initialRating > 0.0 ? initialRating.toString() : '--',
-                    style: textTheme.labelMedium,
+                    style: textTheme.labelLarge?.copyWith(
+                      color: ColorPalette.greyscale100,
+                    ),
                   ),
                 ],
               ),
@@ -88,7 +90,9 @@ class RatingIcon extends ConsumerWidget {
                 ),
                 Text(
                   initialRating > 0.0 ? initialRating.toString() : '--',
-                  style: textTheme.labelMedium,
+                  style: textTheme.labelLarge?.copyWith(
+                    color: ColorPalette.greyscale100,
+                  ),
                 ),
               ],
             ),

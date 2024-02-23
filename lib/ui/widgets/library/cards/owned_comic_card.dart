@@ -18,6 +18,7 @@ class OwnedComicCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         ref.read(selectedOwnedComicProvider.notifier).update((state) => comic);
@@ -58,19 +59,13 @@ class OwnedComicCard extends ConsumerWidget {
                       comic.title,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: textTheme.bodyLarge,
                     ),
                     Text(
                       '${comic.stats?.issuesCount ?? 0} EP',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: textTheme.bodyMedium,
                     ),
                   ],
                 ),

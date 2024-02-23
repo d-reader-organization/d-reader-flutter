@@ -10,7 +10,6 @@ import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dar
 import 'package:d_reader_flutter/ui/widgets/genre/expandable_list.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/bottom_buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -27,26 +26,20 @@ class FilterBottomSheet extends ConsumerWidget {
           child: AppBar(
             backgroundColor: ColorPalette.appBackgroundColor,
             elevation: 0,
-            leading: SvgPicture.asset(
-              'assets/icons/filter.svg',
-              colorFilter: const ColorFilter.mode(
-                Colors.white,
-                BlendMode.srcIn,
-              ),
-              height: 24,
-              width: 24,
+            leading: Text(
+              'Filter',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
-            leadingWidth: 24,
-            title: const Text('Filter'),
             actions: [
               GestureDetector(
-                  onTap: () {
-                    context.pop();
-                  },
-                  child: const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                  ))
+                onTap: () {
+                  context.pop();
+                },
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+              )
             ],
           ),
         ),
@@ -60,9 +53,10 @@ class FilterBottomSheet extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SectionTitle(
-                          title: ref.watch(tabBarProvider).selectedTabIndex == 0
-                              ? 'Show comics'
-                              : 'Show issues'),
+                        title: ref.watch(tabBarProvider).selectedTabIndex == 0
+                            ? 'Show comics'
+                            : 'Show issues',
+                      ),
                       const SizedBox(
                         height: 16,
                       ),

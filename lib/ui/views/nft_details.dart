@@ -24,7 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 const sectionHeadingStyle = TextStyle(
-  color: Color(0xFF777D8C),
+  color: ColorPalette.greyscale200,
   fontSize: 18,
   fontWeight: FontWeight.w700,
 );

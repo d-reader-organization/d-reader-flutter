@@ -30,8 +30,10 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
           Container(
             decoration: const BoxDecoration(
               border: Border(
-                bottom:
-                    BorderSide(color: ColorPalette.greyscale400, width: 2.0),
+                bottom: BorderSide(
+                  color: ColorPalette.greyscale200,
+                  width: 1,
+                ),
               ),
             ),
           ),
@@ -43,9 +45,14 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
             tabs: children,
             controller: controller,
             indicatorWeight: 4,
+            labelStyle: Theme.of(context).textTheme.titleMedium,
+            unselectedLabelStyle:
+                Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
             indicatorColor: ColorPalette.dReaderYellow100,
             labelColor: ColorPalette.dReaderYellow100,
-            unselectedLabelColor: ColorPalette.dReaderGrey,
+            unselectedLabelColor: ColorPalette.greyscale200,
           ),
         ],
       ),

@@ -17,6 +17,7 @@ class FollowBox extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
     final followingHook = useCountState(
       CountState(
         count: followersCount,
@@ -50,9 +51,7 @@ class FollowBox extends HookConsumerWidget {
           children: [
             Text(
               followingHook.value.isSelected ? 'Unfollow' : 'Follow',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: textTheme.titleMedium?.copyWith(
                 color: ColorPalette.greyscale100,
               ),
             ),
@@ -71,9 +70,7 @@ class FollowBox extends HookConsumerWidget {
               child: Text(
                 '${followingHook.value.count}',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                style: textTheme.titleMedium?.copyWith(
                   color: ColorPalette.greyscale100,
                 ),
               ),

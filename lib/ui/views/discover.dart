@@ -105,11 +105,7 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
                         controller: ref.read(searchProvider).searchController,
                         textInputAction: TextInputAction.search,
                         cursorColor: Colors.white,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                         decoration: searchInputDecoration(
                           hintText: 'Search comics, issues & genres',
                           prefixIcon: IconButton(

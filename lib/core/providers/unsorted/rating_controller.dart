@@ -96,15 +96,13 @@ class RatingController extends _$RatingController {
             isResending: true,
           );
         },
-        child: const Text(
+        child: Text(
           'Didn\'t get the code?',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            decoration: TextDecoration.underline,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(decoration: TextDecoration.underline),
         ),
       ),
       onSubmit: () {

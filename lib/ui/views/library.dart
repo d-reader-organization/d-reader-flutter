@@ -54,18 +54,15 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
           ),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
-              const SliverAppBar(
+              SliverAppBar(
                 leading: Padding(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'My Library',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ]),
                 ),

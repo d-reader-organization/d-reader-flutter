@@ -312,11 +312,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                             issue.creator.name,
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
+                                            style: textTheme.titleMedium,
                                           ),
                                         ),
                                       ],
@@ -328,9 +324,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                   child: Text(
                                     Formatter.formatDateFull(issue.releaseDate),
                                     textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
+                                    style: textTheme.bodyMedium?.copyWith(
                                       color: ColorPalette.greyscale100,
                                     ),
                                   ),
@@ -452,15 +446,12 @@ class BottomNavigation extends ConsumerWidget {
         onTap: () {
           context.pop();
         },
-        child: const Text(
+        child: Text(
           'Cancel',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            decoration: TextDecoration.underline,
-            fontWeight: FontWeight.w500,
-            color: Colors.white,
-          ),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                decoration: TextDecoration.underline,
+              ),
         ),
       ),
       onSubmit: () {
@@ -623,10 +614,9 @@ class TransactionButton extends StatelessWidget {
         children: [
           Text(
             text,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-            ),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Colors.black,
+                ),
           ),
           const SizedBox(
             width: 4,
@@ -675,22 +665,19 @@ class ReadButton extends ConsumerWidget {
           path: '${RoutePath.eReader}/${issue.id}',
         );
       },
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             FontAwesomeIcons.glasses,
             size: 14,
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
           Text(
             'Read',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-            ),
+            style: Theme.of(context).textTheme.titleSmall,
           )
         ],
       ),

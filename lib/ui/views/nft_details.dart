@@ -188,19 +188,17 @@ class Body extends StatelessWidget {
                         );
                       },
                       child: nft.isListed
-                          ? const Text(
+                          ? Text(
                               'Delist',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: ColorPalette.greyscale200),
+                              style: textTheme.titleMedium?.copyWith(
+                                color: ColorPalette.greyscale200,
+                              ),
                             )
-                          : const Text(
+                          : Text(
                               'List',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: ColorPalette.greyscale200),
+                              style: textTheme.titleMedium?.copyWith(
+                                color: ColorPalette.greyscale200,
+                              ),
                             ),
                     ),
                   );
@@ -216,9 +214,7 @@ class Body extends StatelessWidget {
                       borderColor: ColorPalette.dReaderGreen,
                       child: Text(
                         nft.isUsed ? 'Read' : 'Open',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                        style: textTheme.titleMedium?.copyWith(
                           color: ColorPalette.dReaderGreen,
                         ),
                       ),

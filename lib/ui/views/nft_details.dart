@@ -11,7 +11,6 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
@@ -138,6 +137,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: ListView(
@@ -290,17 +290,16 @@ class Body extends StatelessWidget {
                       children: [
                         Text(
                           '${Formatter.formatPrice(nft.royalties)}%',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: ColorPalette.dReaderBlue,
-                                  ),
+                          style: textTheme.bodySmall?.copyWith(
+                            color: ColorPalette.dReaderBlue,
+                          ),
                         ),
                         const SizedBox(
                           width: 4,
                         ),
                         Text(
                           'royalty',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -346,7 +345,7 @@ class Body extends StatelessWidget {
             children: [
               Text(
                 Formatter.formatAddress(nft.ownerAddress, 12),
-                style: Theme.of(context).textTheme.bodySmall,
+                style: textTheme.bodySmall,
               ),
               const SizedBox(
                 width: 8,
@@ -389,7 +388,7 @@ class Body extends StatelessWidget {
             children: [
               Text(
                 Formatter.formatAddress(nft.address, 12),
-                style: Theme.of(context).textTheme.bodySmall,
+                style: textTheme.bodySmall,
               ),
               const SizedBox(
                 width: 8,
@@ -421,10 +420,10 @@ class Body extends StatelessWidget {
           const SizedBox(
             height: 32,
           ),
-          RoundedButton(
-            text: 'View Issue Details',
+          CustomTextButton(
             size: const Size(120, 50),
             borderColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 4),
             backgroundColor: Colors.transparent,
             textColor: Colors.white,
             onPressed: () {
@@ -433,6 +432,10 @@ class Body extends StatelessWidget {
                 path: '${RoutePath.comicIssueDetails}/${nft.comicIssueId}',
               );
             },
+            child: Text(
+              'View Issue Details',
+              style: textTheme.titleMedium,
+            ),
           ),
         ],
       ),

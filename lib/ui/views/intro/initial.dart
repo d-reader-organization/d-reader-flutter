@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,6 +11,7 @@ class InitialIntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Column(
@@ -65,8 +66,7 @@ class InitialIntroScreen extends StatelessWidget {
       bottomNavigationBar: Row(
         children: [
           Expanded(
-            child: RoundedButton(
-              text: 'Log in',
+            child: CustomTextButton(
               backgroundColor: Colors.transparent,
               textColor: Colors.white,
               borderColor: ColorPalette.greyscale300,
@@ -81,11 +81,16 @@ class InitialIntroScreen extends StatelessWidget {
                   homeSubRoute: false,
                 );
               },
+              child: Text(
+                'Log in',
+                style: textTheme.titleSmall?.copyWith(
+                  letterSpacing: .2,
+                ),
+              ),
             ),
           ),
           Expanded(
-            child: RoundedButton(
-              text: 'Sign up',
+            child: CustomTextButton(
               backgroundColor: ColorPalette.dReaderYellow100,
               textColor: Colors.black,
               size: const Size(
@@ -99,6 +104,13 @@ class InitialIntroScreen extends StatelessWidget {
                   homeSubRoute: false,
                 );
               },
+              child: Text(
+                'Sign up',
+                style: textTheme.titleSmall?.copyWith(
+                  letterSpacing: .2,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
         ],

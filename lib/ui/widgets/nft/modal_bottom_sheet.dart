@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -120,8 +120,7 @@ class SubmitButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return RoundedButton(
-      text: 'Next',
+    return CustomTextButton(
       isLoading: ref.watch(globalStateProvider).isLoading,
       onPressed: price != null
           ? () async {
@@ -151,6 +150,12 @@ class SubmitButton extends ConsumerWidget {
             }
           : null,
       size: const Size(double.infinity, 50),
+      child: Text(
+        'Next',
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Colors.black,
+            ),
+      ),
     );
   }
 }

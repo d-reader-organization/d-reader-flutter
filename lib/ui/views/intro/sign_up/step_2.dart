@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -163,16 +163,9 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                 const SizedBox(
                   height: 48,
                 ),
-                RoundedButton(
-                  text: 'Confirm',
-                  padding: 0,
+                CustomTextButton(
+                  padding: const EdgeInsets.all(0),
                   isLoading: ref.watch(globalStateProvider).isLoading,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    letterSpacing: .2,
-                  ),
                   size: const Size(
                     double.infinity,
                     50,
@@ -191,6 +184,13 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                           );
                     }
                   },
+                  child: Text(
+                    'Next',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: Colors.black,
+                          letterSpacing: .2,
+                        ),
+                  ),
                 ),
                 const SizedBox(
                   height: 16,

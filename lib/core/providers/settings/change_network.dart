@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
@@ -67,6 +68,7 @@ class ChangeNetworkController extends _$ChangeNetworkController {
       ref.invalidate(carouselProvider);
       ref.invalidate(paginatedIssuesProvider);
       ref.invalidate(paginatedComicsProvider);
+      ref.invalidate(ownedComicsAsyncProvider);
       return triggerChangeDialog(
         isSuccess: true,
         text: snackbarText,

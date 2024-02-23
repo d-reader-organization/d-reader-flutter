@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,6 +40,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -73,8 +74,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             const SizedBox(
               height: 32,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
+            Padding(
+              padding: const EdgeInsets.symmetric(
                 vertical: 8.0,
                 horizontal: 32,
               ),
@@ -83,23 +84,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   Text(
                     'Welcome back!',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                    style: textTheme.titleLarge,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Text(
                     'Browse the store, start collecting, trading and reading the comics!',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
+                    style: textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -167,12 +160,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         homeSubRoute: false,
                       );
                     },
-                    child: const Text(
+                    child: Text(
                       'Forgot password?',
                       textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                      style: textTheme.bodySmall?.copyWith(
                         color: ColorPalette.dReaderYellow100,
                       ),
                     ),
@@ -180,16 +171,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   const SizedBox(
                     height: 48,
                   ),
-                  RoundedButton(
-                    text: 'Login',
-                    padding: 0,
+                  CustomTextButton(
                     isLoading: ref.watch(globalStateProvider).isLoading,
-                    textStyle: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      letterSpacing: .2,
-                    ),
+                    padding: const EdgeInsets.all(0),
                     size: const Size(
                       double.infinity,
                       50,
@@ -213,6 +197,13 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             );
                       }
                     },
+                    child: Text(
+                      'Login',
+                      style: textTheme.titleSmall?.copyWith(
+                        color: Colors.black,
+                        letterSpacing: .2,
+                      ),
+                    ),
                   ),
                 ],
               ),

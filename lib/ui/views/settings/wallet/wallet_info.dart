@@ -8,7 +8,7 @@ import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +42,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final globalHook = useGlobalState();
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -235,15 +236,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           child: Row(
             children: [
               Expanded(
-                child: RoundedButton(
-                  text: 'Cancel',
+                child: CustomTextButton(
                   backgroundColor: Colors.transparent,
-                  textColor: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: ColorPalette.greyscale50,
-                  ),
                   borderColor: ColorPalette.greyscale50,
                   size: const Size(
                     0,
@@ -252,18 +246,13 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                   onPressed: () {
                     context.pop();
                   },
+                  child: Text('Cancel', style: textTheme.titleSmall),
                 ),
               ),
               Expanded(
-                child: RoundedButton(
-                  text: 'Save',
+                child: CustomTextButton(
                   isLoading: ref.watch(globalStateProvider).isLoading,
                   backgroundColor: ColorPalette.dReaderYellow100,
-                  textColor: Colors.black,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
                   size: const Size(
                     0,
                     50,
@@ -287,6 +276,12 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                           },
                         );
                   },
+                  child: Text(
+                    'Save',
+                    style: textTheme.titleSmall?.copyWith(
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -114,21 +114,21 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                 const SizedBox(
                   height: 48,
                 ),
-                RoundedButton(
-                  text: 'Next',
+                CustomTextButton(
                   isLoading: ref.watch(globalStateProvider).isLoading,
-                  padding: 0,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    letterSpacing: .2,
-                  ),
+                  padding: const EdgeInsets.all(0),
                   size: const Size(
                     double.infinity,
                     50,
                   ),
                   onPressed: _handleNext,
+                  child: Text(
+                    'Next',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: Colors.black,
+                          letterSpacing: .2,
+                        ),
+                  ),
                 ),
                 const SizedBox(
                   height: 16,

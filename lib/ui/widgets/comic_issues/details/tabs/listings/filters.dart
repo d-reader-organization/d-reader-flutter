@@ -1,67 +1,7 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
-import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/formatter.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_items.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
-import 'package:d_reader_flutter/ui/widgets/common/stats_info.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:solana/solana.dart' show lamportsPerSol;
-
-class IssueListings extends ConsumerWidget {
-  final ComicIssueModel issue;
-  const IssueListings({
-    super.key,
-    required this.issue,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return NotificationListener(
-      onNotification: (notification) {
-        if (notification is ScrollNotification) {
-          double maxScroll = notification.metrics.maxScrollExtent;
-          double currentScroll = notification.metrics.pixels;
-          double delta = MediaQuery.sizeOf(context).width * 0.2;
-          if (maxScroll - currentScroll <= delta) {
-            ref.read(listingsPaginatedProvider(issue).notifier).fetchNext();
-          }
-        }
-        return true;
-      },
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          ListingStats(
-            issue: issue,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          // const ListingFilters(),
-          // const SizedBox(
-          //   height: 16,
-          // ),
-          ListedItems(
-            issue: issue,
-          ),
-          OnGoingBottomWidget(
-            provider: ref.watch(
-              listingsPaginatedProvider(
-                issue,
-              ),
-            ),
-            sliverWidget: false,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class ListingFilters extends ConsumerStatefulWidget {
   const ListingFilters({super.key});
@@ -175,58 +115,5 @@ class _ListingFiltersState extends ConsumerState<ListingFilters> {
         )
       ],
     );
-  }
-}
-
-class ListingStats extends ConsumerWidget {
-  final ComicIssueModel issue;
-  const ListingStats({
-    super.key,
-    required this.issue,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(collectionStatsProvider(issue.id));
-
-    return provider.when(data: (collectionStats) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          StatsInfo(
-            title: 'VOLUME',
-            stats: issue.isFreeToRead
-                ? '--'
-                : '${collectionStats?.totalVolume != null ? (collectionStats!.totalVolume / lamportsPerSol).toStringAsFixed(2) : 0}◎',
-          ),
-          StatsInfo(
-            title: 'SUPPLY',
-            stats: issue.isSecondarySaleActive
-                ? '${collectionStats?.supply}'
-                : '--',
-          ),
-          StatsInfo(
-            title: 'LISTED',
-            stats: issue.isFreeToRead
-                ? '--'
-                : '${collectionStats?.itemsListed ?? 0}',
-          ),
-          StatsInfo(
-            title: 'FLOOR',
-            stats: issue.isFreeToRead
-                ? 'FREE'
-                : '${collectionStats?.floorPrice != null ? Formatter.formatLamportPrice(collectionStats!.floorPrice) : '--'}◎',
-            isLastItem: true,
-          ),
-        ],
-      );
-    }, error: (Object error, StackTrace stackTrace) {
-      return const Text('Something went wrong in candy machine stats');
-    }, loading: () {
-      return const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: SkeletonRow(),
-      );
-    });
   }
 }

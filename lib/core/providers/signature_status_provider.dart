@@ -23,7 +23,7 @@ final mintingStatusProvider = StateProvider.family<void, String>(
         timeout: const Duration(seconds: 10),
       )
           .then((value) {
-        Future.delayed(const Duration(milliseconds: 2500), () {
+        Future.delayed(const Duration(seconds: 7), () {
           ref.read(globalStateProvider.notifier).update(
                 (state) => state.copyWith(
                   isLoading: false,

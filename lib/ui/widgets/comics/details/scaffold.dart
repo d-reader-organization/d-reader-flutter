@@ -1,13 +1,12 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/providers/comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
-import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/common/animated_app_bar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/ui/widgets/comics/details/sort_direction.dart';
+import 'package:d_reader_flutter/ui/widgets/comics/details/view_mode_container.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/animated_app_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/bookmark_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
@@ -18,7 +17,6 @@ import 'package:d_reader_flutter/ui/widgets/creators/avatar.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicDetailsScaffold extends StatefulWidget {
   final Widget body;
@@ -340,118 +338,6 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
           ],
         ),
       ),
-    );
-  }
-}
-
-class BodyFilterAndSortContainer extends StatelessWidget {
-  final Widget child;
-  const BodyFilterAndSortContainer({
-    super.key,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 36,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 4,
-      ),
-      decoration: BoxDecoration(
-        color: ColorPalette.greyscale500,
-        border: Border.all(
-          color: ColorPalette.greyscale300,
-        ),
-        borderRadius: BorderRadius.circular(
-          8,
-        ),
-      ),
-      child: child,
-    );
-  }
-}
-
-class SortDirectionContainer extends ConsumerWidget {
-  const SortDirectionContainer({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: () {
-        ref.read(comicSortDirectionProvider.notifier).update(
-              (state) => state == SortDirection.asc
-                  ? SortDirection.desc
-                  : SortDirection.asc,
-            );
-      },
-      child: BodyFilterAndSortContainer(
-        child: Row(
-          children: [
-            const Text(
-              'Ep No',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(
-              width: 4,
-            ),
-            ref.watch(comicSortDirectionProvider) == SortDirection.asc
-                ? SvgPicture.asset(
-                    'assets/icons/arrow_down.svg',
-                    height: 18,
-                    width: 18,
-                  )
-                : RotationTransition(
-                    turns: const AlwaysStoppedAnimation(
-                      180 / 360,
-                    ),
-                    child: SvgPicture.asset(
-                      'assets/icons/arrow_down.svg',
-                      height: 18,
-                      width: 18,
-                    ),
-                  ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ViewModeContainer extends ConsumerWidget {
-  const ViewModeContainer({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: () {
-        ref.read(comicViewModeProvider.notifier).update((state) =>
-            state == ViewMode.detailed ? ViewMode.gallery : ViewMode.detailed);
-      },
-      child: BodyFilterAndSortContainer(
-          child: Row(
-        children: [
-          const Text(
-            'View',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          ref.watch(comicViewModeProvider) == ViewMode.detailed
-              ? SvgPicture.asset('assets/icons/category.svg')
-              : SvgPicture.asset('assets/icons/list.svg'),
-        ],
-      )),
     );
   }
 }

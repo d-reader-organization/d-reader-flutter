@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_tab_persisent_header.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/slivers/custom_sliver_tab_persisent_header.dart';
 import 'package:d_reader_flutter/ui/widgets/library/tabs/owned.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

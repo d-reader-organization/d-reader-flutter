@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/ui/widgets/common/rating_star.dart';
+import 'package:d_reader_flutter/ui/widgets/common/rating/rating_star.dart';
 import 'package:flutter/material.dart';
 
 class RatingStars extends StatelessWidget {

@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_issues/details/listed_item_row.dart';
+import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/listings/listed_item_row.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

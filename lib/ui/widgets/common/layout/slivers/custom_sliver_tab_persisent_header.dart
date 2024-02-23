@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_app_bar_delegate.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/custom_sliver_tab_bar.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/slivers/custom_sliver_app_bar_delegate.dart';
+import 'package:d_reader_flutter/ui/widgets/common/layout/slivers/custom_sliver_tab_bar.dart';
 import 'package:flutter/material.dart';
 
 class CustomSliverTabPersistentHeader extends StatelessWidget {

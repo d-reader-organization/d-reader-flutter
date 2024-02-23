@@ -55,7 +55,7 @@ class CollectibleCard extends StatelessWidget {
                           ),
                           child: Text(
                             'EDITION 1/20',
-                            style: textTheme.bodyMedium?.copyWith(
+                            style: textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -71,7 +71,7 @@ class CollectibleCard extends StatelessWidget {
                           children: [
                             Text(
                               'Caught in a Mugwhump\'s HypnoRay',
-                              style: textTheme.bodyMedium,
+                              style: textTheme.bodySmall,
                             ),
                           ],
                         ),

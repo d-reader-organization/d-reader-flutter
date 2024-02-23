@@ -23,7 +23,7 @@ class AuthorVerified extends StatelessWidget {
       authorName,
       overflow: TextOverflow.ellipsis,
       maxLines: 1,
-      style: textTheme.titleSmall?.copyWith(
+      style: textTheme.bodySmall?.copyWith(
         color: textColor,
       ),
     );

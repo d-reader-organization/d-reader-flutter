@@ -106,7 +106,7 @@ class ComicCard extends ConsumerWidget {
                     ),
                     Text(
                       '${comic.stats?.issuesCount ?? 0} ${pluralizeString(comic.stats?.issuesCount ?? 0, 'EP')}',
-                      style: textTheme.titleSmall,
+                      style: textTheme.bodySmall,
                     ),
                   ],
                 ),

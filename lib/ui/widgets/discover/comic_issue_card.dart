@@ -60,7 +60,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                         issue.comic?.title ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: textTheme.titleSmall?.copyWith(
+                        style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
                         ),
                       ),
@@ -81,7 +81,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   ),
                   Text(
                     'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
-                    style: textTheme.titleSmall,
+                    style: textTheme.bodySmall,
                   ),
                   const SizedBox(
                     height: 4,
@@ -95,7 +95,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                           issue.creator.name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style: textTheme.titleSmall?.copyWith(
+                          style: textTheme.bodySmall?.copyWith(
                             color: ColorPalette.greyscale100,
                           ),
                         ),

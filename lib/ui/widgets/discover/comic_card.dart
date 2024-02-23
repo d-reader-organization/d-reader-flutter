@@ -80,7 +80,7 @@ class DiscoverComicCard extends StatelessWidget {
                       ),
                       Text(
                         comic.creator?.name ?? '',
-                        style: textTheme.titleSmall?.copyWith(
+                        style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
                         ),
                       ),
@@ -89,7 +89,7 @@ class DiscoverComicCard extends StatelessWidget {
                       ),
                       Text(
                         '${comic.stats?.issuesCount ?? 0} EPs',
-                        style: textTheme.titleSmall,
+                        style: textTheme.bodySmall,
                       ),
                       const Divider(
                         thickness: 1,

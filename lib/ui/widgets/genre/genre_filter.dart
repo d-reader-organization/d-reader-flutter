@@ -55,10 +55,7 @@ class GenreFilter extends ConsumerWidget {
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.fade,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ],
         ),

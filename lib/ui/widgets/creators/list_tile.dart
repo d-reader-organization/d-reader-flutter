@@ -33,11 +33,7 @@ class CreatorListTile extends StatelessWidget {
         creator.name,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
-        style: textTheme.bodyMedium?.copyWith(
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-          color: Colors.white,
-        ),
+        style: textTheme.bodySmall,
       ),
     );
   }

@@ -12,10 +12,10 @@ class DateWidget extends StatelessWidget {
       children: [
         Text(
           Formatter.formatDate(date),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: ColorPalette.greyscale100, letterSpacing: 1.2),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: ColorPalette.greyscale100,
+                letterSpacing: 1.2,
+              ),
         )
       ],
     );

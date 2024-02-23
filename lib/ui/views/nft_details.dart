@@ -313,7 +313,7 @@ class Body extends StatelessWidget {
                         Text(
                           '${Formatter.formatPrice(nft.royalties)}%',
                           style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: ColorPalette.dReaderBlue,
                                   ),
                         ),
@@ -322,7 +322,7 @@ class Body extends StatelessWidget {
                         ),
                         Text(
                           'royalty',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
                     ),
@@ -368,7 +368,7 @@ class Body extends StatelessWidget {
             children: [
               Text(
                 Formatter.formatAddress(nft.ownerAddress, 12),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
                 width: 8,
@@ -411,7 +411,7 @@ class Body extends StatelessWidget {
             children: [
               Text(
                 Formatter.formatAddress(nft.address, 12),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(
                 width: 8,

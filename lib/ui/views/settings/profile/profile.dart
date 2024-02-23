@@ -119,7 +119,9 @@ class ProfileView extends HookConsumerWidget {
                       Text(
                         'Recommended image size: 500x500',
                         style: TextStyle(
-                            fontSize: 14, color: ColorPalette.greyscale100),
+                          fontSize: 14,
+                          color: ColorPalette.greyscale100,
+                        ),
                       ),
                     ],
                   ),

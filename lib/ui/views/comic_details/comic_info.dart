@@ -14,6 +14,7 @@ class ComicInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: SafeArea(
@@ -45,22 +46,16 @@ class ComicInfoView extends StatelessWidget {
                 const SizedBox(
                   height: 16,
                 ),
-                const Text(
+                Text(
                   'About',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: textTheme.titleMedium,
                 ),
                 const SizedBox(
                   height: 8,
                 ),
                 Text(
                   comic.description,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: textTheme.bodyMedium,
                 ),
                 const SizedBox(
                   height: 8,
@@ -72,12 +67,9 @@ class ComicInfoView extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                const Text(
+                Text(
                   'Genres',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: textTheme.titleMedium,
                 ),
                 GenreTagsDefault(
                   genres: comic.genres,

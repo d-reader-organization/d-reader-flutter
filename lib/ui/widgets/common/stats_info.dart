@@ -16,6 +16,7 @@ class StatsInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
@@ -34,20 +35,15 @@ class StatsInfo extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: Color(0xffb9b9b9),
+              style: textTheme.labelSmall?.copyWith(
+                color: ColorPalette.greyscale200,
               ),
             ),
             statsWidget != null
                 ? statsWidget!
                 : Text(
                     stats,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: textTheme.labelLarge,
                   ),
           ],
         ),

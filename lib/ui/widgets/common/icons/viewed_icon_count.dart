@@ -31,7 +31,7 @@ class ViewedIconCount extends StatelessWidget {
           viewedCount.toString(),
           style: Theme.of(context)
               .textTheme
-              .labelMedium
+              .bodySmall
               ?.copyWith(color: ColorPalette.dReaderGrey),
         )
       ],

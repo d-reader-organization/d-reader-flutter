@@ -73,8 +73,9 @@ class FavouriteIconCount extends HookConsumerWidget {
                   ),
                   Text(
                     favouritesCount.toString(),
-                    style: textTheme.bodySmall?.copyWith(
+                    style: textTheme.bodyMedium?.copyWith(
                       color: ColorPalette.greyscale100,
+                      letterSpacing: .2,
                     ),
                   ),
                 ],

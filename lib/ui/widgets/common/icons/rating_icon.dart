@@ -65,8 +65,9 @@ class RatingIcon extends ConsumerWidget {
                   ),
                   Text(
                     initialRating > 0.0 ? initialRating.toString() : '--',
-                    style: textTheme.bodySmall?.copyWith(
+                    style: textTheme.bodyMedium?.copyWith(
                       color: ColorPalette.greyscale100,
+                      letterSpacing: .2,
                     ),
                   ),
                 ],

@@ -20,6 +20,7 @@ class ComicIssueCardLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(
@@ -72,9 +73,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                   children: [
                     Text(
                       'Episode ${issue.number} of ${issue.stats?.totalIssuesCount}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                      style: textTheme.bodyMedium?.copyWith(
                         color: ColorPalette.greyscale100,
                       ),
                     ),
@@ -82,9 +81,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                       '${issue.comic?.title}:',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                      style: textTheme.titleLarge?.copyWith(
                         color: ColorPalette.greyscale100,
                       ),
                     ),
@@ -92,11 +89,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                       issue.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
+                      style: textTheme.titleLarge,
                     ),
                     const Divider(
                       thickness: 1,

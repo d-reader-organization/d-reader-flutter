@@ -59,7 +59,7 @@ class NftDetails extends ConsumerWidget {
                   backgroundColor: Colors.transparent,
                   title: Text(
                     shortenNftName(nft.name),
-                    style: Theme.of(context).textTheme.headlineLarge,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
                 SliverPadding(
@@ -151,56 +151,42 @@ class Body extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   return Expanded(
-                    child: CustomTextButton(
-                      size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          8,
-                        ),
-                      ),
-                      borderColor: ColorPalette.greyscale200,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      backgroundColor: Colors.transparent,
-                      isLoading: ref.watch(globalStateProvider).isLoading,
-                      onPressed: ref.watch(isOpeningSessionProvider)
-                          ? null
-                          : () async {
-                              if (nft.isListed) {
-                                return await ref
-                                    .read(nftControllerProvider.notifier)
-                                    .delist(
-                                      nft: nft,
-                                      callback: () {
-                                        showSnackBar(
-                                          context: context,
-                                          text: 'Successfully delisted',
-                                          backgroundColor:
-                                              ColorPalette.dReaderGreen,
-                                        );
-                                      },
-                                      onException: (exception) {
-                                        triggerLowPowerOrNoWallet(
-                                          context,
-                                          exception,
-                                        );
-                                      },
-                                    );
-                              }
-                              showModalBottomSheet(
-                                context: context,
-                                backgroundColor: Colors.transparent,
-                                isScrollControlled: true,
-                                builder: (context) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom: MediaQuery.viewInsetsOf(context)
-                                          .bottom,
-                                    ),
-                                    child: NftModalBottomSheet(nft: nft),
+                    child: Button(
+                      onPressed: () async {
+                        if (nft.isListed) {
+                          return await ref
+                              .read(nftControllerProvider.notifier)
+                              .delist(
+                                nft: nft,
+                                callback: () {
+                                  showSnackBar(
+                                    context: context,
+                                    text: 'Successfully delisted',
+                                    backgroundColor: ColorPalette.dReaderGreen,
+                                  );
+                                },
+                                onException: (exception) {
+                                  triggerLowPowerOrNoWallet(
+                                    context,
+                                    exception,
                                   );
                                 },
                               );
-                            },
+                        }
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: MediaQuery.viewInsetsOf(context).bottom,
+                              ),
+                              child: NftModalBottomSheet(nft: nft),
+                            );
+                          },
+                        );
+                      },
                       child: nft.isListed
                           ? const Text(
                               'Delist',
@@ -226,16 +212,8 @@ class Body extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   return Expanded(
-                    child: CustomTextButton(
-                      backgroundColor: Colors.transparent,
+                    child: Button(
                       borderColor: ColorPalette.dReaderGreen,
-                      size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          8,
-                        ),
-                      ),
                       child: Text(
                         nft.isUsed ? 'Read' : 'Open',
                         style: const TextStyle(
@@ -278,7 +256,7 @@ class Body extends StatelessWidget {
             style: sectionHeadingStyle,
           ),
           const SizedBox(
-            height: 4,
+            height: 8,
           ),
           TextWithViewMore(
             text: nft.description,
@@ -294,7 +272,7 @@ class Body extends StatelessWidget {
                 style: sectionHeadingStyle,
               ),
               const SizedBox(
-                height: 4,
+                height: 8,
               ),
               Row(
                 children: [
@@ -322,7 +300,7 @@ class Body extends StatelessWidget {
                         ),
                         Text(
                           'royalty',
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -362,7 +340,7 @@ class Body extends StatelessWidget {
             style: sectionHeadingStyle,
           ),
           const SizedBox(
-            height: 4,
+            height: 8,
           ),
           Row(
             children: [
@@ -458,6 +436,37 @@ class Body extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class Button extends ConsumerWidget {
+  final Widget child;
+  final Future<void> Function() onPressed;
+  final Color backgroundColor, borderColor;
+  const Button({
+    super.key,
+    required this.child,
+    required this.onPressed,
+    this.backgroundColor = Colors.transparent,
+    this.borderColor = ColorPalette.greyscale200,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CustomTextButton(
+      size: Size(MediaQuery.sizeOf(context).width / 2.4, 40),
+      borderRadius: const BorderRadius.all(
+        Radius.circular(
+          8,
+        ),
+      ),
+      borderColor: borderColor,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      backgroundColor: backgroundColor,
+      isLoading: ref.watch(globalStateProvider).isLoading,
+      onPressed: ref.watch(isOpeningSessionProvider) ? null : onPressed,
+      child: child,
     );
   }
 }

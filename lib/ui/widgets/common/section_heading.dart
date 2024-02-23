@@ -5,7 +5,6 @@ import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SectionHeading extends ConsumerWidget {
@@ -24,51 +23,54 @@ class SectionHeading extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: textTheme.headlineMedium,
-        ),
-        initialTab != null
-            ? GestureDetector(
-                onTap: initialTab != null
-                    ? () {
-                        ref
-                            .read(tabBarProvider.notifier)
-                            .setTabIndex(initialTab!.index);
-                        ref
-                            .read(scaffoldProvider.notifier)
-                            .setNavigationIndex(1);
-                        ref.read(scaffoldPageController).animateToPage(
-                              1,
-                              curve: Curves.linear,
-                              duration: const Duration(milliseconds: 350),
-                            );
-                        ref.invalidate(selectedGenresProvider);
-                        if (filter != null) {
-                          ref.invalidate(selectedSortByProvider);
+    return Padding(
+      padding: const EdgeInsets.only(right: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: textTheme.headlineMedium,
+          ),
+          initialTab != null
+              ? GestureDetector(
+                  onTap: initialTab != null
+                      ? () {
                           ref
-                              .read(selectedFilterProvider.notifier)
-                              .update((state) => filter);
-                        } else if (sort != null) {
-                          ref.invalidate(selectedFilterProvider);
+                              .read(tabBarProvider.notifier)
+                              .setTabIndex(initialTab!.index);
                           ref
-                              .read(selectedSortByProvider.notifier)
-                              .update((state) => sort);
+                              .read(scaffoldProvider.notifier)
+                              .setNavigationIndex(1);
+                          ref.read(scaffoldPageController).animateToPage(
+                                1,
+                                curve: Curves.linear,
+                                duration: const Duration(milliseconds: 350),
+                              );
+                          ref.invalidate(selectedGenresProvider);
+                          if (filter != null) {
+                            ref.invalidate(selectedSortByProvider);
+                            ref
+                                .read(selectedFilterProvider.notifier)
+                                .update((state) => filter);
+                          } else if (sort != null) {
+                            ref.invalidate(selectedFilterProvider);
+                            ref
+                                .read(selectedSortByProvider.notifier)
+                                .update((state) => sort);
+                          }
                         }
-                      }
-                    : null,
-                child: Text(
-                  AppLocalizations.of(context)?.seeAll ?? 'See All',
-                  style: textTheme.titleSmall?.copyWith(
-                    color: ColorPalette.dReaderYellow100,
+                      : null,
+                  child: Text(
+                    'See All',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: ColorPalette.dReaderYellow100,
+                    ),
                   ),
-                ),
-              )
-            : const SizedBox(),
-      ],
+                )
+              : const SizedBox(),
+        ],
+      ),
     );
   }
 }

@@ -77,10 +77,7 @@ class ComicIssueCard extends StatelessWidget {
                     issue.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: textTheme.titleMedium,
                   ),
                   const SizedBox(
                     height: 4,
@@ -90,11 +87,7 @@ class ComicIssueCard extends StatelessWidget {
                     children: [
                       Text(
                         'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
+                        style: textTheme.titleSmall,
                       ),
                       SolanaPrice(
                         price: Formatter.formatLamportPrice(issue.stats?.price),

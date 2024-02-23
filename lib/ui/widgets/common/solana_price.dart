@@ -40,7 +40,7 @@ class SolanaPrice extends StatelessWidget {
               : price is String
                   ? price
                   : 'Free',
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: textColor,
               ),

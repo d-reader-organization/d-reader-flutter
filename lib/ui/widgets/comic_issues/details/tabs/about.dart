@@ -25,6 +25,7 @@ class IssueAbout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
     final walletAddress = ref.watch(environmentProvider).publicKey?.toBase58();
     return NotificationListener(
       onNotification: (notification) {
@@ -52,18 +53,13 @@ class IssueAbout extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Minting in progress',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: textTheme.titleMedium,
                       ),
                       Text(
                         'Total: ${snapshot.data?.itemsMinted}/${snapshot.data?.supply}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                        style: textTheme.bodyMedium?.copyWith(
                           color: ColorPalette.greyscale100,
                         ),
                       ),
@@ -86,23 +82,17 @@ class IssueAbout extends ConsumerWidget {
               height: 16,
             ),
           ],
-          const Text(
+          Text(
             'Genres',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
+            style: textTheme.titleMedium,
           ),
           GenreTagsDefault(genres: issue.genres),
           const SizedBox(
             height: 16,
           ),
-          const Text(
+          Text(
             'About',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
+            style: textTheme.titleMedium,
           ),
           const SizedBox(
             height: 4,
@@ -125,12 +115,9 @@ class IssueAbout extends ConsumerWidget {
             const SizedBox(
               height: 8,
             ),
-            const Text(
+            Text(
               'Rarities',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+              style: textTheme.titleMedium,
             ),
             const SizedBox(
               height: 8,
@@ -142,12 +129,9 @@ class IssueAbout extends ConsumerWidget {
             const SizedBox(
               height: 16,
             ),
-            const Text(
+            Text(
               'Authors list',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+              style: textTheme.titleMedium,
             ),
             const SizedBox(
               height: 8,
@@ -173,10 +157,7 @@ class AuthorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '${author.role} - ${author.name}',
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-      ),
+      style: Theme.of(context).textTheme.titleMedium,
     );
   }
 }
@@ -233,6 +214,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
     final isFutureMint = candyMachineGroup.startDate != null &&
         candyMachineGroup.startDate!.isAfter(DateTime.now());
     final candyMachineState = ref.watch(candyMachineStateProvider);
@@ -258,10 +240,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                     children: [
                       Text(
                         candyMachineGroup.displayLabel,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: textTheme.titleMedium,
                       ),
                       const SizedBox(
                         width: 4,
@@ -281,9 +260,7 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                             : isFutureMint
                                 ? 'Starts in ${Formatter.formatDateInRelative(candyMachineGroup.startDate)}'
                                 : 'Ended',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                        style: textTheme.titleMedium?.copyWith(
                           color: candyMachineGroup.isActive
                               ? ColorPalette.dReaderYellow100
                               : isFutureMint
@@ -327,10 +304,8 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                     children: [
                       Text(
                         'You minted: ${candyMachineGroup.wallet?.itemsMinted ?? 0}/${candyMachineGroup.wallet?.supply ?? '∞'}',
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
@@ -344,10 +319,8 @@ class ExpandableDecoratedContainer extends ConsumerWidget {
                                 itemsMinted: candyMachineGroup.itemsMinted,
                                 totalSupply: candyMachineGroup.supply,
                               ),
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],

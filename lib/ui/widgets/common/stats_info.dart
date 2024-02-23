@@ -39,6 +39,9 @@ class StatsInfo extends StatelessWidget {
                 color: ColorPalette.greyscale200,
               ),
             ),
+            const SizedBox(
+              height: 4,
+            ),
             statsWidget != null
                 ? statsWidget!
                 : Text(

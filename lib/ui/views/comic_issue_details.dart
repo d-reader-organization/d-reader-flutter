@@ -71,6 +71,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(comicIssueDetailsProvider(widget.id));
+    final textTheme = Theme.of(context).textTheme;
     return provider.when(
       data: (issue) {
         if (issue == null) {
@@ -137,22 +138,9 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                               },
                               child: Text(
                                 '${issue.comic?.title}',
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                style: textTheme.headlineMedium,
                               ),
                             ),
-                            // actions: [
-                            //   Padding(
-                            //     padding: const EdgeInsets.only(
-                            //       right: 16,
-                            //       top: 4,
-                            //     ),
-                            //     child:
-                            //         SvgPicture.asset('assets/icons/more.svg'),
-                            //   ),
-                            // ],
                           ),
                         );
                       },
@@ -211,47 +199,36 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
+                                Text(
                                   'EPISODE  ',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
+                                  style: textTheme.bodyMedium?.copyWith(
                                     color: ColorPalette.greyscale100,
                                   ),
                                 ),
                                 Text(
                                   '${issue.number}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),
+                                  style: textTheme.titleMedium,
                                 ),
                                 Text(
                                   ' / ${issue.stats?.totalIssuesCount}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
+                                  style: textTheme.titleMedium?.copyWith(
                                     color: ColorPalette.greyscale100,
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             const SizedBox(
-                              height: 4,
+                              height: 8,
                             ),
                             Text(
                               issue.title,
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                              ),
+                              style: textTheme.headlineLarge,
                             ),
                             const SizedBox(
-                              height: 8,
+                              height: 16,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -283,17 +260,11 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                   children: [
                                     Text(
                                       '${issue.stats?.totalPagesCount} ',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
+                                      style: textTheme.bodyMedium,
                                     ),
-                                    const Text(
+                                    Text(
                                       'pages',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
+                                      style: textTheme.bodyMedium?.copyWith(
                                         color: ColorPalette.greyscale100,
                                       ),
                                     ),
@@ -394,13 +365,21 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                             issue.isSecondarySaleActive &&
                                     issue.activeCandyMachineAddress == null
                                 ? TabBar(
-                                    dividerColor: ColorPalette.dReaderGrey,
                                     indicatorWeight: 4,
+                                    dividerColor: ColorPalette.greyscale200,
+                                    labelStyle:
+                                        Theme.of(context).textTheme.titleMedium,
+                                    unselectedLabelStyle: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                     indicatorColor:
                                         ColorPalette.dReaderYellow100,
                                     labelColor: ColorPalette.dReaderYellow100,
                                     unselectedLabelColor:
-                                        ColorPalette.dReaderGrey,
+                                        ColorPalette.greyscale200,
                                     onTap: (value) {
                                       ref
                                           .read(lastSelectedTabIndex.notifier)

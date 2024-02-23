@@ -11,7 +11,6 @@ import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
@@ -24,7 +23,7 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 const sectionHeadingStyle = TextStyle(
-  color: Color(0xFF777D8C),
+  color: ColorPalette.greyscale200,
   fontSize: 18,
   fontWeight: FontWeight.w700,
 );
@@ -59,7 +58,7 @@ class NftDetails extends ConsumerWidget {
                   backgroundColor: Colors.transparent,
                   title: Text(
                     shortenNftName(nft.name),
-                    style: Theme.of(context).textTheme.headlineLarge,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                 ),
                 SliverPadding(
@@ -138,6 +137,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: ListView(
@@ -151,70 +151,54 @@ class Body extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   return Expanded(
-                    child: CustomTextButton(
-                      size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          8,
-                        ),
-                      ),
-                      borderColor: ColorPalette.greyscale200,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      backgroundColor: Colors.transparent,
-                      isLoading: ref.watch(globalStateProvider).isLoading,
-                      onPressed: ref.watch(isOpeningSessionProvider)
-                          ? null
-                          : () async {
-                              if (nft.isListed) {
-                                return await ref
-                                    .read(nftControllerProvider.notifier)
-                                    .delist(
-                                      nft: nft,
-                                      callback: () {
-                                        showSnackBar(
-                                          context: context,
-                                          text: 'Successfully delisted',
-                                          backgroundColor:
-                                              ColorPalette.dReaderGreen,
-                                        );
-                                      },
-                                      onException: (exception) {
-                                        triggerLowPowerOrNoWallet(
-                                          context,
-                                          exception,
-                                        );
-                                      },
-                                    );
-                              }
-                              showModalBottomSheet(
-                                context: context,
-                                backgroundColor: Colors.transparent,
-                                isScrollControlled: true,
-                                builder: (context) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom: MediaQuery.viewInsetsOf(context)
-                                          .bottom,
-                                    ),
-                                    child: NftModalBottomSheet(nft: nft),
+                    child: Button(
+                      onPressed: () async {
+                        if (nft.isListed) {
+                          return await ref
+                              .read(nftControllerProvider.notifier)
+                              .delist(
+                                nft: nft,
+                                callback: () {
+                                  showSnackBar(
+                                    context: context,
+                                    text: 'Successfully delisted',
+                                    backgroundColor: ColorPalette.dReaderGreen,
+                                  );
+                                },
+                                onException: (exception) {
+                                  triggerLowPowerOrNoWallet(
+                                    context,
+                                    exception,
                                   );
                                 },
                               );
-                            },
+                        }
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: MediaQuery.viewInsetsOf(context).bottom,
+                              ),
+                              child: NftModalBottomSheet(nft: nft),
+                            );
+                          },
+                        );
+                      },
                       child: nft.isListed
-                          ? const Text(
+                          ? Text(
                               'Delist',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: ColorPalette.greyscale200),
+                              style: textTheme.titleMedium?.copyWith(
+                                color: ColorPalette.greyscale200,
+                              ),
                             )
-                          : const Text(
+                          : Text(
                               'List',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: ColorPalette.greyscale200),
+                              style: textTheme.titleMedium?.copyWith(
+                                color: ColorPalette.greyscale200,
+                              ),
                             ),
                     ),
                   );
@@ -226,21 +210,11 @@ class Body extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   return Expanded(
-                    child: CustomTextButton(
-                      backgroundColor: Colors.transparent,
+                    child: Button(
                       borderColor: ColorPalette.dReaderGreen,
-                      size: Size(MediaQuery.sizeOf(context).width / 2.4, 50),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(
-                          8,
-                        ),
-                      ),
                       child: Text(
                         nft.isUsed ? 'Read' : 'Open',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                        style: textTheme.titleMedium?.copyWith(
                           color: ColorPalette.dReaderGreen,
                         ),
                       ),
@@ -278,7 +252,7 @@ class Body extends StatelessWidget {
             style: sectionHeadingStyle,
           ),
           const SizedBox(
-            height: 4,
+            height: 8,
           ),
           TextWithViewMore(
             text: nft.description,
@@ -294,7 +268,7 @@ class Body extends StatelessWidget {
                 style: sectionHeadingStyle,
               ),
               const SizedBox(
-                height: 4,
+                height: 8,
               ),
               Row(
                 children: [
@@ -312,17 +286,16 @@ class Body extends StatelessWidget {
                       children: [
                         Text(
                           '${Formatter.formatPrice(nft.royalties)}%',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: ColorPalette.dReaderBlue,
-                                  ),
+                          style: textTheme.bodySmall?.copyWith(
+                            color: ColorPalette.dReaderBlue,
+                          ),
                         ),
                         const SizedBox(
                           width: 4,
                         ),
                         Text(
                           'royalty',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -362,13 +335,13 @@ class Body extends StatelessWidget {
             style: sectionHeadingStyle,
           ),
           const SizedBox(
-            height: 4,
+            height: 8,
           ),
           Row(
             children: [
               Text(
                 Formatter.formatAddress(nft.ownerAddress, 12),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: textTheme.bodySmall,
               ),
               const SizedBox(
                 width: 8,
@@ -411,7 +384,7 @@ class Body extends StatelessWidget {
             children: [
               Text(
                 Formatter.formatAddress(nft.address, 12),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: textTheme.bodySmall,
               ),
               const SizedBox(
                 width: 8,
@@ -443,10 +416,10 @@ class Body extends StatelessWidget {
           const SizedBox(
             height: 32,
           ),
-          RoundedButton(
-            text: 'View Issue Details',
+          CustomTextButton(
             size: const Size(120, 50),
             borderColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 4),
             backgroundColor: Colors.transparent,
             textColor: Colors.white,
             onPressed: () {
@@ -455,9 +428,44 @@ class Body extends StatelessWidget {
                 path: '${RoutePath.comicIssueDetails}/${nft.comicIssueId}',
               );
             },
+            child: Text(
+              'View Issue Details',
+              style: textTheme.titleMedium,
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class Button extends ConsumerWidget {
+  final Widget child;
+  final Future<void> Function() onPressed;
+  final Color backgroundColor, borderColor;
+  const Button({
+    super.key,
+    required this.child,
+    required this.onPressed,
+    this.backgroundColor = Colors.transparent,
+    this.borderColor = ColorPalette.greyscale200,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CustomTextButton(
+      size: Size(MediaQuery.sizeOf(context).width / 2.4, 40),
+      borderRadius: const BorderRadius.all(
+        Radius.circular(
+          8,
+        ),
+      ),
+      borderColor: borderColor,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      backgroundColor: backgroundColor,
+      isLoading: ref.watch(globalStateProvider).isLoading,
+      onPressed: ref.watch(isOpeningSessionProvider) ? null : onPressed,
+      child: child,
     );
   }
 }

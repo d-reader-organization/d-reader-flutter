@@ -17,6 +17,7 @@ class TextWithViewMore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return ExpandableText(
       text,
       maxLines: maxLines,
@@ -24,13 +25,10 @@ class TextWithViewMore extends StatelessWidget {
       collapseText: 'view less',
       onLinkTap: onLinkTap,
       linkEllipsis: false,
-      linkStyle:
-          const TextStyle(fontSize: 16, color: ColorPalette.dReaderYellow100),
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.normal,
-        color: Colors.white,
+      linkStyle: textTheme.bodyMedium?.copyWith(
+        color: ColorPalette.dReaderYellow100,
       ),
+      style: textTheme.bodyMedium,
     );
   }
 }

@@ -42,30 +42,30 @@ class BookmarkIcon extends ConsumerWidget {
           ),
           borderRadius: BorderRadius.circular(4),
         ),
-        child: Row(children: [
-          SvgPicture.asset(
-            'assets/icons/bookmark_${isBookmarked ? 'saved' : 'unsaved'}.svg',
-            colorFilter: ColorFilter.mode(
-              isBookmarked
-                  ? ColorPalette.dReaderGreen
-                  : ColorPalette.greyscale100,
-              BlendMode.srcIn,
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              'assets/icons/bookmark_${isBookmarked ? 'saved' : 'unsaved'}.svg',
+              colorFilter: ColorFilter.mode(
+                isBookmarked
+                    ? ColorPalette.dReaderGreen
+                    : ColorPalette.greyscale100,
+                BlendMode.srcIn,
+              ),
+              width: 18,
+              height: 18,
             ),
-            width: 18,
-            height: 18,
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          const Text(
-            'Favorite',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: ColorPalette.greyscale100,
+            const SizedBox(
+              width: 4,
             ),
-          ),
-        ]),
+            Text(
+              'Favorite',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    letterSpacing: .2,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }

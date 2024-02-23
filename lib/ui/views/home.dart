@@ -33,8 +33,7 @@ class HomeView extends ConsumerWidget {
               Carousel(),
               Padding(
                 padding: EdgeInsets.only(
-                  left: 12.0,
-                  right: 12,
+                  left: 16,
                   top: 8.0,
                 ),
                 child: Column(

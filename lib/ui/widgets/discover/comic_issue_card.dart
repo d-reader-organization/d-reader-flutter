@@ -21,6 +21,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(
@@ -59,9 +60,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                         issue.comic?.title ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                        style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
                         ),
                       ),
@@ -75,21 +74,14 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   ),
                   Text(
                     issue.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: textTheme.titleMedium,
                   ),
                   const SizedBox(
                     height: 4,
                   ),
                   Text(
                     'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
+                    style: textTheme.bodySmall,
                   ),
                   const SizedBox(
                     height: 4,
@@ -103,12 +95,9 @@ class DiscoverComicIssueCard extends StatelessWidget {
                           issue.creator.name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                    color: ColorPalette.greyscale100,
-                                  ),
+                          style: textTheme.bodySmall?.copyWith(
+                            color: ColorPalette.greyscale100,
+                          ),
                         ),
                       ),
                       Expanded(

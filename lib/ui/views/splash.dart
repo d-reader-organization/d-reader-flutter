@@ -74,13 +74,11 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
                       8,
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'beta version',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      color: ColorPalette.dReaderYellow100,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: ColorPalette.dReaderYellow100,
+                        ),
                   ),
                 ),
               ],

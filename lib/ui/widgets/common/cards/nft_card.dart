@@ -15,7 +15,7 @@ class NfTCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 338 / 232,
+      aspectRatio: 1000 / 688,
       child: CachedImageBgPlaceholder(
         imageUrl: imageUrl,
         bgImageFit: BoxFit.scaleDown,

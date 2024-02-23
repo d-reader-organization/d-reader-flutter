@@ -52,7 +52,8 @@ final unauthorizedRoutes = [
   RoutePath.welcome,
   RoutePath.initial,
   RoutePath.signIn,
-  RoutePath.signUp
+  RoutePath.signUp,
+  RoutePath.requestRessetPassword,
 ];
 
 final authRouteProvider = ChangeNotifierProvider<AuthNotifier>((ref) {

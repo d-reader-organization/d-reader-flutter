@@ -322,11 +322,6 @@ class PreviewImage extends StatelessWidget {
     required this.issueNumber,
   });
 
-  final textStyle = const TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-  );
-
   openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
     showModalBottomSheet(
       context: context,
@@ -371,12 +366,9 @@ class PreviewImage extends StatelessWidget {
                   ),
                 ),
                 !canRead || !isFullyUploaded
-                    ? const Text(
+                    ? Text(
                         'This is a comic preview!',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: Theme.of(context).textTheme.titleLarge,
                       )
                     : const SizedBox(),
                 canRead
@@ -384,7 +376,7 @@ class PreviewImage extends StatelessWidget {
                     : Text(
                         'To view all pages buy a full copy or become a monthly subscriber',
                         textAlign: TextAlign.center,
-                        style: textStyle,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                 Consumer(
                   builder: (context, ref, child) {
@@ -440,7 +432,7 @@ class PreviewImage extends StatelessWidget {
                     : Text(
                         'This comic is not yet fully uploaded. New chapters might be added weekly or the comic is still in a presale phase',
                         textAlign: TextAlign.center,
-                        style: textStyle,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
               ],
             ),

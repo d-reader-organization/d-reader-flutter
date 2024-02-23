@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/description_text.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
@@ -55,7 +55,7 @@ class CollectibleCard extends StatelessWidget {
                           ),
                           child: Text(
                             'EDITION 1/20',
-                            style: textTheme.bodyMedium?.copyWith(
+                            style: textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -71,7 +71,7 @@ class CollectibleCard extends StatelessWidget {
                           children: [
                             Text(
                               'Caught in a Mugwhump\'s HypnoRay',
-                              style: textTheme.bodyMedium,
+                              style: textTheme.bodySmall,
                             ),
                           ],
                         ),
@@ -95,9 +95,9 @@ class CollectibleCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            RoundedButton(
-                              text: 'MAKE OFFER',
+                            CustomTextButton(
                               onPressed: () {},
+                              child: const Text('MAKE OFFER'),
                             ),
                           ],
                         ),

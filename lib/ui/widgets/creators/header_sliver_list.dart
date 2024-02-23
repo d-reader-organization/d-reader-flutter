@@ -58,11 +58,7 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
                   creator.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 const SizedBox(
                   height: 16,
@@ -196,13 +192,13 @@ class StatsBoxContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Column(
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+          style: textTheme.labelSmall?.copyWith(
             color: ColorPalette.greyscale200,
           ),
         ),
@@ -211,11 +207,7 @@ class StatsBoxContainer extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
+          style: textTheme.labelLarge,
         ),
       ],
     );

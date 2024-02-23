@@ -36,6 +36,7 @@ class _WhatIsWalletViewState extends State<WhatIsWalletView> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: SafeArea(
@@ -58,42 +59,30 @@ class _WhatIsWalletViewState extends State<WhatIsWalletView> {
                 const SizedBox(
                   height: 16,
                 ),
-                const Text(
+                Text(
                   'What is a wallet?',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: textTheme.headlineLarge,
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 SelectableText(
                   whatIsAWalletText,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
+                  style: textTheme.bodyMedium,
                 ),
                 const SizedBox(
                   height: 24,
                 ),
-                const Text(
+                Text(
                   'Why do I need a wallet?',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: textTheme.headlineLarge,
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 SelectableText(
                   whyDoINeedAWalletText,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
+                  style: textTheme.bodyMedium,
                 ),
               ],
             ),

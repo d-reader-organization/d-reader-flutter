@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/buttons/rounded_button.dart';
+import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,6 +42,7 @@ class SignUpStep3 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
     return PopScope(
       canPop: false,
       child: Column(
@@ -147,14 +148,9 @@ class SignUpStep3 extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: RoundedButton(
-                  text: 'Skip',
+                child: CustomTextButton(
                   backgroundColor: Colors.transparent,
                   textColor: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
                   borderColor: ColorPalette.greyscale300,
                   size: const Size(
                     0,
@@ -166,25 +162,17 @@ class SignUpStep3 extends ConsumerWidget {
                       path: RoutePath.home,
                     );
                   },
+                  child: Text(
+                    'Skip',
+                    style: textTheme.titleSmall,
+                  ),
                 ),
               ),
               Expanded(
-                child: RoundedButton(
-                  text: ref.watch(isWalletAvailableProvider).maybeWhen(
-                    data: (data) {
-                      return data ? 'Connect' : 'Install';
-                    },
-                    orElse: () {
-                      return 'Connect';
-                    },
-                  ),
+                child: CustomTextButton(
                   isLoading: ref.watch(globalStateProvider).isLoading,
                   backgroundColor: ColorPalette.dReaderYellow100,
                   textColor: Colors.black,
-                  textStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
                   size: const Size(
                     0,
                     50,
@@ -192,6 +180,19 @@ class SignUpStep3 extends ConsumerWidget {
                   onPressed: () async {
                     await _handleConnectWallet(ref, context);
                   },
+                  child: Text(
+                    ref.watch(isWalletAvailableProvider).maybeWhen(
+                      data: (data) {
+                        return data ? 'Connect' : 'Install';
+                      },
+                      orElse: () {
+                        return 'Connect';
+                      },
+                    ),
+                    style: textTheme.titleSmall?.copyWith(
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
             ],

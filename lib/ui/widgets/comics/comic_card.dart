@@ -87,25 +87,26 @@ class ComicCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      comic.title,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: textTheme.titleSmall,
-                    ),
-                    AuthorVerified(
-                      authorName: comic.creator?.name ?? '',
-                      isVerified: comic.creator?.isVerified ?? false,
-                      fontSize: 14,
-                      textColor: ColorPalette.greyscale100,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          comic.title,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: textTheme.titleMedium,
+                        ),
+                        AuthorVerified(
+                          authorName: comic.creator?.name ?? '',
+                          isVerified: comic.creator?.isVerified ?? false,
+                          fontSize: 14,
+                          textColor: ColorPalette.greyscale100,
+                        ),
+                      ],
                     ),
                     Text(
                       '${comic.stats?.issuesCount ?? 0} ${pluralizeString(comic.stats?.issuesCount ?? 0, 'EP')}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: textTheme.bodySmall,
                     ),
                   ],
                 ),

@@ -23,6 +23,7 @@ class ListingItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
     final selectedItems = ref.watch(selectedItemsProvider);
     final myWallets = ref.watch(
       userWalletsProvider(
@@ -72,10 +73,7 @@ class ListingItem extends ConsumerWidget {
               children: [
                 Text(
                   shortenNftName(listing.name),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: textTheme.bodySmall,
                 ),
                 const SizedBox(
                   height: 4,
@@ -112,10 +110,7 @@ class ListingItem extends ConsumerWidget {
                               listing.seller.name!.isNotEmpty
                           ? listing.seller.name!
                           : Formatter.formatAddress(listing.seller.address, 4),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: textTheme.bodySmall,
                     ),
                   ],
                 ),

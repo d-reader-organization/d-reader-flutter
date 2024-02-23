@@ -16,6 +16,7 @@ class ComicCardLarge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(
@@ -57,20 +58,14 @@ class ComicCardLarge extends StatelessWidget {
                     comic.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: textTheme.headlineLarge,
                   ),
                   const SizedBox(
                     height: 4,
                   ),
                   Text(
                     '${comic.stats?.issuesCount} ${pluralizeString(comic.stats?.issuesCount ?? 0, 'Episode')}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: textTheme.bodyMedium,
                   ),
                   const SizedBox(
                     height: 4,

@@ -73,7 +73,10 @@ class FavouriteIconCount extends HookConsumerWidget {
                   ),
                   Text(
                     favouritesCount.toString(),
-                    style: textTheme.labelMedium,
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: ColorPalette.greyscale100,
+                      letterSpacing: .2,
+                    ),
                   ),
                 ],
               ),
@@ -94,7 +97,9 @@ class FavouriteIconCount extends HookConsumerWidget {
                 ),
                 Text(
                   favouritesCount.toString(),
-                  style: textTheme.labelMedium,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: ColorPalette.greyscale100,
+                  ),
                 ),
               ],
             ),

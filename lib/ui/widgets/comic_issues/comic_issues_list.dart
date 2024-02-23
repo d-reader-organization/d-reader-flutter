@@ -26,7 +26,7 @@ class ComicIssuesList extends ConsumerWidget {
         }
         return data.isNotEmpty
             ? SizedBox(
-                height: 217,
+                height: 218,
                 child: ListView.builder(
                   itemCount: data.length,
                   shrinkWrap: true,
@@ -47,13 +47,13 @@ class ComicIssuesList extends ConsumerWidget {
         );
       },
       loading: () => SizedBox(
-        height: 217,
+        height: 218,
         child: ListView.builder(
           itemCount: 2,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => SkeletonCard(
-            height: 217,
+            height: 218,
             margin: const EdgeInsets.only(
               right: 16,
             ),

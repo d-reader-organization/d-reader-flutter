@@ -66,7 +66,7 @@ class DiscoverComicCard extends StatelessWidget {
                             comic.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: textTheme.titleSmall,
+                            style: textTheme.titleMedium,
                           ),
                           // SvgPicture.asset(
                           //   comic.logo.isNotEmpty
@@ -80,9 +80,7 @@ class DiscoverComicCard extends StatelessWidget {
                       ),
                       Text(
                         comic.creator?.name ?? '',
-                        style: textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
+                        style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
                         ),
                       ),
@@ -91,10 +89,7 @@ class DiscoverComicCard extends StatelessWidget {
                       ),
                       Text(
                         '${comic.stats?.issuesCount ?? 0} EPs',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: textTheme.bodySmall,
                       ),
                       const Divider(
                         thickness: 1,

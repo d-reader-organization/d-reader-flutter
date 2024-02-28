@@ -48,6 +48,11 @@ class AuthNotifier extends ChangeNotifier {
   }
 }
 
+final authRouteProvider = ChangeNotifierProvider<AuthNotifier>((ref) {
+  final isLoggedIn = ref.read(environmentProvider).jwtToken != null;
+  return AuthNotifier(isLoggedIn: isLoggedIn);
+});
+
 final unauthorizedRoutes = [
   RoutePath.welcome,
   RoutePath.initial,
@@ -55,11 +60,6 @@ final unauthorizedRoutes = [
   RoutePath.signUp,
   RoutePath.requestRessetPassword,
 ];
-
-final authRouteProvider = ChangeNotifierProvider<AuthNotifier>((ref) {
-  final isLoggedIn = ref.read(environmentProvider).jwtToken != null;
-  return AuthNotifier(isLoggedIn: isLoggedIn);
-});
 
 final routerProvider = Provider((ref) {
   final authState = ref.watch(authRouteProvider);

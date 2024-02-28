@@ -6,7 +6,7 @@ part of 'rating_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ratingControllerHash() => r'52400f1d5baf2f91afb365076007b3dd27c76713';
+String _$ratingControllerHash() => r'ff28c5cb1047f2f6dc79bf140b7a6bcc8666aaa9';
 
 /// See also [RatingController].
 @ProviderFor(RatingController)

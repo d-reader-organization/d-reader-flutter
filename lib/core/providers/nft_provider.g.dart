@@ -6,7 +6,7 @@ part of 'nft_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$nftControllerHash() => r'2dd10ba7423bd831a4ad8b23b38cf5974f09b47f';
+String _$nftControllerHash() => r'af909311060d85def7223aa20a4787a3ae49d923';
 
 /// See also [NftController].
 @ProviderFor(NftController)

@@ -11,10 +11,9 @@ ValueNotifier<GlobalState> useGlobalState<T>() {
 class GlobalState {
   const GlobalState({
     required this.isLoading,
-    this.isReferred = false,
     this.isMinting,
   });
-  final bool isLoading, isReferred;
+  final bool isLoading;
   final bool? isMinting;
 
   GlobalState copyWith({
@@ -25,7 +24,6 @@ class GlobalState {
     return GlobalState(
       isLoading: isLoading,
       isMinting: isMinting,
-      isReferred: isReferred,
     );
   }
 }

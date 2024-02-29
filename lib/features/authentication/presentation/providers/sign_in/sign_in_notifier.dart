@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/authentication/domain/repositories/auth_repository.dart';
-import 'package:d_reader_flutter/features/authentication/presentation/providers/state/auth_state.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
@@ -14,10 +13,9 @@ class SignInController extends _$SignInController {
   late final AuthRepository _authRepository;
 
   @override
-  AuthState build() {
+  void build() {
     // TODO Think about using AutoState if it's possible/worth.
     _authRepository = ref.watch(authRepositoryProvider);
-    return const AuthState.initial();
   }
 
   Future<void> signIn({
@@ -34,7 +32,7 @@ class SignInController extends _$SignInController {
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
     state = response.fold(
       (failure) {
-        return onFail(failure.message);
+        onFail(failure.message);
       },
       (authTokens) {
         ref.read(authRouteProvider).login();
@@ -44,7 +42,7 @@ class SignInController extends _$SignInController {
                 refreshToken: authTokens.refreshToken,
               ),
             );
-        return onSuccess();
+        onSuccess();
       },
     );
   }

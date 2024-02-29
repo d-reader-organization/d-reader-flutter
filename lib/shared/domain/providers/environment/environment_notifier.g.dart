@@ -7,7 +7,7 @@ part of 'environment_notifier.dart';
 // **************************************************************************
 
 String _$environmentNotifierHash() =>
-    r'86d59af6bd6470700abce3f5f6f0f836a9e4bf9c';
+    r'07138ae0992d337c7e1e5ba2e420719ec3f01eb9';
 
 /// See also [EnvironmentNotifier].
 @ProviderFor(EnvironmentNotifier)

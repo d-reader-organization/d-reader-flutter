@@ -1,7 +1,7 @@
-import 'package:d_reader_flutter/core/providers/router_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
 import 'package:d_reader_flutter/core/services/notification.dart';
+import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/styles.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

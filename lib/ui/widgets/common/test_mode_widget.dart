@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,7 +9,7 @@ class TestModeWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(environmentProvider).solanaCluster ==
+    return ref.watch(environmentNotifierProvider).solanaCluster ==
             SolanaCluster.devnet.value
         ? Container(
             width: double.infinity,

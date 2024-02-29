@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
+import 'package:d_reader_flutter/shared/domain/models/user.dart';
 
 abstract class UserRepository {
   Future<UserModel?> myUser();

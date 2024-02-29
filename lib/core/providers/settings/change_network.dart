@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
@@ -9,7 +8,8 @@ import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'change_network.g.dart';
@@ -35,15 +35,15 @@ class ChangeNetworkController extends _$ChangeNetworkController {
       localStoreNetworkDataProvider(cluster),
     );
     final bool isDevnetCluster = cluster == SolanaCluster.devnet.value;
-    ref.invalidate(environmentProvider);
-    final envNotifier = ref.read(environmentProvider.notifier);
+    ref.invalidate(environmentNotifierProvider);
+    final envNotifier = ref.read(environmentNotifierProvider.notifier);
     envNotifier.updateForChangeNetwork(
       cluster: cluster,
       apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
     );
     if (localStoreData != null) {
       bool isSuccessful =
-          ref.read(environmentProvider.notifier).updateEnvironmentState(
+          ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
                 EnvironmentStateUpdateInput.fromDynamic(
                   localStoreData,
                 ),
@@ -53,7 +53,7 @@ class ChangeNetworkController extends _$ChangeNetworkController {
           ? 'Network changed successfully'
           : 'Network change failed.';
       if (!isSuccessful) {
-        ref.read(environmentProvider.notifier).updateEnvironmentState(
+        ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
               EnvironmentStateUpdateInput(
                 solanaCluster: isDevnetCluster
                     ? SolanaCluster.mainnet.value

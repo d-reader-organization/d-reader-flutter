@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/user.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
@@ -43,7 +43,7 @@ class SettingsRootView extends StatelessWidget {
                   leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
                   title: 'Wallet',
                   onTap: () {
-                    final user = ref.read(environmentProvider).user;
+                    final user = ref.read(environmentNotifierProvider).user;
                     if (context.mounted && user != null) {
                       nextScreenPush(
                         context: context,
@@ -85,9 +85,13 @@ class SettingsRootView extends StatelessWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                final userRole = ref.watch(environmentProvider).user?.role;
+                final userRole =
+                    ref.watch(environmentNotifierProvider).user?.role;
                 return userRole == UserRole.tester.name ||
-                        ref.watch(environmentProvider).apiUrl.contains('dev')
+                        ref
+                            .watch(environmentNotifierProvider)
+                            .apiUrl
+                            .contains('dev')
                     ? SettingsCommonListTile(
                         leadingPath:
                             '${Config.settingsAssetsPath}/light/network.svg',

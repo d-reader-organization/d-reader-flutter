@@ -6,15 +6,15 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/api_error.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/exceptions.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +97,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     String? overrideCluster,
   }) async {
     final cluster =
-        overrideCluster ?? ref.read(environmentProvider).solanaCluster;
+        overrideCluster ?? ref.read(environmentNotifierProvider).solanaCluster;
     final result = await _authorize(
       client: client,
       cluster: cluster,
@@ -105,9 +105,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     if (result == null) {
       return 'Failed to authorize wallet.';
     }
-    final envNotifier = ref.read(environmentProvider.notifier);
+    final envNotifier = ref.read(environmentNotifierProvider.notifier);
     final publicKey = Ed25519HDPublicKey(result.publicKey);
-    final currentWallets = ref.read(environmentProvider).wallets;
+    final currentWallets = ref.read(environmentNotifierProvider).wallets;
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
@@ -138,7 +138,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     required final Ed25519HDPublicKey signer,
     required final String authToken,
   }) async {
-    final envState = ref.read(environmentProvider);
+    final envState = ref.read(environmentNotifierProvider);
     final signMessageResult = await _signMessage(
       client: client,
       signer: signer,
@@ -187,7 +187,8 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       return 'Something went wrong.';
     }
 
-    String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
+    String? walletAddress =
+        ref.read(environmentNotifierProvider).publicKey?.toBase58();
     if (walletAddress != null) {
       try {
         return onComplete != null
@@ -200,7 +201,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     }
 
     // final wallets = await ref.read(
-    //   userWalletsProvider(id: ref.read(environmentProvider).user?.id).future,
+    //   userWalletsProvider(id: ref.read(environmentNotifierProvider).user?.id).future,
     // );
     final client = await session.start();
     final result = await _authorizeAndSignIfNeeded(
@@ -247,7 +248,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
     final client = await session.start();
     final String cluster =
-        overrideCluster ?? ref.read(environmentProvider).solanaCluster;
+        overrideCluster ?? ref.read(environmentNotifierProvider).solanaCluster;
     if (onStart != null) {
       onStart();
     }
@@ -260,8 +261,9 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     final apiUrl = cluster == SolanaCluster.devnet.value
         ? Config.apiUrlDevnet
         : Config.apiUrl;
-    final envNotifier = ref.read(environmentProvider.notifier);
-    final String jwtToken = ref.read(environmentProvider).jwtToken ?? '';
+    final envNotifier = ref.read(environmentNotifierProvider.notifier);
+    final String jwtToken =
+        ref.read(environmentNotifierProvider).jwtToken ?? '';
     if (jwtToken.isEmpty) {
       throw Exception('Missing jwt token');
     }
@@ -283,7 +285,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       return 'No signed message';
     }
 
-    final currentWallets = ref.read(environmentProvider).wallets;
+    final currentWallets = ref.read(environmentNotifierProvider).wallets;
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
@@ -350,7 +352,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         ) async {
           if (await _doReauthorize(client)) {
             final walletAddress =
-                ref.read(environmentProvider).publicKey?.toBase58();
+                ref.read(environmentNotifierProvider).publicKey?.toBase58();
             if (walletAddress == null) {
               await session.close();
               return 'Missing wallet';
@@ -389,7 +391,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       Sentry.captureException(
         exception is BadRequestException ? exception.cause : exception,
         stackTrace:
-            'authorizeIfNeededWithOnComplete: ${ref.read(environmentProvider).user?.email}',
+            'authorizeIfNeededWithOnComplete: ${ref.read(environmentNotifierProvider).user?.email}',
       );
       rethrow;
     }
@@ -408,7 +410,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       );
       if (response.signedPayloads.isNotEmpty) {
         final client = createSolanaClient(
-          rpcUrl: ref.read(environmentProvider).solanaCluster ==
+          rpcUrl: ref.read(environmentNotifierProvider).solanaCluster ==
                   SolanaCluster.devnet.value
               ? Config.rpcUrlDevnet
               : Config.rpcUrlMainnet,
@@ -438,7 +440,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       Sentry.captureException(
         exception,
         stackTrace:
-            'User with ${ref.read(environmentProvider).user?.email} failed to sign and send mint.',
+            'User with ${ref.read(environmentNotifierProvider).user?.email} failed to sign and send mint.',
       );
       if (exception is JsonRpcException) {
         return exception.message;
@@ -481,7 +483,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       }
       Sentry.captureException(exception,
           stackTrace:
-              'List failed. Seller $sellerAddress, mintAccount $mintAccount - user with ${ref.read(environmentProvider).user?.email}');
+              'List failed. Seller $sellerAddress, mintAccount $mintAccount - user with ${ref.read(environmentNotifierProvider).user?.email}');
       return false;
     }
   }
@@ -512,7 +514,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       }
       Sentry.captureException(exception,
           stackTrace:
-              'Delist failed for ${ref.read(environmentProvider).user?.email}.');
+              'Delist failed for ${ref.read(environmentNotifierProvider).user?.email}.');
       return false;
     }
   }
@@ -545,7 +547,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       }
       Sentry.captureException(exception,
           stackTrace:
-              'Buy multiple failed for ${ref.read(environmentProvider).user?.email}');
+              'Buy multiple failed for ${ref.read(environmentNotifierProvider).user?.email}');
       return false;
     }
   }
@@ -577,7 +579,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
       }
       Sentry.captureException(exception,
           stackTrace:
-              'Failed to use mint: nftAddress $nftAddress, owner: $ownerAddress. User: ${ref.read(environmentProvider).user?.email}');
+              'Failed to use mint: nftAddress $nftAddress, owner: $ownerAddress. User: ${ref.read(environmentNotifierProvider).user?.email}');
       return false;
     }
   }
@@ -598,7 +600,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         );
         if (response.signedPayloads.isNotEmpty) {
           final client = createSolanaClient(
-            rpcUrl: ref.read(environmentProvider).solanaCluster ==
+            rpcUrl: ref.read(environmentNotifierProvider).solanaCluster ==
                     SolanaCluster.devnet.value
                 ? Config.rpcUrlDevnet
                 : Config.rpcUrlMainnet,
@@ -625,7 +627,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
         await session.close();
         Sentry.captureException(exception,
             stackTrace:
-                'sign and send transaction: ${ref.read(environmentProvider).user?.email}');
+                'sign and send transaction: ${ref.read(environmentNotifierProvider).user?.email}');
         if (exception is JsonRpcException) {
           return exception.message;
         }
@@ -670,7 +672,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
   Future<bool> _authorizeAndStore({
     required MobileWalletAdapterClient client,
   }) async {
-    final envState = ref.read(environmentProvider);
+    final envState = ref.read(environmentNotifierProvider);
     final result = await _authorize(
       client: client,
       cluster: envState.solanaCluster,
@@ -685,7 +687,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     ref.read(selectedWalletProvider.notifier).update(
           (state) => currentWalletAddress,
         );
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
+    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
             wallets: {
@@ -703,7 +705,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
   Future<bool> _doReauthorize(MobileWalletAdapterClient client,
       [String? overrideAuthToken, String? overrideSigner]) async {
-    final envState = ref.read(environmentProvider);
+    final envState = ref.read(environmentNotifierProvider);
     String? currentWalletAddress =
         overrideSigner ?? envState.publicKey?.toBase58();
 
@@ -714,7 +716,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
 
     final authToken = overrideAuthToken ??
         walletAuthToken ??
-        ref.read(environmentProvider).authToken;
+        ref.read(environmentNotifierProvider).authToken;
     if (authToken == null) {
       return await _authorizeAndStore(client: client);
     }
@@ -739,7 +741,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
         );
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
+    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
             publicKey: publicKey,

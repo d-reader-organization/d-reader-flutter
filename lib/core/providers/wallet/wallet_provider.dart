@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
@@ -9,6 +8,7 @@ import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository_impl.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/dto.dart';
@@ -31,7 +31,7 @@ final registerWalletToSocketEvents = Provider(
     final socket = ref
         .read(
           socketProvider(
-            ref.read(environmentProvider).apiUrl,
+            ref.read(environmentNotifierProvider).apiUrl,
           ),
         )
         .socket;
@@ -41,7 +41,7 @@ final registerWalletToSocketEvents = Provider(
 
     socket.connect();
     final String address =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+        ref.read(environmentNotifierProvider).publicKey?.toBase58() ?? '';
     if (address.isEmpty) {
       return;
     }
@@ -83,7 +83,7 @@ Future<AccountResult> accountInfo(
   required String address,
 }) {
   final client = createSolanaClient(
-    rpcUrl: ref.read(environmentProvider).solanaCluster ==
+    rpcUrl: ref.read(environmentNotifierProvider).solanaCluster ==
             SolanaCluster.devnet.value
         ? Config.rpcUrlDevnet
         : Config.rpcUrlMainnet,
@@ -94,7 +94,7 @@ Future<AccountResult> accountInfo(
 final selectedWalletProvider = StateProvider.autoDispose<String>(
   (ref) {
     final latestWallet =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+        ref.read(environmentNotifierProvider).publicKey?.toBase58() ?? '';
     return latestWallet;
   },
 );

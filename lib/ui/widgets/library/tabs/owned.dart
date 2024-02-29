@@ -1,7 +1,7 @@
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/library_utils.dart';
 import 'package:d_reader_flutter/ui/widgets/library/owned_comic_items.dart';
@@ -18,7 +18,7 @@ class OwnedListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       ownedComicsAsyncProvider(
-        ref.watch(environmentProvider).user?.id ?? 0,
+        ref.watch(environmentNotifierProvider).user?.id ?? 0,
       ),
     );
 
@@ -68,7 +68,7 @@ class OwnedListView extends ConsumerWidget {
                     if (maxScroll - currentScroll <= delta) {
                       ref
                           .read(ownedComicsAsyncProvider(
-                            ref.read(environmentProvider).user?.id ?? 0,
+                            ref.read(environmentNotifierProvider).user?.id ?? 0,
                           ).notifier)
                           .fetchNext();
                     }
@@ -77,10 +77,10 @@ class OwnedListView extends ConsumerWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    if (ref.watch(environmentProvider).user?.id != null) {
-                      await ref
-                          .read(userRepositoryProvider)
-                          .syncWallets(ref.watch(environmentProvider).user!.id);
+                    if (ref.watch(environmentNotifierProvider).user?.id !=
+                        null) {
+                      await ref.read(userRepositoryProvider).syncWallets(
+                          ref.watch(environmentNotifierProvider).user!.id);
                       ref.invalidate(ownedComicsAsyncProvider);
                     }
                   },

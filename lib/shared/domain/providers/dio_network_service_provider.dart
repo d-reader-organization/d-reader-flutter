@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/router_provider.dart';
+import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/data/remote/dio_network_service.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';

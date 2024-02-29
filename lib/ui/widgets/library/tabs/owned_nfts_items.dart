@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/library/cards/owned_nft_card.dart';
@@ -19,7 +19,7 @@ class OwnedNftsItems extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       nftsProvider(
-        'comicIssueId=${issue.id}&userId=${ref.watch(environmentProvider).user?.id}',
+        'comicIssueId=${issue.id}&userId=${ref.watch(environmentNotifierProvider).user?.id}',
       ),
     );
 

@@ -1,7 +1,6 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
 import 'package:d_reader_flutter/core/models/candy_machine.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
@@ -9,6 +8,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -23,7 +23,7 @@ class ComicIssueController extends _$ComicIssueController {
   }
 
   _checkIsVerifiedEmail() async {
-    final envUser = ref.read(environmentProvider).user;
+    final envUser = ref.read(environmentNotifierProvider).user;
 
     if (envUser != null && !envUser.isEmailVerified) {
       final user = await ref.read(myUserProvider.future);
@@ -90,7 +90,7 @@ class ComicIssueController extends _$ComicIssueController {
     }) displaySnackBar,
     required void Function(Object exception) onException,
   }) async {
-    final activeWallet = ref.read(environmentProvider).publicKey;
+    final activeWallet = ref.read(environmentNotifierProvider).publicKey;
     if (activeWallet == null) {
       throw Exception(
         'There is no wallet selected',

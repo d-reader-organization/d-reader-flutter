@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/models/listed_item.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
@@ -27,7 +27,7 @@ class ListingItem extends ConsumerWidget {
     final selectedItems = ref.watch(selectedItemsProvider);
     final myWallets = ref.watch(
       userWalletsProvider(
-        id: ref.read(environmentProvider).user?.id,
+        id: ref.read(environmentNotifierProvider).user?.id,
       ),
     );
     final bool isSelected = selectedItems.contains(listing);

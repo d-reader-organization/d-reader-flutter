@@ -1,12 +1,12 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/models/page_model.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/animated_app_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -382,7 +382,7 @@ class PreviewImage extends StatelessWidget {
                   builder: (context, ref, child) {
                     final ownedNfts = ref.watch(
                       nftsProvider(
-                        'comicIssueId=$issueId&userId=${ref.read(environmentProvider).user?.id}',
+                        'comicIssueId=$issueId&userId=${ref.read(environmentNotifierProvider).user?.id}',
                       ),
                     );
 

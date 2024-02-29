@@ -1,12 +1,12 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/models/user.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
@@ -116,7 +116,7 @@ class RatingController extends _$RatingController {
     int? issueId,
     String? comicSlug,
   }) async {
-    UserModel? user = ref.read(environmentProvider).user;
+    UserModel? user = ref.read(environmentNotifierProvider).user;
     if (user != null && !user.isEmailVerified) {
       final result = await ref.read(userRepositoryProvider).myUser();
       final bool isVerified = result != null && result.isEmailVerified;
@@ -126,7 +126,7 @@ class RatingController extends _$RatingController {
           issueId: issueId,
         );
       }
-      ref.read(environmentProvider.notifier).updateEnvironmentState(
+      ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
             EnvironmentStateUpdateInput(
               user: result,
             ),

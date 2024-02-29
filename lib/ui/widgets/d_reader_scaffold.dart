@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/notification/notification_controller.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
@@ -102,14 +102,15 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
           backgroundColor: ColorPalette.appBackgroundColor,
           appBar: _appBar(
             navigationIndex: ref.watch(scaffoldProvider).navigationIndex,
-            isDevnet: ref.watch(environmentProvider).solanaCluster ==
+            isDevnet: ref.watch(environmentNotifierProvider).solanaCluster ==
                 SolanaCluster.devnet.value,
           ),
           body: Padding(
             padding: _bodyPadding(
               screenIndex: ref.watch(scaffoldProvider).navigationIndex,
-              hasBetaAccess: ref.watch(environmentProvider).user != null &&
-                  ref.watch(environmentProvider).user!.hasBetaAccess,
+              hasBetaAccess: ref.watch(environmentNotifierProvider).user !=
+                      null &&
+                  ref.watch(environmentNotifierProvider).user!.hasBetaAccess,
             ),
             child: widget.body ??
                 PageView(
@@ -153,8 +154,8 @@ class BetaBottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(environmentProvider).user?.hasBetaAccess != null &&
-            !ref.watch(environmentProvider).user!.hasBetaAccess
+    return ref.watch(environmentNotifierProvider).user?.hasBetaAccess != null &&
+            !ref.watch(environmentNotifierProvider).user!.hasBetaAccess
         ? const ReferralBottomNavigation()
         : child;
   }

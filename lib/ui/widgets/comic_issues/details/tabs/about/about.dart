@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/about/author.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/about/expandable_container.dart';
@@ -19,7 +19,8 @@ class IssueAbout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    final walletAddress = ref.watch(environmentProvider).publicKey?.toBase58();
+    final walletAddress =
+        ref.watch(environmentNotifierProvider).publicKey?.toBase58();
     return NotificationListener(
       onNotification: (notification) {
         return true;

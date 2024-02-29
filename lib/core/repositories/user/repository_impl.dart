@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/core/models/exceptions.dart';
-import 'package:d_reader_flutter/core/models/user.dart';
 import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/user/repository.dart';
+import 'package:d_reader_flutter/shared/domain/models/user.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

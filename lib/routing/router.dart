@@ -1,4 +1,6 @@
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_in/sign_in.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/sign_up.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
@@ -13,8 +15,6 @@ import 'package:d_reader_flutter/ui/views/creators/creator_details.dart';
 import 'package:d_reader_flutter/ui/views/e_reader.dart';
 import 'package:d_reader_flutter/ui/views/intro/initial.dart';
 import 'package:d_reader_flutter/ui/views/intro/request_reset_password.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_in.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_up.dart';
 import 'package:d_reader_flutter/ui/views/nft_details.dart';
 import 'package:d_reader_flutter/ui/views/settings/about.dart';
 import 'package:d_reader_flutter/ui/views/settings/change_network.dart';
@@ -49,7 +49,7 @@ class AuthNotifier extends ChangeNotifier {
 }
 
 final authRouteProvider = ChangeNotifierProvider<AuthNotifier>((ref) {
-  final isLoggedIn = ref.read(environmentProvider).jwtToken != null;
+  final isLoggedIn = ref.read(environmentNotifierProvider).jwtToken != null;
   return AuthNotifier(isLoggedIn: isLoggedIn);
 });
 

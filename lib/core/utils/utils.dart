@@ -1,6 +1,6 @@
 import 'dart:convert' show jsonDecode;
 
-import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 

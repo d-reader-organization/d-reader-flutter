@@ -1,15 +1,15 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
-import 'package:d_reader_flutter/core/providers/router_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/routing/router.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final logoutProvider = FutureProvider.autoDispose((ref) async {
-  final currentNetwork = ref.read(environmentProvider).solanaCluster;
+  final currentNetwork = ref.read(environmentNotifierProvider).solanaCluster;
   ref.invalidate(scaffoldProvider);
-  ref.invalidate(environmentProvider);
+  ref.invalidate(environmentNotifierProvider);
   ref.invalidate(tabBarProvider);
   await Future.wait([
     LocalStore.instance.delete(
@@ -18,8 +18,8 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
     LocalStore.instance.delete(Config.hasSeenInitialKey),
     LocalStore.instance.clear(),
   ]);
-  ref.read(authRouteProvider).logout();
   await ref
-      .read(environmentProvider.notifier)
+      .read(environmentNotifierProvider.notifier)
       .clearDataFromLocalStore(currentNetwork);
+  ref.read(authRouteProvider).logout();
 });

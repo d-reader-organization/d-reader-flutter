@@ -1,9 +1,9 @@
-import 'package:d_reader_flutter/core/models/user.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/common_text_controller_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'referral.g.dart';
@@ -25,7 +25,7 @@ class ReferralController extends _$ReferralController {
         isLoading: true,
       ),
     );
-    final currentUser = ref.read(environmentProvider).user;
+    final currentUser = ref.read(environmentNotifierProvider).user;
     dynamic updateResult;
     if (currentUser != null) {
       updateResult = await ref.read(userRepositoryProvider).updateUser(
@@ -43,7 +43,7 @@ class ReferralController extends _$ReferralController {
         isLoading: false,
       ),
     );
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
+    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             user: result,
           ),

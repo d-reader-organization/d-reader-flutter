@@ -1,11 +1,11 @@
 import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'owned_controller.g.dart';
@@ -26,7 +26,7 @@ class OwnedController extends _$OwnedController {
       ),
     );
     final ownedNfts = await ref.read(nftsProvider(
-      'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
+      'comicIssueId=$comicIssueId&userId=${ref.read(environmentNotifierProvider).user?.id}',
     ).future);
     globalNotifier.update(
       (state) => state.copyWith(

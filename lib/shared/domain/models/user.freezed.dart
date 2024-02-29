@@ -348,3 +348,209 @@ abstract class _UserModel implements UserModel {
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$UpdateUserPayload {
+  int get id => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  String? get referrer => throw _privateConstructorUsedError;
+  File? get avatar => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $UpdateUserPayloadCopyWith<UpdateUserPayload> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UpdateUserPayloadCopyWith<$Res> {
+  factory $UpdateUserPayloadCopyWith(
+          UpdateUserPayload value, $Res Function(UpdateUserPayload) then) =
+      _$UpdateUserPayloadCopyWithImpl<$Res, UpdateUserPayload>;
+  @useResult
+  $Res call(
+      {int id, String? email, String? name, String? referrer, File? avatar});
+}
+
+/// @nodoc
+class _$UpdateUserPayloadCopyWithImpl<$Res, $Val extends UpdateUserPayload>
+    implements $UpdateUserPayloadCopyWith<$Res> {
+  _$UpdateUserPayloadCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? email = freezed,
+    Object? name = freezed,
+    Object? referrer = freezed,
+    Object? avatar = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      referrer: freezed == referrer
+          ? _value.referrer
+          : referrer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as File?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UpdateUserPayloadImplCopyWith<$Res>
+    implements $UpdateUserPayloadCopyWith<$Res> {
+  factory _$$UpdateUserPayloadImplCopyWith(_$UpdateUserPayloadImpl value,
+          $Res Function(_$UpdateUserPayloadImpl) then) =
+      __$$UpdateUserPayloadImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int id, String? email, String? name, String? referrer, File? avatar});
+}
+
+/// @nodoc
+class __$$UpdateUserPayloadImplCopyWithImpl<$Res>
+    extends _$UpdateUserPayloadCopyWithImpl<$Res, _$UpdateUserPayloadImpl>
+    implements _$$UpdateUserPayloadImplCopyWith<$Res> {
+  __$$UpdateUserPayloadImplCopyWithImpl(_$UpdateUserPayloadImpl _value,
+      $Res Function(_$UpdateUserPayloadImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? email = freezed,
+    Object? name = freezed,
+    Object? referrer = freezed,
+    Object? avatar = freezed,
+  }) {
+    return _then(_$UpdateUserPayloadImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      email: freezed == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      referrer: freezed == referrer
+          ? _value.referrer
+          : referrer // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as File?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UpdateUserPayloadImpl
+    with DiagnosticableTreeMixin
+    implements _UpdateUserPayload {
+  const _$UpdateUserPayloadImpl(
+      {required this.id, this.email, this.name, this.referrer, this.avatar});
+
+  @override
+  final int id;
+  @override
+  final String? email;
+  @override
+  final String? name;
+  @override
+  final String? referrer;
+  @override
+  final File? avatar;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'UpdateUserPayload(id: $id, email: $email, name: $name, referrer: $referrer, avatar: $avatar)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'UpdateUserPayload'))
+      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('email', email))
+      ..add(DiagnosticsProperty('name', name))
+      ..add(DiagnosticsProperty('referrer', referrer))
+      ..add(DiagnosticsProperty('avatar', avatar));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateUserPayloadImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.referrer, referrer) ||
+                other.referrer == referrer) &&
+            const DeepCollectionEquality().equals(other.avatar, avatar));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id, email, name, referrer,
+      const DeepCollectionEquality().hash(avatar));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdateUserPayloadImplCopyWith<_$UpdateUserPayloadImpl> get copyWith =>
+      __$$UpdateUserPayloadImplCopyWithImpl<_$UpdateUserPayloadImpl>(
+          this, _$identity);
+}
+
+abstract class _UpdateUserPayload implements UpdateUserPayload {
+  const factory _UpdateUserPayload(
+      {required final int id,
+      final String? email,
+      final String? name,
+      final String? referrer,
+      final File? avatar}) = _$UpdateUserPayloadImpl;
+
+  @override
+  int get id;
+  @override
+  String? get email;
+  @override
+  String? get name;
+  @override
+  String? get referrer;
+  @override
+  File? get avatar;
+  @override
+  @JsonKey(ignore: true)
+  _$$UpdateUserPayloadImplCopyWith<_$UpdateUserPayloadImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

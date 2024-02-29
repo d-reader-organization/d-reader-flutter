@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/widgets/referrals/body.dart';
@@ -18,8 +18,8 @@ class BetaAccessWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(environmentProvider).user?.hasBetaAccess != null &&
-            !ref.watch(environmentProvider).user!.hasBetaAccess
+    return ref.watch(environmentNotifierProvider).user?.hasBetaAccess != null &&
+            !ref.watch(environmentNotifierProvider).user!.hasBetaAccess
         ? Padding(
             padding: const EdgeInsets.only(left: 12.0, right: 12, top: 8.0),
             child: Column(

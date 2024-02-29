@@ -1,10 +1,10 @@
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart' show Ed25519HDPublicKey;
@@ -59,7 +59,7 @@ class WalletController extends _$WalletController {
     required Future<bool> Function() onAuthorizeNeeded,
   }) async {
     final walletAuthToken =
-        ref.read(environmentProvider).wallets?[address]?.authToken;
+        ref.read(environmentNotifierProvider).wallets?[address]?.authToken;
     if (walletAuthToken == null) {
       final shouldAuthorize = await onAuthorizeNeeded();
       if (!shouldAuthorize) {
@@ -68,10 +68,11 @@ class WalletController extends _$WalletController {
 
       await ref.read(solanaProvider.notifier).authorizeIfNeededWithOnComplete();
       ref.read(selectedWalletProvider.notifier).update((state) =>
-          ref.read(environmentProvider).publicKey?.toBase58() ?? address);
+          ref.read(environmentNotifierProvider).publicKey?.toBase58() ??
+          address);
       return ref.invalidate(userWalletsProvider);
     }
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
+    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             publicKey: Ed25519HDPublicKey.fromBase58(
               address,
@@ -91,12 +92,13 @@ class WalletController extends _$WalletController {
     await ref.read(authRepositoryProvider).disconnectWallet(
           address: address,
         );
-    final envState = ref.read(environmentProvider);
+    final envState = ref.read(environmentNotifierProvider);
     envState.wallets?.removeWhere((key, value) => key == address);
-    if (ref.read(environmentProvider).publicKey?.toBase58() == address) {
-      ref.read(environmentProvider.notifier).clearPublicKey();
+    if (ref.read(environmentNotifierProvider).publicKey?.toBase58() ==
+        address) {
+      ref.read(environmentNotifierProvider.notifier).clearPublicKey();
     }
-    ref.read(environmentProvider.notifier).putStateIntoLocalStore();
+    ref.read(environmentNotifierProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);
     callback();
   }

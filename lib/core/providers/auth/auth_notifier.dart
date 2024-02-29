@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/core/models/exceptions.dart';
-import 'package:d_reader_flutter/core/notifiers/environment_notifier.dart';
 import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/core/states/environment_state.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_notifier.g.dart';
@@ -49,7 +49,7 @@ class AuthController extends _$AuthController {
         isLoading: false,
       ),
     );
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
+    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             user: user,
           ),

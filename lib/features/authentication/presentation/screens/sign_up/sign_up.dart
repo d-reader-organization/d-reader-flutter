@@ -1,11 +1,11 @@
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_providers.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_1.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_2.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_2_verification.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_3.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_up/step_1.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_up/step_2.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_up/step_2_verification.dart';
-import 'package:d_reader_flutter/ui/views/intro/sign_up/step_3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

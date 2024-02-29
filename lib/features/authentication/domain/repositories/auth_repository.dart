@@ -12,4 +12,6 @@ abstract class AuthRepository {
     required String password,
     required String username,
   });
+  Future<Either<AppException, bool>> validateUsername(String username);
+  Future<Either<AppException, bool>> requestEmailVerification();
 }

@@ -26,4 +26,14 @@ class AuthRepositoryImpl extends AuthRepository {
     return authDataSource.signUp(
         email: email, password: password, username: username);
   }
+
+  @override
+  Future<Either<AppException, bool>> validateUsername(String username) {
+    return authDataSource.validateUsername(username);
+  }
+
+  @override
+  Future<Either<AppException, bool>> requestEmailVerification() {
+    return authDataSource.requestEmailVerification();
+  }
 }

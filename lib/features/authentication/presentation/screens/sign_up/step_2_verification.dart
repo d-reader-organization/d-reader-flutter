@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/auth/auth_notifier.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -91,7 +91,7 @@ class SignUpStep2Verification extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       ref
-                          .read(authControllerProvider.notifier)
+                          .read(signUpNotifierProvider.notifier)
                           .handleResendVerification(
                         callback: () {
                           showSnackBar(

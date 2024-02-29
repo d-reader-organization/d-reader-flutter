@@ -8,12 +8,13 @@ abstract class AuthDataSource {
     required String nameOrEmail,
     required String password,
   });
-
   Future<Either<AppException, AuthorizationResponse>> signUp({
     required String email,
     required String password,
     required String username,
   });
+  Future<Either<AppException, bool>> validateUsername(String username);
+  Future<Either<AppException, bool>> requestEmailVerification();
 }
 
 class AuthRemoteDataSource implements AuthDataSource {
@@ -91,5 +92,37 @@ class AuthRemoteDataSource implements AuthDataSource {
         ),
       );
     }
+  }
+
+  @override
+  Future<Either<AppException, bool>> validateUsername(String username) async {
+    try {
+      final result =
+          await networkService.get('/auth/user/validate-name/$username');
+      return result.fold((exception) {
+        return Left(exception);
+      }, (res) {
+        return const Right(true);
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occured',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}-AuthRemoteDataSource.validateUsername',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, bool>> requestEmailVerification() async {
+    return await networkService.patch('/user/request-email-verification').then(
+          (value) => value.fold(
+            (exception) => Left(exception),
+            (value) => const Right(true),
+          ),
+        );
   }
 }

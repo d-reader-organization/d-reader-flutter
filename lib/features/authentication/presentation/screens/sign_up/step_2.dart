@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/auth/auth_notifier.dart';
-import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
-import 'package:d_reader_flutter/core/providers/auth/sign_up_notifier.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/auth_providers.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/textfields/text_field.dart';
@@ -33,7 +33,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
 
   @override
   void initState() {
-    final signupData = ref.read(signUpDataProvider);
+    final signupData = ref.read(signUpDataNotifierProvider);
     _emailController.text = signupData.email;
     _passwordController.text = signupData.password;
     super.initState();
@@ -165,7 +165,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                 ),
                 CustomTextButton(
                   padding: const EdgeInsets.all(0),
-                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  isLoading: ref.watch(globalNotifierProvider).isLoading,
                   size: const Size(
                     double.infinity,
                     50,
@@ -173,12 +173,13 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                   onPressed: () async {
                     if (_step2FormKey.currentState!.validate()) {
                       ref
-                          .read(signUpDataProvider.notifier)
+                          .read(signUpDataNotifierProvider.notifier)
                           .updateEmailAndPassword(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
                           );
-                      await ref.read(authControllerProvider.notifier).signUp(
+                      await ref.read(signUpNotifierProvider.notifier).signUp(
+                            data: ref.read(signUpDataNotifierProvider),
                             onSuccess: widget.onSuccess,
                             onFail: widget.onFail,
                           );

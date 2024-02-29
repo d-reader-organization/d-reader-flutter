@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+// TODO - refactor to not use core/providers.
 class SignUpStep3 extends ConsumerWidget {
   const SignUpStep3({super.key});
 

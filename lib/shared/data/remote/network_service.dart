@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/shared/domain/models/custom_response.dart';
+import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/app_exception.dart';
-import 'package:fpdart/fpdart.dart';
 
 abstract class NetworkService {
   String get baseUrl;

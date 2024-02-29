@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/shared/data/remote/network_service.dart';
 import 'package:d_reader_flutter/shared/domain/models/custom_response.dart';
+import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/app_exception.dart';
 import 'package:d_reader_flutter/shared/mixins/exception_handler_mixin.dart';
 import 'package:dio/dio.dart';
-import 'package:fpdart/fpdart.dart';
 
 class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
   final Dio dio;

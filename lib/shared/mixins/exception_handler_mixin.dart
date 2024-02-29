@@ -2,9 +2,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:d_reader_flutter/shared/data/remote/network_service.dart';
+import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/app_exception.dart';
 import 'package:dio/dio.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:d_reader_flutter/shared/domain/models/custom_response.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

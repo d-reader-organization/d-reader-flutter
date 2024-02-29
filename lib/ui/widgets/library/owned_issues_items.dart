@@ -19,7 +19,7 @@ class OwnedIssuesItems extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       ownedIssuesAsyncProvider(
-          '${ref.watch(environmentNotifierProvider).user?.id ?? ''}?comicSlug=${comic.slug}'),
+          '${ref.watch(environmentProvider).user?.id ?? ''}?comicSlug=${comic.slug}'),
     );
 
     return provider.when(

@@ -7,9 +7,9 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final logoutProvider = FutureProvider.autoDispose((ref) async {
-  final currentNetwork = ref.read(environmentNotifierProvider).solanaCluster;
+  final currentNetwork = ref.read(environmentProvider).solanaCluster;
   ref.invalidate(scaffoldProvider);
-  ref.invalidate(environmentNotifierProvider);
+  ref.invalidate(environmentProvider);
   ref.invalidate(tabBarProvider);
   await Future.wait([
     LocalStore.instance.delete(
@@ -19,7 +19,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
     LocalStore.instance.clear(),
   ]);
   await ref
-      .read(environmentNotifierProvider.notifier)
+      .read(environmentProvider.notifier)
       .clearDataFromLocalStore(currentNetwork);
   ref.read(authRouteProvider).logout();
 });

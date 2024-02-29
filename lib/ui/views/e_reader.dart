@@ -382,7 +382,7 @@ class PreviewImage extends StatelessWidget {
                   builder: (context, ref, child) {
                     final ownedNfts = ref.watch(
                       nftsProvider(
-                        'comicIssueId=$issueId&userId=${ref.read(environmentNotifierProvider).user?.id}',
+                        'comicIssueId=$issueId&userId=${ref.read(environmentProvider).user?.id}',
                       ),
                     );
 

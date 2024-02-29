@@ -22,7 +22,7 @@ final localStoreNetworkDataProvider =
 );
 
 @Riverpod(keepAlive: true)
-class EnvironmentNotifier extends _$EnvironmentNotifier {
+class Environment extends _$Environment {
   @override
   EnvironmentState build() {
     final localStore = LocalStore.instance;

@@ -27,7 +27,7 @@ class ListingItem extends ConsumerWidget {
     final selectedItems = ref.watch(selectedItemsProvider);
     final myWallets = ref.watch(
       userWalletsProvider(
-        id: ref.read(environmentNotifierProvider).user?.id,
+        id: ref.read(environmentProvider).user?.id,
       ),
     );
     final bool isSelected = selectedItems.contains(listing);

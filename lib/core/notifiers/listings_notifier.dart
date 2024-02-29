@@ -41,9 +41,8 @@ class ListingsPaginationNotifier
 
   @override
   void init({Function()? onInit}) {
-    final socket = ref
-        .read(socketProvider(ref.read(environmentNotifierProvider).apiUrl))
-        .socket;
+    final socket =
+        ref.read(socketProvider(ref.read(environmentProvider).apiUrl)).socket;
     socket.connect();
     ref.onDispose(() {
       socket.close();

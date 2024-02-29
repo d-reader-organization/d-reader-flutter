@@ -31,7 +31,7 @@ final registerWalletToSocketEvents = Provider(
     final socket = ref
         .read(
           socketProvider(
-            ref.read(environmentNotifierProvider).apiUrl,
+            ref.read(environmentProvider).apiUrl,
           ),
         )
         .socket;
@@ -41,7 +41,7 @@ final registerWalletToSocketEvents = Provider(
 
     socket.connect();
     final String address =
-        ref.read(environmentNotifierProvider).publicKey?.toBase58() ?? '';
+        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
     if (address.isEmpty) {
       return;
     }
@@ -83,7 +83,7 @@ Future<AccountResult> accountInfo(
   required String address,
 }) {
   final client = createSolanaClient(
-    rpcUrl: ref.read(environmentNotifierProvider).solanaCluster ==
+    rpcUrl: ref.read(environmentProvider).solanaCluster ==
             SolanaCluster.devnet.value
         ? Config.rpcUrlDevnet
         : Config.rpcUrlMainnet,
@@ -94,7 +94,7 @@ Future<AccountResult> accountInfo(
 final selectedWalletProvider = StateProvider.autoDispose<String>(
   (ref) {
     final latestWallet =
-        ref.read(environmentNotifierProvider).publicKey?.toBase58() ?? '';
+        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
     return latestWallet;
   },
 );

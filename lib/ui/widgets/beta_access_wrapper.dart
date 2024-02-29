@@ -18,8 +18,8 @@ class BetaAccessWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(environmentNotifierProvider).user?.hasBetaAccess != null &&
-            !ref.watch(environmentNotifierProvider).user!.hasBetaAccess
+    return ref.watch(environmentProvider).user?.hasBetaAccess != null &&
+            !ref.watch(environmentProvider).user!.hasBetaAccess
         ? Padding(
             padding: const EdgeInsets.only(left: 12.0, right: 12, top: 8.0),
             child: Column(

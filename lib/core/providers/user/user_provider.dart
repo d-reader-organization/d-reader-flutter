@@ -19,7 +19,7 @@ UserRepositoryImpl userRepository(UserRepositoryRef ref) {
 @riverpod
 Future<UserModel?> myUser(MyUserRef ref) async {
   final UserModel? user = await ref.read(userRepositoryProvider).myUser();
-  ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+  ref.read(environmentProvider.notifier).updateEnvironmentState(
         EnvironmentStateUpdateInput(
           user: user,
         ),

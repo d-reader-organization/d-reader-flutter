@@ -219,7 +219,7 @@ class ProfileView extends HookConsumerWidget {
                       );
                     },
                   ),
-                  ref.read(environmentNotifierProvider).wallets != null
+                  ref.read(environmentProvider).wallets != null
                       ? SettingsCommonListTile(
                           title: 'Sync assets',
                           leadingPath:

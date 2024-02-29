@@ -49,7 +49,7 @@ class AuthController extends _$AuthController {
         isLoading: false,
       ),
     );
-    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             user: user,
           ),

@@ -148,7 +148,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                         );
                   },
           ),
-          if (ref.read(environmentNotifierProvider).solanaCluster ==
+          if (ref.read(environmentProvider).solanaCluster ==
               SolanaCluster.devnet.value) ...[
             SettingsCommonListTile(
               title: 'Airdrop \$SOL',

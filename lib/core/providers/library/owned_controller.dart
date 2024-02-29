@@ -26,7 +26,7 @@ class OwnedController extends _$OwnedController {
       ),
     );
     final ownedNfts = await ref.read(nftsProvider(
-      'comicIssueId=$comicIssueId&userId=${ref.read(environmentNotifierProvider).user?.id}',
+      'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
     ).future);
     globalNotifier.update(
       (state) => state.copyWith(

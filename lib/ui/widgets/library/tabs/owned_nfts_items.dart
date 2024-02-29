@@ -19,7 +19,7 @@ class OwnedNftsItems extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       nftsProvider(
-        'comicIssueId=${issue.id}&userId=${ref.watch(environmentNotifierProvider).user?.id}',
+        'comicIssueId=${issue.id}&userId=${ref.watch(environmentProvider).user?.id}',
       ),
     );
 

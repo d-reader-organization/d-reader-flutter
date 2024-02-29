@@ -13,8 +13,7 @@ final chainSubscriptionClientProvider =
   final currentAccountData =
       await ref.read(accountInfoProvider(address: address).future);
   final subscriptionClient = SubscriptionClient.connect(
-      ref.read(environmentNotifierProvider).solanaCluster ==
-              SolanaCluster.devnet.value
+      ref.read(environmentProvider).solanaCluster == SolanaCluster.devnet.value
           ? Config.rpcUrlDevnet.replaceAll(
               'https',
               'ws',

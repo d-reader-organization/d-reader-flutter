@@ -25,7 +25,7 @@ class ReferralController extends _$ReferralController {
         isLoading: true,
       ),
     );
-    final currentUser = ref.read(environmentNotifierProvider).user;
+    final currentUser = ref.read(environmentProvider).user;
     dynamic updateResult;
     if (currentUser != null) {
       updateResult = await ref.read(userRepositoryProvider).updateUser(
@@ -43,7 +43,7 @@ class ReferralController extends _$ReferralController {
         isLoading: false,
       ),
     );
-    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             user: result,
           ),

@@ -516,12 +516,12 @@ class _$UpdateUserPayloadImpl
             (identical(other.name, name) || other.name == name) &&
             (identical(other.referrer, referrer) ||
                 other.referrer == referrer) &&
-            const DeepCollectionEquality().equals(other.avatar, avatar));
+            (identical(other.avatar, avatar) || other.avatar == avatar));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, email, name, referrer,
-      const DeepCollectionEquality().hash(avatar));
+  int get hashCode =>
+      Object.hash(runtimeType, id, email, name, referrer, avatar);
 
   @JsonKey(ignore: true)
   @override

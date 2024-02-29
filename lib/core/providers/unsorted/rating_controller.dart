@@ -116,7 +116,7 @@ class RatingController extends _$RatingController {
     int? issueId,
     String? comicSlug,
   }) async {
-    UserModel? user = ref.read(environmentNotifierProvider).user;
+    UserModel? user = ref.read(environmentProvider).user;
     if (user != null && !user.isEmailVerified) {
       final result = await ref.read(userRepositoryProvider).myUser();
       final bool isVerified = result != null && result.isEmailVerified;
@@ -126,7 +126,7 @@ class RatingController extends _$RatingController {
           issueId: issueId,
         );
       }
-      ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+      ref.read(environmentProvider.notifier).updateEnvironmentState(
             EnvironmentStateUpdateInput(
               user: result,
             ),

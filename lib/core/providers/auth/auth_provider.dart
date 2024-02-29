@@ -25,9 +25,7 @@ Future<dynamic> signIn(
       );
   if (result is AuthorizationResponse) {
     ref.read(authRouteProvider).login();
-    return ref
-        .read(environmentNotifierProvider.notifier)
-        .updateEnvironmentState(
+    return ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             jwtToken: result.accessToken,
             refreshToken: result.refreshToken,
@@ -49,14 +47,14 @@ Future<dynamic> signUpFuture(
       );
   if (result is AuthorizationResponse) {
     ref.read(authRouteProvider.notifier).login();
-    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             jwtToken: result.accessToken,
             refreshToken: result.refreshToken,
           ),
         );
     final user = await ref.read(userRepositoryProvider).myUser();
-    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             user: user,
           ),

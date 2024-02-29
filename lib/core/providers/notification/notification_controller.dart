@@ -13,7 +13,7 @@ class NotificationController extends _$NotificationController {
     final notificationService = ref.read(notificationServiceProvider);
     await notificationService.requestNotificationPermission();
     final fcmToken = await notificationService.getFCMToken();
-    final user = ref.read(environmentNotifierProvider).user;
+    final user = ref.read(environmentProvider).user;
     if (fcmToken != null &&
         user != null &&
         !user.deviceTokens.contains(fcmToken)) {

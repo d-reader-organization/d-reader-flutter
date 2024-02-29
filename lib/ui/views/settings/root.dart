@@ -43,7 +43,7 @@ class SettingsRootView extends StatelessWidget {
                   leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
                   title: 'Wallet',
                   onTap: () {
-                    final user = ref.read(environmentNotifierProvider).user;
+                    final user = ref.read(environmentProvider).user;
                     if (context.mounted && user != null) {
                       nextScreenPush(
                         context: context,
@@ -85,13 +85,9 @@ class SettingsRootView extends StatelessWidget {
             ),
             Consumer(
               builder: (context, ref, child) {
-                final userRole =
-                    ref.watch(environmentNotifierProvider).user?.role;
+                final userRole = ref.watch(environmentProvider).user?.role;
                 return userRole == UserRole.tester.name ||
-                        ref
-                            .watch(environmentNotifierProvider)
-                            .apiUrl
-                            .contains('dev')
+                        ref.watch(environmentProvider).apiUrl.contains('dev')
                     ? SettingsCommonListTile(
                         leadingPath:
                             '${Config.settingsAssetsPath}/light/network.svg',

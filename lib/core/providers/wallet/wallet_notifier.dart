@@ -59,7 +59,7 @@ class WalletController extends _$WalletController {
     required Future<bool> Function() onAuthorizeNeeded,
   }) async {
     final walletAuthToken =
-        ref.read(environmentNotifierProvider).wallets?[address]?.authToken;
+        ref.read(environmentProvider).wallets?[address]?.authToken;
     if (walletAuthToken == null) {
       final shouldAuthorize = await onAuthorizeNeeded();
       if (!shouldAuthorize) {
@@ -68,11 +68,10 @@ class WalletController extends _$WalletController {
 
       await ref.read(solanaProvider.notifier).authorizeIfNeededWithOnComplete();
       ref.read(selectedWalletProvider.notifier).update((state) =>
-          ref.read(environmentNotifierProvider).publicKey?.toBase58() ??
-          address);
+          ref.read(environmentProvider).publicKey?.toBase58() ?? address);
       return ref.invalidate(userWalletsProvider);
     }
-    ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+    ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             publicKey: Ed25519HDPublicKey.fromBase58(
               address,
@@ -92,13 +91,12 @@ class WalletController extends _$WalletController {
     await ref.read(authRepositoryProvider).disconnectWallet(
           address: address,
         );
-    final envState = ref.read(environmentNotifierProvider);
+    final envState = ref.read(environmentProvider);
     envState.wallets?.removeWhere((key, value) => key == address);
-    if (ref.read(environmentNotifierProvider).publicKey?.toBase58() ==
-        address) {
-      ref.read(environmentNotifierProvider.notifier).clearPublicKey();
+    if (ref.read(environmentProvider).publicKey?.toBase58() == address) {
+      ref.read(environmentProvider.notifier).clearPublicKey();
     }
-    ref.read(environmentNotifierProvider.notifier).putStateIntoLocalStore();
+    ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);
     callback();
   }

@@ -11,7 +11,7 @@ final networkServiceProvider = Provider<DioNetworkService>(
   (ref) {
     final Dio dio = Dio(
       BaseOptions(
-        baseUrl: ref.watch(environmentNotifierProvider).apiUrl,
+        baseUrl: ref.watch(environmentProvider).apiUrl,
       ),
     )..interceptors.addAll(
         [
@@ -19,7 +19,7 @@ final networkServiceProvider = Provider<DioNetworkService>(
             onRequest: (options, handler) {
               // Add the access token to the request header
               options.headers['Authorization'] =
-                  ref.watch(environmentNotifierProvider).jwtToken;
+                  ref.watch(environmentProvider).jwtToken;
               return handler.next(options);
             },
             onError: (DioException e, handler) async {
@@ -27,7 +27,7 @@ final networkServiceProvider = Provider<DioNetworkService>(
               //   // If a 401 response is received, refresh the access token
               //   String? newAccessToken = await dio
               //       .get<String?>(
-              //           '/auth/wallet/refresh-token/${ref.read(environmentNotifierProvider).refreshToken}')
+              //           '/auth/wallet/refresh-token/${ref.read(environmentProvider).refreshToken}')
               //       .then(
               //         (value) => value.data,
               //       );
@@ -44,7 +44,7 @@ final networkServiceProvider = Provider<DioNetworkService>(
                   (e.response?.statusCode == 404 &&
                       e.response?.requestOptions.path == '/user/get/me')) {
                 await LocalStore.instance.clear();
-                ref.invalidate(environmentNotifierProvider);
+                ref.invalidate(environmentProvider);
                 routerNavigatorKey.currentState!.push(
                   MaterialPageRoute(
                     builder: (context) => const InitialIntroScreen(),

@@ -11,7 +11,7 @@ part 'dio_provider.g.dart';
 Dio dio(DioRef ref) {
   final Dio dio = Dio(
     BaseOptions(
-      baseUrl: ref.watch(environmentNotifierProvider).apiUrl,
+      baseUrl: ref.watch(environmentProvider).apiUrl,
     ),
   );
   return dio
@@ -21,7 +21,7 @@ Dio dio(DioRef ref) {
           onRequest: (options, handler) {
             // Add the access token to the request header
             options.headers['Authorization'] =
-                ref.watch(environmentNotifierProvider).jwtToken;
+                ref.watch(environmentProvider).jwtToken;
             return handler.next(options);
           },
           onError: (DioException e, handler) async {
@@ -29,7 +29,7 @@ Dio dio(DioRef ref) {
             //   // If a 401 response is received, refresh the access token
             //   String? newAccessToken = await dio
             //       .get<String?>(
-            //           '/auth/wallet/refresh-token/${ref.read(environmentNotifierProvider).refreshToken}')
+            //           '/auth/wallet/refresh-token/${ref.read(environmentProvider).refreshToken}')
             //       .then(
             //         (value) => value.data,
             //       );
@@ -46,7 +46,7 @@ Dio dio(DioRef ref) {
                 (e.response?.statusCode == 404 &&
                     e.response?.requestOptions.path == '/user/get/me')) {
               await LocalStore.instance.clear();
-              ref.invalidate(environmentNotifierProvider);
+              ref.invalidate(environmentProvider);
               routerNavigatorKey.currentState!.push(
                 MaterialPageRoute(
                   builder: (context) => const InitialIntroScreen(),

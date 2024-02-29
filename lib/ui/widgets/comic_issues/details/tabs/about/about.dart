@@ -19,8 +19,7 @@ class IssueAbout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    final walletAddress =
-        ref.watch(environmentNotifierProvider).publicKey?.toBase58();
+    final walletAddress = ref.watch(environmentProvider).publicKey?.toBase58();
     return NotificationListener(
       onNotification: (notification) {
         return true;

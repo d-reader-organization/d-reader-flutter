@@ -56,8 +56,7 @@ class ChangeNetworkView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final String selectedCluster =
-        ref.watch(environmentNotifierProvider).solanaCluster;
+    final String selectedCluster = ref.watch(environmentProvider).solanaCluster;
     return SettingsScaffold(
       body: Column(
         children: [

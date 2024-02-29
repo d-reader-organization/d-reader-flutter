@@ -36,7 +36,7 @@ class SignInController extends _$SignInController {
       },
       (authTokens) {
         ref.read(authRouteProvider).login();
-        ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+        ref.read(environmentProvider.notifier).updateEnvironmentState(
               EnvironmentStateUpdateInput(
                 jwtToken: authTokens.accessToken,
                 refreshToken: authTokens.refreshToken,

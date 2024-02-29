@@ -18,7 +18,7 @@ class OwnedListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
       ownedComicsAsyncProvider(
-        ref.watch(environmentNotifierProvider).user?.id ?? 0,
+        ref.watch(environmentProvider).user?.id ?? 0,
       ),
     );
 
@@ -68,7 +68,7 @@ class OwnedListView extends ConsumerWidget {
                     if (maxScroll - currentScroll <= delta) {
                       ref
                           .read(ownedComicsAsyncProvider(
-                            ref.read(environmentNotifierProvider).user?.id ?? 0,
+                            ref.read(environmentProvider).user?.id ?? 0,
                           ).notifier)
                           .fetchNext();
                     }
@@ -77,10 +77,10 @@ class OwnedListView extends ConsumerWidget {
                 },
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    if (ref.watch(environmentNotifierProvider).user?.id !=
-                        null) {
-                      await ref.read(userRepositoryProvider).syncWallets(
-                          ref.watch(environmentNotifierProvider).user!.id);
+                    if (ref.watch(environmentProvider).user?.id != null) {
+                      await ref
+                          .read(userRepositoryProvider)
+                          .syncWallets(ref.watch(environmentProvider).user!.id);
                       ref.invalidate(ownedComicsAsyncProvider);
                     }
                   },

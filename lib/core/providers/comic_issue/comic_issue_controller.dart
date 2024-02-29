@@ -23,7 +23,7 @@ class ComicIssueController extends _$ComicIssueController {
   }
 
   _checkIsVerifiedEmail() async {
-    final envUser = ref.read(environmentNotifierProvider).user;
+    final envUser = ref.read(environmentProvider).user;
 
     if (envUser != null && !envUser.isEmailVerified) {
       final user = await ref.read(myUserProvider.future);
@@ -90,7 +90,7 @@ class ComicIssueController extends _$ComicIssueController {
     }) displaySnackBar,
     required void Function(Object exception) onException,
   }) async {
-    final activeWallet = ref.read(environmentNotifierProvider).publicKey;
+    final activeWallet = ref.read(environmentProvider).publicKey;
     if (activeWallet == null) {
       throw Exception(
         'There is no wallet selected',

@@ -102,15 +102,14 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
           backgroundColor: ColorPalette.appBackgroundColor,
           appBar: _appBar(
             navigationIndex: ref.watch(scaffoldProvider).navigationIndex,
-            isDevnet: ref.watch(environmentNotifierProvider).solanaCluster ==
+            isDevnet: ref.watch(environmentProvider).solanaCluster ==
                 SolanaCluster.devnet.value,
           ),
           body: Padding(
             padding: _bodyPadding(
               screenIndex: ref.watch(scaffoldProvider).navigationIndex,
-              hasBetaAccess: ref.watch(environmentNotifierProvider).user !=
-                      null &&
-                  ref.watch(environmentNotifierProvider).user!.hasBetaAccess,
+              hasBetaAccess: ref.watch(environmentProvider).user != null &&
+                  ref.watch(environmentProvider).user!.hasBetaAccess,
             ),
             child: widget.body ??
                 PageView(
@@ -154,8 +153,8 @@ class BetaBottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(environmentNotifierProvider).user?.hasBetaAccess != null &&
-            !ref.watch(environmentNotifierProvider).user!.hasBetaAccess
+    return ref.watch(environmentProvider).user?.hasBetaAccess != null &&
+            !ref.watch(environmentProvider).user!.hasBetaAccess
         ? const ReferralBottomNavigation()
         : child;
   }

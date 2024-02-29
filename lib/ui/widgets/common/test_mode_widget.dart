@@ -9,7 +9,7 @@ class TestModeWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(environmentNotifierProvider).solanaCluster ==
+    return ref.watch(environmentProvider).solanaCluster ==
             SolanaCluster.devnet.value
         ? Container(
             width: double.infinity,

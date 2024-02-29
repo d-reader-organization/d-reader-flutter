@@ -49,7 +49,7 @@ class AuthNotifier extends ChangeNotifier {
 }
 
 final authRouteProvider = ChangeNotifierProvider<AuthNotifier>((ref) {
-  final isLoggedIn = ref.read(environmentNotifierProvider).jwtToken != null;
+  final isLoggedIn = ref.read(environmentProvider).jwtToken != null;
   return AuthNotifier(isLoggedIn: isLoggedIn);
 });
 

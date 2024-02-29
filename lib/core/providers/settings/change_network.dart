@@ -35,15 +35,15 @@ class ChangeNetworkController extends _$ChangeNetworkController {
       localStoreNetworkDataProvider(cluster),
     );
     final bool isDevnetCluster = cluster == SolanaCluster.devnet.value;
-    ref.invalidate(environmentNotifierProvider);
-    final envNotifier = ref.read(environmentNotifierProvider.notifier);
+    ref.invalidate(environmentProvider);
+    final envNotifier = ref.read(environmentProvider.notifier);
     envNotifier.updateForChangeNetwork(
       cluster: cluster,
       apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
     );
     if (localStoreData != null) {
       bool isSuccessful =
-          ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+          ref.read(environmentProvider.notifier).updateEnvironmentState(
                 EnvironmentStateUpdateInput.fromDynamic(
                   localStoreData,
                 ),
@@ -53,7 +53,7 @@ class ChangeNetworkController extends _$ChangeNetworkController {
           ? 'Network changed successfully'
           : 'Network change failed.';
       if (!isSuccessful) {
-        ref.read(environmentNotifierProvider.notifier).updateEnvironmentState(
+        ref.read(environmentProvider.notifier).updateEnvironmentState(
               EnvironmentStateUpdateInput(
                 solanaCluster: isDevnetCluster
                     ? SolanaCluster.mainnet.value

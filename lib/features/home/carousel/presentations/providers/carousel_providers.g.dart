@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'carousel_provider.dart';
+part of 'carousel_providers.dart';
 
 // **************************************************************************
 // RiverpodGenerator

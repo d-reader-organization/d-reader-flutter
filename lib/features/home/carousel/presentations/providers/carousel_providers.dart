@@ -1,20 +1,14 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
-import 'package:d_reader_flutter/core/repositories/carousel/carousel_repository_impl.dart';
-import 'package:d_reader_flutter/shared/domain/models/carousel.dart';
+import 'package:d_reader_flutter/features/home/carousel/domain/models/carousel.dart';
+import 'package:d_reader_flutter/features/home/carousel/domain/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show BuildContext;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
-part 'carousel_provider.g.dart';
 
-final carouselRepositoryProvider = Provider<CarouselRepositoryImpl>((ref) {
-  return CarouselRepositoryImpl(
-    client: ref.watch(dioProvider),
-  );
-});
+part 'carousel_providers.g.dart';
 
 final carouselProvider = FutureProvider<List<CarouselModel>>((ref) async {
   return ref.read(carouselRepositoryProvider).getCarouselData();

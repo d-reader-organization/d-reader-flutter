@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
-import 'package:d_reader_flutter/features/genre/presentations/providers/genre_providers.dart';
+import 'package:d_reader_flutter/features/discover/genre/presentations/providers/genre_providers.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/shared/domain/models/collaborator.dart';
-import 'package:d_reader_flutter/features/genre/domain/models/genre.dart';
+import 'package:d_reader_flutter/features/discover/genre/domain/models/genre.dart';
 import 'package:d_reader_flutter/shared/domain/models/stateful_cover.dart';
 import 'package:d_reader_flutter/shared/domain/models/stateless_cover.dart';
 

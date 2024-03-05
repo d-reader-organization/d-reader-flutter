@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/features/genre/domain/models/genre.dart';
-import 'package:d_reader_flutter/features/genre/domain/providers/genre_provider.dart';
+import 'package:d_reader_flutter/features/discover/genre/domain/models/genre.dart';
+import 'package:d_reader_flutter/features/discover/genre/domain/providers/genre_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final genreProvider = FutureProvider<List<GenreModel>>((ref) async {

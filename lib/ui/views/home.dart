@@ -1,8 +1,8 @@
-import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
+import 'package:d_reader_flutter/features/home/carousel/presentations/providers/carousel_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_list.dart';

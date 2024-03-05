@@ -71,8 +71,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<AppException, String>> refreshToken(String refreshToken) {
-    // TODO: implement refreshToken
-    throw UnimplementedError();
+  Future<String> refreshToken(String refreshToken) {
+    return authDataSource.refreshToken(refreshToken);
   }
 }

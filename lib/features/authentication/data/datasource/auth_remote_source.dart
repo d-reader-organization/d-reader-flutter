@@ -28,6 +28,7 @@ abstract class AuthDataSource {
   });
 
   Future<void> disconnectWallet(String address);
+  Future<String> refreshToken(String token);
 }
 
 class AuthRemoteDataSource implements AuthDataSource {
@@ -206,5 +207,12 @@ class AuthRemoteDataSource implements AuthDataSource {
   @override
   Future<void> disconnectWallet(String address) {
     return networkService.patch('/auth/wallet/disconnect/$address');
+  }
+
+  @override
+  Future<String> refreshToken(String token) {
+    return networkService
+        .patch('/auth/user/refresh-token/$token')
+        .then((value) => value.fold((p0) => '', (p0) => p0.data));
   }
 }

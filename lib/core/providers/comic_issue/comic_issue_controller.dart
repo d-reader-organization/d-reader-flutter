@@ -1,12 +1,12 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
-import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/features/auction_house/domain/providers/listings_provider.dart';
+import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
+import 'package:d_reader_flutter/features/auction_house/presentation/providers/listings_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
@@ -113,7 +113,7 @@ class ComicIssueController extends _$ComicIssueController {
           .buyMultiple(selectedNftsInput);
       ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
       if (isSuccessful) {
-        ref.invalidate(listedItemsProvider);
+        // ref.invalidate(listedItemsProvider); TODO listed items provider
         ref.invalidate(listingsPaginatedProvider);
         ref.invalidate(userAssetsProvider);
       }

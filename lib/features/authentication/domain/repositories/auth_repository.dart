@@ -28,5 +28,5 @@ abstract class AuthRepository {
   Future<void> disconnectWallet({
     required String address,
   });
-  Future<Either<AppException, String>> refreshToken(String refreshToken);
+  Future<String> refreshToken(String refreshToken);
 }

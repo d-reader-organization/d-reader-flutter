@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/shared/domain/models/genre.dart';
+import 'package:d_reader_flutter/features/genre/domain/models/genre.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

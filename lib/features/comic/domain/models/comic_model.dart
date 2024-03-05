@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
-import 'package:d_reader_flutter/shared/domain/models/genre.dart';
+import 'package:d_reader_flutter/features/genre/domain/models/genre.dart';
 
 enum AudienceType {
   Everyone,

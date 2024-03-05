@@ -3,8 +3,8 @@ import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_notifier.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -284,7 +284,7 @@ class MyWalletsScreen extends ConsumerWidget {
                           backgroundColor: ColorPalette.dReaderRed,
                         );
                       },
-                      onError: (exception) {
+                      onException: (exception) {
                         triggerLowPowerOrNoWallet(context, exception);
                       },
                     );

@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_notifier.dart';
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
@@ -31,7 +31,7 @@ class SignUpStep3 extends ConsumerWidget {
           backgroundColor: ColorPalette.dReaderRed,
         );
       },
-      onError: (exception) {
+      onException: (exception) {
         triggerLowPowerOrNoWallet(
           context,
           exception,

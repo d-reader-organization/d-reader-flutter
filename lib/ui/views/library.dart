@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/slivers/custom_sliver_tab_persisent_header.dart';
 import 'package:d_reader_flutter/ui/widgets/library/tabs/owned.dart';

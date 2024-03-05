@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';

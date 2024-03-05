@@ -1,61 +1,15 @@
-import 'dart:async' show Timer;
-
-import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/repositories/nft/repository_impl.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
-part 'nft_provider.g.dart';
 
-final nftRepositoryProvider = Provider<NftRepositoryImpl>(
-  (ref) {
-    return NftRepositoryImpl(
-      client: ref.watch(dioProvider),
-    );
-  },
-);
-
-final nftProvider =
-    FutureProvider.autoDispose.family<NftModel?, String>((ref, address) {
-  return ref.read(nftRepositoryProvider).getNft(address);
-});
-
-final nftsProvider =
-    FutureProvider.family<List<NftModel>, String>((ref, query) {
-  Timer? timer;
-
-  ref.onDispose(() {
-    timer?.cancel();
-  });
-
-  ref.onCancel(() {
-    timer = Timer(const Duration(seconds: 30), () {
-      ref.invalidateSelf();
-    });
-  });
-
-  ref.onResume(() {
-    timer?.cancel();
-  });
-  return ref.read(nftRepositoryProvider).getNfts(query);
-});
-
-final lastProcessedNftProvider = StateProvider<String?>(
-  (ref) {
-    return null;
-  },
-);
+part 'nft_controller.g.dart';
 
 @riverpod
 class NftController extends _$NftController {
-  late StateController<GlobalState> globalNotifier;
   @override
-  FutureOr<void> build() {
-    globalNotifier = ref.read(globalStateProvider.notifier);
-  }
+  void build() {}
 
   Future<void> delist({
     required NftModel nft,
@@ -66,8 +20,7 @@ class NftController extends _$NftController {
       final result = await ref
           .read(solanaProvider.notifier)
           .delist(nftAddress: nft.address);
-
-      globalNotifier.update((state) => state.copyWith(isLoading: false));
+      // globalNotifier.update((state) => state.copyWith(isLoading: false));
 
       if (result is bool && result) {
         await Future.delayed(
@@ -79,7 +32,7 @@ class NftController extends _$NftController {
         );
       }
     } catch (exception) {
-      globalNotifier.update((state) => state.copyWith(isLoading: false));
+      // globalNotifier.update((state) => state.copyWith(isLoading: false));
       onException(exception);
     }
   }
@@ -112,7 +65,7 @@ class NftController extends _$NftController {
             mintAccount: mintAccount,
             price: (price * lamportsPerSol).round(),
           );
-      globalNotifier.update((state) => state.copyWith(isLoading: false));
+      // globalNotifier.update((state) => state.copyWith(isLoading: false));
 
       await Future.delayed(
         const Duration(milliseconds: 500),
@@ -122,7 +75,7 @@ class NftController extends _$NftController {
         },
       );
     } catch (exception) {
-      globalNotifier.update((state) => state.copyWith(isLoading: false));
+      // globalNotifier.update((state) => state.copyWith(isLoading: false));
       rethrow;
     }
   }

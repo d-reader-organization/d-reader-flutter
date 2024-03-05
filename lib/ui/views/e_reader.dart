@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart'
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/shared/domain/models/comic_page.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';

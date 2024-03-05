@@ -2,13 +2,13 @@ import 'dart:async' show Timer;
 
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
-import 'package:d_reader_flutter/features/comic/domain/providers/comic_providers.dart';
+import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'comic_provider.g.dart';
+part 'comic_providers.g.dart';
 
 final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
   (ref, queryString) async {

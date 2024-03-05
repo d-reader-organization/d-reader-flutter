@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
-import 'package:d_reader_flutter/features/creator/domain/providers/creator_providers.dart';
+import 'package:d_reader_flutter/features/creator/domain/providers/creator_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';

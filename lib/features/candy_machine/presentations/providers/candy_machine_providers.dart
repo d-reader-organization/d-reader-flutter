@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/features/candy_machine/domain/providers/candy_m
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'candy_machine_provider.g.dart';
+part 'candy_machine_providers.g.dart';
 
 final receiptsProvider =
     FutureProvider.autoDispose.family<List<Receipt>, ReceiptsProviderArg>(

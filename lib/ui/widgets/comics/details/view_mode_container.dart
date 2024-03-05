@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
-import 'package:d_reader_flutter/features/comic/presentation/providers/comic_provider.dart';
+import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/details/filter_and_sort.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/features/comic/presentation/providers/comic_provider.dart';
+import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';

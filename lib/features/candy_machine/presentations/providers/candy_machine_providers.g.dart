@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'candy_machine_provider.dart';
+part of 'candy_machine_providers.dart';
 
 // **************************************************************************
 // RiverpodGenerator

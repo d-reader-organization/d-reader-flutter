@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/core/providers/creator_provider.dart';
+import 'package:d_reader_flutter/features/creator/presentations/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';

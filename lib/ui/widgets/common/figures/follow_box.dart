@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/providers/count_provider.dart';
-import 'package:d_reader_flutter/core/providers/creator_provider.dart';
+import 'package:d_reader_flutter/features/creator/domain/providers/creator_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

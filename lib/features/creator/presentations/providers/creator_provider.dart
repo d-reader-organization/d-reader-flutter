@@ -1,16 +1,9 @@
-import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
-import 'package:d_reader_flutter/core/repositories/creator/creator_repository_impl.dart';
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
+import 'package:d_reader_flutter/features/creator/domain/providers/creator_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-final creatorRepositoryProvider = Provider<CreatorRepositoryImpl>((ref) {
-  return CreatorRepositoryImpl(
-    client: ref.watch(dioProvider),
-  );
-});
 
 final creatorsProvider = FutureProvider.autoDispose
     .family<List<CreatorModel>, String?>((ref, queryString) async {

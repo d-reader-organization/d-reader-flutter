@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/carousel.dart';
 import 'package:d_reader_flutter/core/repositories/carousel/carousel_repository.dart';
+import 'package:d_reader_flutter/shared/domain/models/carousel.dart';
 import 'package:dio/dio.dart';
 
 class CarouselRepositoryImpl implements CarouselRepository {

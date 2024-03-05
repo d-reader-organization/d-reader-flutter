@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/notifiers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';

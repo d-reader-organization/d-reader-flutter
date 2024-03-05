@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/features/authentication/domain/models/authorization_response.dart';
 import 'package:d_reader_flutter/shared/data/remote/network_service.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
-import 'package:d_reader_flutter/shared/exceptions/app_exception.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 abstract class AuthDataSource {
   Future<Either<AppException, AuthorizationResponse>> signIn({
@@ -15,6 +15,19 @@ abstract class AuthDataSource {
   });
   Future<Either<AppException, bool>> validateUsername(String username);
   Future<Either<AppException, bool>> requestEmailVerification();
+  Future<Either<AppException, bool>> connectWallet({
+    required String address,
+    required String encoding,
+    required String apiUrl,
+    required String jwtToken,
+  });
+  Future<Either<AppException, String>> getOneTimePassword({
+    required String address,
+    required String apiUrl,
+    required String jwtToken,
+  });
+
+  Future<void> disconnectWallet(String address);
 }
 
 class AuthRemoteDataSource implements AuthDataSource {
@@ -124,5 +137,74 @@ class AuthRemoteDataSource implements AuthDataSource {
             (value) => const Right(true),
           ),
         );
+  }
+
+  @override
+  Future<Either<AppException, bool>> connectWallet({
+    required String address,
+    required String encoding,
+    required String apiUrl,
+    required String jwtToken,
+  }) async {
+    try {
+      await networkService.patch(
+        '/auth/wallet/connect/$address/$encoding',
+        headers: networkService.updateHeader(
+          {
+            'Authorization': jwtToken,
+          },
+        ),
+      );
+      return const Right(true);
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occured',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}-AuthRemoteDataSource.connectWallet',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, String>> getOneTimePassword({
+    required String address,
+    required String apiUrl,
+    required String jwtToken,
+  }) async {
+    try {
+      final response = await networkService.patch(
+        '/auth/wallet/request-password/$address',
+        headers: networkService.updateHeader(
+          {
+            'Authorization': jwtToken,
+          },
+        ),
+      );
+      return response.fold(
+        (exception) {
+          return Left(exception);
+        },
+        (oneTimePassword) {
+          return Right(oneTimePassword.data);
+        },
+      );
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occured',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}-AuthRemoteDataSource.getOneTimePassword',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<void> disconnectWallet(String address) {
+    return networkService.patch('/auth/wallet/disconnect/$address');
   }
 }

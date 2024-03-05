@@ -3,18 +3,18 @@ import 'dart:typed_data';
 
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/models/api_error.dart';
-import 'package:d_reader_flutter/core/models/buy_nft_input.dart';
-import 'package:d_reader_flutter/core/models/exceptions.dart';
-import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/signature_status_provider.dart';
 import 'package:d_reader_flutter/core/providers/transaction/provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
+import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +25,6 @@ import 'package:solana/base58.dart';
 import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
-
-final isOpeningSessionProvider = StateProvider<bool>((ref) {
-  return false;
-});
 
 final solanaProvider =
     StateNotifierProvider<SolanaClientNotifier, SolanaClientState>(
@@ -648,7 +644,7 @@ class SolanaClientNotifier extends StateNotifier<SolanaClientState> {
             apiUrl: apiUrl,
             jwtToken: jwtToken,
           );
-      if (message is ApiError) {
+      if (message is AppException) {
         return message.message;
       }
       final addresses = Uint8List.fromList(signer.bytes);

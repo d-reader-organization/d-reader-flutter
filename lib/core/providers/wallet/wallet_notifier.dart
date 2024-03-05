@@ -1,8 +1,8 @@
-import 'package:d_reader_flutter/core/providers/auth/auth_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

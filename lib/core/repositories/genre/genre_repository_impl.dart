@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/repositories/genre/genre_repository.dart';
+import 'package:d_reader_flutter/shared/domain/models/genre.dart';
 import 'package:dio/dio.dart';
 
 class GenreRepositoryImpl implements GenreRepository {

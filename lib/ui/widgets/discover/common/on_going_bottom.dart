@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/states/pagination_state.dart';
+import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 

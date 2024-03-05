@@ -1,11 +1,11 @@
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_in/sign_in.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/sign_up.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/models/nft.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/ui/views/animations/mint_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/animations/open_nft_animation_screen.dart';
 import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';

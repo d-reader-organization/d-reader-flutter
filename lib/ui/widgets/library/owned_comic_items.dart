@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';

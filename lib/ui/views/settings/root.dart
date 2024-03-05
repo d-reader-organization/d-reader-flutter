@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';

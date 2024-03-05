@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/utils/pluralize_string.dart';

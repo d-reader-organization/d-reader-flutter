@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/models/wallet.dart';
-import 'package:d_reader_flutter/core/models/wallet_asset.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository.dart';
+import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
+import 'package:d_reader_flutter/features/wallet/domain/models/wallet_asset.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/auction_house/domain/models/listing.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';

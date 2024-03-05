@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/exceptions.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
 import 'package:d_reader_flutter/ui/widgets/common/bottom_sheets/install_wallet_bottom_sheet.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/auth.dart';
 import 'package:d_reader_flutter/core/repositories/auth/auth_repository.dart';
+import 'package:d_reader_flutter/features/authentication/domain/models/authorization_response.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

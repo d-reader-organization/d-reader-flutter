@@ -1,11 +1,11 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/nft.dart';
-import 'package:d_reader_flutter/core/models/page_model.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/shared/domain/models/comic_page.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/animated_app_bar.dart';

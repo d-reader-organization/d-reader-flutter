@@ -1,7 +1,7 @@
 import 'dart:async' show Timer;
 
-import 'package:d_reader_flutter/core/models/comic.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

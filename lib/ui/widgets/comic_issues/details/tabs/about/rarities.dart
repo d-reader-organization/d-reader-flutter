@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/stateless_cover.dart';
+import 'package:d_reader_flutter/shared/domain/models/stateless_cover.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';

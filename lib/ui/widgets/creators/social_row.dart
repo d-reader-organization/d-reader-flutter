@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/filled_icon.dart';

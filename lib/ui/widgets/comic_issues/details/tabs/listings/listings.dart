@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/notifiers/listings_notifier.dart';
+import 'package:d_reader_flutter/features/auction_house/domain/providers/listings_provider.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/listings/listed_items.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/listings/stats.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';

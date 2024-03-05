@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';

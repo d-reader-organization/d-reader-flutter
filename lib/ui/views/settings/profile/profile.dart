@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
 import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';

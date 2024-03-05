@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';

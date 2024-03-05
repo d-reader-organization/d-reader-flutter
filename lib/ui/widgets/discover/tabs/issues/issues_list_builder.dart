@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/comic_issue_card.dart';
 import 'package:flutter/material.dart';

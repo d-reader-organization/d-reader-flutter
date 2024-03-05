@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/creator.dart';
-import 'package:d_reader_flutter/core/states/pagination_state.dart';
+import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
+import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/creators/creators_list_builder.dart';
 import 'package:flutter/material.dart';

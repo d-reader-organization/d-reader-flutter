@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/genre.dart';
 import 'package:d_reader_flutter/core/providers/genre_provider.dart';
+import 'package:d_reader_flutter/shared/domain/models/genre.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/justify_color_string.dart';
 import 'package:flutter/material.dart';

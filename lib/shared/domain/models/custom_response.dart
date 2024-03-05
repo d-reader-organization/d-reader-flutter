@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
-import 'package:d_reader_flutter/shared/exceptions/app_exception.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 class CustomResponse {
   final int statusCode;

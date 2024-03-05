@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
-import 'package:d_reader_flutter/core/states/pagination_state.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
+import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_list_builder.dart';
 import 'package:flutter/material.dart';

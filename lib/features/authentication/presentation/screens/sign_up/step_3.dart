@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_notifier.dart';
 import 'package:d_reader_flutter/core/providers/wallet/wallet_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// TODO - refactor to not use core/providers.
 class SignUpStep3 extends ConsumerWidget {
   const SignUpStep3({super.key});
 
@@ -171,7 +170,7 @@ class SignUpStep3 extends ConsumerWidget {
               ),
               Expanded(
                 child: CustomTextButton(
-                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  isLoading: ref.watch(globalNotifierProvider).isLoading,
                   backgroundColor: ColorPalette.dReaderYellow100,
                   textColor: Colors.black,
                   size: const Size(

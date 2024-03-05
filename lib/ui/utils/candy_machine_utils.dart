@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/candy_machine_group.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:collection/collection.dart';
 
 CandyMachineGroupModel? getActiveGroup(List<CandyMachineGroupModel> groups) {

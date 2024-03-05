@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/models/collection_stats.dart';
-import 'package:d_reader_flutter/core/models/listed_item.dart';
 import 'package:d_reader_flutter/core/repositories/auction_house/repository.dart';
+import 'package:d_reader_flutter/features/auction_house/domain/models/collection_stats.dart';
+import 'package:d_reader_flutter/features/auction_house/domain/models/listing.dart';
 
 import 'package:dio/dio.dart';
 

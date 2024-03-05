@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';

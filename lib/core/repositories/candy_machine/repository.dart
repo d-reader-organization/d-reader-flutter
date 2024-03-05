@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/candy_machine.dart';
-import 'package:d_reader_flutter/core/models/receipt.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 
 abstract class CandyMachineRepository {
   Future<CandyMachineModel?> getCandyMachine({

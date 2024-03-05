@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/utils/pluralize_string.dart';

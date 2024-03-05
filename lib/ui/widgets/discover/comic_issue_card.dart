@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';

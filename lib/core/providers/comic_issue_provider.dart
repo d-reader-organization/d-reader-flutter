@@ -1,14 +1,14 @@
 import 'dart:async' show Timer;
 
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
-import 'package:d_reader_flutter/core/models/owned_comic_issue.dart';
-import 'package:d_reader_flutter/core/models/page_model.dart';
-import 'package:d_reader_flutter/core/notifiers/pagination_notifier.dart';
+
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
-import 'package:d_reader_flutter/core/repositories/comic_issues/comic_issue_repository_impl.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
-import 'package:d_reader_flutter/core/states/pagination_state.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/owned_issue.dart';
+import 'package:d_reader_flutter/shared/domain/models/comic_page.dart';
+import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
+import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

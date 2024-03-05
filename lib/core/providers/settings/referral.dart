@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/core/providers/common_text_controller_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
-import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

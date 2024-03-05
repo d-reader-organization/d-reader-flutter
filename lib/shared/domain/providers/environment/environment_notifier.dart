@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
-import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

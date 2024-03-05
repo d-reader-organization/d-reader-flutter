@@ -1,14 +1,14 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/models/receipt.dart';
-import 'package:d_reader_flutter/core/models/wallet.dart';
 import 'package:d_reader_flutter/core/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
-import 'package:d_reader_flutter/core/providers/socket_client_provider.dart';
 import 'package:d_reader_flutter/core/repositories/wallet/repository_impl.dart';
 import 'package:d_reader_flutter/core/utils/utils.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
+import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/socket_provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/dto.dart';

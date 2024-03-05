@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/collaborator.dart';
+import 'package:d_reader_flutter/shared/domain/models/collaborator.dart';
 import 'package:flutter/material.dart';
 
 class AuthorWidget extends StatelessWidget {

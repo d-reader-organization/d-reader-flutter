@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/features/authentication/data/datasource/auth_re
 import 'package:d_reader_flutter/features/authentication/domain/models/authorization_response.dart';
 import 'package:d_reader_flutter/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
-import 'package:d_reader_flutter/shared/exceptions/app_exception.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   final AuthDataSource authDataSource;
@@ -35,5 +35,44 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either<AppException, bool>> requestEmailVerification() {
     return authDataSource.requestEmailVerification();
+  }
+
+  @override
+  Future<void> connectWallet({
+    required String address,
+    required String encoding,
+    required String apiUrl,
+    required String jwtToken,
+  }) {
+    return authDataSource.connectWallet(
+      address: address,
+      encoding: encoding,
+      apiUrl: apiUrl,
+      jwtToken: jwtToken,
+    );
+  }
+
+  @override
+  Future<Either<AppException, String>> getOneTimePassword({
+    required String address,
+    required String apiUrl,
+    required String jwtToken,
+  }) {
+    return authDataSource.getOneTimePassword(
+      address: address,
+      apiUrl: apiUrl,
+      jwtToken: jwtToken,
+    );
+  }
+
+  @override
+  Future<void> disconnectWallet({required String address}) {
+    return authDataSource.disconnectWallet(address);
+  }
+
+  @override
+  Future<Either<AppException, String>> refreshToken(String refreshToken) {
+    // TODO: implement refreshToken
+    throw UnimplementedError();
   }
 }

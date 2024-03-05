@@ -1,7 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/shared/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:solana/solana.dart';
 
 Map<String, WalletData>? walletsMapFromDynamic(dynamic json) {

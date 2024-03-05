@@ -1,8 +1,8 @@
-import 'package:d_reader_flutter/core/models/candy_machine.dart';
-import 'package:d_reader_flutter/core/models/receipt.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue/provider.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository_implementation.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

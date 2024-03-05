@@ -1,10 +1,10 @@
 import 'dart:async' show Timer;
 
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/repositories/nft/repository_impl.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;

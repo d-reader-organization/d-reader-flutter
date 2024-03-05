@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/creator.dart';
+import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/core/repositories/creator/creator_repository.dart';
 import 'package:dio/dio.dart';
 

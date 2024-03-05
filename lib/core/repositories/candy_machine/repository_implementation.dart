@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/models/receipt.dart';
-import 'package:d_reader_flutter/core/models/candy_machine.dart';
 import 'package:d_reader_flutter/core/repositories/candy_machine/repository.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:dio/dio.dart';
 
 class CandyMachineRepositoryImpl implements CandyMachineRepository {

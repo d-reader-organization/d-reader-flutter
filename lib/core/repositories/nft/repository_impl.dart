@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/repositories/nft/repository.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 
 import 'package:dio/dio.dart';
 

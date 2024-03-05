@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/comic_issue.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/core/providers/auction_house_provider.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';

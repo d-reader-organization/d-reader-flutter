@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/nft.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 
 abstract class NftRepository {
   Future<NftModel?> getNft(String address);

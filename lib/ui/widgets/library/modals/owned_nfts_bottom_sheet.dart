@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/models/nft.dart';
 import 'package:d_reader_flutter/core/providers/library/owned_controller.dart';
+import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';

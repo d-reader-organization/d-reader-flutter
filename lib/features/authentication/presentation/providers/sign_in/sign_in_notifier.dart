@@ -30,7 +30,7 @@ class SignInController extends _$SignInController {
       password: password,
     );
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
-    state = response.fold(
+    response.fold(
       (failure) {
         onFail(failure.message);
       },

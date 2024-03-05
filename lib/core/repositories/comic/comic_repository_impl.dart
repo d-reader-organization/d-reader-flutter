@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/comic.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/core/repositories/comic/comic_repository.dart';
 import 'package:dio/dio.dart';
 

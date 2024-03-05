@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/models/exceptions.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/core/repositories/transaction/repository.dart';
 import 'package:dio/dio.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';

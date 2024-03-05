@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/nft_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/auction_house/domain/providers/listings_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';

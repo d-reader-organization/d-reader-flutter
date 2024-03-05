@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
-import 'package:d_reader_flutter/core/notifiers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/core/providers/carousel_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/comic_provider.dart';
@@ -8,6 +7,7 @@ import 'package:d_reader_flutter/core/providers/creator_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

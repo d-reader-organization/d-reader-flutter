@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/core/providers/search_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
-import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/styles.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/filter_icon.dart';

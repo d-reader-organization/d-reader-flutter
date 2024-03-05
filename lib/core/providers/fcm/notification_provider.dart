@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/services/notification.dart';
+import 'package:d_reader_flutter/shared/data/remote/notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'notification_provider.g.dart';

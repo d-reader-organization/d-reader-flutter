@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
-import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

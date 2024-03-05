@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/services/local_store.dart';
+import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum ViewMode {

@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/features/comic/presentation/providers/comic_provider.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/common/creator_notification_listener.dart';
 import 'package:flutter/material.dart';

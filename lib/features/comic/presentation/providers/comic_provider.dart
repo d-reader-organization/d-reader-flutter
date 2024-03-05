@@ -1,23 +1,14 @@
 import 'dart:async' show Timer;
 
-import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
-import 'package:d_reader_flutter/core/repositories/comic/comic_repository_impl.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
+import 'package:d_reader_flutter/features/comic/domain/providers/comic_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_provider.g.dart';
-
-final comicRepositoryProvider = Provider<ComicRepositoryImpl>(
-  (ref) {
-    return ComicRepositoryImpl(
-      client: ref.watch(dioProvider),
-    );
-  },
-);
 
 final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
   (ref, queryString) async {
@@ -35,10 +26,16 @@ final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
     ref.onResume(() {
       timer?.cancel();
     });
-    return ref.read(comicRepositoryProvider).getComics(
-        queryString: queryString != null && queryString.isNotEmpty
-            ? queryString
-            : appendDefaultQuery(queryString));
+    return ref
+        .read(comicRepositoryProvider)
+        .getComics(
+            queryString: queryString != null && queryString.isNotEmpty
+                ? queryString
+                : appendDefaultQuery(queryString))
+        .then((result) => result.fold((exception) {
+              // TODO think about
+              return [];
+            }, (data) => data));
   },
 );
 
@@ -48,14 +45,17 @@ final paginatedComicsProvider = StateNotifierProvider.family<
     String?>((ref, query) {
   final fetch = ref.read(comicRepositoryProvider).getComics;
   return PaginationNotifier<ComicModel>(
-    fetch: fetch,
+    fetch: fetch, // Pagination fetch TODO
     query: query,
   )..init();
 });
 
 final comicSlugProvider =
     FutureProvider.autoDispose.family<ComicModel?, String>((ref, slug) async {
-  return ref.read(comicRepositoryProvider).getComic(slug);
+  return ref
+      .read(comicRepositoryProvider)
+      .getComic(slug)
+      .then((result) => result.fold((exception) => null, (data) => data));
 });
 
 final updateComicFavouriteProvider =
@@ -82,7 +82,15 @@ Future<List<ComicModel>> ownedComics(
 }) {
   return ref
       .read(comicRepositoryProvider)
-      .getOwnedComics(userId: userId, query: query);
+      .getOwnedComics(userId: userId, query: query)
+      .then((result) => result.fold(
+            (exception) {
+              return [];
+            },
+            (data) {
+              return data;
+            },
+          ));
 }
 
 final comicViewModeProvider = StateProvider.autoDispose<ViewMode>(

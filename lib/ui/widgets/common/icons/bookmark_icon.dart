@@ -1,4 +1,5 @@
-import 'package:d_reader_flutter/core/providers/comic_provider.dart';
+import 'package:d_reader_flutter/features/comic/domain/providers/comic_providers.dart';
+import 'package:d_reader_flutter/features/comic/presentation/providers/comic_provider.dart';
 import 'package:d_reader_flutter/core/providers/unsorted/bookmark_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';

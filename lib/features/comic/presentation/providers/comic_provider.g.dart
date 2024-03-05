@@ -6,7 +6,7 @@ part of 'comic_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ownedComicsHash() => r'fad02d198be5b3ba44669d681f757d72ba849338';
+String _$ownedComicsHash() => r'cdc282f9f6133eed5566ff4700b9a2b2f8f062c0';
 
 /// Copied from Dart SDK
 class _SystemHash {

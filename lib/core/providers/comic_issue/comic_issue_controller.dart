@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/listings_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
@@ -27,7 +27,7 @@ class ComicIssueController extends _$ComicIssueController {
 
     if (envUser != null && !envUser.isEmailVerified) {
       final user = await ref.read(myUserProvider.future);
-      if (user != null && !user.isEmailVerified) {
+      if (!user.isEmailVerified) {
         return false;
       }
     }
@@ -115,7 +115,7 @@ class ComicIssueController extends _$ComicIssueController {
       if (isSuccessful) {
         // ref.invalidate(listedItemsProvider); TODO listed items provider
         ref.invalidate(listingsPaginatedProvider);
-        ref.invalidate(userAssetsProvider);
+        // ref.invalidate(userAssetsProvider); is this used at all
       }
       displaySnackBar(
         text: isSuccessful ? 'Success!' : 'Failed to buy item(s).',

@@ -4,7 +4,8 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
 import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
+import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -95,9 +96,6 @@ class ProfileView extends HookConsumerWidget {
       ),
       body: provider.when(
         data: (user) {
-          if (user == null) {
-            return const SizedBox();
-          }
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(

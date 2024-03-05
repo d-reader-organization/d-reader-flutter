@@ -7,7 +7,7 @@ part of 'referral.dart';
 // **************************************************************************
 
 String _$referralControllerHash() =>
-    r'5d7f0e94c11bda2c78e4e50b0feba54bac90b7c7';
+    r'b05215c7127bc0dfc6539cb5953dfb215a6f92bc';
 
 /// See also [ReferralController].
 @ProviderFor(ReferralController)

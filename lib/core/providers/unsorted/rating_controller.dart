@@ -2,7 +2,8 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
+import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -30,7 +31,7 @@ class RatingController extends _$RatingController {
     required BuildContext context,
     bool isResending = false,
   }) {
-    ref.read(requestEmailVerificationProvider.future);
+    ref.read(userRepositoryProvider).requestEmailVerification();
     context.pop();
     showSnackBar(
       context: context,
@@ -118,8 +119,8 @@ class RatingController extends _$RatingController {
   }) async {
     UserModel? user = ref.read(environmentProvider).user;
     if (user != null && !user.isEmailVerified) {
-      final result = await ref.read(userRepositoryProvider).myUser();
-      final bool isVerified = result != null && result.isEmailVerified;
+      final result = await ref.read(myUserProvider.future);
+      final bool isVerified = result.isEmailVerified;
       if (!isVerified && context.mounted) {
         return _showVerificationWalkthroughDialog(
           context: context,

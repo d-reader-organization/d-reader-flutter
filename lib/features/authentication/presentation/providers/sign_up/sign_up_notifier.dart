@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
@@ -73,7 +73,7 @@ class SignUpNotifier extends _$SignUpNotifier {
               refreshToken: authTokens.refreshToken,
             ),
           );
-      final user = await ref.read(userRepositoryProvider).myUser();
+      final user = await ref.read(myUserProvider.future);
       ref.read(environmentProvider.notifier).updateEnvironmentState(
             EnvironmentStateUpdateInput(
               user: user,

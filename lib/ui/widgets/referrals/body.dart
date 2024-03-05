@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/core/providers/common_text_controller_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/textfields/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/referrals/utils.dart';
@@ -22,17 +22,6 @@ class ReferralBody extends ConsumerWidget {
     final myUser = ref.watch(myUserProvider);
     return myUser.when(
       data: (user) {
-        if (user == null) {
-          return const Center(
-            child: Text(
-              'Failed to get user',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-          );
-        }
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

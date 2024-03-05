@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
+import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/library_utils.dart';

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/core/providers/common_text_controller_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
@@ -26,31 +26,28 @@ class ReferralController extends _$ReferralController {
       ),
     );
     final currentUser = ref.read(environmentProvider).user;
-    dynamic updateResult;
-    if (currentUser != null) {
-      updateResult = await ref.read(userRepositoryProvider).updateUser(
-            UpdateUserPayload(
-              id: currentUser.id,
-              referrer: referrer,
-            ),
-          );
+    if (currentUser == null) {
+      return;
     }
 
-    ref.invalidate(myUserProvider);
-    final result = await ref.read(myUserProvider.future);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
-    ref.read(environmentProvider.notifier).updateEnvironmentState(
-          EnvironmentStateUpdateInput(
-            user: result,
+    final response = await ref.read(userRepositoryProvider).updateUser(
+          UpdateUserPayload(
+            id: currentUser.id,
+            referrer: referrer,
           ),
         );
+    response.fold((exception) {
+      callback(exception.message);
+    }, (user) {
+      ref.read(environmentProvider.notifier).updateEnvironmentState(
+            EnvironmentStateUpdateInput(
+              user: user,
+            ),
+          );
 
-    ref.read(commonTextEditingController).clear();
-    ref.read(commonTextValue.notifier).state = '';
-    callback(updateResult);
+      ref.read(commonTextEditingController).clear();
+      ref.read(commonTextValue.notifier).state = '';
+      callback(true);
+    });
   }
 }

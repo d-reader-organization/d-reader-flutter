@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/user/user_provider.dart';
+import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -85,7 +85,7 @@ void triggerVerificationDialog(BuildContext context, WidgetRef ref) {
         'This sale is currently only available for new verified users. To become eligible make sure to verify your email. Don\'t forget to check your spam!',
     assetPath: '$walkthroughAssetsPath/verify_email.jpg',
     onSubmit: () {
-      ref.read(requestEmailVerificationProvider.future);
+      ref.read(userRepositoryProvider).requestEmailVerification();
       context.pop();
       showSnackBar(
         context: context,

@@ -26,36 +26,11 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<String> cancelBidTransaction({
-    String? receiptAddress,
-    String? nftAddress,
-  }) {
-    return client
-        .get(
-            '/transaction/cancel-bid?receiptAddress=${receiptAddress ?? ''}&nftAddress=$nftAddress')
-        .then((value) => value.data);
-  }
-
-  @override
   Future<String?> cancelListingTransaction({
     required String nftAddress,
   }) {
     return client
         .get('/transaction/cancel-listing?nftAddress=$nftAddress')
-        .then((value) => value.data);
-  }
-
-  @override
-  Future<String?> instantBuyTransaction({
-    required String mintAccount,
-    required int price,
-    required String sellerAddress,
-    required String buyerAddress,
-  }) {
-    return client
-        .get(
-          '/transaction/instant-buy?mintAccount=$mintAccount&price=$price&sellerAddress=$sellerAddress&buyerAddress=$buyerAddress',
-        )
         .then((value) => value.data);
   }
 
@@ -95,31 +70,6 @@ class TransactionRepositoryImpl implements TransactionRepository {
       }
       throw Exception(exception.toString());
     }
-  }
-
-  @override
-  Future<String> privateBidTransaction({
-    required String buyerAddress,
-    required String mintAccount,
-    required int price,
-    String? sellerAddress,
-    String? printReceipt,
-  }) {
-    return client
-        .get(
-            '/transaction/private-bid?buyerAddress=$buyerAddress&mintAccount=$mintAccount&price=$price&sellerAddress=${sellerAddress ?? ''}&printReceipt=${printReceipt ?? 'false'}')
-        .then((value) => value.data);
-  }
-
-  @override
-  Future<String> signComicTransaction({
-    required String nftAddress,
-    required String signerAddress,
-  }) {
-    return client
-        .get(
-            '/transaction/sign-comic?nftAddress=$nftAddress&signerAddress=$signerAddress')
-        .then((value) => value.data);
   }
 
   @override

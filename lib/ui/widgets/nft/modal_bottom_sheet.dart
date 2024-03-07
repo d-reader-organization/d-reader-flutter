@@ -96,7 +96,7 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
           SubmitButton(
             nft: widget.nft,
             price: priceInputValue.isNotEmpty
-                ? _safeParse(
+                ? double.tryParse(
                     priceInputValue,
                   )
                 : null,
@@ -106,8 +106,6 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
     );
   }
 }
-
-double? _safeParse(String input) => double.tryParse(input);
 
 class SubmitButton extends ConsumerWidget {
   final NftModel nft;

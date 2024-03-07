@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/core/providers/comic_issue/comic_issue_controller.dart';
@@ -74,9 +75,6 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
     final textTheme = Theme.of(context).textTheme;
     return provider.when(
       data: (issue) {
-        if (issue == null) {
-          return const SizedBox();
-        }
         return DefaultTabController(
           length: 2,
           initialIndex: issue.isSecondarySaleActive &&

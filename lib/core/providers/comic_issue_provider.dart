@@ -2,7 +2,6 @@ import 'dart:async' show Timer;
 
 import 'package:d_reader_flutter/constants/constants.dart';
 
-import 'package:d_reader_flutter/core/providers/dio/dio_provider.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/owned_issue.dart';
@@ -13,14 +12,6 @@ import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_issue_provider.g.dart';
-
-final comicIssueRepository = Provider<ComicIssueRepositoryImpl>(
-  (ref) {
-    return ComicIssueRepositoryImpl(
-      client: ref.watch(dioProvider),
-    );
-  },
-);
 
 final comicIssuesProvider =
     FutureProvider.family<List<ComicIssueModel>, String?>(
@@ -46,11 +37,6 @@ final comicIssuesProvider =
               queryString,
             ),
       );
-});
-
-final comicIssueDetailsProvider =
-    FutureProvider.autoDispose.family<ComicIssueModel?, int>((ref, id) {
-  return ref.read(comicIssueRepository).getComicIssue(id);
 });
 
 final comicIssuePagesProvider =

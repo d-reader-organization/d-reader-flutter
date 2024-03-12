@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/listings_provider.dart';
@@ -8,6 +7,7 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -59,10 +59,11 @@ class ComicIssueController extends _$ComicIssueController {
         }
       }
 
-      final mintResult = await ref.read(solanaProvider.notifier).mint(
-            candyMachineState.address,
-            activeGroup.label,
-          );
+      final mintResult =
+          await ref.read(solanaTransactionNotifierProvider.notifier).mint(
+                candyMachineState.address,
+                activeGroup.label,
+              );
       if (mintResult is bool && mintResult) {
         ref.invalidate(nftsProvider);
         onSuccessMint();
@@ -105,7 +106,7 @@ class ComicIssueController extends _$ComicIssueController {
         .toList();
     try {
       final isSuccessful = await ref
-          .read(solanaProvider.notifier)
+          .read(solanaTransactionNotifierProvider.notifier)
           .buyMultiple(selectedNftsInput);
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
       if (isSuccessful) {

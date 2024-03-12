@@ -1,9 +1,9 @@
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:flutter/animation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -24,7 +24,7 @@ class NftController extends _$NftController {
   }) async {
     try {
       final result = await ref
-          .read(solanaProvider.notifier)
+          .read(solanaTransactionNotifierProvider.notifier)
           .delist(nftAddress: nft.address);
       // globalNotifier.update((state) => state.copyWith(isLoading: false));
 
@@ -49,10 +49,11 @@ class NftController extends _$NftController {
     required void Function(Object exception) onException,
   }) async {
     try {
-      final result = await ref.read(solanaProvider.notifier).useMint(
-            nftAddress: nft.address,
-            ownerAddress: nft.ownerAddress,
-          );
+      final result =
+          await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
+                nftAddress: nft.address,
+                ownerAddress: nft.ownerAddress,
+              );
       onOpen(result);
     } catch (exception) {
       onException(exception);
@@ -66,11 +67,12 @@ class NftController extends _$NftController {
     required void Function(dynamic result) callback,
   }) async {
     try {
-      final response = await ref.read(solanaProvider.notifier).list(
-            sellerAddress: sellerAddress,
-            mintAccount: mintAccount,
-            price: (price * lamportsPerSol).round(),
-          );
+      final response =
+          await ref.read(solanaTransactionNotifierProvider.notifier).list(
+                sellerAddress: sellerAddress,
+                mintAccount: mintAccount,
+                price: (price * lamportsPerSol).round(),
+              );
       // globalNotifier.update((state) => state.copyWith(isLoading: false));
 
       await Future.delayed(
@@ -180,10 +182,11 @@ class NftController extends _$NftController {
     required String ownerAddress,
     required Function() onSuccess,
   }) async {
-    final isSuccessful = await ref.read(solanaProvider.notifier).useMint(
-          nftAddress: nftAddress,
-          ownerAddress: ownerAddress,
-        );
+    final isSuccessful =
+        await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
+              nftAddress: nftAddress,
+              ownerAddress: ownerAddress,
+            );
     if (isSuccessful) {
       onSuccess();
     }

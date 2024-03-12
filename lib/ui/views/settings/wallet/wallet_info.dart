@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
+import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -182,9 +182,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                   : () async {
                       globalHook.value =
                           globalHook.value.copyWith(isLoading: true);
-                      final airdropResult = await ref
-                          .read(solanaProvider.notifier)
-                          .requestAirdrop(widget.address);
+                      final airdropResult =
+                          await requestAirdrop(widget.address);
 
                       globalHook.value =
                           globalHook.value.copyWith(isLoading: false);

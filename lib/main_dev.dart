@@ -1,4 +1,3 @@
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/shared/data/remote/notification_service.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
@@ -57,15 +56,8 @@ void main() async {
 
 void initApp() {
   runApp(
-    ProviderScope(
-      overrides: [
-        solanaProvider.overrideWith(
-          (ref) => SolanaClientNotifier(
-            ref,
-          ),
-        ),
-      ],
-      child: const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }

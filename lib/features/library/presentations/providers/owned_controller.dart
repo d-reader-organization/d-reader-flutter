@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/library/presentations/providers/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'owned_controller.g.dart';
@@ -48,10 +48,11 @@ class OwnedController extends _$OwnedController {
     required void Function(String message) onFail,
   }) async {
     try {
-      final isSuccessful = await ref.read(solanaProvider.notifier).useMint(
-            nftAddress: ownedNft.address,
-            ownerAddress: ownedNft.ownerAddress,
-          );
+      final isSuccessful =
+          await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
+                nftAddress: ownedNft.address,
+                ownerAddress: ownedNft.ownerAddress,
+              );
       if (isSuccessful) {
         return onSuccess();
       }

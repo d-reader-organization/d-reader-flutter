@@ -40,7 +40,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     );
   }
 
-  Future<bool> _doReauthorize(MobileWalletAdapterClient client,
+  Future<bool> doReauthorize(MobileWalletAdapterClient client,
       [String? overrideAuthToken, String? overrideSigner]) async {
     final envState = ref.read(environmentProvider);
     String? currentWalletAddress =
@@ -102,7 +102,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     required String apiUrl,
     required String jwtToken,
   }) async {
-    if (await _doReauthorize(client, overrideAuthToken, signer.toBase58())) {
+    if (await doReauthorize(client, overrideAuthToken, signer.toBase58())) {
       final response = await _authRepository.getOneTimePassword(
         address: signer.toBase58(),
         apiUrl: apiUrl,

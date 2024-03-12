@@ -26,109 +26,94 @@ class ComicRemoteDataSource implements ComicDataSource {
 
   @override
   Future<void> bookmarkComic(String slug) {
-    // TODO: implement bookmarkComic
-    throw UnimplementedError();
+    return networkService.patch('/comic/bookmark/$slug');
   }
 
   @override
-  Future<Either<AppException, ComicModel?>> getComic(String slug) {
-    // TODO: implement getComic
-    throw UnimplementedError();
+  Future<Either<AppException, ComicModel?>> getComic(String slug) async {
+    try {
+      final response = await networkService.get('/comic/get/$slug');
+      return response.fold((exception) => Left(exception), (result) {
+        return Right(ComicModel.fromJson(result.data));
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier: '${exception.toString()}ComicRemoteDataSource.getComic',
+        ),
+      );
+    }
   }
 
   @override
   Future<Either<AppException, List<ComicModel>>> getComics(
-      {String? queryString}) {
-    // TODO: implement getComics
-    throw UnimplementedError();
+      {String? queryString}) async {
+    try {
+      final response = await networkService.get('/comic/get?$queryString');
+      return response.fold((exception) => Left(exception), (result) {
+        return Right(
+          List<ComicModel>.from(
+            result.data.map(
+              (item) => ComicModel.fromJson(
+                item,
+              ),
+            ),
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier: '${exception.toString()}ComicRemoteDataSource.getComics',
+        ),
+      );
+    }
   }
 
   @override
   Future<Either<AppException, List<ComicModel>>> getOwnedComics(
-      {required int userId, required String query}) {
-    // TODO: implement getOwnedComics
-    throw UnimplementedError();
+      {required int userId, required String query}) async {
+    try {
+      final response =
+          await networkService.get('/comic/get/by-owner/$userId?$query');
+      return response.fold((exception) => Left(exception), (result) {
+        return Right(
+          List<ComicModel>.from(
+            result.data.map(
+              (item) => ComicModel.fromJson(
+                item,
+              ),
+            ),
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier: '${exception.toString()}ComicRemoteDataSource.getComics',
+        ),
+      );
+    }
   }
 
   @override
   Future<void> rateComic({required String slug, required int rating}) {
-    // TODO: implement rateComic
-    throw UnimplementedError();
+    return networkService.patch(
+      '/comic/rate/$slug',
+      data: {
+        'rating': rating,
+      },
+    );
   }
 
   @override
   Future<void> updateComicFavourite(String slug) {
-    // TODO: implement updateComicFavourite
-    throw UnimplementedError();
+    return networkService.patch('/comic/favouritise/$slug');
   }
 }
-
-//   @override
-//   Future<List<ComicModel>> getComics({String? queryString}) async {
-//     final response = await client
-//         .get<List<dynamic>>('/comic/get?$queryString')
-//         .then((value) => value.data);
-
-//     return response != null
-//         ? List<ComicModel>.from(
-//             response.map(
-//               (item) => ComicModel.fromJson(
-//                 item,
-//               ),
-//             ),
-//           )
-//         : [];
-//   }
-
-//   @override
-//   Future<ComicModel?> getComic(String slug) async {
-//     final response = await client
-//         .get<dynamic>('/comic/get/$slug')
-//         .then((value) => value.data);
-
-//     return response != null ? ComicModel.fromJson(response) : null;
-//   }
-
-//   @override
-//   Future<void> updateComicFavourite(String slug) async {
-//     await client.patch('/comic/favouritise/$slug');
-//   }
-
-//   @override
-//   Future rateComic({required String slug, required int rating}) async {
-//     await client
-//         .patch(
-//           '/comic/rate/$slug',
-//           data: {
-//             'rating': rating,
-//           },
-//         )
-//         .then((value) => value.data)
-//         .onError((error, stackTrace) {
-//           return error.toString();
-//         });
-//   }
-
-//   @override
-//   Future<List<ComicModel>> getOwnedComics(
-//       {required int userId, required String query}) async {
-//     final response = await client
-//         .get('/comic/get/by-owner/$userId?$query')
-//         .then((value) => value.data);
-
-//     return response != null
-//         ? List<ComicModel>.from(
-//             response.map(
-//               (item) => ComicModel.fromJson(
-//                 item,
-//               ),
-//             ),
-//           )
-//         : [];
-//   }
-
-//   @override
-//   Future<void> bookmarkComic(String slug) {
-//     return client.patch('/comic/bookmark/$slug').then((value) => value.data);
-//   }
-// }

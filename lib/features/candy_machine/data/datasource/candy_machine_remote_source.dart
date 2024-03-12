@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
-import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:d_reader_flutter/shared/data/remote/network_service.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
@@ -7,9 +6,6 @@ import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 abstract class CandyMachineDataSource {
   Future<Either<AppException, CandyMachineModel?>> getCandyMachine({
     required String query,
-  });
-  Future<Either<AppException, List<Receipt>>> getReceipts({
-    String? queryString,
   });
 }
 
@@ -20,45 +16,26 @@ class CandyMachineRemoteDataSource implements CandyMachineDataSource {
 
   @override
   Future<Either<AppException, CandyMachineModel?>> getCandyMachine(
-      {required String query}) {
-    // TODO: implement getCandyMachine
-    throw UnimplementedError();
-  }
+      {required String query}) async {
+    try {
+      final response = await networkService.get('/candy-machine/get?$query');
 
-  @override
-  Future<Either<AppException, List<Receipt>>> getReceipts(
-      {String? queryString}) {
-    // TODO: implement getReceipts
-    throw UnimplementedError();
+      return response.fold((exception) => Left(exception), (result) {
+        return Right(
+          CandyMachineModel.fromJson(
+            result.data,
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}CandyMachineRemoteDataSource.getCandyMachine',
+        ),
+      );
+    }
   }
 }
-
-//   @override
-//   Future<List<Receipt>> getReceipts({String? queryString}) async {
-//     final response = await client
-//         .get('/candy-machine/get/receipts?$queryString')
-//         .then((value) => value.data);
-
-//     if (response == null) {
-//       return [];
-//     }
-
-//     return List<Receipt>.from(
-//       response.map(
-//         (item) => Receipt.fromJson(
-//           item,
-//         ),
-//       ),
-//     );
-//   }
-
-//   @override
-//   Future<CandyMachineModel?> getCandyMachine({
-//     required String query,
-//   }) async {
-//     final response = await client
-//         .get('/candy-machine/get?$query')
-//         .then((value) => value.data);
-//     return response != null ? CandyMachineModel.fromJson(response) : null;
-//   }
-// }

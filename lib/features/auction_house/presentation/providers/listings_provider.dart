@@ -10,7 +10,7 @@ final listingsPaginatedProvider = StateNotifierProvider.autoDispose.family<
   (ref, arg) {
     final fetch = ref.read(auctionHouseRepositoryProvider).getListedItems;
     return ListingsPaginationNotifier(
-      fetch: fetch, // TODO think about fetch in pagination notifiers
+      fetch: fetch,
       query: 'comicIssueId=${arg.id}',
       ref: ref,
       comicIssueId: arg.id,

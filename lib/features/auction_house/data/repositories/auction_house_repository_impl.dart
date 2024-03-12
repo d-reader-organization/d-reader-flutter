@@ -6,20 +6,18 @@ import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 class AuctionHouseRepositoryImpl implements AuctionHouseRepository {
-  final AuctionHouseDataSource auctionHouseDataSource;
+  final AuctionHouseDataSource dataSource;
 
-  AuctionHouseRepositoryImpl(this.auctionHouseDataSource);
+  AuctionHouseRepositoryImpl(this.dataSource);
   @override
   Future<Either<AppException, CollectionStatsModel?>> getCollectionStatus(
       {required int issueId}) {
-    // TODO: implement getCollectionStatus
-    throw UnimplementedError();
+    return dataSource.getCollectionStatus(issueId: issueId);
   }
 
   @override
   Future<Either<AppException, List<ListingModel>>> getListedItems(
       {String? queryString}) {
-    // TODO: implement getListedItems
-    throw UnimplementedError();
+    return dataSource.getListedItems(queryString: queryString);
   }
 }

@@ -1,30 +1,10 @@
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
-import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'candy_machine_providers.g.dart';
-
-final receiptsProvider =
-    FutureProvider.autoDispose.family<List<Receipt>, ReceiptsProviderArg>(
-  (ref, arg) {
-    return ref
-        .read(candyMachineRepositoryProvider)
-        .getReceipts(
-          queryString: '${arg.query}&candyMachineAddress=${arg.address}',
-        )
-        .then(
-          (value) => value.fold(
-            (exception) {
-              throw exception;
-            },
-            (data) => data,
-          ),
-        );
-  },
-);
 
 final candyMachineStateProvider = StateProvider<CandyMachineModel?>(
   (ref) {

@@ -20,44 +20,63 @@ class AuctionHouseRemoteDataSource implements AuctionHouseDataSource {
 
   @override
   Future<Either<AppException, CollectionStatsModel?>> getCollectionStatus(
-      {required int issueId}) {
-    // TODO: implement getCollectionStatus
-    throw UnimplementedError();
+      {required int issueId}) async {
+    try {
+      final response = await networkService
+          .get('/auction-house/get/collection-stats/$issueId');
+      return response.fold((exception) {
+        return Left(exception);
+      }, (result) {
+        return Right(
+          CollectionStatsModel.fromJson(
+            result.data,
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}AuctionHouseRemoteDataSource.getCollectionStatus',
+        ),
+      );
+    }
   }
 
   @override
   Future<Either<AppException, List<ListingModel>>> getListedItems(
-      {String? queryString}) {
-    // TODO: implement getListedItems
-    throw UnimplementedError();
+      {String? queryString}) async {
+    try {
+      final response = await networkService
+          .get('/auction-house/get/listed-items?$queryString');
+
+      return response.fold((exception) => Left(exception), (result) {
+        final data = result.data;
+
+        if (data == null) {
+          return const Right([]);
+        }
+        return Right(
+          List<ListingModel>.from(
+            data.map(
+              (item) => ListingModel.fromJson(
+                item,
+              ),
+            ),
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}AuctionHouseRemoteDataSource.getListedItems',
+        ),
+      );
+    }
   }
 }
-
-  // @override
-  // Future<List<ListingModel>> getListedItems({
-  //   String? queryString,
-  // }) async {
-  //   final response = await client
-  //       .get('/auction-house/get/listed-items?$queryString')
-  //       .then((value) => value.data);
-  //   if (response == null) {
-  //     return [];
-  //   }
-  //   return List<ListingModel>.from(
-  //     response.map(
-  //       (item) => ListingModel.fromJson(
-  //         item,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // @override
-  // Future<CollectionStatsModel?> getCollectionStatus(
-  //     {required int issueId}) async {
-  //   final response = await client
-  //       .get('/auction-house/get/collection-stats/$issueId')
-  //       .then((value) => value.data);
-
-  //   return response == null ? null : CollectionStatsModel.fromJson(response);
-  // }

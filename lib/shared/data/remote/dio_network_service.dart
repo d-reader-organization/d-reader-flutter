@@ -59,6 +59,7 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
   Future<Either<AppException, CustomResponse>> patch(
     String endpoint, {
     Map<String, dynamic>? data,
+    FormData? formData,
     Map<String, dynamic>? headers,
   }) {
     return handleExceptionWrapper(
@@ -66,7 +67,7 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
       handler: () {
         return dio.patch(
           endpoint,
-          data: data,
+          data: data ?? formData,
           options: Options(headers: headers),
         );
       },

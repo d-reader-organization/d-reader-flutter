@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/shared/domain/models/custom_response.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
+import 'package:dio/dio.dart';
 
 abstract class NetworkService {
   String get baseUrl;
@@ -22,6 +23,7 @@ abstract class NetworkService {
   Future<Either<AppException, CustomResponse>> patch(
     String endpoint, {
     Map<String, dynamic>? data,
+    FormData? formData,
     Map<String, dynamic>? headers,
   });
 }

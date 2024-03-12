@@ -14,14 +14,51 @@ class NftRemoteDataSource implements NftDataSource {
   NftRemoteDataSource(this.networkService);
 
   @override
-  Future<Either<AppException, NftModel?>> getNft(String address) {
-    // TODO: implement getNft
-    throw UnimplementedError();
+  Future<Either<AppException, NftModel?>> getNft(String address) async {
+    try {
+      final response = await networkService.get('/nft/get/$address');
+      return response.fold((exception) => Left(exception), (result) {
+        return Right(
+          NftModel.fromJson(
+            result.data,
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier: '${exception.toString()}NftRemoteDataSource.getNft',
+        ),
+      );
+    }
   }
 
   @override
-  Future<Either<AppException, List<NftModel>>> getNfts(String query) {
-    // TODO: implement getNfts
-    throw UnimplementedError();
+  Future<Either<AppException, List<NftModel>>> getNfts(String query) async {
+    try {
+      final response = await networkService.get('/nft/get?$query');
+
+      return response.fold((exception) => Left(exception), (result) {
+        return Right(
+          List<NftModel>.from(
+            result.data.map(
+              (item) => NftModel.fromJson(
+                item,
+              ),
+            ),
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier: '${exception.toString()}NftRemoteDataSource.getNfts',
+        ),
+      );
+    }
   }
 }

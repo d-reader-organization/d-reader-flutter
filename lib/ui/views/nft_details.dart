@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_controller.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
@@ -464,7 +464,7 @@ class Button extends ConsumerWidget {
       borderColor: borderColor,
       padding: const EdgeInsets.symmetric(vertical: 8),
       backgroundColor: backgroundColor,
-      isLoading: ref.watch(globalStateProvider).isLoading,
+      isLoading: ref.watch(globalNotifierProvider).isLoading,
       onPressed: ref.watch(isOpeningSessionProvider) ? null : onPressed,
       child: child,
     );

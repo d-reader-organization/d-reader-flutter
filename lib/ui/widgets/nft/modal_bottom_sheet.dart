@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_controller.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
@@ -119,7 +119,7 @@ class SubmitButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomTextButton(
-      isLoading: ref.watch(globalStateProvider).isLoading,
+      isLoading: ref.watch(globalNotifierProvider).isLoading,
       onPressed: price != null
           ? () async {
               try {

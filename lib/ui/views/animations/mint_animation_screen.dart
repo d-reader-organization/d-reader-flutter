@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_controller.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/enums.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -299,7 +299,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                       child: Consumer(
                         builder: (context, ref, child) {
                           final bool isLoading =
-                              ref.watch(globalStateProvider).isLoading;
+                              ref.watch(globalNotifierProvider).isLoading;
                           return CustomTextButton(
                             backgroundColor: ColorPalette.dReaderGreen,
                             padding: const EdgeInsets.symmetric(

@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
@@ -9,18 +8,15 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_issue_controller.g.dart';
 
 @riverpod
 class ComicIssueController extends _$ComicIssueController {
-  late StateController<GlobalState> globalNotifier;
   @override
-  FutureOr<void> build() {
-    globalNotifier = ref.read(globalStateProvider.notifier);
-  }
+  void build() {}
 
   _checkIsVerifiedEmail() async {
     final envUser = ref.read(environmentProvider).user;
@@ -76,9 +72,9 @@ class ComicIssueController extends _$ComicIssueController {
           isError: true,
         );
       }
-      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
     } catch (exception) {
-      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       onException(exception);
     }
   }
@@ -111,18 +107,16 @@ class ComicIssueController extends _$ComicIssueController {
       final isSuccessful = await ref
           .read(solanaProvider.notifier)
           .buyMultiple(selectedNftsInput);
-      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       if (isSuccessful) {
-        // ref.invalidate(listedItemsProvider); TODO listed items provider
         ref.invalidate(listingsPaginatedProvider);
-        // ref.invalidate(userAssetsProvider); is this used at all
       }
       displaySnackBar(
         text: isSuccessful ? 'Success!' : 'Failed to buy item(s).',
         isSuccess: isSuccessful,
       );
     } catch (exception) {
-      ref.read(globalStateProvider.notifier).state.copyWith(isLoading: false);
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       onException(exception);
     }
   }

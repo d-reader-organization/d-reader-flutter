@@ -1,6 +1,4 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
@@ -8,6 +6,7 @@ import 'package:d_reader_flutter/features/comic/presentation/providers/comic_pro
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/selected_rating_star_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/utils/trigger_walkthrough_dialog.dart';
@@ -15,17 +14,13 @@ import 'package:d_reader_flutter/ui/widgets/common/dialogs/confirmation_dialog.d
 import 'package:d_reader_flutter/ui/widgets/common/rating/rating_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'rating_controller.g.dart';
 
 @riverpod
 class RatingController extends _$RatingController {
-  late StateController<GlobalState> globalNotifier;
   @override
-  FutureOr<void> build() {
-    globalNotifier = ref.read(globalStateProvider.notifier);
-  }
+  void build() {}
 
   _triggerSendVerificationEmail({
     required BuildContext context,

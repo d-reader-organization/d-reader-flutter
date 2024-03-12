@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/dto.dart';
+import 'package:solana/solana.dart';
 
 part 'wallet_providers.g.dart';
 
@@ -77,4 +78,36 @@ final selectedWalletProvider = StateProvider.autoDispose<String>(
 );
 final walletNameProvider = StateProvider.autoDispose<String>((ref) {
   return '';
+});
+
+final chainSubscriptionClientProvider =
+    StreamProvider.family.autoDispose<Account?, String>((
+  ref,
+  address,
+) async* {
+  final currentAccountData =
+      await ref.read(accountInfoProvider(address: address).future);
+  final subscriptionClient = SubscriptionClient.connect(
+      ref.read(environmentProvider).solanaCluster == SolanaCluster.devnet.value
+          ? Config.rpcUrlDevnet.replaceAll(
+              'https',
+              'ws',
+            )
+          : Config.rpcUrlMainnet.replaceAll(
+              'https',
+              'ws',
+            ));
+  try {
+    Account? accountData = currentAccountData.value;
+    subscriptionClient
+        .accountSubscribe(
+      address,
+    )
+        .listen((event) {
+      accountData = event;
+    });
+    yield accountData;
+  } catch (error) {
+    throw Exception(error);
+  }
 });

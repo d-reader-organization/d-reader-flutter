@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/features/authentication/domain/repositories/aut
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
-import 'package:d_reader_flutter/shared/domain/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sign_in_notifier.g.dart';

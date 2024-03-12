@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
-import 'package:d_reader_flutter/shared/domain/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:flutter/animation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;

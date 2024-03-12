@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/notification/notification_controller.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
@@ -101,13 +101,13 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
         child: Scaffold(
           backgroundColor: ColorPalette.appBackgroundColor,
           appBar: _appBar(
-            navigationIndex: ref.watch(scaffoldProvider).navigationIndex,
+            navigationIndex: ref.watch(scaffoldNavigationIndexProvider),
             isDevnet: ref.watch(environmentProvider).solanaCluster ==
                 SolanaCluster.devnet.value,
           ),
           body: Padding(
             padding: _bodyPadding(
-              screenIndex: ref.watch(scaffoldProvider).navigationIndex,
+              screenIndex: ref.watch(scaffoldNavigationIndexProvider),
               hasBetaAccess: ref.watch(environmentProvider).user != null &&
                   ref.watch(environmentProvider).user!.hasBetaAccess,
             ),
@@ -117,8 +117,8 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
                   physics: const NeverScrollableScrollPhysics(),
                   onPageChanged: (index) {
                     ref
-                        .read(scaffoldProvider.notifier)
-                        .setNavigationIndex(index);
+                        .read(scaffoldNavigationIndexProvider.notifier)
+                        .update((state) => index);
                   },
                   children: const [
                     BetaAccessWrapper(

@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/features/discover/genre/presentations/providers/genre_providers.dart';
-import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
-import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:flutter/material.dart';
@@ -39,10 +39,11 @@ class SectionHeading extends ConsumerWidget {
                       ? () {
                           ref
                               .read(tabBarProvider.notifier)
-                              .setTabIndex(initialTab!.index);
+                              .update((state) => initialTab!.index);
+
                           ref
-                              .read(scaffoldProvider.notifier)
-                              .setNavigationIndex(1);
+                              .read(scaffoldNavigationIndexProvider.notifier)
+                              .update((state) => 1);
                           ref.read(scaffoldPageController).animateToPage(
                                 1,
                                 curve: Curves.linear,

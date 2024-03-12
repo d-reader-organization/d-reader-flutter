@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/selected_rating_star_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

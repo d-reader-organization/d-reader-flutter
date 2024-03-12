@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/core/providers/chain_subscription_client.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -133,7 +133,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                   )
                 : null,
             overrideTrailing: const SizedBox(),
-            onTap: ref.watch(globalStateProvider).isLoading
+            onTap: ref.watch(globalNotifierProvider).isLoading
                 ? null
                 : () {
                     ref.read(walletControllerProvider.notifier).syncWallet(
@@ -153,7 +153,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             SettingsCommonListTile(
               title: 'Airdrop \$SOL',
               leadingPath: '${Config.settingsAssetsPath}/light/arrow_down.svg',
-              overrideColor: ref.watch(globalStateProvider).isLoading
+              overrideColor: ref.watch(globalNotifierProvider).isLoading
                   ? ColorPalette.greyscale300
                   : ColorPalette.dReaderGreen,
               overrideLeading: Padding(
@@ -161,7 +161,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                 child: SvgPicture.asset(
                   '${Config.settingsAssetsPath}/light/arrow_down.svg',
                   colorFilter: ColorFilter.mode(
-                    ref.watch(globalStateProvider).isLoading
+                    ref.watch(globalNotifierProvider).isLoading
                         ? ColorPalette.greyscale300
                         : ColorPalette.dReaderGreen,
                     BlendMode.srcIn,
@@ -251,7 +251,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
               ),
               Expanded(
                 child: CustomTextButton(
-                  isLoading: ref.watch(globalStateProvider).isLoading,
+                  isLoading: ref.watch(globalNotifierProvider).isLoading,
                   backgroundColor: ColorPalette.dReaderYellow100,
                   size: const Size(
                     0,

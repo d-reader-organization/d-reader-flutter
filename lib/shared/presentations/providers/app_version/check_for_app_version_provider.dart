@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:upgrader/upgrader.dart';

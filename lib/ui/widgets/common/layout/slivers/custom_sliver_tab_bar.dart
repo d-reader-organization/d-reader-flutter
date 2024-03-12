@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/search_provider.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/search_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

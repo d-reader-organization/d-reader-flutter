@@ -8,8 +8,8 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/controller/comic_issue_controller.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
@@ -482,7 +482,7 @@ class BottomNavigation extends ConsumerWidget {
               ref.watch(activeCandyMachineGroup) != null
                   ? Expanded(
                       child: TransactionButton(
-                        isLoading: ref.watch(globalStateProvider).isLoading,
+                        isLoading: ref.watch(globalNotifierProvider).isLoading,
                         onPressed: ref.watch(isOpeningSessionProvider)
                             ? null
                             : () async {
@@ -537,7 +537,8 @@ class BottomNavigation extends ConsumerWidget {
                   : issue.isSecondarySaleActive
                       ? Expanded(
                           child: TransactionButton(
-                            isLoading: ref.watch(globalStateProvider).isLoading,
+                            isLoading:
+                                ref.watch(globalNotifierProvider).isLoading,
                             onPressed:
                                 ref.read(selectedItemsProvider).isNotEmpty &&
                                         !ref.watch(isOpeningSessionProvider)

@@ -3,44 +3,31 @@ import 'dart:io' show File;
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'profile_controller.g.dart';
 
 @riverpod
 class ProfileController extends _$ProfileController {
-  late StateController<GlobalState> globalNotifier;
   @override
-  FutureOr<void> build() {
-    globalNotifier = ref.read(globalStateProvider.notifier);
-  }
+  void build() {}
 
   Future<void> changeEmail({
     required String newEmail,
     required void Function() onSuccess,
     required void Function(String cause) onBadRequestException,
   }) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(isLoading: true),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(true);
+
     try {
       await ref.read(userRepositoryProvider).requestChangeEmail(newEmail);
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       onSuccess();
     } catch (exception) {
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       if (exception is BadRequestException) {
         onBadRequestException(exception.cause);
       }
@@ -53,23 +40,13 @@ class ProfileController extends _$ProfileController {
     required int userId,
     required void Function(dynamic result) callback,
   }) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(true);
     final result = await ref.read(userRepositoryProvider).updatePassword(
           userId: userId,
           oldPassword: oldPassword,
           newPassword: newPassword,
         );
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(false);
     callback(result);
   }
 
@@ -79,11 +56,7 @@ class ProfileController extends _$ProfileController {
   }) async {
     final String username = ref.read(usernameTextProvider);
     if (username.isNotEmpty) {
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: true,
-        ),
-      );
+      ref.read(globalNotifierProvider.notifier).updateLoading(true);
       final updateResult = await ref.read(userRepositoryProvider).updateUser(
             UpdateUserPayload(
               id: user.id,
@@ -91,11 +64,7 @@ class ProfileController extends _$ProfileController {
               name: username,
             ),
           );
-      globalNotifier.update(
-        (state) => state.copyWith(
-          isLoading: false,
-        ),
-      );
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       ref.read(usernameTextProvider.notifier).update((state) => '');
       ref.invalidate(myUserProvider);
       callback(updateResult);
@@ -106,17 +75,9 @@ class ProfileController extends _$ProfileController {
     required int userId,
     required void Function() callback,
   }) async {
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(true);
     await ref.read(userRepositoryProvider).syncWallets(userId);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(false);
     callback();
   }
 
@@ -153,17 +114,9 @@ class ProfileController extends _$ProfileController {
     required String email,
     required void Function(String result) callback,
   }) {
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(true);
     ref.read(userRepositoryProvider).requestPasswordReset(email);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(false);
     callback('Instructions have been sent.');
   }
 }

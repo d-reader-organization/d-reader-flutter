@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
 
-import 'package:d_reader_flutter/core/providers/check_for_app_version_provider.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/app_version/check_for_app_version_provider.dart';
 import 'package:d_reader_flutter/ui/widgets/d_reader_scaffold.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

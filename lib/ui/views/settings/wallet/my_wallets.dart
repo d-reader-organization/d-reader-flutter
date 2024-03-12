@@ -1,12 +1,12 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
@@ -290,7 +290,7 @@ class MyWalletsScreen extends ConsumerWidget {
                     );
                   },
             size: const Size(double.infinity, 50),
-            isLoading: ref.watch(globalStateProvider).isLoading,
+            isLoading: ref.watch(globalNotifierProvider).isLoading,
             padding: const EdgeInsets.all(16),
             child: Text(
               ref.watch(isWalletAvailableProvider).maybeWhen(

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
-import 'package:d_reader_flutter/shared/domain/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_notifier.g.dart';
 

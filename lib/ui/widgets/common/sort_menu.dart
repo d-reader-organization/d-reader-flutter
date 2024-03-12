@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/radio_button.dart';
 import 'package:flutter/material.dart';
@@ -92,11 +92,11 @@ class SortMenu extends ConsumerWidget {
         const SizedBox(
           height: 16,
         ),
-        if (ref.watch(tabBarProvider).selectedTabIndex == 0)
+        if (ref.watch(tabBarProvider) == 0)
           const ComicSortMenu()
-        else if (ref.watch(tabBarProvider).selectedTabIndex == 1)
+        else if (ref.watch(tabBarProvider) == 1)
           const IssueSortMenu()
-        else if (ref.watch(tabBarProvider).selectedTabIndex == 2)
+        else if (ref.watch(tabBarProvider) == 2)
           const CreatorSortMenu(),
       ],
     );

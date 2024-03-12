@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/search_provider.dart';
-import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
-import 'package:d_reader_flutter/shared/domain/providers/global/global_providers.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/search_provider.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/shared/styles.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/filter_icon.dart';
@@ -32,11 +32,9 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
   @override
   void initState() {
     _controller = TabController(
-        length: 3,
-        vsync: this,
-        initialIndex: ref.read(tabBarProvider).selectedTabIndex);
+        length: 3, vsync: this, initialIndex: ref.read(tabBarProvider));
     _controller.addListener(() {
-      ref.read(tabBarProvider.notifier).setTabIndex(_controller.index);
+      ref.read(tabBarProvider.notifier).update((state) => _controller.index);
     });
     super.initState();
   }
@@ -56,7 +54,7 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      initialIndex: ref.read(tabBarProvider).selectedTabIndex,
+      initialIndex: ref.read(tabBarProvider),
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [

@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentations/providers/genre_providers.dart';
-import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
@@ -49,19 +49,19 @@ class FilterBottomSheet extends ConsumerWidget {
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [
-            ref.watch(tabBarProvider).selectedTabIndex != 2
+            ref.watch(tabBarProvider) != 2
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SectionTitle(
-                        title: ref.watch(tabBarProvider).selectedTabIndex == 0
+                        title: ref.watch(tabBarProvider) == 0
                             ? 'Show comics'
                             : 'Show issues',
                       ),
                       const SizedBox(
                         height: 16,
                       ),
-                      ref.watch(tabBarProvider).selectedTabIndex == 0
+                      ref.watch(tabBarProvider) == 0
                           ? const FilterContainer(
                               id: FilterId.popular, text: 'Popular')
                           : const Row(

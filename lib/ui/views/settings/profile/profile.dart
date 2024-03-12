@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/logout_provider.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:d_reader_flutter/features/settings/presentations/providers/profile_controller.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
@@ -62,7 +63,7 @@ class ProfileView extends HookConsumerWidget {
                   ),
                   Expanded(
                     child: CustomTextButton(
-                      isLoading: ref.watch(globalStateProvider).isLoading,
+                      isLoading: ref.watch(globalNotifierProvider).isLoading,
                       size: const Size(double.infinity, 40),
                       onPressed: () async {
                         if (provider.value != null) {
@@ -224,7 +225,7 @@ class ProfileView extends HookConsumerWidget {
                               '${Config.settingsAssetsPath}/light/wallet.svg',
                           overrideColor: Colors.green,
                           overrideLeading:
-                              ref.watch(globalStateProvider).isLoading
+                              ref.watch(globalNotifierProvider).isLoading
                                   ? const SizedBox(
                                       height: 24,
                                       width: 24,
@@ -234,7 +235,7 @@ class ProfileView extends HookConsumerWidget {
                                     )
                                   : null,
                           overrideTrailing: const SizedBox(),
-                          onTap: ref.watch(globalStateProvider).isLoading
+                          onTap: ref.watch(globalNotifierProvider).isLoading
                               ? null
                               : () {
                                   ref

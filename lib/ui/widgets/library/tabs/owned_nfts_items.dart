@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
+import 'package:d_reader_flutter/features/library/presentations/providers/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';

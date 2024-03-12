@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/logout_provider.dart';
-import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
+import 'package:d_reader_flutter/features/settings/presentations/providers/profile_controller.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';

@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/auth/input_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/settings/profile_controller.dart';
+import 'package:d_reader_flutter/features/settings/presentations/providers/profile_controller.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';

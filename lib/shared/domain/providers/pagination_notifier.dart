@@ -1,11 +1,14 @@
+import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_args.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PaginationNotifier<T> extends StateNotifier<PaginationState<T>>
     implements IPaginationNotifier {
-  final Future<List<T>> Function({String? queryString}) fetch;
+  final Future<Either<AppException, List<T>>> Function({String? queryString})
+      fetch;
   final String? query;
 
   PaginationNotifier({
@@ -31,8 +34,14 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>>
     }
     state = PaginationState.onGoingLoading(_items);
 
-    try {
-      final result = await fetch(queryString: buildQueryString());
+    final response = await fetch(queryString: buildQueryString());
+    response.fold((exception) {
+      state = PaginationState.onGoingError(
+        _items,
+        'Error occured in fetching next items',
+        StackTrace.fromString('PaginationNotifier.fetchNext()'),
+      );
+    }, (result) {
       if (result.length < args.take) {
         isEnd = true;
         state = PaginationState.data(_items..addAll(result));
@@ -43,19 +52,18 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>>
         take: args.take,
       );
       state = PaginationState.data(_items..addAll(result));
-    } catch (e) {
-      state = PaginationState.onGoingError(
-        _items,
-        'Error occured in fetching next items',
-        StackTrace.fromString('PaginationNotifier.fetchNext()'),
-      );
-    }
+    });
   }
 
   @override
   initialFetch() async {
-    try {
-      final result = await fetch(queryString: buildQueryString());
+    final response = await fetch(queryString: buildQueryString());
+    response.fold((exception) {
+      state = PaginationState.error(
+        exception,
+        StackTrace.fromString('PaginationNotifier.initialFetch()'),
+      );
+    }, (result) {
       if (result.isEmpty || result.length < args.take) {
         isEnd = true;
         state = PaginationState.data(_items..addAll(result));
@@ -67,12 +75,7 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>>
       );
       state = PaginationState.data(_items..addAll(result));
       initialFetchDone = true;
-    } catch (e) {
-      state = PaginationState.error(
-        e,
-        StackTrace.fromString('PaginationNotifier.initialFetch()'),
-      );
-    }
+    });
   }
 
   @override

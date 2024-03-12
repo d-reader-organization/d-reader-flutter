@@ -7,9 +7,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final creatorsProvider = FutureProvider.autoDispose
     .family<List<CreatorModel>, String?>((ref, queryString) async {
-  return await ref
+  final response = await ref
       .read(creatorRepositoryProvider)
       .getCreators(queryString: queryString ?? appendDefaultQuery(queryString));
+
+  return response.fold(
+    (exception) {
+      // TODO think about this
+      return [];
+    },
+    (result) => result,
+  );
 });
 
 final creatorProvider =

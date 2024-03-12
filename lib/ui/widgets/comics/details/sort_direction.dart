@@ -1,4 +1,5 @@
-import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
+import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/details/filter_and_sort.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

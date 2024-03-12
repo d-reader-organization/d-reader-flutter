@@ -1,9 +1,10 @@
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
-import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentations/providers/genre_providers.dart';
 import 'package:d_reader_flutter/core/providers/tab_bar_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
+import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';

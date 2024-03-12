@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/providers/discover/filter_provider.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentations/providers/genre_providers.dart';
 import 'package:d_reader_flutter/features/discover/genre/domain/models/genre.dart';
+import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/genre_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

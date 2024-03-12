@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
@@ -89,6 +90,7 @@ class NftController extends _$NftController {
     required VideoPlayerController videoPlayerController,
     required AnimationController animationController,
     required Future Function(NftModel nft) onSuccess,
+    required Function() onFail,
   }) async {
     final bool isMinting =
         ref.watch(globalNotifierProvider).isMinting != null &&
@@ -103,8 +105,7 @@ class NftController extends _$NftController {
         );
       }
     } else if (!isMinting && !isMinted) {
-      videoPlayerController.pause();
-      context.pop();
+      onFail();
     }
   }
 

@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/selected_rating_provider.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
@@ -54,14 +54,9 @@ class RatingController extends _$RatingController {
           onTap: () {
             final int rating = ref.read(selectedRatingStarIndex) + 1;
             return issueId != null && rating > 0
-                ? ref.read(
-                    rateComicIssueProvider(
-                      {
-                        'id': issueId,
-                        'rating': rating,
-                      },
-                    ).future,
-                  )
+                ? ref
+                    .read(comicIssueRepositoryProvider)
+                    .rateIssue(id: issueId, rating: rating)
                 : ref.read(
                     rateComicProvider(
                       {

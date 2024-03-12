@@ -1,22 +1,5 @@
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-enum FilterId {
-  free,
-  popular,
-}
-
-enum SortByEnum {
-  latest,
-  rating,
-  likes,
-  readers,
-  viewers,
-  followers,
-  name,
-  published,
-}
-
-enum SortDirection { asc, desc }
 
 final selectedFilterProvider = StateProvider<FilterId?>((ref) {
   return null;

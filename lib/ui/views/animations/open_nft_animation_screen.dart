@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/animation/animation_provider.dart';
+import 'package:d_reader_flutter/features/nft/presentations/providers/nft_controller.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
@@ -41,8 +41,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
     _controller.play();
 
     _controller.addListener(() {
-      ref.read(animationNotifierProvider.notifier).mintOpenListener(
-            context: context,
+      ref.read(nftControllerProvider.notifier).mintOpenListener(
             videoPlayerController: _controller,
             animationController: _animationController,
             onSuccess: (String nftAddress) {
@@ -57,7 +56,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
               context.pop();
               showSnackBar(
                 context: context,
-                text: 'Internal server error.',
+                text: 'Failed to mint.',
                 backgroundColor: ColorPalette.dReaderRed,
               );
               return;

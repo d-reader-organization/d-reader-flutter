@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/providers/app_bar/app_bar_visibility.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/core/providers/e_reader/reading_switch_provider.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
+import 'package:d_reader_flutter/features/e_reader/presentations/providers/e_reader_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
@@ -47,9 +47,9 @@ class EReaderBottomNavigation extends ConsumerWidget {
                 Row(
                   children: [
                     RatingIcon(
-                      initialRating: issue?.stats?.averageRating ?? 0,
+                      initialRating: issue.stats?.averageRating ?? 0,
                       issueId: issueId,
-                      isRatedByMe: issue?.myStats?.rating != null,
+                      isRatedByMe: issue.myStats?.rating != null,
                     ),
                     const SizedBox(
                       width: 8,

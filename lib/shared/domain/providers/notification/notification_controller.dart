@@ -1,6 +1,6 @@
-import 'package:d_reader_flutter/core/providers/fcm/notification_provider.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/notification/notification_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'notification_controller.g.dart';
 

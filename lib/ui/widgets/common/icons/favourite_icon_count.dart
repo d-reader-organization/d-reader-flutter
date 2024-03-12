@@ -1,6 +1,7 @@
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
+import 'package:d_reader_flutter/features/comic_issue/domain/providers/comic_issue_provider.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,9 @@ class FavouriteIconCount extends HookConsumerWidget {
               final loadingNotifier = ref.read(privateLoadingProvider.notifier);
               loadingNotifier.update((state) => true);
               if (issueId != null) {
-                await ref.read(favouritiseComicIssueProvider(issueId!).future);
+                await ref
+                    .read(comicIssueRepositoryProvider)
+                    .favouritiseIssue(issueId!);
                 ref.invalidate(comicIssueDetailsProvider);
                 ref.invalidate(paginatedIssuesProvider);
               } else if (slug != null) {

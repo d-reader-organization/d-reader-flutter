@@ -1,26 +1,21 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
 import 'package:d_reader_flutter/core/providers/scaffold_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
 import 'package:d_reader_flutter/features/home/carousel/presentations/providers/carousel_providers.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'change_network.g.dart';
 
 @riverpod
 class ChangeNetworkController extends _$ChangeNetworkController {
-  late StateController<GlobalState> globalNotifier;
   @override
-  FutureOr<void> build() {
-    globalNotifier = ref.read(globalStateProvider.notifier);
-  }
+  void build() {}
 
   _doChangeNetworkProcess({
     required String cluster,

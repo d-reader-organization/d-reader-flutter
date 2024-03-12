@@ -1,8 +1,8 @@
 import 'dart:async' show Timer;
 
-import 'package:d_reader_flutter/core/providers/discover/view_mode.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
@@ -45,7 +45,7 @@ final paginatedComicsProvider = StateNotifierProvider.family<
     String?>((ref, query) {
   final fetch = ref.read(comicRepositoryProvider).getComics;
   return PaginationNotifier<ComicModel>(
-    fetch: fetch, // Pagination fetch TODO
+    fetch: fetch,
     query: query,
   )..init();
 });

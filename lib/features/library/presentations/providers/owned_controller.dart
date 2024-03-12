@@ -1,38 +1,26 @@
-import 'package:d_reader_flutter/core/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/core/providers/global_provider.dart';
-import 'package:d_reader_flutter/core/providers/library/selected_owned_comic_provider.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
+import 'package:d_reader_flutter/features/library/presentations/providers/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:d_reader_flutter/shared/domain/providers/global/global_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'owned_controller.g.dart';
 
 @riverpod
 class OwnedController extends _$OwnedController {
-  late StateController<GlobalState> globalNotifier;
   @override
-  FutureOr<void> build() {
-    globalNotifier = ref.read(globalStateProvider.notifier);
-  }
+  void build() {}
 
   Future<List<NftModel>> _fetchOwnedNfts(int comicIssueId) async {
-    final globalNotifier = ref.read(globalStateProvider.notifier);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: true,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(true);
+
     final ownedNfts = await ref.read(nftsProvider(
       'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
     ).future);
-    globalNotifier.update(
-      (state) => state.copyWith(
-        isLoading: false,
-      ),
-    );
+    ref.read(globalNotifierProvider.notifier).updateLoading(false);
     return ownedNfts;
   }
 

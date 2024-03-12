@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/core/providers/animation/animation_provider.dart';
 import 'package:d_reader_flutter/core/providers/global_provider.dart';
+import 'package:d_reader_flutter/features/nft/presentations/providers/nft_controller.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/ui/shared/app_colors.dart';
@@ -48,24 +48,26 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     _controller.setLooping(true);
     _controller.play();
     _controller.addListener(() async {
-      await ref.read(animationNotifierProvider.notifier).mintLoadingListener(
-            context: context,
-            videoPlayerController: _controller,
-            animationController: _animationController,
-            onSuccess: (NftModel nft) async {
-              await Future.delayed(
-                const Duration(milliseconds: 1000),
-                () {
-                  nextScreenReplace(
-                    context: context,
-                    path: RoutePath.doneMinting,
-                    homeSubRoute: true,
-                    extra: nft,
-                  );
-                },
-              );
-            },
-          );
+      await ref.read(nftControllerProvider.notifier).mintLoadingListener(
+          videoPlayerController: _controller,
+          animationController: _animationController,
+          onSuccess: (NftModel nft) async {
+            await Future.delayed(
+              const Duration(milliseconds: 1000),
+              () {
+                nextScreenReplace(
+                  context: context,
+                  path: RoutePath.doneMinting,
+                  homeSubRoute: true,
+                  extra: nft,
+                );
+              },
+            );
+          },
+          onFail: () {
+            _controller.pause();
+            context.pop();
+          });
     });
   }
 
@@ -165,7 +167,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
   }
 
   _handleUnwrap({required WidgetRef ref}) async {
-    await ref.read(animationNotifierProvider.notifier).handleNftUnwrap(
+    await ref.read(nftControllerProvider.notifier).handleNftUnwrap(
           nftAddress: widget.nft.address,
           ownerAddress: widget.nft.ownerAddress,
           onSuccess: () {

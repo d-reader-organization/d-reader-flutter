@@ -2,7 +2,6 @@ import 'dart:io' show File;
 
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
-import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
@@ -22,16 +21,15 @@ class ProfileController extends _$ProfileController {
   }) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
 
-    try {
-      await ref.read(userRepositoryProvider).requestChangeEmail(newEmail);
-      ref.read(globalNotifierProvider.notifier).updateLoading(false);
-      onSuccess();
-    } catch (exception) {
-      ref.read(globalNotifierProvider.notifier).updateLoading(false);
-      if (exception is BadRequestException) {
-        onBadRequestException(exception.cause);
-      }
-    }
+    final response =
+        await ref.read(userRepositoryProvider).requestChangeEmail(newEmail);
+    ref.read(globalNotifierProvider.notifier).updateLoading(false);
+    response.fold(
+      (exception) => onBadRequestException(exception.message),
+      (result) {
+        onSuccess();
+      },
+    );
   }
 
   Future<void> changePassword({
@@ -41,13 +39,15 @@ class ProfileController extends _$ProfileController {
     required void Function(dynamic result) callback,
   }) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
-    final result = await ref.read(userRepositoryProvider).updatePassword(
+    final response = await ref.read(userRepositoryProvider).updatePassword(
           userId: userId,
           oldPassword: oldPassword,
           newPassword: newPassword,
         );
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
-    callback(result);
+    response.fold((exception) => callback(exception.message), (result) {
+      callback(result);
+    });
   }
 
   Future<void> changeUsername({
@@ -65,9 +65,11 @@ class ProfileController extends _$ProfileController {
             ),
           );
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
-      ref.read(usernameTextProvider.notifier).update((state) => '');
-      ref.invalidate(myUserProvider);
-      callback(updateResult);
+      updateResult.fold((exception) => callback(exception.message), (result) {
+        ref.read(usernameTextProvider.notifier).update((state) => '');
+        ref.invalidate(myUserProvider);
+        callback(result);
+      });
     }
   }
 

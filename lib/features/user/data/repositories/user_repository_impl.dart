@@ -22,7 +22,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> requestChangeEmail(String newEmail) {
+  Future<Either<AppException, bool>> requestChangeEmail(String newEmail) {
     return dataSource.requestChangeEmail(newEmail);
   }
 

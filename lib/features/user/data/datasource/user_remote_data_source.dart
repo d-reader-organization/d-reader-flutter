@@ -19,7 +19,7 @@ abstract class UserDataSource {
   Future<void> syncWallets(int id);
   Future<void> requestPasswordReset(String email);
   Future<void> requestEmailVerification();
-  Future<void> requestChangeEmail(String newEmail);
+  Future<Either<AppException, bool>> requestChangeEmail(String newEmail);
   Future<Either<AppException, List<WalletModel>>> getUserWallets(int id);
   Future<Either<AppException, List<WalletAsset>>> getUserAssets(int id);
   Future<void> insertFcmToken(String fcmToken);
@@ -56,10 +56,13 @@ class UserRemoteDataSource implements UserDataSource {
   }
 
   @override
-  Future<void> requestChangeEmail(String newEmail) async {
+  Future<Either<AppException, bool>> requestChangeEmail(String newEmail) async {
     try {
-      await networkService
+      final response = await networkService
           .patch('/user/request-email-change', data: {"newEmail": newEmail});
+      return response.fold((exception) => Left(exception), (result) {
+        return const Right(true);
+      });
     } catch (exception) {
       throw Exception(exception);
     }

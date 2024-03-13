@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/authentication/domain/repositories/auth_repository.dart';
+import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
@@ -29,19 +30,22 @@ class SignInController extends _$SignInController {
       nameOrEmail: nameOrEmail,
       password: password,
     );
-    ref.read(globalNotifierProvider.notifier).updateLoading(false);
+
     response.fold(
       (failure) {
+        ref.read(globalNotifierProvider.notifier).updateLoading(false);
         onFail(failure.message);
       },
-      (authTokens) {
-        ref.read(authRouteProvider).login();
+      (authTokens) async {
         ref.read(environmentProvider.notifier).updateEnvironmentState(
               EnvironmentStateUpdateInput(
                 jwtToken: authTokens.accessToken,
                 refreshToken: authTokens.refreshToken,
               ),
             );
+        await ref.read(myUserProvider.future);
+        ref.read(globalNotifierProvider.notifier).updateLoading(false);
+        ref.read(authRouteProvider).login();
         onSuccess();
       },
     );

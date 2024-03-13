@@ -25,6 +25,7 @@ final localStoreNetworkDataProvider =
 class Environment extends _$Environment {
   @override
   EnvironmentState build() {
+    state = EnvironmentState.empty();
     final localStore = LocalStore.instance;
     String selectedNetwork = localStore.get(
           'last-network',

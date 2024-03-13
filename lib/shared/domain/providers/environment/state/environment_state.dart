@@ -56,6 +56,10 @@ class EnvironmentState {
     this.wallets,
   });
 
+  factory EnvironmentState.empty() {
+    return EnvironmentState(solanaCluster: SolanaCluster.mainnet.value);
+  }
+
   EnvironmentState copyWith({
     UserModel? user,
     String? apiUrl,

@@ -17,7 +17,7 @@ abstract class UserRepository {
   Future<void> syncWallets(int id);
   Future<void> requestPasswordReset(String email);
   Future<void> requestEmailVerification();
-  Future<void> requestChangeEmail(String newEmail);
+  Future<Either<AppException, bool>> requestChangeEmail(String newEmail);
   Future<Either<AppException, List<WalletModel>>> getUserWallets(int id);
   Future<Either<AppException, List<WalletAsset>>> getUserAssets(int id);
   Future<void> insertFcmToken(String fcmToken);

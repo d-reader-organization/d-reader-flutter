@@ -22,12 +22,13 @@ class ComicDetailsScaffold extends StatefulWidget {
   final Widget body;
   final ComicModel comic;
   final Function() loadMore;
+
   const ComicDetailsScaffold({
-    Key? key,
+    super.key,
     required this.body,
     required this.comic,
     required this.loadMore,
-  }) : super(key: key);
+  });
 
   @override
   State<ComicDetailsScaffold> createState() => _ComicDetailsScaffoldState();

@@ -9,9 +9,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class SocialRow extends StatelessWidget {
   final CreatorModel creator;
   const SocialRow({
-    Key? key,
+    super.key,
     required this.creator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

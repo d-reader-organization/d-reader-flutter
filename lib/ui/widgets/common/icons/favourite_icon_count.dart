@@ -14,13 +14,13 @@ class FavouriteIconCount extends HookConsumerWidget {
   final int? issueId;
 
   const FavouriteIconCount({
-    Key? key,
+    super.key,
     required this.favouritesCount,
     required this.isFavourite,
     this.slug,
     this.issueId,
     this.isContainerWidget = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

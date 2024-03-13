@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class SkeletonRow extends StatelessWidget {
-  const SkeletonRow({Key? key}) : super(key: key);
+  const SkeletonRow({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -8,14 +8,15 @@ class CommonCachedImage extends StatelessWidget {
   final BoxFit fit;
   final Widget? placeholder;
   final Function()? onError;
+
   const CommonCachedImage({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.cacheKey,
     this.fit = BoxFit.cover,
     this.placeholder,
     this.onError,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

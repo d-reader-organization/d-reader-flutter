@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class DateWidget extends StatelessWidget {
   final DateTime date;
-  const DateWidget({Key? key, required this.date}) : super(key: key);
+
+  const DateWidget({super.key, required this.date});
 
   @override
   Widget build(BuildContext context) {

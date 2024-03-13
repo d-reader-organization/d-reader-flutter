@@ -9,7 +9,7 @@ const String imageUrl =
     'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png';
 
 class CollectibleCard extends StatelessWidget {
-  const CollectibleCard({Key? key}) : super(key: key);
+  const CollectibleCard({super.key});
 
   @override
   Widget build(BuildContext context) {

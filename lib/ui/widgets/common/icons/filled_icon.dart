@@ -8,13 +8,14 @@ class FilledIcon extends StatelessWidget {
   final Color backgroundColor;
   final String url;
   final bool shouldOpenApplication;
+
   const FilledIcon({
-    Key? key,
+    super.key,
     required this.iconData,
     required this.url,
     this.shouldOpenApplication = false,
     this.backgroundColor = ColorPalette.greyscale400,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

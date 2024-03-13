@@ -13,13 +13,14 @@ class SectionHeading extends ConsumerWidget {
   final DiscoverTabViewEnum? initialTab;
   final FilterId? filter;
   final SortByEnum? sort;
+
   const SectionHeading({
-    Key? key,
+    super.key,
     required this.title,
     this.initialTab,
     this.filter,
     this.sort,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

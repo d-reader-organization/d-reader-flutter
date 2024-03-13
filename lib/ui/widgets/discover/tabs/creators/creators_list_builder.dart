@@ -41,9 +41,9 @@ class CreatorsListBuilder extends StatelessWidget {
 class CreatorListItem extends StatelessWidget {
   final CreatorModel creator;
   const CreatorListItem({
-    Key? key,
+    super.key,
     required this.creator,
-  }) : super(key: key);
+  });
   final commonTextStyle = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
@@ -117,7 +117,7 @@ class CreatorListItem extends StatelessWidget {
 }
 
 class CreatorListHeader extends StatelessWidget {
-  const CreatorListHeader({Key? key}) : super(key: key);
+  const CreatorListHeader({super.key});
   final commonTextStyle = const TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w500,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CreatorCollectiblesTab extends StatelessWidget {
-  const CreatorCollectiblesTab({Key? key}) : super(key: key);
+  const CreatorCollectiblesTab({super.key});
 
   @override
   Widget build(BuildContext context) {

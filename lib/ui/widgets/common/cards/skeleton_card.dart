@@ -7,13 +7,14 @@ class SkeletonCard extends StatelessWidget {
   final double width;
   final EdgeInsets? margin;
   final bool withBorderRadius;
+
   const SkeletonCard({
-    Key? key,
+    super.key,
     this.height = 255,
     this.width = 180,
     this.margin,
     this.withBorderRadius = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

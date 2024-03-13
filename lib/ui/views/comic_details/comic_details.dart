@@ -15,9 +15,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ComicDetails extends ConsumerWidget {
   final String slug;
   const ComicDetails({
-    Key? key,
+    super.key,
     required this.slug,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

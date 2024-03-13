@@ -15,9 +15,9 @@ import 'package:flutter/material.dart';
 class DiscoverComicIssueCard extends StatelessWidget {
   final ComicIssueModel issue;
   const DiscoverComicIssueCard({
-    Key? key,
+    super.key,
     required this.issue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

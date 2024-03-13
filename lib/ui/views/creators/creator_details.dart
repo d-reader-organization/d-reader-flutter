@@ -10,10 +10,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorDetailsView extends ConsumerWidget {
   final String slug;
+
   const CreatorDetailsView({
-    Key? key,
+    super.key,
     required this.slug,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

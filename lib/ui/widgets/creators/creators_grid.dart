@@ -8,9 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CreatorsGrid extends ConsumerWidget {
   final String? query;
   const CreatorsGrid({
-    Key? key,
+    super.key,
     this.query,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

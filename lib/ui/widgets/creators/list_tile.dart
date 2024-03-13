@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 class CreatorListTile extends StatelessWidget {
   final CreatorModel creator;
   const CreatorListTile({
-    Key? key,
+    super.key,
     required this.creator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ class CustomTextButton extends StatelessWidget {
   final Color borderColor;
 
   const CustomTextButton({
-    Key? key,
+    super.key,
     required this.child,
     this.onPressed,
     this.backgroundColor = ColorPalette.dReaderYellow100,
@@ -29,7 +29,7 @@ class CustomTextButton extends StatelessWidget {
     ),
     this.padding = const EdgeInsets.all(8),
     this.borderColor = Colors.transparent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

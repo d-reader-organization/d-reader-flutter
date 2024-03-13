@@ -6,12 +6,13 @@ class CustomSliverTabPersistentHeader extends StatelessWidget {
   final List<Tab> tabs;
   final TabController? controller;
   final EdgeInsets? padding;
+
   const CustomSliverTabPersistentHeader({
-    Key? key,
+    super.key,
     required this.tabs,
     this.controller,
     this.padding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

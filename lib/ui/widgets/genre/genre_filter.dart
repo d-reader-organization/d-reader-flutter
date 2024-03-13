@@ -8,10 +8,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class GenreFilter extends ConsumerWidget {
   final GenreModel genre;
+
   const GenreFilter({
-    Key? key,
+    super.key,
     required this.genre,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

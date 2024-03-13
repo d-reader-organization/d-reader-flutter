@@ -9,11 +9,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ComicIssuesList extends ConsumerWidget {
   final String? query;
   final bool onlyFree;
+
   const ComicIssuesList({
-    Key? key,
+    super.key,
     this.query,
     this.onlyFree = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -9,13 +9,13 @@ class SolanaPrice extends StatelessWidget {
   final Color? textColor;
   final int priceDecimals;
   const SolanaPrice({
-    Key? key,
+    super.key,
     this.price,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.textDirection,
     this.textColor,
     this.priceDecimals = 2,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

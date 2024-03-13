@@ -14,9 +14,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class ComicCard extends ConsumerWidget {
   final ComicModel comic;
   const ComicCard({
-    Key? key,
+    super.key,
     required this.comic,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

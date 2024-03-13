@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/ui/widgets/discover/common/discover_scroll_view
 import 'package:flutter/material.dart';
 
 class DiscoverIssuesTab extends StatelessWidget {
-  const DiscoverIssuesTab({Key? key}) : super(key: key);
+  const DiscoverIssuesTab({super.key});
 
   @override
   Widget build(BuildContext context) {

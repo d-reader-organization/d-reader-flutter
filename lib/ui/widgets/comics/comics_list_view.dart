@@ -8,10 +8,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicsListView extends ConsumerWidget {
   final String? query;
+
   const ComicsListView({
-    Key? key,
+    super.key,
     this.query,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -7,13 +7,14 @@ class TextWithViewMore extends StatelessWidget {
   final TextAlign textAlign;
   final int maxLines;
   final Function()? onLinkTap;
+
   const TextWithViewMore({
-    Key? key,
+    super.key,
     required this.text,
     this.textAlign = TextAlign.start,
     this.maxLines = 2,
     this.onLinkTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

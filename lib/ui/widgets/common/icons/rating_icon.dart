@@ -9,14 +9,15 @@ class RatingIcon extends ConsumerWidget {
   final int? issueId;
   final String? comicSlug;
   final bool isRatedByMe, isContainerWidget;
+
   const RatingIcon({
-    Key? key,
+    super.key,
     required this.initialRating,
     this.isRatedByMe = false,
     this.issueId,
     this.comicSlug,
     this.isContainerWidget = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

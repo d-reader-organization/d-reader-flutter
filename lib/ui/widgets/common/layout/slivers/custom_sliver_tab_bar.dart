@@ -8,11 +8,11 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
   final TabController? controller;
   final EdgeInsets? padding;
   const CustomSliverTabBar({
-    Key? key,
+    super.key,
     required this.children,
     this.controller,
     this.padding = const EdgeInsets.symmetric(horizontal: 4.0),
-  }) : super(key: key);
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

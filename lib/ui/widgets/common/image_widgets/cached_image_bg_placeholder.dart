@@ -15,7 +15,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
   final Function()? onError;
 
   const CachedImageBgPlaceholder({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.child,
     this.width,
@@ -28,7 +28,7 @@ class CachedImageBgPlaceholder extends StatelessWidget {
     this.placeholder,
     this.padding = const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
     this.onError,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

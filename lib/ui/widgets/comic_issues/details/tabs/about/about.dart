@@ -131,7 +131,7 @@ class IssueAbout extends ConsumerWidget {
             ),
             ...issue.collaborators!.map((author) {
               return AuthorWidget(author: author);
-            }).toList(),
+            }),
           ],
         ],
       ),

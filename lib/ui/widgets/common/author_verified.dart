@@ -6,15 +6,16 @@ class AuthorVerified extends StatelessWidget {
   final bool isVerified, displayFullName;
   final Color textColor;
   final MainAxisAlignment mainAxisAlignment;
+
   const AuthorVerified({
-    Key? key,
+    super.key,
     required this.authorName,
     required this.isVerified,
     this.fontSize = 12,
     this.textColor = Colors.white,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.displayFullName = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

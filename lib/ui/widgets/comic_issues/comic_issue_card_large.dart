@@ -13,10 +13,11 @@ import 'package:flutter/material.dart';
 
 class ComicIssueCardLarge extends StatelessWidget {
   final ComicIssueModel issue;
+
   const ComicIssueCardLarge({
-    Key? key,
+    super.key,
     required this.issue,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

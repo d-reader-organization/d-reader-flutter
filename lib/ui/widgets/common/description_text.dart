@@ -4,12 +4,13 @@ class DescriptionText extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final int maxLines;
+
   const DescriptionText({
-    Key? key,
+    super.key,
     required this.text,
     this.textAlign = TextAlign.start,
     this.maxLines = 2,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

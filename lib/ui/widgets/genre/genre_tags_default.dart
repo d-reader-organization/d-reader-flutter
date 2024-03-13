@@ -22,11 +22,11 @@ class GenreTagsDefault extends StatelessWidget {
   final List<GenreModel> genres;
   final bool ignoreSublist, withHorizontalScroll;
   const GenreTagsDefault({
-    Key? key,
+    super.key,
     required this.genres,
     this.withHorizontalScroll = false,
     this.ignoreSublist = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

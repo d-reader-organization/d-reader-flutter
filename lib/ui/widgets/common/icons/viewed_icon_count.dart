@@ -5,11 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ViewedIconCount extends StatelessWidget {
   final int viewedCount;
   final bool isViewed;
+
   const ViewedIconCount({
-    Key? key,
+    super.key,
     required this.viewedCount,
     required this.isViewed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

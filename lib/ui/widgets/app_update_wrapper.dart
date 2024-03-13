@@ -15,16 +15,16 @@ class AppUpdateWrapper extends ConsumerWidget {
       data: (shouldTriggerUpdateDialog) {
         return shouldTriggerUpdateDialog
             ? UpgradeAlert(
+                canDismissDialog: true,
+                showReleaseNotes: false,
+                dialogStyle: Platform.isIOS
+                    ? UpgradeDialogStyle.cupertino
+                    : UpgradeDialogStyle.material,
                 upgrader: Upgrader(
-                  canDismissDialog: true,
-                  showReleaseNotes: false,
                   debugDisplayOnce: true,
                   durationUntilAlertAgain: const Duration(
                     days: 3,
                   ),
-                  dialogStyle: Platform.isIOS
-                      ? UpgradeDialogStyle.cupertino
-                      : UpgradeDialogStyle.material,
                 ),
                 child: const DReaderScaffold(),
               )

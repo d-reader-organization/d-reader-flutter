@@ -1,12 +1,12 @@
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
+import 'package:d_reader_flutter/features/discover/root/presentations/utils/utils.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/discover_query_string.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/no_more_items.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/tabs/comics/comics_gallery.dart';

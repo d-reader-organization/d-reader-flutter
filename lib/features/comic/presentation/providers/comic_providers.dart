@@ -5,7 +5,6 @@ import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
-import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_providers.g.dart';
@@ -28,10 +27,7 @@ final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
     });
     return ref
         .read(comicRepositoryProvider)
-        .getComics(
-            queryString: queryString != null && queryString.isNotEmpty
-                ? queryString
-                : appendDefaultQuery(queryString))
+        .getComics(queryString: queryString)
         .then((result) => result.fold((exception) {
               // TODO think about
               return [];

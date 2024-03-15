@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/features/discover/genre/presentations/providers/genre_providers.dart';
 import 'package:d_reader_flutter/features/discover/genre/domain/models/genre.dart';
+import 'package:d_reader_flutter/features/discover/genre/presentations/utils/utils.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/justify_color_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

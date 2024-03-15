@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
+import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
 import 'package:flutter/material.dart';

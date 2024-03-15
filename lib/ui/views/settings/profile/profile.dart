@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:d_reader_flutter/features/settings/presentations/providers/profile_controller.dart';
@@ -10,9 +11,8 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/utils/username_validator.dart';
+import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/textfields/text_field.dart';
 import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
@@ -24,6 +24,19 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfileView extends HookConsumerWidget {
   const ProfileView({super.key});
+
+  String? _validateUsername({required String? value, required WidgetRef ref}) {
+    if (value == null || value.isEmpty) {
+      return "Please enter username.";
+    } else if (value.length > 20) {
+      return "Must be less than 20 characters.";
+    } else if (value.length < 2) {
+      return "Must be greater than 2 characters.";
+    } else if (!usernameRegex.hasMatch(value)) {
+      return "Usernames can only contain letters and numbers.";
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -148,7 +161,7 @@ class ProfileView extends HookConsumerWidget {
                             defaultValue:
                                 user.name.isNotEmpty ? user.name : null,
                             onValidate: (value) {
-                              return validateUsername(value: value, ref: ref);
+                              return _validateUsername(value: value, ref: ref);
                             },
                             onChange: (String value) {
                               ref.read(usernameTextProvider.notifier).state =

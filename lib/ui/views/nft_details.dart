@@ -5,11 +5,11 @@ import 'package:d_reader_flutter/features/nft/presentations/utils/extensions.dar
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
-import 'package:d_reader_flutter/ui/utils/formatter.dart';
-import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
-import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
+import 'package:d_reader_flutter/shared/utils/formatter.dart';
+import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/features/nft/presentations/utils/utils.dart';
+import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/nft_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';

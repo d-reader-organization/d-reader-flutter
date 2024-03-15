@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
@@ -48,3 +51,25 @@ Future<String?> requestAirdrop(String publicKey) async {
     return null;
   }
 }
+
+CandyMachineGroupModel? getActiveGroup(List<CandyMachineGroupModel> groups) {
+  final currentDate = DateTime.now();
+  return groups.firstWhereOrNull(
+    (group) {
+      final isStartDateLessOrEqualThanCurrent = group.startDate != null &&
+          (group.startDate!.isBefore(currentDate) ||
+              group.startDate!.isAtSameMomentAs(currentDate));
+      final isEndDateBiggerThanCurrent =
+          group.endDate != null && currentDate.isBefore(group.endDate!);
+      return isStartDateLessOrEqualThanCurrent && isEndDateBiggerThanCurrent;
+    },
+  );
+}
+
+String getSortDirection(SortDirection direction) {
+  return direction == SortDirection.asc ? 'asc' : 'desc';
+}
+
+double getCardWidth(double screenWidth) => screenWidth / 2.4;
+
+String pluralizeString(int count, String word) => count > 1 ? '${word}s' : word;

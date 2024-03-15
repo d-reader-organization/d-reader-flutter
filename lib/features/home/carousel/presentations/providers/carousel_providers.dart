@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/home/carousel/domain/models/carousel.dart';
 import 'package:d_reader_flutter/features/home/carousel/domain/providers/carousel_provider.dart';
-import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
-import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/shared/utils/url_utils.dart';
+import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:flutter/material.dart' show BuildContext;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

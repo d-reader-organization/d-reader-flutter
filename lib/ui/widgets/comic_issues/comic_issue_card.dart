@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/formatter.dart';
-import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
-import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/shared/utils/formatter.dart';
+import 'package:d_reader_flutter/shared/utils/utils.dart';
+import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
 import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';

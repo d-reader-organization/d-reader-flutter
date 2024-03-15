@@ -11,9 +11,8 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
-import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
-import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/encoder.dart';

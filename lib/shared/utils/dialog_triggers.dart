@@ -1,10 +1,12 @@
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
+import 'package:d_reader_flutter/ui/widgets/common/bottom_sheets/install_wallet_bottom_sheet.dart';
+import 'package:flutter/material.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dialogs/walkthrough_dialog.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart' show WidgetRef;
 
@@ -94,4 +96,31 @@ void triggerVerificationDialog(BuildContext context, WidgetRef ref) {
       );
     },
   );
+}
+
+triggerInstallWalletBottomSheet(BuildContext context) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) {
+      return DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.65,
+        minChildSize: 0.65,
+        maxChildSize: 0.8,
+        builder: (context, scrollController) {
+          return const InstallWalletBottomSheet();
+        },
+      );
+    },
+  );
+}
+
+triggerLowPowerOrNoWallet(BuildContext context, dynamic exception) {
+  if (exception is LowPowerModeException) {
+    return triggerLowPowerModeDialog(context);
+  } else if (exception is NoWalletFoundException) {
+    return triggerInstallWalletBottomSheet(context);
+  }
 }

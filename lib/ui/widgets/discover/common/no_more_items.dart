@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
-import 'package:d_reader_flutter/ui/utils/pluralize_string.dart';
+import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

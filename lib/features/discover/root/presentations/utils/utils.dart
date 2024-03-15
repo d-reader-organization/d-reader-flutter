@@ -2,9 +2,10 @@ import 'package:d_reader_flutter/features/discover/genre/presentations/providers
 import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/search_provider.dart';
+import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-String getSortByQueryString(SortByEnum selected, ScrollListType type) {
+String _getSortByQueryString(SortByEnum selected, ScrollListType type) {
   if (type == ScrollListType.comicList) {
     if (selected == SortByEnum.likes) {
       return 'sortTag=likes';
@@ -38,10 +39,6 @@ String getSortByQueryString(SortByEnum selected, ScrollListType type) {
   return '';
 }
 
-String getSortDirection(SortDirection direction) {
-  return direction == SortDirection.asc ? 'asc' : 'desc';
-}
-
 String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   String search = ref.watch(searchProvider).search;
   final String genreTags = ref
@@ -56,14 +53,14 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
     selectedFilter: selectedFilter,
   );
   final String sortByFilter = selectedSortBy != null
-      ? getSortByQueryString(
+      ? _getSortByQueryString(
           selectedSortBy,
           scrollListType,
         )
       : '';
   final String sortDirection = getSortDirection(selectedSortDirection);
   final String common =
-      'sortOrder=$sortDirection&${adjustQueryString(genreTags)}${adjustQueryString(sortByFilter)}${adjustQueryString(tagFilter)}';
+      'sortOrder=$sortDirection&${_adjustQueryString(genreTags)}${_adjustQueryString(sortByFilter)}${_adjustQueryString(tagFilter)}';
   final String query = scrollListType == ScrollListType.creatorList
       ? '$common${'nameSubstring=$search'}'
       : '$common${'titleSubstring=$search'}';
@@ -85,4 +82,4 @@ String _filterPerType({
   return selectedFilter == FilterId.popular ? 'filterTag=popular' : '';
 }
 
-String adjustQueryString(String query) => query.isNotEmpty ? '$query&' : '';
+String _adjustQueryString(String query) => query.isNotEmpty ? '$query&' : '';

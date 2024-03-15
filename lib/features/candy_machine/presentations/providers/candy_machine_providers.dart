@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/providers/candy_machine_provider.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
+import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'candy_machine_providers.g.dart';

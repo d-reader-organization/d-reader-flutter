@@ -8,7 +8,7 @@ import 'package:d_reader_flutter/features/nft/presentations/providers/nft_provid
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/ui/utils/candy_machine_utils.dart';
+import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_issue_controller.g.dart';
 

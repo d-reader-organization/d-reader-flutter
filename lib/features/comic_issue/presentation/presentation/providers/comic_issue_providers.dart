@@ -9,7 +9,6 @@ import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/domain/models/comic_page.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
-import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -53,13 +52,9 @@ final comicIssuesProvider =
       timer?.cancel();
     });
 
-    final response =
-        await ref.read(comicIssueRepositoryProvider).getComicIssues(
-              queryString: queryString ??
-                  appendDefaultQuery(
-                    queryString,
-                  ),
-            );
+    final response = await ref
+        .read(comicIssueRepositoryProvider)
+        .getComicIssues(queryString: queryString);
 
     return response.fold((exception) {
       // TODO think about this

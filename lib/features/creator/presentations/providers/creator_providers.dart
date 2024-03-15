@@ -2,14 +2,13 @@ import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/features/creator/domain/providers/creator_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
-import 'package:d_reader_flutter/ui/utils/append_default_query_string.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final creatorsProvider = FutureProvider.autoDispose
     .family<List<CreatorModel>, String?>((ref, queryString) async {
   final response = await ref
       .read(creatorRepositoryProvider)
-      .getCreators(queryString: queryString ?? appendDefaultQuery(queryString));
+      .getCreators(queryString: queryString);
 
   return response.fold(
     (exception) {

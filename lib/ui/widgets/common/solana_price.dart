@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/ui/utils/formatter.dart';
+import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/material.dart';
 
 class SolanaPrice extends StatelessWidget {

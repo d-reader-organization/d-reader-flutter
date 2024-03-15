@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';
 import 'package:d_reader_flutter/ui/views/settings/root.dart';
-import 'package:d_reader_flutter/ui/widgets/beta_access_wrapper.dart';
 import 'package:d_reader_flutter/ui/widgets/common/layout/custom_bottom_navigation_bar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/test_mode_widget.dart';
 import 'package:d_reader_flutter/ui/widgets/referrals/bottom_navigation.dart';
@@ -121,15 +120,9 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
                         .update((state) => index);
                   },
                   children: const [
-                    BetaAccessWrapper(
-                      child: HomeView(),
-                    ),
-                    BetaAccessWrapper(
-                      child: DiscoverView(),
-                    ),
-                    BetaAccessWrapper(
-                      child: NewLibraryView(),
-                    ),
+                    HomeView(),
+                    DiscoverView(),
+                    NewLibraryView(),
                     SettingsRootView(),
                   ],
                 ),

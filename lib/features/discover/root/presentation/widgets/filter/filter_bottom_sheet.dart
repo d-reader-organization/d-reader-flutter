@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/features/discover/root/presentation/providers/f
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
+import 'package:d_reader_flutter/features/discover/root/presentation/widgets/menus/sort_menu.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/filter/filter_container.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentation/widgets/expandable_list.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/bottom_buttons.dart';

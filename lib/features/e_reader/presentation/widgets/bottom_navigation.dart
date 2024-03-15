@@ -2,8 +2,8 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/providers/com
 import 'package:d_reader_flutter/features/e_reader/presentation/providers/e_reader_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/features/e_reader/presentation/widgets/reading_mode_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

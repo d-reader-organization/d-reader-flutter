@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/features/discover/genre/presentation/providers/genre_providers.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/bottom_sheets/filter_bottom_sheet.dart';
+import 'package:d_reader_flutter/features/discover/root/presentation/widgets/filter/filter_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

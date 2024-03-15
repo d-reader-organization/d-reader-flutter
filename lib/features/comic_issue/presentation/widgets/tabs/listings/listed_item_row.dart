@@ -6,9 +6,9 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/features/nft/presentation/utils/utils.dart';
-import 'package:d_reader_flutter/ui/widgets/common/image_widgets/common_cached_image.dart';
-import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
-import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/image_widgets/common_cached_image.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/bottom_navigation_item_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/layout/bottom_navigation_item_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

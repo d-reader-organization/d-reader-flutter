@@ -3,10 +3,10 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/figures/mature_audience.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentation/widgets/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 

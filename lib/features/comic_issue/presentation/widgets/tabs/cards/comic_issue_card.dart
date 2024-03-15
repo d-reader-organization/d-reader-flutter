@@ -4,9 +4,9 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/hot_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/hot_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCard extends StatelessWidget {

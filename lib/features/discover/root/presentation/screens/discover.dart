@@ -6,9 +6,9 @@ import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_p
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/theme/decorations.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/filter_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/slivers/custom_sliver_app_bar_delegate.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/slivers/custom_sliver_tab_bar.dart';
+import 'package:d_reader_flutter/features/discover/root/presentation/widgets/filter/filter_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_app_bar_delegate.dart';
+import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_bar.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/comics/comics_tab.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/creators/creators_tab.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/issues/issues_tab.dart';

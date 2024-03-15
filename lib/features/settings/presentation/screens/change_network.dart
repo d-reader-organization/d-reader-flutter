@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/dialogs/confirmation_dialog.dart';
+import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/network_list_tile.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/scaffold.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
-import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/skeleton_row.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/creators/creators_list_builder.dart';
 import 'package:flutter/material.dart';
 

@@ -10,8 +10,8 @@ import 'package:d_reader_flutter/shared/presentations/providers/common/selected_
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/ui/widgets/common/dialogs/confirmation_dialog.dart';
-import 'package:d_reader_flutter/ui/widgets/common/rating/rating_stars.dart';
+import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/rating/rating_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

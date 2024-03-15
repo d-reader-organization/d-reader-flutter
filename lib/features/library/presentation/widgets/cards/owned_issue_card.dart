@@ -5,9 +5,9 @@ import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
-import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
+import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/buttons/info_button.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/owned_copies.dart';
 import 'package:flutter/material.dart';

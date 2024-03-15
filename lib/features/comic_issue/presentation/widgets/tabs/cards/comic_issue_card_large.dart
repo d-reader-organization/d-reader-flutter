@@ -3,12 +3,12 @@ import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/ui/widgets/common/date_widget.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/favourite_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/rating_icon.dart';
-import 'package:d_reader_flutter/ui/widgets/common/icons/viewed_icon_count.dart';
-import 'package:d_reader_flutter/ui/widgets/common/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/date_widget.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/viewed_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCardLarge extends StatelessWidget {

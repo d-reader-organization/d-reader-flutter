@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/ui/widgets/common/layout/slivers/custom_sliver_tab_persisent_header.dart';
+import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_persisent_header.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/header_sliver_list.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/tabs/collectibles/tab.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/tabs/comics/tab.dart';

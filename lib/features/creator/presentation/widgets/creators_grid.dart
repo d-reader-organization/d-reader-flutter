@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
-import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
+import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

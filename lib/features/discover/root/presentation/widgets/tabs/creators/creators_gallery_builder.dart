@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
-import 'package:d_reader_flutter/features/creator/presentation/widgets/creator_card.dart';
+import 'package:d_reader_flutter/features/creator/presentation/widgets/cards/creator_card.dart';
 import 'package:flutter/material.dart';
 
 class CreatorsGalleryBuilder extends StatelessWidget {

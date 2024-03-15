@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';

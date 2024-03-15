@@ -1,5 +1,6 @@
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/models/stateless_cover.dart';
-import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/features/nft/presentations/utils/extensions.dart';
 import 'package:d_reader_flutter/ui/widgets/common/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/tabs/issues/list_builder.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/about/author.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/about/expandable_container.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/details/tabs/about/rarities.dart';

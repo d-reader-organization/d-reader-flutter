@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_p
 import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';

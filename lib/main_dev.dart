@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/shared/data/remote/notification_service.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/shared/styles.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

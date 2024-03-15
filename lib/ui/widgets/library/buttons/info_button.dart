@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class InfoButton extends StatelessWidget {

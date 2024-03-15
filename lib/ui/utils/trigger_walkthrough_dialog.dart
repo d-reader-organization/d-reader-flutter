@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dialogs/walkthrough_dialog.dart';
 import 'package:flutter/material.dart';

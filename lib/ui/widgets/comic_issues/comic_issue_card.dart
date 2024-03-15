@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/home_cards_width.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';

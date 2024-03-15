@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/library/presentations/providers/owned_controller.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/features/nft/presentations/utils/extensions.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';

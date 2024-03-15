@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/features/comic/presentation/providers/comic_pro
 import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/sort_menu.dart';
 import 'package:d_reader_flutter/ui/widgets/discover/filter/filter_container.dart';
 import 'package:d_reader_flutter/ui/widgets/genre/expandable_list.dart';

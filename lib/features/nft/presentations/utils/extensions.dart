@@ -1,21 +1,6 @@
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart' show Colors, Color;
-
-enum ScrollListType {
-  comicList,
-  issueList,
-  creatorList,
-  collectiblesList,
-}
-
-enum NftRarity {
-  none,
-  common,
-  uncommon,
-  rare,
-  epic,
-  legendary,
-}
 
 extension RarityExtension on NftRarity {
   static const rarityNames = {

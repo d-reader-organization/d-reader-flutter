@@ -20,3 +20,19 @@ enum ViewMode {
   gallery,
   detailed,
 }
+
+enum ScrollListType {
+  comicList,
+  issueList,
+  creatorList,
+  collectiblesList,
+}
+
+enum NftRarity {
+  none,
+  common,
+  uncommon,
+  rare,
+  epic,
+  legendary,
+}

@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/library/presentations/providers/owned_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/library/cards/owned_issue_card.dart';
 import 'package:flutter/material.dart';

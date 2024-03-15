@@ -2,7 +2,7 @@ import 'dart:convert' show jsonEncode, jsonDecode;
 
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/routing/router.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/launch_external_url.dart';
 import 'package:d_reader_flutter/ui/views/comic_details/comic_details.dart';
 import 'package:d_reader_flutter/ui/views/comic_issue_details.dart';

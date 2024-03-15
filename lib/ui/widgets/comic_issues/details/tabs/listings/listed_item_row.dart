@@ -1,9 +1,9 @@
+import 'package:d_reader_flutter/features/nft/presentations/utils/extensions.dart';
 import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/domain/models/listing.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/formatter.dart';
 import 'package:d_reader_flutter/ui/utils/shorten_nft_name.dart';
 import 'package:d_reader_flutter/ui/widgets/common/image_widgets/common_cached_image.dart';

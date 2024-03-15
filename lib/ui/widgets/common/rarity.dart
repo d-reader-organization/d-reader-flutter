@@ -1,4 +1,5 @@
-import 'package:d_reader_flutter/ui/shared/enums.dart';
+import 'package:d_reader_flutter/features/nft/presentations/utils/extensions.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

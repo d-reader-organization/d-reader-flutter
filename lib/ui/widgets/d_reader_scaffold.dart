@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/notification/notification_controller.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/views/home.dart';
 import 'package:d_reader_flutter/ui/views/library.dart';

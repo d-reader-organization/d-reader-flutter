@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/settings/presentations/providers/change_network.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/ui/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/dialogs/confirmation_dialog.dart';

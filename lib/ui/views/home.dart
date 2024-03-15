@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/
 import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
 import 'package:d_reader_flutter/features/home/carousel/presentations/providers/carousel_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/ui/views/discover.dart';
 import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_list.dart';
 import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';

@@ -1,11 +1,17 @@
-class NoWalletFoundException implements Exception {
-  final String cause;
-  NoWalletFoundException(this.cause);
+class NoWalletFoundException extends AppException {
+  NoWalletFoundException({
+    super.statusCode = 500,
+    super.identifier = '',
+    required super.message,
+  });
 }
 
-class LowPowerModeException implements Exception {
-  final String cause;
-  LowPowerModeException(this.cause);
+class LowPowerModeException extends AppException {
+  LowPowerModeException({
+    super.statusCode = 500,
+    super.identifier = '',
+    required super.message,
+  });
 }
 
 class BadRequestException implements Exception {

@@ -15,7 +15,6 @@ abstract class TransactionRepository {
     required String sellerAddress,
     required String mintAccount,
     required int price,
-    String? printReceipt,
   });
   Future<Either<AppException, List<String>>> buyMultipleItems(
       Map<String, dynamic> query);

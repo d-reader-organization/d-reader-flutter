@@ -32,20 +32,21 @@ class ListingItem extends ConsumerWidget {
     );
     final bool isSelected = selectedItems.contains(listing);
     return GestureDetector(
-      onTap: myWallets.value != null &&
-              myWallets.value!.isNotEmpty &&
-              !myWallets.value!
-                  .any((element) => element.address == listing.seller.address)
-          ? () {
-              List<ListingModel> items = [...selectedItems];
-              if (selectedItems.contains(listing)) {
-                items.remove(listing);
-              } else {
-                items.add(listing);
-              }
-              ref.read(selectedItemsProvider.notifier).state = items;
-            }
-          : null,
+      onTap: () {
+        final allowListingSelection = !(myWallets.value
+                ?.any((element) => element.address == listing.seller.address) ??
+            false);
+        if (!allowListingSelection) {
+          return;
+        }
+        List<ListingModel> items = [...selectedItems];
+        if (selectedItems.contains(listing)) {
+          items.remove(listing);
+        } else {
+          items.add(listing);
+        }
+        ref.read(selectedItemsProvider.notifier).state = items;
+      },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

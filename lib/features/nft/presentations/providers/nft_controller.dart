@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:flutter/animation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,43 +19,55 @@ class NftController extends _$NftController {
   void build() {}
 
   Future<void> delist({
-    required NftModel nft,
+    required String nftAddress,
     required void Function() callback,
     required void Function(Object exception) onException,
   }) async {
     try {
-      final result = await ref
+      final delistResult = await ref
           .read(solanaTransactionNotifierProvider.notifier)
-          .delist(nftAddress: nft.address);
-      // globalNotifier.update((state) => state.copyWith(isLoading: false));
+          .delist(nftAddress: nftAddress);
 
-      if (result is bool && result) {
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
+      delistResult.fold((exception) {
+        onException(exception);
+      }, (result) async {
+        if (result != 'OK') {
+          return onException(
+            AppException(
+              message: result,
+              statusCode: 500,
+              identifier: 'nftController.delist',
+            ),
+          );
+        }
         await Future.delayed(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 1200),
           () {
-            callback();
             ref.invalidate(nftProvider);
+            callback();
           },
         );
-      }
+      });
     } catch (exception) {
-      // globalNotifier.update((state) => state.copyWith(isLoading: false));
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       onException(exception);
     }
   }
 
   Future<void> openNft({
     required NftModel nft,
-    required void Function(dynamic result) onOpen,
+    required void Function(String result) onOpen,
     required void Function(Object exception) onException,
   }) async {
     try {
-      final result =
+      final useMintResult =
           await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
                 nftAddress: nft.address,
                 ownerAddress: nft.ownerAddress,
               );
-      onOpen(result);
+      useMintResult.fold(
+          (exception) => onException(exception), (result) => onOpen(result));
     } catch (exception) {
       onException(exception);
     }
@@ -64,7 +77,7 @@ class NftController extends _$NftController {
     required String sellerAddress,
     required String mintAccount,
     required double price,
-    required void Function(dynamic result) callback,
+    required void Function(String result) callback,
   }) async {
     try {
       final response =
@@ -73,17 +86,24 @@ class NftController extends _$NftController {
                 mintAccount: mintAccount,
                 price: (price * lamportsPerSol).round(),
               );
-      // globalNotifier.update((state) => state.copyWith(isLoading: false));
-
-      await Future.delayed(
-        const Duration(milliseconds: 500),
-        () {
-          callback(response);
-          ref.invalidate(nftProvider);
+      response.fold(
+        (exception) {
+          ref.read(globalNotifierProvider.notifier).updateLoading(false);
+          callback(exception.message);
+        },
+        (result) async {
+          await Future.delayed(
+            const Duration(milliseconds: 1200),
+            () {
+              ref.invalidate(nftProvider);
+              ref.read(globalNotifierProvider.notifier).updateLoading(false);
+              callback(result);
+            },
+          );
         },
       );
     } catch (exception) {
-      // globalNotifier.update((state) => state.copyWith(isLoading: false));
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       rethrow;
     }
   }
@@ -182,13 +202,15 @@ class NftController extends _$NftController {
     required String ownerAddress,
     required Function() onSuccess,
   }) async {
-    final isSuccessful =
+    final useMintResult =
         await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
               nftAddress: nftAddress,
               ownerAddress: ownerAddress,
             );
-    if (isSuccessful) {
-      onSuccess();
-    }
+    useMintResult.fold((exception) => null, (result) {
+      if (result == 'OK') {
+        onSuccess();
+      }
+    });
   }
 }

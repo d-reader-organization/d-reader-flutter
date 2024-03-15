@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
-import 'package:d_reader_flutter/features/authentication/domain/repositories/auth_repository.dart';
+import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -22,11 +22,8 @@ part 'solana_notifier.g.dart';
 
 @riverpod
 class SolanaNotifier extends _$SolanaNotifier {
-  late final AuthRepository _authRepository;
   @override
-  void build() {
-    _authRepository = ref.watch(authRepositoryProvider);
-  }
+  void build() {}
 
   Future<AuthorizationResult?> _authorize({
     required MobileWalletAdapterClient client,
@@ -103,13 +100,14 @@ class SolanaNotifier extends _$SolanaNotifier {
     required String jwtToken,
   }) async {
     if (await doReauthorize(client, overrideAuthToken, signer.toBase58())) {
-      final response = await _authRepository.getOneTimePassword(
-        address: signer.toBase58(),
-        apiUrl: apiUrl,
-        jwtToken: jwtToken,
-      );
-      return await response.fold((failure) {
-        return Left(failure.message);
+      final response =
+          await ref.read(authRepositoryProvider).getOneTimePassword(
+                address: signer.toBase58(),
+                apiUrl: apiUrl,
+                jwtToken: jwtToken,
+              );
+      return response.fold((failure) {
+        return const Left('Failed to sign message');
       }, (oneTimePassword) async {
         final addresses = Uint8List.fromList(signer.bytes);
 
@@ -164,10 +162,10 @@ class SolanaNotifier extends _$SolanaNotifier {
     return true;
   }
 
-  Future<Either<Exception, String>> authorizeIfNeededWithOnComplete({
+  Future<Either<AppException, String>> authorizeIfNeededWithOnComplete({
     String? overrideCluster,
     Function()? onStart,
-    Future Function(
+    Future<Either<AppException, String>> Function(
       MobileWalletAdapterClient client,
       LocalAssociationScenario session,
     )? onComplete,
@@ -195,9 +193,11 @@ class SolanaNotifier extends _$SolanaNotifier {
     String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
     if (walletAddress != null) {
       try {
-        return onComplete != null
-            ? await onComplete(await session.start(), session)
-            : const Right('OK');
+        if (onComplete != null) {
+          return await onComplete(await session.start(), session);
+        }
+        await session.close();
+        return const Right('OK');
       } catch (exception) {
         await session.close();
         return Left(
@@ -211,13 +211,23 @@ class SolanaNotifier extends _$SolanaNotifier {
     }
 
     final client = await session.start();
+    final wallets = await ref.read(
+      userWalletsProvider(id: ref.read(environmentProvider).user?.id).future,
+    );
     final result = await _authorizeAndSignIfNeeded(
       client: client,
+      shouldSignMessage: wallets.isEmpty,
     );
 
     if (result != 'OK') {
       await session.close();
-      return Right(result);
+      return Left(
+        AppException(
+          message: result,
+          identifier: 'SolanaNotifier._authorizeAndSignIfNeeded',
+          statusCode: 500,
+        ),
+      );
     }
 
     if (onStart != null) {
@@ -276,6 +286,8 @@ class SolanaNotifier extends _$SolanaNotifier {
         client: client,
         signer: publicKey,
         authToken: result.authToken,
+        jwtToken: ref.read(environmentProvider).jwtToken ?? '',
+        apiUrl: ref.read(environmentProvider).apiUrl,
       );
     }
     ref.invalidate(registerWalletToSocketEvents);
@@ -283,31 +295,31 @@ class SolanaNotifier extends _$SolanaNotifier {
     return 'OK';
   }
 
-  Future<dynamic> _signMessageAndConnectWallet({
+  Future<String> _signMessageAndConnectWallet({
     required MobileWalletAdapterClient client,
     required final Ed25519HDPublicKey signer,
     required final String authToken,
+    required final String apiUrl,
+    required final String jwtToken,
   }) async {
-    final envState = ref.read(environmentProvider);
     final signMessageResponse = await _signMessage(
       client: client,
       signer: signer,
       overrideAuthToken: authToken,
-      apiUrl: envState.apiUrl,
-      jwtToken: envState.jwtToken ?? '',
+      apiUrl: apiUrl,
+      jwtToken: jwtToken,
     );
-    return signMessageResponse.fold((failMessage) {
+    return await signMessageResponse.fold((failMessage) {
       return failMessage;
     }, (signedMessage) async {
       final connectWalletResult = await _connectWallet(
         signedMessage: signedMessage.signatures.first,
         publicKey: signer,
-        apiUrl: envState.apiUrl,
-        jwtToken: envState.jwtToken ?? '',
+        apiUrl: apiUrl,
+        jwtToken: jwtToken,
       );
-
       return connectWalletResult.fold((failure) {
-        return 'Failed to connect wallet to our API';
+        return failure.message;
       }, (message) {
         ref.invalidate(registerWalletToSocketEvents);
         ref.read(registerWalletToSocketEvents);
@@ -316,7 +328,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     });
   }
 
-  Future<Either<Exception, String>> _connectWallet({
+  Future<Either<AppException, String>> _connectWallet({
     required Uint8List signedMessage,
     required Ed25519HDPublicKey publicKey,
     required String apiUrl,
@@ -350,10 +362,10 @@ class SolanaNotifier extends _$SolanaNotifier {
     final bool isWalletAvailable = await LocalAssociationScenario.isAvailable();
     final bool isLowPowerMode = await Power.isLowPowerMode;
     if (isLowPowerMode) {
-      throw LowPowerModeException(powerSaveModeText);
+      throw LowPowerModeException(message: powerSaveModeText);
     }
     if (!isWalletAvailable) {
-      throw NoWalletFoundException(missingWalletAppText);
+      throw NoWalletFoundException(message: missingWalletAppText);
     }
     ref.read(isOpeningSessionProvider.notifier).update((state) => true);
     final session = await LocalAssociationScenario.create();

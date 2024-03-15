@@ -131,12 +131,8 @@ class SubmitButton extends ConsumerWidget {
                         context.pop();
                         showSnackBar(
                           context: context,
-                          text: result is bool && result
-                              ? 'Listed successfully'
-                              : result is String
-                                  ? result
-                                  : 'Failed to list item',
-                          backgroundColor: result is bool && result
+                          text: result == 'OK' ? 'Listed successfully' : result,
+                          backgroundColor: result == 'OK'
                               ? ColorPalette.dReaderGreen
                               : ColorPalette.dReaderRed,
                         );

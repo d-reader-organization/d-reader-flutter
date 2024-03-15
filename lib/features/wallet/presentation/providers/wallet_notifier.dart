@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/features/wallet/domain/providers/wallet_provide
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
@@ -27,11 +28,14 @@ class WalletController extends _$WalletController {
         .authorizeIfNeededWithOnComplete(onStart: () {
       ref.read(globalNotifierProvider.notifier).updateLoading(true);
     });
-
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
-
     authorizeResult.fold((exception) {
-      onException(exception);
+      if (exception is NoWalletFoundException) {
+        return onException(exception);
+      } else if (exception is LowPowerModeException) {
+        return onException(exception);
+      }
+      onFail(exception.message);
     }, (result) {
       if (result != 'OK') {
         onFail(result);

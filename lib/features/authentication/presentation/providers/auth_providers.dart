@@ -10,6 +10,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
   final currentNetwork = ref.read(environmentProvider).solanaCluster;
   ref.invalidate(scaffoldNavigationIndexProvider);
   ref.invalidate(environmentProvider);
+  ref.read(environmentProvider);
   ref.invalidate(tabBarProvider);
   await Future.wait([
     LocalStore.instance.delete(

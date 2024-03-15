@@ -19,6 +19,15 @@ InputDecoration searchInputDecoration({
         8,
       ),
     ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        width: 1,
+        color: ColorPalette.dReaderYellow100,
+      ),
+      borderRadius: BorderRadius.circular(
+        8,
+      ),
+    ),
     border: OutlineInputBorder(
       borderSide: const BorderSide(
         width: 1,

@@ -44,7 +44,7 @@ mixin ExceptionHandlerMixin on NetworkService {
             ? exceptionMessage is List
                 ? exceptionMessage.join('. ')
                 : exceptionMessage
-            : exception.response?.data.toString();
+            : exception.response?.data?.toString() ?? '';
       } else {
         message = 'Unknown error occurred';
         statusCode = 500;

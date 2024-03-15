@@ -93,6 +93,7 @@ final expandedCandyMachineGroup = StateProvider<String>((ref) {
   return 'none';
 });
 
-final activeCandyMachineGroup = StateProvider<CandyMachineGroupModel?>((ref) {
+final activeCandyMachineGroup =
+    StateProvider.autoDispose<CandyMachineGroupModel?>((ref) {
   return null;
 });

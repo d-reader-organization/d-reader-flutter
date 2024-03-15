@@ -81,6 +81,11 @@ class MyApp extends ConsumerWidget {
             statusBarColor: ColorPalette.appBackgroundColor,
           ),
         ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionColor: ColorPalette.dReaderBlue,
+          selectionHandleColor: ColorPalette.dReaderYellow100,
+        ),
         dialogTheme: const DialogTheme(
           backgroundColor: ColorPalette.greyscale400,
           contentTextStyle: TextStyle(

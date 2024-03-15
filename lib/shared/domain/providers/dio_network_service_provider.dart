@@ -1,5 +1,5 @@
+import 'package:d_reader_flutter/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:d_reader_flutter/routing/router.dart';
-import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/data/remote/dio_network_service.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/ui/views/intro/initial.dart';
@@ -43,8 +43,7 @@ final networkServiceProvider = Provider<DioNetworkService>(
               if (e.response?.statusCode == 401 ||
                   (e.response?.statusCode == 404 &&
                       e.response?.requestOptions.path == '/user/get/me')) {
-                await LocalStore.instance.clear();
-                ref.invalidate(environmentProvider);
+                ref.read(logoutProvider);
                 routerNavigatorKey.currentState!.push(
                   MaterialPageRoute(
                     builder: (context) => const InitialIntroScreen(),

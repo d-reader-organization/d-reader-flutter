@@ -189,7 +189,7 @@ class AuthRemoteDataSource implements AuthDataSource {
           return Left(exception);
         },
         (oneTimePassword) {
-          return Right(oneTimePassword.data);
+          return Right(oneTimePassword.data.toString());
         },
       );
     } catch (exception) {

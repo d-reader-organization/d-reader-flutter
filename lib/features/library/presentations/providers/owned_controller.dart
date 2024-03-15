@@ -48,15 +48,18 @@ class OwnedController extends _$OwnedController {
     required void Function(String message) onFail,
   }) async {
     try {
-      final isSuccessful =
+      final openNftResult =
           await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
                 nftAddress: ownedNft.address,
                 ownerAddress: ownedNft.ownerAddress,
               );
-      if (isSuccessful) {
-        return onSuccess();
-      }
-      onFail('Failed to open');
+
+      openNftResult.fold((exception) => onFail(exception.message), (result) {
+        if (result == 'OK') {
+          return onSuccess();
+        }
+        onFail(result);
+      });
     } catch (exception) {
       rethrow;
     }

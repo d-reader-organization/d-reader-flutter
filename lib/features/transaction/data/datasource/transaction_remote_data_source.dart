@@ -16,7 +16,6 @@ abstract class TransactionDataSource {
     required String sellerAddress,
     required String mintAccount,
     required int price,
-    String? printReceipt,
   });
   Future<Either<AppException, List<String>>> buyMultipleItems(
       Map<String, dynamic> query);
@@ -63,7 +62,7 @@ class TransactionRemoteDataSource implements TransactionDataSource {
           .get('/transaction/cancel-listing?nftAddress=$nftAddress');
       return response.fold(
         (exception) => Left(exception),
-        (result) => Right(result.data),
+        (result) => Right(result.data.toString()),
       );
     } catch (exception) {
       return Left(
@@ -82,16 +81,15 @@ class TransactionRemoteDataSource implements TransactionDataSource {
     required String sellerAddress,
     required String mintAccount,
     required int price,
-    String? printReceipt,
   }) async {
     try {
       final response = await networkService.get(
-        '/transaction/list?sellerAddress=$sellerAddress&mintAccount=$mintAccount&price=$price&printReceipt=$printReceipt',
+        '/transaction/list?sellerAddress=$sellerAddress&mintAccount=$mintAccount&price=$price',
       );
       return response.fold(
         (exception) => Left(exception),
         (result) => Right(
-          result.data,
+          result.data.toString(),
         ),
       );
     } catch (exception) {
@@ -118,7 +116,7 @@ class TransactionRemoteDataSource implements TransactionDataSource {
       return response.fold(
         (exception) => Left(exception),
         (result) {
-          return Right(result.data);
+          return Right(result.data != null ? List.from(result.data) : []);
         },
       );
     } catch (exception) {
@@ -145,7 +143,7 @@ class TransactionRemoteDataSource implements TransactionDataSource {
       return response.fold(
         (exception) => Left(exception),
         (result) => Right(
-          result.data,
+          result.data.toString(),
         ),
       );
     } catch (exception) {

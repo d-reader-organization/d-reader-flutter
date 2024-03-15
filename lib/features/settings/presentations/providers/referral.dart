@@ -29,6 +29,7 @@ class ReferralController extends _$ReferralController {
             referrer: referrer,
           ),
         );
+    ref.read(globalNotifierProvider.notifier).updateLoading(false);
     response.fold((exception) {
       callback(exception.message);
     }, (user) {

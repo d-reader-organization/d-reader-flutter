@@ -27,10 +27,12 @@ class TransactionRepositoryImpl implements TransactionRepository {
     required String sellerAddress,
     required String mintAccount,
     required int price,
-    String? printReceipt,
   }) {
     return dataSource.listTransaction(
-        sellerAddress: sellerAddress, mintAccount: mintAccount, price: price);
+      sellerAddress: sellerAddress,
+      mintAccount: mintAccount,
+      price: price,
+    );
   }
 
   @override

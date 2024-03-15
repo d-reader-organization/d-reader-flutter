@@ -1,8 +1,8 @@
-import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
-import 'package:d_reader_flutter/features/discover/genre/presentations/providers/genre_providers.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
+import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
+import 'package:d_reader_flutter/features/discover/genre/presentation/providers/genre_providers.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
-import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
+import 'package:d_reader_flutter/features/discover/root/presentation/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';

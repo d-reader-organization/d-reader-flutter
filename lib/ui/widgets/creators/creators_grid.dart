@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
-import 'package:d_reader_flutter/features/creator/presentations/providers/creator_providers.dart';
+import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/creators/list_tile.dart';
 import 'package:flutter/material.dart';

@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/features/authentication/presentation/providers/
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/data/remote/dio_network_service.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/ui/views/intro/initial.dart';
+import 'package:d_reader_flutter/features/home/presentation/screens/initial.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

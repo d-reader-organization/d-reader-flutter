@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
-import 'package:d_reader_flutter/features/user/presentations/providers/user_providers.dart';
+import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/domain/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';

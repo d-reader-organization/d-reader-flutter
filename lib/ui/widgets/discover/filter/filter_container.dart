@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/features/discover/root/presentations/providers/filter_providers.dart';
+import 'package:d_reader_flutter/features/discover/root/presentation/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';

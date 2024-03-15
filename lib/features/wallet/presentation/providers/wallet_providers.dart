@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
+import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';

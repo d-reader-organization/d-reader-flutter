@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
-import 'package:d_reader_flutter/features/nft/presentations/providers/nft_providers.dart';
+import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';

@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/owned_issue.dart';
-import 'package:d_reader_flutter/features/library/presentations/providers/owned_controller.dart';
-import 'package:d_reader_flutter/features/nft/presentations/utils/extensions.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned_controller.dart';
+import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';

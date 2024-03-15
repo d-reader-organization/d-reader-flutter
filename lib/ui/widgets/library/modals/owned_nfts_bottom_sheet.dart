@@ -1,11 +1,11 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/features/library/presentations/providers/owned_controller.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned_controller.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
-import 'package:d_reader_flutter/features/nft/presentations/utils/extensions.dart';
+import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/features/nft/presentations/utils/utils.dart';
+import 'package:d_reader_flutter/features/nft/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';

@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
-import 'package:d_reader_flutter/ui/widgets/referrals/body.dart';
-import 'package:d_reader_flutter/ui/widgets/referrals/bottom_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
+import 'package:d_reader_flutter/features/settings/presentation/widgets/referrals/body.dart';
+import 'package:d_reader_flutter/features/settings/presentation/widgets/referrals/bottom_navigation.dart';
+import 'package:d_reader_flutter/features/settings/presentation/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';

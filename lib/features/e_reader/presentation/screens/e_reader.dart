@@ -11,9 +11,9 @@ import 'package:d_reader_flutter/ui/widgets/common/layout/animated_app_bar.dart'
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/ui/widgets/common/image_widgets/common_cached_image.dart';
-import 'package:d_reader_flutter/ui/widgets/e_reader/bottom_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/e_reader/page_number_widget.dart';
-import 'package:d_reader_flutter/ui/widgets/library/modals/owned_nfts_bottom_sheet.dart';
+import 'package:d_reader_flutter/features/e_reader/presentation/widgets/bottom_navigation.dart';
+import 'package:d_reader_flutter/features/e_reader/presentation/widgets/page_number_widget.dart';
+import 'package:d_reader_flutter/features/library/presentation/widgets/modals/owned_nfts_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

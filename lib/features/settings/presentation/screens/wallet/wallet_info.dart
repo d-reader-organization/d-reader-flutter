@@ -10,7 +10,7 @@ import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/textfields/text_field.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
+import 'package:d_reader_flutter/features/settings/presentation/widgets/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_svg/svg.dart';

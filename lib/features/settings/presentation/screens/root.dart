@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/list_tile.dart';
+import 'package:d_reader_flutter/features/settings/presentation/widgets/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';

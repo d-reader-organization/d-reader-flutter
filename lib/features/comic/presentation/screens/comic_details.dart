@@ -5,10 +5,10 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/providers/com
 import 'package:d_reader_flutter/features/discover/root/presentation/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issue_card_large.dart';
-import 'package:d_reader_flutter/ui/widgets/comics/details/scaffold.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/common/on_going_bottom.dart';
-import 'package:d_reader_flutter/ui/widgets/discover/tabs/issues/issues_gallery_builder.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/cards/comic_issue_card_large.dart';
+import 'package:d_reader_flutter/features/comic/presentation/widgets/details/scaffold.dart';
+import 'package:d_reader_flutter/features/discover/root/presentation/widgets/common/on_going_bottom.dart';
+import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/issues/issues_gallery_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

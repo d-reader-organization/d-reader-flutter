@@ -9,7 +9,7 @@ import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/ui/widgets/common/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/ui/widgets/common/textfields/text_field.dart';
-import 'package:d_reader_flutter/ui/widgets/settings/scaffold.dart';
+import 'package:d_reader_flutter/features/settings/presentation/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';

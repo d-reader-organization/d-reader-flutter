@@ -17,7 +17,7 @@ import 'package:d_reader_flutter/ui/widgets/common/rarity.dart';
 import 'package:d_reader_flutter/ui/widgets/common/royalty.dart';
 import 'package:d_reader_flutter/ui/widgets/common/skeleton_row.dart';
 import 'package:d_reader_flutter/ui/widgets/common/text_with_view_more.dart';
-import 'package:d_reader_flutter/ui/widgets/nft/modal_bottom_sheet.dart';
+import 'package:d_reader_flutter/features/nft/presentation/widgets/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

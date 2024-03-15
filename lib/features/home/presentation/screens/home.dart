@@ -5,11 +5,11 @@ import 'package:d_reader_flutter/features/home/carousel/presentation/providers/c
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/screens/discover.dart';
-import 'package:d_reader_flutter/ui/widgets/comic_issues/comic_issues_list.dart';
-import 'package:d_reader_flutter/ui/widgets/comics/comics_list_view.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/comic_issues_list.dart';
+import 'package:d_reader_flutter/features/comic/presentation/widgets/comics_list_view.dart';
 import 'package:d_reader_flutter/ui/widgets/common/carousel.dart';
 import 'package:d_reader_flutter/ui/widgets/common/section_heading.dart';
-import 'package:d_reader_flutter/ui/widgets/creators/creators_grid.dart';
+import 'package:d_reader_flutter/features/creator/presentation/widgets/creators_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

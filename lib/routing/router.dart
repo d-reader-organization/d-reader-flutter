@@ -27,7 +27,7 @@ import 'package:d_reader_flutter/features/settings/presentation/screens/wallet/m
 import 'package:d_reader_flutter/features/settings/presentation/screens/wallet/wallet_info.dart';
 import 'package:d_reader_flutter/features/home/presentation/screens/splash.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/screens/what_is_wallet.dart';
-import 'package:d_reader_flutter/ui/widgets/app_update_wrapper.dart';
+import 'package:d_reader_flutter/shared/widgets/wrappers/app_update_wrapper.dart';
 import 'package:go_router/go_router.dart';
 
 final routerNavigatorKey = GlobalKey<NavigatorState>();

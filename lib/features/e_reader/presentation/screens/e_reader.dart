@@ -90,7 +90,7 @@ class _EReaderViewState extends ConsumerState<EReaderView>
           extendBodyBehindAppBar: true,
           extendBody: true,
           appBar: PreferredSize(
-            preferredSize: const Size(0, 64),
+            preferredSize: const Size(0, 56),
             child: VisibilityAnimationAppBar(
               title: issueProvider.value?.title ?? '',
               centerTitle: false,

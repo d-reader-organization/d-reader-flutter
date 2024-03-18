@@ -14,18 +14,6 @@ class AnimatedAppBar extends StatelessWidget {
     this.title,
     this.actions,
     this.centerTitle = true,
-    //  = const [
-    //   Padding(
-    //     padding: EdgeInsets.symmetric(
-    //       horizontal: 12,
-    //     ),
-    //     child: Icon(
-    //       Icons.more_horiz_outlined,
-    //       size: 16,
-    //       color: Colors.white,
-    //     ),
-    //   ),
-    // ],
   });
 
   @override
@@ -84,6 +72,7 @@ class VisibilityAnimationAppBar extends ConsumerWidget {
               )
             : null,
         centerTitle: centerTitle,
+        leadingWidth: 32,
         actions: actions,
         backgroundColor: ColorPalette.appBackgroundColor,
         shadowColor: ColorPalette.appBackgroundColor,

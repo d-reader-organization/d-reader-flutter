@@ -54,20 +54,14 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
           ),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
-              SliverAppBar(
-                leading: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'My Library',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ]),
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 32),
+                  child: Text(
+                    'My Library',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                 ),
-                leadingWidth: double.infinity,
-                backgroundColor: ColorPalette.appBackgroundColor,
               ),
               CustomSliverTabPersistentHeader(
                 controller: _controller,

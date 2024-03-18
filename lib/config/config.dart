@@ -34,7 +34,6 @@ abstract class Config {
   static const String solanaLogoPath = 'assets/images/solana_logo.png';
   static const String digitalWalletImgPath = 'assets/images/digital_wallet.png';
   static const String tokenKey = 'dReader-token';
-  static const String successAuthAsset = 'assets/animation_files/done.json';
   static const String settingsAssetsPath = 'assets/icons/settings_screen';
   static const String introAssetsPath = 'assets/icons/intro';
   static const String faviconPath = 'assets/icons/favicon.ico';

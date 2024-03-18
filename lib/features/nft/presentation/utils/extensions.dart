@@ -17,7 +17,7 @@ extension RarityExtension on NftRarity {
   static const rarityColors = {
     NftRarity.none: Colors.transparent,
     NftRarity.common: Colors.white,
-    NftRarity.uncommon: ColorPalette.dReaderYellow400,
+    NftRarity.uncommon: ColorPalette.dReaderYellow200,
     NftRarity.rare: Color(0xFF3926B4),
     NftRarity.epic: Color(0xFFC413E0),
     NftRarity.legendary: Color(0xFF8377F2),

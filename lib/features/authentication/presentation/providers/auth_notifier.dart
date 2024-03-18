@@ -16,9 +16,15 @@ class AuthController extends _$AuthController {
   }) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
     try {
-      await ref.read(userRepositoryProvider).requestPasswordReset(email);
+      final response =
+          await ref.read(userRepositoryProvider).requestPasswordReset(email);
+
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
-      onSuccess();
+      response.fold((exception) {
+        onException(exception.message);
+      }, (result) {
+        onSuccess();
+      });
     } catch (exception) {
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
       if (exception is BadRequestException) {

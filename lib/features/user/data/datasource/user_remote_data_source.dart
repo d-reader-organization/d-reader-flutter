@@ -17,8 +17,8 @@ abstract class UserDataSource {
     required String newPassword,
   });
   Future<void> syncWallets(int id);
-  Future<void> requestPasswordReset(String email);
-  Future<void> requestEmailVerification();
+  Future<Either<AppException, bool>> requestPasswordReset(String email);
+  Future<Either<AppException, bool>> requestEmailVerification();
   Future<Either<AppException, bool>> requestChangeEmail(String newEmail);
   Future<Either<AppException, List<WalletModel>>> getUserWallets(int id);
   Future<Either<AppException, List<WalletAsset>>> getUserAssets(int id);
@@ -69,15 +69,26 @@ class UserRemoteDataSource implements UserDataSource {
   }
 
   @override
-  Future<void> requestEmailVerification() {
-    return networkService.patch('/user/request-email-verification');
+  Future<Either<AppException, bool>> requestEmailVerification() async {
+    final response =
+        await networkService.patch('/user/request-email-verification');
+    return response.fold(
+      (exception) => Left(exception),
+      (result) => const Right(
+        true,
+      ),
+    );
   }
 
   @override
-  Future<void> requestPasswordReset(String email) async {
+  Future<Either<AppException, bool>> requestPasswordReset(String email) async {
     try {
-      await networkService
+      final response = await networkService
           .patch('/user/request-password-reset', data: {'nameOrEmail': email});
+
+      return response.fold((exception) => Left(exception), (data) {
+        return const Right(true);
+      });
     } catch (exception) {
       throw Exception(exception);
     }

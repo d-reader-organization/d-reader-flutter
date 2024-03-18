@@ -21,7 +21,7 @@ class Carousel extends ConsumerWidget {
         return Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 12, left: 12),
+              padding: const EdgeInsets.only(top: 4, left: 4),
               alignment: Alignment.centerLeft,
               child: SvgPicture.asset(
                 Config.whiteLogoPath,

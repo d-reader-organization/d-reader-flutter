@@ -15,8 +15,8 @@ abstract class UserRepository {
     required String newPassword,
   });
   Future<void> syncWallets(int id);
-  Future<void> requestPasswordReset(String email);
-  Future<void> requestEmailVerification();
+  Future<Either<AppException, bool>> requestPasswordReset(String email);
+  Future<Either<AppException, bool>> requestEmailVerification();
   Future<Either<AppException, bool>> requestChangeEmail(String newEmail);
   Future<Either<AppException, List<WalletModel>>> getUserWallets(int id);
   Future<Either<AppException, List<WalletAsset>>> getUserAssets(int id);

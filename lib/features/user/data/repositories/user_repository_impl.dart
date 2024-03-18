@@ -27,12 +27,12 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<void> requestEmailVerification() {
+  Future<Either<AppException, bool>> requestEmailVerification() {
     return dataSource.requestEmailVerification();
   }
 
   @override
-  Future<void> requestPasswordReset(String email) {
+  Future<Either<AppException, bool>> requestPasswordReset(String email) {
     return dataSource.requestPasswordReset(email);
   }
 

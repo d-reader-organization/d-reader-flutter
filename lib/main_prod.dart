@@ -1,9 +1,8 @@
-import 'package:d_reader_flutter/core/providers/router_provider.dart';
-import 'package:d_reader_flutter/core/providers/solana_client_provider.dart';
-import 'package:d_reader_flutter/core/services/local_store.dart';
-import 'package:d_reader_flutter/core/services/notification.dart';
-import 'package:d_reader_flutter/ui/shared/app_colors.dart';
-import 'package:d_reader_flutter/ui/shared/styles.dart';
+import 'package:d_reader_flutter/shared/data/remote/notification_service.dart';
+import 'package:d_reader_flutter/routing/router.dart';
+import 'package:d_reader_flutter/shared/data/local/local_store.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/theme/theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -68,23 +67,16 @@ void main() async {
 
 void initApp() {
   runApp(
-    ProviderScope(
-      overrides: [
-        solanaProvider.overrideWith(
-          (ref) => SolanaClientNotifier(
-            ref,
-          ),
-        ),
-      ],
-      child: const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends ConsumerWidget {
   const MyApp({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -99,6 +91,11 @@ class MyApp extends ConsumerWidget {
             systemNavigationBarColor: ColorPalette.appBackgroundColor,
             statusBarColor: ColorPalette.appBackgroundColor,
           ),
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionColor: ColorPalette.dReaderBlue,
+          selectionHandleColor: ColorPalette.dReaderYellow100,
         ),
         dialogTheme: const DialogTheme(
           backgroundColor: ColorPalette.greyscale400,

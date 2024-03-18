@@ -39,7 +39,7 @@ release:
       name: dReader
       short_description: Digital comic book store
       long_description: Platform for discovering, trading, collecting, and reading digital graphic novels
-      new_in_version: Improve listings UI, migrate to GoRouter
+      new_in_version: Debug symbols, migrate to gradle declarative plugins. Code refactoring and restructuring
       saga_features: Exclusive early access, free/discounted collectible comics
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader

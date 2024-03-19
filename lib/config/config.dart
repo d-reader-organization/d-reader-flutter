@@ -24,7 +24,6 @@ abstract class Config {
     defaultValue: 'https://api-dev-devnet.dreader.io',
   );
   static const solanaRpcDevnet = "https://api.devnet.solana.com";
-  static const String logoTextPath = 'assets/images/logo-white-yellow.svg';
   static const String whiteLogoPath = 'assets/images/logo-white.svg';
   static const String whiteLogoSymbol = 'assets/images/logo-symbol-white.svg';
   static const String logoAlphaPath = 'assets/images/logo_alpha.svg';

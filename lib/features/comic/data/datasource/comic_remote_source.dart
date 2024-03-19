@@ -17,6 +17,10 @@ abstract class ComicDataSource {
     required int rating,
   });
   Future<void> bookmarkComic(String slug);
+  Future<Either<AppException, List<ComicModel>>> getFavoriteComics({
+    required int userId,
+    required String query,
+  });
 }
 
 class ComicRemoteDataSource implements ComicDataSource {
@@ -115,5 +119,35 @@ class ComicRemoteDataSource implements ComicDataSource {
   @override
   Future<void> updateComicFavourite(String slug) {
     return networkService.patch('/comic/favouritise/$slug');
+  }
+
+  @override
+  Future<Either<AppException, List<ComicModel>>> getFavoriteComics(
+      {required int userId, required String query}) async {
+    try {
+      final response =
+          await networkService.get('/comic/get/favorites/$userId?$query');
+
+      return response.fold((exception) => Left(exception), (result) {
+        return Right(
+          List<ComicModel>.from(
+            result.data.map(
+              (json) => ComicModel.fromJson(
+                json,
+              ),
+            ),
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occured',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}ComicRemoteDataSource.getFavoriteComics',
+        ),
+      );
+    }
   }
 }

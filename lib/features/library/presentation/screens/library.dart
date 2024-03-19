@@ -1,7 +1,8 @@
+import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/favorites/favorites.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_persisent_header.dart';
-import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned.dart';
+import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -23,11 +24,6 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
     ref.read(
       registerWalletToSocketEvents,
     );
-    _controller.addListener(() {
-      if (_controller.indexIsChanging && _controller.previousIndex == 1) {
-        _controller.index = 1;
-      }
-    });
   }
 
   @override
@@ -46,8 +42,8 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
             child: TabBarView(
               controller: _controller,
               children: const [
-                Text('Coming soon'),
-                OwnedListView(),
+                FavoritesTab(),
+                OwnedTab(),
                 Text('Coming soon'),
               ],
             ),
@@ -67,12 +63,7 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                 controller: _controller,
                 tabs: const [
                   Tab(
-                    child: Text(
-                      'Favorites',
-                      style: TextStyle(
-                        color: ColorPalette.greyscale300,
-                      ),
-                    ),
+                    text: 'Favorites',
                   ),
                   Tab(
                     text: 'Owned',

@@ -1,22 +1,28 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/features/library/presentation/widgets/cards/owned_comic_card.dart';
+import 'package:d_reader_flutter/features/library/presentation/widgets/cards/library_card.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
-class OwnedComicItems extends StatelessWidget {
+class LibraryComicItems extends ConsumerWidget {
   final String letter;
   final List<ComicModel> comics;
-  const OwnedComicItems({
+  final bool isFavoriteTab;
+  const LibraryComicItems({
     super.key,
     required this.letter,
     required this.comics,
+    this.isFavoriteTab = false,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final cardWidth = getCardWidth(screenWidth);
     bool isTablet = screenWidth > 600;
@@ -47,7 +53,23 @@ class OwnedComicItems extends StatelessWidget {
               mainAxisExtent: 190,
             ),
             itemBuilder: (context, index) {
-              return OwnedComicCard(cardWidth: cardWidth, comic: comics[index]);
+              return LibraryCard(
+                cardWidth: cardWidth,
+                comic: comics[index],
+                onTap: isFavoriteTab
+                    ? () {
+                        nextScreenPush(
+                          context: context,
+                          path:
+                              '${RoutePath.comicDetails}/${comics[index].slug}',
+                        );
+                      }
+                    : () {
+                        ref
+                            .read(selectedOwnedComicProvider.notifier)
+                            .update((state) => comics[index]);
+                      },
+              );
             },
           ),
         ),

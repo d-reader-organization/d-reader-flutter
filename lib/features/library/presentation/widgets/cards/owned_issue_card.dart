@@ -9,7 +9,7 @@ import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_pl
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/buttons/info_button.dart';
-import 'package:d_reader_flutter/features/library/presentation/widgets/owned_copies.dart';
+import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned_copies.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

@@ -1,28 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
-import 'package:d_reader_flutter/features/library/presentation/providers/owned_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class OwnedComicCard extends ConsumerWidget {
+class LibraryCard extends ConsumerWidget {
   final double cardWidth;
   final ComicModel comic;
-
-  const OwnedComicCard({
+  final void Function() onTap;
+  const LibraryCard({
     super.key,
     required this.cardWidth,
     required this.comic,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context, ref) {
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
-      onTap: () {
-        ref.read(selectedOwnedComicProvider.notifier).update((state) => comic);
-      },
+      onTap: onTap,
       child: Container(
         width: cardWidth,
         constraints: const BoxConstraints(maxWidth: 190),

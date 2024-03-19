@@ -7,12 +7,12 @@ part of 'referral.dart';
 // **************************************************************************
 
 String _$referralControllerHash() =>
-    r'b05215c7127bc0dfc6539cb5953dfb215a6f92bc';
+    r'3b10ac06c33ec360ea4ec90b3531d4d741e5df0c';
 
 /// See also [ReferralController].
 @ProviderFor(ReferralController)
 final referralControllerProvider =
-    AutoDisposeAsyncNotifierProvider<ReferralController, void>.internal(
+    AutoDisposeNotifierProvider<ReferralController, void>.internal(
   ReferralController.new,
   name: r'referralControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final referralControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ReferralController = AutoDisposeAsyncNotifier<void>;
+typedef _$ReferralController = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

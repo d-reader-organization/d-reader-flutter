@@ -6,12 +6,12 @@ part of 'rating_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ratingControllerHash() => r'7dd8dfbea0280ed5a56940a8ca316ac76ace31a1';
+String _$ratingControllerHash() => r'f993bf3e86248124524dbf0018c0cdb8500018c6';
 
 /// See also [RatingController].
 @ProviderFor(RatingController)
 final ratingControllerProvider =
-    AutoDisposeAsyncNotifierProvider<RatingController, void>.internal(
+    AutoDisposeNotifierProvider<RatingController, void>.internal(
   RatingController.new,
   name: r'ratingControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final ratingControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$RatingController = AutoDisposeAsyncNotifier<void>;
+typedef _$RatingController = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

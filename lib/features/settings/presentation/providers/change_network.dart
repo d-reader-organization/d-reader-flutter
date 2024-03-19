@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/providers/com
 import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
 import 'package:d_reader_flutter/features/home/carousel/presentation/providers/carousel_providers.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
-import 'package:d_reader_flutter/features/comic/presentation/providers/owned_comics_notifier.dart';
+import 'package:d_reader_flutter/features/comic/presentation/providers/comics_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
@@ -63,7 +63,7 @@ class ChangeNetworkController extends _$ChangeNetworkController {
       ref.invalidate(carouselProvider);
       ref.invalidate(paginatedIssuesProvider);
       ref.invalidate(paginatedComicsProvider);
-      ref.invalidate(ownedComicsAsyncProvider);
+      ref.invalidate(genericComicNotifierProvider);
       return triggerChangeDialog(
         isSuccess: true,
         text: snackbarText,

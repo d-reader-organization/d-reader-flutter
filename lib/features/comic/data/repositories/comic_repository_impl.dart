@@ -40,4 +40,10 @@ class ComicRepositoryImpl implements ComicRepository {
   Future<void> updateComicFavourite(String slug) {
     return dataSource.updateComicFavourite(slug);
   }
+
+  @override
+  Future<Either<AppException, List<ComicModel>>> getFavoriteComics(
+      {required int userId, required String query}) {
+    return dataSource.getFavoriteComics(userId: userId, query: query);
+  }
 }

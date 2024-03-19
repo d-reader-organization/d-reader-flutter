@@ -16,4 +16,8 @@ abstract class ComicRepository {
     required int rating,
   });
   Future<void> bookmarkComic(String slug);
+  Future<Either<AppException, List<ComicModel>>> getFavoriteComics({
+    required int userId,
+    required String query,
+  });
 }

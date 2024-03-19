@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/issues/issues_list_builder.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
 
 class IssuesList extends StatelessWidget {
@@ -17,10 +18,12 @@ class IssuesList extends StatelessWidget {
       data: (issues) {
         return IssuesListBuilder(issues: issues);
       },
-      error: (err, stack) => Text(
-        'Error: $err',
-        style: const TextStyle(color: Colors.red),
-      ),
+      error: (err, stack) {
+        return const CarrotErrorWiddget(
+          mainErrorText: 'We ran into some issues',
+          adviceText: 'We are working on a fix. Thanks for your patience!',
+        );
+      },
       loading: () => ListView.builder(
         itemCount: 3,
         shrinkWrap: true,

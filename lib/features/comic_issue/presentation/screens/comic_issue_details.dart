@@ -13,6 +13,7 @@ import 'package:d_reader_flutter/shared/presentations/providers/global/global_no
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
+import 'package:d_reader_flutter/shared/utils/render_carrot_error.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/about.dart';
@@ -412,12 +413,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
         );
       },
       error: (err, stack) {
-        return const Center(
-          child: Text(
-            'Failed to fetch data',
-            style: TextStyle(color: Colors.red),
-          ),
-        );
+        return renderCarrotErrorWidget(ref);
       },
       loading: () => const SizedBox(),
     );

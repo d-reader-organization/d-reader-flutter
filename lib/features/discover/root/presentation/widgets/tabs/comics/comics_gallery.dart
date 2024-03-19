@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_stat
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/comics/comic_gallery_builder.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
 
 class ComicGallery extends StatelessWidget {
@@ -18,10 +19,12 @@ class ComicGallery extends StatelessWidget {
       data: (comics) {
         return ComicGalleryBuilder(comics: comics);
       },
-      error: (err, stack) => Text(
-        'Error: $err',
-        style: const TextStyle(color: Colors.red),
-      ),
+      error: (err, stack) {
+        return const CarrotErrorWiddget(
+          mainErrorText: 'We ran into some issues',
+          adviceText: 'We are working on a fix. Thanks for your patience!',
+        );
+      },
       loading: () => const ComicGallerySkeleton(),
       onGoingError: (List<ComicModel> items, Object? e, StackTrace? stk) {
         return ComicGalleryBuilder(

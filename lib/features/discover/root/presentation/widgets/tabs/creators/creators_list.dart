@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/skeleton_row.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/creators/creators_list_builder.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,12 @@ class CreatorsList extends StatelessWidget {
       data: (creators) {
         return CreatorsListBuilder(creators: creators);
       },
-      error: (err, stack) => Text(
-        'Error: $err',
-        style: const TextStyle(color: Colors.red),
-      ),
+      error: (err, stack) {
+        return const CarrotErrorWiddget(
+          mainErrorText: 'We ran into some issues',
+          adviceText: 'We are working on a fix. Thanks for your patience!',
+        );
+      },
       loading: () => ListView.builder(
         itemCount: 5,
         shrinkWrap: true,

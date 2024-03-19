@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/owned_comic_items.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/owned_issues_items.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned_nfts_items.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -117,8 +118,10 @@ class OwnedListView extends ConsumerWidget {
               );
             },
             error: (error, stackTrace) {
-              return const Center(
-                child: Text('Nothing to see in here.'),
+              return const CarrotErrorWiddget(
+                mainErrorText: 'We ran into some issues',
+                adviceText:
+                    'We are working on a fix. Thanks for your patience!',
               );
             },
             loading: () {

@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/render_carrot_error.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_persisent_header.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/header_sliver_list.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/tabs/collectibles/tab.dart';
@@ -22,68 +23,64 @@ class CreatorDetailsView extends ConsumerWidget {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: SafeArea(
-          child: creator.when(
-        data: (creator) {
-          if (creator == null) {
-            return const SizedBox();
-          }
-          return DefaultTabController(
-            length: 2,
-            child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  CreatorDetailsHeaderSliverList(creator: creator),
-                  StatsDescriptionWidget(creator: creator),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 8,
+        child: creator.when(
+          data: (creator) {
+            if (creator == null) {
+              return const SizedBox();
+            }
+            return DefaultTabController(
+              length: 2,
+              child: NestedScrollView(
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    CreatorDetailsHeaderSliverList(creator: creator),
+                    StatsDescriptionWidget(creator: creator),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 8,
+                      ),
                     ),
+                    const CustomSliverTabPersistentHeader(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                      ),
+                      tabs: [
+                        Tab(
+                          text: 'Comics',
+                        ),
+                        Tab(
+                          text: 'Collectibles',
+                        ),
+                      ],
+                    ),
+                  ];
+                },
+                body: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
                   ),
-                  const CustomSliverTabPersistentHeader(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12,
-                    ),
-                    tabs: [
-                      Tab(
-                        text: 'Comics',
+                  child: TabBarView(
+                    children: [
+                      CreatorComicsTab(
+                        creatorSlug: creator.slug,
                       ),
-                      Tab(
-                        text: 'Collectibles',
-                      ),
+                      const CreatorCollectiblesTab(),
                     ],
                   ),
-                ];
-              },
-              body: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
-                child: TabBarView(
-                  children: [
-                    CreatorComicsTab(
-                      creatorSlug: creator.slug,
-                    ),
-                    const CreatorCollectiblesTab(),
-                  ],
                 ),
               ),
-            ),
-          );
-        },
-        error: (err, stack) {
-          return const Center(
-            child: Text(
-              'Something went wrong',
-              style: TextStyle(color: Colors.red),
-            ),
-          );
-        },
-        loading: () => const Center(
-          child: SizedBox(),
+            );
+          },
+          error: (err, stack) {
+            return renderCarrotErrorWidget(ref);
+          },
+          loading: () => const Center(
+            child: SizedBox(),
+          ),
         ),
-      )),
+      ),
     );
   }
 }

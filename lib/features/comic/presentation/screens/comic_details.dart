@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/providers/filter_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
+import 'package:d_reader_flutter/shared/utils/render_carrot_error.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/cards/comic_issue_card_large.dart';
 import 'package:d_reader_flutter/features/comic/presentation/widgets/details/scaffold.dart';
@@ -81,10 +82,9 @@ class ComicDetails extends ConsumerWidget {
           ),
         );
       },
-      error: (err, stack) => Text(
-        'Error: $err',
-        style: const TextStyle(color: Colors.red),
-      ),
+      error: (err, stack) {
+        return renderCarrotErrorWidget(ref);
+      },
       loading: () => const SizedBox(),
     );
   }

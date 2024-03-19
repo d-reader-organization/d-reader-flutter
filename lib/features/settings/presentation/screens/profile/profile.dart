@@ -33,7 +33,7 @@ class ProfileView extends HookConsumerWidget {
     } else if (value.length < 2) {
       return "Must be greater than 2 characters.";
     } else if (!usernameRegex.hasMatch(value)) {
-      return "Usernames can only contain letters and numbers.";
+      return 'Letters, numbers, hyphens and dashes are allowed.';
     }
     return null;
   }

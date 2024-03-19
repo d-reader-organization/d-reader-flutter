@@ -98,7 +98,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                     } else if (value.length < 2 || value.length > 20) {
                       return 'Username must be 3 to 20 characters long.';
                     } else if (!usernameRegex.hasMatch(value)) {
-                      return 'Letters, numbers and dashes are allowed.';
+                      return 'Letters, numbers, hyphens and dashes are allowed.';
                     }
                     return null;
                   },

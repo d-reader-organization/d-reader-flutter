@@ -68,11 +68,6 @@ class DiscoverComicCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: textTheme.titleMedium,
                           ),
-                          // SvgPicture.asset(
-                          //   comic.logo.isNotEmpty
-                          //       ? 'assets/icons/bookmark_unsaved.svg'
-                          //       : 'assets/icons/bookmark_saved.svg',
-                          // ),
                         ],
                       ),
                       const SizedBox(

@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: A1dTMetVKauXETrEYQS38wV28tco7vkAmyq2ZtE9gv7f
+  address: 7MDQhvpjqs2318XhzmPEQ8aTGuN3CeEuWYRMMG77Q1sD
   media:
     - purpose: icon
       uri: ./512x512_rounded.png

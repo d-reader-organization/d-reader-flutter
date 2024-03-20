@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/owned_issue.dart';
-import 'package:d_reader_flutter/features/library/presentation/providers/owned_controller.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_controller.dart';
 import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';

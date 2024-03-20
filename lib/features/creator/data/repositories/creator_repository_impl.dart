@@ -25,8 +25,10 @@ class CreatorRepositoryImpl implements CreatorRepository {
     return dataSource.getCreators(queryString: queryString);
   }
 
-  // @override
-  // Future<List<CreatorModel>> getCreators({String? queryString}) {
-  //   return dataSource.getCreators(queryString: queryString);
-  // }
+  @override
+  Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
+      {required int userId, required String queryString}) {
+    return dataSource.getFollowedByUser(
+        userId: userId, queryString: queryString);
+  }
 }

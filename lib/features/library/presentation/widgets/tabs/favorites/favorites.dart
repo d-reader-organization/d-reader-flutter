@@ -1,5 +1,5 @@
-import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.dart';
-import 'package:d_reader_flutter/features/comic/presentation/providers/comics_notifier.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/favorites/favorites_providers.dart';
 import 'package:d_reader_flutter/features/library/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/common/library_comic_items.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -14,12 +14,7 @@ class FavoritesTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(
-      genericComicNotifierProvider(
-        userId: ref.watch(environmentProvider).user?.id ?? 0,
-        fetch: ref.read(comicRepositoryProvider).getFavoriteComics,
-      ),
-    );
+    final provider = ref.watch(favoriteComicsProvider);
     return provider.when(
       data: (data) {
         if (data.isEmpty) {
@@ -52,69 +47,7 @@ class FavoritesTab extends ConsumerWidget {
             ],
           );
         }
-        Map<String, int> sortedLetters = sortAndGetLetterOccurences(data);
-        return NotificationListener(
-          onNotification: (notification) {
-            if (notification is ScrollNotification) {
-              double maxScroll = notification.metrics.maxScrollExtent;
-              double currentScroll = notification.metrics.pixels;
-              double delta = MediaQuery.sizeOf(context).width * 0.1;
-              if (maxScroll - currentScroll <= delta) {
-                ref
-                    .read(
-                      genericComicNotifierProvider(
-                        userId: ref.watch(environmentProvider).user?.id ?? 0,
-                        fetch: ref.read(comicRepositoryProvider).getOwnedComics,
-                      ).notifier,
-                    )
-                    .fetchNext();
-              }
-            }
-            return true;
-          },
-          child: RefreshIndicator(
-            onRefresh: () async {
-              if (ref.watch(environmentProvider).user?.id != null) {
-                ref.invalidate(
-                  genericComicNotifierProvider(
-                    userId: ref.watch(environmentProvider).user?.id ?? 0,
-                    fetch: ref.read(comicRepositoryProvider).getOwnedComics,
-                  ),
-                );
-              }
-            },
-            backgroundColor: ColorPalette.dReaderYellow100,
-            color: ColorPalette.appBackgroundColor,
-            child: ListView.separated(
-              itemCount: sortedLetters.keys.length,
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              itemBuilder: (context, index) {
-                final (startAt, endAtLimit) =
-                    getSublistBorders(sortedLetters, index);
-                return Container(
-                  margin: const EdgeInsets.only(
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  child: LibraryComicItems(
-                    letter: sortedLetters.keys.elementAt(index),
-                    comics: data.sublist(
-                      startAt,
-                      endAtLimit,
-                    ),
-                    isFavoriteTab: true,
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(
-                  thickness: 1,
-                  color: ColorPalette.greyscale400,
-                );
-              },
-            ),
-          ),
-        );
+        return FavoriteComicsListBuilder(comics: data);
       },
       error: (error, stackTrace) {
         return const CarrotErrorWiddget(
@@ -125,6 +58,75 @@ class FavoritesTab extends ConsumerWidget {
       loading: () {
         return const LoadingOwnedComicItems();
       },
+      onGoingLoading: (items) {
+        return FavoriteComicsListBuilder(comics: items);
+      },
+      onGoingError: (items, Object? e, StackTrace? stk) {
+        return FavoriteComicsListBuilder(comics: items);
+      },
+    );
+  }
+}
+
+class FavoriteComicsListBuilder extends ConsumerWidget {
+  final List<ComicModel> comics;
+  const FavoriteComicsListBuilder({
+    super.key,
+    required this.comics,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    Map<String, int> sortedLetters = sortAndGetLetterOccurences([...comics]);
+    return NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.sizeOf(context).width * 0.1;
+          if (maxScroll - currentScroll <= delta) {
+            ref.read(favoriteComicsProvider.notifier).fetchNext();
+          }
+        }
+        return true;
+      },
+      child: RefreshIndicator(
+        onRefresh: () async {
+          if (ref.watch(environmentProvider).user?.id != null) {
+            ref.invalidate(favoriteComicsProvider);
+          }
+        },
+        backgroundColor: ColorPalette.dReaderYellow100,
+        color: ColorPalette.appBackgroundColor,
+        child: ListView.separated(
+          itemCount: sortedLetters.keys.length,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          itemBuilder: (context, index) {
+            final (startAt, endAtLimit) =
+                getSublistBorders(sortedLetters, index);
+            return Container(
+              margin: const EdgeInsets.only(
+                top: 8,
+                bottom: 8,
+              ),
+              child: LibraryComicItems(
+                letter: sortedLetters.keys.elementAt(index),
+                comics: comics.sublist(
+                  startAt,
+                  endAtLimit,
+                ),
+                isFavoriteTab: true,
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              thickness: 1,
+              color: ColorPalette.greyscale400,
+            );
+          },
+        ),
+      ),
     );
   }
 }

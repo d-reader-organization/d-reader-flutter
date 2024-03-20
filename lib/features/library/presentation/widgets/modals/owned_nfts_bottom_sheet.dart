@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/features/library/presentation/providers/owned_controller.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_controller.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';

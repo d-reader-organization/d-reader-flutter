@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/features/comic/presentation/providers/comics_notifier.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -274,7 +274,7 @@ class MyWalletsScreen extends ConsumerWidget {
                         );
                         ref.invalidate(selectedWalletProvider);
                         ref.invalidate(userWalletsProvider);
-                        ref.invalidate(genericComicNotifierProvider);
+                        ref.invalidate(ownedComicsProvider);
                       },
                       onFail: (String result) {
                         showSnackBar(

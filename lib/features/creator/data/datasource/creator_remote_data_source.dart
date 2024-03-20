@@ -9,7 +9,7 @@ abstract class CreatorDataSource {
   Future<CreatorModel?> getCreator(String slug);
   Future<void> followCreator(String slug);
   Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
-      {required int userId, required String queryString});
+      {required int userId, required String query});
 }
 
 class CreatorRemoteDataSource implements CreatorDataSource {
@@ -59,10 +59,10 @@ class CreatorRemoteDataSource implements CreatorDataSource {
 
   @override
   Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
-      {required int userId, required String queryString}) async {
+      {required int userId, required String query}) async {
     try {
-      final response =
-          await networkService.get('get/followed-by-user/$userId?$queryString');
+      final response = await networkService
+          .get('/creator/get/followed-by-user/$userId?$query');
 
       return response.fold(
         (exception) {

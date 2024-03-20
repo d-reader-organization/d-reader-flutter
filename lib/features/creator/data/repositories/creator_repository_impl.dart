@@ -27,8 +27,7 @@ class CreatorRepositoryImpl implements CreatorRepository {
 
   @override
   Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
-      {required int userId, required String queryString}) {
-    return dataSource.getFollowedByUser(
-        userId: userId, queryString: queryString);
+      {required int userId, required String query}) {
+    return dataSource.getFollowedByUser(userId: userId, query: query);
   }
 }

@@ -8,5 +8,5 @@ abstract class CreatorRepository {
   Future<CreatorModel?> getCreator(String slug);
   Future<void> followCreator(String slug);
   Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
-      {required int userId, required String queryString});
+      {required int userId, required String query});
 }

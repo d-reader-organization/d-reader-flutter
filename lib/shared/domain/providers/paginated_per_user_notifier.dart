@@ -12,6 +12,8 @@ class PaginatedByUserId<T> extends StateNotifier<PaginationState<T>>
   final List<T> _items = [];
   bool isEnd = false, initialFetchDone = false;
 
+  List<T> get data => _items;
+
   final Future<Either<AppException, List<T>>> Function({
     required int userId,
     required String query,

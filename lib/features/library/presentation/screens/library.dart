@@ -99,12 +99,7 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                     text: 'Owned',
                   ),
                   Tab(
-                    child: Text(
-                      'Creators',
-                      style: TextStyle(
-                        color: ColorPalette.greyscale300,
-                      ),
-                    ),
+                    text: 'Creators',
                   ),
                 ],
               ),

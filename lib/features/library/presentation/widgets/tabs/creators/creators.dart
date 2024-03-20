@@ -1,8 +1,10 @@
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/avatar.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/creators/creators_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -113,18 +115,22 @@ class CreatorsListViewBuilder extends ConsumerWidget {
             final creator = creators[index];
             return GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: ref.watch(isDeleteInProgress)
-                  ? () {
-                      ref.read(selectedCreatorSlugs.notifier).update((state) {
-                        if (state.contains(creator.slug)) {
-                          final items = [...state];
-                          items.remove(creator.slug);
-                          return items;
-                        }
-                        return [...state, creator.slug];
-                      });
-                    }
-                  : null,
+              onTap: () {
+                if (!ref.watch(isDeleteInProgress)) {
+                  return nextScreenPush(
+                    context: context,
+                    path: '${RoutePath.creatorDetails}/${creator.slug}',
+                  );
+                }
+                ref.read(selectedCreatorSlugs.notifier).update((state) {
+                  if (state.contains(creator.slug)) {
+                    final items = [...state];
+                    items.remove(creator.slug);
+                    return items;
+                  }
+                  return [...state, creator.slug];
+                });
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 8,
@@ -156,9 +162,10 @@ class CreatorsListViewBuilder extends ConsumerWidget {
                           children: [
                             Text(
                               'Comics: ${creator.stats?.comicsCount}',
-                              style: textTheme.labelSmall?.copyWith(
+                              style: textTheme.bodySmall?.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: ColorPalette.greyscale200,
+                                fontSize: 12,
                               ),
                             ),
                             const SizedBox(
@@ -166,9 +173,10 @@ class CreatorsListViewBuilder extends ConsumerWidget {
                             ),
                             Text(
                               'Followers: ${creator.stats?.followersCount}',
-                              style: textTheme.labelSmall?.copyWith(
+                              style: textTheme.bodySmall?.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: ColorPalette.greyscale200,
+                                fontSize: 12,
                               ),
                             ),
                           ],

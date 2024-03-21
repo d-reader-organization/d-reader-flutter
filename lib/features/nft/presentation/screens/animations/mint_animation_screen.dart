@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_controller.dart';
@@ -6,14 +7,17 @@ import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart
 import 'package:d_reader_flutter/features/nft/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -263,6 +267,58 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                           iconPath: 'assets/icons/rarity.svg',
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return GestureDetector(
+                          onTap: () async {
+                            final nft = widget.nft;
+                            final dReaderWebUrl = ref
+                                        .read(environmentProvider)
+                                        .solanaCluster ==
+                                    SolanaCluster.devnet.value
+                                ? 'https://dev-devnet.dreader.app/mint/${nft.comicIssueId}'
+                                : 'https://dreader.app/mint/${nft.comicIssueId}';
+                            final uri = Uri.encodeFull(
+                              'https://twitter.com/intent/tweet?text=I just minted a ${nft.rarity.toLowerCase()} copy of the ${nft.name.split('#')[0]}!\n\nMint yours here while the supply lasts.👇\n\n$dReaderWebUrl',
+                            );
+                            await openUrl(uri);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                8,
+                              ),
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Share on',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/x.svg',
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

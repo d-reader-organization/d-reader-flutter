@@ -6,8 +6,6 @@ import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
 import 'package:d_reader_flutter/shared/domain/providers/pagination_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-part 'comic_providers.g.dart';
 
 final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
   (ref, queryString) async {
@@ -69,25 +67,6 @@ final rateComicProvider = FutureProvider.autoDispose.family<dynamic, dynamic>(
     }
   },
 );
-
-@riverpod
-Future<List<ComicModel>> ownedComics(
-  Ref ref, {
-  required int userId,
-  required String query,
-}) {
-  return ref
-      .read(comicRepositoryProvider)
-      .getOwnedComics(userId: userId, query: query)
-      .then((result) => result.fold(
-            (exception) {
-              return [];
-            },
-            (data) {
-              return data;
-            },
-          ));
-}
 
 final comicViewModeProvider = StateProvider.autoDispose<ViewMode>(
   (ref) {

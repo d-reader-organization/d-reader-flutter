@@ -8,6 +8,8 @@ abstract class CreatorDataSource {
       {String? queryString});
   Future<CreatorModel?> getCreator(String slug);
   Future<void> followCreator(String slug);
+  Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
+      {required int userId, required String query});
 }
 
 class CreatorRemoteDataSource implements CreatorDataSource {
@@ -53,5 +55,40 @@ class CreatorRemoteDataSource implements CreatorDataSource {
         );
       },
     );
+  }
+
+  @override
+  Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
+      {required int userId, required String query}) async {
+    try {
+      final response = await networkService
+          .get('/creator/get/followed-by-user/$userId?$query');
+
+      return response.fold(
+        (exception) {
+          return Left(exception);
+        },
+        (result) {
+          return Right(
+            List<CreatorModel>.from(
+              result.data.map(
+                (item) => CreatorModel.fromJson(
+                  item,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}AuctionHouseRemoteDataSource.getListedItems',
+        ),
+      );
+    }
   }
 }

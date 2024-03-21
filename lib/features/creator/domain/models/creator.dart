@@ -52,12 +52,13 @@ class CreatorModel {
 }
 
 class CreatorStats {
-  final int comicIssuesCount, followersCount, totalVolume;
+  final int comicIssuesCount, followersCount, totalVolume, comicsCount;
 
   CreatorStats({
     required this.comicIssuesCount,
     required this.followersCount,
     required this.totalVolume,
+    required this.comicsCount,
   });
 
   factory CreatorStats.fromJson(dynamic json) {
@@ -65,6 +66,7 @@ class CreatorStats {
       comicIssuesCount: json['comicIssuesCount'],
       followersCount: json['followersCount'],
       totalVolume: json['totalVolume'],
+      comicsCount: json['comicsCount'] ?? 0,
     );
   }
 }

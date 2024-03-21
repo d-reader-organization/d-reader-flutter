@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/features/library/presentation/providers/owned_providers.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';

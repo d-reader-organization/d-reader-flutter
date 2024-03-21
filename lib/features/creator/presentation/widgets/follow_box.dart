@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/features/creator/domain/providers/creator_provider.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/creators/creators_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/count_provider.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class FollowBox extends HookConsumerWidget {
     return GestureDetector(
       onTap: () {
         ref.read(creatorRepositoryProvider).followCreator(slug);
+        ref.invalidate(followedCreatorsProvider);
         followingHook.value = followingHook.value.copyWith(
           count: followingHook.value.isSelected
               ? followingHook.value.count - 1

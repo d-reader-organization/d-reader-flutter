@@ -1,6 +1,5 @@
-import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.dart';
-import 'package:d_reader_flutter/features/comic/presentation/providers/comics_notifier.dart';
-import 'package:d_reader_flutter/features/library/presentation/providers/owned_providers.dart';
+import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/library/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -18,13 +17,7 @@ class OwnedTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(
-      genericComicNotifierProvider(
-        userId: ref.watch(environmentProvider).user?.id ?? 0,
-        fetch: ref.read(comicRepositoryProvider).getOwnedComics,
-      ),
-    );
-
+    final provider = ref.watch(ownedComicsProvider);
     return ref.watch(selectedOwnedComicProvider) != null
         ? ref.watch(selectedIssueInfoProvider) != null
             ? OwnedNftsItems(issue: ref.read(selectedIssueInfoProvider)!)
@@ -61,75 +54,7 @@ class OwnedTab extends ConsumerWidget {
                   ],
                 );
               }
-              Map<String, int> sortedLetters = sortAndGetLetterOccurences(data);
-              return NotificationListener(
-                onNotification: (notification) {
-                  if (notification is ScrollNotification) {
-                    double maxScroll = notification.metrics.maxScrollExtent;
-                    double currentScroll = notification.metrics.pixels;
-                    double delta = MediaQuery.sizeOf(context).width * 0.1;
-                    if (maxScroll - currentScroll <= delta) {
-                      ref
-                          .read(
-                            genericComicNotifierProvider(
-                              userId:
-                                  ref.watch(environmentProvider).user?.id ?? 0,
-                              fetch: ref
-                                  .read(comicRepositoryProvider)
-                                  .getOwnedComics,
-                            ).notifier,
-                          )
-                          .fetchNext();
-                    }
-                  }
-                  return true;
-                },
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    if (ref.watch(environmentProvider).user?.id != null) {
-                      await ref
-                          .read(userRepositoryProvider)
-                          .syncWallets(ref.watch(environmentProvider).user!.id);
-                      ref.invalidate(
-                        genericComicNotifierProvider(
-                          userId: ref.watch(environmentProvider).user?.id ?? 0,
-                          fetch:
-                              ref.read(comicRepositoryProvider).getOwnedComics,
-                        ),
-                      );
-                    }
-                  },
-                  backgroundColor: ColorPalette.dReaderYellow100,
-                  color: ColorPalette.appBackgroundColor,
-                  child: ListView.separated(
-                    itemCount: sortedLetters.keys.length,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    itemBuilder: (context, index) {
-                      final (startAt, endAtLimit) =
-                          getSublistBorders(sortedLetters, index);
-                      return Container(
-                        margin: const EdgeInsets.only(
-                          top: 8,
-                          bottom: 8,
-                        ),
-                        child: LibraryComicItems(
-                          letter: sortedLetters.keys.elementAt(index),
-                          comics: data.sublist(
-                            startAt,
-                            endAtLimit,
-                          ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Divider(
-                        thickness: 1,
-                        color: ColorPalette.greyscale400,
-                      );
-                    },
-                  ),
-                ),
-              );
+              return OwnedComicsListBuilder(comics: data);
             },
             error: (error, stackTrace) {
               return const CarrotErrorWiddget(
@@ -141,6 +66,77 @@ class OwnedTab extends ConsumerWidget {
             loading: () {
               return const LoadingOwnedComicItems();
             },
+            onGoingLoading: (items) {
+              return OwnedComicsListBuilder(comics: items);
+            },
+            onGoingError: (items, e, stk) {
+              return OwnedComicsListBuilder(comics: items);
+            },
           );
+  }
+}
+
+class OwnedComicsListBuilder extends ConsumerWidget {
+  final List<ComicModel> comics;
+  const OwnedComicsListBuilder({
+    super.key,
+    required this.comics,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    Map<String, int> sortedLetters = sortAndGetLetterOccurences([...comics]);
+    return NotificationListener(
+      onNotification: (notification) {
+        if (notification is ScrollNotification) {
+          double maxScroll = notification.metrics.maxScrollExtent;
+          double currentScroll = notification.metrics.pixels;
+          double delta = MediaQuery.sizeOf(context).width * 0.1;
+          if (maxScroll - currentScroll <= delta) {
+            ref.read(ownedComicsProvider.notifier).fetchNext();
+          }
+        }
+        return true;
+      },
+      child: RefreshIndicator(
+        onRefresh: () async {
+          if (ref.watch(environmentProvider).user?.id != null) {
+            await ref
+                .read(userRepositoryProvider)
+                .syncWallets(ref.watch(environmentProvider).user!.id);
+            ref.invalidate(ownedComicsProvider);
+          }
+        },
+        backgroundColor: ColorPalette.dReaderYellow100,
+        color: ColorPalette.appBackgroundColor,
+        child: ListView.separated(
+          itemCount: sortedLetters.keys.length,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          itemBuilder: (context, index) {
+            final (startAt, endAtLimit) =
+                getSublistBorders(sortedLetters, index);
+            return Container(
+              margin: const EdgeInsets.only(
+                top: 8,
+                bottom: 8,
+              ),
+              child: LibraryComicItems(
+                letter: sortedLetters.keys.elementAt(index),
+                comics: comics.sublist(
+                  startAt,
+                  endAtLimit,
+                ),
+              ),
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              thickness: 1,
+              color: ColorPalette.greyscale400,
+            );
+          },
+        ),
+      ),
+    );
   }
 }

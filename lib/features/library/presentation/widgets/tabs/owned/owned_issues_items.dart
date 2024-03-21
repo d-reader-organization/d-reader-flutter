@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
-import 'package:d_reader_flutter/features/library/presentation/providers/owned_providers.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';

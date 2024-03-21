@@ -24,7 +24,7 @@ class ListingItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    final selectedItems = ref.watch(selectedItemsProvider);
+    final selectedItems = ref.watch(selectedListingsProvider);
     final myWallets = ref.watch(
       userWalletsProvider(
         id: ref.read(environmentProvider).user?.id,
@@ -45,7 +45,7 @@ class ListingItem extends ConsumerWidget {
         } else {
           items.add(listing);
         }
-        ref.read(selectedItemsProvider.notifier).state = items;
+        ref.read(selectedListingsProvider.notifier).state = items;
       },
       child: Container(
         padding: const EdgeInsets.all(16),

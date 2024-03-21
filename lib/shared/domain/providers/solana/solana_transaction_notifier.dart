@@ -395,7 +395,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
             );
           }
           List<BuyNftInput> selectedNftsInput = ref
-              .read(selectedItemsProvider)
+              .read(selectedListingsProvider)
               .map(
                 (e) => BuyNftInput(
                   mintAccount: e.nftAddress,

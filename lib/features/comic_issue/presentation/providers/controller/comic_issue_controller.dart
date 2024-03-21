@@ -107,8 +107,8 @@ class ComicIssueController extends _$ComicIssueController {
           ),
           () {
             displaySnackBar(isSuccess: true, text: 'Success!');
-            ref.invalidate(selectedItemsProvider);
-            ref.invalidate(selectedItemsPrice);
+            ref.invalidate(selectedListingsProvider);
+            ref.invalidate(selectedListingsPrice);
             ref.invalidate(collectionStatsProvider);
             ref.invalidate(listingsPaginatedProvider);
           },

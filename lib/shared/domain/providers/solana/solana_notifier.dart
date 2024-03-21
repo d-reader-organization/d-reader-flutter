@@ -163,6 +163,7 @@ class SolanaNotifier extends _$SolanaNotifier {
   }
 
   Future<Either<AppException, String>> authorizeIfNeededWithOnComplete({
+    bool isConnectOnly = false,
     String? overrideCluster,
     Function()? onStart,
     Future<Either<AppException, String>> Function(
@@ -189,9 +190,8 @@ class SolanaNotifier extends _$SolanaNotifier {
         ),
       );
     }
-
     String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
-    if (walletAddress != null) {
+    if (!isConnectOnly && walletAddress != null) {
       try {
         if (onComplete != null) {
           return await onComplete(await session.start(), session);
@@ -216,7 +216,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     );
     final result = await _authorizeAndSignIfNeeded(
       client: client,
-      shouldSignMessage: wallets.isEmpty,
+      shouldSignMessage: isConnectOnly || wallets.isEmpty,
     );
 
     if (result != 'OK') {

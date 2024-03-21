@@ -19,11 +19,14 @@ final collectionStatsProvider = FutureProvider.autoDispose
   );
 });
 
-final selectedItemsProvider = StateProvider<List<ListingModel>>((ref) => []);
+final selectedListingsProvider =
+    StateProvider.autoDispose<List<ListingModel>>((ref) {
+  return [];
+});
 
-final selectedItemsPrice = StateProvider<int?>((ref) {
+final selectedListingsPrice = StateProvider.autoDispose<int?>((ref) {
   int? sum;
-  ref.watch(selectedItemsProvider).forEach((listing) {
+  ref.watch(selectedListingsProvider).forEach((listing) {
     sum ??= 0;
     sum = sum! + listing.price;
   });

@@ -25,9 +25,11 @@ class WalletController extends _$WalletController {
   }) async {
     final authorizeResult = await ref
         .read(solanaNotifierProvider.notifier)
-        .authorizeIfNeededWithOnComplete(onStart: () {
-      ref.read(globalNotifierProvider.notifier).updateLoading(true);
-    });
+        .authorizeIfNeededWithOnComplete(
+            isConnectOnly: true,
+            onStart: () {
+              ref.read(globalNotifierProvider.notifier).updateLoading(true);
+            });
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
     authorizeResult.fold((exception) {
       if (exception is NoWalletFoundException) {

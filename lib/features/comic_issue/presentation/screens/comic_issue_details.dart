@@ -535,7 +535,7 @@ class BottomNavigation extends ConsumerWidget {
                             isLoading:
                                 ref.watch(globalNotifierProvider).isLoading,
                             onPressed:
-                                ref.read(selectedItemsProvider).isNotEmpty &&
+                                ref.read(selectedListingsProvider).isNotEmpty &&
                                         !ref.watch(isOpeningSessionProvider)
                                     ? () async {
                                         await ref
@@ -564,7 +564,7 @@ class BottomNavigation extends ConsumerWidget {
                                       }
                                     : null,
                             text: 'Buy',
-                            price: ref.watch(selectedItemsPrice),
+                            price: ref.watch(selectedListingsPrice),
                             isListing: true,
                           ),
                         )

@@ -45,72 +45,74 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
-        child: NestedScrollView(
-          body: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: TabBarView(
-              controller: _controller,
-              children: const [
-                FavoritesTab(),
-                OwnedTab(),
-                CreatorsTab(),
-              ],
-            ),
+      length: 3,
+      child: NestedScrollView(
+        body: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: TabBarView(
+            controller: _controller,
+            children: const [
+              FavoritesTab(),
+              OwnedTab(),
+              CreatorsTab(),
+            ],
           ),
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverToBoxAdapter(
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 32),
-                  child: ref.watch(selectedTabIndex) == 2 &&
-                          ref.watch(isDeleteInProgress)
-                      ? const CreatorTabHeader()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'My Library',
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                            ref.watch(selectedTabIndex) == 2
-                                ? GestureDetector(
-                                    onTap: () {
-                                      ref
-                                          .read(isDeleteInProgress.notifier)
-                                          .update((state) => !state);
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/icons/trash.svg',
-                                    ),
-                                  )
-                                : const SizedBox(),
-                          ],
-                        ),
-                ),
+        ),
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverToBoxAdapter(
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 32),
+                child: ref.watch(selectedTabIndex) == 2 &&
+                        ref.watch(isDeleteInProgress)
+                    ? const CreatorTabHeader()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'My Library',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                          ref.watch(selectedTabIndex) == 2
+                              ? GestureDetector(
+                                  onTap: () {
+                                    ref
+                                        .read(isDeleteInProgress.notifier)
+                                        .update((state) => !state);
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/icons/trash.svg',
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
               ),
-              SliverAppBar(
-                backgroundColor: ColorPalette.appBackgroundColor,
-                titleSpacing: 0,
-                floating: true,
-                title: CustomSliverTabBar(
-                  controller: _controller,
-                  tabs: const [
-                    Tab(
-                      text: 'Favorites',
-                    ),
-                    Tab(
-                      text: 'Owned',
-                    ),
-                    Tab(
-                      text: 'Creators',
-                    ),
-                  ],
-                ),
+            ),
+            SliverAppBar(
+              backgroundColor: ColorPalette.appBackgroundColor,
+              titleSpacing: 0,
+              floating: true,
+              title: CustomSliverTabBar(
+                controller: _controller,
+                tabs: const [
+                  Tab(
+                    text: 'Favorites',
+                  ),
+                  Tab(
+                    text: 'Owned',
+                  ),
+                  Tab(
+                    text: 'Creators',
+                  ),
+                ],
               ),
-            ];
-          },
-        ));
+            ),
+          ];
+        },
+      ),
+    );
   }
 }
 

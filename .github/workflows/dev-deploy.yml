@@ -32,7 +32,9 @@ jobs:
         run: cat /home/runner/work/d_reader_flutter/d_reader_flutter/app/google-services.json | base64
 
       - name: Putting data
-        run: echo ${{ secrets.DEV_GOOGLE_SERVICES_JSON }} > /home/runner/work/d_reader_flutter/d_reader_flutter/app/google-services.json
+        env:
+          DATA: ${{ secrets.DEV_GOOGLE_SERVICES_JSON }}
+        run: echo $DATA > /home/runner/work/d_reader_flutter/d_reader_flutter/app/google-services.json
 
       - name: 'Create env file'
         run: |

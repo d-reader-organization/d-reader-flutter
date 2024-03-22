@@ -2,8 +2,8 @@ class RoutePath {
   // Unauthorized Routes
   static const welcome = '/welcome';
   static const initial = '/initial';
-  static const signIn = '/sign-in';
-  static const signUp = '/sign-up';
+  static const signIn = '/login';
+  static const signUp = '/register';
   static const requestRessetPassword = '/request-reset-password';
 
   // Authorized Routes

@@ -155,6 +155,11 @@ final List<GoRoute> homeRoutes = [
         },
       ),
       GoRoute(
+        path: 'mint/:id',
+        redirect: (context, state) =>
+            '/${RoutePath.comicIssueDetails}/${state.pathParameters['id']}',
+      ),
+      GoRoute(
         path: '${RoutePath.creatorDetails}/:slug',
         builder: (context, state) {
           final slug = state.pathParameters['slug'] ?? '';

@@ -45,5 +45,20 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>CFBundleURLName</key>
+		<string>io.app.dreader</string>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>appscheme</string>
+		</array>
+		</dict>
+	</array>
 </dict>
 </plist>

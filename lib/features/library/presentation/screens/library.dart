@@ -89,13 +89,13 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                         ),
                 ),
               ),
-              const SliverAppBar(
+              SliverAppBar(
                 backgroundColor: ColorPalette.appBackgroundColor,
                 titleSpacing: 0,
                 floating: true,
-                snap: true,
                 title: CustomSliverTabBar(
-                  tabs: [
+                  controller: _controller,
+                  tabs: const [
                     Tab(
                       text: 'Favorites',
                     ),

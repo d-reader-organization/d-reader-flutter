@@ -97,7 +97,6 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
               backgroundColor: ColorPalette.appBackgroundColor,
               titleSpacing: 0,
               floating: true,
-              snap: true,
               toolbarHeight: 134,
               title: Column(
                 children: [

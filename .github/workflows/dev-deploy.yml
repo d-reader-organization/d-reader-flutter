@@ -43,15 +43,22 @@ jobs:
       - name: Set Secret Key Properties
         env:
           KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
-        run: echo "$KEY_PROPERTIES" > ./key.properties
+        run: echo "$KEY_PROPERTIES" > ./android/key.properties
 
       - name: Prepare upload keystore
         run: |
           echo "${{ secrets.BASE_64_SIGNING_KEY }}" > upload_keystore.jks.asc
-          gpg -d --passphrase "${{ secrets.BASE_64_SIGNING_KEY_PASSPHRASE }}" --batch upload_keystore.jks.asc > upload_keystore.jks
+          gpg -d --passphrase "${{ secrets.BASE_64_SIGNING_KEY_PASSPHRASE }}" --batch upload_keystore.jks.asc > ./android/upload_keystore.jks
 
       - name: Build android apk and appBundle
         run: make build-dev
 
       # - name: Build android ios
       #   run: flutter build ios --releasee --no-codesign
+      - name: Upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.DEV_FIREBASE_APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+          groups: test_group
+          file: apks/dReader-dev.apk

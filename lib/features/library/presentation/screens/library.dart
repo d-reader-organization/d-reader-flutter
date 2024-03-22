@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_p
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
-import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_persisent_header.dart';
+import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_bar.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -89,19 +89,24 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                         ),
                 ),
               ),
-              CustomSliverTabPersistentHeader(
-                controller: _controller,
-                tabs: const [
-                  Tab(
-                    text: 'Favorites',
-                  ),
-                  Tab(
-                    text: 'Owned',
-                  ),
-                  Tab(
-                    text: 'Creators',
-                  ),
-                ],
+              const SliverAppBar(
+                backgroundColor: ColorPalette.appBackgroundColor,
+                titleSpacing: 0,
+                floating: true,
+                snap: true,
+                title: CustomSliverTabBar(
+                  tabs: [
+                    Tab(
+                      text: 'Favorites',
+                    ),
+                    Tab(
+                      text: 'Owned',
+                    ),
+                    Tab(
+                      text: 'Creators',
+                    ),
+                  ],
+                ),
               ),
             ];
           },

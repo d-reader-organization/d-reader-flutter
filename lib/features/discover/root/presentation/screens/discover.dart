@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/shared/presentations/providers/global/global_pr
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/theme/decorations.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/filter/filter_icon.dart';
-import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_app_bar_delegate.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_bar.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/comics/comics_tab.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/creators/creators_tab.dart';
@@ -46,6 +45,7 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
   }
 
   void _submitHandler(WidgetRef ref) {
+    ref.read(isSearchFocused.notifier).update((state) => false);
     String search = ref.read(searchProvider).searchController.text.trim();
     ref.read(searchProvider.notifier).updateSearchValue(search);
   }
@@ -56,11 +56,13 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
       length: 3,
       initialIndex: ref.read(tabBarProvider),
       child: NestedScrollView(
+        floatHeaderSlivers: true,
+        physics: const BouncingScrollPhysics(),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverToBoxAdapter(
               child: Container(
-                margin: const EdgeInsets.only(bottom: 32),
+                margin: const EdgeInsets.only(bottom: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -91,61 +93,77 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
                 ),
               ),
             ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: CustomSliverAppBarDelegate(
-                minHeight: 134,
-                maxHeight: 134,
-                child: Container(
-                  color: ColorPalette.appBackgroundColor,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: ref.read(searchProvider).searchController,
-                        textInputAction: TextInputAction.search,
-                        cursorColor: Colors.white,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        decoration: searchInputDecoration(
-                          hintText: 'Search comics, issues & genres',
-                          prefixIcon: IconButton(
-                            onPressed: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              _submitHandler(ref);
-                            },
-                            icon: SvgPicture.asset(
-                              'assets/icons/search.svg',
-                              colorFilter: const ColorFilter.mode(
-                                ColorPalette.greyscale200,
-                                BlendMode.srcIn,
+            SliverAppBar(
+              backgroundColor: ColorPalette.appBackgroundColor,
+              titleSpacing: 0,
+              floating: true,
+              snap: true,
+              toolbarHeight: 134,
+              title: Column(
+                children: [
+                  TextFormField(
+                    controller: ref.read(searchProvider).searchController,
+                    textInputAction: TextInputAction.search,
+                    cursorColor: Colors.white,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    onTap: () {
+                      ref
+                          .read(isSearchFocused.notifier)
+                          .update((state) => true);
+                    },
+                    onTapOutside: (event) {
+                      ref
+                          .read(isSearchFocused.notifier)
+                          .update((state) => false);
+                    },
+                    decoration: searchInputDecoration(
+                      hintText: 'Search comics, issues & genres',
+                      prefixIcon: IconButton(
+                        onPressed: ref.watch(isSearchFocused)
+                            ? () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                ref.invalidate(isSearchFocused);
+                                ref.invalidate(searchProvider);
+                              }
+                            : null,
+                        icon: ref.watch(isSearchFocused)
+                            ? const Icon(
+                                Icons.close,
+                                size: 24,
+                                color: Colors.white,
+                              )
+                            : SvgPicture.asset(
+                                'assets/icons/search.svg',
+                                colorFilter: const ColorFilter.mode(
+                                  ColorPalette.greyscale200,
+                                  BlendMode.srcIn,
+                                ),
                               ),
-                            ),
-                          ),
-                          suffixIcon: const FilterIcon(),
-                        ),
-                        onFieldSubmitted: (value) {
-                          _submitHandler(ref);
-                        },
                       ),
-                      const SizedBox(
-                        height: 16,
+                      suffixIcon: const FilterIcon(),
+                    ),
+                    onFieldSubmitted: (value) {
+                      _submitHandler(ref);
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  CustomSliverTabBar(
+                    controller: _controller,
+                    tabs: const [
+                      Tab(
+                        text: 'Comics',
                       ),
-                      CustomSliverTabBar(
-                        controller: _controller,
-                        children: const [
-                          Tab(
-                            text: 'Comics',
-                          ),
-                          Tab(
-                            text: 'Issues',
-                          ),
-                          Tab(
-                            text: 'Creators',
-                          ),
-                        ],
+                      Tab(
+                        text: 'Issues',
+                      ),
+                      Tab(
+                        text: 'Creators',
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
           ];

@@ -24,7 +24,7 @@ class CustomSliverTabPersistentHeader extends StatelessWidget {
         child: CustomSliverTabBar(
           controller: controller,
           padding: padding,
-          children: tabs,
+          tabs: tabs,
         ),
       ),
     );

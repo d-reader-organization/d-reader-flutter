@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchState {
   const SearchState({required this.search, required this.searchController});
@@ -25,3 +25,5 @@ class SearchNotifier extends Notifier<SearchState> {
 final searchProvider = NotifierProvider<SearchNotifier, SearchState>(
   SearchNotifier.new,
 );
+
+final isSearchFocused = StateProvider.autoDispose<bool>((ref) => false);

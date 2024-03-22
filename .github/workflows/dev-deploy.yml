@@ -47,8 +47,8 @@ jobs:
 
       - name: Prepare upload keystore
         run: |
-          echo "${{ secrets.BASE_64_SIGNING_KEY }}" > upload_keystore.jks.asc
-          gpg -d --passphrase "${{ secrets.BASE_64_SIGNING_KEY_PASSPHRASE }}" --batch upload_keystore.jks.asc > ./android/upload_keystore.jks
+          echo "${{ secrets.BASE_64_SIGNING_KEY }}" > upload-keystore.jks.asc
+          gpg -d --passphrase "${{ secrets.BASE_64_SIGNING_KEY_PASSPHRASE }}" --batch upload-keystore.jks.asc > ./android/upload-keystore.jks
 
       - name: Build android apk and appBundle
         run: make build-dev

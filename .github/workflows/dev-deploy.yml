@@ -64,5 +64,5 @@ jobs:
         with:
           appId: ${{secrets.DEV_FIREBASE_APP_ID}}
           serviceCredentialsFileContent: ${{secrets.DEV_CREDENTIAL_FILE_CONTENT}}
-          groups: dreader_team
+          groups: dreader_internal
           file: apks/dReader-dev.apk

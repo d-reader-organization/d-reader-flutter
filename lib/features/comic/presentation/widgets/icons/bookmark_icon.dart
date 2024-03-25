@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/favorites/favorites_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class BookmarkIcon extends ConsumerWidget {
               await ref.read(comicRepositoryProvider).bookmarkComic(slug);
               loadingNotifier.update((state) => false);
               ref.invalidate(comicSlugProvider);
+              ref.invalidate(favoriteComicsProvider);
             },
       child: Container(
         padding: const EdgeInsets.symmetric(

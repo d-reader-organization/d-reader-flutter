@@ -21,7 +21,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
-import 'package:d_reader_flutter/shared/widgets/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/avatar.dart';
@@ -242,7 +242,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                     const SizedBox(
                                       width: 8,
                                     ),
-                                    FavouriteIconCount(
+                                    FavoriteIconCount(
                                       favouritesCount:
                                           issue.stats?.favouritesCount ?? 0,
                                       isFavourite:

@@ -9,7 +9,7 @@ import 'package:d_reader_flutter/shared/widgets/layout/animated_app_bar.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
 import 'package:d_reader_flutter/features/comic/presentation/widgets/icons/bookmark_icon.dart';
-import 'package:d_reader_flutter/shared/widgets/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/stats_info.dart';
 import 'package:d_reader_flutter/shared/widgets/texts/text_with_view_more.dart';
@@ -193,7 +193,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                               const SizedBox(
                                 width: 8,
                               ),
-                              FavouriteIconCount(
+                              FavoriteIconCount(
                                 favouritesCount:
                                     widget.comic.stats?.favouritesCount ?? 0,
                                 isFavourite:

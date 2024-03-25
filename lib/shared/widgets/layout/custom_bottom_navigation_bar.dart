@@ -22,64 +22,57 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         filter: ImageFilter.blur(sigmaY: 48, sigmaX: 48),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: BottomNavigationBar(
-            onTap: (value) {
+          child: NavigationBar(
+            onDestinationSelected: (value) {
               ref.read(scaffoldPageController).animateToPage(
                     value,
                     curve: Curves.easeIn,
                     duration: const Duration(milliseconds: 5),
                   );
             },
-            currentIndex: ref.watch(scaffoldNavigationIndexProvider),
-            selectedItemColor: ColorPalette.dReaderYellow100,
-            unselectedItemColor: Colors.white,
+            selectedIndex: ref.watch(scaffoldNavigationIndexProvider),
             backgroundColor: Colors.transparent,
-            type: BottomNavigationBarType.fixed,
-            selectedLabelStyle: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.2,
-            ),
-            unselectedLabelStyle: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.2,
-            ),
+            indicatorColor: ColorPalette.dReaderYellow100,
             elevation: 0,
-            items: const [
-              BottomNavigationBarItem(
+            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+            animationDuration: const Duration(milliseconds: 700),
+            destinations: const [
+              NavigationDestination(
                 icon: BottomNavigationItemIcon(
-                    imagePath: 'assets/icons/home.svg'),
+                  imagePath: 'assets/icons/home.svg',
+                ),
                 label: 'Home',
-                activeIcon: BottomNavigationItemIcon(
+                selectedIcon: BottomNavigationItemIcon(
                   imagePath: 'assets/icons/home_bold.svg',
                   isActive: true,
                 ),
               ),
-              BottomNavigationBarItem(
+              NavigationDestination(
                 icon: BottomNavigationItemIcon(
-                    imagePath: 'assets/icons/discovery.svg'),
+                  imagePath: 'assets/icons/discovery.svg',
+                ),
                 label: 'Discover',
-                activeIcon: BottomNavigationItemIcon(
+                selectedIcon: BottomNavigationItemIcon(
                   imagePath: 'assets/icons/discovery_bold.svg',
                   isActive: true,
                 ),
               ),
-              BottomNavigationBarItem(
+              NavigationDestination(
                 icon: BottomNavigationItemIcon(
-                    imagePath: 'assets/icons/bookmark.svg'),
+                  imagePath: 'assets/icons/bookmark.svg',
+                ),
                 label: 'Library',
-                activeIcon: BottomNavigationItemIcon(
+                selectedIcon: BottomNavigationItemIcon(
                   imagePath: 'assets/icons/bookmark_bold.svg',
                   isActive: true,
                 ),
               ),
-              BottomNavigationBarItem(
+              NavigationDestination(
                 icon: BottomNavigationItemIcon(
-                    imagePath:
-                        '${Config.settingsAssetsPath}/light/setting.svg'),
+                  imagePath: '${Config.settingsAssetsPath}/light/setting.svg',
+                ),
                 label: 'Settings',
-                activeIcon: BottomNavigationItemIcon(
+                selectedIcon: BottomNavigationItemIcon(
                   imagePath: '${Config.settingsAssetsPath}/bold/setting.svg',
                   isActive: true,
                 ),

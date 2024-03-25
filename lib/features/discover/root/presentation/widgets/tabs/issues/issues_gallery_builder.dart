@@ -24,7 +24,7 @@ class IssuesGalleryBuilder extends StatelessWidget {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: isTablet ? 3 : 2,
         mainAxisSpacing: 16,
-        mainAxisExtent: 217,
+        mainAxisExtent: 226,
       ),
       itemBuilder: (context, index) {
         return ComicIssueCard(

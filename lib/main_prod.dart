@@ -85,11 +85,21 @@ class MyApp extends ConsumerWidget {
       title: 'dReader',
       routerConfig: router,
       theme: ThemeData(
-        useMaterial3: false,
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             systemNavigationBarColor: ColorPalette.appBackgroundColor,
             statusBarColor: ColorPalette.appBackgroundColor,
+          ),
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          height: 48,
+          labelTextStyle: MaterialStateProperty.all(
+            const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+            ),
           ),
         ),
         textSelectionTheme: const TextSelectionThemeData(

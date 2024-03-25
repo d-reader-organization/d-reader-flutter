@@ -7,13 +7,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FavouriteIconCount extends HookConsumerWidget {
+class FavoriteIconCount extends HookConsumerWidget {
   final int favouritesCount;
   final bool isFavourite, isContainerWidget;
   final String? slug;
   final int? issueId;
 
-  const FavouriteIconCount({
+  const FavoriteIconCount({
     super.key,
     required this.favouritesCount,
     required this.isFavourite,

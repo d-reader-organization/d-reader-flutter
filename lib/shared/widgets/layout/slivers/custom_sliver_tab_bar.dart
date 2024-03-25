@@ -42,6 +42,7 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
               ref.read(searchProvider.notifier).updateSearchValue('');
               ref.read(searchProvider).searchController.clear();
             },
+            indicatorSize: TabBarIndicatorSize.tab,
             tabs: tabs,
             controller: controller,
             indicatorWeight: 4,

@@ -45,8 +45,9 @@ class ComicGallerySkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 226,
+      padding: const EdgeInsets.only(left: 4, top: 8),
       child: ListView.builder(
         itemCount: 2,
         shrinkWrap: true,

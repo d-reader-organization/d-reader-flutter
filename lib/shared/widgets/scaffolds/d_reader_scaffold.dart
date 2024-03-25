@@ -82,16 +82,13 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
 
   EdgeInsets _bodyPadding({
     required int screenIndex,
-    bool hasBetaAccess = false,
   }) {
     if (screenIndex == 0) {
       return EdgeInsets.zero;
     } else if (screenIndex == 3) {
       return const EdgeInsets.symmetric(horizontal: 12);
     }
-    return hasBetaAccess
-        ? const EdgeInsets.only(left: 12.0, right: 12, top: 8.0)
-        : EdgeInsets.zero;
+    return const EdgeInsets.only(left: 12.0, right: 12, top: 8.0);
   }
 
   @override
@@ -109,8 +106,6 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
           body: Padding(
             padding: _bodyPadding(
               screenIndex: ref.watch(scaffoldNavigationIndexProvider),
-              hasBetaAccess: ref.watch(environmentProvider).user != null &&
-                  ref.watch(environmentProvider).user!.hasBetaAccess,
             ),
             child: widget.body ??
                 PageView(

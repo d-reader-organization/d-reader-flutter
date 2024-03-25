@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/date_widget.dart';
-import 'package:d_reader_flutter/shared/widgets/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/viewed_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
@@ -110,7 +110,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                           viewedCount: issue.stats?.viewersCount ?? 0,
                           isViewed: issue.myStats?.viewedAt != null,
                         ),
-                        FavouriteIconCount(
+                        FavoriteIconCount(
                           favouritesCount: issue.stats?.favouritesCount ?? 0,
                           isFavourite: issue.myStats?.isFavourite ?? false,
                         ),

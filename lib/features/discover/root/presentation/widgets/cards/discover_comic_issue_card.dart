@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/date_widget.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
-import 'package:d_reader_flutter/shared/widgets/icons/favourite_icon_count.dart';
+import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentation/widgets/genre_tags_default.dart';
@@ -31,7 +31,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
-        height: 165,
+        height: 167,
         padding: const EdgeInsets.symmetric(
           horizontal: 0,
           vertical: 4,
@@ -129,7 +129,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                           const SizedBox(
                             width: 8,
                           ),
-                          FavouriteIconCount(
+                          FavoriteIconCount(
                             favouritesCount: issue.stats?.favouritesCount ?? 0,
                             isFavourite: true,
                           ),

@@ -64,7 +64,8 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
               AppBar(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
-                toolbarHeight: 40,
+                toolbarHeight: 42,
+                titleSpacing: 12,
                 title: const Text(
                   'Settings',
                   style: TextStyle(

@@ -83,12 +83,14 @@ class MyApp extends ConsumerWidget {
         ),
         navigationBarTheme: NavigationBarThemeData(
           height: 48,
-          labelTextStyle: MaterialStateProperty.all(
-            const TextStyle(
-              color: Colors.white,
+          labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
+            (Set<MaterialState> states) => TextStyle(
+              color: states.contains(MaterialState.selected)
+                  ? ColorPalette.dReaderYellow100
+                  : Colors.white,
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              letterSpacing: 0.2,
+              letterSpacing: .2,
             ),
           ),
         ),

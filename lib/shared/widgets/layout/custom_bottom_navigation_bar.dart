@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
-import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/bottom_navigation_item_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -32,10 +31,10 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             },
             selectedIndex: ref.watch(scaffoldNavigationIndexProvider),
             backgroundColor: Colors.transparent,
-            indicatorColor: ColorPalette.dReaderYellow100,
+            indicatorColor: Colors.transparent,
             elevation: 0,
-            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            animationDuration: const Duration(milliseconds: 700),
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+            overlayColor: const MaterialStatePropertyAll(Colors.transparent),
             destinations: const [
               NavigationDestination(
                 icon: BottomNavigationItemIcon(

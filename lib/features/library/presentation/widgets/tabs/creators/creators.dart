@@ -111,6 +111,7 @@ class CreatorsListViewBuilder extends ConsumerWidget {
         child: ListView.separated(
           itemCount: creators.length,
           padding: const EdgeInsets.symmetric(vertical: 8),
+          physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
             final creator = creators[index];
             return GestureDetector(

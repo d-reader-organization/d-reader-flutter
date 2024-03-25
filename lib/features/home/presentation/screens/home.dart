@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
@@ -11,6 +12,7 @@ import 'package:d_reader_flutter/features/home/carousel/presentation/widgets/car
 import 'package:d_reader_flutter/features/home/presentation/widgets/section_heading.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/creators_grid.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeView extends ConsumerWidget {
@@ -18,26 +20,42 @@ class HomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(carouselProvider);
-          ref.invalidate(comicsProvider);
-          ref.invalidate(comicIssuesProvider);
-          ref.invalidate(creatorProvider);
-        },
-        backgroundColor: ColorPalette.dReaderYellow100,
-        color: ColorPalette.appBackgroundColor,
-        child: const SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Carousel(),
-              Padding(
-                padding: EdgeInsets.only(
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverAppBar(
+          stretch: true,
+          backgroundColor: ColorPalette.appBackgroundColor,
+          title: SvgPicture.asset(
+            Config.whiteLogoPath,
+            colorFilter: const ColorFilter.mode(
+              Colors.white,
+              BlendMode.srcIn,
+            ),
+          ),
+          onStretchTrigger: () async {
+            ref.invalidate(carouselProvider);
+            ref.invalidate(comicsProvider);
+            ref.invalidate(comicIssuesProvider);
+            ref.invalidate(creatorProvider);
+          },
+          expandedHeight: 344,
+          flexibleSpace: const FlexibleSpaceBar(
+            stretchModes: [StretchMode.blurBackground],
+            collapseMode: CollapseMode.pin,
+            background: Carousel(),
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              Container(
+                color: Colors.transparent,
+                padding: const EdgeInsets.only(
                   left: 16,
                   top: 8.0,
                 ),
-                child: Column(
+                child: const Column(
                   children: [
                     SizedBox(
                       height: 24,
@@ -130,7 +148,7 @@ class HomeView extends ConsumerWidget {
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }

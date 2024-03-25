@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_p
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
-import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_persisent_header.dart';
+import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_bar.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -45,51 +45,56 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
-        child: NestedScrollView(
-          body: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: TabBarView(
-              controller: _controller,
-              children: const [
-                FavoritesTab(),
-                OwnedTab(),
-                CreatorsTab(),
-              ],
-            ),
+      length: 3,
+      child: NestedScrollView(
+        body: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: TabBarView(
+            controller: _controller,
+            children: const [
+              FavoritesTab(),
+              OwnedTab(),
+              CreatorsTab(),
+            ],
           ),
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverToBoxAdapter(
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 32),
-                  child: ref.watch(selectedTabIndex) == 2 &&
-                          ref.watch(isDeleteInProgress)
-                      ? const CreatorTabHeader()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'My Library',
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                            ref.watch(selectedTabIndex) == 2
-                                ? GestureDetector(
-                                    onTap: () {
-                                      ref
-                                          .read(isDeleteInProgress.notifier)
-                                          .update((state) => !state);
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/icons/trash.svg',
-                                    ),
-                                  )
-                                : const SizedBox(),
-                          ],
-                        ),
-                ),
+        ),
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverToBoxAdapter(
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 32),
+                child: ref.watch(selectedTabIndex) == 2 &&
+                        ref.watch(isDeleteInProgress)
+                    ? const CreatorTabHeader()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'My Library',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                          ref.watch(selectedTabIndex) == 2
+                              ? GestureDetector(
+                                  onTap: () {
+                                    ref
+                                        .read(isDeleteInProgress.notifier)
+                                        .update((state) => !state);
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/icons/trash.svg',
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
               ),
-              CustomSliverTabPersistentHeader(
+            ),
+            SliverAppBar(
+              backgroundColor: ColorPalette.appBackgroundColor,
+              titleSpacing: 0,
+              floating: true,
+              title: CustomSliverTabBar(
                 controller: _controller,
                 tabs: const [
                   Tab(
@@ -103,9 +108,11 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
                   ),
                 ],
               ),
-            ];
-          },
-        ));
+            ),
+          ];
+        },
+      ),
+    );
   }
 }
 

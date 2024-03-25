@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
-  final List<Widget> children;
+  final List<Widget> tabs;
   final TabController? controller;
   final EdgeInsets? padding;
   const CustomSliverTabBar({
     super.key,
-    required this.children,
+    required this.tabs,
     this.controller,
     this.padding = const EdgeInsets.symmetric(horizontal: 4.0),
   });
@@ -42,7 +42,7 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
               ref.read(searchProvider.notifier).updateSearchValue('');
               ref.read(searchProvider).searchController.clear();
             },
-            tabs: children,
+            tabs: tabs,
             controller: controller,
             indicatorWeight: 4,
             labelStyle: Theme.of(context).textTheme.titleMedium,

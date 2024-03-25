@@ -129,6 +129,7 @@ class DiscoverScrollView extends ConsumerWidget {
         backgroundColor: ColorPalette.dReaderYellow100,
         color: ColorPalette.appBackgroundColor,
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
           slivers: [
             SliverList(
               delegate: SliverChildBuilderDelegate(

@@ -112,6 +112,7 @@ class OwnedComicsListBuilder extends ConsumerWidget {
         child: ListView.separated(
           itemCount: sortedLetters.keys.length,
           padding: const EdgeInsets.symmetric(vertical: 8),
+          physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
             final (startAt, endAtLimit) =
                 getSublistBorders(sortedLetters, index);

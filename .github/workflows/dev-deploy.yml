@@ -1,0 +1,66 @@
+name: Dev - Upload to Firebase Distribution
+
+on:
+  push:
+    branches: ["dev"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: "17.x"
+
+      - name: Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Provide Firebase Android
+        env:
+          FIREBASE_CONFIG_DEV: ${{ secrets.DEV_GOOGLE_SERVICES_JSON }}
+        run: echo $FIREBASE_CONFIG_DEV > ./android/app/google-services.json
+
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo sentryDsn=${{ secrets.SENTRY_DSN }} >> .env
+          cat .env
+      # - name: Run tests
+      #   run: flutter test
+
+      - name: Set Secret Key Properties
+        env:
+          KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
+        run: echo "$KEY_PROPERTIES" > ./android/key.properties
+
+      - name: Prepare upload keystore
+        run: |
+          echo "${{ secrets.BASE_64_SIGNING_KEY }}" > upload-keystore.jks.asc
+          gpg -d --passphrase "${{ secrets.BASE_64_SIGNING_KEY_PASSPHRASE }}" --batch upload-keystore.jks.asc > ./android/upload-keystore.jks
+
+      - name: Create apks dir
+        run: |
+          mkdir apks
+
+      - name: Build android apk and appBundle
+        run: make build-dev
+
+      # - name: Build android ios
+      #   run: flutter build ios --releasee --no-codesign
+      - name: Upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.DEV_FIREBASE_APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.DEV_CREDENTIAL_FILE_CONTENT}}
+          groups: dreader_internal
+          file: apks/dReader-dev.apk

@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 abstract class ComicIssueRepository {
   Future<Either<AppException, List<ComicIssueModel>>> getComicIssues(
       {String? queryString});
-  Future<Either<AppException, ComicIssueModel>> getComicIssue(int id);
+  Future<Either<AppException, ComicIssueModel>> getComicIssue(String id);
   Future<List<PageModel>> getComicIssuePages(int id);
   Future<void> favouritiseIssue(int id);
   Future<void> rateIssue({

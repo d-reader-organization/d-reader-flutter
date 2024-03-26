@@ -151,7 +151,7 @@ final List<GoRoute> homeRoutes = [
         path: '${RoutePath.comicIssueDetails}/:id',
         builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          return ComicIssueDetails(id: int.parse(id));
+          return ComicIssueDetails(id: id);
         },
       ),
       GoRoute(

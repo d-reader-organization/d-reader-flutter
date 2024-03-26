@@ -69,7 +69,7 @@ class _EReaderViewState extends ConsumerState<EReaderView>
     AsyncValue<List<PageModel>> pagesProvider =
         ref.watch(comicIssuePagesProvider(widget.issueId));
     AsyncValue<ComicIssueModel?> issueProvider =
-        ref.watch(comicIssueDetailsProvider(widget.issueId));
+        ref.watch(comicIssueDetailsProvider('${widget.issueId}'));
     final notifier = ref.read(isAppBarVisibleProvider.notifier);
     return NotificationListener(
       onNotification: (notification) {

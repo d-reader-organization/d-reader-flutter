@@ -23,7 +23,7 @@ class EReaderBottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(comicIssueDetailsProvider(issueId));
+    final provider = ref.watch(comicIssueDetailsProvider('$issueId'));
 
     return provider.maybeWhen(
       orElse: () {

@@ -19,9 +19,7 @@ handleNotificationAction(Map payload) {
     return routerNavigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => ComicIssueDetails(
-          id: int.parse(
-            payload[NotificationDataKey.comicIssueId.stringValue],
-          ),
+          id: payload[NotificationDataKey.comicIssueId.stringValue],
         ),
       ),
     );

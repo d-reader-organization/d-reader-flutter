@@ -17,7 +17,7 @@ class ComicIssueRepositoryImpl implements ComicIssueRepository {
   }
 
   @override
-  Future<Either<AppException, ComicIssueModel>> getComicIssue(int id) {
+  Future<Either<AppException, ComicIssueModel>> getComicIssue(String id) {
     return dataSource.getComicIssue(id);
   }
 

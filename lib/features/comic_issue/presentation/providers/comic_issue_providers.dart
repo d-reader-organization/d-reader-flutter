@@ -16,7 +16,7 @@ part 'comic_issue_providers.g.dart';
 
 @riverpod
 Future<ComicIssueModel> comicIssueDetails(
-    ComicIssueDetailsRef ref, int id) async {
+    ComicIssueDetailsRef ref, String id) async {
   final response =
       await ref.read(comicIssueRepositoryProvider).getComicIssue(id);
   return response.fold((exception) {

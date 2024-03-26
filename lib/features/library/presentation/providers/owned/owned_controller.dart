@@ -37,7 +37,7 @@ class OwnedController extends _$OwnedController {
       goToNftDetails(ownedNfts.elementAt(properIndex).address);
     }
     final ComicIssueModel? comicIssue = await ref.read(
-      comicIssueDetailsProvider(comicIssueId).future,
+      comicIssueDetailsProvider('$comicIssueId').future,
     );
     ref.read(selectedIssueInfoProvider.notifier).update((state) => comicIssue);
   }

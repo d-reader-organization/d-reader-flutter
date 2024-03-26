@@ -6,7 +6,7 @@ part of 'comic_issue_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$comicIssueDetailsHash() => r'94f3f85cd8e50f9e0fd73f801861846fcb838e4e';
+String _$comicIssueDetailsHash() => r'850ab351782b6d72c9bd5ac6ed34ddb6d9ead34c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,7 +40,7 @@ class ComicIssueDetailsFamily extends Family<AsyncValue<ComicIssueModel>> {
 
   /// See also [comicIssueDetails].
   ComicIssueDetailsProvider call(
-    int id,
+    String id,
   ) {
     return ComicIssueDetailsProvider(
       id,
@@ -76,7 +76,7 @@ class ComicIssueDetailsProvider
     extends AutoDisposeFutureProvider<ComicIssueModel> {
   /// See also [comicIssueDetails].
   ComicIssueDetailsProvider(
-    int id,
+    String id,
   ) : this._internal(
           (ref) => comicIssueDetails(
             ref as ComicIssueDetailsRef,
@@ -104,7 +104,7 @@ class ComicIssueDetailsProvider
     required this.id,
   }) : super.internal();
 
-  final int id;
+  final String id;
 
   @override
   Override overrideWith(
@@ -145,7 +145,7 @@ class ComicIssueDetailsProvider
 
 mixin ComicIssueDetailsRef on AutoDisposeFutureProviderRef<ComicIssueModel> {
   /// The parameter `id` of this provider.
-  int get id;
+  String get id;
 }
 
 class _ComicIssueDetailsProviderElement
@@ -154,7 +154,7 @@ class _ComicIssueDetailsProviderElement
   _ComicIssueDetailsProviderElement(super.provider);
 
   @override
-  int get id => (origin as ComicIssueDetailsProvider).id;
+  String get id => (origin as ComicIssueDetailsProvider).id;
 }
 
 String _$ownedIssuesHash() => r'833c572384821b22a8c5e23b2e55228f9a713613';

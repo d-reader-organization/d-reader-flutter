@@ -31,7 +31,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicIssueDetails extends ConsumerStatefulWidget {
-  final int id;
+  final String id;
   const ComicIssueDetails({
     super.key,
     required this.id,

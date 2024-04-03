@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/state/envir
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart';
 
@@ -110,18 +109,5 @@ class WalletController extends _$WalletController {
     ref.invalidate(walletNameProvider);
     ref.invalidate(userWalletsProvider);
     callback(result);
-  }
-
-  Future<void> syncWallet({
-    required String address,
-    required void Function() callback,
-  }) async {
-    final notifier = ref.read(privateLoadingProvider.notifier);
-
-    notifier.update((state) => true);
-    await ref.read(walletRepositoryProvider).syncWallet(address);
-    notifier.update((state) => false);
-    ref.invalidate(userWalletsProvider);
-    callback();
   }
 }

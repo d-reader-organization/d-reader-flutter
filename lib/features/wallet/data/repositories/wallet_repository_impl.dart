@@ -10,11 +10,6 @@ class WalletRepositoryImpl implements WalletRepository {
   WalletRepositoryImpl(this.walletDataSource);
 
   @override
-  Future<Either<AppException, bool>> syncWallet(String address) {
-    return walletDataSource.syncWallet(address);
-  }
-
-  @override
   Future<Either<AppException, WalletModel>> updateWallet({
     required String address,
     required String label,

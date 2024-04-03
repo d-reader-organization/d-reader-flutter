@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 abstract class WalletDataSource {
-  Future<Either<AppException, bool>> syncWallet(String address);
   Future<Either<AppException, WalletModel>> updateWallet({
     required String address,
     required String label,
@@ -15,14 +14,6 @@ class WalletRemoteDataSource implements WalletDataSource {
   final NetworkService networkService;
 
   WalletRemoteDataSource(this.networkService);
-
-  @override
-  Future<Either<AppException, bool>> syncWallet(String address) {
-    return networkService.get('/wallet/sync/$address').then((result) {
-      return result.fold(
-          (exception) => Left(exception), (right) => const Right(true));
-    });
-  }
 
   @override
   Future<Either<AppException, WalletModel>> updateWallet({

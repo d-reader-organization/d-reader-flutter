@@ -458,119 +458,107 @@ class BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bool canRead =
-        issue.myStats?.canRead != null && issue.myStats!.canRead;
-    final bool showReadButtonOnly = issue.isFreeToRead &&
-        canRead &&
-        issue.activeCandyMachineAddress == null &&
-        !issue.isSecondarySaleActive;
-    return showReadButtonOnly
-        ? ReadButton(issue: issue)
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: ReadButton(
-                  issue: issue,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: ReadButton(
+            issue: issue,
+          ),
+        ),
+        issue.activeCandyMachineAddress != null
+            ? Expanded(
+                child: TransactionButton(
+                  isLoading: ref.watch(globalNotifierProvider).isLoading,
+                  onPressed: ref.watch(isOpeningSessionProvider)
+                      ? null
+                      : () async {
+                          await ref
+                              .read(comicIssueControllerProvider.notifier)
+                              .handleMint(
+                            displaySnackbar: ({
+                              required String text,
+                              bool isError = false,
+                            }) {
+                              showSnackBar(
+                                context: context,
+                                text: text,
+                                backgroundColor: isError
+                                    ? ColorPalette.dReaderRed
+                                    : ColorPalette.greyscale300,
+                              );
+                            },
+                            triggerVerificationDialog: () {
+                              return triggerVerificationDialog(context, ref);
+                            },
+                            onSuccessMint: () {
+                              nextScreenPush(
+                                context: context,
+                                path: RoutePath.mintLoadingAnimation,
+                              );
+                            },
+                            onException: (exception) {
+                              if (exception is NoWalletFoundException) {
+                                return _showWalkthroughDialog(
+                                    context: context, ref: ref);
+                              } else if (exception is LowPowerModeException) {
+                                return triggerLowPowerModeDialog(context);
+                              }
+                              showSnackBar(
+                                context: context,
+                                text: exception is BadRequestException
+                                    ? exception.cause
+                                    : exception.toString(),
+                                backgroundColor: ColorPalette.dReaderRed,
+                              );
+                            },
+                          );
+                        },
+                  text: 'Mint',
+                  price: ref.watch(activeCandyMachineGroup)?.mintPrice ?? 0,
                 ),
-              ),
-              ref.watch(activeCandyMachineGroup) != null
-                  ? Expanded(
-                      child: TransactionButton(
-                        isLoading: ref.watch(globalNotifierProvider).isLoading,
-                        onPressed: ref.watch(isOpeningSessionProvider)
-                            ? null
-                            : () async {
-                                await ref
-                                    .read(comicIssueControllerProvider.notifier)
-                                    .handleMint(
-                                  displaySnackbar: ({
-                                    required String text,
-                                    bool isError = false,
-                                  }) {
-                                    showSnackBar(
-                                      context: context,
-                                      text: text,
-                                      backgroundColor: isError
-                                          ? ColorPalette.dReaderRed
-                                          : ColorPalette.greyscale300,
-                                    );
-                                  },
-                                  triggerVerificationDialog: () {
-                                    return triggerVerificationDialog(
-                                        context, ref);
-                                  },
-                                  onSuccessMint: () {
-                                    nextScreenPush(
-                                      context: context,
-                                      path: RoutePath.mintLoadingAnimation,
-                                    );
-                                  },
-                                  onException: (exception) {
-                                    if (exception is NoWalletFoundException) {
-                                      return _showWalkthroughDialog(
-                                          context: context, ref: ref);
-                                    } else if (exception
-                                        is LowPowerModeException) {
-                                      return triggerLowPowerModeDialog(context);
-                                    }
-                                    showSnackBar(
-                                      context: context,
-                                      text: exception is BadRequestException
-                                          ? exception.cause
-                                          : exception.toString(),
-                                      backgroundColor: ColorPalette.dReaderRed,
-                                    );
-                                  },
-                                );
-                              },
-                        text: 'Mint',
-                        price:
-                            ref.watch(activeCandyMachineGroup)?.mintPrice ?? 0,
-                      ),
-                    )
-                  : issue.isSecondarySaleActive
-                      ? Expanded(
-                          child: TransactionButton(
-                            isLoading:
-                                ref.watch(globalNotifierProvider).isLoading,
-                            onPressed:
-                                ref.read(selectedListingsProvider).isNotEmpty &&
-                                        !ref.watch(isOpeningSessionProvider)
-                                    ? () async {
-                                        await ref
-                                            .read(comicIssueControllerProvider
-                                                .notifier)
-                                            .handleBuy(
-                                          displaySnackBar: ({
-                                            required String text,
-                                            required bool isSuccess,
-                                          }) {
-                                            showSnackBar(
-                                              context: context,
-                                              text: text,
-                                              backgroundColor: isSuccess
-                                                  ? ColorPalette.dReaderGreen
-                                                  : ColorPalette.dReaderRed,
-                                            );
-                                          },
-                                          onException: (exception) {
-                                            triggerLowPowerOrNoWallet(
-                                              context,
-                                              exception,
-                                            );
-                                          },
-                                        );
-                                      }
-                                    : null,
-                            text: 'Buy',
-                            price: ref.watch(selectedListingsPrice),
-                            isListing: true,
-                          ),
-                        )
-                      : const SizedBox(),
-            ],
-          );
+              )
+            : issue.isSecondarySaleActive
+                ? Expanded(
+                    child: TransactionButton(
+                      isLoading: ref.watch(globalNotifierProvider).isLoading,
+                      onPressed: ref
+                                  .read(selectedListingsProvider)
+                                  .isNotEmpty &&
+                              !ref.watch(isOpeningSessionProvider)
+                          ? () async {
+                              await ref
+                                  .read(comicIssueControllerProvider.notifier)
+                                  .handleBuy(
+                                displaySnackBar: ({
+                                  required String text,
+                                  required bool isSuccess,
+                                }) {
+                                  showSnackBar(
+                                    context: context,
+                                    text: text,
+                                    backgroundColor: isSuccess
+                                        ? ColorPalette.dReaderGreen
+                                        : ColorPalette.dReaderRed,
+                                  );
+                                },
+                                onException: (exception) {
+                                  triggerLowPowerOrNoWallet(
+                                    context,
+                                    exception,
+                                  );
+                                },
+                              );
+                            }
+                          : null,
+                      text: 'Buy',
+                      price: ref.watch(selectedListingsPrice),
+                      isListing: true,
+                    ),
+                  )
+                : const SizedBox(),
+      ],
+    );
   }
 }
 

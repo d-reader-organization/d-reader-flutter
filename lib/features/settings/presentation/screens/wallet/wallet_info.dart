@@ -119,35 +119,6 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           const Divider(
             color: ColorPalette.greyscale400,
           ),
-          SettingsCommonListTile(
-            title: 'Sync wallet',
-            leadingPath: '${Config.settingsAssetsPath}/light/wallet.svg',
-            overrideColor: Colors.green,
-            overrideLeading: ref.watch(privateLoadingProvider)
-                ? const SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      color: ColorPalette.dReaderGreen,
-                    ),
-                  )
-                : null,
-            overrideTrailing: const SizedBox(),
-            onTap: ref.watch(globalNotifierProvider).isLoading
-                ? null
-                : () {
-                    ref.read(walletControllerProvider.notifier).syncWallet(
-                          address: widget.address,
-                          callback: () {
-                            showSnackBar(
-                              context: context,
-                              text: 'Wallet synced successfully',
-                              backgroundColor: ColorPalette.dReaderGreen,
-                            );
-                          },
-                        );
-                  },
-          ),
           if (ref.read(environmentProvider).solanaCluster ==
               SolanaCluster.devnet.value) ...[
             SettingsCommonListTile(

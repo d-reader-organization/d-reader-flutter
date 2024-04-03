@@ -1,38 +1,59 @@
 import 'dart:io' show File;
 
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
+class UserModel {
+  final int id, referralsRemaining;
+  final String email, avatar, name, role;
+  final bool isEmailVerified, hasBetaAccess;
+  final List<String> deviceTokens;
 
-part 'user.freezed.dart';
-part 'user.g.dart';
+  UserModel({
+    required this.id,
+    required this.email,
+    required this.name,
+    required this.avatar,
+    required this.role,
+    required this.isEmailVerified,
+    required this.hasBetaAccess,
+    required this.referralsRemaining,
+    required this.deviceTokens,
+  });
 
-@freezed
-class UserModel with _$UserModel {
-  const factory UserModel({
-    required int id,
-    required int referralsRemaining,
-    required String email,
-    required String avatar,
-    required String name,
-    required String role,
-    required bool isEmailVerified,
-    required bool hasBetaAccess,
-    required List<String> deviceTokens,
-  }) = _UserModel;
+  factory UserModel.fromJson(dynamic json) {
+    return UserModel(
+      id: json['id'],
+      email: json['email'],
+      avatar: json['avatar'],
+      name: json['name'],
+      role: json['role'],
+      isEmailVerified: json['isEmailVerified'],
+      hasBetaAccess: json['hasBetaAccess'] ?? false,
+      referralsRemaining: json['referralsRemaining'] ?? 0,
+      deviceTokens: json['deviceTokens'] != null
+          ? List<String>.from(json['deviceTokens'])
+          : [],
+    );
+  }
 
-  factory UserModel.fromJson(Map<String, Object?> json) =>
-      _$UserModelFromJson(json);
-}
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['email'] = email;
+    data['name'] = name;
+    data['avatar'] = avatar;
+    data['role'] = role;
+    data['isEmailVerified'] = isEmailVerified;
+    data['hasBetaAccess'] = hasBetaAccess;
+    data['referralsRemaining'] = referralsRemaining;
+    data['deviceTokens'] = deviceTokens;
+    return data;
+  }
 
-@freezed
-class UpdateUserPayload with _$UpdateUserPayload {
-  const factory UpdateUserPayload({
-    required int id,
-    String? email,
-    String? name,
-    String? referrer,
-    File? avatar,
-  }) = _UpdateUserPayload;
+  @override
+  bool operator ==(Object other) =>
+      other is UserModel && other.runtimeType == runtimeType && other.id == id;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id, email);
 }
 
 enum UserRole {
@@ -51,4 +72,19 @@ extension UserRoleValue on UserRole {
   };
 
   String get name => userRoles[this] ?? 'User';
+}
+
+class UpdateUserPayload {
+  final int id;
+
+  final File? avatar;
+  final String? email, name, referrer;
+
+  UpdateUserPayload({
+    required this.id,
+    this.email,
+    this.name,
+    this.avatar,
+    this.referrer,
+  });
 }

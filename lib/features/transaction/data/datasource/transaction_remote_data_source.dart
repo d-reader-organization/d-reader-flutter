@@ -8,7 +8,7 @@ abstract class TransactionDataSource {
     required String minterAddress,
     String? label,
   });
-  Future<Either<AppException, String>> useComicIssueNftTransaction({
+  Future<Either<AppException, String?>> useComicIssueNftTransaction({
     required String nftAddress,
     required String ownerAddress,
   });
@@ -132,7 +132,7 @@ class TransactionRemoteDataSource implements TransactionDataSource {
   }
 
   @override
-  Future<Either<AppException, String>> useComicIssueNftTransaction({
+  Future<Either<AppException, String?>> useComicIssueNftTransaction({
     required String nftAddress,
     required String ownerAddress,
   }) async {
@@ -143,7 +143,7 @@ class TransactionRemoteDataSource implements TransactionDataSource {
       return response.fold(
         (exception) => Left(exception),
         (result) => Right(
-          result.data.toString(),
+          result.data?.toString(),
         ),
       );
     } catch (exception) {

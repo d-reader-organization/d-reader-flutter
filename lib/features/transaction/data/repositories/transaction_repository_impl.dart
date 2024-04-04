@@ -46,7 +46,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<Either<AppException, String>> useComicIssueNftTransaction({
+  Future<Either<AppException, String?>> useComicIssueNftTransaction({
     required String nftAddress,
     required String ownerAddress,
   }) {

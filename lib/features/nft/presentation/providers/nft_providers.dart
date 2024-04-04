@@ -60,10 +60,10 @@ final mintingStatusProvider = StateProvider.family<void, String>(
           .waitForSignatureStatus(
         signature,
         status: Commitment.confirmed,
-        timeout: const Duration(seconds: 10),
+        timeout: const Duration(seconds: 12),
       )
           .then((value) {
-        Future.delayed(const Duration(seconds: 7), () {
+        Future.delayed(const Duration(seconds: 8), () {
           ref.read(globalNotifierProvider.notifier).update(
                 isLoading: false,
                 isMinting: false,

@@ -234,6 +234,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
 
     if (!isReauthorized) {
       await session.close();
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       return 'Failed to reauthorize wallet';
     }
 
@@ -244,6 +245,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         }).toList(),
       );
       if (response.signedPayloads.isEmpty) {
+        ref.read(globalNotifierProvider.notifier).updateLoading(false);
         return 'Failed to sign transactions';
       }
       final solanaClient = createSolanaClient(
@@ -475,6 +477,13 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
               return Left(exception);
             },
             (transaction) async {
+              // if there is no transaction, that means it's Core NFT which means it's unwrapped
+              if (transaction == null) {
+                ref
+                    .read(lastProcessedNftProvider.notifier)
+                    .update((state) => nftAddress);
+                return const Right('OK');
+              }
               return Right(
                 await _signAndSendTransactions(
                   client: client,

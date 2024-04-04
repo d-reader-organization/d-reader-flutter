@@ -7,7 +7,7 @@ abstract class TransactionRepository {
     required String minterAddress,
     String? label,
   });
-  Future<Either<AppException, String>> useComicIssueNftTransaction({
+  Future<Either<AppException, String?>> useComicIssueNftTransaction({
     required String nftAddress,
     required String ownerAddress,
   });

@@ -60,6 +60,7 @@ class NftDetails extends ConsumerWidget {
 
     ref.invalidate(lastProcessedNftProvider);
     ref.invalidate(nftsProvider);
+    ref.invalidate(nftProvider);
     ref.invalidate(ownedComicsProvider);
     ref.invalidate(ownedIssuesAsyncProvider);
     ref.invalidate(comicIssuePagesProvider);
@@ -116,73 +117,59 @@ class NftDetails extends ConsumerWidget {
                           children: [
                             Expanded(
                               child: Button(
-                                onPressed: ref.watch(privateLoadingProvider)
-                                    ? () async {}
-                                    : () async {
-                                        if (nft.isListed) {
-                                          return await ref
-                                              .read(nftControllerProvider
-                                                  .notifier)
-                                              .delist(
-                                                nftAddress: nft.address,
-                                                callback: () {
-                                                  showSnackBar(
-                                                    context: context,
-                                                    text:
-                                                        'Successfully delisted',
-                                                    backgroundColor:
-                                                        ColorPalette
-                                                            .dReaderGreen,
-                                                  );
-                                                },
-                                                onException: (exception) {
-                                                  triggerLowPowerOrNoWallet(
-                                                    context,
-                                                    exception,
-                                                  );
-                                                },
-                                              );
-                                        }
-                                        showModalBottomSheet(
-                                          context: context,
-                                          backgroundColor: Colors.transparent,
-                                          isScrollControlled: true,
-                                          builder: (context) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(
-                                                bottom: MediaQuery.viewInsetsOf(
-                                                        context)
-                                                    .bottom,
-                                              ),
-                                              child:
-                                                  NftModalBottomSheet(nft: nft),
+                                isLoading: ref.watch(privateLoadingProvider),
+                                loadingColor: ColorPalette.greyscale200,
+                                onPressed: () async {
+                                  if (nft.isListed) {
+                                    return await ref
+                                        .read(nftControllerProvider.notifier)
+                                        .delist(
+                                          nftAddress: nft.address,
+                                          callback: () {
+                                            showSnackBar(
+                                              context: context,
+                                              text: 'Successfully delisted',
+                                              backgroundColor:
+                                                  ColorPalette.dReaderGreen,
+                                            );
+                                          },
+                                          onException: (exception) {
+                                            triggerLowPowerOrNoWallet(
+                                              context,
+                                              exception,
                                             );
                                           },
                                         );
-                                      },
-                                child: ref.watch(privateLoadingProvider)
-                                    ? const SizedBox(
-                                        height: 24,
-                                        width: 24,
-                                        child: CircularProgressIndicator(
+                                  }
+                                  showModalBottomSheet(
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    isScrollControlled: true,
+                                    builder: (context) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom:
+                                              MediaQuery.viewInsetsOf(context)
+                                                  .bottom,
+                                        ),
+                                        child: NftModalBottomSheet(nft: nft),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: nft.isListed
+                                    ? Text(
+                                        'Delist',
+                                        style: textTheme.titleMedium?.copyWith(
                                           color: ColorPalette.greyscale200,
                                         ),
                                       )
-                                    : nft.isListed
-                                        ? Text(
-                                            'Delist',
-                                            style:
-                                                textTheme.titleMedium?.copyWith(
-                                              color: ColorPalette.greyscale200,
-                                            ),
-                                          )
-                                        : Text(
-                                            'List',
-                                            style:
-                                                textTheme.titleMedium?.copyWith(
-                                              color: ColorPalette.greyscale200,
-                                            ),
-                                          ),
+                                    : Text(
+                                        'List',
+                                        style: textTheme.titleMedium?.copyWith(
+                                          color: ColorPalette.greyscale200,
+                                        ),
+                                      ),
                               ),
                             ),
                             const SizedBox(
@@ -193,6 +180,7 @@ class NftDetails extends ConsumerWidget {
                                 borderColor: ColorPalette.dReaderGreen,
                                 isLoading:
                                     ref.watch(globalNotifierProvider).isLoading,
+                                loadingColor: ColorPalette.dReaderGreen,
                                 onPressed: () async {
                                   if (nft.isUsed) {
                                     return nextScreenPush(
@@ -482,7 +470,7 @@ class Button extends ConsumerWidget {
   final Widget child;
   final bool isLoading;
   final Future<void> Function() onPressed;
-  final Color backgroundColor, borderColor;
+  final Color backgroundColor, borderColor, loadingColor;
   const Button({
     super.key,
     required this.child,
@@ -490,6 +478,7 @@ class Button extends ConsumerWidget {
     this.isLoading = false,
     this.backgroundColor = Colors.transparent,
     this.borderColor = ColorPalette.greyscale200,
+    this.loadingColor = ColorPalette.appBackgroundColor,
   });
 
   @override
@@ -506,6 +495,7 @@ class Button extends ConsumerWidget {
       backgroundColor: backgroundColor,
       isLoading: isLoading,
       onPressed: ref.watch(isOpeningSessionProvider) ? null : onPressed,
+      loadingColor: loadingColor,
       child: child,
     );
   }

@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
   final Widget child;
-  final Color backgroundColor;
-  final Color textColor;
+  final Color backgroundColor, borderColor, loadingColor, textColor;
   final void Function()? onPressed;
   final Size size;
   final double fontSize;
   final bool isLoading;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
-  final Color borderColor;
 
   const CustomTextButton({
     super.key,
@@ -29,6 +27,7 @@ class CustomTextButton extends StatelessWidget {
     ),
     this.padding = const EdgeInsets.all(8),
     this.borderColor = Colors.transparent,
+    this.loadingColor = ColorPalette.appBackgroundColor,
   });
 
   @override
@@ -63,12 +62,10 @@ class CustomTextButton extends StatelessWidget {
               ),
         ),
         child: isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 height: 24,
                 width: 24,
-                child: CircularProgressIndicator(
-                  color: ColorPalette.appBackgroundColor,
-                ),
+                child: CircularProgressIndicator(color: loadingColor),
               )
             : child,
       ),

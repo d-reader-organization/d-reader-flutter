@@ -462,28 +462,32 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     required String ownerAddress,
   }) async {
     final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
+    ref.read(globalNotifierProvider.notifier).updateLoading(true);
+
     try {
-      return await solanaNotifier.authorizeIfNeededWithOnComplete(
-        onComplete: (client, session) async {
-          final response = await ref
-              .read(transactionRepositoryProvider)
-              .useComicIssueNftTransaction(
-                nftAddress: nftAddress,
-                ownerAddress: ownerAddress,
-              );
-          return response.fold(
-            (exception) async {
-              await session.close();
-              return Left(exception);
-            },
-            (transaction) async {
-              // if there is no transaction, that means it's Core NFT which means it's unwrapped
-              if (transaction == null) {
-                ref
-                    .read(lastProcessedNftProvider.notifier)
-                    .update((state) => nftAddress);
-                return const Right('OK');
-              }
+      final response = await ref
+          .read(transactionRepositoryProvider)
+          .useComicIssueNftTransaction(
+            nftAddress: nftAddress,
+            ownerAddress: ownerAddress,
+          );
+
+      return response.fold(
+        (exception) async {
+          ref.read(globalNotifierProvider.notifier).updateLoading(false);
+          return Left(exception);
+        },
+        (transaction) async {
+          // if there is no transaction, that means it's Core NFT which means it's unwrapped
+          if (transaction == null || transaction.isEmpty) {
+            ref
+                .read(lastProcessedNftProvider.notifier)
+                .update((state) => nftAddress);
+            ref.read(globalNotifierProvider.notifier).updateLoading(false);
+            return const Right('OK');
+          }
+          return await solanaNotifier.authorizeIfNeededWithOnComplete(
+            onComplete: (client, session) async {
               return Right(
                 await _signAndSendTransactions(
                   client: client,

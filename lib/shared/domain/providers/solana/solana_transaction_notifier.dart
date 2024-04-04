@@ -130,7 +130,6 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
       );
     }
 
-    ref.read(globalNotifierProvider.notifier).updateLoading(true);
     final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(

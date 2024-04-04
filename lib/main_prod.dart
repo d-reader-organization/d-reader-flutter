@@ -86,6 +86,7 @@ class MyApp extends ConsumerWidget {
       routerConfig: router,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
+          foregroundColor: Colors.white,
           systemOverlayStyle: SystemUiOverlayStyle(
             systemNavigationBarColor: ColorPalette.appBackgroundColor,
             statusBarColor: ColorPalette.appBackgroundColor,
@@ -103,6 +104,9 @@ class MyApp extends ConsumerWidget {
               letterSpacing: .2,
             ),
           ),
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: ColorPalette.dReaderYellow100,
         ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.white,

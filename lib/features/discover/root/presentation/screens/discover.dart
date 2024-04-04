@@ -97,7 +97,7 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
               backgroundColor: ColorPalette.appBackgroundColor,
               titleSpacing: 0,
               floating: true,
-              toolbarHeight: 134,
+              toolbarHeight: 140,
               title: Column(
                 children: [
                   TextFormField(

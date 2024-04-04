@@ -1,9 +1,14 @@
 import 'package:d_reader_flutter/constants/routes.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_controller.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
@@ -35,18 +40,30 @@ class NftDetails extends ConsumerWidget {
     required this.address,
   });
 
-  _handleNftOpen(BuildContext context, String openResponse) {
-    if (openResponse == 'OK') {
-      return nextScreenPush(
+  _handleNftOpen({
+    required BuildContext context,
+    required WidgetRef ref,
+    required String openResponse,
+  }) {
+    if (openResponse != 'OK') {
+      return showSnackBar(
         context: context,
-        path: RoutePath.openNftAnimation,
+        backgroundColor: ColorPalette.dReaderRed,
+        text: openResponse,
       );
     }
     showSnackBar(
       context: context,
-      backgroundColor: ColorPalette.dReaderRed,
-      text: openResponse,
+      text: 'NFT Unwrapped successfully',
+      backgroundColor: ColorPalette.dReaderGreen,
     );
+
+    ref.invalidate(lastProcessedNftProvider);
+    ref.invalidate(nftsProvider);
+    ref.invalidate(ownedComicsProvider);
+    ref.invalidate(ownedIssuesAsyncProvider);
+    ref.invalidate(comicIssuePagesProvider);
+    ref.invalidate(comicIssueDetailsProvider);
   }
 
   @override
@@ -99,57 +116,73 @@ class NftDetails extends ConsumerWidget {
                           children: [
                             Expanded(
                               child: Button(
-                                onPressed: () async {
-                                  if (nft.isListed) {
-                                    return await ref
-                                        .read(nftControllerProvider.notifier)
-                                        .delist(
-                                          nftAddress: nft.address,
-                                          callback: () {
-                                            showSnackBar(
-                                              context: context,
-                                              text: 'Successfully delisted',
-                                              backgroundColor:
-                                                  ColorPalette.dReaderGreen,
-                                            );
-                                          },
-                                          onException: (exception) {
-                                            triggerLowPowerOrNoWallet(
-                                              context,
-                                              exception,
+                                onPressed: ref.watch(privateLoadingProvider)
+                                    ? () async {}
+                                    : () async {
+                                        if (nft.isListed) {
+                                          return await ref
+                                              .read(nftControllerProvider
+                                                  .notifier)
+                                              .delist(
+                                                nftAddress: nft.address,
+                                                callback: () {
+                                                  showSnackBar(
+                                                    context: context,
+                                                    text:
+                                                        'Successfully delisted',
+                                                    backgroundColor:
+                                                        ColorPalette
+                                                            .dReaderGreen,
+                                                  );
+                                                },
+                                                onException: (exception) {
+                                                  triggerLowPowerOrNoWallet(
+                                                    context,
+                                                    exception,
+                                                  );
+                                                },
+                                              );
+                                        }
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          isScrollControlled: true,
+                                          builder: (context) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                bottom: MediaQuery.viewInsetsOf(
+                                                        context)
+                                                    .bottom,
+                                              ),
+                                              child:
+                                                  NftModalBottomSheet(nft: nft),
                                             );
                                           },
                                         );
-                                  }
-                                  showModalBottomSheet(
-                                    context: context,
-                                    backgroundColor: Colors.transparent,
-                                    isScrollControlled: true,
-                                    builder: (context) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom:
-                                              MediaQuery.viewInsetsOf(context)
-                                                  .bottom,
-                                        ),
-                                        child: NftModalBottomSheet(nft: nft),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: nft.isListed
-                                    ? Text(
-                                        'Delist',
-                                        style: textTheme.titleMedium?.copyWith(
+                                      },
+                                child: ref.watch(privateLoadingProvider)
+                                    ? const SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: CircularProgressIndicator(
                                           color: ColorPalette.greyscale200,
                                         ),
                                       )
-                                    : Text(
-                                        'List',
-                                        style: textTheme.titleMedium?.copyWith(
-                                          color: ColorPalette.greyscale200,
-                                        ),
-                                      ),
+                                    : nft.isListed
+                                        ? Text(
+                                            'Delist',
+                                            style:
+                                                textTheme.titleMedium?.copyWith(
+                                              color: ColorPalette.greyscale200,
+                                            ),
+                                          )
+                                        : Text(
+                                            'List',
+                                            style:
+                                                textTheme.titleMedium?.copyWith(
+                                              color: ColorPalette.greyscale200,
+                                            ),
+                                          ),
                               ),
                             ),
                             const SizedBox(
@@ -158,12 +191,8 @@ class NftDetails extends ConsumerWidget {
                             Expanded(
                               child: Button(
                                 borderColor: ColorPalette.dReaderGreen,
-                                child: Text(
-                                  nft.isUsed ? 'Read' : 'Open',
-                                  style: textTheme.titleMedium?.copyWith(
-                                    color: ColorPalette.dReaderGreen,
-                                  ),
-                                ),
+                                isLoading:
+                                    ref.watch(globalNotifierProvider).isLoading,
                                 onPressed: () async {
                                   if (nft.isUsed) {
                                     return nextScreenPush(
@@ -177,16 +206,38 @@ class NftDetails extends ConsumerWidget {
                                       .openNft(
                                         nft: nft,
                                         onOpen: (String result) {
-                                          _handleNftOpen(context, result);
+                                          _handleNftOpen(
+                                            context: context,
+                                            ref: ref,
+                                            openResponse: result,
+                                          );
                                         },
                                         onException: (exception) {
-                                          triggerLowPowerOrNoWallet(
-                                            context,
-                                            exception,
-                                          );
+                                          if (exception
+                                                  is LowPowerModeException ||
+                                              exception
+                                                  is NoWalletFoundException) {
+                                            triggerLowPowerOrNoWallet(
+                                              context,
+                                              exception,
+                                            );
+                                            return;
+                                          } else if (exception
+                                              is AppException) {
+                                            showSnackBar(
+                                              context: context,
+                                              text: exception.message,
+                                            );
+                                          }
                                         },
                                       );
                                 },
+                                child: Text(
+                                  nft.isUsed ? 'Read' : 'Open',
+                                  style: textTheme.titleMedium?.copyWith(
+                                    color: ColorPalette.dReaderGreen,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -429,12 +480,14 @@ class NftDetails extends ConsumerWidget {
 
 class Button extends ConsumerWidget {
   final Widget child;
+  final bool isLoading;
   final Future<void> Function() onPressed;
   final Color backgroundColor, borderColor;
   const Button({
     super.key,
     required this.child,
     required this.onPressed,
+    this.isLoading = false,
     this.backgroundColor = Colors.transparent,
     this.borderColor = ColorPalette.greyscale200,
   });
@@ -451,7 +504,7 @@ class Button extends ConsumerWidget {
       borderColor: borderColor,
       padding: const EdgeInsets.symmetric(vertical: 8),
       backgroundColor: backgroundColor,
-      isLoading: ref.watch(globalNotifierProvider).isLoading,
+      isLoading: isLoading,
       onPressed: ref.watch(isOpeningSessionProvider) ? null : onPressed,
       child: child,
     );

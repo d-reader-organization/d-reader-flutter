@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -292,6 +293,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
+          ref.read(privateLoadingProvider.notifier).update((state) => true);
           final response =
               await ref.read(transactionRepositoryProvider).listTransaction(
                     sellerAddress: sellerAddress,
@@ -339,6 +341,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
+          ref.read(privateLoadingProvider.notifier).update((state) => true);
           final response = await ref
               .read(transactionRepositoryProvider)
               .cancelListingTransaction(nftAddress: nftAddress);

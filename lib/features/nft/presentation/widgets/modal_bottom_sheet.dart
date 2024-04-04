@@ -47,8 +47,14 @@ class _NftModalBottomSheetState extends ConsumerState<NftModalBottomSheet> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
-              title: Text(widget.nft.name),
-              subtitle: Text(widget.nft.comicName),
+              title: Text(
+                widget.nft.name,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              subtitle: Text(
+                widget.nft.comicName,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
               leading: Container(
                 width: 64,
                 height: 64,

@@ -36,7 +36,14 @@ class CustomTextButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: TextButton(
-        onPressed: isLoading ? null : onPressed,
+        onPressed: () {
+          if (isLoading) {
+            return;
+          }
+          if (onPressed != null) {
+            onPressed!();
+          }
+        },
         style: TextButton.styleFrom(
           minimumSize: size,
           backgroundColor: backgroundColor,

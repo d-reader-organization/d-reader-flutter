@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/features/nft/presentation/providers/nft_provide
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:flutter/animation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
@@ -28,11 +29,12 @@ class NftController extends _$NftController {
           .read(solanaTransactionNotifierProvider.notifier)
           .delist(nftAddress: nftAddress);
 
-      ref.read(globalNotifierProvider.notifier).updateLoading(false);
       delistResult.fold((exception) {
+        ref.read(privateLoadingProvider.notifier).update((state) => false);
         onException(exception);
       }, (result) async {
         if (result != 'OK') {
+          ref.read(privateLoadingProvider.notifier).update((state) => false);
           return onException(
             AppException(
               message: result,
@@ -45,12 +47,13 @@ class NftController extends _$NftController {
           const Duration(milliseconds: 1200),
           () {
             ref.invalidate(nftProvider);
+            ref.read(privateLoadingProvider.notifier).update((state) => false);
             callback();
           },
         );
       });
     } catch (exception) {
-      ref.read(globalNotifierProvider.notifier).updateLoading(false);
+      ref.read(privateLoadingProvider.notifier).update((state) => false);
       onException(exception);
     }
   }
@@ -88,7 +91,7 @@ class NftController extends _$NftController {
               );
       response.fold(
         (exception) {
-          ref.read(globalNotifierProvider.notifier).updateLoading(false);
+          ref.read(privateLoadingProvider.notifier).update((state) => false);
           callback(exception.message);
         },
         (result) async {
@@ -96,14 +99,16 @@ class NftController extends _$NftController {
             const Duration(milliseconds: 1200),
             () {
               ref.invalidate(nftProvider);
-              ref.read(globalNotifierProvider.notifier).updateLoading(false);
+              ref
+                  .read(privateLoadingProvider.notifier)
+                  .update((state) => false);
               callback(result);
             },
           );
         },
       );
     } catch (exception) {
-      ref.read(globalNotifierProvider.notifier).updateLoading(false);
+      ref.read(privateLoadingProvider.notifier).update((state) => false);
       rethrow;
     }
   }

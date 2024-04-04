@@ -29,6 +29,8 @@ abstract class AuthDataSource {
 
   Future<void> disconnectWallet(String address);
   Future<String> refreshToken(String token);
+  Future<Either<AppException, AuthorizationResponse>> googleSignIn(
+      {required String accessToken});
 }
 
 class AuthRemoteDataSource implements AuthDataSource {
@@ -214,5 +216,44 @@ class AuthRemoteDataSource implements AuthDataSource {
     return networkService
         .patch('/auth/user/refresh-token/$token')
         .then((value) => value.fold((p0) => '', (p0) => p0.data));
+  }
+
+  @override
+  Future<Either<AppException, AuthorizationResponse>> googleSignIn(
+      {required String accessToken}) async {
+    try {
+      final googleSignInResult = await networkService.patch(
+        '/auth/user/google-login',
+        headers: networkService.updateHeader(
+          {
+            'authorization': 'Google $accessToken',
+          },
+        ),
+      );
+      return googleSignInResult.fold(
+        (exception) {
+          return Left(exception);
+        },
+        (response) {
+          final authorizationResponse =
+              AuthorizationResponse.fromJson(response.data);
+
+          networkService.updateHeader(
+            {'Authorization': authorizationResponse.accessToken},
+          );
+
+          return Right(authorizationResponse);
+        },
+      );
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}AuthRemoteDataSource.googleSignIn',
+        ),
+      );
+    }
   }
 }

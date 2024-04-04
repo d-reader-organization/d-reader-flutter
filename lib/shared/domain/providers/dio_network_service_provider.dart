@@ -17,9 +17,13 @@ final networkServiceProvider = Provider<DioNetworkService>(
         [
           InterceptorsWrapper(
             onRequest: (options, handler) {
-              // Add the access token to the request header
-              options.headers['Authorization'] =
-                  ref.watch(environmentProvider).jwtToken;
+              if (!options.path.contains('google')) {
+                // Add the access token to the request header
+                // TODO add this at service level
+                options.headers['Authorization'] =
+                    ref.watch(environmentProvider).jwtToken;
+              }
+
               return handler.next(options);
             },
             onError: (DioException e, handler) async {

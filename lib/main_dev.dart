@@ -94,6 +94,9 @@ class MyApp extends ConsumerWidget {
             ),
           ),
         ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: ColorPalette.dReaderYellow100,
+        ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.white,
           selectionColor: ColorPalette.dReaderBlue,

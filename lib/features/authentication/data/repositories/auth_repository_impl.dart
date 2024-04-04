@@ -74,4 +74,10 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<String> refreshToken(String refreshToken) {
     return authDataSource.refreshToken(refreshToken);
   }
+
+  @override
+  Future<Either<AppException, AuthorizationResponse>> googleSignIn(
+      {required String accessToken}) {
+    return authDataSource.googleSignIn(accessToken: accessToken);
+  }
 }

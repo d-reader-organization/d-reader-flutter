@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
@@ -16,7 +17,6 @@ class CreatorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = getCardWidth(MediaQuery.sizeOf(context).width);
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
@@ -26,7 +26,6 @@ class CreatorCard extends StatelessWidget {
         );
       },
       child: Container(
-        width: width,
         decoration: BoxDecoration(
           color: ColorPalette.greyscale500,
           borderRadius: BorderRadius.circular(
@@ -38,44 +37,52 @@ class CreatorCard extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CachedImageBgPlaceholder(
-                  imageUrl: creator.banner,
-                  height: 83,
-                  overrideBorderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(
-                      8,
-                    ),
-                    topRight: Radius.circular(
-                      8,
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: creatorBannerAspectratio,
+                    child: CachedImageBgPlaceholder(
+                      imageUrl: creator.banner,
+                      height: 83,
+                      overrideBorderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(
+                          8,
+                        ),
+                        topRight: Radius.circular(
+                          8,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    right: 4,
-                    left: 4,
-                    bottom: 5,
-                    top: 8,
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        creator.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.titleMedium,
-                      ),
-                      Text(
-                        '${creator.stats?.followersCount ?? 0} ${pluralizeString(
-                          creator.stats?.followersCount ?? 0,
-                          'Follower',
-                        )}',
-                        style: textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: ColorPalette.greyscale100,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 4,
+                      left: 4,
+                      bottom: 5,
+                      top: 8,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          creator.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.titleMedium,
                         ),
-                      ),
-                    ],
+                        Text(
+                          '${creator.stats?.followersCount ?? 0} ${pluralizeString(
+                            creator.stats?.followersCount ?? 0,
+                            'Follower',
+                          )}',
+                          style: textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: ColorPalette.greyscale100,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

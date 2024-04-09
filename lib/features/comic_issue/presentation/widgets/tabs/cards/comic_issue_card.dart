@@ -1,8 +1,8 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/hot_icon.dart';
@@ -20,7 +20,6 @@ class ComicIssueCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    final double cardWidth = getCardWidth(MediaQuery.sizeOf(context).width);
     return GestureDetector(
       onTap: () {
         nextScreenPush(
@@ -28,15 +27,12 @@ class ComicIssueCard extends StatelessWidget {
           path: '${RoutePath.comicIssueDetails}/${issue.id}',
         );
       },
-      child: Container(
-        width: cardWidth,
-        constraints: const BoxConstraints(maxWidth: 190),
-        margin: const EdgeInsets.only(right: 16),
-        child: Stack(
-          children: [
-            CachedImageBgPlaceholder(
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: comicIssueAspectRatio,
+            child: CachedImageBgPlaceholder(
               imageUrl: issue.cover,
-              width: cardWidth,
               padding: EdgeInsets.zero,
               foregroundDecoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -57,50 +53,50 @@ class ComicIssueCard extends StatelessWidget {
                     )
                   : null,
             ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    issue.comic?.title ?? '',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: ColorPalette.greyscale100,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  issue.comic?.title ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: ColorPalette.greyscale100,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  issue.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.titleMedium,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
+                      style: textTheme.bodySmall,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    issue.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.titleMedium,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
-                        style: textTheme.bodySmall,
-                      ),
-                      SolanaPrice(
-                        price: Formatter.formatLamportPrice(issue.stats?.price),
-                        mainAxisAlignment: MainAxisAlignment.end,
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                    SolanaPrice(
+                      price: Formatter.formatLamportPrice(issue.stats?.price),
+                      mainAxisAlignment: MainAxisAlignment.end,
+                    ),
+                  ],
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

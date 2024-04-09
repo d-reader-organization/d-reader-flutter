@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/features/comic/presentation/widgets/cards/comic_card.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,7 @@ class ComicsListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<ComicModel>> comics = ref.watch(comicsProvider(query));
+    final screenWidth = MediaQuery.sizeOf(context).width;
     return comics.when(
       data: (data) {
         if (data.isEmpty) {
@@ -28,14 +28,19 @@ class ComicsListView extends ConsumerWidget {
             ),
           );
         }
+
         return SizedBox(
-          height: 226,
+          height: 235,
           child: ListView.builder(
             itemCount: data.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => ComicCard(
-              comic: data[index],
+            itemBuilder: (context, index) => Container(
+              margin: const EdgeInsets.only(right: 16),
+              width: screenWidth > 360 ? 156 : 152,
+              child: ComicCard(
+                comic: data[index],
+              ),
             ),
           ),
         );
@@ -47,15 +52,14 @@ class ComicsListView extends ConsumerWidget {
         );
       },
       loading: () => SizedBox(
-        height: 226,
+        height: 235,
         child: ListView.builder(
           itemCount: 3,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => SkeletonCard(
             margin: const EdgeInsets.only(right: 16),
-            width: getCardWidth(MediaQuery.sizeOf(context).width),
-            height: 226,
+            width: screenWidth > 360 ? 156 : 152,
           ),
         ),
       ),

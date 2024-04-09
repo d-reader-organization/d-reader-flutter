@@ -11,17 +11,17 @@ class ComicGalleryBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    bool isTablet = screenWidth > 600;
+    bool isTablet = MediaQuery.sizeOf(context).width > 600;
     return GridView.builder(
       itemCount: comics.length,
       primary: false,
-      padding: const EdgeInsets.only(left: 4, top: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       shrinkWrap: true,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: isTablet ? 3 : 2,
         mainAxisSpacing: 16,
-        mainAxisExtent: 226,
+        crossAxisSpacing: 16,
+        childAspectRatio: 156 / 235,
       ),
       itemBuilder: (context, index) {
         return ComicCard(

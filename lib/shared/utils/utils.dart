@@ -70,6 +70,4 @@ String getSortDirection(SortDirection direction) {
   return direction == SortDirection.asc ? 'asc' : 'desc';
 }
 
-double getCardWidth(double screenWidth) => screenWidth / 2.4;
-
 String pluralizeString(int count, String word) => count > 1 ? '${word}s' : word;

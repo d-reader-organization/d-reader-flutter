@@ -11,8 +11,7 @@ class IssuesGalleryBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    bool isTablet = screenWidth > 600;
+    bool isTablet = MediaQuery.sizeOf(context).width > 600;
     return GridView.builder(
       itemCount: issues.length,
       primary: false,
@@ -24,7 +23,8 @@ class IssuesGalleryBuilder extends StatelessWidget {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: isTablet ? 3 : 2,
         mainAxisSpacing: 16,
-        mainAxisExtent: 226,
+        crossAxisSpacing: 16,
+        childAspectRatio: 156 / 226,
       ),
       itemBuilder: (context, index) {
         return ComicIssueCard(

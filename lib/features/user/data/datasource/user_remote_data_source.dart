@@ -23,6 +23,7 @@ abstract class UserDataSource {
   Future<Either<AppException, List<WalletModel>>> getUserWallets(int id);
   Future<Either<AppException, List<WalletAsset>>> getUserAssets(int id);
   Future<void> insertFcmToken(String fcmToken);
+  Future<Either<AppException, bool>> verifyEmail(String verificationId);
 }
 
 class UserRemoteDataSource implements UserDataSource {
@@ -238,6 +239,28 @@ class UserRemoteDataSource implements UserDataSource {
           statusCode: 500,
           identifier:
               '${exception.toString()}UserRemoteDataSource.insertFcmToken',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, bool>> verifyEmail(String verificationId) async {
+    try {
+      final response =
+          await networkService.patch('/user/verify-email/$verificationId');
+      return response.fold(
+        (exception) => Left(exception),
+        (result) => const Right(
+          true,
+        ),
+      );
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier: '${exception.toString()}UserRemoteDataSource.verifyEmail',
         ),
       );
     }

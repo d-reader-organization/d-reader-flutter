@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
@@ -45,7 +46,7 @@ class NftDetails extends ConsumerWidget {
     required WidgetRef ref,
     required String openResponse,
   }) {
-    if (openResponse != 'OK') {
+    if (openResponse != successResult) {
       return showSnackBar(
         context: context,
         backgroundColor: ColorPalette.dReaderRed,

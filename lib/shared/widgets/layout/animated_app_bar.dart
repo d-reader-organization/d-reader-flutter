@@ -38,6 +38,7 @@ class AnimatedAppBar extends StatelessWidget {
           actions: actions,
           backgroundColor: animation.value,
           shadowColor: animation.value,
+          surfaceTintColor: animation.value,
         );
       },
     );

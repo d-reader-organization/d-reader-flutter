@@ -123,6 +123,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                             pinned: true,
                             backgroundColor: _animation.value,
                             shadowColor: Colors.transparent,
+                            surfaceTintColor: _animation.value,
                             centerTitle: true,
                             title: GestureDetector(
                               onTap: () {

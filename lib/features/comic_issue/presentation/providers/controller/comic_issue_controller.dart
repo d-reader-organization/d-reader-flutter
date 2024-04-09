@@ -67,7 +67,7 @@ class ComicIssueController extends _$ComicIssueController {
       mintResult.fold((exception) {
         displaySnackbar(text: exception.message, isError: true);
       }, (result) {
-        if (result != 'OK') {
+        if (result != successResult) {
           return displaySnackbar(text: result, isError: true);
         }
         ref.invalidate(nftsProvider);
@@ -98,7 +98,7 @@ class ComicIssueController extends _$ComicIssueController {
           text: exception.message,
         );
       }, (result) async {
-        if (result != 'OK') {
+        if (result != successResult) {
           return displaySnackBar(isSuccess: false, text: result);
         }
         await Future.delayed(

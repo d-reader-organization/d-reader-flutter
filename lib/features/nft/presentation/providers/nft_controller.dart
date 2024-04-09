@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
@@ -33,7 +34,7 @@ class NftController extends _$NftController {
         ref.read(privateLoadingProvider.notifier).update((state) => false);
         onException(exception);
       }, (result) async {
-        if (result != 'OK') {
+        if (result != successResult) {
           ref.read(privateLoadingProvider.notifier).update((state) => false);
           return onException(
             AppException(
@@ -213,7 +214,7 @@ class NftController extends _$NftController {
               ownerAddress: ownerAddress,
             );
     useMintResult.fold((exception) => null, (result) {
-      if (result == 'OK') {
+      if (result == successResult) {
         onSuccess();
       }
     });

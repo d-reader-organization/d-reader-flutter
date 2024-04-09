@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/domain/providers/wallet_provider.dart';
@@ -38,7 +39,7 @@ class WalletController extends _$WalletController {
       }
       onFail(exception.message);
     }, (result) {
-      if (result != 'OK') {
+      if (result != successResult) {
         onFail(result);
       }
       onSuccess();

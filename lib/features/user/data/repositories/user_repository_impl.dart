@@ -71,4 +71,9 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<AppException, List<WalletModel>>> getUserWallets(int id) {
     return dataSource.getUserWallets(id);
   }
+
+  @override
+  Future<Either<AppException, bool>> verifyEmail(String verificationId) {
+    return dataSource.verifyEmail(verificationId);
+  }
 }

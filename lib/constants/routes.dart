@@ -5,6 +5,7 @@ class RoutePath {
   static const signIn = '/login';
   static const signUp = '/register';
   static const requestRessetPassword = '/request-reset-password';
+  static const verifyEmail = '/verify-email';
 
   // Authorized Routes
   static const home = '/';

@@ -197,7 +197,7 @@ class SolanaNotifier extends _$SolanaNotifier {
           return await onComplete(await session.start(), session);
         }
         await session.close();
-        return const Right('OK');
+        return const Right(successResult);
       } catch (exception) {
         await session.close();
         return Left(
@@ -219,7 +219,7 @@ class SolanaNotifier extends _$SolanaNotifier {
       shouldSignMessage: isConnectOnly || wallets.isEmpty,
     );
 
-    if (result != 'OK') {
+    if (result != successResult) {
       await session.close();
       return Left(
         AppException(
@@ -238,7 +238,7 @@ class SolanaNotifier extends _$SolanaNotifier {
         return await onComplete(client, session);
       }
       await session.close();
-      return const Right('OK');
+      return const Right(successResult);
     } catch (exception) {
       await session.close();
       return Left(
@@ -292,7 +292,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     }
     ref.invalidate(registerWalletToSocketEvents);
     ref.read(registerWalletToSocketEvents);
-    return 'OK';
+    return successResult;
   }
 
   Future<String> _signMessageAndConnectWallet({
@@ -346,7 +346,7 @@ class SolanaNotifier extends _$SolanaNotifier {
             apiUrl: apiUrl,
             jwtToken: jwtToken,
           );
-      return const Right('OK');
+      return const Right(successResult);
     } catch (exception) {
       return Left(
         AppException(

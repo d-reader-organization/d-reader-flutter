@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
@@ -55,7 +56,7 @@ class OwnedController extends _$OwnedController {
               );
 
       openNftResult.fold((exception) => onFail(exception.message), (result) {
-        if (result == 'OK') {
+        if (result == successResult) {
           return onSuccess();
         }
         onFail(result);

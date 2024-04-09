@@ -21,4 +21,5 @@ abstract class UserRepository {
   Future<Either<AppException, List<WalletModel>>> getUserWallets(int id);
   Future<Either<AppException, List<WalletAsset>>> getUserAssets(int id);
   Future<void> insertFcmToken(String fcmToken);
+  Future<Either<AppException, bool>> verifyEmail(String verificationId);
 }

@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_in/sign_in.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/sign_up.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/verify_email.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +134,13 @@ final List<GoRoute> authRoutes = [
     path: RoutePath.requestRessetPassword,
     builder: (context, state) {
       return const RequestResetPasswordView();
+    },
+  ),
+  GoRoute(
+    path: '${RoutePath.verifyEmail}/:verificationId',
+    builder: (context, state) {
+      final verificationId = state.pathParameters['verificationId'] ?? '';
+      return VerifyEmailScreen(verificationId: verificationId);
     },
   ),
 ];

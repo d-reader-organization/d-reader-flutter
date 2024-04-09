@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_controller.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
@@ -137,8 +138,10 @@ class SubmitButton extends ConsumerWidget {
                         context.pop();
                         showSnackBar(
                           context: context,
-                          text: result == 'OK' ? 'Listed successfully' : result,
-                          backgroundColor: result == 'OK'
+                          text: result == successResult
+                              ? 'Listed successfully'
+                              : result,
+                          backgroundColor: result == successResult
                               ? ColorPalette.dReaderGreen
                               : ColorPalette.dReaderRed,
                         );

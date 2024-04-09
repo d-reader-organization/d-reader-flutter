@@ -1,6 +1,7 @@
 import 'dart:convert' show base64Decode, jsonEncode;
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
@@ -91,7 +92,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
 
       ref.read(mintingStatusProvider(sendTransactionResult));
       await session.close();
-      return const Right('OK');
+      return const Right(successResult);
     } catch (exception) {
       await session.close();
       Sentry.captureException(
@@ -269,7 +270,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
           .update(isLoading: false, isMinting: true);
       ref.read(mintingStatusProvider(sendTransactionResult));
       await session.close();
-      return 'OK';
+      return successResult;
     } catch (exception) {
       await session.close();
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
@@ -487,7 +488,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
                 .read(lastProcessedNftProvider.notifier)
                 .update((state) => nftAddress);
             ref.read(globalNotifierProvider.notifier).updateLoading(false);
-            return const Right('OK');
+            return const Right(successResult);
           }
           return await solanaNotifier.authorizeIfNeededWithOnComplete(
             onComplete: (client, session) async {

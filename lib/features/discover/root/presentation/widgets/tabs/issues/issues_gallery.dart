@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/issues/issues_gallery_builder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
@@ -45,20 +44,24 @@ class IssuesGallerySkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 217,
-      child: ListView.builder(
-        itemCount: 2,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => SkeletonCard(
-          height: 217,
-          margin: const EdgeInsets.only(
-            right: 16,
-          ),
-          width: getCardWidth(MediaQuery.sizeOf(context).width),
-        ),
+    bool isTablet = MediaQuery.sizeOf(context).width > 600;
+    return GridView.builder(
+      itemCount: 4,
+      primary: false,
+      padding: const EdgeInsets.only(
+        left: 4,
+        top: 8,
       ),
+      shrinkWrap: true,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: isTablet ? 3 : 2,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        childAspectRatio: 156 / 226,
+      ),
+      itemBuilder: (context, index) {
+        return const SkeletonCard();
+      },
     );
   }
 }

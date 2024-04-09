@@ -3,7 +3,6 @@ import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/cards/library_card.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +22,7 @@ class LibraryComicItems extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    final cardWidth = getCardWidth(screenWidth);
-    bool isTablet = screenWidth > 600;
+    bool isTablet = MediaQuery.sizeOf(context).width > 600;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -50,11 +47,10 @@ class LibraryComicItems extends ConsumerWidget {
               crossAxisCount: isTablet ? 3 : 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
-              mainAxisExtent: 190,
+              childAspectRatio: 140 / 195,
             ),
             itemBuilder: (context, index) {
               return LibraryCard(
-                cardWidth: cardWidth,
                 comic: comics[index],
                 onTap: isFavoriteTab
                     ? () {
@@ -83,9 +79,7 @@ class LoadingOwnedComicItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    final cardWidth = getCardWidth(screenWidth);
-    bool isTablet = screenWidth > 600;
+    bool isTablet = MediaQuery.sizeOf(context).width > 600;
     return Container(
       margin: const EdgeInsets.only(top: 12, bottom: 8),
       child: Row(
@@ -126,13 +120,10 @@ class LoadingOwnedComicItems extends StatelessWidget {
                 crossAxisCount: isTablet ? 3 : 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                mainAxisExtent: 190,
+                childAspectRatio: 140 / 195,
               ),
               itemBuilder: (context, index) {
-                return SkeletonCard(
-                  height: 190,
-                  width: cardWidth,
-                );
+                return const SkeletonCard();
               },
             ),
           ),

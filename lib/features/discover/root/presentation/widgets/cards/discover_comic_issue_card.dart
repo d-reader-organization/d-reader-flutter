@@ -39,7 +39,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 3,
+              flex: 1,
               child: CachedImageBgPlaceholder(
                 imageUrl: issue.cover,
                 height: 165,
@@ -49,7 +49,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
               width: 16,
             ),
             Expanded(
-              flex: 7,
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -11,8 +11,7 @@ class CreatorsGalleryBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    bool isTablet = screenWidth > 600;
+    bool isTablet = MediaQuery.sizeOf(context).width > 600;
     return GridView.builder(
       itemCount: creators.length,
       primary: false,
@@ -25,7 +24,7 @@ class CreatorsGalleryBuilder extends StatelessWidget {
         crossAxisCount: isTablet ? 3 : 2,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        mainAxisExtent: 166,
+        childAspectRatio: 156 / 166,
       ),
       itemBuilder: (context, index) {
         return CreatorCard(creator: creators[index]);

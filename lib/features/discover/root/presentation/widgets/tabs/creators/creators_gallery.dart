@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/creators/creators_gallery_builder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
@@ -51,12 +50,11 @@ class CreatorsGallerySkeleton extends StatelessWidget {
         itemCount: 2,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => SkeletonCard(
-          height: 166,
-          margin: const EdgeInsets.only(
+        itemBuilder: (context, index) => const SkeletonCard(
+          margin: EdgeInsets.only(
             right: 16,
           ),
-          width: getCardWidth(MediaQuery.sizeOf(context).width),
+          width: 156,
         ),
       ),
     );

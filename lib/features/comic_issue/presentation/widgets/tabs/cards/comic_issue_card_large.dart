@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
@@ -30,114 +31,116 @@ class ComicIssueCardLarge extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.only(top: 8),
+        margin: const EdgeInsets.only(top: 8, bottom: 16),
         constraints: const BoxConstraints(
           minHeight: 237,
-          maxHeight: 237,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              flex: 5,
-              child: CachedImageBgPlaceholder(
-                imageUrl: issue.cover,
-                bgImageFit: BoxFit.fill,
-                overrideBorderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(
-                    16,
-                  ),
-                  bottomLeft: Radius.circular(
-                    16,
+              child: AspectRatio(
+                aspectRatio: comicIssueAspectRatio,
+                child: CachedImageBgPlaceholder(
+                  imageUrl: issue.cover,
+                  overrideBorderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(
+                      16,
+                    ),
+                    bottomLeft: Radius.circular(
+                      16,
+                    ),
                   ),
                 ),
               ),
             ),
             Expanded(
-              flex: 6,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: const BoxDecoration(
-                  color: ColorPalette.greyscale500,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
+              child: AspectRatio(
+                aspectRatio: comicIssueAspectRatio,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Episode ${issue.number} of ${issue.stats?.totalIssuesCount}',
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: ColorPalette.greyscale100,
+                  decoration: const BoxDecoration(
+                    color: ColorPalette.greyscale500,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Episode ${issue.number} of ${issue.stats?.totalIssuesCount}',
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: ColorPalette.greyscale100,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${issue.comic?.title}:',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: textTheme.titleLarge?.copyWith(
-                        color: ColorPalette.greyscale100,
+                      Text(
+                        '${issue.comic?.title}:',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.titleLarge?.copyWith(
+                          color: ColorPalette.greyscale100,
+                        ),
                       ),
-                    ),
-                    Text(
-                      issue.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: textTheme.titleLarge,
-                    ),
-                    const Divider(
-                      thickness: 1,
-                      color: ColorPalette.greyscale400,
-                    ),
-                    DateWidget(
-                      date: issue.releaseDate,
-                    ),
-                    const Divider(
-                      thickness: 1,
-                      color: ColorPalette.greyscale400,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ViewedIconCount(
-                          viewedCount: issue.stats?.viewersCount ?? 0,
-                          isViewed: issue.myStats?.viewedAt != null,
-                        ),
-                        FavoriteIconCount(
-                          favouritesCount: issue.stats?.favouritesCount ?? 0,
-                          isFavourite: issue.myStats?.isFavourite ?? false,
-                        ),
-                      ],
-                    ),
-                    const Divider(
-                      thickness: 1,
-                      color: ColorPalette.greyscale400,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SolanaPrice(
-                          price: issue.stats?.price != null
-                              ? Formatter.formatPriceWithSignificant(
-                                  issue.stats!.price!,
-                                )
-                              : null,
-                        ),
-                        RatingIcon(
-                          initialRating: issue.stats?.averageRating ?? 0,
-                          issueId: issue.id,
-                          isRatedByMe: issue.myStats?.rating != null,
-                        ),
-                      ],
-                    ),
-                  ],
+                      Text(
+                        issue.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.titleLarge,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: ColorPalette.greyscale400,
+                      ),
+                      DateWidget(
+                        date: issue.releaseDate,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: ColorPalette.greyscale400,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ViewedIconCount(
+                            viewedCount: issue.stats?.viewersCount ?? 0,
+                            isViewed: issue.myStats?.viewedAt != null,
+                          ),
+                          FavoriteIconCount(
+                            favouritesCount: issue.stats?.favouritesCount ?? 0,
+                            isFavourite: issue.myStats?.isFavourite ?? false,
+                          ),
+                        ],
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        color: ColorPalette.greyscale400,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SolanaPrice(
+                            price: issue.stats?.price != null
+                                ? Formatter.formatPriceWithSignificant(
+                                    issue.stats!.price!,
+                                  )
+                                : null,
+                          ),
+                          RatingIcon(
+                            initialRating: issue.stats?.averageRating ?? 0,
+                            issueId: issue.id,
+                            isRatedByMe: issue.myStats?.rating != null,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

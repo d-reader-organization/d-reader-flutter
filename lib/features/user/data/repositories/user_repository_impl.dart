@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/features/user/data/datasource/user_remote_data_source.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user_privacy_consent.dart';
 import 'package:d_reader_flutter/features/user/domain/repositories/user_repository.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/wallet_asset.dart';
@@ -75,5 +76,20 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<AppException, bool>> verifyEmail(String verificationId) {
     return dataSource.verifyEmail(verificationId);
+  }
+
+  @override
+  Future<Either<AppException, UserPrivacyConsent>> createUserPrivacyConsent({
+    required bool isConsentGiven,
+    required ConsentType consentType,
+  }) {
+    return dataSource.createUserPrivacyConsent(
+        isConsentGiven: isConsentGiven, consentType: consentType);
+  }
+
+  @override
+  Future<Either<AppException, List<UserPrivacyConsent>>>
+      getUserPrivacyConsents() {
+    return dataSource.getUserPrivacyConsents();
   }
 }

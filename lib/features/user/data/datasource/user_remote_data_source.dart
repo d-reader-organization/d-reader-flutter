@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user_privacy_consent.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/wallet_asset.dart';
 import 'package:d_reader_flutter/shared/data/remote/network_service.dart';
@@ -24,6 +25,12 @@ abstract class UserDataSource {
   Future<Either<AppException, List<WalletAsset>>> getUserAssets(int id);
   Future<void> insertFcmToken(String fcmToken);
   Future<Either<AppException, bool>> verifyEmail(String verificationId);
+  Future<Either<AppException, List<UserPrivacyConsent>>>
+      getUserPrivacyConsents();
+  Future<Either<AppException, UserPrivacyConsent>> createUserPrivacyConsent({
+    required bool isConsentGiven,
+    required ConsentType consentType,
+  });
 }
 
 class UserRemoteDataSource implements UserDataSource {
@@ -261,6 +268,72 @@ class UserRemoteDataSource implements UserDataSource {
           message: 'Unknown exception occurred',
           statusCode: 500,
           identifier: '${exception.toString()}UserRemoteDataSource.verifyEmail',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, UserPrivacyConsent>> createUserPrivacyConsent({
+    required bool isConsentGiven,
+    required ConsentType consentType,
+  }) async {
+    try {
+      final response = await networkService.post(
+        '/user/privacy-consent/create',
+        data: {
+          "isConsentGiven": isConsentGiven,
+          "consentType": consentType.value,
+        },
+      );
+      return response.fold(
+        (exception) => Left(exception),
+        (result) => Right(
+          UserPrivacyConsent.fromJson(result.data),
+        ),
+      );
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}UserRemoteDataSource.createUserPrivacyConsent',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, List<UserPrivacyConsent>>>
+      getUserPrivacyConsents() async {
+    try {
+      final response = await networkService.get(
+        '/user/privacy-consent/',
+      );
+      return response.fold((exception) => Left(exception), (result) {
+        final data = result.data;
+        if (data == null) {
+          return const Right([]);
+        }
+
+        return Right(
+          List<UserPrivacyConsent>.from(
+            data.map(
+              (item) => UserPrivacyConsent.fromJson(
+                item,
+              ),
+            ),
+          ),
+        );
+      });
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}UserRemoteDataSource.getUserPrivacyConsents',
         ),
       );
     }

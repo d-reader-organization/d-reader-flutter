@@ -59,34 +59,38 @@ class MyWalletsScreen extends ConsumerWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  ref.read(walletControllerProvider.notifier).handleSyncWallets(
-                    afterSync: () {
-                      showSnackBar(
-                        context: context,
-                        text: 'Wallets synced successfully',
-                        backgroundColor: ColorPalette.dReaderGreen,
-                      );
-                    },
-                  );
-                },
-                icon: const Icon(
-                  Icons.refresh,
-                ),
-              ),
-            ],
+            actions: data.isEmpty
+                ? null
+                : [
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(walletControllerProvider.notifier)
+                            .handleSyncWallets(
+                          afterSync: () {
+                            showSnackBar(
+                              context: context,
+                              text: 'Wallets synced successfully',
+                              backgroundColor: ColorPalette.dReaderGreen,
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.refresh,
+                      ),
+                    ),
+                  ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: data.isEmpty
                 ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SvgPicture.asset(
-                        'assets/icons/intro/splash_2.svg',
+                        'assets/icons/no_wallet_detected.svg',
                         height: 281,
                         width: 238,
                       ),

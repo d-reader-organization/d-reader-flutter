@@ -2,7 +2,6 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
-import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -60,6 +59,24 @@ class MyWalletsScreen extends ConsumerWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  ref.read(walletControllerProvider.notifier).handleSyncWallets(
+                    afterSync: () {
+                      showSnackBar(
+                        context: context,
+                        text: 'Wallets synced successfully',
+                        backgroundColor: ColorPalette.dReaderGreen,
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.refresh,
+                ),
+              ),
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -100,26 +117,66 @@ class MyWalletsScreen extends ConsumerWidget {
                   )
                 : RefreshIndicator(
                     onRefresh: () async {
-                      await ref
-                          .read(userRepositoryProvider)
-                          .syncWallets(ref.watch(environmentProvider).user!.id);
-                      ref.invalidate(userWalletsProvider);
+                      ref
+                          .read(walletControllerProvider.notifier)
+                          .handleSyncWallets(
+                        afterSync: () {
+                          showSnackBar(
+                            context: context,
+                            text: 'Wallets synced successfully',
+                            backgroundColor: ColorPalette.dReaderGreen,
+                          );
+                        },
+                      );
                     },
                     backgroundColor: ColorPalette.dReaderYellow100,
                     color: ColorPalette.appBackgroundColor,
                     child: ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (context, index) {
-                        final walletName = data[index].label.isNotEmpty
-                            ? data[index].label
+                        final wallet = data[index];
+                        final walletName = wallet.label.isNotEmpty
+                            ? wallet.label
                             : 'Wallet ${index + 1}';
+                        final existingAuthToken = ref
+                                .read(environmentProvider)
+                                .wallets?[wallet.address]
+                                ?.authToken ??
+                            '';
                         return GestureDetector(
                           onTap: () {
-                            nextScreenPush(
-                              context: context,
-                              path:
-                                  '${RoutePath.walletInfo}?address=${data[index].address}&name=$walletName',
-                            );
+                            if (ref.read(selectedWalletProvider) ==
+                                wallet.address) {
+                              return;
+                            }
+                            ref
+                                .read(walletControllerProvider.notifier)
+                                .handleWalletSelect(
+                                  address: wallet.address,
+                                  onAuthorizeNeeded: () async {
+                                    return await showDialog<bool>(
+                                          context: context,
+                                          builder: (context) {
+                                            return ConfirmationDialog(
+                                              title: '',
+                                              subtitle:
+                                                  'Wallet ${Formatter.formatAddress(wallet.address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
+                                            );
+                                          },
+                                        ) ??
+                                        false;
+                                  },
+                                )
+                                .then((value) {
+                              if (value) {
+                                showSnackBar(
+                                  context: context,
+                                  milisecondsDuration: 1800,
+                                  text:
+                                      'Wallet with ${Formatter.formatAddress(wallet.address, 4)} is selected as active',
+                                );
+                              }
+                            });
                           },
                           child: Container(
                             padding: const EdgeInsets.all(12),
@@ -131,7 +188,7 @@ class MyWalletsScreen extends ConsumerWidget {
                               ),
                               border: Border.all(
                                 color: ref.watch(selectedWalletProvider) ==
-                                        data[index].address
+                                        wallet.address
                                     ? ColorPalette.dReaderYellow100
                                     : ColorPalette.greyscale400,
                               ),
@@ -139,36 +196,56 @@ class MyWalletsScreen extends ConsumerWidget {
                             child: Row(
                               children: [
                                 Expanded(
-                                  flex: 1,
-                                  child: Column(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        walletName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: topTextStyle,
+                                      SvgPicture.asset(
+                                        existingAuthToken.isNotEmpty
+                                            ? 'assets/icons/link_wallet.svg'
+                                            : 'assets/icons/unlink_wallet.svg',
+                                        colorFilter: ColorFilter.mode(
+                                          existingAuthToken.isNotEmpty
+                                              ? Colors.white
+                                              : ColorPalette.greyscale100,
+                                          BlendMode.srcIn,
+                                        ),
                                       ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        Formatter.formatAddress(
-                                            data[index].address, 4),
-                                        style: bottomTextStyle,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            walletName,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: topTextStyle,
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          Text(
+                                            Formatter.formatAddress(
+                                                wallet.address, 4),
+                                            style: bottomTextStyle,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 48,
-                                  child: VerticalDivider(
-                                    color: ColorPalette.greyscale300,
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: SizedBox(
+                                    height: 48,
+                                    child: VerticalDivider(
+                                      color: ColorPalette.greyscale300,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 2,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -180,7 +257,7 @@ class MyWalletsScreen extends ConsumerWidget {
                                           ref
                                               .watch(
                                             accountInfoProvider(
-                                              address: data[index].address,
+                                              address: wallet.address,
                                             ),
                                           )
                                               .when(
@@ -190,7 +267,7 @@ class MyWalletsScreen extends ConsumerWidget {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    '${Formatter.formatPriceWithSignificant((accountData.value?.lamports ?? 0))} \$SOL',
+                                                    '${Formatter.formatPriceWithSignificant((accountData.value?.lamports ?? 0))} SOL',
                                                     style: bottomTextStyle,
                                                   ),
                                                 ],
@@ -207,36 +284,14 @@ class MyWalletsScreen extends ConsumerWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          ref
-                                              .read(walletControllerProvider
-                                                  .notifier)
-                                              .handleWalletSelect(
-                                                address: data[index].address,
-                                                onAuthorizeNeeded: () async {
-                                                  return await showDialog<bool>(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return ConfirmationDialog(
-                                                            title: '',
-                                                            subtitle:
-                                                                'Wallet ${Formatter.formatAddress(data[index].address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
-                                                          );
-                                                        },
-                                                      ) ??
-                                                      false;
-                                                },
-                                              );
+                                          nextScreenPush(
+                                            context: context,
+                                            path:
+                                                '${RoutePath.walletInfo}?address=${wallet.address}&name=$walletName',
+                                          );
                                         },
-                                        child: Icon(
-                                          ref.watch(selectedWalletProvider) ==
-                                                  data[index].address
-                                              ? Icons.circle
-                                              : Icons.circle_outlined,
-                                          color: ref.watch(
-                                                      selectedWalletProvider) ==
-                                                  data[index].address
-                                              ? ColorPalette.dReaderYellow100
-                                              : ColorPalette.greyscale300,
+                                        child: SvgPicture.asset(
+                                          'assets/icons/more.svg',
                                         ),
                                       ),
                                     ],
@@ -259,9 +314,9 @@ class MyWalletsScreen extends ConsumerWidget {
                       await triggerWalkthroughDialogIfNeeded(
                         context: context,
                         key: WalkthroughKeys.multipleWallet.name,
-                        title: 'Another wallet',
+                        title: 'Multiple wallets',
                         subtitle:
-                            'When connecting multiple wallets to dReader bare in mind to always match the wallet selected on dReader with the mobile wallet app which holds its private keys',
+                            "When 2 or more wallets are connected to dReader, one will always be selected as 'active'. To switch the active wallet, click on any of the wallets listed on this screen",
                         assetPath: '$walkthroughAssetsPath/multiple_wallet.jpg',
                         onSubmit: () {
                           context.pop();

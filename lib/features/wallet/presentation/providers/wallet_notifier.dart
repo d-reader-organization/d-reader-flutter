@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
+import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/domain/providers/wallet_provider.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -46,7 +47,7 @@ class WalletController extends _$WalletController {
     });
   }
 
-  Future<void> handleWalletSelect({
+  Future<bool> handleWalletSelect({
     required String address,
     required Future<bool> Function() onAuthorizeNeeded,
   }) async {
@@ -55,7 +56,7 @@ class WalletController extends _$WalletController {
     if (walletAuthToken == null) {
       final shouldAuthorize = await onAuthorizeNeeded();
       if (!shouldAuthorize) {
-        return;
+        return false;
       }
 
       await ref
@@ -63,7 +64,8 @@ class WalletController extends _$WalletController {
           .authorizeIfNeededWithOnComplete();
       ref.read(selectedWalletProvider.notifier).update((state) =>
           ref.read(environmentProvider).publicKey?.toBase58() ?? address);
-      return ref.invalidate(userWalletsProvider);
+      ref.invalidate(userWalletsProvider);
+      return true;
     }
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
@@ -76,6 +78,7 @@ class WalletController extends _$WalletController {
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
         );
+    return true;
   }
 
   Future<void> handleDisconnectWallet({
@@ -110,5 +113,15 @@ class WalletController extends _$WalletController {
     ref.invalidate(walletNameProvider);
     ref.invalidate(userWalletsProvider);
     callback(result);
+  }
+
+  Future<void> handleSyncWallets({required void Function() afterSync}) async {
+    await ref
+        .read(userRepositoryProvider)
+        .syncWallets(ref.watch(environmentProvider).user!.id)
+        .then((value) {
+      ref.invalidate(userWalletsProvider);
+      afterSync();
+    });
   }
 }

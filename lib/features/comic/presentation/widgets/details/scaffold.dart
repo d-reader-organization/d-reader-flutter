@@ -96,7 +96,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: SvgPicture.asset('assets/icons/more.svg'),
+                  child: SvgPicture.asset('assets/icons/more_with_border.svg'),
                 ),
               ),
             ],

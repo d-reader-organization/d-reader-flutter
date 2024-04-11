@@ -36,7 +36,9 @@ class SettingsCommonListTile extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: overrideColor ?? color,
+            ),
       ),
       minLeadingWidth: 20,
       trailing: overrideTrailing ??

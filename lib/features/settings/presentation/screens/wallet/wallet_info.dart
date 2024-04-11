@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/shared/widgets/textfields/text_field.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/list_tile.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,9 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
   Widget build(BuildContext context) {
     final globalHook = useGlobalState();
     final textTheme = Theme.of(context).textTheme;
+    final shouldConnectWallet =
+        ref.read(environmentProvider).wallets?[widget.address]?.authToken ==
+            null;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -61,7 +65,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           ref.watch(chainSubscriptionClientProvider(widget.address)).when(
             data: (data) {
               return Text(
-                '${Formatter.formatPriceWithSignificant(data?.lamports ?? 0)} \$SOL',
+                '${Formatter.formatPriceWithSignificant(data?.lamports ?? 0)} SOL',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,
@@ -83,6 +87,101 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           const SizedBox(
             height: 16,
           ),
+          shouldConnectWallet
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 35,
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          8,
+                        ),
+                        border: Border.all(color: ColorPalette.greyscale200),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/unlink_wallet.svg',
+                        colorFilter: const ColorFilter.mode(
+                          ColorPalette.greyscale200,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    CustomTextButton(
+                      onPressed: () {
+                        ref
+                            .read(walletControllerProvider.notifier)
+                            .handleWalletSelect(
+                              address: widget.address,
+                              onAuthorizeNeeded: () async {
+                                return true;
+                              },
+                            );
+                      },
+                      padding: EdgeInsets.zero,
+                      borderColor: ColorPalette.greyscale200,
+                      backgroundColor: Colors.transparent,
+                      child: Text(
+                        'Set as active wallet',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: ColorPalette.greyscale200,
+                            ),
+                      ),
+                    )
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ref.watch(selectedWalletProvider) == widget.address
+                        ? CustomTextButton(
+                            onPressed: null,
+                            padding: EdgeInsets.zero,
+                            backgroundColor:
+                                ColorPalette.dReaderYellow100.withOpacity(.1),
+                            child: Text(
+                              'Active wallet',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: ColorPalette.dReaderYellow100,
+                                  ),
+                            ),
+                          )
+                        : CustomTextButton(
+                            padding: EdgeInsets.zero,
+                            backgroundColor: Colors.transparent,
+                            onPressed: () {
+                              ref
+                                  .read(selectedWalletProvider.notifier)
+                                  .update((state) => widget.address);
+                              showSnackBar(
+                                context: context,
+                                milisecondsDuration: 1800,
+                                text: 'Wallet is selected as active',
+                              );
+                            },
+                            borderColor: ColorPalette.dReaderYellow100,
+                            child: Text(
+                              'Set as active wallet',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color: ColorPalette.dReaderYellow100,
+                                  ),
+                            ),
+                          ),
+                  ],
+                ),
+          const SizedBox(
+            height: 32,
+          ),
           CustomTextField(
             labelText: 'Name',
             controller: _nameController,
@@ -93,7 +192,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           CustomTextField(
             labelText: 'Address',
             isReadOnly: true,
-            hintText: Formatter.formatAddress(widget.address),
+            hintText: Formatter.formatAddress(widget.address, 8),
             suffix: GestureDetector(
               onTap: () async {
                 await Clipboard.setData(
@@ -109,16 +208,31 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                   },
                 );
               },
-              child: const Icon(
-                Icons.copy,
-                color: Colors.white,
-                size: 16,
+              child: SvgPicture.asset(
+                '${Config.settingsAssetsPath}/bold/copy.svg',
               ),
             ),
           ),
           const Divider(
+            height: 32,
             color: ColorPalette.greyscale400,
           ),
+          shouldConnectWallet
+              ? SettingsCommonListTile(
+                  title: 'Connect wallet to dReader',
+                  leadingPath: 'assets/icons/link_wallet.svg',
+                  onTap: () async {
+                    await ref
+                        .read(walletControllerProvider.notifier)
+                        .handleWalletSelect(
+                          address: widget.address,
+                          onAuthorizeNeeded: () async {
+                            return true;
+                          },
+                        );
+                  },
+                )
+              : const SizedBox(),
           if (ref.read(environmentProvider).solanaCluster ==
               SolanaCluster.devnet.value) ...[
             SettingsCommonListTile(
@@ -178,15 +292,30 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           ],
           SettingsCommonListTile(
             title: 'Disconnect wallet',
-            leadingPath: '${Config.settingsAssetsPath}/light/logout.svg',
+            leadingPath: 'assets/icons/close_square.svg',
             overrideColor: ColorPalette.dReaderRed,
             onTap: () async {
-              await ref
-                  .read(walletControllerProvider.notifier)
-                  .handleDisconnectWallet(
-                    address: widget.address,
-                    callback: context.pop,
-                  );
+              final bool shouldDisconnect = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const ConfirmationDialog(
+                        title: 'Disconnect Wallet',
+                        subtitle: 'Are you sure you want to disconnect wallet?',
+                      );
+                    },
+                  ) ??
+                  false;
+              if (!shouldDisconnect) {
+                return;
+              }
+              if (context.mounted) {
+                await ref
+                    .read(walletControllerProvider.notifier)
+                    .handleDisconnectWallet(
+                      address: widget.address,
+                      callback: context.pop,
+                    );
+              }
             },
           ),
         ],

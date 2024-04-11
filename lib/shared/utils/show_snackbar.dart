@@ -7,6 +7,7 @@ showSnackBar({
   Color backgroundColor = ColorPalette.greyscale300,
   int milisecondsDuration = 3600,
 }) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(text),

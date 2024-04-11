@@ -7,7 +7,7 @@ class CustomTextButton extends StatelessWidget {
   final void Function()? onPressed;
   final Size size;
   final double fontSize;
-  final bool isLoading;
+  final bool isLoading, isDisabled;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
 
@@ -20,6 +20,7 @@ class CustomTextButton extends StatelessWidget {
     this.size = const Size(120, 27),
     this.fontSize = 14,
     this.isLoading = false,
+    this.isDisabled = false,
     this.borderRadius = const BorderRadius.all(
       Radius.circular(
         8,
@@ -35,14 +36,16 @@ class CustomTextButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: TextButton(
-        onPressed: () {
-          if (isLoading) {
-            return;
-          }
-          if (onPressed != null) {
-            onPressed!();
-          }
-        },
+        onPressed: isDisabled
+            ? null
+            : () {
+                if (isLoading) {
+                  return;
+                }
+                if (onPressed != null) {
+                  onPressed!();
+                }
+              },
         style: TextButton.styleFrom(
           minimumSize: size,
           backgroundColor: backgroundColor,

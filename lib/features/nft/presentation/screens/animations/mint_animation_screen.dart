@@ -14,6 +14,7 @@ import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/shared/widgets/checkbox/custom_labeled_checkbox.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
 import 'package:flutter/material.dart';
@@ -396,66 +397,20 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                                           'By unwrapping the comic, you will be able to read it. This action is irreversible and will make the comic lose the mint condition.',
                                       bottomWidget: StatefulBuilder(
                                         builder: (context, setState) {
-                                          return GestureDetector(
-                                            onTap: () {
+                                          return CustomLabeledCheckbox(
+                                            isChecked: isChecked,
+                                            onChange: () {
                                               setState(
                                                 () {
                                                   isChecked = !isChecked;
                                                 },
                                               );
                                             },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Theme(
-                                                  data: ThemeData(
-                                                    unselectedWidgetColor:
-                                                        ColorPalette
-                                                            .greyscale300,
-                                                  ),
-                                                  child: Transform.scale(
-                                                    scale: 1.2,
-                                                    child: Checkbox(
-                                                      value: isChecked,
-                                                      checkColor: ColorPalette
-                                                          .dReaderYellow100,
-                                                      fillColor:
-                                                          const MaterialStatePropertyAll<
-                                                              Color>(
-                                                        ColorPalette
-                                                            .greyscale500,
-                                                      ),
-                                                      onChanged: (value) {
-                                                        setState(
-                                                          () {
-                                                            isChecked =
-                                                                !isChecked;
-                                                          },
-                                                        );
-                                                      },
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                          6,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 2,
-                                                ),
-                                                const Text(
-                                                  'Don\'t ask me again',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
+                                            label: Text(
+                                              'Don\'t ask me again',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
                                             ),
                                           );
                                         },

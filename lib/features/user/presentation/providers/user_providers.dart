@@ -1,4 +1,6 @@
+import 'package:d_reader_flutter/features/settings/presentation/providers/security_and_privacy.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
+import 'package:d_reader_flutter/features/user/domain/models/user_privacy_consent.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -56,3 +58,29 @@ final newPasswordProvider = StateProvider.autoDispose<String>(
     return '';
   },
 );
+
+final userConsentsProvider =
+    FutureProvider.autoDispose<Map<ConsentType, bool>>((ref) async {
+  final response =
+      await ref.read(userRepositoryProvider).getUserPrivacyConsents();
+
+  return response.fold((exception) => throw exception, (data) {
+    final Map<ConsentType, bool> map = {};
+    for (final userConsent in data) {
+      map.update(
+        userConsent.consentType.consentTypeFromString(),
+        (value) => userConsent.isConsentGiven,
+        ifAbsent: () => userConsent.isConsentGiven,
+      );
+      ref.read(localUserConsentsProvider.notifier).update((state) {
+        state.update(
+          userConsent.consentType.consentTypeFromString(),
+          (value) => userConsent.isConsentGiven,
+          ifAbsent: () => userConsent.isConsentGiven,
+        );
+        return state;
+      });
+    }
+    return map;
+  });
+});

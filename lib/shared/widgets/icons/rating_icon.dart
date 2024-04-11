@@ -35,7 +35,7 @@ class RatingIcon extends ConsumerWidget {
       child: isContainerWidget
           ? Container(
               padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(minWidth: 64),
+              constraints: const BoxConstraints(minWidth: 64, minHeight: 42),
               decoration: BoxDecoration(
                 color: isRatedByMe
                     ? ColorPalette.dReaderYellow100.withOpacity(.4)
@@ -50,17 +50,13 @@ class RatingIcon extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  isRatedByMe
-                      ? SvgPicture.asset(
-                          'assets/icons/star_bold.svg',
-                          width: 16,
-                          height: 16,
-                        )
-                      : SvgPicture.asset(
-                          'assets/icons/star_light.svg',
-                          width: 16,
-                          height: 16,
-                        ),
+                  SvgPicture.asset(
+                    isRatedByMe
+                        ? 'assets/icons/star_bold.svg'
+                        : 'assets/icons/star_light.svg',
+                    width: 16,
+                    height: 16,
+                  ),
                   const SizedBox(
                     width: 4,
                   ),
@@ -76,17 +72,13 @@ class RatingIcon extends ConsumerWidget {
             )
           : Row(
               children: [
-                isRatedByMe
-                    ? SvgPicture.asset(
-                        'assets/icons/star_bold.svg',
-                        width: 16,
-                        height: 16,
-                      )
-                    : SvgPicture.asset(
-                        'assets/icons/star_light.svg',
-                        width: 16,
-                        height: 16,
-                      ),
+                SvgPicture.asset(
+                  isRatedByMe
+                      ? 'assets/icons/star_bold.svg'
+                      : 'assets/icons/star_light.svg',
+                  width: 16,
+                  height: 16,
+                ),
                 const SizedBox(
                   width: 4,
                 ),

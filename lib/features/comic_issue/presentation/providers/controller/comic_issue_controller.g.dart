@@ -7,7 +7,7 @@ part of 'comic_issue_controller.dart';
 // **************************************************************************
 
 String _$comicIssueControllerHash() =>
-    r'39691badb1ba2ec469ebae1412ebcb8a6f8eb435';
+    r'a80eeee74b09695a987182f68b600a8e9d476342';
 
 /// See also [ComicIssueController].
 @ProviderFor(ComicIssueController)

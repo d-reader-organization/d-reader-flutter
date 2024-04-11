@@ -50,7 +50,7 @@ class FavoritesTab extends ConsumerWidget {
         return FavoriteComicsListBuilder(comics: data);
       },
       error: (error, stackTrace) {
-        return const CarrotErrorWiddget(
+        return const CarrotErrorWidget(
           mainErrorText: 'We ran into some issues',
           adviceText: 'We are working on a fix. Thanks for your patience!',
         );

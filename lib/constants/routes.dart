@@ -25,6 +25,8 @@ class RoutePath {
   static const changeNetwork = 'change-network';
   static const walletInfo = 'wallet-info';
   static const whatIsAWallet = 'what-is-wallet';
+  static const securityAndPrivacy = 'security-and-privacy';
+
   static const doneMinting = 'animation/done-minting';
   static const openNftAnimation = 'animation/open-nft';
   static const mintLoadingAnimation = 'animation/mint-loading';

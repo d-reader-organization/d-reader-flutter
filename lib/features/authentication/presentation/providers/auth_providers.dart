@@ -34,3 +34,5 @@ final verifyEmailProvider = FutureProvider.autoDispose
 
   return result.fold((exception) => exception.message, (_) => successResult);
 });
+
+final isTOSSelected = StateProvider.autoDispose<bool>((ref) => false);

@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/features/authentication/presentation/screens/si
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/sign_up.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/verify_email.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/features/settings/presentation/screens/security_and_privacy.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -231,6 +232,12 @@ final List<GoRoute> homeRoutes = [
           return const WhatIsWalletView();
         },
       ),
+      GoRoute(
+        path: RoutePath.securityAndPrivacy,
+        builder: (context, state) {
+          return const SecurityAndPrivacyScreen();
+        },
+      )
     ],
   ),
 ];

@@ -39,8 +39,7 @@ abstract class Config {
   static const String hasSeenInitialKey = 'hasSeenInitial';
   static const String helpCenterLink =
       "https://docs.google.com/forms/d/e/1FAIpQLSefq-KgefpgmINtOUxJIKEBppcMQL4W7F8RLXreaLdHnFOZsg/viewform";
-  static const String privacyPolicyUrl =
-      "https://raw.githubusercontent.com/d-reader-organization/.github/main/PRIVACY_POLICY.md";
+  static const String privacyPolicyUrl = "https://dreader.app/privacy-policy";
   static const String twitterUrl = 'https://twitter.com/dReaderApp';
   static const String discordUrl = 'https://discord.gg/rrZsRvC9mh';
   static const String localStoreName = 'local_store';

@@ -7,7 +7,6 @@ import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsRootView extends StatelessWidget {
   const SettingsRootView({
@@ -67,9 +66,9 @@ class SettingsRootView extends StatelessWidget {
               leadingPath: '${Config.settingsAssetsPath}/light/shield_done.svg',
               title: 'Security & Privacy',
               onTap: () {
-                openUrl(
-                  Config.privacyPolicyUrl,
-                  LaunchMode.inAppWebView,
+                nextScreenPush(
+                  context: context,
+                  path: RoutePath.securityAndPrivacy,
                 );
               },
             ),

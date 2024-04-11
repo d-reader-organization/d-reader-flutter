@@ -15,7 +15,7 @@ class AppUpdateWrapper extends ConsumerWidget {
       data: (shouldTriggerUpdateDialog) {
         return shouldTriggerUpdateDialog
             ? UpgradeAlert(
-                canDismissDialog: true,
+                barrierDismissible: true,
                 showReleaseNotes: false,
                 dialogStyle: Platform.isIOS
                     ? UpgradeDialogStyle.cupertino

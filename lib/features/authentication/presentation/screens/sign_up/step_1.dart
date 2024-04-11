@@ -1,12 +1,16 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
+import 'package:d_reader_flutter/shared/widgets/checkbox/custom_labeled_checkbox.dart';
 import 'package:d_reader_flutter/shared/widgets/textfields/text_field.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -38,7 +42,7 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
     super.dispose();
   }
 
-  _handleNext() {
+  void _handleNext() {
     if (_usernameFormKey.currentState!.validate()) {
       ref.read(signUpNotifierProvider.notifier).handleSignUpStep1(
             username: _usernameController.text.trim(),
@@ -112,11 +116,40 @@ class _SignUpStep1State extends ConsumerState<SignUpStep1> {
                   ),
                 ),
                 const SizedBox(
+                  height: 24,
+                ),
+                CustomLabeledCheckbox(
+                  isChecked: ref.watch(isTOSSelected),
+                  onChange: () {
+                    ref.read(isTOSSelected.notifier).update((state) => !state);
+                  },
+                  label: RichText(
+                    text: TextSpan(
+                      text: 'I have read and agree to the ',
+                      style: Theme.of(context).textTheme.bodySmall,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Terms of Service',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              openUrl(Config.privacyPolicyUrl);
+                            },
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: ColorPalette.dReaderYellow100),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
                   height: 48,
                 ),
                 CustomTextButton(
                   isLoading: ref.watch(globalNotifierProvider).isLoading,
                   padding: const EdgeInsets.all(0),
+                  isDisabled: !ref.watch(isTOSSelected),
                   size: const Size(
                     double.infinity,
                     50,

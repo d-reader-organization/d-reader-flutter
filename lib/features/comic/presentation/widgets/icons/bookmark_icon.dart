@@ -31,10 +31,8 @@ class BookmarkIcon extends ConsumerWidget {
               ref.invalidate(favoriteComicsProvider);
             },
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 5,
-        ),
+        constraints: const BoxConstraints(minHeight: 42),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: isBookmarked
               ? ColorPalette.dReaderGreen.withOpacity(.4)
@@ -46,6 +44,7 @@ class BookmarkIcon extends ConsumerWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
               'assets/icons/bookmark_${isBookmarked ? 'saved' : 'unsaved'}.svg',
@@ -55,8 +54,8 @@ class BookmarkIcon extends ConsumerWidget {
                     : ColorPalette.greyscale100,
                 BlendMode.srcIn,
               ),
-              width: 18,
-              height: 18,
+              width: 20,
+              height: 20,
             ),
             const SizedBox(
               width: 4,

@@ -283,7 +283,7 @@ class UserRemoteDataSource implements UserDataSource {
         '/user/privacy-consent/create',
         data: {
           "isConsentGiven": isConsentGiven,
-          "consentType": consentType.value,
+          "consentType": consentType.getString(),
         },
       );
       return response.fold(
@@ -309,7 +309,7 @@ class UserRemoteDataSource implements UserDataSource {
       getUserPrivacyConsents() async {
     try {
       final response = await networkService.get(
-        '/user/privacy-consent/',
+        '/user/privacy-consent',
       );
       return response.fold((exception) => Left(exception), (result) {
         final data = result.data;

@@ -15,17 +15,17 @@ class CarrotErrorScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       extendBodyBehindAppBar: true,
-      body: CarrotErrorWiddget(
+      body: CarrotErrorWidget(
         mainErrorText: errorText,
       ),
     );
   }
 }
 
-class CarrotErrorWiddget extends StatelessWidget {
+class CarrotErrorWidget extends StatelessWidget {
   final String adviceText, mainErrorText;
   final double height;
-  const CarrotErrorWiddget({
+  const CarrotErrorWidget({
     super.key,
     this.adviceText =
         'Try resetting the app and make sure it\'s running on the latest version',

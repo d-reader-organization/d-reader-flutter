@@ -3,8 +3,8 @@ import 'package:d_reader_flutter/features/comic_issue/domain/providers/comic_iss
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FavoriteIconCount extends HookConsumerWidget {
@@ -47,7 +47,7 @@ class FavoriteIconCount extends HookConsumerWidget {
       child: isContainerWidget
           ? Container(
               padding: const EdgeInsets.all(8),
-              constraints: const BoxConstraints(minWidth: 64),
+              constraints: const BoxConstraints(minWidth: 64, minHeight: 42),
               decoration: BoxDecoration(
                 color: isFavourite
                     ? ColorPalette.dReaderRed.withOpacity(.4)
@@ -61,15 +61,14 @@ class FavoriteIconCount extends HookConsumerWidget {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
+                  SvgPicture.asset(
                     isFavourite
-                        ? CupertinoIcons.heart_fill
-                        : CupertinoIcons.heart,
-                    color: isFavourite
-                        ? ColorPalette.dReaderRed
-                        : ColorPalette.greyscale100,
-                    size: 16,
+                        ? 'assets/icons/heart.svg'
+                        : 'assets/icons/heart_light.svg',
+                    width: 16,
+                    height: 16,
                   ),
                   const SizedBox(
                     width: 4,
@@ -86,14 +85,12 @@ class FavoriteIconCount extends HookConsumerWidget {
             )
           : Row(
               children: [
-                Icon(
+                SvgPicture.asset(
                   isFavourite
-                      ? CupertinoIcons.heart_fill
-                      : CupertinoIcons.heart,
-                  color: isFavourite
-                      ? ColorPalette.dReaderRed
-                      : ColorPalette.dReaderGrey,
-                  size: 16,
+                      ? 'assets/icons/heart.svg'
+                      : 'assets/icons/heart_light.svg',
+                  width: 16,
+                  height: 16,
                 ),
                 const SizedBox(
                   width: 4,

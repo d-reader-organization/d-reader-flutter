@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 Widget renderCarrotErrorWidget(WidgetRef ref) {
   return ref.watch(internetAccessProvider).when(
     data: (hasInternet) {
-      return CarrotErrorWiddget(
+      return CarrotErrorWidget(
         mainErrorText:
             hasInternet ? 'Something broke!' : 'No internet connection',
       );

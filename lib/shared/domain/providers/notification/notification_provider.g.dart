@@ -26,7 +26,7 @@ String _$firebaseMessagingHash() => r'351aa26cfb267d98e81eec4890c225abb44f6bd5';
 
 /// See also [firebaseMessaging].
 @ProviderFor(firebaseMessaging)
-final firebaseMessagingProvider = Provider<dynamic>.internal(
+final firebaseMessagingProvider = Provider<Object?>.internal(
   firebaseMessaging,
   name: r'firebaseMessagingProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -36,6 +36,6 @@ final firebaseMessagingProvider = Provider<dynamic>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FirebaseMessagingRef = ProviderRef<dynamic>;
+typedef FirebaseMessagingRef = ProviderRef<Object?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -76,6 +76,8 @@ class EReaderBottomNavigation extends ConsumerWidget {
                       value: ref.watch(isPageByPageReadingMode),
                       activeTrackColor: ColorPalette.greyscale300,
                       activeColor: Colors.white,
+                      trackOutlineColor:
+                          const MaterialStatePropertyAll(Colors.transparent),
                       trackColor: const MaterialStatePropertyAll<Color>(
                         ColorPalette.greyscale300,
                       ),

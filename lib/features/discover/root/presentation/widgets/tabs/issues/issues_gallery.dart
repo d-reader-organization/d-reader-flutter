@@ -19,7 +19,7 @@ class IssuesGallery extends StatelessWidget {
         return IssuesGalleryBuilder(issues: issues);
       },
       error: (err, stack) {
-        return const CarrotErrorWiddget(
+        return const CarrotErrorWidget(
           mainErrorText: 'We ran into some issues',
           adviceText: 'We are working on a fix. Thanks for your patience!',
         );

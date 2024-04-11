@@ -286,15 +286,21 @@ class MyWalletsScreen extends ConsumerWidget {
                                           ),
                                         ],
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
+                                      IconButton(
+                                        padding: const EdgeInsets.only(
+                                          top: 24,
+                                          bottom: 24,
+                                          left: 16,
+                                          right: 4,
+                                        ),
+                                        onPressed: () {
                                           nextScreenPush(
                                             context: context,
                                             path:
                                                 '${RoutePath.walletInfo}?address=${wallet.address}&name=$walletName',
                                           );
                                         },
-                                        child: SvgPicture.asset(
+                                        icon: SvgPicture.asset(
                                           'assets/icons/more.svg',
                                         ),
                                       ),

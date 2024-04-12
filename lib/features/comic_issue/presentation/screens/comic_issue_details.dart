@@ -163,26 +163,36 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                             ),
                           ),
                           Positioned.fill(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const SizedBox(),
-                                Container(
-                                  height: 304,
-                                  width: 214,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                      8,
+                            child: GestureDetector(
+                              onTap: () {
+                                nextScreenPush(
+                                  context: context,
+                                  path: '${RoutePath.eReader}/${issue.id}',
+                                );
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 32),
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 210,
+                                      maxHeight: 304,
                                     ),
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: CachedNetworkImageProvider(
-                                        issue.cover,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        8,
+                                      ),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: CachedNetworkImageProvider(
+                                          issue.cover,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -356,21 +366,6 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                             issue.isSecondarySaleActive &&
                                     issue.activeCandyMachineAddress == null
                                 ? TabBar(
-                                    indicatorWeight: 4,
-                                    dividerColor: ColorPalette.greyscale200,
-                                    labelStyle:
-                                        Theme.of(context).textTheme.titleMedium,
-                                    unselectedLabelStyle: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                    indicatorColor:
-                                        ColorPalette.dReaderYellow100,
-                                    labelColor: ColorPalette.dReaderYellow100,
-                                    unselectedLabelColor:
-                                        ColorPalette.greyscale200,
                                     onTap: (value) {
                                       ref
                                           .read(lastSelectedTabIndex.notifier)

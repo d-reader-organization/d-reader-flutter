@@ -21,15 +21,19 @@ class ConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return AlertDialog(
       backgroundColor: ColorPalette.greyscale400,
       contentPadding: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: Column(
               children: [
                 const SizedBox(
@@ -38,24 +42,18 @@ class ConfirmationDialog extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: textTheme.titleLarge,
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 16,
                 ),
                 Text(
                   subtitle,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
+                  style: textTheme.bodyMedium,
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 16,
                 ),
                 if (additionalChild != null) additionalChild!
               ],
@@ -69,7 +67,7 @@ class ConfirmationDialog extends StatelessWidget {
                     return context.pop();
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(16),
                     decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(
@@ -82,13 +80,11 @@ class ConfirmationDialog extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Cancel',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: ColorPalette.dReaderYellow100,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      style: textTheme.bodyLarge
+                          ?.copyWith(color: ColorPalette.dReaderYellow100),
                     ),
                   ),
                 ),
@@ -122,7 +118,7 @@ class ConfirmationDialog extends StatelessWidget {
                         }
                       },
                       child: Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(16),
                         decoration: const BoxDecoration(
                           border: Border(
                             top: BorderSide(
@@ -141,13 +137,11 @@ class ConfirmationDialog extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : const Text(
+                            : Text(
                                 'OK',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: ColorPalette.dReaderYellow100,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                style: textTheme.bodyLarge?.copyWith(
+                                    color: ColorPalette.dReaderYellow100),
                               ),
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'dart:convert' show base64Decode, jsonEncode;
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
@@ -28,7 +29,14 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   @override
   void build() {}
 
-  Future<bool> _isWalletEligibleForMint({
+  bool _checkEligiblity(CandyMachineGroupModel group) {
+    if (group.user != null) {
+      return group.user!.isEligible;
+    }
+    return group.wallet != null && group.wallet!.isEligible;
+  }
+
+  Future<bool> _hasEligibilityForMint({
     required String candyMachineAddress,
     required String walletAddress,
   }) async {
@@ -44,9 +52,8 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
       if (activeGroup == null) {
         return false;
       }
-      return activeGroup.wallet != null && activeGroup.wallet!.isEligible;
     }
-    return activeGroup.wallet != null && activeGroup.wallet!.isEligible;
+    return _checkEligiblity(activeGroup);
   }
 
   Future<Either<AppException, String>> _signAndSendMint({
@@ -161,11 +168,11 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
               ),
             );
           }
-          final isWalletEligibleForMint = await _isWalletEligibleForMint(
+          final hasEligibility = await _hasEligibilityForMint(
             candyMachineAddress: candyMachineAddress,
             walletAddress: walletAddress,
           );
-          if (!isWalletEligibleForMint) {
+          if (!hasEligibility) {
             await session.close();
             return Left(
               AppException(

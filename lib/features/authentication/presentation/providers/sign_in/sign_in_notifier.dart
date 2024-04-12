@@ -24,15 +24,12 @@ class SignInController extends _$SignInController {
     required Function() onSuccess,
     required Function(String message) onFail,
   }) async {
-    ref.read(globalNotifierProvider.notifier).updateLoading(true);
-
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       final googleSignInResult = await googleSignIn.signIn();
       final accessToken =
           (await googleSignInResult?.authentication)?.accessToken;
       if (accessToken == null) {
-        ref.read(globalNotifierProvider.notifier).updateLoading(false);
         return onFail('Failed to sign in with google.');
       }
 

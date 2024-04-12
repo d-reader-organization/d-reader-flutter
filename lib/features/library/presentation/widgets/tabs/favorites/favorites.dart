@@ -107,8 +107,8 @@ class FavoriteComicsListBuilder extends ConsumerWidget {
                 getSublistBorders(sortedLetters, index);
             return Container(
               margin: const EdgeInsets.only(
-                top: 8,
-                bottom: 8,
+                top: 16,
+                bottom: 16,
               ),
               child: LibraryComicItems(
                 letter: sortedLetters.keys.elementAt(index),

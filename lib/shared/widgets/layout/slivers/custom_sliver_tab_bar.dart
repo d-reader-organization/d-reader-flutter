@@ -45,15 +45,6 @@ class CustomSliverTabBar extends ConsumerWidget implements PreferredSizeWidget {
             indicatorSize: TabBarIndicatorSize.tab,
             tabs: tabs,
             controller: controller,
-            indicatorWeight: 4,
-            labelStyle: Theme.of(context).textTheme.titleMedium,
-            unselectedLabelStyle:
-                Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-            indicatorColor: ColorPalette.dReaderYellow100,
-            labelColor: ColorPalette.dReaderYellow100,
-            unselectedLabelColor: ColorPalette.greyscale200,
           ),
         ],
       ),

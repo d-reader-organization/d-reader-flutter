@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_in/sign_in_notifier.dart';
+import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
@@ -24,199 +25,181 @@ class InitialIntroScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            flex: 7,
-            child: Container(
-              margin: const EdgeInsets.only(top: 34),
-              child: SvgPicture.asset(
-                '${Config.introAssetsPath}/welcome.svg',
-                fit: BoxFit.fitWidth,
-              ),
+            child: SvgPicture.asset(
+              '${Config.introAssetsPath}/welcome.svg',
+              fit: BoxFit.fitWidth,
             ),
           ),
-          const Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Join the comic revolution!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      height: 1.2,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    'Help us shape the future of digital graphic novels and empower artists!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+          const Padding(
+            padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: Text(
+              'Join the comic revolution!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                height: 1.2,
+                fontSize: 32,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CustomTextButton(
-            backgroundColor: ColorPalette.dReaderYellow100,
-            textColor: Colors.black,
-            size: const Size(
-              double.infinity,
-              50,
-            ),
-            onPressed: () {
-              nextScreenPush(
-                context: context,
-                path: RoutePath.signUp,
-                homeSubRoute: false,
-              );
-            },
-            child: Text(
-              'Sign up',
-              style: textTheme.titleSmall?.copyWith(
-                letterSpacing: .2,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(
-                flex: 2,
-                child: Divider(
-                  thickness: 1,
-                  indent: 12,
-                  color: ColorPalette.greyscale200,
+      bottomNavigationBar: Consumer(builder: (context, ref, child) {
+        return ref.watch(globalNotifierProvider).isLoading
+            ? const SizedBox(
+                height: 222,
+                width: 100,
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  'or with',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: ColorPalette.greyscale200,
-                      ),
-                ),
-              ),
-              const Expanded(
-                flex: 2,
-                child: Divider(
-                  thickness: 1,
-                  endIndent: 12,
-                  color: ColorPalette.greyscale200,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          Consumer(
-            builder: (context, ref, child) {
-              return Row(
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: SocialButton(
-                      icon: 'assets/icons/google_logo.svg',
-                      title: 'Google',
-                      onPressed: () {
-                        ref
-                            .read(signInControllerProvider.notifier)
-                            .googleSignIn(
-                          onSuccess: () {
-                            nextScreenCloseOthers(
-                              context: context,
-                              path: RoutePath.home,
-                            );
-                          },
-                          onFail: (String message) {
-                            showSnackBar(
-                              context: context,
-                              text: message,
-                              backgroundColor: ColorPalette.dReaderRed,
-                            );
-                          },
-                        );
-                      },
+                  CustomTextButton(
+                    backgroundColor: ColorPalette.dReaderYellow100,
+                    textColor: Colors.black,
+                    size: const Size(
+                      double.infinity,
+                      50,
                     ),
-                  ),
-                  if (Platform.isIOS) ...[
-                    Expanded(
-                      child: SocialButton(
-                        icon: 'assets/icons/apple_logo.svg',
-                        title: 'Apple',
-                        onPressed: () {
-                          // handle apple login
-                        },
-                      ),
-                    ),
-                  ]
-                ],
-              );
-            },
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-          RichText(
-            text: TextSpan(
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  nextScreenPush(
-                    context: context,
-                    path: RoutePath.signIn,
-                    homeSubRoute: false,
-                  );
-                },
-              text: 'Already have account? ',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: ColorPalette.greyscale200),
-              children: <TextSpan>[
-                TextSpan(
-                  text: 'Log in',
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
+                    onPressed: () {
                       nextScreenPush(
                         context: context,
-                        path: RoutePath.signIn,
+                        path: RoutePath.signUp,
                         homeSubRoute: false,
                       );
                     },
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: ColorPalette.dReaderYellow100),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 12,
-          ),
-        ],
-      ),
+                    child: Text(
+                      'Sign up',
+                      style: textTheme.titleSmall?.copyWith(
+                        letterSpacing: .2,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Expanded(
+                        flex: 2,
+                        child: Divider(
+                          thickness: 1,
+                          indent: 12,
+                          color: ColorPalette.greyscale200,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          'or with',
+                          textAlign: TextAlign.center,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: ColorPalette.greyscale200,
+                                  ),
+                        ),
+                      ),
+                      const Expanded(
+                        flex: 2,
+                        child: Divider(
+                          thickness: 1,
+                          endIndent: 12,
+                          color: ColorPalette.greyscale200,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SocialButton(
+                          icon: 'assets/icons/google_logo.svg',
+                          title: 'Google',
+                          onPressed: () {
+                            ref
+                                .read(signInControllerProvider.notifier)
+                                .googleSignIn(
+                              onSuccess: () {
+                                nextScreenCloseOthers(
+                                  context: context,
+                                  path: RoutePath.home,
+                                );
+                              },
+                              onFail: (String message) {
+                                showSnackBar(
+                                  context: context,
+                                  text: message,
+                                  backgroundColor: ColorPalette.dReaderRed,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      if (Platform.isIOS) ...[
+                        Expanded(
+                          child: SocialButton(
+                            icon: 'assets/icons/apple_logo.svg',
+                            title: 'Apple',
+                            onPressed: () {
+                              // handle apple login
+                            },
+                          ),
+                        ),
+                      ]
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          nextScreenPush(
+                            context: context,
+                            path: RoutePath.signIn,
+                            homeSubRoute: false,
+                          );
+                        },
+                      text: 'Already have account? ',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(color: ColorPalette.greyscale200),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Log in',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              nextScreenPush(
+                                context: context,
+                                path: RoutePath.signIn,
+                                homeSubRoute: false,
+                              );
+                            },
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(color: ColorPalette.dReaderYellow100),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              );
+      }),
     );
   }
 }

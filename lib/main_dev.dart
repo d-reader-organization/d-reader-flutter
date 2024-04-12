@@ -80,6 +80,24 @@ class MyApp extends ConsumerWidget {
             statusBarColor: ColorPalette.appBackgroundColor,
           ),
         ),
+        tabBarTheme: TabBarTheme(
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelStyle: Theme.of(context).textTheme.titleMedium,
+          unselectedLabelStyle:
+              Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+          indicatorColor: ColorPalette.dReaderYellow100,
+          labelColor: ColorPalette.dReaderYellow100,
+          unselectedLabelColor: ColorPalette.greyscale200,
+          dividerColor: ColorPalette.greyscale200,
+          indicator: const UnderlineTabIndicator(
+            borderSide: BorderSide(
+              width: 4,
+              color: ColorPalette.dReaderYellow100,
+            ),
+          ),
+        ),
         navigationBarTheme: NavigationBarThemeData(
           height: 48,
           labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(

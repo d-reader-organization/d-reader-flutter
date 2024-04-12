@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
@@ -111,20 +113,33 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
               children: [
                 Stack(
                   children: [
-                    CachedImageBgPlaceholder(
-                      height: 320,
-                      imageUrl: widget.comic.cover,
-                      overrideBorderRadius: BorderRadius.circular(0),
-                      foregroundDecoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            ColorPalette.appBackgroundColor,
-                            Colors.transparent,
-                            ColorPalette.appBackgroundColor,
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          stops: [0.0, .6406, 1],
+                    AspectRatio(
+                      aspectRatio: comicAspectRatio,
+                      child: CachedImageBgPlaceholder(
+                        imageUrl: widget.comic.cover,
+                        overrideBorderRadius: BorderRadius.circular(0),
+                        foregroundDecoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              ColorPalette.appBackgroundColor,
+                              Colors.transparent,
+                              ColorPalette.appBackgroundColor,
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            stops: [0.0, .6406, 1],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: AspectRatio(
+                          aspectRatio: .6,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.comic.logo,
+                          ),
                         ),
                       ),
                     ),
@@ -168,7 +183,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         },
                       ),
                       const SizedBox(
-                        height: 12,
+                        height: 16,
                       ),
                       GenreTagsDefault(
                         genres: widget.comic.genres,
@@ -272,9 +287,9 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 StatsInfo(
-                  title: 'VOLUME',
+                  title: 'TOTAL VOL',
                   stats:
-                      '${Formatter.formatLamportPrice(widget.comic.stats?.totalVolume) ?? 0}◎',
+                      '${Formatter.formatLamportPrice(widget.comic.stats?.totalVolume) ?? 0}',
                 ),
                 StatsInfo(
                   title: 'ISSUES',
@@ -327,7 +342,7 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
               ),
             ),
             const SizedBox(
-              height: 8,
+              height: 16,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(

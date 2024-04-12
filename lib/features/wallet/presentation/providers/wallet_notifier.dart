@@ -110,9 +110,16 @@ class WalletController extends _$WalletController {
           label: label,
         );
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
-    ref.invalidate(walletNameProvider);
-    ref.invalidate(userWalletsProvider);
-    callback(result);
+    result.fold(
+      (exception) {
+        callback(exception.message);
+      },
+      (wallet) {
+        ref.invalidate(walletNameProvider);
+        ref.invalidate(userWalletsProvider);
+        callback(wallet);
+      },
+    );
   }
 
   Future<void> handleSyncWallets({required void Function() afterSync}) async {

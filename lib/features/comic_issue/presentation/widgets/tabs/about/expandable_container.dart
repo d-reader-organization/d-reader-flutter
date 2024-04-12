@@ -12,6 +12,10 @@ String mintNumbersText({required int itemsMinted, required int totalSupply}) {
   return '${itemsMinted > totalSupply ? totalSupply : itemsMinted}/$totalSupply';
 }
 
+String myMintNumbersText({required int itemsMinted, int? supply}) {
+  return 'You minted: $itemsMinted/${supply ?? '∞'}';
+}
+
 class ExpandableContainer extends ConsumerWidget {
   final CandyMachineGroupModel candyMachineGroup;
   final int totalSupply;
@@ -112,7 +116,13 @@ class ExpandableContainer extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'You minted: ${candyMachineGroup.wallet?.itemsMinted ?? 0}/${candyMachineGroup.wallet?.supply ?? '∞'}',
+                        myMintNumbersText(
+                          itemsMinted: candyMachineGroup.user?.itemsMinted ??
+                              candyMachineGroup.wallet?.itemsMinted ??
+                              0,
+                          supply: candyMachineGroup.user?.supply ??
+                              candyMachineGroup.wallet?.supply,
+                        ),
                         style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
                         ),

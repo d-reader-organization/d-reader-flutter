@@ -68,8 +68,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                 '${Formatter.formatPriceWithSignificant(data?.lamports ?? 0)} SOL',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w700,
                 ),
               );
             },
@@ -221,6 +221,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
               ? SettingsCommonListTile(
                   title: 'Connect wallet to dReader',
                   leadingPath: 'assets/icons/link_wallet.svg',
+                  overrideFontSize: 16,
                   onTap: () async {
                     await ref
                         .read(walletControllerProvider.notifier)
@@ -241,6 +242,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
               overrideColor: ref.watch(globalNotifierProvider).isLoading
                   ? ColorPalette.greyscale300
                   : ColorPalette.dReaderGreen,
+              overrideFontSize: 16,
               overrideLeading: Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: SvgPicture.asset(
@@ -294,6 +296,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             title: 'Disconnect wallet',
             leadingPath: 'assets/icons/close_square.svg',
             overrideColor: ColorPalette.dReaderRed,
+            overrideFontSize: 16,
             onTap: () async {
               final bool shouldDisconnect = await showDialog(
                     context: context,

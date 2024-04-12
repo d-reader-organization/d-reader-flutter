@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final logoutProvider = FutureProvider.autoDispose((ref) async {
@@ -14,6 +15,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
   ref.invalidate(environmentProvider);
   ref.read(environmentProvider);
   ref.invalidate(tabBarProvider);
+  await GoogleSignIn().signOut();
   await Future.wait([
     LocalStore.instance.delete(
       'last-network',

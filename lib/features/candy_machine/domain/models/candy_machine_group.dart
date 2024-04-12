@@ -1,11 +1,13 @@
+import 'package:d_reader_flutter/features/user/domain/models/user_group.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/wallet_group.dart';
 
 class CandyMachineGroupModel {
   final int itemsMinted, mintLimit, mintPrice, supply;
-  final String label, displayLabel, splTokenAddress;
+  final String label, displayLabel;
   final DateTime? startDate, endDate;
   final bool isActive;
   final WalletGroupModel? wallet;
+  final UserGroupModel? user;
 
   CandyMachineGroupModel({
     required this.mintPrice,
@@ -14,11 +16,11 @@ class CandyMachineGroupModel {
     required this.supply,
     required this.label,
     required this.displayLabel,
-    required this.splTokenAddress,
     required this.startDate,
     required this.endDate,
     required this.isActive,
     this.wallet,
+    this.user,
   });
 
   factory CandyMachineGroupModel.fromJson(dynamic json) {
@@ -29,7 +31,6 @@ class CandyMachineGroupModel {
       supply: json['supply'] ?? 0,
       label: json['label'],
       displayLabel: json['displayLabel'],
-      splTokenAddress: json['splTokenAddress'],
       startDate: json['startDate'] != null
           ? DateTime.parse(
               json['startDate'],
@@ -46,6 +47,7 @@ class CandyMachineGroupModel {
               json['wallet'],
             )
           : null,
+      user: json['user'] != null ? UserGroupModel.fromJson(json['user']) : null,
     );
   }
 }

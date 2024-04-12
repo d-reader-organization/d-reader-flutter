@@ -18,6 +18,17 @@ class ChangeNetworkController extends _$ChangeNetworkController {
   @override
   void build() {}
 
+  void _invalidateChangeNetworkData() {
+    ref.invalidate(comicsProvider);
+    ref.invalidate(comicIssuesProvider);
+    ref.invalidate(creatorsProvider);
+    ref.invalidate(carouselProvider);
+    ref.invalidate(paginatedIssuesProvider);
+    ref.invalidate(paginatedComicsProvider);
+    ref.invalidate(ownedComicsProvider);
+    ref.invalidate(favoriteComicsProvider);
+  }
+
   _doChangeNetworkProcess({
     required String cluster,
     required String dialogText,
@@ -58,20 +69,14 @@ class ChangeNetworkController extends _$ChangeNetworkController {
             );
         return triggerChangeDialog(isSuccess: false, text: snackbarText);
       }
-      ref.invalidate(comicsProvider);
-      ref.invalidate(comicIssuesProvider);
-      ref.invalidate(creatorsProvider);
-      ref.invalidate(carouselProvider);
-      ref.invalidate(paginatedIssuesProvider);
-      ref.invalidate(paginatedComicsProvider);
-      ref.invalidate(ownedComicsProvider);
-      ref.invalidate(favoriteComicsProvider);
+      _invalidateChangeNetworkData();
       return triggerChangeDialog(
         isSuccess: true,
         text: snackbarText,
       );
     } else {
       ref.invalidate(scaffoldNavigationIndexProvider);
+      _invalidateChangeNetworkData();
       triggerScreenChange();
     }
   }

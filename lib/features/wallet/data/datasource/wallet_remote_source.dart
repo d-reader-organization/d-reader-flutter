@@ -21,7 +21,10 @@ class WalletRemoteDataSource implements WalletDataSource {
     required String label,
   }) async {
     try {
-      final result = await networkService.patch('/wallet/update/$address');
+      final result =
+          await networkService.patch('/wallet/update/$address', data: {
+        'label': label,
+      });
       return result.fold((exception) {
         return Left(exception);
       }, (response) {

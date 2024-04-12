@@ -46,10 +46,10 @@ class ComicIssueCardLarge extends StatelessWidget {
                   imageUrl: issue.cover,
                   overrideBorderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(
-                      16,
+                      8,
                     ),
                     bottomLeft: Radius.circular(
-                      16,
+                      8,
                     ),
                   ),
                 ),
@@ -66,8 +66,8 @@ class ComicIssueCardLarge extends StatelessWidget {
                   decoration: const BoxDecoration(
                     color: ColorPalette.greyscale500,
                     borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
+                      topRight: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
                     ),
                   ),
                   child: Column(

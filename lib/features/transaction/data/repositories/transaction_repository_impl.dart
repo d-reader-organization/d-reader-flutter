@@ -42,7 +42,10 @@ class TransactionRepositoryImpl implements TransactionRepository {
     String? label,
   }) {
     return dataSource.mintOneTransaction(
-        candyMachineAddress: candyMachineAddress, minterAddress: minterAddress);
+      candyMachineAddress: candyMachineAddress,
+      minterAddress: minterAddress,
+      label: label,
+    );
   }
 
   @override

@@ -8,6 +8,7 @@ class SettingsCommonListTile extends StatelessWidget {
   final Function()? onTap;
   final Color? overrideColor;
   final Widget? overrideTrailing, overrideLeading;
+  final double? overrideFontSize;
   const SettingsCommonListTile({
     super.key,
     required this.title,
@@ -16,6 +17,7 @@ class SettingsCommonListTile extends StatelessWidget {
     this.overrideColor,
     this.overrideTrailing,
     this.overrideLeading,
+    this.overrideFontSize,
   });
 
   @override
@@ -36,8 +38,9 @@ class SettingsCommonListTile extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: overrideColor ?? color,
+              fontSize: overrideFontSize,
             ),
       ),
       minLeadingWidth: 20,

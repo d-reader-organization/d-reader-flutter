@@ -56,7 +56,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
               context.pop();
               showSnackBar(
                 context: context,
-                text: 'Failed to open.',
+                text: 'Failed to unwrap.',
                 backgroundColor: ColorPalette.dReaderRed,
               );
               return;

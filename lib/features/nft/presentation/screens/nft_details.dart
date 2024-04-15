@@ -222,7 +222,7 @@ class NftDetails extends ConsumerWidget {
                                       );
                                 },
                                 child: Text(
-                                  nft.isUsed ? 'Read' : 'Open',
+                                  nft.isUsed ? 'Read' : 'Unwrap',
                                   style: textTheme.titleMedium?.copyWith(
                                     color: ColorPalette.dReaderGreen,
                                   ),

@@ -36,7 +36,7 @@ class FavoritesTab extends ConsumerWidget {
                 height: 8,
               ),
               const Text(
-                'Favorite comic first',
+                'Favoritize comic first',
                 style: TextStyle(
                   fontSize: 14,
                   letterSpacing: 0.2,

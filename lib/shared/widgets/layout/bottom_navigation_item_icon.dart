@@ -13,17 +13,14 @@ class BottomNavigationItemIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SvgPicture.asset(
-        imagePath,
-        colorFilter: isActive
-            ? const ColorFilter.mode(
-                ColorPalette.dReaderYellow100,
-                BlendMode.srcIn,
-              )
-            : null,
-      ),
+    return SvgPicture.asset(
+      imagePath,
+      colorFilter: isActive
+          ? const ColorFilter.mode(
+              ColorPalette.dReaderYellow100,
+              BlendMode.srcIn,
+            )
+          : null,
     );
   }
 }

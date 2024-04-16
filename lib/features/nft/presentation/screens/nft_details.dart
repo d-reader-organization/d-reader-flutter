@@ -177,10 +177,10 @@ class NftDetails extends ConsumerWidget {
                             ),
                             Expanded(
                               child: Button(
-                                borderColor: ColorPalette.dReaderGreen,
+                                borderColor: ColorPalette.dReaderYellow100,
                                 isLoading:
                                     ref.watch(globalNotifierProvider).isLoading,
-                                loadingColor: ColorPalette.dReaderGreen,
+                                loadingColor: ColorPalette.dReaderYellow100,
                                 onPressed: () async {
                                   if (nft.isUsed) {
                                     return nextScreenPush(
@@ -223,7 +223,7 @@ class NftDetails extends ConsumerWidget {
                                 child: Text(
                                   nft.isUsed ? 'Read' : 'Unwrap',
                                   style: textTheme.titleMedium?.copyWith(
-                                    color: ColorPalette.dReaderGreen,
+                                    color: ColorPalette.dReaderYellow100,
                                   ),
                                 ),
                               ),

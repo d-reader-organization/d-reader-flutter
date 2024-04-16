@@ -89,10 +89,11 @@ class SignUpNotifier extends _$SignUpNotifier {
   }) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
     try {
-      final data = ref.read(signUpDataNotifierProvider);
+      final SignUpData(:googleAccessToken, :username) =
+          ref.read(signUpDataNotifierProvider);
       final response = await _authRepository.googleSignUp(
-        accessToken: data.googleAccessToken,
-        username: data.username,
+        accessToken: googleAccessToken,
+        username: username,
       );
       return response.fold(
         (failure) {

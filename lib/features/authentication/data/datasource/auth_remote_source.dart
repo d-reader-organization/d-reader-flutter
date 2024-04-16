@@ -240,10 +240,7 @@ class AuthRemoteDataSource implements AuthDataSource {
         },
         (response) {
           if (response.data is String || response.data is bool) {
-            final parsedResult = bool.tryParse(response.data);
-            if (parsedResult != null) {
-              return Right(parsedResult);
-            }
+            return Right(bool.tryParse(response.data) ?? false);
           }
           final authorizationResponse =
               AuthorizationResponse.fromJson(response.data);

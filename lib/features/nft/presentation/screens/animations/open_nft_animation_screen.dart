@@ -47,7 +47,8 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
             onSuccess: (String nftAddress) {
               nextScreenReplace(
                 context: context,
-                path: '${RoutePath.nftDetails}/$nftAddress',
+                path:
+                    '${RoutePath.nftDetails}/$nftAddress', // TODO open eReader
                 homeSubRoute: true,
               );
             },

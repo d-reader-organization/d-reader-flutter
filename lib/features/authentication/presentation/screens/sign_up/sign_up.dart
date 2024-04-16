@@ -1,9 +1,10 @@
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_notifier.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_providers.dart';
-import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_1.dart';
-import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_2.dart';
-import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_2_verification.dart';
-import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/step_3.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/username_step.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/email_and_password_step.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/verification_step.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/connect_wallet_step.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -47,62 +48,119 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             child: const Heading(),
           ),
         ),
-        body: Consumer(
-          builder: (context, ref, child) {
-            return PageView(
-              controller: _pageController,
-              physics: ref.watch(signUpPageProvider) > 2
-                  ? const NeverScrollableScrollPhysics()
-                  : null,
-              onPageChanged: (value) {
-                ref.read(signUpPageProvider.notifier).update((state) => value);
-              },
-              children: [
-                SignUpStep1(
-                  onSuccess: () {
-                    _pageController.animateToPage(
-                      1,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                ),
-                SignUpStep2(
-                  onSuccess: () {
-                    ref
-                        .read(signUpDataNotifierProvider.notifier)
-                        .updateSucces(true);
-                    _pageController.animateToPage(
-                      2,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  onFail: (text) {
-                    showSnackBar(
-                      context: context,
-                      text: text,
-                      backgroundColor: ColorPalette.dReaderRed,
-                    );
-                  },
-                ),
-                if (ref.watch(signUpDataNotifierProvider).isSuccess) ...[
-                  SignUpStep2Verification(
-                    handleNext: () {
-                      _pageController.animateToPage(
-                        3,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
-                      );
-                    },
-                  ),
-                  const SignUpStep3(),
-                ],
-              ],
+        body: ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
+            ? GoogleSignUpForm(pageController: _pageController)
+            : RegularSignUpForm(pageController: _pageController),
+      ),
+    );
+  }
+}
+
+class RegularSignUpForm extends ConsumerWidget {
+  final PageController pageController;
+  const RegularSignUpForm({
+    super.key,
+    required this.pageController,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PageView(
+      controller: pageController,
+      physics: ref.watch(signUpPageProvider) > 2
+          ? const NeverScrollableScrollPhysics()
+          : null,
+      onPageChanged: (value) {
+        ref.read(signUpPageProvider.notifier).update((state) => value);
+      },
+      children: [
+        SignUpUsernameStep(
+          onSuccess: () {
+            pageController.animateToPage(
+              1,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
             );
           },
         ),
-      ),
+        SignUpEmailAndPasswordStep(
+          onSuccess: () {
+            ref.read(signUpDataNotifierProvider.notifier).updateSuccess(true);
+            pageController.animateToPage(
+              2,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          },
+          onFail: (text) {
+            showSnackBar(
+              context: context,
+              text: text,
+              backgroundColor: ColorPalette.dReaderRed,
+            );
+          },
+        ),
+        if (ref.watch(signUpDataNotifierProvider).isSuccess) ...[
+          SignUpVerificationStep(
+            handleNext: () {
+              pageController.animateToPage(
+                3,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeIn,
+              );
+            },
+          ),
+          const SignUpConnectWalletStep(),
+        ],
+      ],
+    );
+  }
+}
+
+class GoogleSignUpForm extends ConsumerWidget {
+  final PageController pageController;
+  const GoogleSignUpForm({
+    super.key,
+    required this.pageController,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PageView(
+      controller: pageController,
+      physics: const NeverScrollableScrollPhysics(),
+      onPageChanged: (value) {
+        ref.read(signUpPageProvider.notifier).update((state) => value);
+      },
+      children: [
+        SignUpUsernameStep(
+          overrideNext: () {
+            ref.read(signUpNotifierProvider.notifier).googleSignUp(
+              onSuccess: () {
+                ref
+                    .read(signUpDataNotifierProvider.notifier)
+                    .updateSuccess(true);
+                pageController.animateToPage(
+                  1,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                );
+              },
+              onFail: (message) {
+                showSnackBar(
+                  context: context,
+                  text: message,
+                  backgroundColor: ColorPalette.dReaderRed,
+                );
+              },
+            );
+          },
+          onSuccess: () {},
+        ),
+        if (ref.watch(signUpDataNotifierProvider).isSuccess) ...[
+          const SignUpConnectWalletStep(),
+        ],
+      ],
     );
   }
 }
@@ -129,24 +187,32 @@ class Heading extends ConsumerWidget {
             BlendMode.srcIn,
           ),
         ),
-        HeadingItem(
-          step: 2,
-          title: 'Email & pass',
-          color: ref.watch(signUpPageProvider) > 0
-              ? Colors.white
-              : ColorPalette.greyscale200,
-        ),
-        SvgPicture.asset(
-          'assets/icons/arrow_right.svg',
-          height: 16,
-          width: 16,
-          colorFilter: const ColorFilter.mode(
-            ColorPalette.greyscale200,
-            BlendMode.srcIn,
+        if (ref
+            .watch(signUpDataNotifierProvider)
+            .googleAccessToken
+            .isEmpty) ...[
+          HeadingItem(
+            step: 2,
+            title: 'Email & pass',
+            color: ref.watch(signUpPageProvider) > 0
+                ? Colors.white
+                : ColorPalette.greyscale200,
           ),
-        ),
+          SvgPicture.asset(
+            'assets/icons/arrow_right.svg',
+            height: 16,
+            width: 16,
+            colorFilter: const ColorFilter.mode(
+              ColorPalette.greyscale200,
+              BlendMode.srcIn,
+            ),
+          ),
+        ],
         HeadingItem(
-          step: 3,
+          step:
+              ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
+                  ? 2
+                  : 3,
           title: 'Wallet',
           color: ref.watch(signUpPageProvider) > 2
               ? Colors.white

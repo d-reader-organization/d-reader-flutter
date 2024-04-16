@@ -53,12 +53,6 @@ class NftDetails extends ConsumerWidget {
         text: openResponse,
       );
     }
-    showSnackBar(
-      context: context,
-      text: 'NFT Unwrapped successfully',
-      backgroundColor: ColorPalette.dReaderGreen,
-    );
-
     ref.invalidate(lastProcessedNftProvider);
     ref.invalidate(nftsProvider);
     ref.invalidate(nftProvider);
@@ -66,6 +60,11 @@ class NftDetails extends ConsumerWidget {
     ref.invalidate(ownedIssuesAsyncProvider);
     ref.invalidate(comicIssuePagesProvider);
     ref.invalidate(comicIssueDetailsProvider);
+    showSnackBar(
+      context: context,
+      text: 'NFT Unwrapped successfully',
+      backgroundColor: ColorPalette.dReaderGreen,
+    );
   }
 
   @override

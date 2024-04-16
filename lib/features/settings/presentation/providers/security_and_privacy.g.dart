@@ -7,7 +7,7 @@ part of 'security_and_privacy.dart';
 // **************************************************************************
 
 String _$securityAndPrivacyControllerHash() =>
-    r'15833a16a90c400bbdf64d839353589ee1a3f2af';
+    r'b0d6c0f111ba747d649d5e04c8598eac56f58c22';
 
 /// See also [SecurityAndPrivacyController].
 @ProviderFor(SecurityAndPrivacyController)

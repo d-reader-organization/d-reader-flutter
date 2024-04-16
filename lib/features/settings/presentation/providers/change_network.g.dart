@@ -7,7 +7,7 @@ part of 'change_network.dart';
 // **************************************************************************
 
 String _$changeNetworkControllerHash() =>
-    r'6ad2b48337d9ea11a658b001f027337a89635604';
+    r'ff62d7ea95d5b8268c597a092c9c9d2aeb036e6f';
 
 /// See also [ChangeNetworkController].
 @ProviderFor(ChangeNetworkController)

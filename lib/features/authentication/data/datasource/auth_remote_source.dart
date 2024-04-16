@@ -29,8 +29,12 @@ abstract class AuthDataSource {
 
   Future<void> disconnectWallet(String address);
   Future<String> refreshToken(String token);
-  Future<Either<AppException, AuthorizationResponse>> googleSignIn(
+  Future<Either<AppException, dynamic>> googleSignIn(
       {required String accessToken});
+  Future<Either<AppException, AuthorizationResponse>> googleSignUp({
+    required String accessToken,
+    required String username,
+  });
 }
 
 class AuthRemoteDataSource implements AuthDataSource {
@@ -219,11 +223,11 @@ class AuthRemoteDataSource implements AuthDataSource {
   }
 
   @override
-  Future<Either<AppException, AuthorizationResponse>> googleSignIn(
+  Future<Either<AppException, dynamic>> googleSignIn(
       {required String accessToken}) async {
     try {
       final googleSignInResult = await networkService.patch(
-        '/auth/user/google-login',
+        '/auth/user/login-with-google',
         headers: networkService.updateHeader(
           {
             'authorization': 'Google $accessToken',
@@ -231,6 +235,53 @@ class AuthRemoteDataSource implements AuthDataSource {
         ),
       );
       return googleSignInResult.fold(
+        (exception) {
+          return Left(exception);
+        },
+        (response) {
+          if (response.data is String || response.data is bool) {
+            final parsedResult = bool.tryParse(response.data);
+            if (parsedResult != null) {
+              return Right(parsedResult);
+            }
+          }
+          final authorizationResponse =
+              AuthorizationResponse.fromJson(response.data);
+
+          networkService.updateHeader(
+            {'Authorization': authorizationResponse.accessToken},
+          );
+
+          return Right(authorizationResponse);
+        },
+      );
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occurred',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}AuthRemoteDataSource.googleSignIn',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, AuthorizationResponse>> googleSignUp(
+      {required String accessToken, required String username}) async {
+    try {
+      final googleSignUpResult =
+          await networkService.post('/auth/user/register-with-google',
+              headers: networkService.updateHeader(
+                {
+                  'authorization': 'Google $accessToken',
+                },
+              ),
+              data: {
+            "name": username,
+          });
+      return googleSignUpResult.fold(
         (exception) {
           return Left(exception);
         },
@@ -251,7 +302,7 @@ class AuthRemoteDataSource implements AuthDataSource {
           message: 'Unknown exception occurred',
           statusCode: 500,
           identifier:
-              '${exception.toString()}AuthRemoteDataSource.googleSignIn',
+              '${exception.toString()}AuthRemoteDataSource.googleSignUp',
         ),
       );
     }

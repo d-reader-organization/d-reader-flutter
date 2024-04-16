@@ -76,8 +76,15 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<AppException, AuthorizationResponse>> googleSignIn(
+  Future<Either<AppException, dynamic>> googleSignIn(
       {required String accessToken}) {
     return authDataSource.googleSignIn(accessToken: accessToken);
+  }
+
+  @override
+  Future<Either<AppException, AuthorizationResponse>> googleSignUp(
+      {required String accessToken, required String username}) {
+    return authDataSource.googleSignUp(
+        accessToken: accessToken, username: username);
   }
 }

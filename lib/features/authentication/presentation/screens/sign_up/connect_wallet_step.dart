@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SignUpStep3 extends ConsumerWidget {
-  const SignUpStep3({super.key});
+class SignUpConnectWalletStep extends ConsumerWidget {
+  const SignUpConnectWalletStep({super.key});
 
   Future<void> _handleConnectWallet(WidgetRef ref, BuildContext context) async {
     await ref.read(walletControllerProvider.notifier).connectWallet(
@@ -49,6 +49,7 @@ class SignUpStep3 extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SvgPicture.asset(
                 '${Config.introAssetsPath}/wallet.svg',

@@ -29,7 +29,11 @@ abstract class AuthRepository {
     required String address,
   });
   Future<String> refreshToken(String refreshToken);
-  Future<Either<AppException, AuthorizationResponse>> googleSignIn({
+  Future<Either<AppException, dynamic>> googleSignIn({
     required String accessToken,
+  });
+  Future<Either<AppException, AuthorizationResponse>> googleSignUp({
+    required String accessToken,
+    required String username,
   });
 }

@@ -1,5 +1,7 @@
+import 'package:d_reader_flutter/features/authentication/domain/models/authorization_response.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/authentication/domain/repositories/auth_repository.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -16,15 +18,19 @@ class SignInController extends _$SignInController {
 
   @override
   void build() {
-    // TODO Think about using AutoState if it's possible/worth.
     _authRepository = ref.watch(authRepositoryProvider);
   }
 
   Future<void> googleSignIn({
-    required Function() onSuccess,
+    required Function(bool isRegistered) onSuccess,
     required Function(String message) onFail,
   }) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    if (await googleSignIn.isSignedIn()) {
+      await googleSignIn.signOut();
+    }
+
     try {
       final googleSignInResult = await googleSignIn.signIn();
       final accessToken =
@@ -33,12 +39,35 @@ class SignInController extends _$SignInController {
         return onFail('Failed to sign in with google.');
       }
 
-      return await signIn(
-        nameOrEmail: '',
-        password: '',
-        onSuccess: onSuccess,
-        onFail: onFail,
-        googleAccessToken: accessToken,
+      ref.read(globalNotifierProvider.notifier).updateLoading(true);
+      final response =
+          await _authRepository.googleSignIn(accessToken: accessToken);
+
+      return response.fold(
+        (failure) {
+          ref.read(globalNotifierProvider.notifier).updateLoading(false);
+          onFail(failure.message);
+        },
+        (result) async {
+          if (result is bool) {
+            ref
+                .read(signUpDataNotifierProvider.notifier)
+                .updateGoogleAccessToken(accessToken);
+            ref.read(globalNotifierProvider.notifier).updateLoading(false);
+            return onSuccess(result);
+          } else if (result is AuthorizationResponse) {
+            ref.read(environmentProvider.notifier).updateEnvironmentState(
+                  EnvironmentStateUpdateInput(
+                    jwtToken: result.accessToken,
+                    refreshToken: result.refreshToken,
+                  ),
+                );
+            await ref.read(myUserProvider.future);
+            ref.read(globalNotifierProvider.notifier).updateLoading(false);
+            ref.read(authRouteProvider).login();
+            onSuccess(true);
+          }
+        },
       );
     } catch (exception) {
       ref.read(globalNotifierProvider.notifier).updateLoading(false);

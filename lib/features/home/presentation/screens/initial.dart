@@ -127,10 +127,12 @@ class InitialIntroScreen extends StatelessWidget {
                             ref
                                 .read(signInControllerProvider.notifier)
                                 .googleSignIn(
-                              onSuccess: () {
+                              onSuccess: (bool isRegistered) {
                                 nextScreenCloseOthers(
                                   context: context,
-                                  path: RoutePath.home,
+                                  path: isRegistered
+                                      ? RoutePath.home
+                                      : RoutePath.signUp,
                                 );
                               },
                               onFail: (String message) {

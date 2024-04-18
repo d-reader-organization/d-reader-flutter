@@ -62,7 +62,7 @@ class NftDetails extends ConsumerWidget {
     ref.invalidate(comicIssueDetailsProvider);
     showSnackBar(
       context: context,
-      text: 'NFT Unwrapped successfully',
+      text: 'Comic unwrapped successfully',
       backgroundColor: ColorPalette.dReaderGreen,
     );
   }

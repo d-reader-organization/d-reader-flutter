@@ -14,6 +14,10 @@ class SignUpDataNotifier extends _$SignUpDataNotifier {
     state = state.copyWith(username: username);
   }
 
+  void updateGoogleAccessToken(String accessToken) {
+    state = state.copyWith(googleAccessToken: accessToken);
+  }
+
   void updateEmailAndPassword({
     required String email,
     required String password,
@@ -21,7 +25,7 @@ class SignUpDataNotifier extends _$SignUpDataNotifier {
     state = state.copyWith(email: email, password: password);
   }
 
-  void updateSucces(bool isSuccess) {
+  void updateSuccess(bool isSuccess) {
     state = state.copyWith(
       isSuccess: isSuccess,
       email: '',

@@ -42,14 +42,18 @@ class DioNetworkService extends NetworkService with ExceptionHandlerMixin {
   }
 
   @override
-  Future<Either<AppException, CustomResponse>> post(String endpoint,
-      {Map<String, dynamic>? data}) {
+  Future<Either<AppException, CustomResponse>> post(
+    String endpoint, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+  }) {
     return handleExceptionWrapper(
       endpoint: endpoint,
       handler: () {
         return dio.post(
           endpoint,
           data: data,
+          options: Options(headers: headers),
         );
       },
     );

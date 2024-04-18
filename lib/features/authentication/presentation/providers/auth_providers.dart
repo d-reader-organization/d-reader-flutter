@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/routing/router.dart';
@@ -15,6 +16,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
   ref.invalidate(environmentProvider);
   ref.read(environmentProvider);
   ref.invalidate(tabBarProvider);
+  ref.invalidate(signUpDataNotifierProvider);
   await GoogleSignIn().signOut();
   await Future.wait([
     LocalStore.instance.delete(
@@ -36,5 +38,3 @@ final verifyEmailProvider = FutureProvider.autoDispose
 
   return result.fold((exception) => exception.message, (_) => successResult);
 });
-
-final isTOSSelected = StateProvider.autoDispose<bool>((ref) => false);

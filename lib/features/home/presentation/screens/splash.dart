@@ -56,32 +56,9 @@ class _SplashViewState extends State<SplashView> with TickerProviderStateMixin {
         child: Center(
           child: FadeTransition(
             opacity: _fadeInFadeOut,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(),
-                SvgPicture.asset(
-                  Config.whiteLogoPath,
-                  height: 50,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: ColorPalette.dReaderYellow100,
-                    ),
-                    borderRadius: BorderRadius.circular(
-                      8,
-                    ),
-                  ),
-                  child: Text(
-                    'beta version',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: ColorPalette.dReaderYellow100,
-                        ),
-                  ),
-                ),
-              ],
+            child: SvgPicture.asset(
+              Config.whiteLogoPath,
+              height: 50,
             ),
           ),
         ),

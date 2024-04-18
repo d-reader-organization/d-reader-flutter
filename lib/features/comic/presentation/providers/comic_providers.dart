@@ -46,10 +46,8 @@ final paginatedComicsProvider = StateNotifierProvider.family<
 
 final comicSlugProvider =
     FutureProvider.autoDispose.family<ComicModel?, String>((ref, slug) async {
-  return ref
-      .read(comicRepositoryProvider)
-      .getComic(slug)
-      .then((result) => result.fold((exception) => null, (data) => data));
+  return ref.read(comicRepositoryProvider).getComic(slug).then(
+      (result) => result.fold((exception) => throw exception, (data) => data));
 });
 
 final updateComicFavouriteProvider =

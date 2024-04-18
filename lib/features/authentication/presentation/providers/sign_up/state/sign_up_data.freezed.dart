@@ -19,6 +19,7 @@ mixin _$SignUpData {
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
+  String get googleAccessToken => throw _privateConstructorUsedError;
   bool get isSuccess => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,7 +33,12 @@ abstract class $SignUpDataCopyWith<$Res> {
           SignUpData value, $Res Function(SignUpData) then) =
       _$SignUpDataCopyWithImpl<$Res, SignUpData>;
   @useResult
-  $Res call({String email, String password, String username, bool isSuccess});
+  $Res call(
+      {String email,
+      String password,
+      String username,
+      String googleAccessToken,
+      bool isSuccess});
 }
 
 /// @nodoc
@@ -51,6 +57,7 @@ class _$SignUpDataCopyWithImpl<$Res, $Val extends SignUpData>
     Object? email = null,
     Object? password = null,
     Object? username = null,
+    Object? googleAccessToken = null,
     Object? isSuccess = null,
   }) {
     return _then(_value.copyWith(
@@ -65,6 +72,10 @@ class _$SignUpDataCopyWithImpl<$Res, $Val extends SignUpData>
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      googleAccessToken: null == googleAccessToken
+          ? _value.googleAccessToken
+          : googleAccessToken // ignore: cast_nullable_to_non_nullable
               as String,
       isSuccess: null == isSuccess
           ? _value.isSuccess
@@ -82,7 +93,12 @@ abstract class _$$SignUpDataImplCopyWith<$Res>
       __$$SignUpDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String password, String username, bool isSuccess});
+  $Res call(
+      {String email,
+      String password,
+      String username,
+      String googleAccessToken,
+      bool isSuccess});
 }
 
 /// @nodoc
@@ -99,6 +115,7 @@ class __$$SignUpDataImplCopyWithImpl<$Res>
     Object? email = null,
     Object? password = null,
     Object? username = null,
+    Object? googleAccessToken = null,
     Object? isSuccess = null,
   }) {
     return _then(_$SignUpDataImpl(
@@ -113,6 +130,10 @@ class __$$SignUpDataImplCopyWithImpl<$Res>
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      googleAccessToken: null == googleAccessToken
+          ? _value.googleAccessToken
+          : googleAccessToken // ignore: cast_nullable_to_non_nullable
               as String,
       isSuccess: null == isSuccess
           ? _value.isSuccess
@@ -129,6 +150,7 @@ class _$SignUpDataImpl implements _SignUpData {
       {this.email = '',
       this.password = '',
       this.username = '',
+      this.googleAccessToken = '',
       this.isSuccess = false});
 
   @override
@@ -142,11 +164,14 @@ class _$SignUpDataImpl implements _SignUpData {
   final String username;
   @override
   @JsonKey()
+  final String googleAccessToken;
+  @override
+  @JsonKey()
   final bool isSuccess;
 
   @override
   String toString() {
-    return 'SignUpData(email: $email, password: $password, username: $username, isSuccess: $isSuccess)';
+    return 'SignUpData(email: $email, password: $password, username: $username, googleAccessToken: $googleAccessToken, isSuccess: $isSuccess)';
   }
 
   @override
@@ -159,13 +184,15 @@ class _$SignUpDataImpl implements _SignUpData {
                 other.password == password) &&
             (identical(other.username, username) ||
                 other.username == username) &&
+            (identical(other.googleAccessToken, googleAccessToken) ||
+                other.googleAccessToken == googleAccessToken) &&
             (identical(other.isSuccess, isSuccess) ||
                 other.isSuccess == isSuccess));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, email, password, username, isSuccess);
+  int get hashCode => Object.hash(
+      runtimeType, email, password, username, googleAccessToken, isSuccess);
 
   @JsonKey(ignore: true)
   @override
@@ -179,6 +206,7 @@ abstract class _SignUpData implements SignUpData {
       {final String email,
       final String password,
       final String username,
+      final String googleAccessToken,
       final bool isSuccess}) = _$SignUpDataImpl;
 
   @override
@@ -187,6 +215,8 @@ abstract class _SignUpData implements SignUpData {
   String get password;
   @override
   String get username;
+  @override
+  String get googleAccessToken;
   @override
   bool get isSuccess;
   @override

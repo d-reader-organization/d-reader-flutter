@@ -13,6 +13,7 @@ import 'package:d_reader_flutter/shared/presentations/providers/global/global_pr
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/shared/utils/validation.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/shared/widgets/textfields/text_field.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/list_tile.dart';
@@ -24,19 +25,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ProfileView extends HookConsumerWidget {
   const ProfileView({super.key});
-
-  String? _validateUsername({required String? value, required WidgetRef ref}) {
-    if (value == null || value.isEmpty) {
-      return "Please enter username.";
-    } else if (value.length > 20) {
-      return "Must be less than 20 characters.";
-    } else if (value.length < 2) {
-      return "Must be greater than 2 characters.";
-    } else if (!usernameRegex.hasMatch(value)) {
-      return 'Letters, numbers, hyphens and dashes are allowed.';
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -160,16 +148,14 @@ class ProfileView extends HookConsumerWidget {
                             labelText: 'Username',
                             defaultValue:
                                 user.name.isNotEmpty ? user.name : null,
-                            onValidate: (value) {
-                              return _validateUsername(value: value, ref: ref);
-                            },
+                            onValidate: usernameValidation,
                             onChange: (String value) {
                               ref.read(usernameTextProvider.notifier).state =
                                   value;
                             },
                           ),
                           const Text(
-                            'Must be 2 to 20 characters long. Letters, numbers and dashes are allowed.',
+                            usernameCriteriaText,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,

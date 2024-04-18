@@ -47,7 +47,8 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
             onSuccess: (String nftAddress) {
               nextScreenReplace(
                 context: context,
-                path: '${RoutePath.nftDetails}/$nftAddress',
+                path:
+                    '${RoutePath.nftDetails}/$nftAddress', // TODO open eReader
                 homeSubRoute: true,
               );
             },
@@ -56,7 +57,7 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
               context.pop();
               showSnackBar(
                 context: context,
-                text: 'Failed to open.',
+                text: 'Failed to unwrap.',
                 backgroundColor: ColorPalette.dReaderRed,
               );
               return;

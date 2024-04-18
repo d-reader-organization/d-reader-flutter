@@ -358,7 +358,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                           final bool isLoading =
                               ref.watch(globalNotifierProvider).isLoading;
                           return CustomTextButton(
-                            backgroundColor: ColorPalette.dReaderGreen,
+                            backgroundColor: ColorPalette.dReaderYellow100,
                             padding: const EdgeInsets.symmetric(
                               vertical: 4,
                               horizontal: 8,

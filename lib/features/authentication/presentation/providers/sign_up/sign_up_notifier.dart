@@ -82,4 +82,40 @@ class SignUpNotifier extends _$SignUpNotifier {
       onSuccess();
     });
   }
+
+  Future<void> googleSignUp({
+    required Function() onSuccess,
+    required Function(String message) onFail,
+  }) async {
+    ref.read(globalNotifierProvider.notifier).updateLoading(true);
+    try {
+      final SignUpData(:googleAccessToken, :username) =
+          ref.read(signUpDataNotifierProvider);
+      final response = await _authRepository.googleSignUp(
+        accessToken: googleAccessToken,
+        username: username,
+      );
+      return response.fold(
+        (failure) {
+          ref.read(globalNotifierProvider.notifier).updateLoading(false);
+          onFail(failure.message);
+        },
+        (authTokens) async {
+          ref.read(environmentProvider.notifier).updateEnvironmentState(
+                EnvironmentStateUpdateInput(
+                  jwtToken: authTokens.accessToken,
+                  refreshToken: authTokens.refreshToken,
+                ),
+              );
+          await ref.read(myUserProvider.future);
+          ref.read(globalNotifierProvider.notifier).updateLoading(false);
+          ref.read(authRouteProvider).login();
+          onSuccess();
+        },
+      );
+    } catch (exception) {
+      ref.read(globalNotifierProvider.notifier).updateLoading(false);
+      onFail(exception.toString());
+    }
+  }
 }

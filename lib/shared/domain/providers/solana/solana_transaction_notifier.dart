@@ -524,7 +524,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         AppException(
           identifier: 'SolanaTransactionNotifier.list',
           statusCode: 500,
-          message: 'Failed to open nft',
+          message: 'Failed to unwrap nft',
         ),
       );
     }

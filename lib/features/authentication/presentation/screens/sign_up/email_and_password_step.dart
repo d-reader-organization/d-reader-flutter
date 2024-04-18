@@ -13,20 +13,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SignUpStep2 extends ConsumerStatefulWidget {
+class SignUpEmailAndPasswordStep extends ConsumerStatefulWidget {
   final Function() onSuccess;
   final Function(String text) onFail;
-  const SignUpStep2({
+  const SignUpEmailAndPasswordStep({
     super.key,
     required this.onSuccess,
     required this.onFail,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpStep1State();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _SignUpEmailAndPasswordStepState();
 }
 
-class _SignUpStep1State extends ConsumerState<SignUpStep2> {
+class _SignUpEmailAndPasswordStepState
+    extends ConsumerState<SignUpEmailAndPasswordStep> {
   final GlobalKey<FormState> _step2FormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -135,29 +137,6 @@ class _SignUpStep1State extends ConsumerState<SignUpStep2> {
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: ColorPalette.greyscale200,
-                  ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                RichText(
-                  text: const TextSpan(
-                    text: 'By clicking on confirm you accept our ',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: ColorPalette.greyscale200,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Privacy Policy',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: ColorPalette.dReaderYellow100,
-                        ),
-                      ),
-                    ],
                   ),
                 ),
                 const SizedBox(

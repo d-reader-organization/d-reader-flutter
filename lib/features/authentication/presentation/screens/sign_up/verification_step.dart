@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SignUpStep2Verification extends StatelessWidget {
+class SignUpVerificationStep extends StatelessWidget {
   final Function() handleNext;
-  const SignUpStep2Verification({
+  const SignUpVerificationStep({
     super.key,
     required this.handleNext,
   });

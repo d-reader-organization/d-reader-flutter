@@ -46,7 +46,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     if (currentWalletAddress == null) {
       return await _authorizeAndStore(client: client);
     }
-    final walletAuthToken = envState.wallets?[currentWalletAddress]?.authToken;
+    final walletAuthToken = envState.walletAuthTokenMap?[currentWalletAddress];
 
     final authToken = overrideAuthToken ??
         walletAuthToken ??
@@ -71,7 +71,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     }
     final publicKey = Ed25519HDPublicKey(result.publicKey);
     final address = publicKey.toBase58();
-    final walletsMap = envState.wallets;
+    final walletsMap = envState.walletAuthTokenMap;
     ref.read(selectedWalletProvider.notifier).update(
           (state) => address,
         );
@@ -79,11 +79,9 @@ class SolanaNotifier extends _$SolanaNotifier {
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
             publicKey: publicKey,
-            wallets: {
+            walletAuthTokenMap: {
               ...?walletsMap,
-              address: WalletData(
-                authToken: result.authToken,
-              ),
+              address: result.authToken,
             },
           ),
         );
@@ -142,18 +140,16 @@ class SolanaNotifier extends _$SolanaNotifier {
     }
     final currentWalletAddress =
         Ed25519HDPublicKey(result.publicKey).toBase58();
-    final walletsMap = envState.wallets;
+    final walletsMap = envState.walletAuthTokenMap;
     ref.read(selectedWalletProvider.notifier).update(
           (state) => currentWalletAddress,
         );
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
-            wallets: {
+            walletAuthTokenMap: {
               ...?walletsMap,
-              currentWalletAddress: WalletData(
-                authToken: result.authToken,
-              ),
+              currentWalletAddress: result.authToken,
             },
           ),
         );
@@ -267,17 +263,15 @@ class SolanaNotifier extends _$SolanaNotifier {
     }
     final envNotifier = ref.read(environmentProvider.notifier);
     final publicKey = Ed25519HDPublicKey(result.publicKey);
-    final currentWallets = ref.read(environmentProvider).wallets;
+    final currentWallets = ref.read(environmentProvider).walletAuthTokenMap;
     envNotifier.updateEnvironmentState(
       EnvironmentStateUpdateInput(
         publicKey: publicKey,
         authToken: result.authToken,
         solanaCluster: cluster,
-        wallets: {
+        walletAuthTokenMap: {
           ...?currentWallets,
-          publicKey.toBase58(): WalletData(
-            authToken: result.authToken,
-          ),
+          publicKey.toBase58(): result.authToken,
         },
       ),
     );

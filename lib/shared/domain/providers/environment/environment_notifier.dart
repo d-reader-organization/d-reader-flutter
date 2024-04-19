@@ -48,6 +48,10 @@ class Environment extends _$Environment {
 
     var networkData = jsonDecode(localStoreData);
     Map<String, WalletData>? wallets = walletsMapFromDynamic(networkData);
+    Map<String, dynamic>? parsedWalletAuthTokens =
+        networkData['walletAuthTokenMap'] != null
+            ? jsonDecode(networkData['walletAuthTokenMap'])
+            : null;
     return state.copyWith(
       apiUrl: networkData['apiUrl'],
       authToken: networkData['authToken'],
@@ -61,6 +65,16 @@ class Environment extends _$Environment {
           ? UserModel.fromJson(jsonDecode(networkData['user']))
           : null,
       wallets: wallets,
+      walletAuthTokenMap: parsedWalletAuthTokens != null
+          ? parsedWalletAuthTokens.map(
+              (key, value) => MapEntry(key, value),
+            )
+          : wallets?.map(
+              (key, value) => MapEntry(
+                key,
+                value.authToken,
+              ),
+            ),
     );
   }
 
@@ -76,6 +90,7 @@ class Environment extends _$Environment {
       publicKey: input.publicKey,
       wallets: input.wallets,
       user: input.user,
+      walletAuthTokenMap: input.walletAuthTokenMap,
     );
 
     if (input.jwtToken != null) {
@@ -113,15 +128,27 @@ class Environment extends _$Environment {
     putStateIntoLocalStore();
   }
 
+  void onLogout() {
+    state = state.copyWithNullables(
+      apiUrl: state.apiUrl,
+      solanaCluster: state.solanaCluster,
+      authToken: state.authToken,
+      walletAuthTokenMap: state.walletAuthTokenMap,
+      jwtToken: null,
+      publicKey: state.publicKey,
+      refreshToken: null,
+      user: null,
+      wallets: null,
+    );
+    putStateIntoLocalStore();
+  }
+
   void clearPublicKey() {
     state.publicKey = null;
   }
 
-  Future<void> clearDataFromLocalStore(String cluster) async {
+  void clearTokenFromLocalStore() {
     final localStore = LocalStore.instance;
     localStore.delete(Config.tokenKey);
-    return await localStore.delete(
-      cluster == SolanaCluster.devnet.value ? 'dev-network' : 'prod-network',
-    );
   }
 }

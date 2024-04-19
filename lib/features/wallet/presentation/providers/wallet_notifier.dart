@@ -52,7 +52,7 @@ class WalletController extends _$WalletController {
     required Future<bool> Function() onAuthorizeNeeded,
   }) async {
     final walletAuthToken =
-        ref.read(environmentProvider).wallets?[address]?.authToken;
+        ref.read(environmentProvider).walletAuthTokenMap?[address];
     if (walletAuthToken == null) {
       final shouldAuthorize = await onAuthorizeNeeded();
       if (!shouldAuthorize) {
@@ -89,7 +89,7 @@ class WalletController extends _$WalletController {
           address: address,
         );
     final envState = ref.read(environmentProvider);
-    envState.wallets?.removeWhere((key, value) => key == address);
+    envState.walletAuthTokenMap?.removeWhere((key, value) => key == address);
     if (ref.read(environmentProvider).publicKey?.toBase58() == address) {
       ref.read(environmentProvider.notifier).clearPublicKey();
     }

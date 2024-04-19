@@ -144,8 +144,7 @@ class MyWalletsScreen extends ConsumerWidget {
                             : 'Wallet ${index + 1}';
                         final existingAuthToken = ref
                                 .read(environmentProvider)
-                                .wallets?[wallet.address]
-                                ?.authToken ??
+                                .walletAuthTokenMap?[wallet.address] ??
                             '';
                         return GestureDetector(
                           onTap: () {

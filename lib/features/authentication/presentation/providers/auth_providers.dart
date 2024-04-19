@@ -11,23 +11,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final logoutProvider = FutureProvider.autoDispose((ref) async {
-  final currentNetwork = ref.read(environmentProvider).solanaCluster;
   ref.invalidate(scaffoldNavigationIndexProvider);
-  ref.invalidate(environmentProvider);
-  ref.read(environmentProvider);
   ref.invalidate(tabBarProvider);
   ref.invalidate(signUpDataNotifierProvider);
-  await GoogleSignIn().signOut();
   await Future.wait([
-    LocalStore.instance.delete(
-      'last-network',
-    ),
+    GoogleSignIn().signOut(),
     LocalStore.instance.delete(Config.hasSeenInitialKey),
-    LocalStore.instance.clear(),
   ]);
-  await ref
-      .read(environmentProvider.notifier)
-      .clearDataFromLocalStore(currentNetwork);
+  ref.read(environmentProvider.notifier).onLogout();
   ref.read(authRouteProvider).logout();
 });
 

@@ -45,7 +45,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
     final globalHook = useGlobalState();
     final textTheme = Theme.of(context).textTheme;
     final shouldConnectWallet =
-        ref.read(environmentProvider).wallets?[widget.address]?.authToken ==
+        ref.read(environmentProvider).walletAuthTokenMap?[widget.address] ==
             null;
     return Scaffold(
       appBar: AppBar(

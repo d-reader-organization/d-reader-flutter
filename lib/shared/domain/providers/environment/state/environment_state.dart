@@ -4,45 +4,13 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:solana/solana.dart';
 
-Map<String, WalletData>? walletsMapFromDynamic(dynamic json) {
-  Map<String, dynamic>? storedWallets =
-      json['wallets'] != null ? jsonDecode(json['wallets']) : null;
-  return storedWallets?.map(
-    (key, value) => MapEntry(
-      key,
-      WalletData.fromJson(
-        value,
-      ),
-    ),
-  );
-}
-
-class WalletData {
-  // TODO think of removing this to be backward compatible
-  final String authToken;
-
-  WalletData({
-    required this.authToken,
-  });
-
-  factory WalletData.fromJson(dynamic json) {
-    return WalletData(
-      authToken: json['authToken'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['authToken'] = authToken;
-    return data;
-  }
-}
-
 class EnvironmentState {
   final UserModel? user;
   final String apiUrl, solanaCluster;
   final String? authToken, jwtToken, refreshToken;
+  @Deprecated('walletAuthTokenMap should be used')
   final Map<String, WalletData>? wallets;
+  final Map<String, String>? walletAuthTokenMap;
   Ed25519HDPublicKey? publicKey;
 
   EnvironmentState({
@@ -54,6 +22,7 @@ class EnvironmentState {
     this.refreshToken,
     this.publicKey,
     this.wallets,
+    this.walletAuthTokenMap,
   });
 
   factory EnvironmentState.empty() {
@@ -69,6 +38,7 @@ class EnvironmentState {
     String? solanaCluster,
     Ed25519HDPublicKey? publicKey,
     Map<String, WalletData>? wallets,
+    Map<String, String>? walletAuthTokenMap,
   }) {
     return EnvironmentState(
       user: user ?? this.user,
@@ -79,6 +49,7 @@ class EnvironmentState {
       solanaCluster: solanaCluster ?? this.solanaCluster,
       publicKey: publicKey ?? this.publicKey,
       wallets: wallets ?? this.wallets,
+      walletAuthTokenMap: walletAuthTokenMap ?? this.walletAuthTokenMap,
     );
   }
 
@@ -91,6 +62,7 @@ class EnvironmentState {
     required String solanaCluster,
     Ed25519HDPublicKey? publicKey,
     Map<String, WalletData>? wallets,
+    Map<String, String>? walletAuthTokenMap,
   }) {
     return EnvironmentState(
       user: user,
@@ -101,6 +73,7 @@ class EnvironmentState {
       solanaCluster: solanaCluster,
       publicKey: publicKey,
       wallets: wallets,
+      walletAuthTokenMap: walletAuthTokenMap,
     );
   }
 
@@ -114,6 +87,8 @@ class EnvironmentState {
     data['publicKey'] = publicKey?.toBase58();
     data['user'] = user != null ? jsonEncode(user) : null;
     data['wallets'] = wallets != null ? jsonEncode(wallets) : null;
+    data['walletAuthTokenMap'] =
+        walletAuthTokenMap != null ? jsonEncode(walletAuthTokenMap) : null;
     return data;
   }
 }
@@ -123,6 +98,7 @@ class EnvironmentStateUpdateInput {
   final String? apiUrl, authToken, jwtToken, refreshToken, solanaCluster;
   final Ed25519HDPublicKey? publicKey;
   Map<String, WalletData>? wallets;
+  Map<String, String>? walletAuthTokenMap;
 
   EnvironmentStateUpdateInput({
     this.user,
@@ -133,6 +109,7 @@ class EnvironmentStateUpdateInput {
     this.solanaCluster,
     this.publicKey,
     this.wallets,
+    this.walletAuthTokenMap,
   });
 
   factory EnvironmentStateUpdateInput.fromDynamic(dynamic data) {
@@ -155,6 +132,42 @@ class EnvironmentStateUpdateInput {
               ),
             )
           : null,
+      walletAuthTokenMap: json['walletAuthTokenMap'] != null
+          ? jsonDecode('walletAuthTokenMap')
+          : null,
     );
+  }
+}
+
+Map<String, WalletData>? walletsMapFromDynamic(dynamic json) {
+  Map<String, dynamic>? storedWallets =
+      json['wallets'] != null ? jsonDecode(json['wallets']) : null;
+  return storedWallets?.map(
+    (key, value) => MapEntry(
+      key,
+      WalletData.fromJson(
+        value,
+      ),
+    ),
+  );
+}
+
+class WalletData {
+  final String authToken;
+
+  WalletData({
+    required this.authToken,
+  });
+
+  factory WalletData.fromJson(dynamic json) {
+    return WalletData(
+      authToken: json['authToken'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['authToken'] = authToken;
+    return data;
   }
 }

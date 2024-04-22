@@ -146,7 +146,9 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                       child: Stack(
                         children: [
                           CachedImageBgPlaceholder(
-                            height: 431,
+                            height: MediaQuery.sizeOf(context).height > 780
+                                ? 431
+                                : 460,
                             imageUrl: issue.cover,
                             overrideBorderRadius: BorderRadius.circular(0),
                             foregroundDecoration: BoxDecoration(

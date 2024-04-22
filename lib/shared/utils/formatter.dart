@@ -81,4 +81,8 @@ class Formatter {
       return formatted;
     }
   }
+
+  static String formatCount(int count) {
+    return NumberFormat.compact().format(count);
+  }
 }

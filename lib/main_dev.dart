@@ -119,14 +119,17 @@ class MyApp extends ConsumerWidget {
           selectionColor: ColorPalette.dReaderBlue,
           selectionHandleColor: ColorPalette.dReaderYellow100,
         ),
-        dialogTheme: const DialogTheme(
+        dialogTheme: DialogTheme(
           backgroundColor: ColorPalette.greyscale400,
-          contentTextStyle: TextStyle(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentTextStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
             color: Colors.white,
           ),
-          titleTextStyle: TextStyle(
+          titleTextStyle: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: Colors.white,

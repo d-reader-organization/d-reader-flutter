@@ -132,21 +132,25 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
     with TickerProviderStateMixin {
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
-  late final AnimationController _animationController;
+  late final AnimationController _fadeAnimationController;
   late final AnimationController _bgAnimationController;
-
+  late final Animation<double> _scaleAnimationController;
   @override
   void initState() {
     super.initState();
     _controller =
         VideoPlayerController.asset('assets/animation_files/nft-mint-bg.mp4');
-    _animationController = AnimationController(
+    _fadeAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
+    _scaleAnimationController = CurvedAnimation(
+      parent: _fadeAnimationController,
+      curve: Curves.bounceOut,
+    );
     _bgAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2500),
+      duration: const Duration(milliseconds: 2000),
     );
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
@@ -155,10 +159,10 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
     _bgAnimationController.forward();
     Future.delayed(
       const Duration(
-        milliseconds: 2000,
+        milliseconds: 1300,
       ),
       () {
-        _animationController.forward();
+        _fadeAnimationController.forward();
       },
     );
   }
@@ -166,7 +170,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
   @override
   void dispose() {
     _controller.dispose();
-    _animationController.dispose();
+    _fadeAnimationController.dispose();
     _bgAnimationController.dispose();
     super.dispose();
   }
@@ -206,127 +210,131 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
               },
             ),
             FadeTransition(
-              opacity: _animationController,
-              child: GestureDetector(
-                onTap: () {
-                  nextScreenReplace(
-                    context: context,
-                    path: '${RoutePath.nftDetails}/${widget.nft.address}',
-                    homeSubRoute: true,
-                  );
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 276 / 220,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.nft.image,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      widget.nft.comicName,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: ColorPalette.greyscale100,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'Congrats! You own ${shortenNftName(widget.nft.name)}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const RoyaltyWidget(
-                          iconPath: 'assets/icons/mint_icon.svg',
-                          text: 'Mint',
-                          color: ColorPalette.dReaderGreen,
+              opacity: _fadeAnimationController,
+              child: ScaleTransition(
+                scale: _scaleAnimationController,
+                child: GestureDetector(
+                  onTap: () {
+                    nextScreenReplace(
+                      context: context,
+                      path: '${RoutePath.nftDetails}/${widget.nft.address}',
+                      homeSubRoute: true,
+                    );
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 276 / 220,
+                        child: CachedNetworkImage(
+                          imageUrl: widget.nft.image,
                         ),
-                        widget.nft.isSigned
-                            ? const RoyaltyWidget(
-                                iconPath: 'assets/icons/signed_icon.svg',
-                                text: 'Signed',
-                                color: ColorPalette.dReaderOrange,
-                              )
-                            : const SizedBox(),
-                        RarityWidget(
-                          rarity: widget.nft.rarity.rarityEnum,
-                          iconPath: 'assets/icons/rarity.svg',
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        widget.nft.comicName,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.greyscale100,
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        return GestureDetector(
-                          onTap: () async {
-                            final nft = widget.nft;
-                            final dReaderWebUrl = ref
-                                        .read(environmentProvider)
-                                        .solanaCluster ==
-                                    SolanaCluster.devnet.value
-                                ? 'https://dev-devnet.dreader.app/mint/${nft.comicIssueId}'
-                                : 'https://dreader.app/mint/${nft.comicIssueId}';
-                            final uri = Uri.encodeFull(
-                              'https://twitter.com/intent/tweet?text=I just minted a ${nft.rarity.toLowerCase()} copy of the ${nft.name.split('#')[0]}!\n\nMint yours here while the supply lasts.👇\n\n$dReaderWebUrl',
-                            );
-                            await openUrl(uri);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                8,
-                              ),
-                              border: Border.all(
-                                color: Colors.white,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'Share on',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                SvgPicture.asset(
-                                  'assets/icons/x.svg',
-                                ),
-                              ],
-                            ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        'Congrats! You own ${shortenNftName(widget.nft.name)}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const RoyaltyWidget(
+                            iconPath: 'assets/icons/mint_icon.svg',
+                            text: 'Mint',
+                            color: ColorPalette.dReaderGreen,
                           ),
-                        );
-                      },
-                    ),
-                  ],
+                          widget.nft.isSigned
+                              ? const RoyaltyWidget(
+                                  iconPath: 'assets/icons/signed_icon.svg',
+                                  text: 'Signed',
+                                  color: ColorPalette.dReaderOrange,
+                                )
+                              : const SizedBox(),
+                          RarityWidget(
+                            rarity: widget.nft.rarity.rarityEnum,
+                            iconPath: 'assets/icons/rarity.svg',
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Consumer(
+                        builder: (context, ref, child) {
+                          return GestureDetector(
+                            onTap: () async {
+                              final nft = widget.nft;
+                              final dReaderWebUrl = ref
+                                          .read(environmentProvider)
+                                          .solanaCluster ==
+                                      SolanaCluster.devnet.value
+                                  ? 'https://dev-devnet.dreader.app/mint/${nft.comicIssueId}'
+                                  : 'https://dreader.app/mint/${nft.comicIssueId}';
+                              final uri = Uri.encodeFull(
+                                'https://twitter.com/intent/tweet?text=I just minted a ${nft.rarity.toLowerCase()} copy of the ${nft.name.split('#')[0]}!\n\nMint yours here while the supply lasts.👇\n\n$dReaderWebUrl',
+                              );
+                              await openUrl(uri);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  8,
+                                ),
+                                border: Border.all(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'Share on',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/icons/x.svg',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             FadeTransition(
-              opacity: _animationController,
+              opacity: _fadeAnimationController,
               child: Container(
                 alignment: Alignment.bottomCenter,
                 padding: const EdgeInsets.all(8),

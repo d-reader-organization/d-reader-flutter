@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/features/creator/domain/providers/creator_provi
 import 'package:d_reader_flutter/features/library/presentation/providers/creators/creators_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/count_provider.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -70,7 +71,7 @@ class FollowBox extends HookConsumerWidget {
                 color: ColorPalette.greyscale400,
               ),
               child: Text(
-                '${followingHook.value.count}',
+                Formatter.formatCount(followingHook.value.count),
                 textAlign: TextAlign.center,
                 style: textTheme.titleMedium?.copyWith(
                   color: ColorPalette.greyscale100,

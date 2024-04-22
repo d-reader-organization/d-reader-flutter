@@ -13,7 +13,7 @@ app:
   urls:
     license_url: https://github.com/d-reader-organization/d-reader-flutter/blob/main/LICENSE
     copyright_url: https://github.com/d-reader-organization/d-reader-flutter/blob/main/LICENSE
-    privacy_policy_url: https://dreader.io/
+    privacy_policy_url: https://dreader.app/privacy-policy
     website: https://dreader.io/
   media:
     - purpose: icon

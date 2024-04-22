@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/features/comic_issue/domain/providers/comic_iss
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -74,7 +75,7 @@ class FavoriteIconCount extends HookConsumerWidget {
                     width: 4,
                   ),
                   Text(
-                    favouritesCount.toString(),
+                    Formatter.formatCount(favouritesCount),
                     style: textTheme.bodyMedium?.copyWith(
                       color: ColorPalette.greyscale100,
                       letterSpacing: .2,
@@ -96,7 +97,7 @@ class FavoriteIconCount extends HookConsumerWidget {
                   width: 4,
                 ),
                 Text(
-                  favouritesCount.toString(),
+                  Formatter.formatCount(favouritesCount),
                   style: textTheme.bodySmall?.copyWith(
                     color: ColorPalette.greyscale100,
                   ),

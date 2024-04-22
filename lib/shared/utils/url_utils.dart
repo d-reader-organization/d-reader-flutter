@@ -15,7 +15,7 @@ Future<void> openUrl(
   }
 }
 
-Future<void> openExternalApp(String appId) async {
+Future<void> openPlayStoreApp(String appId) async {
   final url = Uri.parse("market://details?id=$appId");
   launchUrl(
     url,

@@ -76,6 +76,7 @@ final networkServiceProvider = Provider<DioNetworkService>(
                 return handler
                     .resolve(await refreshTokenDio.fetch(error.requestOptions));
               }
+              return handler.next(error);
             },
           ),
         ],

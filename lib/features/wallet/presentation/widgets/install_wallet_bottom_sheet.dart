@@ -52,7 +52,7 @@ class InstallWalletBottomSheet extends ConsumerWidget {
                 appName: 'Espresso Cash',
                 iconPath: 'assets/icons/wallets/espresso_cash.png',
                 onPressed: () {
-                  openExternalApp('com.pleasecrypto.flutter');
+                  openPlayStoreApp('com.pleasecrypto.flutter');
                 },
               ),
               const Divider(
@@ -62,7 +62,7 @@ class InstallWalletBottomSheet extends ConsumerWidget {
                 appName: 'Ultimate',
                 iconPath: 'assets/icons/wallets/ultimate.svg',
                 onPressed: () {
-                  openExternalApp('fi.unstoppable.ultimate.android');
+                  openPlayStoreApp('fi.unstoppable.ultimate.android');
                 },
               ),
               const Divider(
@@ -72,7 +72,7 @@ class InstallWalletBottomSheet extends ConsumerWidget {
                 appName: 'Solflare',
                 iconPath: 'assets/icons/wallets/solflare.svg',
                 onPressed: () {
-                  openExternalApp('com.solflare.mobile');
+                  openPlayStoreApp('com.solflare.mobile');
                 },
               ),
               const Divider(
@@ -82,7 +82,7 @@ class InstallWalletBottomSheet extends ConsumerWidget {
                 appName: 'Phantom',
                 iconPath: 'assets/icons/wallets/phantom.svg',
                 onPressed: () {
-                  openExternalApp('app.phantom');
+                  openPlayStoreApp('app.phantom');
                 },
               ),
             ],

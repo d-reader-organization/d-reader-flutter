@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/owned_issue.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_controller.dart';
@@ -41,9 +42,12 @@ class OwnedIssueCard extends ConsumerWidget {
           children: [
             Expanded(
               flex: 3,
-              child: CachedImageBgPlaceholder(
-                imageUrl: issue.cover,
-                bgImageFit: BoxFit.fill,
+              child: AspectRatio(
+                aspectRatio: comicIssueAspectRatio,
+                child: CachedImageBgPlaceholder(
+                  imageUrl: issue.cover,
+                  bgImageFit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(

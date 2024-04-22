@@ -1,12 +1,14 @@
 import 'dart:io' show Platform;
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:upgrader/upgrader.dart';
 part 'check_for_app_version_provider.g.dart';
 
 const String appCheckKey = 'app_check_date';
+const String sagaModel = 'Saga';
 
 @riverpod
 Future<bool> shouldTriggerAppVersionUpdate(Ref ref) async {
@@ -54,6 +56,12 @@ bool _areDifferentVersions({
 
 Future<String?> getStoreVersion(String myAppBundleId) async {
   String? storeVersion;
+  final deviceModel =
+      await DeviceInfoPlugin().deviceInfo.then((value) => value.data['model']);
+
+  if (deviceModel == sagaModel) {
+    return null;
+  }
   if (Platform.isAndroid) {
     PlayStoreSearchAPI playStoreSearchAPI = PlayStoreSearchAPI();
     final result = await playStoreSearchAPI.lookupById(myAppBundleId);

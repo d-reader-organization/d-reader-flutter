@@ -62,7 +62,7 @@ class IssueAbout extends ConsumerWidget {
                     height: 16,
                   ),
                   ...snapshot.data?.groups.map((candyMachineGroup) {
-                        return ExpandableContainer(
+                        return MintInfoContainer(
                           candyMachineGroup: candyMachineGroup,
                           totalSupply: snapshot.data?.supply ?? 0,
                         );

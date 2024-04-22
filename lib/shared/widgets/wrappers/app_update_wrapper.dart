@@ -2,7 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:d_reader_flutter/shared/presentations/providers/app_version/check_for_app_version_provider.dart';
 import 'package:d_reader_flutter/shared/widgets/scaffolds/d_reader_scaffold.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:upgrader/upgrader.dart';
 

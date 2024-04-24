@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
@@ -314,9 +315,18 @@ class SolanaNotifier extends _$SolanaNotifier {
       );
       return connectWalletResult.fold((failure) {
         return failure.message;
-      }, (message) {
+      }, (message) async {
         ref.invalidate(registerWalletToSocketEvents);
         ref.read(registerWalletToSocketEvents);
+        if (ref.read(selectedCandyMachineGroup) != null) {
+          final currentCMAddress = ref.read(candyMachineStateProvider)?.address;
+          ref.invalidate(candyMachineProvider);
+          await ref.read(candyMachineProvider(
+                  query:
+                      'candyMachineAddress=$currentCMAddress${'&walletAddress=${signer.toBase58()}'}')
+              .future);
+        }
+
         return message;
       });
     });

@@ -46,7 +46,7 @@ final selectedCandyMachineGroup =
   return null;
 });
 
-final activeSplToken = StateProvider<SplToken?>(
+final activeSplToken = StateProvider.autoDispose<SplToken?>(
   (ref) {
     return ref
         .watch(splTokensProvider)

@@ -169,8 +169,8 @@ class MintInfoContainer extends ConsumerWidget {
                     ],
                   ),
                 ),
-          const SizedBox(
-            height: 24,
+          SizedBox(
+            height: displayDropdown ? 12 : 24,
           ),
           if (isMintActive) ...[
             LinearProgressIndicator(

@@ -175,10 +175,13 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                 );
                               },
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Container(
-                                    margin: const EdgeInsets.only(top: 32),
+                                    margin: const EdgeInsets.only(
+                                      top: 32,
+                                      bottom: 16,
+                                    ),
                                     constraints: const BoxConstraints(
                                       maxWidth: 210,
                                       maxHeight: 304,

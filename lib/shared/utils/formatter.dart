@@ -86,7 +86,7 @@ class Formatter {
   }
 
   static String formatCount(dynamic count) {
-    return NumberFormat.compact().format(count);
+    return count == 0 ? 'Free' : NumberFormat.compact().format(count);
   }
 
   static String formatPriceByCurrency(

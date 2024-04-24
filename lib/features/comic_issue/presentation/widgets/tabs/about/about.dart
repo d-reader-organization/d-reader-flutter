@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/author.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/expandable_container.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/mint_info_container.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/rarities.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentation/widgets/genre_tags_default.dart';
 import 'package:flutter/material.dart';
@@ -41,34 +41,10 @@ class IssueAbout extends ConsumerWidget {
                     snapshot.hasError) {
                   return const SizedBox();
                 }
-
-                return Column(children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Minting in progress',
-                        style: textTheme.titleMedium,
-                      ),
-                      Text(
-                        'Total: ${snapshot.data?.itemsMinted}/${snapshot.data?.supply}',
-                        style: textTheme.bodyMedium?.copyWith(
-                          color: ColorPalette.greyscale100,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  ...snapshot.data?.groups.map((candyMachineGroup) {
-                        return MintInfoContainer(
-                          candyMachineGroup: candyMachineGroup,
-                          totalSupply: snapshot.data?.supply ?? 0,
-                        );
-                      }).toList() ??
-                      [],
-                ]);
+                return MintInfoContainer(
+                  candyMachineGroups: snapshot.data?.groups ?? [],
+                  totalSupply: snapshot.data?.supply ?? 0,
+                );
               },
             ),
             const SizedBox(

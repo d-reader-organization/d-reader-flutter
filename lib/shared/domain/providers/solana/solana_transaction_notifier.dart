@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_mach
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
+import 'package:d_reader_flutter/features/settings/presentation/providers/spl_tokens.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -40,15 +41,19 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     required String candyMachineAddress,
     required String walletAddress,
   }) async {
-    final candyMachineState = ref.read(candyMachineStateProvider);
-    var activeGroup = getActiveGroup(candyMachineState?.groups ?? []);
+    var activeGroup = ref.read(selectedCandyMachineGroup);
 
     if (activeGroup == null || activeGroup.wallet?.supply == null) {
       final candyMachine = await ref.read(candyMachineProvider(
         query:
             'candyMachineAddress=$candyMachineAddress&walletAddress=$walletAddress',
       ).future);
-      activeGroup = getActiveGroup(candyMachine?.groups ?? []);
+      activeGroup = getSelectedGroup(
+        groups: candyMachine?.groups ?? [],
+        selectedSplTokenAddress: getSplTokenWithHighestPriority(
+                await ref.read(splTokensProvider.future))
+            .address,
+      );
       if (activeGroup == null) {
         return false;
       }

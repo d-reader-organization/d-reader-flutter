@@ -8,7 +8,6 @@ import 'package:d_reader_flutter/features/nft/presentation/providers/nft_provide
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_issue_controller.g.dart';
 
@@ -45,7 +44,7 @@ class ComicIssueController extends _$ComicIssueController {
         return displaySnackbar(
             text: 'Failed to find candy machine', isError: false);
       }
-      final activeGroup = getActiveGroup(candyMachineState.groups);
+      final activeGroup = ref.read(selectedCandyMachineGroup);
       if (activeGroup == null) {
         return displaySnackbar(
           text: 'There is no active mint',

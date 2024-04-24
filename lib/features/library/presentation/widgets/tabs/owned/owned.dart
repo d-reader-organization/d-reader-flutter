@@ -85,7 +85,7 @@ class OwnedComicsListBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Map<String, int> sortedLetters = sortAndGetLetterOccurences([...comics]);
+    Map<String, int> sortedLetters = sortAndGetLetterOccurences(comics);
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {

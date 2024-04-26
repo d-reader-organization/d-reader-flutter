@@ -77,7 +77,10 @@ class FavoriteComicsListBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Map<String, int> sortedLetters = sortAndGetLetterOccurences([...comics]);
+    Map<String, int> sortedLetters =
+        sortAndGetLetterOccurences([...comics]..sort((a, b) {
+            return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+          }));
     return NotificationListener(
       onNotification: (notification) {
         if (notification is ScrollNotification) {

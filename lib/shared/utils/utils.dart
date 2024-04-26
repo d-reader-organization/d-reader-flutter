@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
+import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
@@ -52,18 +54,21 @@ Future<String?> requestAirdrop(String publicKey) async {
   }
 }
 
-CandyMachineGroupModel? getActiveGroup(List<CandyMachineGroupModel> groups) {
-  final currentDate = DateTime.now();
+CandyMachineGroupModel? getSelectedGroup({
+  required List<CandyMachineGroupModel> groups,
+  required String selectedSplTokenAddress,
+}) {
   return groups.firstWhereOrNull(
     (group) {
-      final isStartDateLessOrEqualThanCurrent = group.startDate != null &&
-          (group.startDate!.isBefore(currentDate) ||
-              group.startDate!.isAtSameMomentAs(currentDate));
-      final isEndDateBiggerThanCurrent =
-          group.endDate != null && currentDate.isBefore(group.endDate!);
-      return isStartDateLessOrEqualThanCurrent && isEndDateBiggerThanCurrent;
+      return group.splTokenAddress == selectedSplTokenAddress;
     },
   );
+}
+
+SplToken getSplTokenWithHighestPriority(List<SplToken> splTokens) {
+  return splTokens.firstWhereOrNull(
+          (element) => element.priority == splTokenHighestPriority) ??
+      splTokens.first;
 }
 
 String getSortDirection(SortDirection direction) {

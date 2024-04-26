@@ -1,4 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/features/settings/presentation/providers/spl_tokens.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/notification/notification_controller.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/scaffold_provider.dart';
@@ -94,6 +95,7 @@ class _DReaderScaffoldState extends ConsumerState<DReaderScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(splTokensProvider);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: SafeArea(

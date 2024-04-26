@@ -92,7 +92,11 @@ class ComicRemoteDataSource implements ComicDataSource {
                 item,
               ),
             ),
-          ),
+          )..sort(
+              (a, b) {
+                return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+              },
+            ),
         );
       });
     } catch (exception) {

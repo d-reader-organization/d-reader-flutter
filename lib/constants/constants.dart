@@ -15,3 +15,4 @@ const String powerSaveModeText = 'Cannot use wallet in the power save mode.';
 const String successResult = 'OK';
 const String usernameCriteriaText =
     'Must be 3 to 20 characters long. Numbers, dashes and underscores are allowed.';
+const int splTokenHighestPriority = 1;

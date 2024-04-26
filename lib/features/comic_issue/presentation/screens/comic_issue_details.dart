@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
@@ -23,6 +24,7 @@ import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_pl
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/mint_price_widget.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/avatar.dart';
 import 'package:flutter/material.dart';
@@ -173,10 +175,13 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                 );
                               },
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Container(
-                                    margin: const EdgeInsets.only(top: 32),
+                                    margin: const EdgeInsets.only(
+                                      top: 32,
+                                      bottom: 16,
+                                    ),
                                     constraints: const BoxConstraints(
                                       maxWidth: 210,
                                       maxHeight: 304,
@@ -347,7 +352,6 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                     SliverToBoxAdapter(
                       child: Container(
                         padding: const EdgeInsets.only(
-                          bottom: 4,
                           left: 16,
                           right: 16,
                         ),
@@ -392,7 +396,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                 body: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 4,
+                    vertical: 16,
                   ),
                   child: issue.isSecondarySaleActive
                       ? TabBarView(
@@ -513,7 +517,11 @@ class BottomNavigation extends ConsumerWidget {
                           );
                         },
                   text: 'Mint',
-                  price: ref.watch(activeCandyMachineGroup)?.mintPrice ?? 0,
+                  price: ref.watch(selectedCandyMachineGroup)?.mintPrice ?? 0,
+                  isMultiGroup:
+                      (ref.watch(candyMachineStateProvider)?.groups.length ??
+                              0) >
+                          1,
                 ),
               )
             : issue.isSecondarySaleActive
@@ -561,11 +569,10 @@ class BottomNavigation extends ConsumerWidget {
 }
 
 class TransactionButton extends StatelessWidget {
-  final bool isLoading;
+  final bool isListing, isLoading, isMultiGroup;
   final Function()? onPressed;
   final String text;
   final int? price;
-  final bool isListing;
   const TransactionButton({
     super.key,
     required this.isLoading,
@@ -573,6 +580,7 @@ class TransactionButton extends StatelessWidget {
     required this.text,
     this.price,
     this.isListing = false,
+    this.isMultiGroup = false,
   });
 
   @override
@@ -605,12 +613,16 @@ class TransactionButton extends StatelessWidget {
                   width: 14,
                   height: 10,
                 )
-              : SolanaPrice(
-                  price: price != null && price! > 0
-                      ? Formatter.formatPriceWithSignificant(price!)
-                      : null,
-                  textColor: Colors.black,
-                ),
+              : isMultiGroup
+                  ? const MintPriceWidget(
+                      priceColor: Colors.black,
+                    )
+                  : SolanaPrice(
+                      price: price != null && price! > 0
+                          ? Formatter.formatPriceWithSignificant(price!)
+                          : null,
+                      textColor: Colors.black,
+                    ),
         ],
       ),
     );

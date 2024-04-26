@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/features/wallet/domain/models/wallet_group.dart
 
 class CandyMachineGroupModel {
   final int itemsMinted, mintLimit, mintPrice, supply;
-  final String label, displayLabel;
+  final String label, displayLabel, splTokenAddress;
   final DateTime? startDate, endDate;
   final bool isActive;
   final WalletGroupModel? wallet;
@@ -19,6 +19,7 @@ class CandyMachineGroupModel {
     required this.startDate,
     required this.endDate,
     required this.isActive,
+    required this.splTokenAddress,
     this.wallet,
     this.user,
   });
@@ -31,6 +32,7 @@ class CandyMachineGroupModel {
       supply: json['supply'] ?? 0,
       label: json['label'],
       displayLabel: json['displayLabel'],
+      splTokenAddress: json['splTokenAddress'],
       startDate: json['startDate'] != null
           ? DateTime.parse(
               json['startDate'],

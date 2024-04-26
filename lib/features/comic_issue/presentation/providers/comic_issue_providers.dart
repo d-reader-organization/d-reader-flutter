@@ -1,7 +1,6 @@
 import 'dart:async' show Timer;
 
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/owned_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/providers/comic_issue_provider.dart';
@@ -82,13 +81,4 @@ final comicIssuePagesProvider =
 final lastSelectedTabIndex = StateProvider<int>((ref) {
   final int? lastIndex = LocalStore.instance.get(issueLastSelectedTabKey);
   return lastIndex ?? 0;
-});
-
-final expandedCandyMachineGroup = StateProvider<String>((ref) {
-  return 'none';
-});
-
-final activeCandyMachineGroup =
-    StateProvider.autoDispose<CandyMachineGroupModel?>((ref) {
-  return null;
 });

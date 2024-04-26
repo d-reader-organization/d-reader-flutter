@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/features/creator/presentation/providers/creator
 import 'package:d_reader_flutter/features/home/carousel/presentation/providers/carousel_providers.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/favorites/favorites_providers.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
+import 'package:d_reader_flutter/features/settings/presentation/providers/spl_tokens.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
@@ -27,6 +28,7 @@ class ChangeNetworkController extends _$ChangeNetworkController {
     ref.invalidate(paginatedComicsProvider);
     ref.invalidate(ownedComicsProvider);
     ref.invalidate(favoriteComicsProvider);
+    ref.invalidate(splTokensProvider);
   }
 
   _doChangeNetworkProcess({

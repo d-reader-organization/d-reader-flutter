@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart';
 import 'package:intl/intl.dart';
 import 'package:solana/solana.dart' show lamportsPerSol;
 
@@ -82,7 +85,16 @@ class Formatter {
     }
   }
 
-  static String formatCount(int count) {
-    return NumberFormat.compact().format(count);
+  static String formatCount(dynamic count) {
+    return count == 0 ? 'Free' : NumberFormat.compact().format(count);
+  }
+
+  static String formatPriceByCurrency(
+      {required int mintPrice, required SplToken? splToken}) {
+    if (splToken == null) {
+      return formatPriceWithSignificant(mintPrice);
+    }
+    final divideResult = mintPrice / pow(10, splToken.decimals);
+    return formatCount(divideResult);
   }
 }

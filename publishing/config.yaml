@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: 85sZz2gCr25T6aCQ5rZ2MUy7rMnFbAYxpKENr7mkZnwF
+  address: G4sKQBVPwkFNmawMzbg2GnbtQ6ayzL4zcD41MqHVaeuK
   media:
     - purpose: icon
       uri: ./512x512_rounded.png
@@ -40,7 +40,7 @@ release:
       short_description: Digital comic book store
       long_description: Platform for discovering, trading, collecting, and reading digital graphic novels
       new_in_version: Consolidate auth flow
-      saga_features: Exclusive early access, free/discounted collectible comics
+      saga_features: New mint info container
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader
   testing_instructions: Run the app

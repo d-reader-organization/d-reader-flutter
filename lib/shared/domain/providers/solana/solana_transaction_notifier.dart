@@ -9,6 +9,7 @@ import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
@@ -93,11 +94,11 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
           preflightCommitment: Commitment.confirmed,
         );
       }
-      ref
-          .read(globalNotifierProvider.notifier)
-          .update(isLoading: false, isMinting: true);
+      ref.read(globalNotifierProvider.notifier).update(
+          isLoading: false,
+          newMessage: TransactionStatusMessage.waiting.getString());
 
-      ref.read(mintingStatusProvider(sendTransactionResult));
+      ref.read(transactionChainStatusProvider(sendTransactionResult));
       await session.close();
       return const Right(successResult);
     } catch (exception) {
@@ -272,10 +273,10 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         signedTx.encode(),
         preflightCommitment: Commitment.confirmed,
       );
-      ref
-          .read(globalNotifierProvider.notifier)
-          .update(isLoading: false, isMinting: true);
-      ref.read(mintingStatusProvider(sendTransactionResult));
+      ref.read(globalNotifierProvider.notifier).update(
+          isLoading: false,
+          newMessage: TransactionStatusMessage.waiting.getString());
+      ref.read(transactionChainStatusProvider(sendTransactionResult));
       await session.close();
       return successResult;
     } catch (exception) {

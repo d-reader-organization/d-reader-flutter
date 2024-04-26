@@ -6,6 +6,6 @@ part 'global_state.freezed.dart';
 abstract class GlobalState with _$GlobalState {
   const factory GlobalState({
     required bool isLoading,
-    bool? isMinting,
+    @Default('') String signatureMessage,
   }) = _GlobalState;
 }

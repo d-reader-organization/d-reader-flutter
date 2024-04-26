@@ -418,9 +418,7 @@ class Avatar extends StatelessWidget {
                 height: 96,
                 width: 96,
                 padding: const EdgeInsets.all(16),
-                child: const CircularProgressIndicator(
-                  color: ColorPalette.dReaderBlue,
-                ),
+                child: const CircularProgressIndicator(),
               ),
             )
           : user.avatar.isNotEmpty

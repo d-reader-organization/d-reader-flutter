@@ -10,18 +10,14 @@ class GlobalNotifier extends _$GlobalNotifier {
     return const GlobalState(isLoading: false);
   }
 
-  void update({required bool isLoading, bool? isMinting}) {
+  void update({required bool isLoading, String? newMessage}) {
     state = state.copyWith(
       isLoading: isLoading,
-      isMinting: isMinting,
+      signatureMessage: newMessage ?? state.signatureMessage,
     );
   }
 
   void updateLoading(bool isLoading) {
     state = state.copyWith(isLoading: isLoading);
-  }
-
-  void updateMinting(bool isMinting) {
-    state = state.copyWith(isMinting: isMinting);
   }
 }

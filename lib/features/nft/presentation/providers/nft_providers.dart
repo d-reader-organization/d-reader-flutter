@@ -3,6 +3,7 @@ import 'dart:async' show Timer;
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/domain/providers/nft_provider.dart';
+import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
@@ -46,37 +47,48 @@ final lastProcessedNftProvider = StateProvider<String?>(
   },
 );
 
-final mintingStatusProvider = StateProvider.family<void, String>(
+final transactionChainStatusProvider = StateProvider.family<void, String>(
   (ref, signature) {
-    if (signature.isNotEmpty) {
-      final client = createSolanaClient(
-        rpcUrl: ref.read(environmentProvider).solanaCluster ==
-                SolanaCluster.devnet.value
-            ? Config.rpcUrlDevnet
-            : Config.rpcUrlMainnet,
-      );
+    if (signature.isEmpty) {
+      ref.read(globalNotifierProvider.notifier).update(
+            isLoading: false,
+            newMessage: '',
+          );
+      return;
+    }
+    final client = createSolanaClient(
+      rpcUrl: ref.read(environmentProvider).solanaCluster ==
+              SolanaCluster.devnet.value
+          ? Config.rpcUrlDevnet
+          : Config.rpcUrlMainnet,
+    );
 
-      client
-          .waitForSignatureStatus(
-        signature,
-        status: Commitment.confirmed,
-        timeout: const Duration(seconds: 12),
-      )
-          .then((value) {
-        Future.delayed(const Duration(seconds: 8), () {
-          ref.read(globalNotifierProvider.notifier).update(
-                isLoading: false,
-                isMinting: false,
-              );
-        });
-      }).onError((error, stackTrace) {
-        Sentry.captureException(error,
-            stackTrace: 'Signature status provider $signature');
+    client
+        .waitForSignatureStatus(
+      signature,
+      status: Commitment.confirmed,
+      timeout: const Duration(seconds: 12),
+    )
+        .then((value) {
+      ref.read(globalNotifierProvider.notifier).update(
+            isLoading: false,
+            newMessage: TransactionStatusMessage.success.getString(),
+          );
+    }).onError((error, stackTrace) {
+      Sentry.captureException(error,
+          stackTrace: 'Signature status provider $signature');
+      ref.read(globalNotifierProvider.notifier).update(
+            isLoading: false,
+            newMessage: TransactionStatusMessage.fail.getString(),
+          );
+    }).timeout(
+      const Duration(seconds: 12),
+      onTimeout: () {
         ref.read(globalNotifierProvider.notifier).update(
               isLoading: false,
-              isMinting: null,
+              newMessage: TransactionStatusMessage.timeout.getString(),
             );
-      });
-    }
+      },
+    );
   },
 );

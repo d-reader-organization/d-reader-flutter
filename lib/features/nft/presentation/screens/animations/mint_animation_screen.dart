@@ -1,20 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/nft/presentation/providers/nft_controller.dart';
 import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/features/nft/presentation/utils/utils.dart';
-import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
+import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/shared/widgets/checkbox/custom_labeled_checkbox.dart';
+import 'package:d_reader_flutter/shared/widgets/buttons/unwrap_button.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
 import 'package:flutter/material.dart';
@@ -54,25 +53,39 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
     _controller.play();
     _controller.addListener(() async {
       await ref.read(nftControllerProvider.notifier).mintLoadingListener(
-          videoPlayerController: _controller,
-          animationController: _animationController,
-          onSuccess: (NftModel nft) async {
-            await Future.delayed(
-              const Duration(milliseconds: 1000),
-              () {
-                nextScreenReplace(
-                  context: context,
-                  path: RoutePath.doneMinting,
-                  homeSubRoute: true,
-                  extra: nft,
-                );
-              },
-            );
-          },
-          onFail: () {
-            _controller.pause();
-            context.pop();
-          });
+            videoPlayerController: _controller,
+            animationController: _animationController,
+            onSuccess: (NftModel nft) async {
+              await Future.delayed(
+                const Duration(milliseconds: 1000),
+                () {
+                  nextScreenReplace(
+                    context: context,
+                    path: RoutePath.doneMinting,
+                    homeSubRoute: true,
+                    extra: nft,
+                  );
+                },
+              );
+            },
+            onTimeout: () {
+              _controller.pause();
+              context.pop();
+              showSnackBar(
+                context: context,
+                text: ref.read(globalNotifierProvider).signatureMessage,
+              );
+            },
+            onFail: () {
+              _controller.pause();
+              context.pop();
+              showSnackBar(
+                context: context,
+                text: 'Failed to mint',
+                backgroundColor: ColorPalette.dReaderRed,
+              );
+            },
+          );
     });
   }
 
@@ -283,14 +296,19 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                           return GestureDetector(
                             onTap: () async {
                               final nft = widget.nft;
+                              final comicIssue = await ref.read(
+                                comicIssueDetailsProvider(
+                                        nft.comicIssueId.toString())
+                                    .future,
+                              );
                               final dReaderWebUrl = ref
                                           .read(environmentProvider)
                                           .solanaCluster ==
                                       SolanaCluster.devnet.value
-                                  ? 'https://dev-devnet.dreader.app/mint/${nft.comicIssueId}'
-                                  : 'https://dreader.app/mint/${nft.comicIssueId}';
+                                  ? 'https://dev-devnet.dreader.app/mint/${comicIssue.comicSlug}_${comicIssue.slug}?utm_source=mobile'
+                                  : 'https://dreader.app/mint/${comicIssue.comicSlug}_${comicIssue.slug}?utm_source=mobile';
                               final uri = Uri.encodeFull(
-                                'https://twitter.com/intent/tweet?text=I just minted a ${nft.rarity.toLowerCase()} copy of the ${nft.name.split('#')[0]}!\n\nMint yours here while the supply lasts.👇\n\n$dReaderWebUrl',
+                                'https://twitter.com/intent/tweet?text=I just minted a ${nft.rarity} ${comicIssue.comic?.title}: ${comicIssue.title} comic on @dReaderApp! 📚\n\nMint yours here while the supply lasts.👇\n\n$dReaderWebUrl',
                               );
                               await openUrl(uri);
                             },
@@ -365,70 +383,12 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                         builder: (context, ref, child) {
                           final bool isLoading =
                               ref.watch(globalNotifierProvider).isLoading;
-                          return CustomTextButton(
-                            backgroundColor: ColorPalette.dReaderYellow100,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 4,
-                              horizontal: 8,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                            textColor: Colors.black,
-                            size: const Size(0, 50),
+                          return UnwrapButton(
                             isLoading: isLoading,
-                            onPressed: isLoading
-                                ? null
-                                : () async {
-                                    final shouldTriggerDialog = LocalStore
-                                            .instance
-                                            .get(WalkthroughKeys.unwrap.name) ==
-                                        null;
-                                    if (!shouldTriggerDialog) {
-                                      return await _handleUnwrap(ref: ref);
-                                    }
-
-                                    bool isChecked = false;
-                                    return triggerWalkthroughDialog(
-                                      context: context,
-                                      buttonText: 'Unwrap',
-                                      onSubmit: () async {
-                                        if (isChecked) {
-                                          LocalStore.instance.put(
-                                            WalkthroughKeys.unwrap.name,
-                                            true,
-                                          );
-                                        }
-                                        context.pop();
-                                        await _handleUnwrap(ref: ref);
-                                      },
-                                      title: 'Comic unwraping',
-                                      subtitle:
-                                          'By unwrapping the comic, you will be able to read it. This action is irreversible and will make the comic lose the mint condition.',
-                                      bottomWidget: StatefulBuilder(
-                                        builder: (context, setState) {
-                                          return CustomLabeledCheckbox(
-                                            isChecked: isChecked,
-                                            onChange: () {
-                                              setState(
-                                                () {
-                                                  isChecked = !isChecked;
-                                                },
-                                              );
-                                            },
-                                            label: Text(
-                                              'Don\'t ask me again',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      assetPath: '',
-                                    );
-                                  },
-                            child: const Text(
-                              'Unwrap',
-                            ),
+                            nft: widget.nft,
+                            onPressed: () async {
+                              await _handleUnwrap(ref: ref);
+                            },
                           );
                         },
                       ),

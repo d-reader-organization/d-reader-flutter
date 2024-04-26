@@ -1,5 +1,4 @@
 import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.dart';
-import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/favorites/favorites_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
@@ -18,6 +17,8 @@ class BookmarkIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bookmarkNotifier =
+        ref.watch(bookmarkSelectedProvider(isBookmarked).notifier);
     return GestureDetector(
       onTap: ref.watch(bookmarkLoadingProvider)
           ? null
@@ -25,21 +26,23 @@ class BookmarkIcon extends ConsumerWidget {
               final loadingNotifier =
                   ref.read(bookmarkLoadingProvider.notifier);
               loadingNotifier.update((state) => true);
+              bookmarkNotifier.update((state) => !state);
               await ref.read(comicRepositoryProvider).bookmarkComic(slug);
               loadingNotifier.update((state) => false);
-              ref.invalidate(comicSlugProvider);
+
               ref.invalidate(favoriteComicsProvider);
             },
       child: Container(
         constraints: const BoxConstraints(minHeight: 42),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: isBookmarked
+          color: ref.watch(bookmarkSelectedProvider(isBookmarked))
               ? ColorPalette.dReaderGreen.withOpacity(.4)
               : Colors.transparent,
           border: Border.all(
-            color:
-                isBookmarked ? Colors.transparent : ColorPalette.greyscale300,
+            color: ref.watch(bookmarkSelectedProvider(isBookmarked))
+                ? Colors.transparent
+                : ColorPalette.greyscale300,
           ),
           borderRadius: BorderRadius.circular(4),
         ),
@@ -47,9 +50,9 @@ class BookmarkIcon extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'assets/icons/bookmark_${isBookmarked ? 'saved' : 'unsaved'}.svg',
+              'assets/icons/bookmark_${ref.watch(bookmarkSelectedProvider(isBookmarked)) ? 'saved' : 'unsaved'}.svg',
               colorFilter: ColorFilter.mode(
-                isBookmarked
+                ref.watch(bookmarkSelectedProvider(isBookmarked))
                     ? ColorPalette.dReaderGreen
                     : ColorPalette.greyscale100,
                 BlendMode.srcIn,

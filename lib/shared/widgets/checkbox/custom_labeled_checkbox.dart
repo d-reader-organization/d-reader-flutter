@@ -20,7 +20,7 @@ class CustomLabeledCheckbox extends StatelessWidget {
         onChange();
       },
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
             height: 20,

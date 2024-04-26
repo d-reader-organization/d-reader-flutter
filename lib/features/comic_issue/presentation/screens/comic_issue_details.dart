@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/mint_info_container.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -460,6 +461,12 @@ class BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final candyMachineGroup = ref.watch(selectedCandyMachineGroup);
+    final (isMintActive, isEnded) = candyMachineGroup != null
+        ? getMintStatuses(candyMachineGroup)
+        : (null, null);
+    final shouldDisableMintButton =
+        isMintActive != null && !isMintActive && isEnded != null && !isEnded;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -472,6 +479,7 @@ class BottomNavigation extends ConsumerWidget {
             ? Expanded(
                 child: TransactionButton(
                   isLoading: ref.watch(globalNotifierProvider).isLoading,
+                  isDisabled: shouldDisableMintButton,
                   onPressed: ref.watch(isOpeningSessionProvider)
                       ? null
                       : () async {
@@ -569,7 +577,7 @@ class BottomNavigation extends ConsumerWidget {
 }
 
 class TransactionButton extends ConsumerWidget {
-  final bool isListing, isLoading, isMultiGroup;
+  final bool isListing, isLoading, isMultiGroup, isDisabled;
   final Function()? onPressed;
   final String text;
   final int? price;
@@ -581,6 +589,7 @@ class TransactionButton extends ConsumerWidget {
     this.price,
     this.isListing = false,
     this.isMultiGroup = false,
+    this.isDisabled = false,
   });
 
   @override
@@ -589,6 +598,7 @@ class TransactionButton extends ConsumerWidget {
       size: const Size(150, 50),
       isLoading: isLoading,
       fontSize: 16,
+      isDisabled: isDisabled,
       borderRadius: const BorderRadius.all(
         Radius.circular(
           8,

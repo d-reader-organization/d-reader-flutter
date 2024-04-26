@@ -1,10 +1,10 @@
 import 'package:d_reader_flutter/features/comic/presentation/providers/comic_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/providers/comic_issue_provider.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -26,21 +26,24 @@ class FavoriteIconCount extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    final favoriteNotifier = useState<bool>(isFavourite);
+    final countNotifier = useState(favouritesCount);
     return GestureDetector(
       onTap: (slug != null || issueId != null) &&
               !ref.watch(privateLoadingProvider)
           ? () async {
               final loadingNotifier = ref.read(privateLoadingProvider.notifier);
               loadingNotifier.update((state) => true);
+              favoriteNotifier.value = !favoriteNotifier.value;
+              countNotifier.value = favoriteNotifier.value
+                  ? ++countNotifier.value
+                  : --countNotifier.value;
               if (issueId != null) {
                 await ref
                     .read(comicIssueRepositoryProvider)
                     .favouritiseIssue(issueId!);
-                ref.invalidate(comicIssueDetailsProvider);
-                ref.invalidate(paginatedIssuesProvider);
               } else if (slug != null) {
                 await ref.read(updateComicFavouriteProvider(slug!).future);
-                ref.invalidate(comicSlugProvider);
               }
               loadingNotifier.update((state) => false);
             }
@@ -50,12 +53,12 @@ class FavoriteIconCount extends HookConsumerWidget {
               padding: const EdgeInsets.all(8),
               constraints: const BoxConstraints(minWidth: 64, minHeight: 42),
               decoration: BoxDecoration(
-                color: isFavourite
+                color: favoriteNotifier.value
                     ? ColorPalette.dReaderRed.withOpacity(.4)
                     : ColorPalette.appBackgroundColor,
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: isFavourite
+                  color: favoriteNotifier.value
                       ? Colors.transparent
                       : ColorPalette.greyscale300,
                 ),
@@ -65,7 +68,7 @@ class FavoriteIconCount extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    isFavourite
+                    favoriteNotifier.value
                         ? 'assets/icons/heart.svg'
                         : 'assets/icons/heart_light.svg',
                     width: 16,
@@ -75,7 +78,7 @@ class FavoriteIconCount extends HookConsumerWidget {
                     width: 4,
                   ),
                   Text(
-                    Formatter.formatCount(favouritesCount),
+                    Formatter.formatCount(countNotifier.value),
                     style: textTheme.bodyMedium?.copyWith(
                       color: ColorPalette.greyscale100,
                       letterSpacing: .2,
@@ -87,7 +90,7 @@ class FavoriteIconCount extends HookConsumerWidget {
           : Row(
               children: [
                 SvgPicture.asset(
-                  isFavourite
+                  favoriteNotifier.value
                       ? 'assets/icons/heart.svg'
                       : 'assets/icons/heart_light.svg',
                   width: 16,
@@ -97,7 +100,7 @@ class FavoriteIconCount extends HookConsumerWidget {
                   width: 4,
                 ),
                 Text(
-                  Formatter.formatCount(favouritesCount),
+                  Formatter.formatCount(countNotifier.value),
                   style: textTheme.bodySmall?.copyWith(
                     color: ColorPalette.greyscale100,
                   ),

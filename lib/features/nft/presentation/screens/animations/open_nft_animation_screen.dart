@@ -44,11 +44,10 @@ class _OpenNftAnimationState extends ConsumerState<OpenNftAnimation>
       ref.read(nftControllerProvider.notifier).mintOpenListener(
             videoPlayerController: _controller,
             animationController: _animationController,
-            onSuccess: (String nftAddress) {
+            onSuccess: (int comicIssueId) {
               nextScreenReplace(
                 context: context,
-                path:
-                    '${RoutePath.nftDetails}/$nftAddress', // TODO open eReader
+                path: '${RoutePath.eReader}/$comicIssueId',
                 homeSubRoute: true,
               );
             },

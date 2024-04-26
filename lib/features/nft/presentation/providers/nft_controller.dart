@@ -179,7 +179,7 @@ class NftController extends _$NftController {
   mintOpenListener({
     required VideoPlayerController videoPlayerController,
     required AnimationController animationController,
-    required Function(String nftAddress) onSuccess,
+    required Function(int comicIssueId) onSuccess,
     required Function() onFail,
   }) {
     final bool isMinted = ref.watch(lastProcessedNftProvider) != null;
@@ -201,7 +201,7 @@ class NftController extends _$NftController {
   _handleOpenedCase({
     required VideoPlayerController videoPlayerController,
     required AnimationController animationController,
-    required Function(String nftAddress) onSuccess,
+    required Function(int comicIssueId) onSuccess,
   }) {
     videoPlayerController.pause();
     animationController.reverse(
@@ -220,7 +220,13 @@ class NftController extends _$NftController {
     ref
         .read(globalNotifierProvider.notifier)
         .update(isLoading: false, newMessage: '');
-    onSuccess(nftAddress);
+    ref.read(nftProvider(nftAddress).future).then(
+      (value) {
+        if (value != null) {
+          onSuccess(value.comicIssueId);
+        }
+      },
+    );
   }
 
   handleNftUnwrap({

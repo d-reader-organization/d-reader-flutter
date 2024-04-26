@@ -25,18 +25,23 @@ class CarrotErrorScaffold extends StatelessWidget {
 class CarrotErrorWidget extends StatelessWidget {
   final String adviceText, mainErrorText;
   final double height;
+  final EdgeInsets? padding;
+  final Widget? additionalChild;
   const CarrotErrorWidget({
     super.key,
     this.adviceText =
         'Try resetting the app and make sure it\'s running on the latest version',
     this.mainErrorText = 'Something broke!',
     this.height = 300,
+    this.padding,
+    this.additionalChild,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: height,
+      padding: padding,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -75,7 +80,13 @@ class CarrotErrorWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: ColorPalette.greyscale100,
                 ),
-          )
+          ),
+          if (additionalChild != null) ...[
+            const SizedBox(
+              height: 16,
+            ),
+            additionalChild!
+          ]
         ],
       ),
     );

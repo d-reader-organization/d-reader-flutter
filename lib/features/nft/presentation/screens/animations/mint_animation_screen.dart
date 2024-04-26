@@ -70,10 +70,10 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
             },
             onTimeout: () {
               _controller.pause();
-              context.pop();
-              showSnackBar(
+              nextScreenReplace(
                 context: context,
-                text: ref.read(globalNotifierProvider).signatureMessage,
+                path: RoutePath.transactionStatusTimeout,
+                homeSubRoute: true,
               );
             },
             onFail: () {

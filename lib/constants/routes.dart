@@ -26,6 +26,7 @@ class RoutePath {
   static const walletInfo = 'wallet-info';
   static const whatIsAWallet = 'what-is-wallet';
   static const securityAndPrivacy = 'security-and-privacy';
+  static const transactionStatusTimeout = 'status-timeout';
 
   static const doneMinting = 'animation/done-minting';
   static const openNftAnimation = 'animation/open-nft';

@@ -227,13 +227,14 @@ class NftController extends _$NftController {
     required String nftAddress,
     required String ownerAddress,
     required Function() onSuccess,
+    required Function(String message) onFail,
   }) async {
     final useMintResult =
         await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
               nftAddress: nftAddress,
               ownerAddress: ownerAddress,
             );
-    useMintResult.fold((exception) => null, (result) {
+    useMintResult.fold((exception) => onFail(exception.message), (result) {
       if (result == successResult) {
         onSuccess();
       }

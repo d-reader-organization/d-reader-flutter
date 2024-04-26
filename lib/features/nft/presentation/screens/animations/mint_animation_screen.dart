@@ -190,16 +190,22 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
 
   _handleUnwrap({required WidgetRef ref}) async {
     await ref.read(nftControllerProvider.notifier).handleNftUnwrap(
-          nftAddress: widget.nft.address,
-          ownerAddress: widget.nft.ownerAddress,
-          onSuccess: () {
-            nextScreenReplace(
-              context: context,
-              path: RoutePath.openNftAnimation,
-              homeSubRoute: true,
-            );
-          },
-        );
+        nftAddress: widget.nft.address,
+        ownerAddress: widget.nft.ownerAddress,
+        onSuccess: () {
+          nextScreenReplace(
+            context: context,
+            path: RoutePath.openNftAnimation,
+            homeSubRoute: true,
+          );
+        },
+        onFail: (String message) {
+          showSnackBar(
+            context: context,
+            text: message,
+            backgroundColor: ColorPalette.dReaderRed,
+          );
+        });
   }
 
   @override

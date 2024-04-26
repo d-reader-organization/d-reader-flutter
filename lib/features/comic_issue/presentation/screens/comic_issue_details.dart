@@ -568,7 +568,7 @@ class BottomNavigation extends ConsumerWidget {
   }
 }
 
-class TransactionButton extends StatelessWidget {
+class TransactionButton extends ConsumerWidget {
   final bool isListing, isLoading, isMultiGroup;
   final Function()? onPressed;
   final String text;
@@ -584,7 +584,7 @@ class TransactionButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return CustomTextButton(
       size: const Size(150, 50),
       isLoading: isLoading,
@@ -619,7 +619,9 @@ class TransactionButton extends StatelessWidget {
                     )
                   : SolanaPrice(
                       price: price != null && price! > 0
-                          ? Formatter.formatPriceWithSignificant(price!)
+                          ? Formatter.formatPriceByCurrency(
+                              mintPrice: price!,
+                              splToken: ref.watch(activeSplToken))
                           : null,
                       textColor: Colors.black,
                     ),

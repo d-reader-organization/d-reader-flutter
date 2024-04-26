@@ -161,8 +161,9 @@ class MintInfoContainer extends ConsumerWidget {
                       ),
                       SolanaPrice(
                         price: candyMachineGroup.mintPrice > 0
-                            ? Formatter.formatPriceWithSignificant(
-                                candyMachineGroup.mintPrice.round(),
+                            ? Formatter.formatPriceByCurrency(
+                                mintPrice: candyMachineGroup.mintPrice,
+                                splToken: ref.watch(activeSplToken),
                               )
                             : null,
                       )

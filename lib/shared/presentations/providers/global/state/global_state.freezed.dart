@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$GlobalState {
   bool get isLoading => throw _privateConstructorUsedError;
-  bool? get isMinting => throw _privateConstructorUsedError;
+  String get signatureMessage => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GlobalStateCopyWith<GlobalState> get copyWith =>
@@ -30,7 +30,7 @@ abstract class $GlobalStateCopyWith<$Res> {
           GlobalState value, $Res Function(GlobalState) then) =
       _$GlobalStateCopyWithImpl<$Res, GlobalState>;
   @useResult
-  $Res call({bool isLoading, bool? isMinting});
+  $Res call({bool isLoading, String signatureMessage});
 }
 
 /// @nodoc
@@ -47,17 +47,17 @@ class _$GlobalStateCopyWithImpl<$Res, $Val extends GlobalState>
   @override
   $Res call({
     Object? isLoading = null,
-    Object? isMinting = freezed,
+    Object? signatureMessage = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      isMinting: freezed == isMinting
-          ? _value.isMinting
-          : isMinting // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      signatureMessage: null == signatureMessage
+          ? _value.signatureMessage
+          : signatureMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -70,7 +70,7 @@ abstract class _$$GlobalStateImplCopyWith<$Res>
       __$$GlobalStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool isLoading, bool? isMinting});
+  $Res call({bool isLoading, String signatureMessage});
 }
 
 /// @nodoc
@@ -85,17 +85,17 @@ class __$$GlobalStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
-    Object? isMinting = freezed,
+    Object? signatureMessage = null,
   }) {
     return _then(_$GlobalStateImpl(
       isLoading: null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
-      isMinting: freezed == isMinting
-          ? _value.isMinting
-          : isMinting // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      signatureMessage: null == signatureMessage
+          ? _value.signatureMessage
+          : signatureMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -103,16 +103,18 @@ class __$$GlobalStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GlobalStateImpl implements _GlobalState {
-  const _$GlobalStateImpl({required this.isLoading, this.isMinting});
+  const _$GlobalStateImpl(
+      {required this.isLoading, this.signatureMessage = ''});
 
   @override
   final bool isLoading;
   @override
-  final bool? isMinting;
+  @JsonKey()
+  final String signatureMessage;
 
   @override
   String toString() {
-    return 'GlobalState(isLoading: $isLoading, isMinting: $isMinting)';
+    return 'GlobalState(isLoading: $isLoading, signatureMessage: $signatureMessage)';
   }
 
   @override
@@ -122,12 +124,12 @@ class _$GlobalStateImpl implements _GlobalState {
             other is _$GlobalStateImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
-            (identical(other.isMinting, isMinting) ||
-                other.isMinting == isMinting));
+            (identical(other.signatureMessage, signatureMessage) ||
+                other.signatureMessage == signatureMessage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isLoading, isMinting);
+  int get hashCode => Object.hash(runtimeType, isLoading, signatureMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -139,12 +141,12 @@ class _$GlobalStateImpl implements _GlobalState {
 abstract class _GlobalState implements GlobalState {
   const factory _GlobalState(
       {required final bool isLoading,
-      final bool? isMinting}) = _$GlobalStateImpl;
+      final String signatureMessage}) = _$GlobalStateImpl;
 
   @override
   bool get isLoading;
   @override
-  bool? get isMinting;
+  String get signatureMessage;
   @override
   @JsonKey(ignore: true)
   _$$GlobalStateImplCopyWith<_$GlobalStateImpl> get copyWith =>

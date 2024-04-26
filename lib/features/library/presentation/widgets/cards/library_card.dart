@@ -28,27 +28,23 @@ class LibraryCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 9,
-              child: AspectRatio(
-                aspectRatio: comicAspectRatio,
-                child: CachedImageBgPlaceholder(
-                  imageUrl: comic.cover,
-                  opacity: .4,
-                  overrideBorderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                  child: comic.logo.isNotEmpty
-                      ? CachedNetworkImage(
-                          imageUrl: comic.logo,
-                        )
-                      : null,
+            AspectRatio(
+              aspectRatio: comicAspectRatio,
+              child: CachedImageBgPlaceholder(
+                imageUrl: comic.cover,
+                opacity: .4,
+                overrideBorderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
                 ),
+                child: comic.logo.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: comic.logo,
+                      )
+                    : null,
               ),
             ),
             Expanded(
-              flex: 4,
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
@@ -9,6 +10,7 @@ import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_pl
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OwnedNftCard extends ConsumerWidget {
@@ -37,8 +39,8 @@ class OwnedNftCard extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            Expanded(
-              flex: 3,
+            AspectRatio(
+              aspectRatio: comicIssueAspectRatio,
               child: CachedImageBgPlaceholder(
                 imageUrl: nft.image,
               ),
@@ -47,7 +49,6 @@ class OwnedNftCard extends ConsumerWidget {
               width: 16,
             ),
             Expanded(
-              flex: 7,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +78,8 @@ class OwnedNftCard extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  Row(
+                  Wrap(
+                    runSpacing: 8,
                     children: [
                       nft.isUsed
                           ? const RoyaltyWidget(

@@ -135,7 +135,7 @@ class Environment extends _$Environment {
       authToken: state.authToken,
       walletAuthTokenMap: state.walletAuthTokenMap,
       jwtToken: null,
-      publicKey: state.publicKey,
+      publicKey: null,
       refreshToken: null,
       user: null,
       wallets: null,

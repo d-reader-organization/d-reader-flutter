@@ -40,21 +40,17 @@ class OwnedIssueCard extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            Expanded(
-              flex: 3,
-              child: AspectRatio(
-                aspectRatio: comicIssueAspectRatio,
-                child: CachedImageBgPlaceholder(
-                  imageUrl: issue.cover,
-                  bgImageFit: BoxFit.cover,
-                ),
+            AspectRatio(
+              aspectRatio: comicIssueAspectRatio,
+              child: CachedImageBgPlaceholder(
+                imageUrl: issue.cover,
+                bgImageFit: BoxFit.cover,
               ),
             ),
             const SizedBox(
               width: 16,
             ),
             Expanded(
-              flex: 7,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

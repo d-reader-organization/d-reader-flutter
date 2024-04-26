@@ -59,10 +59,11 @@ class WalkthroughDialog extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 8,
+          height: 16,
         ),
         CustomTextButton(
           onPressed: onSubmit,
+          size: const Size(0, 50),
           borderRadius: BorderRadius.circular(8),
           child: Text(
             buttonText,
@@ -75,7 +76,7 @@ class WalkthroughDialog extends StatelessWidget {
         ),
         if (bottomWidget != null) ...[
           const SizedBox(
-            height: 8,
+            height: 16,
           ),
           bottomWidget!,
         ],

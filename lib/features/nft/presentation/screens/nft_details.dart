@@ -18,6 +18,7 @@ import 'package:d_reader_flutter/features/nft/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/features/nft/presentation/widgets/nft_card.dart';
+import 'package:d_reader_flutter/shared/widgets/buttons/unwrap_button.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
@@ -176,57 +177,81 @@ class NftDetails extends ConsumerWidget {
                               width: 16,
                             ),
                             Expanded(
-                              child: Button(
-                                borderColor: ColorPalette.dReaderYellow100,
-                                isLoading:
-                                    ref.watch(globalNotifierProvider).isLoading,
-                                loadingColor: ColorPalette.dReaderYellow100,
-                                onPressed: () async {
-                                  if (nft.isUsed) {
-                                    return nextScreenPush(
-                                      context: context,
-                                      path:
-                                          '${RoutePath.eReader}/${nft.comicIssueId}',
-                                    );
-                                  }
-                                  await ref
-                                      .read(nftControllerProvider.notifier)
-                                      .openNft(
-                                        nft: nft,
-                                        onOpen: (String result) {
-                                          _handleNftOpen(
-                                            context: context,
-                                            ref: ref,
-                                            openResponse: result,
-                                          );
-                                        },
-                                        onException: (exception) {
-                                          if (exception
-                                                  is LowPowerModeException ||
-                                              exception
-                                                  is NoWalletFoundException) {
-                                            triggerLowPowerOrNoWallet(
-                                              context,
-                                              exception,
+                              child: nft.isUsed
+                                  ? Button(
+                                      borderColor:
+                                          ColorPalette.dReaderYellow100,
+                                      isLoading: ref
+                                          .watch(globalNotifierProvider)
+                                          .isLoading,
+                                      loadingColor:
+                                          ColorPalette.dReaderYellow100,
+                                      onPressed: () async {
+                                        return nextScreenPush(
+                                          context: context,
+                                          path:
+                                              '${RoutePath.eReader}/${nft.comicIssueId}',
+                                        );
+                                      },
+                                      child: Text(
+                                        'Read',
+                                        style: textTheme.titleMedium?.copyWith(
+                                          color: ColorPalette.dReaderYellow100,
+                                        ),
+                                      ),
+                                    )
+                                  : UnwrapButton(
+                                      nft: nft,
+                                      onPressed: () async {
+                                        await ref
+                                            .read(
+                                                nftControllerProvider.notifier)
+                                            .openNft(
+                                              nft: nft,
+                                              onOpen: (String result) {
+                                                _handleNftOpen(
+                                                  context: context,
+                                                  ref: ref,
+                                                  openResponse: result,
+                                                );
+                                              },
+                                              onException: (exception) {
+                                                if (exception
+                                                        is LowPowerModeException ||
+                                                    exception
+                                                        is NoWalletFoundException) {
+                                                  triggerLowPowerOrNoWallet(
+                                                    context,
+                                                    exception,
+                                                  );
+                                                  return;
+                                                } else if (exception
+                                                    is AppException) {
+                                                  showSnackBar(
+                                                    context: context,
+                                                    text: exception.message,
+                                                  );
+                                                }
+                                              },
                                             );
-                                            return;
-                                          } else if (exception
-                                              is AppException) {
-                                            showSnackBar(
-                                              context: context,
-                                              text: exception.message,
-                                            );
-                                          }
-                                        },
-                                      );
-                                },
-                                child: Text(
-                                  nft.isUsed ? 'Read' : 'Unwrap',
-                                  style: textTheme.titleMedium?.copyWith(
-                                    color: ColorPalette.dReaderYellow100,
-                                  ),
-                                ),
-                              ),
+                                      },
+                                      borderColor:
+                                          ColorPalette.dReaderYellow100,
+                                      isLoading: ref
+                                          .watch(globalNotifierProvider)
+                                          .isLoading,
+                                      backgroundColor: Colors.transparent,
+                                      loadingColor:
+                                          ColorPalette.dReaderYellow100,
+                                      textColor: ColorPalette.dReaderYellow100,
+                                      size: Size(
+                                        MediaQuery.sizeOf(context).width / 2.4,
+                                        40,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                      ),
+                                    ),
                             ),
                           ],
                         ),
@@ -256,35 +281,42 @@ class NftDetails extends ConsumerWidget {
                             const SizedBox(
                               height: 8,
                             ),
-                            Row(
+                            Wrap(
+                              runSpacing: 8,
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  height: 40,
-                                  margin: const EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(
-                                      color: ColorPalette.dReaderBlue,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '${Formatter.formatPrice(nft.royalties)}%',
-                                        style: textTheme.bodySmall?.copyWith(
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      height: 40,
+                                      margin: const EdgeInsets.only(right: 8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        border: Border.all(
                                           color: ColorPalette.dReaderBlue,
                                         ),
                                       ),
-                                      const SizedBox(
-                                        width: 4,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '${Formatter.formatPrice(nft.royalties)}%',
+                                            style:
+                                                textTheme.bodySmall?.copyWith(
+                                              color: ColorPalette.dReaderBlue,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(
+                                            'royalty',
+                                            style: textTheme.bodyMedium,
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        'royalty',
-                                        style: textTheme.bodyMedium,
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                                 RoyaltyWidget(
                                   isLarge: true,

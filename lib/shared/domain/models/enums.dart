@@ -36,3 +36,22 @@ enum NftRarity {
   epic,
   legendary,
 }
+
+enum TransactionStatusMessage {
+  success,
+  fail,
+  unknown,
+  waiting,
+  timeout;
+
+  String getString() {
+    return switch (this) {
+      TransactionStatusMessage.success => 'Confirmed',
+      TransactionStatusMessage.fail => 'Fail',
+      TransactionStatusMessage.unknown => 'Unknown transaction status',
+      TransactionStatusMessage.waiting => 'Waiting',
+      TransactionStatusMessage.timeout =>
+        'Network is congested, your transaction might have failed. Please check your wallet',
+    };
+  }
+}

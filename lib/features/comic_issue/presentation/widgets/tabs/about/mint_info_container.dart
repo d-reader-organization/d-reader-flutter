@@ -161,8 +161,9 @@ class MintInfoContainer extends ConsumerWidget {
                       ),
                       SolanaPrice(
                         price: candyMachineGroup.mintPrice > 0
-                            ? Formatter.formatPriceWithSignificant(
-                                candyMachineGroup.mintPrice.round(),
+                            ? Formatter.formatPriceByCurrency(
+                                mintPrice: candyMachineGroup.mintPrice,
+                                splToken: ref.watch(activeSplToken),
                               )
                             : null,
                       )
@@ -228,29 +229,53 @@ class _ComicVaultContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: ColorPalette.greyscale400,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.transparent,
       ),
-      child: Column(
+      child: ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+        trailing: const SizedBox(),
+        backgroundColor: ColorPalette.greyscale400,
+        collapsedBackgroundColor: ColorPalette.greyscale400,
+        collapsedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            8,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            8,
+          ),
+        ),
+        childrenPadding: const EdgeInsets.only(
+          left: 8,
+          right: 8,
+          bottom: 8,
+          top: 0,
+        ),
+        title: Row(
+          children: [
+            SvgPicture.asset(
+              'assets/icons/lock.svg',
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              'Comic Vault',
+              style: textTheme.bodySmall?.copyWith(
+                color: ColorPalette.greyscale100,
+              ),
+            ),
+          ],
+        ),
         children: [
-          Row(
-            children: [
-              SvgPicture.asset(
-                'assets/icons/lock.svg',
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Comic Vault',
-                style: textTheme.bodySmall?.copyWith(
-                  color: ColorPalette.greyscale100,
-                ),
-              ),
-            ],
+          Text(
+            'Comic Vault stores portion of the supply of each issue to later use in giveaways & other activities where we reward loyal users',
+            style: textTheme.bodySmall?.copyWith(
+              color: ColorPalette.greyscale100,
+            ),
           ),
         ],
       ),

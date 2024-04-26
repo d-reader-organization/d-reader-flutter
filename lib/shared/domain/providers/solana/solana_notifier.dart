@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
+import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -213,7 +215,8 @@ class SolanaNotifier extends _$SolanaNotifier {
     );
     final result = await _authorizeAndSignIfNeeded(
       client: client,
-      shouldSignMessage: isConnectOnly || wallets.isEmpty,
+      wallets: wallets,
+      shouldSignMessage: isConnectOnly,
     );
 
     if (result != successResult) {
@@ -250,6 +253,7 @@ class SolanaNotifier extends _$SolanaNotifier {
 
   Future<String> _authorizeAndSignIfNeeded({
     required MobileWalletAdapterClient client,
+    required List<WalletModel> wallets,
     bool shouldSignMessage = true,
     String? overrideCluster,
   }) async {
@@ -276,7 +280,10 @@ class SolanaNotifier extends _$SolanaNotifier {
         },
       ),
     );
-    if (shouldSignMessage) {
+    final isExistingWallet = wallets.firstWhereOrNull(
+            (element) => element.address == publicKey.toBase58()) !=
+        null;
+    if (shouldSignMessage || !isExistingWallet) {
       return await _signMessageAndConnectWallet(
         client: client,
         signer: publicKey,

@@ -44,3 +44,9 @@ final obscureTextProvider = StateProvider.autoDispose<bool>((ref) {
 final additionalObscureTextProvider = StateProvider.autoDispose<bool>((ref) {
   return true;
 });
+
+final bookmarkSelectedProvider = StateProvider.family.autoDispose<bool, bool>(
+  (ref, arg) {
+    return arg;
+  },
+);

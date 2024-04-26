@@ -37,7 +37,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Choose to open',
+                'Choose to unwrap',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -48,7 +48,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                 height: 8,
               ),
               Text(
-                'In order to read comic issue you need to open it from its package.',
+                'By unwrapping the comic, you will be able to read it. This action is irreversible and will make the comic lose the mint condition.', //By unwrapping the comic, you will be able to read it. This action is irreversible and will make the comic lose the mint condition.
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -98,7 +98,7 @@ class OwnedNftsBottomSheet extends StatelessWidget {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             alignment: WrapAlignment.start,
                             direction: Axis.horizontal,
-                            runSpacing: 4,
+                            runSpacing: 8,
                             children: [
                               RoyaltyWidget(
                                 iconPath: ownedNft.isUsed

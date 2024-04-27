@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_in/sign_in.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/sign_up.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/verify_email.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/settings/presentation/screens/security_and_privacy.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/screens/transaction_timeout.dart';
@@ -94,30 +95,10 @@ final routerProvider = Provider((ref) {
         },
       ),
       ...authRoutes,
-      ...homeRoutes,
+      ...generateHomeRoutes(ref),
     ],
   );
 });
-
-final router = GoRouter(
-  initialLocation: RoutePath.home,
-  routes: [
-    GoRoute(
-      path: RoutePath.welcome,
-      builder: (context, state) {
-        return const SplashView();
-      },
-    ),
-    GoRoute(
-      path: RoutePath.initial,
-      builder: (context, state) {
-        return const InitialIntroScreen();
-      },
-    ),
-    ...authRoutes,
-    ...homeRoutes,
-  ],
-);
 
 final List<GoRoute> authRoutes = [
   GoRoute(
@@ -147,107 +128,121 @@ final List<GoRoute> authRoutes = [
   ),
 ];
 
-final List<GoRoute> homeRoutes = [
-  GoRoute(
-    path: RoutePath.home,
-    builder: (context, state) {
-      return const AppUpdateWrapper();
-    },
-    routes: [
-      ...comicRoutes,
-      ...profileRoutes,
-      ...animationRoutes,
-      GoRoute(
-        path: '${RoutePath.comicIssueDetails}/:id',
-        builder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          return ComicIssueDetails(id: id);
-        },
-      ),
-      GoRoute(
-        path: 'mint/:id',
-        redirect: (context, state) =>
-            '/${RoutePath.comicIssueDetails}/${state.pathParameters['id']}',
-      ),
-      GoRoute(
-        path: '${RoutePath.creatorDetails}/:slug',
-        builder: (context, state) {
-          final slug = state.pathParameters['slug'] ?? '';
-          return CreatorDetailsView(slug: slug);
-        },
-      ),
-      GoRoute(
-        path: '${RoutePath.nftDetails}/:address',
-        builder: (context, state) {
-          final address = state.pathParameters['address'] ?? '';
-          return NftDetails(address: address);
-        },
-      ),
-      GoRoute(
-        path: '${RoutePath.eReader}/:comicIssueId',
-        builder: (context, state) {
-          final comicIssueId = state.pathParameters['comicIssueId'] ?? '';
-          return EReaderView(
-            issueId: int.parse(
-              comicIssueId,
-            ),
-          );
-        },
-      ),
-      GoRoute(
-        path: '${RoutePath.myWallets}/:userId',
-        builder: (context, state) {
-          final userId = state.pathParameters['userId'] ?? '';
-          return MyWalletsScreen(userId: int.parse(userId));
-        },
-      ),
-      GoRoute(
-        path: RoutePath.referrals,
-        builder: (context, state) {
-          return const ReferralsView();
-        },
-      ),
-      GoRoute(
-        path: RoutePath.about,
-        builder: (context, state) {
-          return const AboutView();
-        },
-      ),
-      GoRoute(
-        path: RoutePath.changeNetwork,
-        builder: (context, state) {
-          return const ChangeNetworkView();
-        },
-      ),
-      GoRoute(
-        path: RoutePath.walletInfo,
-        builder: (context, state) {
-          final address = state.uri.queryParameters['address'] ?? '';
-          final name = state.uri.queryParameters['name'] ?? '';
-          return WalletInfoScreen(address: address, name: name);
-        },
-      ),
-      GoRoute(
-        path: RoutePath.whatIsAWallet,
-        builder: (context, state) {
-          return const WhatIsWalletView();
-        },
-      ),
-      GoRoute(
-        path: RoutePath.securityAndPrivacy,
-        builder: (context, state) {
-          return const SecurityAndPrivacyScreen();
-        },
-      ),
-      GoRoute(
-        path: RoutePath.transactionStatusTimeout,
-        builder: (context, state) {
-          return const TransactionTimeoutScreen();
-        },
-      ),
-    ],
-  ),
-];
+List<GoRoute> generateHomeRoutes(ProviderRef ref) {
+  return [
+    GoRoute(
+      path: RoutePath.home,
+      onExit: (context) async {
+        if (ref.read(selectedIssueInfoProvider) != null) {
+          ref.invalidate(selectedIssueInfoProvider);
+          return false;
+        }
+        if (ref.read(selectedOwnedComicProvider) != null) {
+          ref.invalidate(selectedOwnedComicProvider);
+          return false;
+        }
+
+        return true;
+      },
+      builder: (context, state) {
+        return const AppUpdateWrapper();
+      },
+      routes: [
+        ...comicRoutes,
+        ...profileRoutes,
+        ...animationRoutes,
+        GoRoute(
+          path: '${RoutePath.comicIssueDetails}/:id',
+          builder: (context, state) {
+            final id = state.pathParameters['id'] ?? '';
+            return ComicIssueDetails(id: id);
+          },
+        ),
+        GoRoute(
+          path: 'mint/:id',
+          redirect: (context, state) =>
+              '/${RoutePath.comicIssueDetails}/${state.pathParameters['id']}',
+        ),
+        GoRoute(
+          path: '${RoutePath.creatorDetails}/:slug',
+          builder: (context, state) {
+            final slug = state.pathParameters['slug'] ?? '';
+            return CreatorDetailsView(slug: slug);
+          },
+        ),
+        GoRoute(
+          path: '${RoutePath.nftDetails}/:address',
+          builder: (context, state) {
+            final address = state.pathParameters['address'] ?? '';
+            return NftDetails(address: address);
+          },
+        ),
+        GoRoute(
+          path: '${RoutePath.eReader}/:comicIssueId',
+          builder: (context, state) {
+            final comicIssueId = state.pathParameters['comicIssueId'] ?? '';
+            return EReaderView(
+              issueId: int.parse(
+                comicIssueId,
+              ),
+            );
+          },
+        ),
+        GoRoute(
+          path: '${RoutePath.myWallets}/:userId',
+          builder: (context, state) {
+            final userId = state.pathParameters['userId'] ?? '';
+            return MyWalletsScreen(userId: int.parse(userId));
+          },
+        ),
+        GoRoute(
+          path: RoutePath.referrals,
+          builder: (context, state) {
+            return const ReferralsView();
+          },
+        ),
+        GoRoute(
+          path: RoutePath.about,
+          builder: (context, state) {
+            return const AboutView();
+          },
+        ),
+        GoRoute(
+          path: RoutePath.changeNetwork,
+          builder: (context, state) {
+            return const ChangeNetworkView();
+          },
+        ),
+        GoRoute(
+          path: RoutePath.walletInfo,
+          builder: (context, state) {
+            final address = state.uri.queryParameters['address'] ?? '';
+            final name = state.uri.queryParameters['name'] ?? '';
+            return WalletInfoScreen(address: address, name: name);
+          },
+        ),
+        GoRoute(
+          path: RoutePath.whatIsAWallet,
+          builder: (context, state) {
+            return const WhatIsWalletView();
+          },
+        ),
+        GoRoute(
+          path: RoutePath.securityAndPrivacy,
+          builder: (context, state) {
+            return const SecurityAndPrivacyScreen();
+          },
+        ),
+        GoRoute(
+          path: RoutePath.transactionStatusTimeout,
+          builder: (context, state) {
+            return const TransactionTimeoutScreen();
+          },
+        ),
+      ],
+    ),
+  ];
+}
 
 final List<GoRoute> comicRoutes = [
   GoRoute(

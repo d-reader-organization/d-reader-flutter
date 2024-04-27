@@ -28,72 +28,64 @@ class OwnedNftsItems extends ConsumerWidget {
         if (data.isEmpty) {
           return const Text('No data.');
         }
-        return PopScope(
-          canPop: false,
-          onPopInvoked: (didPop) {
-            ref.invalidate(selectedIssueInfoProvider);
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    ref.invalidate(selectedIssueInfoProvider);
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        '${issue.comic?.title} / ',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: ColorPalette.greyscale200,
-                        ),
-                      ),
-                      Text(
-                        'EP ${issue.number}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ],
+        return ListView(
+          children: [
+            GestureDetector(
+              onTap: () {
+                ref.invalidate(selectedIssueInfoProvider);
+              },
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
                   ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const Divider(
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    '${issue.comic?.title} / ',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: ColorPalette.greyscale200,
+                    ),
+                  ),
+                  Text(
+                    'EP ${issue.number}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            const Divider(
+              thickness: 1,
+              color: ColorPalette.greyscale500,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const PageScrollPhysics(),
+              itemBuilder: (context, index) {
+                return OwnedNftCard(nft: data[index]);
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
                   thickness: 1,
                   color: ColorPalette.greyscale500,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const PageScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return OwnedNftCard(nft: data[index]);
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      thickness: 1,
-                      color: ColorPalette.greyscale500,
-                    );
-                  },
-                  itemCount: data.length,
-                ),
-              ],
+                );
+              },
+              itemCount: data.length,
             ),
-          ),
+          ],
         );
       },
       error: (Object error, StackTrace stackTrace) {

@@ -27,64 +27,56 @@ class OwnedIssuesItems extends ConsumerWidget {
         if (data.isEmpty) {
           return const Text('Something went wrong.');
         }
-        return PopScope(
-          canPop: false,
-          onPopInvoked: (didPop) {
-            ref.invalidate(selectedOwnedComicProvider);
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    ref.invalidate(selectedOwnedComicProvider);
-                  },
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        comic.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+        return ListView(
+          children: [
+            GestureDetector(
+              onTap: () {
+                ref.invalidate(selectedOwnedComicProvider);
+              },
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
                   ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const Divider(
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    comic.title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            const Divider(
+              thickness: 1,
+              color: ColorPalette.greyscale500,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const PageScrollPhysics(),
+              itemBuilder: (context, index) {
+                return OwnedIssueCard(issue: data[index]);
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
                   thickness: 1,
                   color: ColorPalette.greyscale500,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const PageScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return OwnedIssueCard(issue: data[index]);
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      thickness: 1,
-                      color: ColorPalette.greyscale500,
-                    );
-                  },
-                  itemCount: data.length,
-                ),
-              ],
+                );
+              },
+              itemCount: data.length,
             ),
-          ),
+          ],
         );
       },
       error: (Object error, StackTrace stackTrace) {

@@ -42,7 +42,7 @@ final comicIssuesProvider =
       timer?.cancel();
     });
     ref.onCancel(() {
-      timer = Timer(const Duration(seconds: 30), () {
+      timer = Timer(const Duration(seconds: paginatedDataCacheInSeconds), () {
         ref.invalidateSelf();
       });
     });

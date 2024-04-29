@@ -16,3 +16,5 @@ const String successResult = 'OK';
 const String usernameCriteriaText =
     'Must be 3 to 20 characters long. Numbers, dashes and underscores are allowed.';
 const int splTokenHighestPriority = 1;
+const int chainStatusTimeoutInSeconds = 25;
+const int paginatedDataCacheInSeconds = 30;

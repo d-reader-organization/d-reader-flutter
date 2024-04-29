@@ -1,5 +1,6 @@
 import 'dart:async' show Timer;
 
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/features/creator/domain/providers/creator_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
@@ -16,7 +17,7 @@ final followedCreatorsProvider = StateNotifierProvider<
   });
 
   ref.onCancel(() {
-    timer = Timer(const Duration(seconds: 30), () {
+    timer = Timer(const Duration(seconds: paginatedDataCacheInSeconds), () {
       ref.invalidateSelf();
     });
   });

@@ -1,6 +1,7 @@
 import 'dart:async' show TimeoutException, Timer;
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/nft/domain/providers/nft_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
@@ -29,7 +30,7 @@ final nftsProvider =
   });
 
   ref.onCancel(() {
-    timer = Timer(const Duration(seconds: 30), () {
+    timer = Timer(const Duration(seconds: paginatedDataCacheInSeconds), () {
       ref.invalidateSelf();
     });
   });
@@ -67,13 +68,21 @@ final transactionChainStatusProvider = StateProvider.family<void, String>(
         .waitForSignatureStatus(
       signature,
       status: Commitment.confirmed,
-      timeout: const Duration(seconds: 12),
+      timeout: const Duration(seconds: chainStatusTimeoutInSeconds),
     )
         .then((value) {
-      ref.read(globalNotifierProvider.notifier).update(
-            isLoading: false,
-            newMessage: TransactionStatusMessage.success.getString(),
-          );
+      const timeToWaitForSocketEventInSeconds = 7;
+      Future.delayed(
+        const Duration(
+          seconds: timeToWaitForSocketEventInSeconds,
+        ),
+        () {
+          ref.read(globalNotifierProvider.notifier).update(
+                isLoading: false,
+                newMessage: TransactionStatusMessage.success.getString(),
+              );
+        },
+      );
     }).onError((exception, stackTrace) {
       if (exception is TimeoutException || exception is RpcTimeoutException) {
         ref.read(globalNotifierProvider.notifier).update(
@@ -91,7 +100,7 @@ final transactionChainStatusProvider = StateProvider.family<void, String>(
             newMessage: TransactionStatusMessage.fail.getString(),
           );
     }).timeout(
-      const Duration(seconds: 12),
+      const Duration(seconds: chainStatusTimeoutInSeconds),
       onTimeout: () {
         ref.read(globalNotifierProvider.notifier).update(
               isLoading: false,

@@ -1,5 +1,6 @@
 import 'dart:async' show Timer;
 
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/features/comic/domain/providers/comic_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
@@ -15,7 +16,7 @@ final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
       timer?.cancel();
     });
     ref.onCancel(() {
-      timer = Timer(const Duration(seconds: 30), () {
+      timer = Timer(const Duration(seconds: paginatedDataCacheInSeconds), () {
         ref.invalidateSelf();
       });
     });

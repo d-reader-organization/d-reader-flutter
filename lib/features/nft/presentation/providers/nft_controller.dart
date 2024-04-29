@@ -120,7 +120,7 @@ class NftController extends _$NftController {
     required AnimationController animationController,
     required Future Function(NftModel nft) onSuccess,
     required Function() onTimeout,
-    required Function() onFail,
+    required Function([String message]) onFail,
   }) async {
     final transactionMessage =
         ref.watch(globalNotifierProvider).signatureMessage;
@@ -133,6 +133,11 @@ class NftController extends _$NftController {
           animationController: animationController,
           onSuccess: onSuccess,
         );
+      } else if (transactionMessage ==
+              TransactionStatusMessage.success.getString() &&
+          !isMinted) {
+        onFail(
+            'Transaction is sent but not confirmed. Please use sync-wallet and check your wallet for the asset');
       } else if (transactionMessage ==
           TransactionStatusMessage.timeout.getString()) {
         onTimeout();

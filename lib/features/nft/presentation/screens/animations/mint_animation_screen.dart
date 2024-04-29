@@ -76,13 +76,15 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
                 homeSubRoute: true,
               );
             },
-            onFail: () {
+            onFail: ([String message = '']) {
               _controller.pause();
               context.pop();
               showSnackBar(
                 context: context,
-                text: 'Failed to mint',
-                backgroundColor: ColorPalette.dReaderRed,
+                text: message.isNotEmpty ? message : 'Failed to mint',
+                backgroundColor: message.isNotEmpty
+                    ? ColorPalette.greyscale300
+                    : ColorPalette.dReaderRed,
               );
             },
           );

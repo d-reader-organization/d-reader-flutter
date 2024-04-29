@@ -1,5 +1,6 @@
 import 'dart:async' show Timer;
 
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/owned_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,7 +24,7 @@ class OwnedIssuesAsyncNotifier
     });
 
     ref.onCancel(() {
-      timer = Timer(const Duration(seconds: 30), () {
+      timer = Timer(const Duration(seconds: paginatedDataCacheInSeconds), () {
         ref.invalidateSelf();
       });
     });

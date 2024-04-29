@@ -1,4 +1,4 @@
-import 'dart:async' show Timer;
+import 'dart:async' show TimeoutException, Timer;
 
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
@@ -74,9 +74,18 @@ final transactionChainStatusProvider = StateProvider.family<void, String>(
             isLoading: false,
             newMessage: TransactionStatusMessage.success.getString(),
           );
-    }).onError((error, stackTrace) {
-      Sentry.captureException(error,
-          stackTrace: 'Signature status provider $signature');
+    }).onError((exception, stackTrace) {
+      if (exception is TimeoutException || exception is RpcTimeoutException) {
+        ref.read(globalNotifierProvider.notifier).update(
+              isLoading: false,
+              newMessage: TransactionStatusMessage.timeout.getString(),
+            );
+        return;
+      }
+      Sentry.captureException(
+        exception,
+        stackTrace: 'Signature status provider $signature',
+      );
       ref.read(globalNotifierProvider.notifier).update(
             isLoading: false,
             newMessage: TransactionStatusMessage.fail.getString(),

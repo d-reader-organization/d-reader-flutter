@@ -34,7 +34,7 @@ class ReferralBody extends ConsumerWidget {
                 height: 12,
               ),
               Text(
-                user.hasBetaAccess ? 'Invite your friends' : 'Join the beta',
+                user.hasBetaAccess ? 'Invite your friends' : 'Claim referral',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 32,
@@ -46,7 +46,7 @@ class ReferralBody extends ConsumerWidget {
               ),
               if (!user.hasBetaAccess) ...[
                 const Text(
-                  'Type in the username or the wallet address from your referrer to claim beta access',
+                  'Onboarding people to the platform will make you eligible for rewards in the future',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -78,17 +78,6 @@ class ReferralBody extends ConsumerWidget {
                   'Referrals remaining: ${user.referralsRemaining}',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text(
-                  'Fully onboarding 2 people to the platform will make you eligible for a free comic mint! \'Fully\' means that the users have verified their email and connected a wallet.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),

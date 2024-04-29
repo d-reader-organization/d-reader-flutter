@@ -180,11 +180,13 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
           );
           if (!hasEligibility) {
             await session.close();
+            final isUser = ref.read(selectedCandyMachineGroup)?.user != null;
             return Left(
               AppException(
                 identifier: 'SolanaTransactionNotifier.mint',
-                message:
-                    'Wallet address ${Formatter.formatAddress(walletAddress, 3)} is not eligible for minting',
+                message: isUser
+                    ? 'User ${ref.read(environmentProvider).user?.email} is not eligible for minting'
+                    : 'Wallet address ${Formatter.formatAddress(walletAddress, 3)} is not eligible for minting',
                 statusCode: 403,
               ),
             );

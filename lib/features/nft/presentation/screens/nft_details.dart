@@ -311,7 +311,7 @@ class NftDetails extends ConsumerWidget {
                                           ),
                                           Text(
                                             'royalty',
-                                            style: textTheme.bodyMedium,
+                                            style: textTheme.bodySmall,
                                           ),
                                         ],
                                       ),
@@ -394,7 +394,7 @@ class NftDetails extends ConsumerWidget {
                           height: 16,
                         ),
                         const Text(
-                          'NFT Address',
+                          'Token Address',
                           style: sectionHeadingStyle,
                         ),
                         const SizedBox(

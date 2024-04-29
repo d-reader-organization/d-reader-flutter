@@ -219,6 +219,17 @@ class SolanaNotifier extends _$SolanaNotifier {
       shouldSignMessage: isConnectOnly,
     );
 
+    // Invalidate candy machine to refetch eligibility
+    if (ref.read(selectedCandyMachineGroup) != null) {
+      final signerAddress = ref.read(environmentProvider).publicKey?.toBase58();
+      final currentCMAddress = ref.read(candyMachineStateProvider)?.address;
+      ref.invalidate(candyMachineProvider);
+      await ref.read(candyMachineProvider(
+              query:
+                  'candyMachineAddress=$currentCMAddress${'&walletAddress=$signerAddress'}')
+          .future);
+    }
+
     if (result != successResult) {
       await session.close();
       return Left(
@@ -325,15 +336,6 @@ class SolanaNotifier extends _$SolanaNotifier {
       }, (message) async {
         ref.invalidate(registerWalletToSocketEvents);
         ref.read(registerWalletToSocketEvents);
-        if (ref.read(selectedCandyMachineGroup) != null) {
-          final currentCMAddress = ref.read(candyMachineStateProvider)?.address;
-          ref.invalidate(candyMachineProvider);
-          await ref.read(candyMachineProvider(
-                  query:
-                      'candyMachineAddress=$currentCMAddress${'&walletAddress=${signer.toBase58()}'}')
-              .future);
-        }
-
         return message;
       });
     });

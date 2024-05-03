@@ -12,7 +12,7 @@ class RoutePath {
   static const nftDetails = 'nft-details';
   static const comicDetails = 'comic-details';
   static const comicDetailsInfo = 'comic-details-info';
-  static const comicIssueDetails = 'comic-issue-details';
+  static const comicIssueDetails = 'comic-issue';
   static const creatorDetails = 'creator-details';
   static const eReader = 'e-reader';
   static const profile = 'profile';

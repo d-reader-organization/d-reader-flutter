@@ -39,6 +39,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="dreader.app" />
+                <data android:path="/" />
+                <data android:pathPattern="/mint/.*" />
+                <data android:pathPattern="/comic-issue/.*" />
             </intent-filter>                   
         </activity>
         <!-- Don't delete the meta-data below.

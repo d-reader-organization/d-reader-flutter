@@ -1,11 +1,14 @@
+import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
+import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:flutter/material.dart';
 
-class NfTCard extends StatelessWidget {
+class NftCard extends StatelessWidget {
   final String imageUrl;
   final String comicName;
   final String issueName;
-  const NfTCard({
+  const NftCard({
     super.key,
     required this.imageUrl,
     required this.comicName,
@@ -14,12 +17,27 @@ class NfTCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1000 / 688,
-      child: CachedImageBgPlaceholder(
-        imageUrl: imageUrl,
-        bgImageFit: BoxFit.scaleDown,
-        placeholder: const SizedBox(),
+    return GestureDetector(
+      onTap: () {
+        nextScreenPush(
+          context: context,
+          path: RoutePath.comicIssueCover,
+          extra: imageUrl,
+        );
+      },
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 232,
+          maxHeight: 338,
+        ),
+        child: AspectRatio(
+          aspectRatio: comicIssueAspectRatio,
+          child: CachedImageBgPlaceholder(
+            imageUrl: imageUrl,
+            bgImageFit: BoxFit.scaleDown,
+            placeholder: const SizedBox(),
+          ),
+        ),
       ),
     );
   }

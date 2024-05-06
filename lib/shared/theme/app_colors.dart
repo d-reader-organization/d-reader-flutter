@@ -15,6 +15,8 @@ class ColorPalette {
   static const Color dReaderOrange = Color(0xFFE9A860);
   static const Color dReaderBlue = Color(0xFF0079BF);
   static const Color dReaderError = Color(0xFFEE7B4F);
+  static const Color dReaderPink = Color(0xFFFF769F);
+  static const Color dReaderLightGreen = Color(0xFF7AEB21);
 
   static const Color someGreyColor = Color(0xFFB9B9B9);
 

@@ -1,6 +1,7 @@
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_in/sign_in.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/sign_up.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/verify_email.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/screens/comic_issue_cover.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
 import 'package:d_reader_flutter/features/settings/presentation/screens/security_and_privacy.dart';
@@ -162,6 +163,13 @@ List<GoRoute> generateHomeRoutes(ProviderRef ref) {
           path: 'mint/:id',
           redirect: (context, state) =>
               '/${RoutePath.comicIssueDetails}/${state.pathParameters['id']}',
+        ),
+        GoRoute(
+          path: RoutePath.comicIssueCover,
+          builder: (context, state) {
+            final String imageUrl = state.extra as String;
+            return ComicIssueCoverScreen(imageUrl: imageUrl);
+          },
         ),
         GoRoute(
           path: '${RoutePath.creatorDetails}/:slug',

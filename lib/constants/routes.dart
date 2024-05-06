@@ -13,6 +13,7 @@ class RoutePath {
   static const comicDetails = 'comic-details';
   static const comicDetailsInfo = 'comic-details-info';
   static const comicIssueDetails = 'comic-issue';
+  static const comicIssueCover = 'comic-issue-cover';
   static const creatorDetails = 'creator-details';
   static const eReader = 'e-reader';
   static const profile = 'profile';

@@ -172,7 +172,8 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                               onTap: () {
                                 nextScreenPush(
                                   context: context,
-                                  path: '${RoutePath.eReader}/${issue.id}',
+                                  path: RoutePath.comicIssueCover,
+                                  extra: issue.cover,
                                 );
                               },
                               child: Column(

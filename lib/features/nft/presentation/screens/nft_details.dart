@@ -98,7 +98,7 @@ class NftDetails extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   sliver: SliverToBoxAdapter(
-                    child: NfTCard(
+                    child: NftCard(
                       comicName: nft.comicName,
                       imageUrl: nft.image,
                       issueName: nft.comicIssueName,

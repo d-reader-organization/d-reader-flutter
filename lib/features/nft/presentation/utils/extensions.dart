@@ -18,8 +18,8 @@ extension RarityExtension on NftRarity {
     NftRarity.none: Colors.transparent,
     NftRarity.common: Colors.white,
     NftRarity.uncommon: ColorPalette.dReaderYellow200,
-    NftRarity.rare: Color(0xFF3926B4),
-    NftRarity.epic: Color(0xFFC413E0),
+    NftRarity.rare: ColorPalette.dReaderLightGreen,
+    NftRarity.epic: ColorPalette.dReaderPink,
     NftRarity.legendary: Color(0xFF8377F2),
   };
 

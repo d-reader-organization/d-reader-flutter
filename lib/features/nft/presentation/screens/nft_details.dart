@@ -425,7 +425,7 @@ class NftDetails extends ConsumerWidget {
                                       .showSnackBar(
                                     const SnackBar(
                                       content: Text(
-                                        "NFT address copied to clipboard",
+                                        "Token address copied to clipboard",
                                       ),
                                     ),
                                   ),

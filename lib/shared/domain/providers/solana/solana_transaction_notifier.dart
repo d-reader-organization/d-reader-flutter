@@ -344,7 +344,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         AppException(
           identifier: 'SolanaTransactionNotifier.list',
           statusCode: 500,
-          message: 'Failed to list nft.',
+          message: 'Failed to list.',
         ),
       );
     }

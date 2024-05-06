@@ -1,6 +1,5 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
@@ -83,25 +82,25 @@ class SettingsRootView extends StatelessWidget {
                 );
               },
             ),
-            Consumer(
-              builder: (context, ref, child) {
-                final userRole = ref.watch(environmentProvider).user?.role;
-                return userRole == UserRole.tester.name ||
-                        ref.watch(environmentProvider).apiUrl.contains('dev')
-                    ? SettingsCommonListTile(
-                        leadingPath:
-                            '${Config.settingsAssetsPath}/light/network.svg',
-                        title: 'Change Network',
-                        onTap: () {
-                          nextScreenPush(
-                            context: context,
-                            path: RoutePath.changeNetwork,
-                          );
-                        },
-                      )
-                    : const SizedBox();
-              },
-            ),
+            // Consumer(
+            //   builder: (context, ref, child) {
+            //     final userRole = ref.watch(environmentProvider).user?.role;
+            //     return userRole == UserRole.tester.name ||
+            //             ref.watch(environmentProvider).apiUrl.contains('dev')
+            //         ? SettingsCommonListTile(
+            //             leadingPath:
+            //                 '${Config.settingsAssetsPath}/light/network.svg',
+            //             title: 'Change Network',
+            //             onTap: () {
+            //               nextScreenPush(
+            //                 context: context,
+            //                 path: RoutePath.changeNetwork,
+            //               );
+            //             },
+            //           )
+            //         : const SizedBox();
+            //   },
+            // ),
             SettingsCommonListTile(
               leadingPath: '${Config.settingsAssetsPath}/light/bun_bun.svg',
               title: 'About dReader',

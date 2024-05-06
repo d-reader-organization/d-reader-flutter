@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart';
@@ -27,11 +28,9 @@ class Environment extends _$Environment {
   EnvironmentState build() {
     state = EnvironmentState.empty();
     final localStore = LocalStore.instance;
-    String selectedNetwork = localStore.get(
-          'last-network',
-          defaultValue: null,
-        ) ??
-        SolanaCluster.mainnet.value;
+    const bool isProd = appFlavor != null && appFlavor == 'prod';
+    final String selectedNetwork =
+        isProd ? SolanaCluster.mainnet.value : SolanaCluster.devnet.value;
     final localStoreData = localStore.get(
       selectedNetwork == SolanaCluster.mainnet.value
           ? 'prod-network'
@@ -42,7 +41,6 @@ class Environment extends _$Environment {
     if (localStoreData == null) {
       return EnvironmentState(
         solanaCluster: selectedNetwork,
-        apiUrl: Config.apiUrl,
       );
     }
 
@@ -53,7 +51,6 @@ class Environment extends _$Environment {
             ? jsonDecode(networkData['walletAuthTokenMap'])
             : null;
     return state.copyWith(
-      apiUrl: networkData['apiUrl'],
       authToken: networkData['authToken'],
       jwtToken: networkData['jwtToken'],
       refreshToken: networkData['refreshToken'],
@@ -82,7 +79,6 @@ class Environment extends _$Environment {
     final localStore = LocalStore.instance;
 
     state = state.copyWith(
-      apiUrl: input.apiUrl,
       authToken: input.authToken,
       jwtToken: input.jwtToken,
       refreshToken: input.refreshToken,
@@ -121,7 +117,6 @@ class Environment extends _$Environment {
     Ed25519HDPublicKey? publicKey,
   }) {
     state = state.copyWithNullables(
-      apiUrl: apiUrl,
       solanaCluster: cluster,
       publicKey: publicKey,
     );
@@ -130,7 +125,6 @@ class Environment extends _$Environment {
 
   void onLogout() {
     state = state.copyWithNullables(
-      apiUrl: state.apiUrl,
       solanaCluster: state.solanaCluster,
       authToken: state.authToken,
       walletAuthTokenMap: state.walletAuthTokenMap,

@@ -9,11 +9,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReferralBody extends ConsumerWidget {
-  final bool onlyInput;
   final Widget? child;
   const ReferralBody({
     super.key,
-    this.onlyInput = false,
     this.child,
   });
 
@@ -46,7 +44,7 @@ class ReferralBody extends ConsumerWidget {
               ),
               if (!user.hasBetaAccess) ...[
                 const Text(
-                  'Onboarding people to the platform will make you eligible for rewards in the future',
+                  'Enter the username or wallet address of your referrer so they can claim the referral bonus',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -68,68 +66,75 @@ class ReferralBody extends ConsumerWidget {
                   },
                 ),
               ],
-              if (!onlyInput) ...[
-                if (user.referralsRemaining >= 0) ...[
-                  const SizedBox(
-                    height: 16,
-                  ),
-                ],
-                Text(
-                  'Referrals remaining: ${user.referralsRemaining}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+              const SizedBox(
+                height: 4,
+              ),
+              const Text(
+                'Onboarding people to the platform will make you eligible for rewards in the future',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
-                const SizedBox(
-                  height: 16,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Text(
+                'Your referrals remaining: ${user.referralsRemaining}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Clipboard.setData(
-                      ClipboardData(
-                        text:
-                            'https://dreader.app/register?referrer=${user.name}',
-                      ),
-                    ).then(
-                      (value) => ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: ColorPalette.dReaderGreen,
-                          content: Text(
-                            "Referral link copied to clipboard",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(
+                    ClipboardData(
+                      text:
+                          'https://dreader.app/register?referrer=${user.name}',
+                    ),
+                  ).then(
+                    (value) => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: ColorPalette.dReaderGreen,
+                        content: Text(
+                          "Referral link copied to clipboard",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                    );
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.copy,
+                    ),
+                  );
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.copy,
+                      color: ColorPalette.dReaderYellow100,
+                      size: 16,
+                    ),
+                    SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      'Copy my referral link',
+                      style: TextStyle(
+                        fontSize: 16,
                         color: ColorPalette.dReaderYellow100,
-                        size: 16,
+                        decoration: TextDecoration.underline,
                       ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        'Copy my referral link',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: ColorPalette.dReaderYellow100,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
               if (child != null) ...[child!],
             ],
           ),

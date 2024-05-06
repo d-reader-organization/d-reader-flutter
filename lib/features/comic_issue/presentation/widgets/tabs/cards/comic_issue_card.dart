@@ -69,7 +69,7 @@ class ComicIssueCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 4,
                 ),
                 Text(
                   issue.title,
@@ -78,7 +78,7 @@ class ComicIssueCard extends StatelessWidget {
                   style: textTheme.titleMedium,
                 ),
                 const SizedBox(
-                  height: 8,
+                  height: 4,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

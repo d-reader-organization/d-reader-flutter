@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/auth_providers.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/data/remote/dio_network_service.dart';
@@ -21,7 +22,7 @@ final networkServiceProvider = Provider<DioNetworkService>(
   (ref) {
     final Dio dio = Dio(
       BaseOptions(
-        baseUrl: ref.watch(environmentProvider).apiUrl,
+        baseUrl: Config.apiUrl,
       ),
     )..interceptors.addAll(
         [
@@ -29,7 +30,6 @@ final networkServiceProvider = Provider<DioNetworkService>(
             onRequest: (options, handler) {
               if (!options.path.contains('google')) {
                 // Add the access token to the request header
-                // TODO add this at service level
                 options.headers['Authorization'] =
                     ref.watch(environmentProvider).jwtToken;
               }
@@ -48,9 +48,11 @@ final networkServiceProvider = Provider<DioNetworkService>(
           QueuedInterceptorsWrapper(
             onError: (error, handler) async {
               if (error.response?.statusCode == 401) {
-                final Dio refreshTokenDio = Dio(BaseOptions(
-                  baseUrl: ref.watch(environmentProvider).apiUrl,
-                ));
+                final Dio refreshTokenDio = Dio(
+                  BaseOptions(
+                    baseUrl: Config.apiUrl,
+                  ),
+                );
                 String? newAccessToken = await refreshTokenDio
                     .patch<String?>(
                         '/auth/user/refresh-token/${ref.read(environmentProvider).refreshToken}')

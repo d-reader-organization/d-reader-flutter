@@ -300,7 +300,7 @@ class SolanaNotifier extends _$SolanaNotifier {
         signer: publicKey,
         authToken: result.authToken,
         jwtToken: ref.read(environmentProvider).jwtToken ?? '',
-        apiUrl: ref.read(environmentProvider).apiUrl,
+        apiUrl: Config.apiUrl,
       );
     }
     ref.invalidate(registerWalletToSocketEvents);

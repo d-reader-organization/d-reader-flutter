@@ -6,7 +6,7 @@ import 'package:solana/solana.dart';
 
 class EnvironmentState {
   final UserModel? user;
-  final String apiUrl, solanaCluster;
+  final String solanaCluster;
   final String? authToken, jwtToken, refreshToken;
   @Deprecated('walletAuthTokenMap should be used')
   final Map<String, WalletData>? wallets;
@@ -14,7 +14,6 @@ class EnvironmentState {
   Ed25519HDPublicKey? publicKey;
 
   EnvironmentState({
-    this.apiUrl = Config.apiUrl,
     required this.solanaCluster,
     this.user,
     this.authToken,
@@ -31,7 +30,6 @@ class EnvironmentState {
 
   EnvironmentState copyWith({
     UserModel? user,
-    String? apiUrl,
     String? authToken,
     String? jwtToken,
     String? refreshToken,
@@ -42,7 +40,6 @@ class EnvironmentState {
   }) {
     return EnvironmentState(
       user: user ?? this.user,
-      apiUrl: apiUrl ?? this.apiUrl,
       authToken: authToken ?? this.authToken,
       jwtToken: jwtToken ?? this.jwtToken,
       refreshToken: refreshToken ?? this.refreshToken,
@@ -55,7 +52,6 @@ class EnvironmentState {
 
   EnvironmentState copyWithNullables({
     UserModel? user,
-    required String apiUrl,
     String? authToken,
     String? jwtToken,
     String? refreshToken,
@@ -66,7 +62,6 @@ class EnvironmentState {
   }) {
     return EnvironmentState(
       user: user,
-      apiUrl: apiUrl,
       authToken: authToken,
       jwtToken: jwtToken,
       refreshToken: refreshToken,
@@ -79,7 +74,6 @@ class EnvironmentState {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['apiUrl'] = apiUrl;
     data['authToken'] = authToken;
     data['jwtToken'] = jwtToken;
     data['refreshToken'] = refreshToken;

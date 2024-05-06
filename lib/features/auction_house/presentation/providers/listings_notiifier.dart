@@ -1,10 +1,10 @@
+import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/auction_house/domain/models/listing.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_args.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/models/pagination/pagination_state.dart';
-import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/socket_provider.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,8 +31,7 @@ class ListingsPaginationNotifier
 
   @override
   void init({Function()? onInit}) {
-    final socket =
-        ref.read(socketProvider(ref.read(environmentProvider).apiUrl)).socket;
+    final socket = ref.read(socketProvider(Config.apiUrl)).socket;
     socket.connect();
     ref.onDispose(() {
       socket.close();

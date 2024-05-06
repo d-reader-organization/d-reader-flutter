@@ -17,9 +17,7 @@ final registerWalletToSocketEvents = Provider(
   (ref) {
     final socket = ref
         .read(
-          socketProvider(
-            ref.read(environmentProvider).apiUrl,
-          ),
+          socketProvider(Config.apiUrl),
         )
         .socket;
     ref.onDispose(() {

@@ -113,7 +113,6 @@ class Environment extends _$Environment {
 
   void updateForChangeNetwork({
     required String cluster,
-    required String apiUrl,
     Ed25519HDPublicKey? publicKey,
   }) {
     state = state.copyWithNullables(

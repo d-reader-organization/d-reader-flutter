@@ -31,7 +31,7 @@ all: build-dev build-prod build-prod-apk
 
 build-dev:
 	flutter clean && \
-	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_DEV) --dart-define=apiUrlDevnet=$(API_URL_DEV_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor dev --target lib/main_dev.dart && \
+	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_DEV_DEVNET) --dart-define=apiUrlDevnet=$(API_URL_DEV_DEVNET) --dart-define=sentryDsn=${sentryDsn} --flavor dev --target lib/main_dev.dart && \
 	mv ./build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk ./apks/dReader-dev.apk
 
 build-prod:

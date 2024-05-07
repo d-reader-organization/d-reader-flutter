@@ -48,7 +48,6 @@ class ChangeNetworkController extends _$ChangeNetworkController {
     final envNotifier = ref.read(environmentProvider.notifier);
     envNotifier.updateForChangeNetwork(
       cluster: cluster,
-      apiUrl: isDevnetCluster ? Config.apiUrlDevnet : Config.apiUrl,
     );
     if (localStoreData != null) {
       bool isSuccessful =

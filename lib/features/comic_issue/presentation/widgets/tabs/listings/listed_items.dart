@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/features/auction_house/presentation/providers/l
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/listings/listed_item_row.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -27,7 +28,10 @@ class ListedItems extends ConsumerWidget {
         return ListedItemsBuilder(listings: listings);
       },
       error: (error, stackTrace) {
-        return const Text('Failed to fetch data');
+        return const CarrotErrorWidget(
+          mainErrorText: 'We ran into some issues',
+          adviceText: 'We are working on a fix. Thanks for your patience!',
+        );
       },
       loading: () {
         return const Center(

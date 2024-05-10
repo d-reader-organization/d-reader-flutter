@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/models/stateless_cover.dart';
-import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
@@ -46,7 +46,8 @@ class RaritiesWidget extends StatelessWidget {
                   height: 16,
                 ),
                 RarityWidget(
-                  rarity: covers[index].rarity?.rarityEnum ?? NftRarity.none,
+                  rarity: covers[index].rarity?.rarityEnum ??
+                      DigitalAssetRarity.none,
                   iconPath: 'assets/icons/rarity.svg',
                 ),
               ],

@@ -17,9 +17,11 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
   @override
   Future<Either<AppException, String>> cancelListingTransaction({
-    required String nftAddress,
+    required String digitalAssetAddress,
   }) {
-    return dataSource.cancelListingTransaction(nftAddress: nftAddress);
+    return dataSource.cancelListingTransaction(
+      digitalAssetAddress: digitalAssetAddress,
+    );
   }
 
   @override
@@ -49,11 +51,11 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<Either<AppException, String?>> useComicIssueNftTransaction({
-    required String nftAddress,
+  Future<Either<AppException, String?>> useComicIssueAssetTransaction({
+    required String digitalAssetAddress,
     required String ownerAddress,
   }) {
-    return dataSource.useComicIssueNftTransaction(
-        nftAddress: nftAddress, ownerAddress: ownerAddress);
+    return dataSource.useComicIssueAssetTransaction(
+        digitalAssetAddress: digitalAssetAddress, ownerAddress: ownerAddress);
   }
 }

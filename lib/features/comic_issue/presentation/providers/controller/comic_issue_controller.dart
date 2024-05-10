@@ -4,7 +4,7 @@ import 'package:d_reader_flutter/features/auction_house/presentation/providers/a
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/listings_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
-import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
@@ -69,7 +69,7 @@ class ComicIssueController extends _$ComicIssueController {
         if (result != successResult) {
           return displaySnackbar(text: result, isError: true);
         }
-        ref.invalidate(nftsProvider);
+        ref.invalidate(digitalAssetsProvider);
         onSuccessMint();
       });
     } catch (exception) {

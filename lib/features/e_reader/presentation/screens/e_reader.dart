@@ -1,8 +1,8 @@
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/e_reader/presentation/providers/e_reader_providers.dart';
-import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
-import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
+import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/shared/domain/models/comic_page.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
@@ -13,7 +13,7 @@ import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/common_cached_image.dart';
 import 'package:d_reader_flutter/features/e_reader/presentation/widgets/bottom_navigation.dart';
 import 'package:d_reader_flutter/features/e_reader/presentation/widgets/page_number_widget.dart';
-import 'package:d_reader_flutter/features/library/presentation/widgets/modals/owned_nfts_bottom_sheet.dart';
+import 'package:d_reader_flutter/features/library/presentation/widgets/modals/owned_digital_assets_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -321,19 +321,20 @@ class PreviewImage extends StatelessWidget {
     required this.issueNumber,
   });
 
-  openModalBottomSheet(BuildContext context, List<NftModel> ownedNfts) {
+  openModalBottomSheet(
+      BuildContext context, List<DigitalAssetModel> ownedDigitalAssets) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
-          minChildSize: ownedNfts.length > 1 ? 0.65 : 0.5,
+          initialChildSize: ownedDigitalAssets.length > 1 ? 0.65 : 0.5,
+          minChildSize: ownedDigitalAssets.length > 1 ? 0.65 : 0.5,
           maxChildSize: 0.8,
           expand: false,
           builder: (context, scrollController) {
-            return OwnedNftsBottomSheet(
-              ownedNfts: ownedNfts,
+            return OwnedDigitalAssetsBottomSheet(
+              ownedDigitalAssets: ownedDigitalAssets,
               episodeNumber: issueNumber,
             );
           },
@@ -379,19 +380,20 @@ class PreviewImage extends StatelessWidget {
                       ),
                 Consumer(
                   builder: (context, ref, child) {
-                    final ownedNfts = ref.watch(
-                      nftsProvider(
+                    final ownedDigitalAssets = ref.watch(
+                      digitalAssetsProvider(
                         'comicIssueId=$issueId&userId=${ref.read(environmentProvider).user?.id}',
                       ),
                     );
 
-                    return ownedNfts.when(
+                    return ownedDigitalAssets.when(
                       data: (data) {
                         if (data.isEmpty) {
                           return const SizedBox();
                         }
 
-                        final isAtLeastOneUsed = data.any((nft) => nft.isUsed);
+                        final isAtLeastOneUsed =
+                            data.any((digitalAsset) => digitalAsset.isUsed);
                         return isAtLeastOneUsed && canRead
                             ? const SizedBox()
                             : CustomTextButton(
@@ -416,7 +418,8 @@ class PreviewImage extends StatelessWidget {
                       error: (error, stackTrace) {
                         Sentry.captureException(
                           error,
-                          stackTrace: 'eReader owned Nfts: $stackTrace',
+                          stackTrace:
+                              'eReader owned DigitalAssets: $stackTrace',
                         );
                         return const SizedBox();
                       },

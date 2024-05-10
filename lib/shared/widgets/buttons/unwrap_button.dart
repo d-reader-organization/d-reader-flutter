@@ -1,5 +1,5 @@
 import 'package:d_reader_flutter/constants/enums.dart';
-import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
@@ -11,7 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class UnwrapButton extends ConsumerWidget {
   final bool isLoading;
-  final NftModel nft;
+  final DigitalAssetModel digitalAsset;
   final Color backgroundColor, borderColor, loadingColor, textColor;
   final Size? size;
   final EdgeInsets padding;
@@ -19,7 +19,7 @@ class UnwrapButton extends ConsumerWidget {
   const UnwrapButton({
     super.key,
     required this.isLoading,
-    required this.nft,
+    required this.digitalAsset,
     required this.onPressed,
     this.backgroundColor = ColorPalette.dReaderYellow100,
     this.borderColor = Colors.transparent,

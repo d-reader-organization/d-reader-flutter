@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/features/authentication/presentation/screens/si
 import 'package:d_reader_flutter/features/authentication/presentation/screens/verify_email.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/screens/comic_issue_cover.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
-import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/settings/presentation/screens/security_and_privacy.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/screens/transaction_timeout.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
-import 'package:d_reader_flutter/features/nft/presentation/screens/animations/mint_animation_screen.dart';
-import 'package:d_reader_flutter/features/nft/presentation/screens/animations/open_nft_animation_screen.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/screens/animations/mint_animation_screen.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/screens/animations/open_asset_animation_screen.dart';
 import 'package:d_reader_flutter/features/comic/presentation/screens/comic_details.dart';
 import 'package:d_reader_flutter/features/comic/presentation/screens/comic_info.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/screens/comic_issue_details.dart';
@@ -20,7 +20,7 @@ import 'package:d_reader_flutter/features/creator/presentation/screens/creator_d
 import 'package:d_reader_flutter/features/e_reader/presentation/screens/e_reader.dart';
 import 'package:d_reader_flutter/features/home/presentation/screens/initial.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/screens/request_reset_password.dart';
-import 'package:d_reader_flutter/features/nft/presentation/screens/nft_details.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/screens/digital_asset_details.dart';
 import 'package:d_reader_flutter/features/settings/presentation/screens/about.dart';
 import 'package:d_reader_flutter/features/settings/presentation/screens/change_network.dart';
 import 'package:d_reader_flutter/features/settings/presentation/screens/profile/change_email.dart';
@@ -179,10 +179,10 @@ List<GoRoute> generateHomeRoutes(ProviderRef ref) {
           },
         ),
         GoRoute(
-          path: '${RoutePath.nftDetails}/:address',
+          path: '${RoutePath.digitalAssetDetails}/:address',
           builder: (context, state) {
             final address = state.pathParameters['address'] ?? '';
-            return NftDetails(address: address);
+            return DigitalAssetDetails(address: address);
           },
         ),
         GoRoute(
@@ -304,14 +304,14 @@ final List<GoRoute> animationRoutes = [
   GoRoute(
     path: RoutePath.doneMinting,
     builder: (context, state) {
-      final nft = state.extra as NftModel;
-      return DoneMintingAnimation(nft: nft);
+      final digitalAsset = state.extra as DigitalAssetModel;
+      return DoneMintingAnimation(digitalAsset: digitalAsset);
     },
   ),
   GoRoute(
-    path: RoutePath.openNftAnimation,
+    path: RoutePath.openDigitalAssetAnimation,
     builder: (context, state) {
-      return const OpenNftAnimation();
+      return const OpenDigitalAssetAnimation();
     },
   ),
   GoRoute(

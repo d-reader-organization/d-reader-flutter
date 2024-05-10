@@ -9,7 +9,7 @@ class RoutePath {
 
   // Authorized Routes
   static const home = '/';
-  static const nftDetails = 'nft-details';
+  static const digitalAssetDetails = 'digital-asset-details';
   static const comicDetails = 'comic-details';
   static const comicDetailsInfo = 'comic-details-info';
   static const comicIssueDetails = 'comic-issue';
@@ -30,6 +30,6 @@ class RoutePath {
   static const transactionStatusTimeout = 'status-timeout';
 
   static const doneMinting = 'animation/done-minting';
-  static const openNftAnimation = 'animation/open-nft';
+  static const openDigitalAssetAnimation = 'animation/open-digital-asset';
   static const mintLoadingAnimation = 'animation/mint-loading';
 }

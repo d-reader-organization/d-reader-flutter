@@ -8,8 +8,8 @@ abstract class TransactionDataSource {
     required String minterAddress,
     String? label,
   });
-  Future<Either<AppException, String?>> useComicIssueNftTransaction({
-    required String nftAddress,
+  Future<Either<AppException, String?>> useComicIssueAssetTransaction({
+    required String digitalAssetAddress,
     required String ownerAddress,
   });
   Future<Either<AppException, String>> listTransaction({
@@ -20,7 +20,7 @@ abstract class TransactionDataSource {
   Future<Either<AppException, List<String>>> buyMultipleItems(
       Map<String, dynamic> query);
   Future<Either<AppException, String>> cancelListingTransaction({
-    required String nftAddress,
+    required String digitalAssetAddress,
   });
 }
 
@@ -55,11 +55,11 @@ class TransactionRemoteDataSource implements TransactionDataSource {
 
   @override
   Future<Either<AppException, String>> cancelListingTransaction({
-    required String nftAddress,
+    required String digitalAssetAddress,
   }) async {
     try {
       final response = await networkService
-          .get('/transaction/cancel-listing?nftAddress=$nftAddress');
+          .get('/transaction/cancel-listing?assetAddress=$digitalAssetAddress');
       return response.fold(
         (exception) => Left(exception),
         (result) => Right(result.data.toString()),
@@ -132,13 +132,13 @@ class TransactionRemoteDataSource implements TransactionDataSource {
   }
 
   @override
-  Future<Either<AppException, String?>> useComicIssueNftTransaction({
-    required String nftAddress,
+  Future<Either<AppException, String?>> useComicIssueAssetTransaction({
+    required String digitalAssetAddress,
     required String ownerAddress,
   }) async {
     try {
       final response = await networkService.get(
-        '/transaction/use-comic-issue-nft?nftAddress=$nftAddress&ownerAddress=$ownerAddress',
+        '/transaction/use-comic-issue-asset?assetAddress=$digitalAssetAddress&ownerAddress=$ownerAddress',
       );
       return response.fold(
         (exception) => Left(exception),
@@ -152,7 +152,7 @@ class TransactionRemoteDataSource implements TransactionDataSource {
           message: 'Unknown exception occured',
           statusCode: 500,
           identifier:
-              '${exception.toString()}-TransactionRemoteDataSource.useComicIssueNftTransaction',
+              '${exception.toString()}-TransactionRemoteDataSource.useComicIssueAssetTransaction',
         ),
       );
     }

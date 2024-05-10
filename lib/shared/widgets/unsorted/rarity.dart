@@ -1,4 +1,4 @@
-import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class RarityWidget extends StatelessWidget {
   final bool isLarge;
   final String iconPath;
-  final NftRarity rarity;
+  final DigitalAssetRarity rarity;
   const RarityWidget({
     super.key,
     required this.rarity,
@@ -16,7 +16,7 @@ class RarityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return rarity == NftRarity.none
+    return rarity == DigitalAssetRarity.none
         ? const SizedBox()
         : Container(
             padding: EdgeInsets.symmetric(

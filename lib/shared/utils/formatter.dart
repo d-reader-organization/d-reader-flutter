@@ -85,8 +85,12 @@ class Formatter {
     }
   }
 
-  static String formatCount(dynamic count) {
-    return count == 0 ? 'Free' : NumberFormat.compact().format(count);
+  static String formatCount(dynamic count, [bool isPrice = false]) {
+    return count == 0
+        ? isPrice
+            ? 'Free'
+            : '0'
+        : NumberFormat.compact().format(count);
   }
 
   static String formatPriceByCurrency(
@@ -95,6 +99,6 @@ class Formatter {
       return formatPriceWithSignificant(mintPrice);
     }
     final divideResult = mintPrice / pow(10, splToken.decimals);
-    return formatCount(divideResult);
+    return formatCount(divideResult, true);
   }
 }

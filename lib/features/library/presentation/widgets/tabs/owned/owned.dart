@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/common/library_comic_items.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned_issues_items.dart';
-import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned_nfts_items.dart';
+import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned_digital_assets_items.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,7 +20,8 @@ class OwnedTab extends ConsumerWidget {
     final provider = ref.watch(ownedComicsProvider);
     return ref.watch(selectedOwnedComicProvider) != null
         ? ref.watch(selectedIssueInfoProvider) != null
-            ? OwnedNftsItems(issue: ref.read(selectedIssueInfoProvider)!)
+            ? OwnedDigitalAssetsItems(
+                issue: ref.read(selectedIssueInfoProvider)!)
             : OwnedIssuesItems(comic: ref.read(selectedOwnedComicProvider)!)
         : provider.when(
             data: (data) {

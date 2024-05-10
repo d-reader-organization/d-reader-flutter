@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
-import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
-import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
@@ -15,27 +15,32 @@ class OwnedController extends _$OwnedController {
   @override
   void build() {}
 
-  Future<List<NftModel>> _fetchOwnedNfts(int comicIssueId) async {
+  Future<List<DigitalAssetModel>> _fetchOwnedDigitalAssets(
+      int comicIssueId) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
 
-    final ownedNfts = await ref.read(nftsProvider(
+    final ownedDigitalAssets = await ref.read(digitalAssetsProvider(
       'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
     ).future);
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
-    return ownedNfts;
+    return ownedDigitalAssets;
   }
 
   Future<void> handleIssueInfoTap({
     required int comicIssueId,
-    required void Function(String nftAddress) goToNftDetails,
+    required void Function(String digitalAssetAddress) goToDigitalAssetDetails,
   }) async {
-    final List<NftModel> ownedNfts = await _fetchOwnedNfts(comicIssueId);
+    final List<DigitalAssetModel> ownedDigitalAssets =
+        await _fetchOwnedDigitalAssets(comicIssueId);
 
-    final int usedNftIndex = ownedNfts.indexWhere((element) => element.isUsed);
+    final int usedDigitalAssetIndex =
+        ownedDigitalAssets.indexWhere((element) => element.isUsed);
 
-    if (ownedNfts.length == 1) {
-      final properIndex = usedNftIndex > -1 ? usedNftIndex : 0;
-      goToNftDetails(ownedNfts.elementAt(properIndex).address);
+    if (ownedDigitalAssets.length == 1) {
+      final properIndex =
+          usedDigitalAssetIndex > -1 ? usedDigitalAssetIndex : 0;
+      goToDigitalAssetDetails(
+          ownedDigitalAssets.elementAt(properIndex).address);
     }
     final ComicIssueModel? comicIssue = await ref.read(
       comicIssueDetailsProvider('$comicIssueId').future,
@@ -43,19 +48,20 @@ class OwnedController extends _$OwnedController {
     ref.read(selectedIssueInfoProvider.notifier).update((state) => comicIssue);
   }
 
-  Future<void> handleOpenNft({
-    required NftModel ownedNft,
+  Future<void> handleOpenDigitalAsset({
+    required DigitalAssetModel ownedDigitalAsset,
     required void Function() onSuccess,
     required void Function(String message) onFail,
   }) async {
     try {
-      final openNftResult =
+      final openDigitalAssetResult =
           await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
-                nftAddress: ownedNft.address,
-                ownerAddress: ownedNft.ownerAddress,
+                digitalAssetAddress: ownedDigitalAsset.address,
+                ownerAddress: ownedDigitalAsset.ownerAddress,
               );
 
-      openNftResult.fold((exception) => onFail(exception.message), (result) {
+      openDigitalAssetResult.fold((exception) => onFail(exception.message),
+          (result) {
         if (result == successResult) {
           return onSuccess();
         }

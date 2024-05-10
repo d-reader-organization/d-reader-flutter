@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -32,17 +32,17 @@ final registerWalletToSocketEvents = Provider(
     }
     socket.on('wallet/$address/item-used', (data) {
       ref.invalidate(ownedIssuesProvider);
-      ref.invalidate(nftProvider);
+      ref.invalidate(digitalAssetProvider);
       return ref
-          .read(lastProcessedNftProvider.notifier)
+          .read(lastProcessedAssetProvider.notifier)
           .update((state) => data['address']);
     });
     socket.on('wallet/$address/item-minted', (data) async {
       final newReceipt = Receipt.fromJson(data);
       ref.invalidate(candyMachineProvider);
       ref
-          .read(lastProcessedNftProvider.notifier)
-          .update((state) => newReceipt.nft.address);
+          .read(lastProcessedAssetProvider.notifier)
+          .update((state) => newReceipt.partialAsset.address);
       ref.invalidate(comicIssueDetailsProvider);
     });
   },

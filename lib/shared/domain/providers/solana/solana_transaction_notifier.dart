@@ -5,8 +5,8 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
-import 'package:d_reader_flutter/features/nft/domain/models/buy_nft.dart';
-import 'package:d_reader_flutter/features/nft/presentation/providers/nft_providers.dart';
+import 'package:d_reader_flutter/features/digital_asset/domain/models/buy_digital_asset.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/settings/presentation/providers/spl_tokens.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
@@ -63,13 +63,13 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   }
 
   Future<Either<AppException, String>> _signAndSendMint({
-    required List encodedNftTransactions,
+    required List encodedDigitalAssetTransactions,
     required MobileWalletAdapterClient client,
     required LocalAssociationScenario session,
   }) async {
     try {
       final response = await client.signTransactions(
-        transactions: encodedNftTransactions.map((transaction) {
+        transactions: encodedDigitalAssetTransactions.map((transaction) {
           return base64Decode(transaction);
         }).toList(),
       );
@@ -201,8 +201,8 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
           return response.fold((exception) async {
             await session.close();
             return Left(exception);
-          }, (encodedNftTransactions) async {
-            if (encodedNftTransactions.isEmpty) {
+          }, (encodedDigitalAssetTransactions) async {
+            if (encodedDigitalAssetTransactions.isEmpty) {
               await session.close();
               return Left(
                 AppException(
@@ -213,7 +213,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
               );
             }
             final signAndSendMintResult = await _signAndSendMint(
-              encodedNftTransactions: encodedNftTransactions,
+              encodedDigitalAssetTransactions: encodedDigitalAssetTransactions,
               client: client,
               session: session,
             );
@@ -351,7 +351,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   }
 
   Future<Either<AppException, String>> delist({
-    required String nftAddress,
+    required String digitalAssetAddress,
   }) async {
     final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
     try {
@@ -360,7 +360,8 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
           ref.read(privateLoadingProvider.notifier).update((state) => true);
           final response = await ref
               .read(transactionRepositoryProvider)
-              .cancelListingTransaction(nftAddress: nftAddress);
+              .cancelListingTransaction(
+                  digitalAssetAddress: digitalAssetAddress);
 
           return response.fold((exception) async {
             await session.close();
@@ -392,7 +393,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         AppException(
           identifier: 'SolanaTransactionNotifier.list',
           statusCode: 500,
-          message: 'Failed to delist nft.',
+          message: 'Failed to delist digital asset.',
         ),
       );
     }
@@ -414,11 +415,11 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
               ),
             );
           }
-          List<BuyNftInput> selectedNftsInput = ref
+          List<BuyDigitalAsset> selectedDigitalAssetsInput = ref
               .read(selectedListingsProvider)
               .map(
-                (e) => BuyNftInput(
-                  mintAccount: e.nftAddress,
+                (e) => BuyDigitalAsset(
+                  mintAccount: e.assetAddress,
                   price: e.price,
                   sellerAddress: e.seller.address,
                   buyerAddress: activeWallet,
@@ -426,9 +427,9 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
               )
               .toList();
           Map<String, String> query = {};
-          for (int i = 0; i < selectedNftsInput.length; ++i) {
+          for (int i = 0; i < selectedDigitalAssetsInput.length; ++i) {
             query["instantBuyParams[$i]"] =
-                jsonEncode(selectedNftsInput[i].toJson());
+                jsonEncode(selectedDigitalAssetsInput[i].toJson());
           }
           final response = await ref
               .read(transactionRepositoryProvider)
@@ -470,14 +471,14 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         AppException(
           identifier: 'SolanaTransactionNotifier.list',
           statusCode: 500,
-          message: 'Failed to delist nft.',
+          message: 'Failed to delist digital asset.',
         ),
       );
     }
   }
 
   Future<Either<AppException, String>> useMint({
-    required String nftAddress,
+    required String digitalAssetAddress,
     required String ownerAddress,
   }) async {
     final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
@@ -486,8 +487,8 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     try {
       final response = await ref
           .read(transactionRepositoryProvider)
-          .useComicIssueNftTransaction(
-            nftAddress: nftAddress,
+          .useComicIssueAssetTransaction(
+            digitalAssetAddress: digitalAssetAddress,
             ownerAddress: ownerAddress,
           );
 
@@ -497,11 +498,11 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
           return Left(exception);
         },
         (transaction) async {
-          // if there is no transaction, that means it's Core NFT which means it's unwrapped
+          // if there is no transaction, that means it's Core Digital Asset which means it's unwrapped
           if (transaction == null || transaction.isEmpty) {
             ref
-                .read(lastProcessedNftProvider.notifier)
-                .update((state) => nftAddress);
+                .read(lastProcessedAssetProvider.notifier)
+                .update((state) => digitalAssetAddress);
             ref.read(globalNotifierProvider.notifier).updateLoading(false);
             return const Right(successResult);
           }
@@ -527,12 +528,12 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
 
       Sentry.captureException(exception,
           stackTrace:
-              'Failed to use mint: nftAddress $nftAddress, owner: $ownerAddress. User: ${ref.read(environmentProvider).user?.email}');
+              'Failed to use mint: digitalAssetAddress $digitalAssetAddress, owner: $ownerAddress. User: ${ref.read(environmentProvider).user?.email}');
       return Left(
         AppException(
           identifier: 'SolanaTransactionNotifier.list',
           statusCode: 500,
-          message: 'Failed to unwrap nft',
+          message: 'Failed to unwrap digitalAssetAddress',
         ),
       );
     }

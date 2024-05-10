@@ -7,8 +7,8 @@ abstract class TransactionRepository {
     required String minterAddress,
     String? label,
   });
-  Future<Either<AppException, String?>> useComicIssueNftTransaction({
-    required String nftAddress,
+  Future<Either<AppException, String?>> useComicIssueAssetTransaction({
+    required String digitalAssetAddress,
     required String ownerAddress,
   });
   Future<Either<AppException, String>> listTransaction({
@@ -19,6 +19,6 @@ abstract class TransactionRepository {
   Future<Either<AppException, List<String>>> buyMultipleItems(
       Map<String, dynamic> query);
   Future<Either<AppException, String>> cancelListingTransaction({
-    required String nftAddress,
+    required String digitalAssetAddress,
   });
 }

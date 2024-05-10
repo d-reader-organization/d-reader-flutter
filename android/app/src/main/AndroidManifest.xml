@@ -42,7 +42,13 @@
                 <data android:path="/" />
                 <data android:pathPattern="/mint/.*" />
                 <data android:pathPattern="/comic-issue/.*" />
-            </intent-filter>                   
+            </intent-filter>
+            <!-- <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="solanadappstore" android:host="details" />
+            </intent-filter>                                -->
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

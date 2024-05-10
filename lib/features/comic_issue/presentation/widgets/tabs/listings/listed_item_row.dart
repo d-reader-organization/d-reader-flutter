@@ -1,11 +1,11 @@
-import 'package:d_reader_flutter/features/nft/presentation/utils/extensions.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/domain/models/listing.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
-import 'package:d_reader_flutter/features/nft/presentation/utils/utils.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/common_cached_image.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
@@ -73,7 +73,7 @@ class ListingItem extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  shortenNftName(listing.name),
+                  shortenDigitalAssetName(listing.name),
                   style: textTheme.bodySmall,
                 ),
                 const SizedBox(
@@ -134,7 +134,7 @@ class ListingItem extends ConsumerWidget {
                           ? ColorPalette.lightblue
                           : ColorPalette.dReaderGreen,
                       icon: listing.isUsed
-                          ? 'assets/icons/used_nft.svg'
+                          ? 'assets/icons/used_asset.svg'
                           : 'assets/icons/mint_icon.svg',
                     ),
                     const SizedBox(

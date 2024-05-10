@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/features/comic/presentation/screens/comic_details.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/screens/comic_issue_details.dart';
 import 'package:d_reader_flutter/features/creator/presentation/screens/creator_details.dart';
-import 'package:d_reader_flutter/features/nft/presentation/screens/nft_details.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/screens/digital_asset_details.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -39,11 +39,12 @@ handleNotificationAction(Map payload) {
         ),
       ),
     );
-  } else if (payload.containsKey(NotificationDataKey.nftAddress.stringValue)) {
+  } else if (payload
+      .containsKey(NotificationDataKey.digitalAssetAddress.stringValue)) {
     return routerNavigatorKey.currentState!.push(
       MaterialPageRoute(
-        builder: (context) => NftDetails(
-          address: payload[NotificationDataKey.nftAddress.stringValue],
+        builder: (context) => DigitalAssetDetails(
+          address: payload[NotificationDataKey.digitalAssetAddress.stringValue],
         ),
       ),
     );

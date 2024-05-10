@@ -1,9 +1,9 @@
-import 'package:d_reader_flutter/features/nft/domain/models/nft.dart';
+import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 
 class ListingModel {
   final int id;
-  final String nftAddress, name, cover, rarity;
-  final List<NftAttribute> attributes;
+  final String assetAddress, name, cover, rarity;
+  final List<DigitalAssetAttribute> attributes;
   final Seller seller;
   final String tokenAddress;
   final int price;
@@ -12,7 +12,7 @@ class ListingModel {
 
   ListingModel({
     required this.id,
-    required this.nftAddress,
+    required this.assetAddress,
     required this.name,
     required this.cover,
     required this.attributes,
@@ -27,11 +27,11 @@ class ListingModel {
   factory ListingModel.fromJson(Map<String, dynamic> json) {
     return ListingModel(
         id: json['id'],
-        nftAddress: json['nftAddress'],
+        assetAddress: json['assetAddress'],
         name: json['name'],
         cover: json['cover'],
-        attributes: List<NftAttribute>.from(
-          json['attributes'].map((x) => NftAttribute.fromJson(x)),
+        attributes: List<DigitalAssetAttribute>.from(
+          json['attributes'].map((x) => DigitalAssetAttribute.fromJson(x)),
         ),
         seller: Seller.fromJson(json['seller']),
         tokenAddress: json['tokenAddress'],
@@ -44,7 +44,7 @@ class ListingModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['nftAddress'] = nftAddress;
+    data['assetAddress'] = assetAddress;
     data['name'] = name;
     data['cover'] = cover;
     data['attributes'] = List<dynamic>.from(attributes.map((x) => x.toJson()));

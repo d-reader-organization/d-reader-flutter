@@ -28,7 +28,7 @@ enum ScrollListType {
   collectiblesList,
 }
 
-enum NftRarity {
+enum DigitalAssetRarity {
   none,
   common,
   uncommon,

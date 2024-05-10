@@ -2,10 +2,8 @@ enum WalkthroughKeys {
   connectWallet,
   connectWalletTutorial,
   issueDetails,
-  openNft,
   library,
   secondarySale,
-  nftDetails,
   changeNetwork,
   lowPowerMode,
   verifyEmail,
@@ -18,7 +16,7 @@ enum NotificationDataKey {
   comicIssueId,
   comicSlug,
   creatorSlug,
-  nftAddress,
+  digitalAssetAddress,
   externalUrl,
 }
 
@@ -27,7 +25,7 @@ extension NotificationDataKeyString on NotificationDataKey {
     NotificationDataKey.comicIssueId: 'comicIssueId',
     NotificationDataKey.comicSlug: 'comicSlug',
     NotificationDataKey.creatorSlug: 'creatorSlug',
-    NotificationDataKey.nftAddress: 'nftAddress',
+    NotificationDataKey.digitalAssetAddress: 'digitalAssetAddress',
     NotificationDataKey.externalUrl: 'externalUrl'
   };
 

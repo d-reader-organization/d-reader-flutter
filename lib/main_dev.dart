@@ -23,6 +23,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   notificationsService.displayNotification(message);
 }
 
+void showOversizedImages() {
+  debugInvertOversizedImages = true;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Future.wait(

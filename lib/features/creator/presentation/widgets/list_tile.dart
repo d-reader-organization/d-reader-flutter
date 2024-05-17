@@ -23,7 +23,6 @@ class CreatorListTile extends StatelessWidget {
       },
       leading: CreatorAvatar(
         avatar: creator.avatar,
-        slug: creator.slug,
         radius: 48,
         width: 48,
         height: 48,

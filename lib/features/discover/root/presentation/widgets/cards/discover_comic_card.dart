@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic/domain/models/comic_model.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
@@ -29,29 +30,39 @@ class DiscoverComicCard extends StatelessWidget {
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
         child: Row(
           children: [
             Expanded(
-              flex: 4,
-              child: CachedImageBgPlaceholder(
-                imageUrl: comic.cover,
-                borderRadius: 8,
-                height: 135,
-                opacity: .4,
-                child: comic.logo.isNotEmpty
-                    ? CachedNetworkImage(
-                        key: ValueKey(comic.logo),
-                        imageUrl: comic.logo,
-                      )
-                    : null,
+              flex: 3,
+              child: AspectRatio(
+                aspectRatio: comicAspectRatio,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return CachedImageBgPlaceholder(
+                    imageUrl: comic.cover,
+                    borderRadius: 8,
+                    opacity: .4,
+                    cacheHeight: constraints.maxHeight.cacheSize(context),
+                    cacheWidth: constraints.maxWidth.cacheSize(context),
+                    child: comic.logo.isNotEmpty
+                        ? CachedNetworkImage(
+                            key: ValueKey(comic.logo),
+                            imageUrl: comic.logo,
+                            memCacheWidth:
+                                constraints.maxWidth.cacheSize(context),
+                            memCacheHeight:
+                                (constraints.maxHeight / 2).cacheSize(context),
+                          )
+                        : null,
+                  );
+                }),
               ),
             ),
             const SizedBox(
               width: 16,
             ),
             Expanded(
-              flex: 7,
+              flex: 5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,11 +73,13 @@ class DiscoverComicCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            comic.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: textTheme.titleMedium,
+                          Expanded(
+                            child: Text(
+                              comic.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.titleMedium,
+                            ),
                           ),
                         ],
                       ),

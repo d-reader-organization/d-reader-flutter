@@ -115,31 +115,45 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                   children: [
                     AspectRatio(
                       aspectRatio: comicAspectRatio,
-                      child: CachedImageBgPlaceholder(
-                        imageUrl: widget.comic.cover,
-                        overrideBorderRadius: BorderRadius.circular(0),
-                        foregroundDecoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ColorPalette.appBackgroundColor,
-                              Colors.transparent,
-                              ColorPalette.appBackgroundColor,
-                            ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            stops: [0.0, .6406, 1],
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        return CachedImageBgPlaceholder(
+                          imageUrl: widget.comic.cover,
+                          cacheHeight: constraints.maxHeight.cacheSize(context),
+                          cacheWidth: constraints.maxWidth.cacheSize(context),
+                          overrideBorderRadius: BorderRadius.circular(0),
+                          foregroundDecoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                ColorPalette.appBackgroundColor,
+                                Colors.transparent,
+                                ColorPalette.appBackgroundColor,
+                              ],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              stops: [0.0, .6406, 1],
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     ),
                     Positioned.fill(
                       child: Container(
                         alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
                         child: AspectRatio(
-                          aspectRatio: .6,
-                          child: CachedNetworkImage(
-                            imageUrl: widget.comic.logo,
-                          ),
+                          aspectRatio: comicLogoAspectRatio,
+                          child: LayoutBuilder(builder: (context, constraint) {
+                            return CachedNetworkImage(
+                              imageUrl: widget.comic.logo,
+                              memCacheWidth:
+                                  constraint.maxWidth.cacheSize(context),
+                              memCacheHeight:
+                                  constraint.maxHeight.cacheSize(context),
+                            );
+                          }),
                         ),
                       ),
                     ),
@@ -256,7 +270,6 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                               radius: 24,
                               height: 32,
                               width: 32,
-                              slug: widget.comic.creator?.slug ?? '',
                             ),
                             const SizedBox(width: 12),
                             Expanded(

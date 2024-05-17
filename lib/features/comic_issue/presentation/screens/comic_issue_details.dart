@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
@@ -8,6 +7,7 @@ import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/mint_info_container.dart';
+import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -27,7 +27,6 @@ import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mint_price_widget.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
-import 'package:d_reader_flutter/features/creator/presentation/widgets/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -153,6 +152,11 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                 ? 431
                                 : 460,
                             imageUrl: issue.cover,
+                            cacheHeight:
+                                (MediaQuery.sizeOf(context).height > 780
+                                        ? 431
+                                        : 460)
+                                    .cacheSize(context),
                             overrideBorderRadius: BorderRadius.circular(0),
                             foregroundDecoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -185,19 +189,20 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                       bottom: 16,
                                     ),
                                     constraints: const BoxConstraints(
-                                      maxWidth: 210,
-                                      maxHeight: 304,
+                                      maxWidth: 220,
                                     ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        8,
-                                      ),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: CachedNetworkImageProvider(
-                                          issue.cover,
-                                        ),
-                                      ),
+                                    child: AspectRatio(
+                                      aspectRatio: comicIssueAspectRatio,
+                                      child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                        return CachedImageBgPlaceholder(
+                                          imageUrl: issue.cover,
+                                          cacheWidth: constraints.maxWidth
+                                              .cacheSize(context),
+                                          cacheHeight: constraints.maxHeight
+                                              .cacheSize(context),
+                                        );
+                                      }),
                                     ),
                                   ),
                                 ],
@@ -315,13 +320,18 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                     },
                                     child: Row(
                                       children: [
-                                        CreatorAvatar(
-                                          avatar: issue.creator.avatar,
-                                          radius: 24,
-                                          height: 32,
-                                          width: 32,
-                                          slug: issue.creator.slug,
+                                        renderAvatar(
+                                          context: context,
+                                          creator: issue.creator,
+                                          height: 24,
+                                          width: 24,
                                         ),
+                                        // CreatorAvatar(
+                                        //   avatar: issue.creator.avatar,
+                                        //   radius: 24,
+                                        //   height: 32,
+                                        //   width: 32,
+                                        // ),
                                         const SizedBox(width: 12),
                                         Expanded(
                                           child: Text(

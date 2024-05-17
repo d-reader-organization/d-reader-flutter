@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 class CreatorAvatar extends StatelessWidget {
   final String avatar;
   final double radius;
-  final String slug;
   final double? height;
   final double? width;
   const CreatorAvatar({
     super.key,
     required this.avatar,
-    required this.slug,
     this.radius = 64,
     this.width,
     this.height,
@@ -23,6 +21,8 @@ class CreatorAvatar extends StatelessWidget {
       borderRadius: radius,
       height: height,
       width: width,
+      cacheHeight: height?.cacheSize(context),
+      cacheWidth: width?.cacheSize(context),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
@@ -31,7 +32,6 @@ class DiscoverComicIssueCard extends StatelessWidget {
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
-        height: 167,
         padding: const EdgeInsets.symmetric(
           horizontal: 0,
           vertical: 4,
@@ -40,9 +40,15 @@ class DiscoverComicIssueCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 1,
-              child: CachedImageBgPlaceholder(
-                imageUrl: issue.cover,
-                height: 165,
+              child: AspectRatio(
+                aspectRatio: comicIssueAspectRatio,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return CachedImageBgPlaceholder(
+                    imageUrl: issue.cover,
+                    cacheHeight: constraints.maxHeight.cacheSize(context),
+                    cacheWidth: constraints.maxWidth.cacheSize(context),
+                  );
+                }),
               ),
             ),
             const SizedBox(
@@ -56,12 +62,14 @@ class DiscoverComicIssueCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        issue.comic?.title ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.bodySmall?.copyWith(
-                          color: ColorPalette.greyscale100,
+                      Expanded(
+                        child: Text(
+                          issue.comic?.title ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: ColorPalette.greyscale100,
+                          ),
                         ),
                       ),
                       MatureAudience(

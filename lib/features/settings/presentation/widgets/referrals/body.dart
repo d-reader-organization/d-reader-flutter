@@ -66,9 +66,6 @@ class ReferralBody extends ConsumerWidget {
                   },
                 ),
               ],
-              const SizedBox(
-                height: 4,
-              ),
               const Text(
                 'Onboarding people to the platform will make you eligible for rewards in the future',
                 textAlign: TextAlign.center,

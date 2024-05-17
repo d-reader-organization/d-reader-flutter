@@ -8,6 +8,7 @@ const String publicGroupLabel = 'public';
 const double comicIssueAspectRatio = 690 / 1000;
 const double comicAspectRatio = 1000 / 900;
 const double creatorBannerAspectratio = 1920 / 900;
+const double comicLogoAspectRatio = 800 / 450;
 
 const String walkthroughAssetsPath = 'assets/images/walkthrough';
 const String missingWalletAppText = 'Missing wallet application.';
@@ -18,3 +19,10 @@ const String usernameCriteriaText =
 const int splTokenHighestPriority = 1;
 const int chainStatusTimeoutInSeconds = 25;
 const int paginatedDataCacheInSeconds = 30;
+
+const String localStoreName = 'local_store';
+const String eReaderLocalStoreName = 'eReader_store';
+
+const String eReaderListPositionKey = 'eReader_list_position';
+const String eReaderPagePositionKey = 'eReader_page_position';
+const String eReaderReadingModeKey = 'reading_mode';

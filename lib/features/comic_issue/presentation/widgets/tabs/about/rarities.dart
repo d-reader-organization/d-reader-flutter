@@ -38,6 +38,8 @@ class RaritiesWidget extends StatelessWidget {
                   },
                   child: CachedImageBgPlaceholder(
                     imageUrl: covers[index].image,
+                    cacheHeight: 197.cacheSize(context),
+                    cacheWidth: 137.cacheSize(context),
                     width: 137,
                     height: 197,
                   ),

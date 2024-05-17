@@ -144,7 +144,6 @@ class CreatorsListViewBuilder extends ConsumerWidget {
                             avatar: creator.avatar,
                             height: 48,
                             width: 48,
-                            slug: creator.slug,
                           ),
                     const SizedBox(
                       width: 16,
@@ -216,7 +215,6 @@ class SelectableAvatar extends ConsumerWidget {
           avatar: creator.avatar,
           height: 48,
           width: 48,
-          slug: creator.slug,
         ),
         Positioned.fill(
           left: 24,

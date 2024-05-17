@@ -42,7 +42,6 @@ abstract class Config {
   static const String privacyPolicyUrl = "https://dreader.app/privacy-policy";
   static const String twitterUrl = 'https://twitter.com/dReaderApp';
   static const String discordUrl = 'https://discord.gg/rrZsRvC9mh';
-  static const String localStoreName = 'local_store';
   static String rpcUrlMainnet =
       dotenv.get('rpcMainnet', fallback: 'https://api.mainnet-beta.solana.com');
   static String rpcUrlDevnet =

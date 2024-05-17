@@ -42,7 +42,7 @@ build-prod:
 build-prod-apk:
 	flutter clean && \
 	flutter build apk --split-per-abi --release --dart-define=apiUrl=$(API_URL_PROD) --dart-define=apiUrlDevnet=$(API_URL_PROD) --dart-define=sentryDsn=${sentryDsn} --flavor prod --target lib/main_prod.dart && \
-	mv ./build/app/outputs/flutter-apk/app-armeabi-v7a-prod-release.apk ./apks/dReader.apk
+	mv ./build/app/outputs/flutter-apk/app-arm64-v8a-prod-release.apk ./apks/dReader.apk
 
 start-saga-release:
 	pre-saga-release create-saga-release publish-saga-update

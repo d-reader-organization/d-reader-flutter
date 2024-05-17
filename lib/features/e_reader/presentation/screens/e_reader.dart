@@ -1,24 +1,17 @@
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/features/e_reader/presentation/providers/e_reader_providers.dart';
-import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
-import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
+import 'package:d_reader_flutter/features/e_reader/presentation/utils/utils.dart';
+import 'package:d_reader_flutter/features/e_reader/presentation/widgets/page_widget.dart';
+import 'package:d_reader_flutter/features/e_reader/presentation/widgets/preview_image.dart';
 import 'package:d_reader_flutter/shared/domain/models/comic_page.dart';
-import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/animated_app_bar.dart';
-import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
-import 'package:d_reader_flutter/shared/widgets/image_widgets/common_cached_image.dart';
 import 'package:d_reader_flutter/features/e_reader/presentation/widgets/bottom_navigation.dart';
-import 'package:d_reader_flutter/features/e_reader/presentation/widgets/page_number_widget.dart';
-import 'package:d_reader_flutter/features/library/presentation/widgets/modals/owned_digital_assets_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:vector_math/vector_math_64.dart' show Quad, Vector3;
 
 class EReaderView extends ConsumerStatefulWidget {
   final int issueId;
@@ -39,11 +32,58 @@ class _EReaderViewState extends ConsumerState<EReaderView>
   TapDownDetails? tapDownDetails;
   Animation<Matrix4>? animation;
 
-  bool _isPageChangeEnabled = true;
+  Rect axisAlignedBoundingBox(Quad quad) {
+    double? xMin;
+    double? xMax;
+    double? yMin;
+    double? yMax;
+    for (final Vector3 point in <Vector3>[
+      quad.point0,
+      quad.point1,
+      quad.point2,
+      quad.point3
+    ]) {
+      if (xMin == null || point.x < xMin) {
+        xMin = point.x;
+      }
+      if (xMax == null || point.x > xMax) {
+        xMax = point.x;
+      }
+      if (yMin == null || point.y < yMin) {
+        yMin = point.y;
+      }
+      if (yMax == null || point.y > yMax) {
+        yMax = point.y;
+      }
+    }
+    return Rect.fromLTRB(xMin!, yMin!, xMax!, yMax!);
+  }
+
+  bool _shouldDisplayRow(
+    int currentRowIndex,
+    List<double> pageDYPositions,
+    double top,
+    double bottom,
+  ) {
+    final (bottomBorder, topBorder) = (
+      pageDYPositions[currentRowIndex],
+      pageDYPositions[currentRowIndex + 1]
+    );
+
+    return (bottomBorder <= bottom) && (top <= topBorder);
+  }
+
+  bool _isCellVisible(int row, List<double> pageDYPositions, Quad viewport) {
+    final Rect aabb = axisAlignedBoundingBox(viewport);
+    return _shouldDisplayRow(row, pageDYPositions, aabb.top, aabb.bottom);
+  }
 
   @override
   void initState() {
     super.initState();
+    // final Matrix4? initialPosition = LocalStore.eReaderInstance
+    //     .get('${widget.issueId}_$eReaderListPositionKey');
+    // _transformationController = TransformationController(initialPosition);
     _transformationController = TransformationController();
     _animationController = AnimationController(
       vsync: this,
@@ -59,6 +99,8 @@ class _EReaderViewState extends ConsumerState<EReaderView>
 
   @override
   void dispose() {
+    // LocalStore.eReaderInstance.put('${widget.issueId}_$eReaderListPositionKey',
+    //     _transformationController.value);
     _transformationController.dispose();
     _animationController.dispose();
     super.dispose();
@@ -111,179 +153,147 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                 bool canRead = issueProvider.value!.myStats != null &&
                     issueProvider.value!.myStats!.canRead;
                 bool showPreviewableImage = !canRead || !isFullyUploaded;
+                final int totalPagesCount =
+                    showPreviewableImage ? pages.length + 1 : pages.length;
+
+                List<double> pageDYPositions =
+                    pages.fold([0], (previousValue, page) {
+                  final double currentPageHeight = calcPageImageHeight(
+                    context: context,
+                    imageHeight: page.height,
+                    imageWidth: page.width,
+                  );
+                  final double newItem =
+                      currentPageHeight + (previousValue.lastOrNull ?? 0);
+
+                  return [...previousValue, newItem];
+                });
 
                 return GestureDetector(
                   onTap: () {
                     notifier
                         .update((state) => !ref.read(isAppBarVisibleProvider));
                   },
-                  onDoubleTapDown: (details) {
-                    tapDownDetails = details;
-                  },
-                  onDoubleTap: () {
-                    final position = tapDownDetails?.localPosition;
-                    const double scale = 3;
-                    final x = (-position!.dx) * (scale - 1);
-                    final y = (-position.dy) * (scale - 1);
-
-                    final zoomed = Matrix4.identity()
-                      ..translate(x, y)
-                      ..scale(scale);
-                    final end = _transformationController.value.isIdentity()
-                        ? zoomed
-                        : Matrix4.identity();
-
-                    animation = Matrix4Tween(
-                      begin: _transformationController.value,
-                      end: end,
-                    ).animate(
-                      CurveTween(curve: Curves.easeOut).animate(
-                        _animationController,
-                      ),
-                    );
-
-                    _animationController.forward(from: 0);
-                    if (ref.read(isPageByPageReadingMode)) {
-                      setState(() {
-                        _isPageChangeEnabled = end.getMaxScaleOnAxis() <= 1;
-                      });
-                    }
-                  },
-                  child: ref.watch(isPageByPageReadingMode)
-                      ? PageView.builder(
-                          pageSnapping: true,
-                          physics: _isPageChangeEnabled
-                              ? const PageScrollPhysics()
-                              : const NeverScrollableScrollPhysics(),
-                          allowImplicitScrolling: true,
-                          itemCount: showPreviewableImage
-                              ? pages.length + 1
-                              : pages.length,
-                          itemBuilder: (context, index) {
-                            ValueNotifier<int> valueNotifier =
-                                ValueNotifier(index);
-                            return MyInteractiveViewer(
-                              minScale: 0.1,
-                              maxScale: 4,
-                              panEnabled: true,
-                              scaleEnabled: true,
-                              transformationController:
-                                  _transformationController,
-                              onInteractionEnd: (scaleDetails) {
-                                double scale = _transformationController.value
-                                    .getMaxScaleOnAxis();
-                                setState(() {
-                                  _isPageChangeEnabled = scale <= 1;
-                                });
-                              },
-                              constrained: true,
-                              child: index == pages.length
-                                  ? Center(
-                                      child: PreviewImage(
+                  // child: ref.watch(isPageByPageReadingMode)
+                  //     ? Column(
+                  //         children: [
+                  //           Expanded(
+                  //             child: Center(
+                  //               child: PageView.builder(
+                  //                 physics: const NeverScrollableScrollPhysics(),
+                  //                 itemCount: totalPagesCount,
+                  //                 controller: _pageController,
+                  //                 onPageChanged: (value) {
+                  //                   print(
+                  //                       'page controlelr pages: ${_pageController.page?.toInt()}');
+                  //                 },
+                  //                 itemBuilder: (context, index) {
+                  //                   return InteractiveViewer(
+                  //                     panEnabled: true,
+                  //                     scaleEnabled: true,
+                  //                     maxScale: 10,
+                  //                     child: index == pages.length
+                  //                         ? Center(
+                  //                             child: PreviewImage(
+                  //                               canRead: canRead,
+                  //                               isFullyUploaded:
+                  //                                   isFullyUploaded,
+                  //                               issueId: widget.issueId,
+                  //                               issueNumber:
+                  //                                   issueProvider.value!.number,
+                  //                             ),
+                  //                           )
+                  //                         : PageWidget(
+                  //                             row: index,
+                  //                             isPageByPage: true,
+                  //                             page: pages[index],
+                  //                           ),
+                  //                   );
+                  //                 },
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           ScrollingArrowsWidget(
+                  //             currentPage: ref.watch(
+                  //                 currentPageProvider(_currentPageInView)),
+                  //             totalPagesCount: totalPagesCount,
+                  //             onPageChange: (page) {
+                  //               _pageController
+                  //                   .animateToPage(
+                  //                 page,
+                  //                 duration: const Duration(
+                  //                   milliseconds: 300,
+                  //                 ),
+                  //                 curve: Curves.easeIn,
+                  //               )
+                  //                   .then(
+                  //                 (value) {
+                  //                   ref
+                  //                       .read(currentPageProvider(
+                  //                               _currentPageInView)
+                  //                           .notifier)
+                  //                       .update((state) => page);
+                  //                   LocalStore.eReaderInstance.put(
+                  //                     '${widget.issueId}_$eReaderPagePositionKey',
+                  //                     page,
+                  //                   );
+                  //                 },
+                  //               );
+                  //             },
+                  //           ),
+                  //           const SizedBox(
+                  //             height: 50,
+                  //           ),
+                  //         ],
+                  //       )
+                  //     :
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return InteractiveViewer.builder(
+                        panEnabled: true,
+                        transformationController: _transformationController,
+                        scaleEnabled: true,
+                        maxScale: 10,
+                        builder: (context, viewport) {
+                          return Column(
+                            children: [
+                              for (int row = 0; row < totalPagesCount; ++row)
+                                row == pages.length
+                                    ? PreviewImage(
                                         canRead: canRead,
                                         isFullyUploaded: isFullyUploaded,
                                         issueId: widget.issueId,
                                         issueNumber:
                                             issueProvider.value!.number,
-                                      ),
-                                    )
-                                  : ValueListenableBuilder(
-                                      valueListenable: valueNotifier,
-                                      builder: (context, value, child) {
-                                        return Stack(
-                                          children: [
-                                            CommonCachedImage(
-                                              fit: BoxFit.contain,
-                                              placeholder: Container(
-                                                height: 400,
-                                                width: double.infinity,
-                                                color:
-                                                    ColorPalette.greyscale400,
-                                              ),
-                                              imageUrl: pages[index].image,
-                                              onError: () {
-                                                ++valueNotifier.value;
-                                              },
-                                            ),
-                                            Positioned.fill(
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                  top: 72,
-                                                  right: 16,
-                                                ),
-                                                alignment: Alignment.topRight,
-                                                child: PageNumberWidget(
-                                                  pageNumber:
-                                                      pages[index].pageNumber,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                            );
-                          },
-                        )
-                      : MyInteractiveViewer(
-                          minScale: 1,
-                          maxScale: 4,
-                          panEnabled: true,
-                          transformationController: _transformationController,
-                          scaleEnabled: true,
-                          constrained: true,
-                          child: ListView.builder(
-                            itemCount: showPreviewableImage
-                                ? pages.length + 1
-                                : pages.length,
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              ValueNotifier<int> valueNotifier =
-                                  ValueNotifier(index);
-                              return index == pages.length
-                                  ? PreviewImage(
-                                      canRead: canRead,
-                                      isFullyUploaded: isFullyUploaded,
-                                      issueId: widget.issueId,
-                                      issueNumber: issueProvider.value!.number,
-                                    )
-                                  : ValueListenableBuilder(
-                                      valueListenable: valueNotifier,
-                                      builder: (context, value, child) {
-                                        return Stack(
-                                          children: [
-                                            CommonCachedImage(
-                                              placeholder: Container(
-                                                height: 400,
-                                                width: double.infinity,
-                                                color:
-                                                    ColorPalette.greyscale400,
-                                              ),
-                                              imageUrl: pages[index].image,
-                                              onError: () {
-                                                ++valueNotifier.value;
-                                              },
-                                            ),
-                                            Positioned.fill(
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                  top: 72,
-                                                  right: 16,
-                                                ),
-                                                alignment: Alignment.topRight,
-                                                child: PageNumberWidget(
-                                                  pageNumber:
-                                                      pages[index].pageNumber,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                            },
-                          ),
-                        ),
+                                      )
+                                    : _isCellVisible(
+                                        row,
+                                        pageDYPositions,
+                                        viewport,
+                                      )
+                                        ? PageWidget(
+                                            row: row,
+                                            page: pages[row],
+                                          )
+                                        : SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                .width,
+                                            height: row == pages.length
+                                                ? previewImageHeight
+                                                : calcPageImageHeight(
+                                                    context: context,
+                                                    imageHeight:
+                                                        pages[row].height,
+                                                    imageWidth:
+                                                        pages[row].width,
+                                                  ),
+                                          ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                 );
               },
               error: (Object error, StackTrace stackTrace) {
@@ -306,177 +316,6 @@ class _EReaderViewState extends ConsumerState<EReaderView>
           ),
         ),
       ),
-    );
-  }
-}
-
-class PreviewImage extends StatelessWidget {
-  final bool canRead, isFullyUploaded;
-  final int issueId, issueNumber;
-  const PreviewImage({
-    super.key,
-    required this.canRead,
-    required this.isFullyUploaded,
-    required this.issueId,
-    required this.issueNumber,
-  });
-
-  openModalBottomSheet(
-      BuildContext context, List<DigitalAssetModel> ownedDigitalAssets) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: ownedDigitalAssets.length > 1 ? 0.65 : 0.5,
-          minChildSize: ownedDigitalAssets.length > 1 ? 0.65 : 0.5,
-          maxChildSize: 0.8,
-          expand: false,
-          builder: (context, scrollController) {
-            return OwnedDigitalAssetsBottomSheet(
-              ownedDigitalAssets: ownedDigitalAssets,
-              episodeNumber: issueNumber,
-            );
-          },
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 240),
-      padding: const EdgeInsets.all(16.0),
-      child: Stack(
-        children: [
-          SvgPicture.asset(
-            'assets/icons/comic_preview.svg',
-          ),
-          Positioned.fill(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Icon(
-                    FontAwesomeIcons.eyeSlash,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-                !canRead || !isFullyUploaded
-                    ? Text(
-                        'This is a comic preview!',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      )
-                    : const SizedBox(),
-                canRead
-                    ? const SizedBox()
-                    : Text(
-                        'To view all pages buy a full copy or become a monthly subscriber',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                Consumer(
-                  builder: (context, ref, child) {
-                    final ownedDigitalAssets = ref.watch(
-                      digitalAssetsProvider(
-                        'comicIssueId=$issueId&userId=${ref.read(environmentProvider).user?.id}',
-                      ),
-                    );
-
-                    return ownedDigitalAssets.when(
-                      data: (data) {
-                        if (data.isEmpty) {
-                          return const SizedBox();
-                        }
-
-                        final isAtLeastOneUsed =
-                            data.any((digitalAsset) => digitalAsset.isUsed);
-                        return isAtLeastOneUsed && canRead
-                            ? const SizedBox()
-                            : CustomTextButton(
-                                backgroundColor: ColorPalette.dReaderYellow100,
-                                fontSize: 16,
-                                isLoading: ref.watch(privateLoadingProvider),
-                                textColor: Colors.black,
-                                onPressed: () {
-                                  final privateLoadingNotifier =
-                                      ref.read(privateLoadingProvider.notifier);
-                                  privateLoadingNotifier
-                                      .update((state) => true);
-                                  openModalBottomSheet(context, data);
-                                  privateLoadingNotifier
-                                      .update((state) => false);
-                                },
-                                child: const Text(
-                                  'Unwrap',
-                                ),
-                              );
-                      },
-                      error: (error, stackTrace) {
-                        Sentry.captureException(
-                          error,
-                          stackTrace:
-                              'eReader owned DigitalAssets: $stackTrace',
-                        );
-                        return const SizedBox();
-                      },
-                      loading: () {
-                        return const SizedBox();
-                      },
-                    );
-                  },
-                ),
-                isFullyUploaded
-                    ? const SizedBox()
-                    : Text(
-                        'This comic is not yet fully uploaded. New chapters might be added weekly or the comic is still in a presale phase',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MyInteractiveViewer extends StatelessWidget {
-  final Widget child;
-  final TransformationController? transformationController;
-  final double minScale, maxScale;
-  final bool panEnabled, scaleEnabled, constrained;
-  final void Function(ScaleEndDetails)? onInteractionEnd;
-  final void Function(ScaleStartDetails)? onInteractionStart;
-  const MyInteractiveViewer({
-    super.key,
-    required this.child,
-    this.transformationController,
-    this.minScale = 0.1,
-    this.maxScale = 4,
-    this.panEnabled = true,
-    this.scaleEnabled = false,
-    this.constrained = false,
-    this.onInteractionEnd,
-    this.onInteractionStart,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InteractiveViewer(
-      minScale: minScale,
-      maxScale: maxScale,
-      panEnabled: panEnabled,
-      transformationController: transformationController,
-      scaleEnabled: scaleEnabled,
-      constrained: constrained,
-      onInteractionEnd: onInteractionEnd,
-      onInteractionStart: onInteractionStart,
-      child: child,
     );
   }
 }

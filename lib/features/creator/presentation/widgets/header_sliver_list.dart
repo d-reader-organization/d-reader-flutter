@@ -49,7 +49,6 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
               children: [
                 CreatorAvatar(
                   avatar: creator.avatar,
-                  slug: creator.slug,
                   height: 96,
                   width: 96,
                   radius: 64,

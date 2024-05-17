@@ -425,20 +425,10 @@ class Avatar extends StatelessWidget {
               ? CircleAvatar(
                   radius: 48,
                   backgroundColor: ColorPalette.greyscale400,
-                  child: CachedNetworkImage(
-                    key: ValueKey(user.avatar),
-                    imageUrl: user.avatar,
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(64),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    },
+                  backgroundImage: CachedNetworkImageProvider(
+                    user.avatar,
+                    maxHeight: 96,
+                    maxWidth: 96,
                   ),
                 )
               : Container(

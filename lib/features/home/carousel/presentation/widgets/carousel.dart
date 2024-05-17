@@ -9,11 +9,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Carousel extends ConsumerWidget {
   const Carousel({super.key});
-
+  final double carouselHeight = 360;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<List<CarouselModel>> carouselData = ref.watch(carouselProvider);
     TextTheme textTheme = Theme.of(context).textTheme;
+
     return carouselData.when(
       data: (data) {
         return Column(
@@ -25,7 +26,7 @@ class Carousel extends ConsumerWidget {
                       .read(sliderDotsIndicatorPosition.notifier)
                       .update((state) => index);
                 },
-                height: 320,
+                height: carouselHeight,
                 viewportFraction: 1,
                 enlargeCenterPage: true,
                 autoPlay: true,
@@ -47,23 +48,23 @@ class Carousel extends ConsumerWidget {
                       child: Stack(
                         children: [
                           CachedImageBgPlaceholder(
-                            height: 320,
+                            height: carouselHeight,
+                            cacheHeight: carouselHeight.cacheSize(context),
+                            cacheWidth: MediaQuery.sizeOf(context)
+                                .width
+                                .cacheSize(context),
+                            bgImageFit: BoxFit.fill,
                             imageUrl: carouselItem.image,
                             borderRadius: 0,
                             foregroundDecoration: const BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  ColorPalette.appBackgroundColor,
                                   Color.fromRGBO(31, 34, 42, 0.0),
                                   ColorPalette.appBackgroundColor,
                                 ],
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                stops: [
-                                  0,
-                                  .4236,
-                                  1.0,
-                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [0.5579, 1],
                               ),
                             ),
                           ),

@@ -30,19 +30,27 @@ class LibraryCard extends ConsumerWidget {
           children: [
             AspectRatio(
               aspectRatio: comicAspectRatio,
-              child: CachedImageBgPlaceholder(
-                imageUrl: comic.cover,
-                opacity: .4,
-                overrideBorderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                child: comic.logo.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: comic.logo,
-                      )
-                    : null,
-              ),
+              child: LayoutBuilder(builder: (context, constraints) {
+                return CachedImageBgPlaceholder(
+                  imageUrl: comic.cover,
+                  opacity: .4,
+                  cacheHeight: constraints.maxHeight.cacheSize(context),
+                  cacheWidth: constraints.maxWidth.cacheSize(context),
+                  overrideBorderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                  child: comic.logo.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: comic.logo,
+                          memCacheWidth:
+                              constraints.maxWidth.cacheSize(context),
+                          memCacheHeight:
+                              (constraints.maxHeight / 1.2).cacheSize(context),
+                        )
+                      : null,
+                );
+              }),
             ),
             Expanded(
               child: Padding(

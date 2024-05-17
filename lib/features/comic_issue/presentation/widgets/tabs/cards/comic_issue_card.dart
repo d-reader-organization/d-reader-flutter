@@ -31,28 +31,34 @@ class ComicIssueCard extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: comicIssueAspectRatio,
-            child: CachedImageBgPlaceholder(
-              imageUrl: issue.cover,
-              padding: EdgeInsets.zero,
-              foregroundDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: const LinearGradient(
-                  colors: [
-                    ColorPalette.greyscale500,
-                    Colors.transparent,
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  stops: [0.0, .5],
-                ),
-              ),
-              child: issue.isPopular
-                  ? const Align(
-                      alignment: Alignment.topLeft,
-                      child: HotIconSmall(),
-                    )
-                  : null,
-            ),
+            child: Builder(builder: (context) {
+              return LayoutBuilder(builder: (context, constraints) {
+                return CachedImageBgPlaceholder(
+                  imageUrl: issue.cover,
+                  padding: EdgeInsets.zero,
+                  cacheHeight: constraints.maxHeight.cacheSize(context),
+                  cacheWidth: constraints.maxWidth.cacheSize(context),
+                  foregroundDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    gradient: const LinearGradient(
+                      colors: [
+                        ColorPalette.greyscale500,
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      stops: [0.0, .5],
+                    ),
+                  ),
+                  child: issue.isPopular
+                      ? const Align(
+                          alignment: Alignment.topLeft,
+                          child: HotIconSmall(),
+                        )
+                      : null,
+                );
+              });
+            }),
           ),
           Padding(
             padding: const EdgeInsets.all(12),

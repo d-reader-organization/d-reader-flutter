@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/utils.dart';
-import 'package:d_reader_flutter/shared/widgets/image_widgets/common_cached_image.dart';
+import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:flutter/material.dart';
@@ -91,8 +91,11 @@ class ListingItem extends ConsumerWidget {
                               decoration: const BoxDecoration(
                                 color: ColorPalette.greyscale500,
                               ),
-                              child: CommonCachedImage(
+                              child: CachedImageBgPlaceholder(
                                 imageUrl: listing.seller.avatar!,
+                                borderRadius: 0,
+                                cacheHeight: 32,
+                                cacheWidth: 32,
                               ),
                             ),
                           )

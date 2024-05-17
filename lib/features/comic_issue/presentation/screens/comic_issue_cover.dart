@@ -36,9 +36,13 @@ class ComicIssueCoverScreen extends StatelessWidget {
             maxScale: 5,
             child: AspectRatio(
               aspectRatio: comicIssueAspectRatio,
-              child: CachedImageBgPlaceholder(
-                imageUrl: imageUrl,
-              ),
+              child: LayoutBuilder(builder: (context, constraints) {
+                return CachedImageBgPlaceholder(
+                  imageUrl: imageUrl,
+                  cacheHeight: constraints.maxHeight.cacheSize(context),
+                  cacheWidth: constraints.maxWidth.cacheSize(context),
+                );
+              }),
             ),
           ),
         ),

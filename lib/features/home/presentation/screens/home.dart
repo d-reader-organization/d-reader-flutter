@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/features/comic/presentation/providers/comic_pro
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
 import 'package:d_reader_flutter/features/home/carousel/presentation/providers/carousel_providers.dart';
+import 'package:d_reader_flutter/main_dev.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/screens/discover.dart';
@@ -20,6 +21,7 @@ class HomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    showOversizedImages();
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -39,7 +41,7 @@ class HomeView extends ConsumerWidget {
             ref.invalidate(comicIssuesProvider);
             ref.invalidate(creatorProvider);
           },
-          expandedHeight: 344,
+          expandedHeight: 384,
           flexibleSpace: const FlexibleSpaceBar(
             stretchModes: [StretchMode.blurBackground],
             collapseMode: CollapseMode.pin,

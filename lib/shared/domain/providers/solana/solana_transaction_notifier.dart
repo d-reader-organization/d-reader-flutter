@@ -96,7 +96,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         );
         sendTransactionResult = await solanaClient.rpcClient.sendTransaction(
           signedTx.encode(),
-          preflightCommitment: Commitment.confirmed,
+          skipPreflight: true,
         );
       }
       ref.read(globalNotifierProvider.notifier).update(

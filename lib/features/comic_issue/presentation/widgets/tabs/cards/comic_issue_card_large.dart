@@ -42,17 +42,21 @@ class ComicIssueCardLarge extends StatelessWidget {
             Expanded(
               child: AspectRatio(
                 aspectRatio: comicIssueAspectRatio,
-                child: CachedImageBgPlaceholder(
-                  imageUrl: issue.cover,
-                  overrideBorderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(
-                      8,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return CachedImageBgPlaceholder(
+                    imageUrl: issue.cover,
+                    cacheHeight: constraints.maxHeight.cacheSize(context),
+                    cacheWidth: constraints.maxWidth.cacheSize(context),
+                    overrideBorderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(
+                        8,
+                      ),
+                      bottomLeft: Radius.circular(
+                        8,
+                      ),
                     ),
-                    bottomLeft: Radius.circular(
-                      8,
-                    ),
-                  ),
-                ),
+                  );
+                }),
               ),
             ),
             Expanded(

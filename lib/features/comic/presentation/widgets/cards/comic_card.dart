@@ -41,19 +41,24 @@ class ComicCard extends ConsumerWidget {
                 children: [
                   AspectRatio(
                     aspectRatio: comicAspectRatio,
-                    child: CachedImageBgPlaceholder(
-                      imageUrl: comic.cover,
-                      opacity: .4,
-                      padding: EdgeInsets.zero,
-                      overrideBorderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(
-                          8,
+                    child: LayoutBuilder(builder: (context, constraint) {
+                      return CachedImageBgPlaceholder(
+                        width: constraint.maxWidth.toDouble(),
+                        cacheHeight: constraint.maxHeight.cacheSize(context),
+                        cacheWidth: constraint.maxWidth.cacheSize(context),
+                        imageUrl: comic.cover,
+                        opacity: .4,
+                        padding: EdgeInsets.zero,
+                        overrideBorderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(
+                            8,
+                          ),
+                          topRight: Radius.circular(
+                            8,
+                          ),
                         ),
-                        topRight: Radius.circular(
-                          8,
-                        ),
-                      ),
-                    ),
+                      );
+                    }),
                   ),
                   Positioned.fill(
                     top: 0,
@@ -67,11 +72,21 @@ class ComicCard extends ConsumerWidget {
                             ? Container(
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
+                                  horizontal: 8,
                                   vertical: 4,
                                 ),
-                                child: CachedNetworkImage(
-                                  imageUrl: comic.logo,
+                                child: AspectRatio(
+                                  aspectRatio: comicLogoAspectRatio,
+                                  child: LayoutBuilder(
+                                      builder: (context, constraint) {
+                                    return CachedNetworkImage(
+                                      imageUrl: comic.logo,
+                                      memCacheWidth: constraint.maxWidth
+                                          .cacheSize(context),
+                                      memCacheHeight: constraint.maxHeight
+                                          .cacheSize(context),
+                                    );
+                                  }),
                                 ),
                               )
                             : const SizedBox(),

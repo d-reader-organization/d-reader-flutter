@@ -1,11 +1,11 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
+import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/features/creator/presentation/widgets/avatar.dart';
 import 'package:flutter/material.dart';
 
 class CreatorCard extends StatelessWidget {
@@ -40,18 +40,27 @@ class CreatorCard extends StatelessWidget {
                 Expanded(
                   child: AspectRatio(
                     aspectRatio: creatorBannerAspectratio,
-                    child: CachedImageBgPlaceholder(
-                      imageUrl: creator.banner,
-                      height: 83,
-                      overrideBorderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(
-                          8,
-                        ),
-                        topRight: Radius.circular(
-                          8,
-                        ),
-                      ),
-                    ),
+                    child: LayoutBuilder(builder: (context, constraints) {
+                      return unsupportedCacheTypesRegex.hasMatch(creator.banner)
+                          ? Image.network(
+                              creator.banner,
+                            )
+                          : CachedImageBgPlaceholder(
+                              imageUrl: creator.banner,
+                              cacheHeight:
+                                  constraints.maxHeight.cacheSize(context),
+                              cacheWidth:
+                                  constraints.maxWidth.cacheSize(context),
+                              overrideBorderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(
+                                  8,
+                                ),
+                                topRight: Radius.circular(
+                                  8,
+                                ),
+                              ),
+                            );
+                    }),
                   ),
                 ),
                 Expanded(
@@ -101,11 +110,11 @@ class CreatorCard extends StatelessWidget {
                       64,
                     ),
                   ),
-                  child: CreatorAvatar(
-                    avatar: creator.avatar,
-                    slug: creator.slug,
-                    width: 48,
+                  child: renderAvatar(
+                    context: context,
+                    creator: creator,
                     height: 48,
+                    width: 48,
                   ),
                 ),
               ),

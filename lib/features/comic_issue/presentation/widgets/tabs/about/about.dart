@@ -37,8 +37,20 @@ class IssueAbout extends ConsumerWidget {
                     .future,
               ),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    snapshot.hasError) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  final currentCandyMachine =
+                      ref.read(candyMachineStateProvider);
+                  if (currentCandyMachine != null &&
+                      currentCandyMachine.address ==
+                          issue.activeCandyMachineAddress) {
+                    return MintInfoContainer(
+                      candyMachineGroups: currentCandyMachine.groups,
+                      totalSupply: currentCandyMachine.supply,
+                    );
+                  }
+                  return const SizedBox();
+                }
+                if (snapshot.hasError) {
                   return const SizedBox();
                 }
                 return MintInfoContainer(

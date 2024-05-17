@@ -1,9 +1,9 @@
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
+import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/widgets/texts/author_verified.dart';
-import 'package:d_reader_flutter/features/creator/presentation/widgets/avatar.dart';
 import 'package:flutter/material.dart';
 
 class CreatorsListBuilder extends StatelessWidget {
@@ -48,6 +48,7 @@ class CreatorListItem extends StatelessWidget {
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -63,12 +64,7 @@ class CreatorListItem extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                CreatorAvatar(
-                  avatar: creator.avatar,
-                  height: 24,
-                  width: 24,
-                  slug: creator.slug,
-                ),
+                renderAvatar(context: context, creator: creator),
                 const SizedBox(
                   width: 8,
                 ),

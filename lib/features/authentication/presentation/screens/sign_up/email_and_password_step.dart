@@ -10,8 +10,8 @@ import 'package:d_reader_flutter/shared/widgets/icons/secure_password_icon.dart'
 import 'package:d_reader_flutter/shared/widgets/textfields/text_field.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vector_graphics/vector_graphics_compat.dart';
 
 class SignUpEmailAndPasswordStep extends ConsumerStatefulWidget {
   final Function() onSuccess;
@@ -53,8 +53,10 @@ class _SignUpEmailAndPasswordStepState
     return ListView(
       padding: EdgeInsets.zero,
       children: [
-        SvgPicture.asset(
-          '${Config.introAssetsPath}/email_pass.svg',
+        const VectorGraphic(
+          loader: AssetBytesLoader(
+            '${Config.introAssetsPath}/email_pass.svg',
+          ),
           fit: BoxFit.fitWidth,
         ),
         const Padding(

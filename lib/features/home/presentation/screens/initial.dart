@@ -10,8 +10,8 @@ import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vector_graphics/vector_graphics_compat.dart';
 
 class InitialIntroScreen extends StatelessWidget {
   const InitialIntroScreen({super.key});
@@ -21,16 +21,18 @@ class InitialIntroScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Column(
+      body: const Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: SvgPicture.asset(
-              '${Config.introAssetsPath}/welcome.svg',
+            child: VectorGraphic(
+              loader: AssetBytesLoader(
+                '${Config.introAssetsPath}/welcome.svg',
+              ),
               fit: BoxFit.fitWidth,
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: Text(
               'Join the comic revolution!',
@@ -230,7 +232,8 @@ class SocialButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(icon),
+          VectorGraphic(loader: AssetBytesLoader(icon)),
+          // SvgPicture.asset(icon),
           const SizedBox(
             width: 8,
           ),

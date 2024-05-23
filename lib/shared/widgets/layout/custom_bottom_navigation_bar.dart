@@ -34,7 +34,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             indicatorColor: Colors.transparent,
             elevation: 0,
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-            overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
             destinations: const [
               NavigationDestination(
                 icon: BottomNavigationItemIcon(

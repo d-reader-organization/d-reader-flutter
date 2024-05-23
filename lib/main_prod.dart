@@ -111,9 +111,9 @@ class MyApp extends ConsumerWidget {
         ),
         navigationBarTheme: NavigationBarThemeData(
           height: 48,
-          labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
-            (Set<MaterialState> states) => TextStyle(
-              color: states.contains(MaterialState.selected)
+          labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+            (Set<WidgetState> states) => TextStyle(
+              color: states.contains(WidgetState.selected)
                   ? ColorPalette.dReaderYellow100
                   : Colors.white,
               fontSize: 12,

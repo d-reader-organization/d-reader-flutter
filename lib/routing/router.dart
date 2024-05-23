@@ -133,7 +133,7 @@ List<GoRoute> generateHomeRoutes(ProviderRef ref) {
   return [
     GoRoute(
       path: RoutePath.home,
-      onExit: (context) async {
+      onExit: (context, state) async {
         if (ref.read(selectedIssueInfoProvider) != null) {
           ref.invalidate(selectedIssueInfoProvider);
           return false;

@@ -10,9 +10,9 @@ import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart'
 import 'package:d_reader_flutter/shared/widgets/icons/secure_password_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/textfields/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vector_graphics/vector_graphics_compat.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -61,11 +61,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 ),
               ),
             ),
-            SvgPicture.asset(
-              Config.whiteLogoSymbol,
+            const VectorGraphic(
+              loader: AssetBytesLoader(Config.whiteLogoSymbol),
               height: 64,
               width: 64,
-              colorFilter: const ColorFilter.mode(
+              colorFilter: ColorFilter.mode(
                 Colors.white,
                 BlendMode.srcIn,
               ),

@@ -19,12 +19,12 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: 9FWHbNVpgAiWQCchkUAUrJwH3PMhrrptxH6g3r2hBsWv
+  address: 3Q7n6gsQu4fvAcoiLhxFkeV7P3a24x9ggJ2e7XuqpLtn
   media:
     - purpose: icon
       uri: ./512x512_rounded.png
     - purpose: screenshot
-      uri: ./screenshots/1.png      
+      uri: ./screenshots/1.png
     - purpose: screenshot
       uri: ./screenshots/2.png
     - purpose: screenshot
@@ -46,3 +46,9 @@ release:
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader
   testing_instructions: Run the app
+lastSubmittedVersionOnChain:
+  address: 3Q7n6gsQu4fvAcoiLhxFkeV7P3a24x9ggJ2e7XuqpLtn
+  version_code: 2046
+  apk_hash: j/FCwOXdrAuf9yYDytrNYZxKB2Zdm9xSqq+00ynvmkw=
+lastUpdatedVersionOnStore:
+  address: 3Q7n6gsQu4fvAcoiLhxFkeV7P3a24x9ggJ2e7XuqpLtn

@@ -38,9 +38,9 @@ class CustomLabeledCheckbox extends StatelessWidget {
                   color: ColorPalette.greyscale300,
                 ),
                 value: isChecked,
-                fillColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) =>
-                      !states.contains(MaterialState.selected)
+                fillColor: WidgetStateProperty.resolveWith<Color>(
+                  (Set<WidgetState> states) =>
+                      !states.contains(WidgetState.selected)
                           ? ColorPalette.greyscale500
                           : ColorPalette.dReaderYellow100,
                 ),

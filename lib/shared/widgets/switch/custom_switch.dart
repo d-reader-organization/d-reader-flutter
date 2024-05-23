@@ -20,12 +20,12 @@ class CustomSwitch extends StatelessWidget {
       children: [
         Text(title, style: Theme.of(context).textTheme.titleLarge),
         Switch(
-          thumbColor: MaterialStateProperty.resolveWith((states) {
+          thumbColor: WidgetStateProperty.resolveWith((states) {
             return Colors.white;
           }),
-          trackOutlineColor: const MaterialStatePropertyAll(Colors.transparent),
-          trackColor: MaterialStateProperty.resolveWith((states) {
-            return states.contains(MaterialState.selected)
+          trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+          trackColor: WidgetStateProperty.resolveWith((states) {
+            return states.contains(WidgetState.selected)
                 ? ColorPalette.dReaderGreen
                 : ColorPalette.greyscale300;
           }),

@@ -12,6 +12,7 @@ import 'package:d_reader_flutter/features/wallet/presentation/widgets/why_need_w
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vector_graphics/vector_graphics_compat.dart';
 
 class SignUpConnectWalletStep extends ConsumerWidget {
   const SignUpConnectWalletStep({super.key});
@@ -51,8 +52,10 @@ class SignUpConnectWalletStep extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SvgPicture.asset(
-                '${Config.introAssetsPath}/wallet.svg',
+              const VectorGraphic(
+                loader: AssetBytesLoader(
+                  '${Config.introAssetsPath}/wallet.svg',
+                ),
                 fit: BoxFit.fitWidth,
               ),
               const Padding(

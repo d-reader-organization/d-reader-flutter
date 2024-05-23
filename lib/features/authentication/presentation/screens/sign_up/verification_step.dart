@@ -3,8 +3,8 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vector_graphics/vector_graphics_compat.dart';
 
 class SignUpVerificationStep extends StatelessWidget {
   final Function() handleNext;
@@ -29,10 +29,11 @@ class SignUpVerificationStep extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              SvgPicture.asset(
-                'assets/icons/envelope.svg',
-                colorFilter:
-                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              const VectorGraphic(
+                loader: AssetBytesLoader(
+                  'assets/icons/envelope.svg',
+                ),
+                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
               const SizedBox(
                 height: 16,

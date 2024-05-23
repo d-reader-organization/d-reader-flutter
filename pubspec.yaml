@@ -3,7 +3,7 @@ description: dReader Flutter app.
 
 publish_to: 'none'
 
-version: 1.3.6+75 # # dappStore: 1.3.2+45 (next release: 1.3.5+46)) google play: 1.3.5+74 (next release: 1.3.6+75)
+version: 1.3.6+75 # # dappStore: 1.3.6+46 (next release: 1.3.7+47) google play: 1.3.6+75 (next release: 1.3.7+76)
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -38,8 +38,8 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   riverpod_annotation: ^2.1.1
   freezed_annotation: ^2.4.1
-  package_info_plus: ^6.0.0
-  sentry_flutter: ^7.5.1
+  package_info_plus: ^8.0.0
+  sentry_flutter: ^8.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   flutter_typeahead: ^5.2.0
@@ -55,10 +55,11 @@ dependencies:
   firebase_messaging: ^14.7.10
   firebase_core: ^2.24.2
   flutter_local_notifications: ^17.0.0
-  go_router: ^13.1.0
+  go_router: ^14.1.1
   json_annotation: ^4.8.1
   google_sign_in: ^6.2.1
   vector_math: ^2.1.4
+  vector_graphics: ^1.1.11+1
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +70,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
   build_runner: ^2.4.8
   freezed: ^2.4.7
@@ -80,6 +81,7 @@ dev_dependencies:
   custom_lint: ^0.6.4
   hive_generator: ^2.0.1
   json_serializable: ^6.7.1
+  vector_graphics_compiler: ^1.1.11+1
 
 flutter_icons:
   android: "launcher_icon"
@@ -105,8 +107,28 @@ flutter:
     - assets/icons/settings_screen/bold/
     - assets/icons/intro/
     - assets/res/
-    - .env    
-
+    - .env
+    - path: assets/icons/google_logo.svg
+      transformers:
+        - package: vector_graphics_compiler        
+    - path: assets/icons/intro/welcome.svg
+      transformers:
+        - package: vector_graphics_compiler
+    - path: assets/icons/intro/username.svg
+      transformers:
+        - package: vector_graphics_compiler
+    - path: assets/icons/intro/email_pass.svg
+      transformers:
+        - package: vector_graphics_compiler
+    - path: assets/icons/intro/wallet.svg
+      transformers:
+        - package: vector_graphics_compiler
+    - path: assets/icons/envelope.svg
+      transformers:
+        - package: vector_graphics_compiler               
+    - path: assets/images/logo-symbol-white.svg
+      transformers:
+        - package: vector_graphics_compiler             
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

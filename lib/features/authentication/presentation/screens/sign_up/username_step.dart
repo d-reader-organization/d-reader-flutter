@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vector_graphics/vector_graphics_compat.dart';
 
 class SignUpUsernameStep extends ConsumerStatefulWidget {
   final Function() onSuccess;
@@ -72,8 +73,10 @@ class _SignUpUsernameStepState extends ConsumerState<SignUpUsernameStep> {
     return ListView(
       padding: EdgeInsets.zero,
       children: [
-        SvgPicture.asset(
-          '${Config.introAssetsPath}/username.svg',
+        const VectorGraphic(
+          loader: AssetBytesLoader(
+            '${Config.introAssetsPath}/username.svg',
+          ),
           fit: BoxFit.fitWidth,
         ),
         const Padding(

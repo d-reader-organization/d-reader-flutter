@@ -145,15 +145,15 @@ class _ComicDetailsScaffoldState extends State<ComicDetailsScaffold>
                         ),
                         child: AspectRatio(
                           aspectRatio: comicLogoAspectRatio,
-                          child: LayoutBuilder(builder: (context, constraint) {
-                            return CachedNetworkImage(
-                              imageUrl: widget.comic.logo,
-                              memCacheWidth:
-                                  constraint.maxWidth.cacheSize(context),
-                              memCacheHeight:
-                                  constraint.maxHeight.cacheSize(context),
-                            );
-                          }),
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return CachedNetworkImage(
+                                imageUrl: widget.comic.logo,
+                                memCacheHeight: (constraints.maxHeight * .6)
+                                    .cacheSize(context),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),

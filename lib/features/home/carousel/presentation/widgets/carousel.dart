@@ -53,7 +53,6 @@ class Carousel extends ConsumerWidget {
                             cacheWidth: MediaQuery.sizeOf(context)
                                 .width
                                 .cacheSize(context),
-                            bgImageFit: BoxFit.fill,
                             imageUrl: carouselItem.image,
                             borderRadius: 0,
                             foregroundDecoration: const BoxDecoration(

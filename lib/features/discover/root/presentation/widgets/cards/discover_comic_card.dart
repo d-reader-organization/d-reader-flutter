@@ -46,12 +46,9 @@ class DiscoverComicCard extends StatelessWidget {
                     cacheWidth: constraints.maxWidth.cacheSize(context),
                     child: comic.logo.isNotEmpty
                         ? CachedNetworkImage(
-                            key: ValueKey(comic.logo),
                             imageUrl: comic.logo,
-                            memCacheWidth:
-                                constraints.maxWidth.cacheSize(context),
                             memCacheHeight:
-                                (constraints.maxHeight / 2).cacheSize(context),
+                                (constraints.maxHeight * .6).cacheSize(context),
                           )
                         : null,
                   );

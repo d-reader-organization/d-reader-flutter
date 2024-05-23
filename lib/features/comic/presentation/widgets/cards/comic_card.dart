@@ -78,13 +78,12 @@ class ComicCard extends ConsumerWidget {
                                 child: AspectRatio(
                                   aspectRatio: comicLogoAspectRatio,
                                   child: LayoutBuilder(
-                                      builder: (context, constraint) {
+                                      builder: (context, constraints) {
                                     return CachedNetworkImage(
                                       imageUrl: comic.logo,
-                                      memCacheWidth: constraint.maxWidth
-                                          .cacheSize(context),
-                                      memCacheHeight: constraint.maxHeight
-                                          .cacheSize(context),
+                                      memCacheHeight:
+                                          (constraints.maxHeight * .6)
+                                              .cacheSize(context),
                                     );
                                   }),
                                 ),

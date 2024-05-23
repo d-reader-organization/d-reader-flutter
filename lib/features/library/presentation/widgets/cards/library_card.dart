@@ -43,10 +43,8 @@ class LibraryCard extends ConsumerWidget {
                   child: comic.logo.isNotEmpty
                       ? CachedNetworkImage(
                           imageUrl: comic.logo,
-                          memCacheWidth:
-                              constraints.maxWidth.cacheSize(context),
                           memCacheHeight:
-                              (constraints.maxHeight / 1.2).cacheSize(context),
+                              (constraints.maxHeight * .6).cacheSize(context),
                         )
                       : null,
                 );

@@ -80,6 +80,6 @@ class PaginationNotifier<T> extends StateNotifier<PaginationState<T>>
 
   @override
   String buildQueryString() {
-    return 'skip=${args.skip * args.take}&take=${args.take}&$query';
+    return 'skip=${args.skip * args.take}&take=${args.take}${query != null ? '&$query' : ''}';
   }
 }

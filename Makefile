@@ -53,6 +53,9 @@ pre-saga-release:
 create-saga-release:
 	cd publishing && NVM_DIR="$${HOME}/.nvm" && . "$${NVM_DIR}/nvm.sh" && nvm use && npx dapp-store create release -k ${keyPairPath} -b ~/Library/Android/sdk/build-tools/34.0.0-rc3 -u ${rpcMainnet}
 
+create-saga-release-aws:
+	cd publishing && NVM_DIR="$${HOME}/.nvm" && . "$${NVM_DIR}/nvm.sh" && nvm use && npx dapp-store create release -k ${keyPairPath} -b ~/Library/Android/sdk/build-tools/34.0.0-rc3 -u ${rpcMainnet} -s "[\"s3\", \"${awsAccessKey}\", \"${awsSecretKey}\", \"${awsS3BucketName}\", \"${awsS3Region}\"]"
+
 publish-saga-update:
 	cd publishing && NVM_DIR="$${HOME}/.nvm" && . "$${NVM_DIR}/nvm.sh" && nvm use && npx dapp-store publish update -k ${keyPairPath} -u ${rpcMainnet} --requestor-is-authorized --complies-with-solana-dapp-store-policies
 

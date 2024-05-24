@@ -30,7 +30,7 @@ class ListingsPaginationNotifier
   bool isEnd = false, initialFetchDone = false;
 
   @override
-  void init({Function()? onInit}) {
+  void init() {
     final socket = ref.read(socketProvider(Config.apiUrl)).socket;
     socket.connect();
     ref.onDispose(() {
@@ -118,6 +118,6 @@ class ListingsPaginationNotifier
 
   @override
   String buildQueryString() {
-    return 'skip=${args.skip * args.take}&take=${args.take}&$query';
+    return 'skip=${args.skip * args.take}&take=${args.take}${query != null ? '&$query' : ''}';
   }
 }

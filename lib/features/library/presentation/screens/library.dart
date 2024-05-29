@@ -59,6 +59,7 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
           ),
         ),
         floatHeaderSlivers: true,
+        physics: const BouncingScrollPhysics(),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverToBoxAdapter(

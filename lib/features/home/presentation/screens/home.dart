@@ -49,15 +49,14 @@ class HomeView extends ConsumerWidget {
           ),
         ),
         SliverList(
-          delegate: SliverChildListDelegate(
-            [
-              Container(
-                color: Colors.transparent,
-                padding: const EdgeInsets.only(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return const Padding(
+                padding: EdgeInsets.only(
                   left: 16,
                   top: 8.0,
                 ),
-                child: const Column(
+                child: Column(
                   children: [
                     SizedBox(
                       height: 24,
@@ -146,8 +145,9 @@ class HomeView extends ConsumerWidget {
                     ),
                   ],
                 ),
-              ),
-            ],
+              );
+            },
+            childCount: 1,
           ),
         ),
       ],

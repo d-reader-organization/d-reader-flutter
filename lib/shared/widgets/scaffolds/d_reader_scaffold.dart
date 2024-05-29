@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/screens/discover.dart';
 import 'package:d_reader_flutter/features/home/presentation/screens/home.dart';
 import 'package:d_reader_flutter/features/library/presentation/screens/library.dart';
-import 'package:d_reader_flutter/features/settings/presentation/screens/root.dart';
+import 'package:d_reader_flutter/features/settings/presentation/screens/settings.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/custom_bottom_navigation_bar.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/test_mode_widget.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/referrals/bottom_navigation.dart';

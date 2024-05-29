@@ -34,118 +34,60 @@ class DiscoverScrollView extends ConsumerWidget {
     required bool isDetailedView,
     required WidgetRef ref,
   }) {
-    // return switch (scrollListType) {
-    //   ScrollListType.comicList => isDetailedView
-    //       ? ComicList(
-    //           provider: ref.read(
-    //             paginatedComicsProvider(
-    //               query,
-    //             ),
-    //           ),
-    //         )
-    //       : ComicGallery(
-    //           provider: ref.read(
-    //             paginatedComicsProvider(
-    //               query,
-    //             ),
-    //           ),
-    //         ),
-    //   ScrollListType.issueList => isDetailedView
-    //       ? IssuesList(
-    //           provider: ref.read(
-    //             paginatedIssuesProvider(
-    //               query,
-    //             ),
-    //           ),
-    //         )
-    //       : IssuesGallery(
-    //           provider: ref.read(
-    //             paginatedIssuesProvider(
-    //               query,
-    //             ),
-    //           ),
-    //         ),
-    //   ScrollListType.creatorList => isDetailedView
-    //       ? CreatorsList(
-    //           provider: ref.read(
-    //             paginatedCreatorsProvider(
-    //               query,
-    //             ),
-    //           ),
-    //         )
-    //       : CreatorsGallery(
-    //           provider: ref.read(
-    //             paginatedCreatorsProvider(
-    //               query,
-    //             ),
-    //           ),
-    //         ),
-    //   ScrollListType.collectiblesList => ComicList(
-    //       provider: ref.read(
-    //         paginatedComicsProvider(
-    //           query,
-    //         ),
-    //       ),
-    //     ),
-    // };
-    switch (scrollListType) {
-      case ScrollListType.comicList:
-        return isDetailedView
-            ? ComicList(
-                provider: ref.read(
-                  paginatedComicsProvider(
-                    query,
-                  ),
+    return switch (scrollListType) {
+      ScrollListType.comicList => isDetailedView
+          ? ComicList(
+              provider: ref.read(
+                paginatedComicsProvider(
+                  query,
                 ),
-              )
-            : ComicGallery(
-                provider: ref.read(
-                  paginatedComicsProvider(
-                    query,
-                  ),
+              ),
+            )
+          : ComicGallery(
+              provider: ref.read(
+                paginatedComicsProvider(
+                  query,
                 ),
-              );
-      case ScrollListType.issueList:
-        return isDetailedView
-            ? IssuesList(
-                provider: ref.read(
-                  paginatedIssuesProvider(
-                    query,
-                  ),
+              ),
+            ),
+      ScrollListType.issueList => isDetailedView
+          ? IssuesList(
+              provider: ref.read(
+                paginatedIssuesProvider(
+                  query,
                 ),
-              )
-            : IssuesGallery(
-                provider: ref.read(
-                  paginatedIssuesProvider(
-                    query,
-                  ),
+              ),
+            )
+          : IssuesGallery(
+              provider: ref.read(
+                paginatedIssuesProvider(
+                  query,
                 ),
-              );
-      case ScrollListType.creatorList:
-        return isDetailedView
-            ? CreatorsList(
-                provider: ref.read(
-                  paginatedCreatorsProvider(
-                    query,
-                  ),
+              ),
+            ),
+      ScrollListType.creatorList => isDetailedView
+          ? CreatorsList(
+              provider: ref.read(
+                paginatedCreatorsProvider(
+                  query,
                 ),
-              )
-            : CreatorsGallery(
-                provider: ref.read(
-                  paginatedCreatorsProvider(
-                    query,
-                  ),
+              ),
+            )
+          : CreatorsGallery(
+              provider: ref.read(
+                paginatedCreatorsProvider(
+                  query,
                 ),
-              );
-      case ScrollListType.collectiblesList:
-        return ComicList(
+              ),
+            ),
+      ScrollListType.collectiblesList => ComicList(
           provider: ref.read(
             paginatedComicsProvider(
               query,
             ),
           ),
-        );
-    }
+        ),
+    };
   }
 
   @override

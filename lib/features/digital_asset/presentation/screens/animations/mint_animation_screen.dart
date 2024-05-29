@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_controller.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/extensions.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
-import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/features/twitter/domain/providers/twitter_provider.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
@@ -308,22 +306,19 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                         builder: (context, ref, child) {
                           return GestureDetector(
                             onTap: () async {
-                              final digitalAsset = widget.digitalAsset;
-                              final comicIssue = await ref.read(
-                                comicIssueDetailsProvider(
-                                        digitalAsset.comicIssueId.toString())
-                                    .future,
+                              final response = await ref
+                                  .read(twitterRepositoryProvider)
+                                  .assetMintedContent(
+                                      widget.digitalAsset.address);
+                              response.fold(
+                                (exception) {
+                                  // handle exception
+                                },
+                                (twitterUri) async {
+                                  final uri = Uri.encodeFull(twitterUri);
+                                  await openUrl(uri);
+                                },
                               );
-                              final dReaderWebUrl = ref
-                                          .read(environmentProvider)
-                                          .solanaCluster ==
-                                      SolanaCluster.devnet.value
-                                  ? 'https://dev-devnet.dreader.app/mint/${comicIssue.comicSlug}_${comicIssue.slug}?utm_source=mobile'
-                                  : 'https://dreader.app/mint/${comicIssue.comicSlug}_${comicIssue.slug}?utm_source=mobile';
-                              final uri = Uri.encodeFull(
-                                'https://twitter.com/intent/tweet?text=I just minted a ${digitalAsset.rarity} ${comicIssue.comic?.title}: ${comicIssue.title} comic on @dReaderApp! 📚\n\nMint yours here while the supply lasts.👇\n\n$dReaderWebUrl',
-                              );
-                              await openUrl(uri);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(

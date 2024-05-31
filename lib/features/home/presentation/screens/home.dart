@@ -3,7 +3,6 @@ import 'package:d_reader_flutter/features/comic/presentation/providers/comic_pro
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/creator/presentation/providers/creator_providers.dart';
 import 'package:d_reader_flutter/features/home/carousel/presentation/providers/carousel_providers.dart';
-import 'package:d_reader_flutter/main_dev.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/screens/discover.dart';
@@ -21,7 +20,6 @@ class HomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    showOversizedImages();
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -54,94 +52,60 @@ class HomeView extends ConsumerWidget {
               return const Padding(
                 padding: EdgeInsets.only(
                   left: 16,
-                  top: 8.0,
+                  top: 32.0,
+                  bottom: 32,
                 ),
-                child: Column(
+                child: Wrap(
+                  runSpacing: 32,
                   children: [
-                    SizedBox(
-                      height: 24,
-                    ),
-                    SectionHeading(
+                    _SectionItem(
                       title: 'Popular Comics',
                       initialTab: DiscoverTabViewEnum.comics,
                       filter: FilterId.popular,
+                      child: ComicsListView(
+                        query: 'skip=0&take=12&filterTag=popular',
+                      ),
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    ComicsListView(
-                      query: 'skip=0&take=12&filterTag=popular',
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    SectionHeading(
+                    _SectionItem(
                       title: 'New Episodes',
                       initialTab: DiscoverTabViewEnum.issues,
                       sort: SortByEnum.latest,
+                      child: ComicIssuesList(
+                        query: 'skip=0&take=12&sortTag=latest',
+                      ),
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    ComicIssuesList(
-                      query: 'skip=0&take=12&sortTag=latest',
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    SectionHeading(
+                    _SectionItem(
                       title: 'Top Creators',
                       initialTab: DiscoverTabViewEnum.creators,
+                      child: CreatorsGrid(
+                        query: 'skip=0&take=4&sortTag=followers&sortOrder=desc',
+                      ),
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    CreatorsGrid(query: 'skip=0&take=4'),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    SectionHeading(
+                    _SectionItem(
                       title: 'New Comics',
                       initialTab: DiscoverTabViewEnum.comics,
                       sort: SortByEnum.latest,
+                      child: ComicsListView(
+                        query:
+                            'skip=0&take=12&sortTag=published&sortOrder=desc',
+                      ),
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    ComicsListView(
-                      query: 'skip=0&take=12&sortTag=published&sortOrder=desc',
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    SectionHeading(
+                    _SectionItem(
                       title: 'Free Episodes',
                       initialTab: DiscoverTabViewEnum.issues,
                       filter: FilterId.free,
+                      child: ComicIssuesList(
+                        query: 'skip=0&take=20&filterTag=free',
+                      ),
                     ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    ComicIssuesList(
-                      query: 'skip=0&take=20&filterTag=free',
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    SectionHeading(
+                    _SectionItem(
                       title: 'Spicy action',
                       initialTab: DiscoverTabViewEnum.comics,
                       sort: SortByEnum.viewers,
-                    ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    ComicsListView(
-                      query:
-                          'skip=0&take=12&sortTag=viewers&sortOrder=desc&genreSlugs[]=action',
-                    ),
-                    SizedBox(
-                      height: 32,
+                      child: ComicsListView(
+                        query:
+                            'skip=0&take=12&sortTag=viewers&sortOrder=desc&genreSlugs[]=action',
+                      ),
                     ),
                   ],
                 ),
@@ -150,6 +114,40 @@ class HomeView extends ConsumerWidget {
             childCount: 1,
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _SectionItem extends StatelessWidget {
+  final FilterId? filter;
+  final DiscoverTabViewEnum? initialTab;
+  final SortByEnum? sort;
+  final String title;
+  final Widget child;
+
+  const _SectionItem({
+    required this.child,
+    this.filter,
+    this.initialTab,
+    this.sort,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SectionHeading(
+          title: title,
+          filter: filter,
+          initialTab: initialTab,
+          sort: sort,
+        ),
+        const SizedBox(
+          height: 24,
+        ),
+        child,
       ],
     );
   }

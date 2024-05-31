@@ -21,12 +21,8 @@ class SignUpScreen extends ConsumerStatefulWidget {
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final PageController _pageController = PageController();
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -45,21 +41,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               left: 16,
               right: 16,
             ),
-            child: const Heading(),
+            child: const _Heading(),
           ),
         ),
         body: ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
-            ? GoogleSignUpForm(pageController: _pageController)
-            : RegularSignUpForm(pageController: _pageController),
+            ? _GoogleSignUpForm(pageController: _pageController)
+            : _RegularSignUpForm(pageController: _pageController),
       ),
     );
   }
 }
 
-class RegularSignUpForm extends ConsumerWidget {
+class _RegularSignUpForm extends ConsumerWidget {
   final PageController pageController;
-  const RegularSignUpForm({
-    super.key,
+  const _RegularSignUpForm({
     required this.pageController,
   });
 
@@ -117,10 +112,9 @@ class RegularSignUpForm extends ConsumerWidget {
   }
 }
 
-class GoogleSignUpForm extends ConsumerWidget {
+class _GoogleSignUpForm extends ConsumerWidget {
   final PageController pageController;
-  const GoogleSignUpForm({
-    super.key,
+  const _GoogleSignUpForm({
     required this.pageController,
   });
 
@@ -165,15 +159,15 @@ class GoogleSignUpForm extends ConsumerWidget {
   }
 }
 
-class Heading extends ConsumerWidget {
-  const Heading({super.key});
+class _Heading extends ConsumerWidget {
+  const _Heading();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const HeadingItem(
+        const _HeadingItem(
           step: 1,
           title: 'Username',
           color: Colors.white,
@@ -191,7 +185,7 @@ class Heading extends ConsumerWidget {
             .watch(signUpDataNotifierProvider)
             .googleAccessToken
             .isEmpty) ...[
-          HeadingItem(
+          _HeadingItem(
             step: 2,
             title: 'Email & pass',
             color: ref.watch(signUpPageProvider) > 0
@@ -208,7 +202,7 @@ class Heading extends ConsumerWidget {
             ),
           ),
         ],
-        HeadingItem(
+        _HeadingItem(
           step:
               ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
                   ? 2
@@ -223,12 +217,11 @@ class Heading extends ConsumerWidget {
   }
 }
 
-class HeadingItem extends StatelessWidget {
+class _HeadingItem extends StatelessWidget {
   final int step;
   final String title;
   final Color color;
-  const HeadingItem({
-    super.key,
+  const _HeadingItem({
     required this.step,
     required this.title,
     required this.color,

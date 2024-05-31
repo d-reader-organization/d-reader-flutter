@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 const defaultErrorMessage = 'Something broke!';
+const defaultAdviceText =
+    'Try resetting the app and make sure it\'s running on the latest version';
 
 class CarrotErrorScaffold extends StatelessWidget {
   final String adviceText, errorText;
   const CarrotErrorScaffold({
     super.key,
-    this.adviceText =
-        'Try resetting the app and make sure it\'s running on the latest version',
+    this.adviceText = defaultAdviceText,
     this.errorText = defaultErrorMessage,
   });
 
@@ -32,8 +33,7 @@ class CarrotErrorWidget extends StatelessWidget {
   final Widget? additionalChild;
   const CarrotErrorWidget({
     super.key,
-    this.adviceText =
-        'Try resetting the app and make sure it\'s running on the latest version',
+    this.adviceText = defaultAdviceText,
     this.mainErrorText = defaultErrorMessage,
     this.height = 300,
     this.padding,

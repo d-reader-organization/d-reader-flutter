@@ -1,18 +1,17 @@
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/cards/comic_issue_card.dart';
+import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicIssuesList extends ConsumerWidget {
   final String? query;
-  final bool onlyFree;
 
   const ComicIssuesList({
     super.key,
     this.query,
-    this.onlyFree = false,
   });
 
   @override
@@ -22,15 +21,11 @@ class ComicIssuesList extends ConsumerWidget {
     final screenWidth = MediaQuery.sizeOf(context).width;
     return comicIssues.when(
       data: (data) {
-        if (onlyFree) {
-          data = data.where((element) => element.isFreeToRead).toList();
-        }
         return data.isNotEmpty
             ? SizedBox(
                 height: 227,
                 child: ListView.builder(
                   itemCount: data.length,
-                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     return Container(
@@ -48,14 +43,13 @@ class ComicIssuesList extends ConsumerWidget {
       error: (err, stack) {
         return const Text(
           "Fetch data error occured.",
-          style: TextStyle(color: Colors.red),
+          style: TextStyle(color: ColorPalette.dReaderRed),
         );
       },
       loading: () => SizedBox(
         height: 227,
         child: ListView.builder(
           itemCount: 3,
-          shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) => SkeletonCard(
             margin: const EdgeInsets.only(

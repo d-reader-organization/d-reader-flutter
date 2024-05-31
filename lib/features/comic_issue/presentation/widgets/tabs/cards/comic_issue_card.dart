@@ -19,7 +19,6 @@ class ComicIssueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
         nextScreenPush(
@@ -29,78 +28,101 @@ class ComicIssueCard extends StatelessWidget {
       },
       child: Stack(
         children: [
-          AspectRatio(
-            aspectRatio: comicIssueAspectRatio,
-            child: Builder(builder: (context) {
-              return LayoutBuilder(builder: (context, constraints) {
-                return CachedImageBgPlaceholder(
-                  imageUrl: issue.cover,
-                  padding: EdgeInsets.zero,
-                  cacheHeight: constraints.maxHeight.cacheSize(context),
-                  cacheWidth: constraints.maxWidth.cacheSize(context),
-                  foregroundDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    gradient: const LinearGradient(
-                      colors: [
-                        ColorPalette.greyscale500,
-                        Colors.transparent,
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      stops: [0.0, .5],
-                    ),
-                  ),
-                  child: issue.isPopular
-                      ? const Align(
-                          alignment: Alignment.topLeft,
-                          child: HotIconSmall(),
-                        )
-                      : null,
-                );
-              });
-            }),
+          _IssueCoverBgContainer(issue: issue),
+          _IssueInfoContainer(
+            issue: issue,
           ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  issue.comic?.title ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: textTheme.bodySmall?.copyWith(
-                    color: ColorPalette.greyscale100,
-                  ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  issue.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: textTheme.titleMedium,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
-                      style: textTheme.bodySmall,
-                    ),
-                    SolanaPrice(
-                      price: Formatter.formatLamportPrice(issue.stats?.price),
-                      mainAxisAlignment: MainAxisAlignment.end,
-                    ),
-                  ],
-                )
-              ],
+        ],
+      ),
+    );
+  }
+}
+
+class _IssueCoverBgContainer extends StatelessWidget {
+  final ComicIssueModel issue;
+  const _IssueCoverBgContainer({required this.issue});
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: comicIssueAspectRatio,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return CachedImageBgPlaceholder(
+            imageUrl: issue.cover,
+            padding: EdgeInsets.zero,
+            cacheHeight: constraints.maxHeight.cacheSize(context),
+            cacheWidth: constraints.maxWidth.cacheSize(context),
+            foregroundDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              gradient: const LinearGradient(
+                colors: [
+                  ColorPalette.greyscale500,
+                  Colors.transparent,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                stops: [0.0, .5],
+              ),
             ),
+            child: issue.isPopular
+                ? const Align(
+                    alignment: Alignment.topLeft,
+                    child: HotIconSmall(),
+                  )
+                : null,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _IssueInfoContainer extends StatelessWidget {
+  final ComicIssueModel issue;
+  const _IssueInfoContainer({required this.issue});
+
+  @override
+  Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            issue.comic?.title ?? '',
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: textTheme.bodySmall?.copyWith(
+              color: ColorPalette.greyscale100,
+            ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            issue.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.titleMedium,
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'EP ${issue.number}/${issue.stats?.totalIssuesCount}',
+                style: textTheme.bodySmall,
+              ),
+              SolanaPrice(
+                price: Formatter.formatLamportPrice(issue.stats?.price),
+                mainAxisAlignment: MainAxisAlignment.end,
+              ),
+            ],
           ),
         ],
       ),

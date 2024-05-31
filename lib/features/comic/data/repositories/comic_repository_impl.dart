@@ -15,7 +15,7 @@ class ComicRepositoryImpl implements ComicRepository {
   }
 
   @override
-  Future<Either<AppException, ComicModel?>> getComic(String slug) {
+  Future<Either<AppException, ComicModel>> getComic(String slug) {
     return dataSource.getComic(slug);
   }
 

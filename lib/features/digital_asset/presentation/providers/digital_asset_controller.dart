@@ -16,6 +16,9 @@ import 'package:video_player/video_player.dart';
 
 part 'digital_asset_controller.g.dart';
 
+const String failedTransactionMessage =
+    'Could not confirm the transaction, asset might appear in your wallet at a later time.';
+
 @riverpod
 class DigitalAssetController extends _$DigitalAssetController {
   @override
@@ -136,8 +139,7 @@ class DigitalAssetController extends _$DigitalAssetController {
       } else if (transactionMessage ==
               TransactionStatusMessage.success.getString() &&
           !isMinted) {
-        onFail(
-            'Transaction is sent but not confirmed. Please use sync-wallet and check your wallet for the asset');
+        onFail(failedTransactionMessage);
       } else if (transactionMessage ==
           TransactionStatusMessage.timeout.getString()) {
         onTimeout();

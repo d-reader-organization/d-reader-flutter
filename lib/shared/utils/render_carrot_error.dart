@@ -3,12 +3,13 @@ import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dar
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+const String _noInternetMessage = 'No internet connection';
+
 Widget renderCarrotErrorWidget(WidgetRef ref) {
   return ref.watch(internetAccessProvider).when(
     data: (hasInternet) {
       return CarrotErrorWidget(
-        mainErrorText:
-            hasInternet ? 'Something broke!' : 'No internet connection',
+        mainErrorText: hasInternet ? defaultErrorMessage : _noInternetMessage,
       );
     },
     error: (error, stackTrace) {

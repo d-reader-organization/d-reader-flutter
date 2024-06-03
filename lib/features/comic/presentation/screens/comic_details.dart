@@ -10,6 +10,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/
 import 'package:d_reader_flutter/features/comic/presentation/widgets/details/scaffold.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/common/on_going_bottom.dart';
 import 'package:d_reader_flutter/features/discover/root/presentation/widgets/tabs/issues/issues_gallery_builder.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -22,18 +23,16 @@ class ComicDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<ComicModel?> provider = ref.watch(comicSlugProvider(slug));
+    final AsyncValue<ComicModel> provider = ref.watch(comicSlugProvider(slug));
     final issuesProvider = ref.watch(
       paginatedIssuesProvider(
         'comicSlug=$slug&sortTag=latest&sortOrder=${getSortDirection(ref.watch(comicSortDirectionProvider))}',
       ),
     );
-
+    final bool isDetailedViewMode =
+        ref.watch(comicViewModeProvider) == ViewMode.detailed;
     return provider.when(
       data: (comic) {
-        if (comic == null) {
-          return const SizedBox();
-        }
         return ComicDetailsScaffold(
           comic: comic,
           loadMore: ref
@@ -53,25 +52,28 @@ class ComicDetails extends ConsumerWidget {
                   (context, index) {
                     return issuesProvider.when(
                       data: (List<ComicIssueModel> issues) {
-                        return ref.watch(comicViewModeProvider) ==
-                                ViewMode.detailed
+                        return isDetailedViewMode
                             ? _IssuesList(issues: issues)
                             : IssuesGalleryBuilder(
                                 issues: issues,
                               );
                       },
                       error: (Object? e, StackTrace? stk) {
-                        return const Text('Failed to fetch data.');
+                        return const CarrotErrorWidget();
                       },
                       loading: () {
                         return const SizedBox();
                       },
                       onGoingError: (List<ComicIssueModel> items, Object? e,
                           StackTrace? stk) {
-                        return _IssuesList(issues: items);
+                        return isDetailedViewMode
+                            ? _IssuesList(issues: items)
+                            : IssuesGalleryBuilder(issues: items);
                       },
                       onGoingLoading: (List<ComicIssueModel> items) {
-                        return _IssuesList(issues: items);
+                        return isDetailedViewMode
+                            ? _IssuesList(issues: items)
+                            : IssuesGalleryBuilder(issues: items);
                       },
                     );
                   },

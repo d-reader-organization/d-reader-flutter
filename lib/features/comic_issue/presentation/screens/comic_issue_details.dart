@@ -6,7 +6,6 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/mint_info_container.dart';
 import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
@@ -472,12 +471,8 @@ class BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final candyMachineGroup = ref.watch(selectedCandyMachineGroup);
-    final (isMintActive, isEnded) = candyMachineGroup != null
-        ? getMintStatuses(candyMachineGroup)
-        : (null, null);
-    final shouldDisableMintButton =
-        isMintActive != null && !isMintActive && isEnded != null && !isEnded;
+    final (isMintActive, isEnded) = ref.watch(mintStatusesProvider);
+    final shouldDisableMintButton = !isMintActive && !isEnded;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

@@ -315,8 +315,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                                   // handle exception
                                 },
                                 (twitterUri) async {
-                                  final uri = Uri.encodeFull(twitterUri);
-                                  await openUrl(uri);
+                                  await openUrl(twitterUri);
                                 },
                               );
                             },

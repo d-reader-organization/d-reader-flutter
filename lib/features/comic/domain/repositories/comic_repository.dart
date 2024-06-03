@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 abstract class ComicRepository {
   Future<Either<AppException, List<ComicModel>>> getComics(
       {String? queryString});
-  Future<Either<AppException, ComicModel?>> getComic(String slug);
+  Future<Either<AppException, ComicModel>> getComic(String slug);
   Future<Either<AppException, List<ComicModel>>> getOwnedComics({
     required int userId,
     required String query,

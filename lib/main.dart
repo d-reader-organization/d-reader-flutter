@@ -1,3 +1,5 @@
+import 'package:d_reader_flutter/firebase_options_dev.dart';
+import 'package:d_reader_flutter/firebase_options_prod.dart';
 import 'package:d_reader_flutter/shared/data/remote/notification_service.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
@@ -12,15 +14,19 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options_prod.dart';
 
+const bool isProd = appFlavor != null && appFlavor == 'prod';
 // Defines a top-level named handler which background/terminated messages will call
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   NotificationService notificationsService = NotificationService();
+  final firebaseOptions = isProd
+      ? ProdDefaultFirebaseOptions.currentPlatform
+      : DevDefaultFirebaseOptions.currentPlatform;
+
   try {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+      options: firebaseOptions,
     );
   } catch (exception, stackTrace) {
     Sentry.captureException(exception, stackTrace: stackTrace);
@@ -40,7 +46,9 @@ void main() async {
   await LocalStore().init();
   try {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+      options: isProd
+          ? ProdDefaultFirebaseOptions.currentPlatform
+          : DevDefaultFirebaseOptions.currentPlatform,
     );
   } catch (exception, stackTrace) {
     Sentry.captureException(exception, stackTrace: stackTrace);

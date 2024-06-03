@@ -2,13 +2,17 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+const defaultErrorMessage = 'Something broke!';
+const defaultAdviceText =
+    'Try resetting the app and make sure it\'s running on the latest version';
+
 class CarrotErrorScaffold extends StatelessWidget {
   final String adviceText, errorText;
-  const CarrotErrorScaffold(
-      {super.key,
-      this.adviceText =
-          'Try resetting the app and make sure it\'s running on the latest version',
-      this.errorText = 'Something broke!'});
+  const CarrotErrorScaffold({
+    super.key,
+    this.adviceText = defaultAdviceText,
+    this.errorText = defaultErrorMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +33,8 @@ class CarrotErrorWidget extends StatelessWidget {
   final Widget? additionalChild;
   const CarrotErrorWidget({
     super.key,
-    this.adviceText =
-        'Try resetting the app and make sure it\'s running on the latest version',
-    this.mainErrorText = 'Something broke!',
+    this.adviceText = defaultAdviceText,
+    this.mainErrorText = defaultErrorMessage,
     this.height = 300,
     this.padding,
     this.additionalChild,

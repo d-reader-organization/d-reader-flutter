@@ -12,7 +12,6 @@ class CreatorCollectiblesTab extends StatelessWidget {
     );
     //  ListView.builder(
     //   itemCount: 1,
-    //   shrinkWrap: true,
     //   itemBuilder: (context, index) {
     //     return const Padding(
     //       padding: EdgeInsets.all(12.0),

@@ -48,7 +48,7 @@ class SectionHeading extends ConsumerWidget {
                           ref.read(scaffoldPageController).animateToPage(
                                 1,
                                 curve: Curves.linear,
-                                duration: const Duration(milliseconds: 350),
+                                duration: const Duration(milliseconds: 200),
                               );
                           ref.invalidate(selectedGenresProvider);
                           if (filter != null) {

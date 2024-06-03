@@ -125,7 +125,8 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
 
       return Left(
         AppException(
-          message: 'Something got broken. We are working on fix.',
+          message:
+              'Unknown error occurred and report has been sent to our development team.',
           identifier: 'SolanaTransactionNotifier._signAndSendMint',
           statusCode: 500,
         ),

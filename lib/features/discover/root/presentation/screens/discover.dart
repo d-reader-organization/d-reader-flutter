@@ -1,3 +1,5 @@
+import 'dart:async' show Timer;
+
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
@@ -27,7 +29,7 @@ class DiscoverView extends ConsumerStatefulWidget {
 class _DiscoverViewState extends ConsumerState<DiscoverView>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
-
+  Timer? _debounceTimer;
   @override
   void initState() {
     _controller = TabController(
@@ -40,14 +42,20 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }
 
-  void _submitHandler(WidgetRef ref) {
-    ref.read(isSearchFocused.notifier).update((state) => false);
-    String search = ref.read(searchProvider).searchController.text.trim();
-    ref.read(searchProvider.notifier).updateSearchValue(search);
+  void _onChangeHandler() {
+    if (_debounceTimer?.isActive ?? false) {
+      _debounceTimer?.cancel();
+    }
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      ref.read(isSearchFocused.notifier).update((state) => false);
+      String search = ref.read(searchProvider).searchController.text.trim();
+      ref.read(searchProvider.notifier).updateSearchValue(search);
+    });
   }
 
   @override
@@ -141,8 +149,8 @@ class _DiscoverViewState extends ConsumerState<DiscoverView>
                       ),
                       suffixIcon: const FilterIcon(),
                     ),
-                    onFieldSubmitted: (value) {
-                      _submitHandler(ref);
+                    onChanged: (value) {
+                      _onChangeHandler();
                     },
                   ),
                   const SizedBox(

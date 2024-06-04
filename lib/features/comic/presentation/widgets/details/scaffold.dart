@@ -176,13 +176,12 @@ class _ComicBannerHeader extends StatelessWidget {
               vertical: 4,
             ),
             child: AspectRatio(
-              aspectRatio: comicLogoAspectRatio,
+              aspectRatio: .6,
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return CachedNetworkImage(
                     imageUrl: comic.logo,
-                    memCacheHeight:
-                        (constraints.maxHeight * .6).cacheSize(context),
+                    memCacheHeight: 100,
                   );
                 },
               ),

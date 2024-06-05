@@ -174,9 +174,7 @@ class SolanaNotifier extends _$SolanaNotifier {
     try {
       session = await _getSession();
     } catch (exception) {
-      if (exception is NoWalletFoundException) {
-        return Left(exception);
-      } else if (exception is LowPowerModeException) {
+      if (exception is AppException) {
         return Left(exception);
       }
 

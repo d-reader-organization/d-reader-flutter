@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.da
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/socket_provider.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -53,12 +54,7 @@ Future<AccountResult> accountInfo(
   AccountInfoRef ref, {
   required String address,
 }) {
-  final client = createSolanaClient(
-    rpcUrl: ref.read(environmentProvider).solanaCluster ==
-            SolanaCluster.devnet.value
-        ? Config.rpcUrlDevnet
-        : Config.rpcUrlMainnet,
-  );
+  final client = ref.read(solanaClientProvider);
   return client.rpcClient.getAccountInfo(address);
 }
 

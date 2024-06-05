@@ -1,13 +1,11 @@
 import 'dart:async' show TimeoutException, Timer;
 
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/providers/digital_asset_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
-import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart';
@@ -59,12 +57,7 @@ final transactionChainStatusProvider = StateProvider.family<void, String>(
           );
       return;
     }
-    final client = createSolanaClient(
-      rpcUrl: ref.read(environmentProvider).solanaCluster ==
-              SolanaCluster.devnet.value
-          ? Config.rpcUrlDevnet
-          : Config.rpcUrlMainnet,
-    );
+    final client = ref.read(solanaClientProvider);
 
     client
         .waitForSignatureStatus(

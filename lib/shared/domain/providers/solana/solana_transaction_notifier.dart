@@ -1,23 +1,21 @@
 import 'dart:convert' show base64Decode, jsonEncode;
 
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/buy_digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
-import 'package:d_reader_flutter/features/settings/presentation/providers/spl_tokens.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/encoder.dart';
@@ -31,39 +29,23 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   @override
   void build() {}
 
-  bool _checkEligiblity(CandyMachineGroupModel group) {
+  bool _checkEligiblity(CandyMachineGroupModel? group) {
+    if (group == null) {
+      return false;
+    }
     if (group.user != null) {
       return group.user!.isEligible;
     }
     return group.wallet != null && group.wallet!.isEligible;
   }
 
-  Future<bool> _hasEligibilityForMint({
-    required String candyMachineAddress,
-    required String walletAddress,
-  }) async {
-    var activeGroup = ref.read(selectedCandyMachineGroup);
-
-    if (activeGroup == null || activeGroup.wallet?.supply == null) {
-      final candyMachine = await ref.read(candyMachineProvider(
-        query:
-            'candyMachineAddress=$candyMachineAddress&walletAddress=$walletAddress',
-      ).future);
-      activeGroup = getSelectedGroup(
-        groups: candyMachine?.groups ?? [],
-        selectedSplTokenAddress: getSplTokenWithHighestPriority(
-                await ref.read(splTokensProvider.future))
-            .address,
-      );
-      if (activeGroup == null) {
-        return false;
-      }
-    }
-    return _checkEligiblity(activeGroup);
-  }
+  bool _hasEligibilityForMint(
+          {required String candyMachineAddress,
+          required String walletAddress}) =>
+      _checkEligiblity(ref.read(selectedCandyMachineGroup));
 
   Future<Either<AppException, String>> _signAndSendMint({
-    required List encodedDigitalAssetTransactions,
+    required List<String> encodedDigitalAssetTransactions,
     required MobileWalletAdapterClient client,
     required LocalAssociationScenario session,
   }) async {
@@ -82,13 +64,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
           ),
         );
       }
-
-      final solanaClient = createSolanaClient(
-        rpcUrl: ref.read(environmentProvider).solanaCluster ==
-                SolanaCluster.devnet.value
-            ? Config.rpcUrlDevnet
-            : Config.rpcUrlMainnet,
-      );
+      final solanaClient = ref.read(solanaClientProvider);
       String sendTransactionResult = '';
       for (final signedPayload in response.signedPayloads) {
         final signedTx = SignedTx.fromBytes(
@@ -135,17 +111,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   }
 
   Future<Either<AppException, String>> mint(
-      String? candyMachineAddress, String? label) async {
-    if (candyMachineAddress == null) {
-      return Left(
-        AppException(
-          message: 'Candy machine not found.',
-          identifier: 'SolanaTransactionNotifier.mint',
-          statusCode: 404,
-        ),
-      );
-    }
-
+      String candyMachineAddress, String label) async {
     final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
@@ -175,7 +141,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
               ),
             );
           }
-          final hasEligibility = await _hasEligibilityForMint(
+          final hasEligibility = _hasEligibilityForMint(
             candyMachineAddress: candyMachineAddress,
             walletAddress: walletAddress,
           );
@@ -266,12 +232,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         ref.read(globalNotifierProvider.notifier).updateLoading(false);
         return 'Failed to sign transactions';
       }
-      final solanaClient = createSolanaClient(
-        rpcUrl: ref.read(environmentProvider).solanaCluster ==
-                SolanaCluster.devnet.value
-            ? Config.rpcUrlDevnet
-            : Config.rpcUrlMainnet,
-      );
+      final solanaClient = ref.read(solanaClientProvider);
 
       final signedTx = SignedTx.fromBytes(
         response.signedPayloads.first.toList(),
@@ -332,9 +293,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         },
       );
     } catch (exception) {
-      if (exception is LowPowerModeException) {
-        return Left(exception);
-      } else if (exception is NoWalletFoundException) {
+      if (exception is AppException) {
         return Left(exception);
       }
 
@@ -379,9 +338,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         },
       );
     } catch (exception) {
-      if (exception is LowPowerModeException) {
-        return Left(exception);
-      } else if (exception is NoWalletFoundException) {
+      if (exception is AppException) {
         return Left(exception);
       }
 
@@ -459,9 +416,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         },
       );
     } catch (exception) {
-      if (exception is LowPowerModeException) {
-        return Left(exception);
-      } else if (exception is NoWalletFoundException) {
+      if (exception is AppException) {
         return Left(exception);
       }
 
@@ -521,9 +476,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
         },
       );
     } catch (exception) {
-      if (exception is LowPowerModeException) {
-        return Left(exception);
-      } else if (exception is NoWalletFoundException) {
+      if (exception is AppException) {
         return Left(exception);
       }
 

@@ -6,7 +6,7 @@ part of 'solana_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$solanaNotifierHash() => r'ba121a7aee85d3d4efc63e236801d7e91769c136';
+String _$solanaNotifierHash() => r'ca22574a35f3d358950d539d32362dd052a653f5';
 
 /// See also [SolanaNotifier].
 @ProviderFor(SolanaNotifier)

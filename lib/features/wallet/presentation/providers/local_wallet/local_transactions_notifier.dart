@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/local_wallet/local_wallet.dart';
@@ -62,6 +63,8 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
       price: (price * lamportsPerSol).round(),
     );
     await signAndSendTransactions([_getBase64Decode(listTransaction)]);
+    ref.invalidate(digitalAssetsProvider);
+    ref.invalidate(digitalAssetProvider);
   }
 
   Future<void> handleUnwrap({
@@ -69,8 +72,12 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
     required String ownerAddress,
   }) async {
     final unwrapTransaction = await _getUnwrapTransaction(
-        assetAddress: assetAddress, ownerAddress: ownerAddress);
+      assetAddress: assetAddress,
+      ownerAddress: ownerAddress,
+    );
     await signAndSendTransactions([_getBase64Decode(unwrapTransaction)]);
+    ref.invalidate(digitalAssetsProvider);
+    ref.invalidate(digitalAssetProvider);
   }
 
   @override

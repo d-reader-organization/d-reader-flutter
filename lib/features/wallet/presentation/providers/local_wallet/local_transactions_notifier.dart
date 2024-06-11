@@ -64,6 +64,15 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
     await signAndSendTransactions([_getBase64Decode(listTransaction)]);
   }
 
+  Future<void> handleUnwrap({
+    required String assetAddress,
+    required String ownerAddress,
+  }) async {
+    final unwrapTransaction = await _getUnwrapTransaction(
+        assetAddress: assetAddress, ownerAddress: ownerAddress);
+    await signAndSendTransactions([_getBase64Decode(unwrapTransaction)]);
+  }
+
   @override
   Future<void> signAndSendTransactions(List<Uint8List> transactions) async {
     final List<SignedTx> signedTxs = await _signTransactions(transactions);
@@ -114,6 +123,23 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
       (exception) => '',
       (data) => data,
     );
+  }
+
+  Future<String> _getUnwrapTransaction({
+    required String assetAddress,
+    required String ownerAddress,
+  }) async {
+    return _transactionRepository
+        .useComicIssueAssetTransaction(
+          digitalAssetAddress: assetAddress,
+          ownerAddress: ownerAddress,
+        )
+        .then(
+          (value) => value.fold(
+            (exception) => '',
+            (data) => data ?? '',
+          ),
+        );
   }
 
   Future<List<SignedTx>> _signTransactions(List<Uint8List> transactions) async {

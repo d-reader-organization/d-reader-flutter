@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
@@ -27,6 +28,7 @@ class Environment extends _$Environment {
   @override
   EnvironmentState build() {
     state = EnvironmentState.empty();
+    ref.read(localWalletNotifierProvider);
     final localStore = LocalStore.instance;
     const bool isProd = appFlavor != null && appFlavor == 'prod';
     final String selectedNetwork =

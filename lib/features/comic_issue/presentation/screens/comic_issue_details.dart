@@ -7,6 +7,8 @@ import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
 import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -489,6 +491,34 @@ class BottomNavigation extends ConsumerWidget {
                   onPressed: ref.watch(isOpeningSessionProvider)
                       ? null
                       : () async {
+                          final bool isLocalWallet = ref
+                                  .read(localWalletNotifierProvider)
+                                  .value
+                                  ?.address ==
+                              ref.read(selectedWalletProvider);
+                          if (isLocalWallet) {
+                            ref
+                                .read(globalNotifierProvider.notifier)
+                                .updateLoading(true);
+                            await ref
+                                .read(
+                                    localTransactionsNotifierProvider.notifier)
+                                .handleMintWithLocalWallet(
+                                  candyMachineAddress:
+                                      issue.activeCandyMachineAddress!,
+                                  onSuccess: () => showSnackBar(
+                                    context: context,
+                                    text: 'Minted with baked in wallet!',
+                                    backgroundColor: ColorPalette.dReaderGreen,
+                                  ),
+                                );
+
+                            ref
+                                .read(globalNotifierProvider.notifier)
+                                .updateLoading(false);
+                            return;
+                          }
+
                           await ref
                               .read(comicIssueControllerProvider.notifier)
                               .handleMint(

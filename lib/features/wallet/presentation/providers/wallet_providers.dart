@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/providers/com
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/socket_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
@@ -62,13 +63,12 @@ Future<AccountResult> accountInfo(
 Future<bool> isWalletAvailable(Ref ref) =>
     LocalAssociationScenario.isAvailable();
 
-final selectedWalletProvider = StateProvider.autoDispose<String>(
-  (ref) {
-    final latestWallet =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
-    return latestWallet;
-  },
-);
+final selectedWalletProvider = StateProvider.autoDispose<String>((ref) {
+  final latestWallet = ref.read(localWalletNotifierProvider).value?.address ??
+      ref.read(environmentProvider).publicKey?.toBase58() ??
+      '';
+  return latestWallet;
+}, dependencies: [localWalletNotifierProvider]);
 final walletNameProvider = StateProvider.autoDispose<String>((ref) {
   return '';
 });

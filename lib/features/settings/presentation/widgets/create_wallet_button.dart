@@ -4,6 +4,9 @@ import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart'
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+const String createWallet = 'Create wallet';
+const String deleteWallet = 'Delete wallet';
+
 class CreateAWalletButton extends ConsumerWidget {
   const CreateAWalletButton({super.key});
 
@@ -18,7 +21,7 @@ class CreateAWalletButton extends ConsumerWidget {
                 onPressed:
                     ref.read(localWalletNotifierProvider.notifier).createWallet,
                 child: const Text(
-                  'Create a wallet',
+                  createWallet,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -31,7 +34,7 @@ class CreateAWalletButton extends ConsumerWidget {
                 onPressed:
                     ref.read(localWalletNotifierProvider.notifier).deleteWallet,
                 child: const Text(
-                  'Delete Wallet',
+                  deleteWallet,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -51,7 +54,7 @@ class CreateAWalletButton extends ConsumerWidget {
           isLoading: true,
           loadingColor: ColorPalette.appBackgroundColor,
           child: const Text(
-            'Delete Wallet',
+            deleteWallet,
           ),
         );
       },

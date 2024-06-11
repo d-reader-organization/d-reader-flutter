@@ -46,4 +46,5 @@ abstract class Config {
       dotenv.get('rpcMainnet', fallback: 'https://api.mainnet-beta.solana.com');
   static String rpcUrlDevnet =
       dotenv.get('rpcDevnet', fallback: 'https://api.devnet.solana.com');
+  static String mnemonicKey = dotenv.get('mnemonicKey', fallback: '');
 }

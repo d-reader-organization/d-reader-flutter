@@ -5,7 +5,6 @@ import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_mach
 import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:solana/solana.dart';
-import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 SolanaClient createSolanaClient({required String rpcUrl}) {
   return SolanaClient(
@@ -19,10 +18,6 @@ SolanaClient createSolanaClient({required String rpcUrl}) {
       ),
     ),
   );
-}
-
-Future<bool> isWalletAppAvailable() async {
-  return LocalAssociationScenario.isAvailable();
 }
 
 Future<String?> requestAirdrop(String publicKey) async {

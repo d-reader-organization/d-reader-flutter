@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
+import 'package:d_reader_flutter/features/settings/presentation/widgets/create_wallet_button.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -314,66 +315,72 @@ class MyWalletsScreen extends ConsumerWidget {
                     ),
                   ),
           ),
-          bottomNavigationBar: CustomTextButton(
-            borderRadius: BorderRadius.circular(8),
-            onPressed: ref.watch(isOpeningSessionProvider)
-                ? null
-                : () async {
-                    if (data.isNotEmpty) {
-                      await triggerWalkthroughDialogIfNeeded(
-                        context: context,
-                        key: WalkthroughKeys.multipleWallet.name,
-                        title: 'Multiple wallets',
-                        subtitle:
-                            "When 2 or more wallets are connected to dReader, one will always be selected as 'active'. To switch the active wallet, click on any of the wallets listed on this screen",
-                        assetPath: '$walkthroughAssetsPath/multiple_wallet.jpg',
-                        onSubmit: () {
-                          context.pop();
-                        },
-                      );
-                    }
-                    await ref
-                        .read(walletControllerProvider.notifier)
-                        .connectWallet(
-                      onSuccess: () {
-                        showSnackBar(
-                          context: context,
-                          text: 'Wallet has been connected',
-                          backgroundColor: ColorPalette.dReaderGreen,
+          bottomNavigationBar: Wrap(
+            children: [
+              const CreateAWalletButton(),
+              CustomTextButton(
+                borderRadius: BorderRadius.circular(8),
+                onPressed: ref.watch(isOpeningSessionProvider)
+                    ? null
+                    : () async {
+                        if (data.isNotEmpty) {
+                          await triggerWalkthroughDialogIfNeeded(
+                            context: context,
+                            key: WalkthroughKeys.multipleWallet.name,
+                            title: 'Multiple wallets',
+                            subtitle:
+                                "When 2 or more wallets are connected to dReader, one will always be selected as 'active'. To switch the active wallet, click on any of the wallets listed on this screen",
+                            assetPath:
+                                '$walkthroughAssetsPath/multiple_wallet.jpg',
+                            onSubmit: () {
+                              context.pop();
+                            },
+                          );
+                        }
+                        await ref
+                            .read(walletControllerProvider.notifier)
+                            .connectWallet(
+                          onSuccess: () {
+                            showSnackBar(
+                              context: context,
+                              text: 'Wallet has been connected',
+                              backgroundColor: ColorPalette.dReaderGreen,
+                            );
+                            ref.invalidate(selectedWalletProvider);
+                            ref.invalidate(userWalletsProvider);
+                            ref.invalidate(ownedComicsProvider);
+                          },
+                          onFail: (String result) {
+                            showSnackBar(
+                              context: context,
+                              text: result,
+                              backgroundColor: ColorPalette.dReaderRed,
+                            );
+                          },
+                          onException: (exception) {
+                            triggerLowPowerOrNoWallet(context, exception);
+                          },
                         );
-                        ref.invalidate(selectedWalletProvider);
-                        ref.invalidate(userWalletsProvider);
-                        ref.invalidate(ownedComicsProvider);
                       },
-                      onFail: (String result) {
-                        showSnackBar(
-                          context: context,
-                          text: result,
-                          backgroundColor: ColorPalette.dReaderRed,
-                        );
-                      },
-                      onException: (exception) {
-                        triggerLowPowerOrNoWallet(context, exception);
-                      },
-                    );
-                  },
-            size: const Size(double.infinity, 50),
-            isLoading: ref.watch(globalNotifierProvider).isLoading,
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              ref.watch(isWalletAvailableProvider).maybeWhen(
-                data: (data) {
-                  return data ? 'Add / Connect Wallet' : 'Install wallet';
-                },
-                orElse: () {
-                  return '';
-                },
+                size: const Size(double.infinity, 50),
+                isLoading: ref.watch(globalNotifierProvider).isLoading,
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  ref.watch(isWalletAvailableProvider).maybeWhen(
+                    data: (data) {
+                      return data ? 'Add / Connect Wallet' : 'Install wallet';
+                    },
+                    orElse: () {
+                      return '';
+                    },
+                  ),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            ],
           ),
         );
       },

@@ -118,7 +118,7 @@ class DigitalAssetDetails extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Button(
+                              child: _Button(
                                 isLoading: ref.watch(privateLoadingProvider),
                                 loadingColor: ColorPalette.greyscale200,
                                 onPressed: () async {
@@ -182,7 +182,7 @@ class DigitalAssetDetails extends ConsumerWidget {
                             ),
                             Expanded(
                               child: digitalAsset.isUsed
-                                  ? Button(
+                                  ? _Button(
                                       borderColor:
                                           ColorPalette.dReaderYellow100,
                                       isLoading: ref
@@ -506,17 +506,15 @@ class DigitalAssetDetails extends ConsumerWidget {
   }
 }
 
-class Button extends ConsumerWidget {
+class _Button extends ConsumerWidget {
   final Widget child;
   final bool isLoading;
   final Future<void> Function() onPressed;
-  final Color backgroundColor, borderColor, loadingColor;
-  const Button({
-    super.key,
+  final Color borderColor, loadingColor;
+  const _Button({
     required this.child,
     required this.onPressed,
     this.isLoading = false,
-    this.backgroundColor = Colors.transparent,
     this.borderColor = ColorPalette.greyscale200,
     this.loadingColor = ColorPalette.appBackgroundColor,
   });
@@ -532,7 +530,7 @@ class Button extends ConsumerWidget {
       ),
       borderColor: borderColor,
       padding: const EdgeInsets.symmetric(vertical: 8),
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.transparent,
       isLoading: isLoading,
       onPressed: ref.watch(isOpeningSessionProvider) ? null : onPressed,
       loadingColor: loadingColor,

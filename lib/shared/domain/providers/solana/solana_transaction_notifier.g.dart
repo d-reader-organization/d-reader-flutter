@@ -7,7 +7,7 @@ part of 'solana_transaction_notifier.dart';
 // **************************************************************************
 
 String _$solanaTransactionNotifierHash() =>
-    r'd5a5294f581012fe722cd5462cde0010d5958885';
+    r'192b245ff5255d3aaefb22854245181ee16a9adc';
 
 /// See also [SolanaTransactionNotifier].
 @ProviderFor(SolanaTransactionNotifier)

@@ -18,13 +18,9 @@ abstract class AuthDataSource {
   Future<Either<AppException, bool>> connectWallet({
     required String address,
     required String encoding,
-    required String apiUrl,
-    required String jwtToken,
   });
   Future<Either<AppException, String>> getOneTimePassword({
     required String address,
-    required String apiUrl,
-    required String jwtToken,
   });
 
   Future<void> disconnectWallet(String address);
@@ -150,18 +146,9 @@ class AuthRemoteDataSource implements AuthDataSource {
   Future<Either<AppException, bool>> connectWallet({
     required String address,
     required String encoding,
-    required String apiUrl,
-    required String jwtToken,
   }) async {
     try {
-      await networkService.patch(
-        '/auth/wallet/connect/$address/$encoding',
-        headers: networkService.updateHeader(
-          {
-            'Authorization': jwtToken,
-          },
-        ),
-      );
+      await networkService.patch('/auth/wallet/connect/$address/$encoding');
       return const Right(true);
     } catch (exception) {
       return Left(
@@ -178,18 +165,10 @@ class AuthRemoteDataSource implements AuthDataSource {
   @override
   Future<Either<AppException, String>> getOneTimePassword({
     required String address,
-    required String apiUrl,
-    required String jwtToken,
   }) async {
     try {
-      final response = await networkService.patch(
-        '/auth/wallet/request-password/$address',
-        headers: networkService.updateHeader(
-          {
-            'Authorization': jwtToken,
-          },
-        ),
-      );
+      final response =
+          await networkService.patch('/auth/wallet/request-password/$address');
       return response.fold(
         (exception) {
           return Left(exception);

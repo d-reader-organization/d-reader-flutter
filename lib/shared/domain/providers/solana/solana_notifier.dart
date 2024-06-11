@@ -98,14 +98,11 @@ class SolanaNotifier extends _$SolanaNotifier {
     required Ed25519HDPublicKey signer,
     required String overrideAuthToken,
     required String apiUrl,
-    required String jwtToken,
   }) async {
     if (await doReauthorize(client, overrideAuthToken, signer.toBase58())) {
       final response =
           await ref.read(authRepositoryProvider).getOneTimePassword(
                 address: signer.toBase58(),
-                apiUrl: apiUrl,
-                jwtToken: jwtToken,
               );
       return response.fold((failure) {
         return const Left('Failed to sign message');
@@ -297,7 +294,6 @@ class SolanaNotifier extends _$SolanaNotifier {
         client: client,
         signer: publicKey,
         authToken: result.authToken,
-        jwtToken: ref.read(environmentProvider).jwtToken ?? '',
         apiUrl: Config.apiUrl,
       );
     }
@@ -311,14 +307,12 @@ class SolanaNotifier extends _$SolanaNotifier {
     required final Ed25519HDPublicKey signer,
     required final String authToken,
     required final String apiUrl,
-    required final String jwtToken,
   }) async {
     final signMessageResponse = await _signMessage(
       client: client,
       signer: signer,
       overrideAuthToken: authToken,
       apiUrl: apiUrl,
-      jwtToken: jwtToken,
     );
     return await signMessageResponse.fold((failMessage) {
       return failMessage;
@@ -326,8 +320,6 @@ class SolanaNotifier extends _$SolanaNotifier {
       final connectWalletResult = await _connectWallet(
         signedMessage: signedMessage.signatures.first,
         publicKey: signer,
-        apiUrl: apiUrl,
-        jwtToken: jwtToken,
       );
       return connectWalletResult.fold((failure) {
         return failure.message;
@@ -342,8 +334,6 @@ class SolanaNotifier extends _$SolanaNotifier {
   Future<Either<AppException, String>> _connectWallet({
     required Uint8List signedMessage,
     required Ed25519HDPublicKey publicKey,
-    required String apiUrl,
-    required String jwtToken,
   }) async {
     try {
       await ref.read(authRepositoryProvider).connectWallet(
@@ -354,8 +344,6 @@ class SolanaNotifier extends _$SolanaNotifier {
                 signedMessage.length,
               ),
             ),
-            apiUrl: apiUrl,
-            jwtToken: jwtToken,
           );
       return const Right(successResult);
     } catch (exception) {

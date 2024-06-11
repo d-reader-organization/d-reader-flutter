@@ -41,27 +41,19 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<void> connectWallet({
     required String address,
     required String encoding,
-    required String apiUrl,
-    required String jwtToken,
   }) {
     return authDataSource.connectWallet(
       address: address,
       encoding: encoding,
-      apiUrl: apiUrl,
-      jwtToken: jwtToken,
     );
   }
 
   @override
   Future<Either<AppException, String>> getOneTimePassword({
     required String address,
-    required String apiUrl,
-    required String jwtToken,
   }) {
     return authDataSource.getOneTimePassword(
       address: address,
-      apiUrl: apiUrl,
-      jwtToken: jwtToken,
     );
   }
 

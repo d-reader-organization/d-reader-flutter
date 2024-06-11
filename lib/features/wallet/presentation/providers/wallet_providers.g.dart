@@ -6,7 +6,7 @@ part of 'wallet_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$accountInfoHash() => r'55bc7ead68aa7b6dc7f85aa6f2120f9658bfca3a';
+String _$accountInfoHash() => r'ba51d41306153052cae2ca6aeca19662d4c62740';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -156,7 +156,7 @@ class _AccountInfoProviderElement
   String get address => (origin as AccountInfoProvider).address;
 }
 
-String _$isWalletAvailableHash() => r'd02c7e296799e42f1b199d19c392377e9fa8653a';
+String _$isWalletAvailableHash() => r'7bb330e01ed44dc868ea06edaf76836c29bf02c6';
 
 /// See also [isWalletAvailable].
 @ProviderFor(isWalletAvailable)

@@ -54,6 +54,8 @@ dependencies:
   google_sign_in: ^6.2.1
   vector_math: ^2.1.4
   vector_graphics: ^1.1.11+1
+  bip39: ^1.0.6
+  flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
   flutter_test:

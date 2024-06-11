@@ -1,13 +1,16 @@
 import 'dart:convert';
 
+import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/local_wallet/local_wallet.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/encoder.dart';
+import 'package:solana/solana.dart';
 
 part 'local_transactions_notifier.g.dart';
 
@@ -27,21 +30,18 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
     _wallet = ref.read(localWalletNotifierProvider).value!;
   }
 
-  Future<List<Uint8List>> _getMintTransactions(
-    String candyMachineAddress,
-  ) async {
-    return _getMintOneTransaction(
-            candyMachineAddress: candyMachineAddress,
-            walletAddress: _wallet.address)
-        .then(
-      (value) => value.map(_getBase64Decode).toList(),
-    );
-  }
-
-  Future<void> handleMintWithLocalWallet({
+  Future<void> handleMint({
     required String candyMachineAddress,
     required VoidCallback onSuccess,
   }) async {
+    final hasEligibility =
+        hasEligibilityForMint(ref.read(selectedCandyMachineGroup));
+    if (!hasEligibility) {
+      // final isUser = ref.read(selectedCandyMachineGroup)?.user != null;
+      // handle no eligibility.
+      return;
+    }
+
     await signAndSendTransactions(
       await _getMintTransactions(
         candyMachineAddress,
@@ -51,10 +51,34 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
     });
   }
 
+  Future<void> handleList({
+    required String assetAddress,
+    required String sellerAddress,
+    required double price,
+  }) async {
+    final listTransaction = await _getListTransaction(
+      assetAddress: assetAddress,
+      sellerAddress: sellerAddress,
+      price: (price * lamportsPerSol).round(),
+    );
+    await signAndSendTransactions([_getBase64Decode(listTransaction)]);
+  }
+
   @override
   Future<void> signAndSendTransactions(List<Uint8List> transactions) async {
     final List<SignedTx> signedTxs = await _signTransactions(transactions);
     await _sendTransactions(signedTxs);
+  }
+
+  Future<List<Uint8List>> _getMintTransactions(
+    String candyMachineAddress,
+  ) async {
+    return _getMintOneTransaction(
+            candyMachineAddress: candyMachineAddress,
+            walletAddress: _wallet.address)
+        .then(
+      (value) => value.map(_getBase64Decode).toList(),
+    );
   }
 
   Future<List<String>> _getMintOneTransaction({
@@ -72,6 +96,24 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
             (data) => data,
           ),
         );
+  }
+
+  Future<String> _getListTransaction({
+    required String assetAddress,
+    required String sellerAddress,
+    required int price,
+  }) async {
+    final response =
+        await ref.read(transactionRepositoryProvider).listTransaction(
+              sellerAddress: sellerAddress,
+              mintAccount: assetAddress,
+              price: price,
+            );
+
+    return response.fold(
+      (exception) => '',
+      (data) => data,
+    );
   }
 
   Future<List<SignedTx>> _signTransactions(List<Uint8List> transactions) async {

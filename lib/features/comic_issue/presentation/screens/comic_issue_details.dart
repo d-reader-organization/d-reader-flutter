@@ -503,7 +503,7 @@ class BottomNavigation extends ConsumerWidget {
                             await ref
                                 .read(
                                     localTransactionsNotifierProvider.notifier)
-                                .handleMintWithLocalWallet(
+                                .handleMint(
                                   candyMachineAddress:
                                       issue.activeCandyMachineAddress!,
                                   onSuccess: () => showSnackBar(

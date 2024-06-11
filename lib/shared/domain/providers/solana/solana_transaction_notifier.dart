@@ -24,25 +24,20 @@ import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 part 'solana_transaction_notifier.g.dart';
 
+bool hasEligibilityForMint(CandyMachineGroupModel? group) {
+  if (group == null) {
+    return false;
+  }
+  if (group.user != null) {
+    return group.user!.isEligible;
+  }
+  return group.wallet != null && group.wallet!.isEligible;
+}
+
 @riverpod
 class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   @override
   void build() {}
-
-  bool _checkEligiblity(CandyMachineGroupModel? group) {
-    if (group == null) {
-      return false;
-    }
-    if (group.user != null) {
-      return group.user!.isEligible;
-    }
-    return group.wallet != null && group.wallet!.isEligible;
-  }
-
-  bool _hasEligibilityForMint(
-          {required String candyMachineAddress,
-          required String walletAddress}) =>
-      _checkEligiblity(ref.read(selectedCandyMachineGroup));
 
   Future<Either<AppException, String>> _signAndSendMint({
     required List<String> encodedDigitalAssetTransactions,
@@ -141,10 +136,8 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
               ),
             );
           }
-          final hasEligibility = _hasEligibilityForMint(
-            candyMachineAddress: candyMachineAddress,
-            walletAddress: walletAddress,
-          );
+          final hasEligibility =
+              hasEligibilityForMint(ref.read(selectedCandyMachineGroup));
           if (!hasEligibility) {
             await session.close();
             final isUser = ref.read(selectedCandyMachineGroup)?.user != null;

@@ -2,6 +2,9 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_controller.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
@@ -131,6 +134,20 @@ class SubmitButton extends ConsumerWidget {
       onPressed: price != null
           ? () async {
               try {
+                // create common notifier that will handle logic for using MWA or LocalWallet
+                final bool isLocalWallet = ref.read(selectedWalletProvider) ==
+                    ref.read(localWalletNotifierProvider).value?.address;
+
+                if (isLocalWallet) {
+                  await ref
+                      .read(localTransactionsNotifierProvider.notifier)
+                      .handleList(
+                        assetAddress: digitalAsset.address,
+                        sellerAddress: digitalAsset.ownerAddress,
+                        price: price!,
+                      );
+                  return;
+                }
                 await ref
                     .read(digitalAssetControllerProvider.notifier)
                     .listDigitalAsset(

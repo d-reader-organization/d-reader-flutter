@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/author.dart';
@@ -19,7 +20,9 @@ class IssueAbout extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
-    final walletAddress = ref.watch(environmentProvider).publicKey?.toBase58();
+    final walletAddress =
+        ref.watch(environmentProvider).publicKey?.toBase58() ??
+            ref.read(localWalletNotifierProvider).value?.address;
     return NotificationListener(
       onNotification: (notification) {
         return true;

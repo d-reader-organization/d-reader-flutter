@@ -6,6 +6,9 @@ import 'package:d_reader_flutter/features/library/presentation/providers/owned/o
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_controller.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/extensions.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
@@ -207,37 +210,54 @@ class DigitalAssetDetails extends ConsumerWidget {
                                   : UnwrapButton(
                                       digitalAsset: digitalAsset,
                                       onPressed: () async {
-                                        await ref
-                                            .read(digitalAssetControllerProvider
-                                                .notifier)
-                                            .openDigitalAsset(
-                                              digitalAsset: digitalAsset,
-                                              onOpen: (String result) {
-                                                _handleDigitalAssetOpen(
-                                                  context: context,
-                                                  ref: ref,
-                                                  openResponse: result,
+                                        ref.read(selectedWalletProvider) ==
+                                                ref
+                                                    .read(
+                                                        localWalletNotifierProvider)
+                                                    .value
+                                                    ?.address
+                                            ? await ref
+                                                .read(
+                                                    localTransactionsNotifierProvider
+                                                        .notifier)
+                                                .handleUnwrap(
+                                                  assetAddress:
+                                                      digitalAsset.address,
+                                                  ownerAddress:
+                                                      digitalAsset.ownerAddress,
+                                                )
+                                            : await ref
+                                                .read(
+                                                    digitalAssetControllerProvider
+                                                        .notifier)
+                                                .openDigitalAsset(
+                                                  digitalAsset: digitalAsset,
+                                                  onOpen: (String result) {
+                                                    _handleDigitalAssetOpen(
+                                                      context: context,
+                                                      ref: ref,
+                                                      openResponse: result,
+                                                    );
+                                                  },
+                                                  onException: (exception) {
+                                                    if (exception
+                                                            is LowPowerModeException ||
+                                                        exception
+                                                            is NoWalletFoundException) {
+                                                      triggerLowPowerOrNoWallet(
+                                                        context,
+                                                        exception,
+                                                      );
+                                                      return;
+                                                    } else if (exception
+                                                        is AppException) {
+                                                      showSnackBar(
+                                                        context: context,
+                                                        text: exception.message,
+                                                      );
+                                                    }
+                                                  },
                                                 );
-                                              },
-                                              onException: (exception) {
-                                                if (exception
-                                                        is LowPowerModeException ||
-                                                    exception
-                                                        is NoWalletFoundException) {
-                                                  triggerLowPowerOrNoWallet(
-                                                    context,
-                                                    exception,
-                                                  );
-                                                  return;
-                                                } else if (exception
-                                                    is AppException) {
-                                                  showSnackBar(
-                                                    context: context,
-                                                    text: exception.message,
-                                                  );
-                                                }
-                                              },
-                                            );
                                       },
                                       borderColor:
                                           ColorPalette.dReaderYellow100,

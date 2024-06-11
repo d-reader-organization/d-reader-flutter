@@ -6,11 +6,11 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/socket_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/dto.dart';
 import 'package:solana/solana.dart';
+import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 part 'wallet_providers.g.dart';
 
@@ -59,9 +59,8 @@ Future<AccountResult> accountInfo(
 }
 
 @riverpod
-Future<bool> isWalletAvailable(Ref ref) {
-  return isWalletAppAvailable();
-}
+Future<bool> isWalletAvailable(Ref ref) =>
+    LocalAssociationScenario.isAvailable();
 
 final selectedWalletProvider = StateProvider.autoDispose<String>(
   (ref) {

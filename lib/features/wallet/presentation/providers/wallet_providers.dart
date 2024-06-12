@@ -27,8 +27,7 @@ final registerWalletToSocketEvents = Provider(
     });
 
     socket.connect();
-    final String address =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+    final String address = ref.read(selectedWalletProvider);
     if (address.isEmpty) {
       return;
     }

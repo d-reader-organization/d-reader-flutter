@@ -54,7 +54,7 @@ class MintInfoContainer extends ConsumerStatefulWidget {
 
 class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
     with SingleTickerProviderStateMixin {
-  late final Ticker _ticker;
+  Ticker? _ticker;
 
   @override
   void initState() {
@@ -80,16 +80,16 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
                   Formatter.formatDateInRelative(candyMachineGroup.startDate),
             );
         if (isActive) {
-          _ticker.stop();
+          _ticker?.stop();
         }
       },
     );
-    _ticker.start();
+    _ticker?.start();
   }
 
   @override
   void dispose() {
-    _ticker.dispose();
+    _ticker?.dispose();
     super.dispose();
   }
 

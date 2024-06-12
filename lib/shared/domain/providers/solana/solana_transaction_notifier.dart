@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/digital_asset/domain/models/buy_digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -16,6 +17,7 @@ import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/encoder.dart';
@@ -40,15 +42,13 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   void build() {}
 
   Future<Either<AppException, String>> _signAndSendMint({
-    required List<String> encodedDigitalAssetTransactions,
+    required List<Uint8List> transactions,
     required MobileWalletAdapterClient client,
     required LocalAssociationScenario session,
   }) async {
     try {
       final response = await client.signTransactions(
-        transactions: encodedDigitalAssetTransactions.map((transaction) {
-          return base64Decode(transaction);
-        }).toList(),
+        transactions: transactions,
       );
       if (response.signedPayloads.isEmpty) {
         return Left(
@@ -105,8 +105,16 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     }
   }
 
+  String _noEligibilityMessage() {
+    final isUser = ref.read(selectedCandyMachineGroup)?.user != null;
+    return isUser
+        ? 'User ${ref.read(environmentProvider).user?.email} is not eligible for minting'
+        : 'Wallet address ${Formatter.formatAddress(ref.read(selectedWalletProvider), 3)} is not eligible for minting';
+  }
+
   Future<Either<AppException, String>> mint(
-      String candyMachineAddress, String label) async {
+    List<Uint8List> transactions,
+  ) async {
     final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
@@ -124,64 +132,26 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
             );
           }
 
-          final walletAddress =
-              ref.read(environmentProvider).publicKey?.toBase58();
-          if (walletAddress == null) {
-            await session.close();
+          if (!hasEligibilityForMint(ref.read(selectedCandyMachineGroup))) {
+            // have to keep it inside MWA session.
             return Left(
               AppException(
                 identifier: 'SolanaTransactionNotifier.mint',
-                message: 'Missing wallet',
-                statusCode: 404,
-              ),
-            );
-          }
-          final hasEligibility =
-              hasEligibilityForMint(ref.read(selectedCandyMachineGroup));
-          if (!hasEligibility) {
-            await session.close();
-            final isUser = ref.read(selectedCandyMachineGroup)?.user != null;
-            return Left(
-              AppException(
-                identifier: 'SolanaTransactionNotifier.mint',
-                message: isUser
-                    ? 'User ${ref.read(environmentProvider).user?.email} is not eligible for minting'
-                    : 'Wallet address ${Formatter.formatAddress(walletAddress, 3)} is not eligible for minting',
-                statusCode: 403,
+                message: _noEligibilityMessage(),
+                statusCode: 401,
               ),
             );
           }
 
-          final response =
-              await ref.read(transactionRepositoryProvider).mintOneTransaction(
-                    candyMachineAddress: candyMachineAddress,
-                    minterAddress: walletAddress,
-                    label: label,
-                  );
-          return response.fold((exception) async {
-            await session.close();
-            return Left(exception);
-          }, (encodedDigitalAssetTransactions) async {
-            if (encodedDigitalAssetTransactions.isEmpty) {
-              await session.close();
-              return Left(
-                AppException(
-                  identifier: 'SolanaTransactionNotifier.mint',
-                  message: 'Failed to fetch transaction from API',
-                  statusCode: 500,
-                ),
-              );
-            }
-            final signAndSendMintResult = await _signAndSendMint(
-              encodedDigitalAssetTransactions: encodedDigitalAssetTransactions,
-              client: client,
-              session: session,
-            );
-            return signAndSendMintResult.fold(
-              (exception) => Left(exception),
-              (result) => Right(result),
-            );
-          });
+          final signAndSendMintResult = await _signAndSendMint(
+            transactions: transactions,
+            client: client,
+            session: session,
+          );
+          return signAndSendMintResult.fold(
+            (exception) => Left(exception),
+            (result) => Right(result),
+          );
         },
       );
     } catch (exception) {

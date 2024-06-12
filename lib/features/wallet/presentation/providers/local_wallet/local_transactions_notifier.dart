@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/local_wallet/local_wallet.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/encoder.dart';
@@ -29,27 +27,6 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
   void build() {
     _transactionRepository = ref.read(transactionRepositoryProvider);
     _wallet = ref.read(localWalletNotifierProvider).value!;
-  }
-
-  Future<void> handleMint({
-    required String candyMachineAddress,
-    required VoidCallback onSuccess,
-  }) async {
-    final hasEligibility =
-        hasEligibilityForMint(ref.read(selectedCandyMachineGroup));
-    if (!hasEligibility) {
-      // final isUser = ref.read(selectedCandyMachineGroup)?.user != null;
-      // handle no eligibility.
-      return;
-    }
-
-    await signAndSendTransactions(
-      await _getMintTransactions(
-        candyMachineAddress,
-      ),
-    ).then((value) {
-      onSuccess();
-    });
   }
 
   Future<void> handleList({
@@ -81,37 +58,13 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
   }
 
   @override
-  Future<void> signAndSendTransactions(List<Uint8List> transactions) async {
+  Future<bool> signAndSendTransactions(List<Uint8List> transactions) async {
     final List<SignedTx> signedTxs = await _signTransactions(transactions);
+    if (signedTxs.isEmpty) {
+      return false;
+    }
     await _sendTransactions(signedTxs);
-  }
-
-  Future<List<Uint8List>> _getMintTransactions(
-    String candyMachineAddress,
-  ) async {
-    return _getMintOneTransaction(
-            candyMachineAddress: candyMachineAddress,
-            walletAddress: _wallet.address)
-        .then(
-      (value) => value.map(_getBase64Decode).toList(),
-    );
-  }
-
-  Future<List<String>> _getMintOneTransaction({
-    required String candyMachineAddress,
-    required String walletAddress,
-  }) async {
-    return _transactionRepository
-        .mintOneTransaction(
-          candyMachineAddress: candyMachineAddress,
-          minterAddress: walletAddress,
-        )
-        .then(
-          (value) => value.fold(
-            (exception) => [],
-            (data) => data,
-          ),
-        );
+    return true;
   }
 
   Future<String> _getListTransaction({
@@ -178,12 +131,14 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
   }
 
   Future<void> _sendTransactions(List<SignedTx> signedTxs) async {
+    String sendTransactionResult = '';
     for (final signedTx in signedTxs) {
-      await ref
+      sendTransactionResult = await ref
           .read(solanaClientProvider)
           .rpcClient
           .sendTransaction(signedTx.encode(), skipPreflight: true);
     }
+    ref.read(transactionChainStatusProvider(sendTransactionResult));
   }
 }
 

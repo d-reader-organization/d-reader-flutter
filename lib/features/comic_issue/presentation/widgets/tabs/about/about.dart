@@ -43,6 +43,7 @@ class IssueAbout extends ConsumerWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   final currentCandyMachine =
                       ref.read(candyMachineStateProvider);
+
                   if (currentCandyMachine != null &&
                       currentCandyMachine.address ==
                           issue.activeCandyMachineAddress) {

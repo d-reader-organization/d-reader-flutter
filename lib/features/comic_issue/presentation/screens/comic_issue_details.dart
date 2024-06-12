@@ -6,9 +6,8 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/mint/notifier/mint_notifier.dart';
 import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -87,7 +86,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
             extendBodyBehindAppBar: true,
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: BottomNavigation(
+              child: _BottomNavigation(
                 issue: issue,
               ),
             ),
@@ -435,46 +434,14 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
   }
 }
 
-class BottomNavigation extends ConsumerWidget {
+class _BottomNavigation extends ConsumerWidget {
   final ComicIssueModel issue;
-  const BottomNavigation({
-    super.key,
+  const _BottomNavigation({
     required this.issue,
   });
 
-  void _showWalkthroughDialog({
-    required BuildContext context,
-    required WidgetRef ref,
-  }) {
-    triggerWalkthroughDialog(
-      context: context,
-      bottomWidget: GestureDetector(
-        onTap: () {
-          context.pop();
-        },
-        child: Text(
-          'Cancel',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                decoration: TextDecoration.underline,
-              ),
-        ),
-      ),
-      onSubmit: () {
-        context.pop();
-        triggerInstallWalletBottomSheet(context);
-      },
-      assetPath: '$walkthroughAssetsPath/install_wallet.jpg',
-      title: 'Install a wallet',
-      subtitle:
-          'To buy a digital asset you need to have a digital wallet installed first. Click “Next” to set up a wallet!',
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (isMintActive, isEnded) = ref.watch(mintStatusesProvider);
-    final shouldDisableMintButton = !isMintActive && !isEnded;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -485,92 +452,13 @@ class BottomNavigation extends ConsumerWidget {
         ),
         issue.activeCandyMachineAddress != null
             ? Expanded(
-                child: TransactionButton(
-                  isLoading: ref.watch(globalNotifierProvider).isLoading,
-                  isDisabled: shouldDisableMintButton,
-                  onPressed: ref.watch(isOpeningSessionProvider)
-                      ? null
-                      : () async {
-                          final bool isLocalWallet = ref
-                                  .read(localWalletNotifierProvider)
-                                  .value
-                                  ?.address ==
-                              ref.read(selectedWalletProvider);
-                          if (isLocalWallet) {
-                            ref
-                                .read(globalNotifierProvider.notifier)
-                                .updateLoading(true);
-                            await ref
-                                .read(
-                                    localTransactionsNotifierProvider.notifier)
-                                .handleMint(
-                                  candyMachineAddress:
-                                      issue.activeCandyMachineAddress!,
-                                  onSuccess: () => showSnackBar(
-                                    context: context,
-                                    text: 'Minted with baked in wallet!',
-                                    backgroundColor: ColorPalette.dReaderGreen,
-                                  ),
-                                );
-
-                            ref
-                                .read(globalNotifierProvider.notifier)
-                                .updateLoading(false);
-                            return;
-                          }
-
-                          await ref
-                              .read(comicIssueControllerProvider.notifier)
-                              .handleMint(
-                            displaySnackbar: ({
-                              required String text,
-                              bool isError = false,
-                            }) {
-                              showSnackBar(
-                                context: context,
-                                text: text,
-                                backgroundColor: isError
-                                    ? ColorPalette.dReaderRed
-                                    : ColorPalette.greyscale300,
-                              );
-                            },
-                            triggerVerificationDialog: () {
-                              return triggerVerificationDialog(context, ref);
-                            },
-                            onSuccessMint: () {
-                              nextScreenPush(
-                                context: context,
-                                path: RoutePath.mintLoadingAnimation,
-                              );
-                            },
-                            onException: (exception) {
-                              if (exception is NoWalletFoundException) {
-                                return _showWalkthroughDialog(
-                                    context: context, ref: ref);
-                              } else if (exception is LowPowerModeException) {
-                                return triggerLowPowerModeDialog(context);
-                              }
-                              showSnackBar(
-                                context: context,
-                                text: exception is BadRequestException
-                                    ? exception.cause
-                                    : exception.toString(),
-                                backgroundColor: ColorPalette.dReaderRed,
-                              );
-                            },
-                          );
-                        },
-                  text: 'Mint',
-                  price: ref.watch(selectedCandyMachineGroup)?.mintPrice ?? 0,
-                  isMultiGroup:
-                      (ref.watch(candyMachineStateProvider)?.groups.length ??
-                              0) >
-                          1,
+                child: _MintButtonWithStates(
+                  activeCandyMachineAddress: issue.activeCandyMachineAddress!,
                 ),
               )
             : issue.isSecondarySaleActive
                 ? Expanded(
-                    child: TransactionButton(
+                    child: _TransactionButton(
                       isLoading: ref.watch(globalNotifierProvider).isLoading,
                       onPressed: ref
                                   .read(selectedListingsProvider)
@@ -612,13 +500,118 @@ class BottomNavigation extends ConsumerWidget {
   }
 }
 
-class TransactionButton extends ConsumerWidget {
+class _MintButtonWithStates extends ConsumerWidget {
+  final String activeCandyMachineAddress;
+  const _MintButtonWithStates({
+    required this.activeCandyMachineAddress,
+  });
+
+  void _showWalkthroughDialog({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    triggerWalkthroughDialog(
+      context: context,
+      bottomWidget: GestureDetector(
+        onTap: () {
+          context.pop();
+        },
+        child: Text(
+          'Cancel',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                decoration: TextDecoration.underline,
+              ),
+        ),
+      ),
+      onSubmit: () {
+        context.pop();
+        triggerInstallWalletBottomSheet(context);
+      },
+      assetPath: '$walkthroughAssetsPath/install_wallet.jpg',
+      title: 'Install a wallet',
+      subtitle:
+          'To buy a digital asset you need to have a digital wallet installed first. Click “Next” to set up a wallet!',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      mintNotifierProvider,
+      (previous, next) {
+        next.whenOrNull(
+          failed: (message) => showSnackBar(context: context, text: message),
+          success: (message) => nextScreenPush(
+            context: context,
+            path: RoutePath.mintLoadingAnimation,
+          ),
+          verificationNeeded: () => triggerVerificationDialog(context, ref),
+          failedWithException: (exception) {
+            if (exception is NoWalletFoundException) {
+              _showWalkthroughDialog(context: context, ref: ref);
+            } else if (exception is LowPowerModeException) {
+              triggerLowPowerModeDialog(context);
+            }
+            showSnackBar(
+              context: context,
+              text: exception.message,
+              backgroundColor: ColorPalette.dReaderRed,
+            );
+          },
+        );
+      },
+    );
+
+    return ref.watch(mintNotifierProvider).maybeWhen(
+          minting: () => _MintButton(
+            activeCandyMachineAddress: activeCandyMachineAddress,
+            isLoading: true,
+          ),
+          orElse: () => _MintButton(
+            activeCandyMachineAddress: activeCandyMachineAddress,
+            isLoading: false,
+          ),
+        );
+  }
+}
+
+class _MintButton extends ConsumerWidget {
+  final bool isLoading;
+  final String activeCandyMachineAddress;
+  const _MintButton({
+    required this.activeCandyMachineAddress,
+    required this.isLoading,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final (isMintActive, isEnded) = ref.watch(mintStatusesProvider);
+    final shouldDisableMintButton = !isMintActive && !isEnded;
+    return _TransactionButton(
+      isLoading: isLoading,
+      isDisabled: shouldDisableMintButton,
+      onPressed: ref.watch(isOpeningSessionProvider)
+          ? null
+          : () {
+              ref
+                  .read(mintNotifierProvider.notifier)
+                  .mint(activeCandyMachineAddress);
+            },
+      text: 'Mint',
+      price: ref.watch(selectedCandyMachineGroup)?.mintPrice ?? 0,
+      isMultiGroup:
+          (ref.watch(candyMachineStateProvider)?.groups.length ?? 0) > 1,
+    );
+  }
+}
+
+class _TransactionButton extends ConsumerWidget {
   final bool isListing, isLoading, isMultiGroup, isDisabled;
   final Function()? onPressed;
   final String text;
   final int? price;
-  const TransactionButton({
-    super.key,
+  const _TransactionButton({
     required this.isLoading,
     this.onPressed,
     required this.text,

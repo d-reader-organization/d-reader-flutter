@@ -33,7 +33,9 @@ String _myMintSupplyText({required int itemsMinted, int? supply}) {
 bool _shouldInitTicker(DateTime mintStartDate) {
   final currentDate = DateTime.now();
   final difference = mintStartDate.difference(currentDate);
-  return difference.inDays < 1 && difference.inHours < 1;
+  return difference.inDays < 1 &&
+      difference.inHours < 1 &&
+      difference.inSeconds > 1;
 }
 
 class MintInfoContainer extends ConsumerStatefulWidget {

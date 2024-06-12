@@ -66,7 +66,7 @@ final timeUntilMintStarts = StateProvider.autoDispose<String>(
 
 final mintStatusesProvider = StateProvider.autoDispose<(bool, bool)>(
   (ref) {
-    final candyMachineGroup = ref.read(selectedCandyMachineGroup);
+    final candyMachineGroup = ref.watch(selectedCandyMachineGroup);
 
     return candyMachineGroup == null
         ? (false, false)

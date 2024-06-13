@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
@@ -34,12 +35,21 @@ class ListNotifier extends _$ListNotifier {
       mintAccount: assetAddress,
       sellerAddress: sellerAddress,
       price: price,
-    ).then(_handleApiResponse);
+    ).then(_handleApiResponse).then(_invalidateData);
   }
 
   Future<void> delist(String assetAddress) async {
     state = const TransactionState.processing();
-    await _getDelistTransaction(assetAddress).then(_handleApiResponse);
+    await _getDelistTransaction(assetAddress)
+        .then(_handleApiResponse)
+        .then(_invalidateData);
+  }
+
+  Future<void> _invalidateData(void value) async {
+    Future.delayed(
+      const Duration(seconds: 1),
+      () => ref.invalidate(digitalAssetProvider),
+    );
   }
 
   FutureOr<void> _handleApiResponse(

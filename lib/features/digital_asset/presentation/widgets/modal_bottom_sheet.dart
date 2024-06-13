@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/shared/presentations/providers/global/global_no
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DigitalAssetModalBottomSheet extends ConsumerStatefulWidget {
@@ -127,11 +128,14 @@ class SubmitButton extends ConsumerWidget {
       isLoading: ref.watch(globalNotifierProvider).isLoading,
       onPressed: price != null
           ? () async {
-              await ref.read(listNotifierProvider.notifier).list(
+              await ref
+                  .read(listNotifierProvider.notifier)
+                  .list(
                     assetAddress: digitalAsset.address,
                     sellerAddress: digitalAsset.ownerAddress,
                     price: price!,
-                  );
+                  )
+                  .then((value) => context.pop());
             }
           : null,
       size: const Size(double.infinity, 50),

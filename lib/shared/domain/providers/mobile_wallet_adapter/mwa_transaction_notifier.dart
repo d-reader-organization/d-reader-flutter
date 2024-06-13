@@ -15,7 +15,6 @@ import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/m
 import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -170,30 +169,40 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
     }
   }
 
-  Future<String> _signAndSendTransactions({
+  Future<Either<AppException, String>> _signAndSendTransactions({
     required MobileWalletAdapterClient client,
     required LocalAssociationScenario session,
-    required List<String> encodedTransactions,
+    required List<Uint8List> transactions,
   }) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
-    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
-    final isReauthorized = await solanaNotifier.doReauthorize(client);
+    final mwaNotifier = ref.read(mwaNotifierProvider.notifier);
+    final isReauthorized = await mwaNotifier.doReauthorize(client);
 
     if (!isReauthorized) {
       await session.close();
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
-      return 'Failed to reauthorize wallet';
+      return Left(
+        AppException(
+          identifier: 'mwaNotifier._signAndSendTransactions',
+          message: 'Failed to reauthorize wallet',
+          statusCode: 401,
+        ),
+      );
     }
 
     try {
       final response = await client.signTransactions(
-        transactions: encodedTransactions.map((transaction) {
-          return base64Decode(transaction);
-        }).toList(),
+        transactions: transactions,
       );
       if (response.signedPayloads.isEmpty) {
         ref.read(globalNotifierProvider.notifier).updateLoading(false);
-        return 'Failed to sign transactions';
+        return Left(
+          AppException(
+            identifier: 'mwaNotifier._signAndSendTransactions',
+            message: 'Failed to reauthorize wallet',
+            statusCode: 401,
+          ),
+        );
       }
       final solanaClient = ref.read(solanaClientProvider);
 
@@ -203,101 +212,41 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
       final sendTransactionResult =
           await solanaClient.rpcClient.sendTransaction(
         signedTx.encode(),
-        preflightCommitment: Commitment.confirmed,
+        skipPreflight: true,
       );
       ref.read(globalNotifierProvider.notifier).update(
-          isLoading: false,
-          newMessage: TransactionStatusMessage.waiting.getString());
+            isLoading: false,
+            newMessage: TransactionStatusMessage.waiting.getString(),
+          );
       ref.read(transactionChainStatusProvider(sendTransactionResult));
       await session.close();
-      return successResult;
+      return const Right(successResult);
     } catch (exception) {
       await session.close();
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
-      Sentry.captureException(exception,
-          stackTrace:
-              'sign and send transaction: ${ref.read(environmentProvider).user?.email}');
-      if (exception is JsonRpcException) {
-        return exception.message;
-      }
-      return 'Failed to sign and send transactions';
-    }
-  }
-
-  Future<Either<AppException, String>> list({
-    required String sellerAddress,
-    required String mintAccount,
-    required int price,
-    String printReceipt = 'false',
-  }) async {
-    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
-    try {
-      return await solanaNotifier.authorizeIfNeededWithOnComplete(
-        onComplete: (client, session) async {
-          ref.read(privateLoadingProvider.notifier).update((state) => true);
-          final response =
-              await ref.read(transactionRepositoryProvider).listTransaction(
-                    sellerAddress: sellerAddress,
-                    mintAccount: mintAccount,
-                    price: price,
-                  );
-          return response.fold((exception) async {
-            await session.close();
-            return Left(exception);
-          }, (encodedTransaction) async {
-            return Right(
-              await _signAndSendTransactions(
-                client: client,
-                session: session,
-                encodedTransactions: [encodedTransaction],
-              ),
-            );
-          });
-        },
-      );
-    } catch (exception) {
-      if (exception is AppException) {
-        return Left(exception);
-      }
-
-      Sentry.captureException(exception,
-          stackTrace:
-              'List failed. Seller $sellerAddress, mintAccount $mintAccount - user with ${ref.read(environmentProvider).user?.email}');
       return Left(
         AppException(
-          identifier: 'SolanaTransactionNotifier.list',
+          identifier: 'mwaNotifier.signAndSendTransactions',
+          message: exception is JsonRpcException
+              ? exception.message
+              : 'Failed to sign and send transactions',
           statusCode: 500,
-          message: 'Failed to list.',
         ),
       );
     }
   }
 
-  Future<Either<AppException, String>> delist({
-    required String digitalAssetAddress,
-  }) async {
+  Future<Either<AppException, String>> signAndSendWithWrapper(
+      List<Uint8List> transactions) async {
     final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
-          ref.read(privateLoadingProvider.notifier).update((state) => true);
-          final response = await ref
-              .read(transactionRepositoryProvider)
-              .cancelListingTransaction(
-                  digitalAssetAddress: digitalAssetAddress);
-
-          return response.fold((exception) async {
-            await session.close();
-            return Left(exception);
-          }, (encodedTransaction) async {
-            return Right(
-              await _signAndSendTransactions(
-                client: client,
-                session: session,
-                encodedTransactions: [encodedTransaction],
-              ),
-            );
-          });
+          return await _signAndSendTransactions(
+            client: client,
+            session: session,
+            transactions: transactions,
+          );
         },
       );
     } catch (exception) {
@@ -305,16 +254,11 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         return Left(exception);
       }
 
-      Sentry.captureException(
-        exception,
-        stackTrace:
-            'Delist failed for ${ref.read(environmentProvider).user?.email}.',
-      );
       return Left(
         AppException(
-          identifier: 'SolanaTransactionNotifier.list',
+          identifier: 'SolanaTransactionNotifier.signAndSendWithWrapper',
           statusCode: 500,
-          message: 'Failed to delist digital asset.',
+          message: 'Failed to sign and send transactions.',
         ),
       );
     }
@@ -368,12 +312,10 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
                 ),
               );
             }
-            return Right(
-              await _signAndSendTransactions(
-                client: client,
-                session: session,
-                encodedTransactions: encodedTransactions,
-              ),
+            return await _signAndSendTransactions(
+              client: client,
+              session: session,
+              transactions: encodedTransactions.map(base64Decode).toList(),
             );
           });
         },
@@ -427,12 +369,10 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
           }
           return await solanaNotifier.authorizeIfNeededWithOnComplete(
             onComplete: (client, session) async {
-              return Right(
-                await _signAndSendTransactions(
-                  client: client,
-                  session: session,
-                  encodedTransactions: [transaction],
-                ),
+              return await _signAndSendTransactions(
+                client: client,
+                session: session,
+                transactions: [base64Decode(transaction)],
               );
             },
           );

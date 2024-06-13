@@ -1,16 +1,10 @@
 import 'package:d_reader_flutter/config/config.dart';
-import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
-import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_controller.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:d_reader_flutter/features/transaction/presentation/providers/list/notifier/list_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DigitalAssetModalBottomSheet extends ConsumerStatefulWidget {
@@ -133,43 +127,11 @@ class SubmitButton extends ConsumerWidget {
       isLoading: ref.watch(globalNotifierProvider).isLoading,
       onPressed: price != null
           ? () async {
-              try {
-                // create common notifier that will handle logic for using MWA or LocalWallet
-                final bool isLocalWallet = ref.read(selectedWalletProvider) ==
-                    ref.read(localWalletNotifierProvider).value?.address;
-
-                if (isLocalWallet) {
-                  await ref
-                      .read(localTransactionsNotifierProvider.notifier)
-                      .handleList(
-                        assetAddress: digitalAsset.address,
-                        sellerAddress: digitalAsset.ownerAddress,
-                        price: price!,
-                      );
-                  return;
-                }
-                await ref
-                    .read(digitalAssetControllerProvider.notifier)
-                    .listDigitalAsset(
-                      sellerAddress: digitalAsset.ownerAddress,
-                      mintAccount: digitalAsset.address,
-                      price: price!,
-                      callback: (result) {
-                        context.pop();
-                        showSnackBar(
-                          context: context,
-                          text: result == successResult
-                              ? 'Listed successfully'
-                              : result,
-                          backgroundColor: result == successResult
-                              ? ColorPalette.dReaderGreen
-                              : ColorPalette.dReaderRed,
-                        );
-                      },
-                    );
-              } catch (exception) {
-                rethrow;
-              }
+              await ref.read(listNotifierProvider.notifier).list(
+                    assetAddress: digitalAsset.address,
+                    sellerAddress: digitalAsset.ownerAddress,
+                    price: price!,
+                  );
             }
           : null,
       size: const Size(double.infinity, 50),

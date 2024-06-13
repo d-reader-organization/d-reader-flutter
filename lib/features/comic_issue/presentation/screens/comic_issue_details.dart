@@ -564,7 +564,7 @@ class _MintButtonWithStates extends ConsumerWidget {
     );
 
     return ref.watch(mintNotifierProvider).maybeWhen(
-          minting: () => _MintButton(
+          processing: () => _MintButton(
             activeCandyMachineAddress: activeCandyMachineAddress,
             isLoading: true,
           ),

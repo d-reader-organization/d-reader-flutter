@@ -3,6 +3,7 @@ import 'dart:convert' show base64Decode;
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
+import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/mint/state/mint_state.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
@@ -81,7 +82,7 @@ class MintNotifier extends _$MintNotifier {
   }
 
   Future<void> mint(String candyMachineAddress) async {
-    state = const MintState.minting();
+    state = const MintState.processing();
     final proceedMint = await _shouldProceedMint();
     if (!proceedMint) {
       return;
@@ -113,7 +114,7 @@ class MintNotifier extends _$MintNotifier {
     );
   }
 
-  Future<MintTransactionsResponse> _getMintTransactions({
+  Future<TransactionApiResponse<List<String>>> _getMintTransactions({
     required String candyMachineAddress,
     required String walletAddress,
     required String label,
@@ -124,12 +125,7 @@ class MintNotifier extends _$MintNotifier {
           minterAddress: walletAddress,
           label: label,
         )
-        .then(
-          (value) => value.fold(
-            (exception) => MintTransactionsResponse.error(exception.message),
-            (data) => MintTransactionsResponse.ok(data),
-          ),
-        );
+        .then(mapApiResponse<List<String>>);
   }
 
   Future<void> _localWalletSignAndSend(List<Uint8List> transactions) async {
@@ -140,7 +136,7 @@ class MintNotifier extends _$MintNotifier {
     _listenToSignatureStatus(signatures);
     state = signatures.isNotEmpty
         ? const MintState.success(successResult)
-        : const MintState.failed('Failed to sign transactions');
+        : const MintState.failed(failedToSignTransactionsMessage);
   }
 
   Future<void> _mwaSignAndSend(List<Uint8List> transactions) async {

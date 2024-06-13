@@ -26,3 +26,5 @@ const String eReaderLocalStoreName = 'eReader_store';
 const String eReaderListPositionKey = 'eReader_list_position';
 const String eReaderPagePositionKey = 'eReader_page_position';
 const String eReaderReadingModeKey = 'reading_mode';
+
+const String failedToSignTransactionsMessage = 'Failed to sign transactions';

@@ -6,12 +6,9 @@ import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_as
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_transaction_notifier.dart';
-import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:flutter/animation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:solana/solana.dart' show lamportsPerSol;
 import 'package:video_player/video_player.dart';
 
 part 'digital_asset_controller.g.dart';
@@ -23,45 +20,6 @@ const String failedTransactionMessage =
 class DigitalAssetController extends _$DigitalAssetController {
   @override
   void build() {}
-
-  Future<void> delist({
-    required String digitalAssetAddress,
-    required void Function() callback,
-    required void Function(Object exception) onException,
-  }) async {
-    try {
-      final delistResult = await ref
-          .read(mwaTransactionNotifierProvider.notifier)
-          .delist(digitalAssetAddress: digitalAssetAddress);
-
-      delistResult.fold((exception) {
-        ref.read(privateLoadingProvider.notifier).update((state) => false);
-        onException(exception);
-      }, (result) async {
-        if (result != successResult) {
-          ref.read(privateLoadingProvider.notifier).update((state) => false);
-          return onException(
-            AppException(
-              message: result,
-              statusCode: 500,
-              identifier: 'DigitalAssetController.delist',
-            ),
-          );
-        }
-        await Future.delayed(
-          const Duration(milliseconds: 1200),
-          () {
-            ref.invalidate(digitalAssetProvider);
-            ref.read(privateLoadingProvider.notifier).update((state) => false);
-            callback();
-          },
-        );
-      });
-    } catch (exception) {
-      ref.read(privateLoadingProvider.notifier).update((state) => false);
-      onException(exception);
-    }
-  }
 
   Future<void> openDigitalAsset({
     required DigitalAssetModel digitalAsset,
@@ -78,43 +36,6 @@ class DigitalAssetController extends _$DigitalAssetController {
           (exception) => onException(exception), (result) => onOpen(result));
     } catch (exception) {
       onException(exception);
-    }
-  }
-
-  Future<void> listDigitalAsset({
-    required String sellerAddress,
-    required String mintAccount,
-    required double price,
-    required void Function(String result) callback,
-  }) async {
-    try {
-      final response =
-          await ref.read(mwaTransactionNotifierProvider.notifier).list(
-                sellerAddress: sellerAddress,
-                mintAccount: mintAccount,
-                price: (price * lamportsPerSol).round(),
-              );
-      response.fold(
-        (exception) {
-          ref.read(privateLoadingProvider.notifier).update((state) => false);
-          callback(exception.message);
-        },
-        (result) async {
-          await Future.delayed(
-            const Duration(milliseconds: 1200),
-            () {
-              ref.invalidate(digitalAssetProvider);
-              ref
-                  .read(privateLoadingProvider.notifier)
-                  .update((state) => false);
-              callback(result);
-            },
-          );
-        },
-      );
-    } catch (exception) {
-      ref.read(privateLoadingProvider.notifier).update((state) => false);
-      rethrow;
     }
   }
 

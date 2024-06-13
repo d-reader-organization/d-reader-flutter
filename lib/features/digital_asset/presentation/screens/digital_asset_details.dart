@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/widgets/button.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_controller.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
@@ -9,10 +10,8 @@ import 'package:d_reader_flutter/features/digital_asset/presentation/utils/exten
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
@@ -28,7 +27,6 @@ import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/royalty.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/skeleton_row.dart';
 import 'package:d_reader_flutter/shared/widgets/texts/text_with_view_more.dart';
-import 'package:d_reader_flutter/features/digital_asset/presentation/widgets/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -121,63 +119,9 @@ class DigitalAssetDetails extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: _Button(
-                                isLoading: ref.watch(privateLoadingProvider),
-                                loadingColor: ColorPalette.greyscale200,
-                                onPressed: () async {
-                                  if (digitalAsset.isListed) {
-                                    return await ref
-                                        .read(digitalAssetControllerProvider
-                                            .notifier)
-                                        .delist(
-                                          digitalAssetAddress:
-                                              digitalAsset.address,
-                                          callback: () {
-                                            showSnackBar(
-                                              context: context,
-                                              text: 'Successfully delisted',
-                                              backgroundColor:
-                                                  ColorPalette.dReaderGreen,
-                                            );
-                                          },
-                                          onException: (exception) {
-                                            triggerLowPowerOrNoWallet(
-                                              context,
-                                              exception,
-                                            );
-                                          },
-                                        );
-                                  }
-                                  showModalBottomSheet(
-                                    context: context,
-                                    backgroundColor: Colors.transparent,
-                                    isScrollControlled: true,
-                                    builder: (context) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom:
-                                              MediaQuery.viewInsetsOf(context)
-                                                  .bottom,
-                                        ),
-                                        child: DigitalAssetModalBottomSheet(
-                                            digitalAsset: digitalAsset),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: digitalAsset.isListed
-                                    ? Text(
-                                        'Delist',
-                                        style: textTheme.titleMedium?.copyWith(
-                                          color: ColorPalette.greyscale200,
-                                        ),
-                                      )
-                                    : Text(
-                                        'List',
-                                        style: textTheme.titleMedium?.copyWith(
-                                          color: ColorPalette.greyscale200,
-                                        ),
-                                      ),
+                              child: ListOrDelistButton(
+                                digitalAsset: digitalAsset,
+                                isListButton: !digitalAsset.isListed,
                               ),
                             ),
                             const SizedBox(
@@ -185,28 +129,7 @@ class DigitalAssetDetails extends ConsumerWidget {
                             ),
                             Expanded(
                               child: digitalAsset.isUsed
-                                  ? _Button(
-                                      borderColor:
-                                          ColorPalette.dReaderYellow100,
-                                      isLoading: ref
-                                          .watch(globalNotifierProvider)
-                                          .isLoading,
-                                      loadingColor:
-                                          ColorPalette.dReaderYellow100,
-                                      onPressed: () async {
-                                        return nextScreenPush(
-                                          context: context,
-                                          path:
-                                              '${RoutePath.eReader}/${digitalAsset.comicIssueId}',
-                                        );
-                                      },
-                                      child: Text(
-                                        'Read',
-                                        style: textTheme.titleMedium?.copyWith(
-                                          color: ColorPalette.dReaderYellow100,
-                                        ),
-                                      ),
-                                    )
+                                  ? ReadButton(digitalAsset: digitalAsset)
                                   : UnwrapButton(
                                       digitalAsset: digitalAsset,
                                       onPressed: () async {
@@ -522,39 +445,6 @@ class DigitalAssetDetails extends ConsumerWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _Button extends ConsumerWidget {
-  final Widget child;
-  final bool isLoading;
-  final Future<void> Function() onPressed;
-  final Color borderColor, loadingColor;
-  const _Button({
-    required this.child,
-    required this.onPressed,
-    this.isLoading = false,
-    this.borderColor = ColorPalette.greyscale200,
-    this.loadingColor = ColorPalette.appBackgroundColor,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return CustomTextButton(
-      size: Size(MediaQuery.sizeOf(context).width / 2.4, 40),
-      borderRadius: const BorderRadius.all(
-        Radius.circular(
-          8,
-        ),
-      ),
-      borderColor: borderColor,
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      backgroundColor: Colors.transparent,
-      isLoading: isLoading,
-      onPressed: ref.watch(isOpeningSessionProvider) ? null : onPressed,
-      loadingColor: loadingColor,
-      child: child,
     );
   }
 }

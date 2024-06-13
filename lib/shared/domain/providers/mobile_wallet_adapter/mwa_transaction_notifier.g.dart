@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'solana_notifier.dart';
+part of 'mwa_transaction_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$solanaNotifierHash() => r'ca22574a35f3d358950d539d32362dd052a653f5';
+String _$mwaTransactionNotifierHash() =>
+    r'b9a5d2d50eb61ee40b74bbda4fc03685f555daed';
 
-/// See also [SolanaNotifier].
-@ProviderFor(SolanaNotifier)
-final solanaNotifierProvider =
-    AutoDisposeNotifierProvider<SolanaNotifier, void>.internal(
-  SolanaNotifier.new,
-  name: r'solanaNotifierProvider',
+/// See also [MwaTransactionNotifier].
+@ProviderFor(MwaTransactionNotifier)
+final mwaTransactionNotifierProvider =
+    AutoDisposeNotifierProvider<MwaTransactionNotifier, void>.internal(
+  MwaTransactionNotifier.new,
+  name: r'mwaTransactionNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$solanaNotifierHash,
+      : _$mwaTransactionNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SolanaNotifier = AutoDisposeNotifier<void>;
+typedef _$MwaTransactionNotifier = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

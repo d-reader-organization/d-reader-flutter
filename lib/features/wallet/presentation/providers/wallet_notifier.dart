@@ -8,7 +8,7 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart';
 
@@ -25,7 +25,7 @@ class WalletController extends _$WalletController {
     required Function(Object exception) onException,
   }) async {
     final authorizeResult = await ref
-        .read(solanaNotifierProvider.notifier)
+        .read(mwaNotifierProvider.notifier)
         .authorizeIfNeededWithOnComplete(
             isConnectOnly: true,
             onStart: () {
@@ -60,7 +60,7 @@ class WalletController extends _$WalletController {
       }
 
       await ref
-          .read(solanaNotifierProvider.notifier)
+          .read(mwaNotifierProvider.notifier)
           .authorizeIfNeededWithOnComplete();
       ref.read(selectedWalletProvider.notifier).update((state) =>
           ref.read(environmentProvider).publicKey?.toBase58() ?? address);

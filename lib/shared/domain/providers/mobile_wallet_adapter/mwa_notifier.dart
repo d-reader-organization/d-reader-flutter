@@ -12,7 +12,7 @@ import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_p
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:power/power.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,10 +21,10 @@ import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
-part 'solana_notifier.g.dart';
+part 'mwa_notifier.g.dart';
 
 @riverpod
-class SolanaNotifier extends _$SolanaNotifier {
+class MwaNotifier extends _$MwaNotifier {
   @override
   void build() {}
 

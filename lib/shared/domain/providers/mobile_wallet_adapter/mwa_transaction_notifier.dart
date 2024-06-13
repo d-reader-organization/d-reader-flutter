@@ -11,8 +11,8 @@ import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_p
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
@@ -24,7 +24,7 @@ import 'package:solana/encoder.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
-part 'solana_transaction_notifier.g.dart';
+part 'mwa_transaction_notifier.g.dart';
 
 bool hasEligibilityForMint(CandyMachineGroupModel? group) {
   if (group == null) {
@@ -37,7 +37,7 @@ bool hasEligibilityForMint(CandyMachineGroupModel? group) {
 }
 
 @riverpod
-class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
+class MwaTransactionNotifier extends _$MwaTransactionNotifier {
   @override
   void build() {}
 
@@ -115,7 +115,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   Future<Either<AppException, String>> mint(
     List<Uint8List> transactions,
   ) async {
-    final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
+    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
@@ -176,7 +176,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     required List<String> encodedTransactions,
   }) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
-    final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
+    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     final isReauthorized = await solanaNotifier.doReauthorize(client);
 
     if (!isReauthorized) {
@@ -230,7 +230,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     required int price,
     String printReceipt = 'false',
   }) async {
-    final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
+    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
@@ -276,7 +276,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   Future<Either<AppException, String>> delist({
     required String digitalAssetAddress,
   }) async {
-    final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
+    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
@@ -321,7 +321,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
   }
 
   Future<Either<AppException, String>> buyMultiple() async {
-    final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
+    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
@@ -400,7 +400,7 @@ class SolanaTransactionNotifier extends _$SolanaTransactionNotifier {
     required String digitalAssetAddress,
     required String ownerAddress,
   }) async {
-    final solanaNotifier = ref.read(solanaNotifierProvider.notifier);
+    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
 
     try {

@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/mint/state/mint_state.dart';
+import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
@@ -11,20 +12,17 @@ import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wa
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'mint_notifier.g.dart';
 
-abstract class MintNotifierInterface {
-  Future<void> mint(String candyMachineAddress);
-}
-
 @riverpod
 class MintNotifier extends _$MintNotifier {
   late final TransactionRepository _transactionRepository;
+
   @override
   MintState build() {
     _transactionRepository = ref.read(transactionRepositoryProvider);
@@ -88,9 +86,6 @@ class MintNotifier extends _$MintNotifier {
     if (!proceedMint) {
       return;
     }
-    final bool isLocalWallet =
-        ref.read(localWalletNotifierProvider).value?.address ==
-            ref.read(selectedWalletProvider);
 
     final apiResponse = await _getMintTransactions(
       candyMachineAddress: candyMachineAddress,
@@ -100,11 +95,15 @@ class MintNotifier extends _$MintNotifier {
 
     apiResponse.when(
       ok: (data) async {
+        final bool isLocalWallet =
+            ref.read(localWalletNotifierProvider).value?.address ==
+                ref.read(selectedWalletProvider);
         final transactions = data.map(base64Decode).toList();
         if (isLocalWallet) {
           if (_hasEligibility()) {
-            return await _localWalletSignAndSend(transactions);
+            await _localWalletSignAndSend(transactions);
           }
+          return;
         }
         await _mwaSignAndSend(transactions);
       },
@@ -134,18 +133,19 @@ class MintNotifier extends _$MintNotifier {
   }
 
   Future<void> _localWalletSignAndSend(List<Uint8List> transactions) async {
-    final isSuccess = await ref
+    final List<String> signatures = await ref
         .read(localTransactionsNotifierProvider.notifier)
         .signAndSendTransactions(transactions);
-    state = isSuccess
+
+    _listenToSignatureStatus(signatures);
+    state = signatures.isNotEmpty
         ? const MintState.success(successResult)
         : const MintState.failed('Failed to sign transactions');
-    return;
   }
 
   Future<void> _mwaSignAndSend(List<Uint8List> transactions) async {
     final response = await ref
-        .read(solanaTransactionNotifierProvider.notifier)
+        .read(mwaTransactionNotifierProvider.notifier)
         .mint(transactions);
 
     response.fold(
@@ -157,4 +157,12 @@ class MintNotifier extends _$MintNotifier {
       },
     );
   }
+
+  _listenToSignatureStatus(List<String> signatures) => signatures.isNotEmpty
+      ? ref.read(
+          transactionChainStatusProvider(
+            signatures.last,
+          ),
+        )
+      : null;
 }

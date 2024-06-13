@@ -7,7 +7,7 @@ part of 'digital_asset_controller.dart';
 // **************************************************************************
 
 String _$digitalAssetControllerHash() =>
-    r'6e1878cc909e1cd9e763a7b7c0dc5030d89905c5';
+    r'64ce8946f60b5a243328f8125c7d7116067c5f8b';
 
 /// See also [DigitalAssetController].
 @ProviderFor(DigitalAssetController)

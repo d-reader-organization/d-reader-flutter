@@ -5,7 +5,7 @@ import 'package:d_reader_flutter/features/library/presentation/providers/owned/o
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
@@ -31,7 +31,7 @@ class DigitalAssetController extends _$DigitalAssetController {
   }) async {
     try {
       final delistResult = await ref
-          .read(solanaTransactionNotifierProvider.notifier)
+          .read(mwaTransactionNotifierProvider.notifier)
           .delist(digitalAssetAddress: digitalAssetAddress);
 
       delistResult.fold((exception) {
@@ -70,7 +70,7 @@ class DigitalAssetController extends _$DigitalAssetController {
   }) async {
     try {
       final useMintResult =
-          await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
+          await ref.read(mwaTransactionNotifierProvider.notifier).useMint(
                 digitalAssetAddress: digitalAsset.address,
                 ownerAddress: digitalAsset.ownerAddress,
               );
@@ -89,7 +89,7 @@ class DigitalAssetController extends _$DigitalAssetController {
   }) async {
     try {
       final response =
-          await ref.read(solanaTransactionNotifierProvider.notifier).list(
+          await ref.read(mwaTransactionNotifierProvider.notifier).list(
                 sellerAddress: sellerAddress,
                 mintAccount: mintAccount,
                 price: (price * lamportsPerSol).round(),
@@ -243,7 +243,7 @@ class DigitalAssetController extends _$DigitalAssetController {
     required Function(String message) onFail,
   }) async {
     final useMintResult =
-        await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
+        await ref.read(mwaTransactionNotifierProvider.notifier).useMint(
               digitalAssetAddress: digitalAssetAddress,
               ownerAddress: ownerAddress,
             );

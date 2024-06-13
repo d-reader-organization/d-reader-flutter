@@ -8,7 +8,7 @@ import 'package:d_reader_flutter/features/comic_issue/presentation/providers/com
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/mint/notifier/mint_notifier.dart';
 import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';

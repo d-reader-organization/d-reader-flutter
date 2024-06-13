@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/features/user/presentation/providers/user_provi
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/auction_house/presentation/providers/listings_provider.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_issue_controller.g.dart';
@@ -33,9 +33,8 @@ class ComicIssueController extends _$ComicIssueController {
     required void Function(Object exception) onException,
   }) async {
     try {
-      final buyResult = await ref
-          .read(solanaTransactionNotifierProvider.notifier)
-          .buyMultiple();
+      final buyResult =
+          await ref.read(mwaTransactionNotifierProvider.notifier).buyMultiple();
       ref.read(globalNotifierProvider.notifier).updateLoading(false);
 
       buyResult.fold((exception) {

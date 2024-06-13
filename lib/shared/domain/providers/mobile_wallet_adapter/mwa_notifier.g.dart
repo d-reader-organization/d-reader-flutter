@@ -1,25 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'mint_notifier.dart';
+part of 'mwa_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mintNotifierHash() => r'10f9fc55d821a877198bed4336ae2e81f4b420aa';
+String _$mwaNotifierHash() => r'eb4cf456a56f3279946fedce821290c4f00a975d';
 
-/// See also [MintNotifier].
-@ProviderFor(MintNotifier)
-final mintNotifierProvider =
-    AutoDisposeNotifierProvider<MintNotifier, MintState>.internal(
-  MintNotifier.new,
-  name: r'mintNotifierProvider',
+/// See also [MwaNotifier].
+@ProviderFor(MwaNotifier)
+final mwaNotifierProvider =
+    AutoDisposeNotifierProvider<MwaNotifier, void>.internal(
+  MwaNotifier.new,
+  name: r'mwaNotifierProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$mintNotifierHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$mwaNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MintNotifier = AutoDisposeNotifier<MintState>;
+typedef _$MwaNotifier = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

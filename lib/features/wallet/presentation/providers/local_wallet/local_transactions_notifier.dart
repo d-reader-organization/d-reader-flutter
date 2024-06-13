@@ -1,11 +1,11 @@
-import 'dart:convert';
+import 'dart:convert' show base64Decode;
 
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/local_wallet/local_wallet.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/encoder.dart';
@@ -39,7 +39,7 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
       sellerAddress: sellerAddress,
       price: (price * lamportsPerSol).round(),
     );
-    await signAndSendTransactions([_getBase64Decode(listTransaction)]);
+    await signAndSendTransactions([base64Decode(listTransaction)]);
     ref.invalidate(digitalAssetsProvider);
     ref.invalidate(digitalAssetProvider);
   }
@@ -52,19 +52,21 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
       assetAddress: assetAddress,
       ownerAddress: ownerAddress,
     );
-    await signAndSendTransactions([_getBase64Decode(unwrapTransaction)]);
+    await signAndSendTransactions([base64Decode(unwrapTransaction)]);
     ref.invalidate(digitalAssetsProvider);
     ref.invalidate(digitalAssetProvider);
   }
 
+  /// Returns list of transactions signatures
   @override
-  Future<bool> signAndSendTransactions(List<Uint8List> transactions) async {
+  Future<List<String>> signAndSendTransactions(
+    List<Uint8List> transactions,
+  ) async {
     final List<SignedTx> signedTxs = await _signTransactions(transactions);
     if (signedTxs.isEmpty) {
-      return false;
+      return [];
     }
-    await _sendTransactions(signedTxs);
-    return true;
+    return await _sendTransactions(signedTxs);
   }
 
   Future<String> _getListTransaction({
@@ -130,16 +132,15 @@ class LocalTransactionsNotifier extends _$LocalTransactionsNotifier
     return signedTxs;
   }
 
-  Future<void> _sendTransactions(List<SignedTx> signedTxs) async {
-    String sendTransactionResult = '';
+  Future<List<String>> _sendTransactions(List<SignedTx> signedTxs) async {
+    List<String> transactionSignatures = [];
     for (final signedTx in signedTxs) {
-      sendTransactionResult = await ref
+      final String signature = await ref
           .read(solanaClientProvider)
           .rpcClient
           .sendTransaction(signedTx.encode(), skipPreflight: true);
+      transactionSignatures.add(signature);
     }
-    ref.read(transactionChainStatusProvider(sendTransactionResult));
+    return transactionSignatures;
   }
 }
-
-Uint8List _getBase64Decode(String value) => base64Decode(value);

@@ -3,7 +3,7 @@ import 'dart:convert' show base64Decode;
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/mint/state/mint_state.dart';
+import 'package:d_reader_flutter/features/transaction/presentation/providers/mint/state/mint_state.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';

@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/mint/notifier/mint_notifier.dart';
+import 'package:d_reader_flutter/features/transaction/presentation/providers/mint/notifier/mint_notifier.dart';
 import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';

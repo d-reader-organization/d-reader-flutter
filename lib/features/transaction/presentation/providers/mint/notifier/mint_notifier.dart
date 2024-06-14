@@ -125,7 +125,7 @@ class MintNotifier extends _$MintNotifier {
           minterAddress: walletAddress,
           label: label,
         )
-        .then(mapApiResponse<List<String>>);
+        .then(mapApiResponse);
   }
 
   Future<void> _localWalletSignAndSend(List<Uint8List> transactions) async {

@@ -15,7 +15,7 @@ sealed class TransactionState with _$TransactionState {
 }
 
 @freezed
-sealed class TransactionApiResponse<T> with _$TransactionApiResponse {
+sealed class TransactionApiResponse<T> with _$TransactionApiResponse<T> {
   const factory TransactionApiResponse.ok(T data) = _Ok;
   const factory TransactionApiResponse.error(String message) = _Error;
 }

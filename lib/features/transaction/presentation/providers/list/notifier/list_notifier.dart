@@ -82,7 +82,7 @@ class ListNotifier extends _$ListNotifier {
             mintAccount: mintAccount,
             price: (price * lamportsPerSol).round(),
           )
-          .then(mapApiResponse<String>);
+          .then(mapApiResponse);
 
   Future<TransactionApiResponse<String>> _getDelistTransaction(
           String assetAddress) =>
@@ -90,7 +90,7 @@ class ListNotifier extends _$ListNotifier {
           .cancelListingTransaction(
             digitalAssetAddress: assetAddress,
           )
-          .then(mapApiResponse<String>);
+          .then(mapApiResponse);
 
   Future<void> _localWalletSignAndSend(List<Uint8List> transactions) async {
     final List<String> signatures = await ref

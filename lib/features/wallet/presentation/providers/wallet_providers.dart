@@ -68,6 +68,7 @@ final selectedWalletProvider = StateProvider.autoDispose<String>((ref) {
       '';
   return latestWallet;
 }, dependencies: [localWalletNotifierProvider]);
+
 final walletNameProvider = StateProvider.autoDispose<String>((ref) {
   return '';
 });

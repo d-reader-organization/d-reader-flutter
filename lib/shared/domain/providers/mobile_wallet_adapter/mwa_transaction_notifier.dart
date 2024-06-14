@@ -1,10 +1,8 @@
-import 'dart:convert' show base64Decode, jsonEncode;
+import 'dart:convert' show base64Decode;
 
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
-import 'package:d_reader_flutter/features/digital_asset/domain/models/buy_digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -237,7 +235,8 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
   }
 
   Future<Either<AppException, String>> signAndSendWithWrapper(
-      List<Uint8List> transactions) async {
+    List<Uint8List> transactions,
+  ) async {
     final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
       return await solanaNotifier.authorizeIfNeededWithOnComplete(
@@ -259,80 +258,6 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
           identifier: 'SolanaTransactionNotifier.signAndSendWithWrapper',
           statusCode: 500,
           message: 'Failed to sign and send transactions.',
-        ),
-      );
-    }
-  }
-
-  Future<Either<AppException, String>> buyMultiple() async {
-    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
-    try {
-      return await solanaNotifier.authorizeIfNeededWithOnComplete(
-        onComplete: (client, session) async {
-          final activeWallet =
-              ref.read(environmentProvider).publicKey?.toBase58();
-          if (activeWallet == null) {
-            return Left(
-              AppException(
-                message: 'Failed to connect wallet',
-                identifier: 'SolanaTransactionNotifier.buyMultiple',
-                statusCode: 500,
-              ),
-            );
-          }
-          List<BuyDigitalAsset> selectedDigitalAssetsInput = ref
-              .read(selectedListingsProvider)
-              .map(
-                (e) => BuyDigitalAsset(
-                  mintAccount: e.assetAddress,
-                  price: e.price,
-                  sellerAddress: e.seller.address,
-                  buyerAddress: activeWallet,
-                ),
-              )
-              .toList();
-          Map<String, String> query = {};
-          for (int i = 0; i < selectedDigitalAssetsInput.length; ++i) {
-            query["instantBuyParams[$i]"] =
-                jsonEncode(selectedDigitalAssetsInput[i].toJson());
-          }
-          final response = await ref
-              .read(transactionRepositoryProvider)
-              .buyMultipleItems(query);
-          return response.fold((exception) async {
-            await session.close();
-            return Left(exception);
-          }, (encodedTransactions) async {
-            if (encodedTransactions.isEmpty) {
-              return Left(
-                AppException(
-                  message: 'Failed to get transactions from API',
-                  identifier: 'SolanaTransactionNotifier.buyMultiple',
-                  statusCode: 500,
-                ),
-              );
-            }
-            return await _signAndSendTransactions(
-              client: client,
-              session: session,
-              transactions: encodedTransactions.map(base64Decode).toList(),
-            );
-          });
-        },
-      );
-    } catch (exception) {
-      if (exception is AppException) {
-        return Left(exception);
-      }
-
-      Sentry.captureException(exception,
-          stackTrace:
-              'Buy multiple failed for ${ref.read(environmentProvider).user?.email}');
-      return Left(
-        AppException(
-          identifier: 'SolanaTransactionNotifier.list',
-          statusCode: 500,
-          message: 'Failed to delist digital asset.',
         ),
       );
     }

@@ -67,6 +67,8 @@ class OwnedIssueCard extends ConsumerWidget {
                       ),
                       Text(
                         issue.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,

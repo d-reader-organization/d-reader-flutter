@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
-import 'package:d_reader_flutter/features/transaction/presentation/providers/mint/state/mint_state.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
@@ -25,9 +24,9 @@ class MintNotifier extends _$MintNotifier {
   late final TransactionRepository _transactionRepository;
 
   @override
-  MintState build() {
+  TransactionState build() {
     _transactionRepository = ref.read(transactionRepositoryProvider);
-    return const MintState.initialized();
+    return const TransactionState.initialized();
   }
 
   _checkIsVerifiedEmail() async {
@@ -45,18 +44,18 @@ class MintNotifier extends _$MintNotifier {
   Future<bool> _shouldProceedMint() async {
     CandyMachineModel? candyMachineState = ref.read(candyMachineStateProvider);
     if (candyMachineState == null) {
-      state = const MintState.failed('Failed to find candy machine');
+      state = const TransactionState.failed('Failed to find candy machine');
       return false;
     }
     final activeGroup = ref.read(selectedCandyMachineGroup);
     if (activeGroup == null) {
-      state = const MintState.failed('There is no active mint');
+      state = const TransactionState.failed('There is no active mint');
       return false;
     }
     if (activeGroup.label == dFreeLabel) {
       bool isVerified = await _checkIsVerifiedEmail();
       if (!isVerified) {
-        state = const MintState.verificationNeeded();
+        state = const TransactionState.showDialog();
         return false;
       }
     }
@@ -68,7 +67,7 @@ class MintNotifier extends _$MintNotifier {
     final hasEligibility =
         hasEligibilityForMint(ref.read(selectedCandyMachineGroup));
     if (!hasEligibility) {
-      state = MintState.failed(_noEligibilityMessage());
+      state = TransactionState.failed(_noEligibilityMessage());
       return false;
     }
     return true;
@@ -82,7 +81,7 @@ class MintNotifier extends _$MintNotifier {
   }
 
   Future<void> mint(String candyMachineAddress) async {
-    state = const MintState.processing();
+    state = const TransactionState.processing();
     final proceedMint = await _shouldProceedMint();
     if (!proceedMint) {
       return;
@@ -109,7 +108,7 @@ class MintNotifier extends _$MintNotifier {
         await _mwaSignAndSend(transactions);
       },
       error: (message) {
-        state = MintState.failed(message);
+        state = TransactionState.failed(message);
       },
     );
   }
@@ -135,8 +134,8 @@ class MintNotifier extends _$MintNotifier {
 
     _listenToSignatureStatus(signatures);
     state = signatures.isNotEmpty
-        ? const MintState.success(successResult)
-        : const MintState.failed(failedToSignTransactionsMessage);
+        ? const TransactionState.success(successResult)
+        : const TransactionState.failed(failedToSignTransactionsMessage);
   }
 
   Future<void> _mwaSignAndSend(List<Uint8List> transactions) async {
@@ -146,10 +145,10 @@ class MintNotifier extends _$MintNotifier {
 
     response.fold(
       (exception) {
-        state = MintState.failed(exception.message);
+        state = TransactionState.failed(exception.message);
       },
       (data) {
-        state = MintState.success(data);
+        state = TransactionState.success(data);
       },
     );
   }

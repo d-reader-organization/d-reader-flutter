@@ -1,23 +1,11 @@
-import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/widgets/button.dart';
-import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
-import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_controller.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/extensions.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/utils.dart';
-import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/widgets/digital_asset_card.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/unwrap_button.dart';
@@ -43,32 +31,6 @@ class DigitalAssetDetails extends ConsumerWidget {
     super.key,
     required this.address,
   });
-
-  _handleDigitalAssetOpen({
-    required BuildContext context,
-    required WidgetRef ref,
-    required String openResponse,
-  }) {
-    if (openResponse != successResult) {
-      return showSnackBar(
-        context: context,
-        backgroundColor: ColorPalette.dReaderRed,
-        text: openResponse,
-      );
-    }
-    ref.invalidate(lastProcessedAssetProvider);
-    ref.invalidate(digitalAssetsProvider);
-    ref.invalidate(digitalAssetProvider);
-    ref.invalidate(ownedComicsProvider);
-    ref.invalidate(ownedIssuesAsyncProvider);
-    ref.invalidate(comicIssuePagesProvider);
-    ref.invalidate(comicIssueDetailsProvider);
-    showSnackBar(
-      context: context,
-      text: 'Comic unwrapped successfully',
-      backgroundColor: ColorPalette.dReaderGreen,
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -132,61 +94,8 @@ class DigitalAssetDetails extends ConsumerWidget {
                                   ? ReadButton(digitalAsset: digitalAsset)
                                   : UnwrapButton(
                                       digitalAsset: digitalAsset,
-                                      onPressed: () async {
-                                        ref.read(selectedWalletProvider) ==
-                                                ref
-                                                    .read(
-                                                        localWalletNotifierProvider)
-                                                    .value
-                                                    ?.address
-                                            ? await ref
-                                                .read(
-                                                    localTransactionsNotifierProvider
-                                                        .notifier)
-                                                .handleUnwrap(
-                                                  assetAddress:
-                                                      digitalAsset.address,
-                                                  ownerAddress:
-                                                      digitalAsset.ownerAddress,
-                                                )
-                                            : await ref
-                                                .read(
-                                                    digitalAssetControllerProvider
-                                                        .notifier)
-                                                .openDigitalAsset(
-                                                  digitalAsset: digitalAsset,
-                                                  onOpen: (String result) {
-                                                    _handleDigitalAssetOpen(
-                                                      context: context,
-                                                      ref: ref,
-                                                      openResponse: result,
-                                                    );
-                                                  },
-                                                  onException: (exception) {
-                                                    if (exception
-                                                            is LowPowerModeException ||
-                                                        exception
-                                                            is NoWalletFoundException) {
-                                                      triggerLowPowerOrNoWallet(
-                                                        context,
-                                                        exception,
-                                                      );
-                                                      return;
-                                                    } else if (exception
-                                                        is AppException) {
-                                                      showSnackBar(
-                                                        context: context,
-                                                        text: exception.message,
-                                                      );
-                                                    }
-                                                  },
-                                                );
-                                      },
                                       borderColor:
                                           ColorPalette.dReaderYellow100,
-                                      isLoading: ref
-                                          .watch(globalNotifierProvider)
-                                          .isLoading,
                                       backgroundColor: Colors.transparent,
                                       loadingColor:
                                           ColorPalette.dReaderYellow100,

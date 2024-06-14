@@ -12,6 +12,7 @@ sealed class TransactionState with _$TransactionState {
   const factory TransactionState.initialized() = _Initialized;
   const factory TransactionState.processing() = _Processing;
   const factory TransactionState.success(String message) = _Success;
+  const factory TransactionState.showDialog() = _ShowDialog;
 }
 
 @freezed

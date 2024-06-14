@@ -1,10 +1,7 @@
-import 'dart:convert' show base64Decode;
-
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
-import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
@@ -258,64 +255,6 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
           identifier: 'SolanaTransactionNotifier.signAndSendWithWrapper',
           statusCode: 500,
           message: 'Failed to sign and send transactions.',
-        ),
-      );
-    }
-  }
-
-  Future<Either<AppException, String>> useMint({
-    required String digitalAssetAddress,
-    required String ownerAddress,
-  }) async {
-    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
-    ref.read(globalNotifierProvider.notifier).updateLoading(true);
-
-    try {
-      final response = await ref
-          .read(transactionRepositoryProvider)
-          .useComicIssueAssetTransaction(
-            digitalAssetAddress: digitalAssetAddress,
-            ownerAddress: ownerAddress,
-          );
-
-      return response.fold(
-        (exception) async {
-          ref.read(globalNotifierProvider.notifier).updateLoading(false);
-          return Left(exception);
-        },
-        (transaction) async {
-          // if there is no transaction, that means it's Core Digital Asset which means it's unwrapped
-          if (transaction == null || transaction.isEmpty) {
-            ref
-                .read(lastProcessedAssetProvider.notifier)
-                .update((state) => digitalAssetAddress);
-            ref.read(globalNotifierProvider.notifier).updateLoading(false);
-            return const Right(successResult);
-          }
-          return await solanaNotifier.authorizeIfNeededWithOnComplete(
-            onComplete: (client, session) async {
-              return await _signAndSendTransactions(
-                client: client,
-                session: session,
-                transactions: [base64Decode(transaction)],
-              );
-            },
-          );
-        },
-      );
-    } catch (exception) {
-      if (exception is AppException) {
-        return Left(exception);
-      }
-
-      Sentry.captureException(exception,
-          stackTrace:
-              'Failed to use mint: digitalAssetAddress $digitalAssetAddress, owner: $ownerAddress. User: ${ref.read(environmentProvider).user?.email}');
-      return Left(
-        AppException(
-          identifier: 'SolanaTransactionNotifier.list',
-          statusCode: 500,
-          message: 'Failed to unwrap digitalAssetAddress',
         ),
       );
     }

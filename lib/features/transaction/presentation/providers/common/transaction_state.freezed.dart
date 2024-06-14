@@ -23,6 +23,7 @@ mixin _$TransactionState {
     required TResult Function() initialized,
     required TResult Function() processing,
     required TResult Function(String message) success,
+    required TResult Function() showDialog,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,6 +33,7 @@ mixin _$TransactionState {
     TResult? Function()? initialized,
     TResult? Function()? processing,
     TResult? Function(String message)? success,
+    TResult? Function()? showDialog,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,6 +43,7 @@ mixin _$TransactionState {
     TResult Function()? initialized,
     TResult Function()? processing,
     TResult Function(String message)? success,
+    TResult Function()? showDialog,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -51,6 +54,7 @@ mixin _$TransactionState {
     required TResult Function(_Initialized value) initialized,
     required TResult Function(_Processing value) processing,
     required TResult Function(_Success value) success,
+    required TResult Function(_ShowDialog value) showDialog,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,6 +64,7 @@ mixin _$TransactionState {
     TResult? Function(_Initialized value)? initialized,
     TResult? Function(_Processing value)? processing,
     TResult? Function(_Success value)? success,
+    TResult? Function(_ShowDialog value)? showDialog,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,6 +74,7 @@ mixin _$TransactionState {
     TResult Function(_Initialized value)? initialized,
     TResult Function(_Processing value)? processing,
     TResult Function(_Success value)? success,
+    TResult Function(_ShowDialog value)? showDialog,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -161,6 +167,7 @@ class _$FailedImpl implements _Failed {
     required TResult Function() initialized,
     required TResult Function() processing,
     required TResult Function(String message) success,
+    required TResult Function() showDialog,
   }) {
     return failed(message);
   }
@@ -173,6 +180,7 @@ class _$FailedImpl implements _Failed {
     TResult? Function()? initialized,
     TResult? Function()? processing,
     TResult? Function(String message)? success,
+    TResult? Function()? showDialog,
   }) {
     return failed?.call(message);
   }
@@ -185,6 +193,7 @@ class _$FailedImpl implements _Failed {
     TResult Function()? initialized,
     TResult Function()? processing,
     TResult Function(String message)? success,
+    TResult Function()? showDialog,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -201,6 +210,7 @@ class _$FailedImpl implements _Failed {
     required TResult Function(_Initialized value) initialized,
     required TResult Function(_Processing value) processing,
     required TResult Function(_Success value) success,
+    required TResult Function(_ShowDialog value) showDialog,
   }) {
     return failed(this);
   }
@@ -213,6 +223,7 @@ class _$FailedImpl implements _Failed {
     TResult? Function(_Initialized value)? initialized,
     TResult? Function(_Processing value)? processing,
     TResult? Function(_Success value)? success,
+    TResult? Function(_ShowDialog value)? showDialog,
   }) {
     return failed?.call(this);
   }
@@ -225,6 +236,7 @@ class _$FailedImpl implements _Failed {
     TResult Function(_Initialized value)? initialized,
     TResult Function(_Processing value)? processing,
     TResult Function(_Success value)? success,
+    TResult Function(_ShowDialog value)? showDialog,
     required TResult orElse(),
   }) {
     if (failed != null) {
@@ -314,6 +326,7 @@ class _$FailedWithExceptionImpl implements _FailedWithException {
     required TResult Function() initialized,
     required TResult Function() processing,
     required TResult Function(String message) success,
+    required TResult Function() showDialog,
   }) {
     return failedWithException(exception);
   }
@@ -326,6 +339,7 @@ class _$FailedWithExceptionImpl implements _FailedWithException {
     TResult? Function()? initialized,
     TResult? Function()? processing,
     TResult? Function(String message)? success,
+    TResult? Function()? showDialog,
   }) {
     return failedWithException?.call(exception);
   }
@@ -338,6 +352,7 @@ class _$FailedWithExceptionImpl implements _FailedWithException {
     TResult Function()? initialized,
     TResult Function()? processing,
     TResult Function(String message)? success,
+    TResult Function()? showDialog,
     required TResult orElse(),
   }) {
     if (failedWithException != null) {
@@ -354,6 +369,7 @@ class _$FailedWithExceptionImpl implements _FailedWithException {
     required TResult Function(_Initialized value) initialized,
     required TResult Function(_Processing value) processing,
     required TResult Function(_Success value) success,
+    required TResult Function(_ShowDialog value) showDialog,
   }) {
     return failedWithException(this);
   }
@@ -366,6 +382,7 @@ class _$FailedWithExceptionImpl implements _FailedWithException {
     TResult? Function(_Initialized value)? initialized,
     TResult? Function(_Processing value)? processing,
     TResult? Function(_Success value)? success,
+    TResult? Function(_ShowDialog value)? showDialog,
   }) {
     return failedWithException?.call(this);
   }
@@ -378,6 +395,7 @@ class _$FailedWithExceptionImpl implements _FailedWithException {
     TResult Function(_Initialized value)? initialized,
     TResult Function(_Processing value)? processing,
     TResult Function(_Success value)? success,
+    TResult Function(_ShowDialog value)? showDialog,
     required TResult orElse(),
   }) {
     if (failedWithException != null) {
@@ -440,6 +458,7 @@ class _$InitializedImpl implements _Initialized {
     required TResult Function() initialized,
     required TResult Function() processing,
     required TResult Function(String message) success,
+    required TResult Function() showDialog,
   }) {
     return initialized();
   }
@@ -452,6 +471,7 @@ class _$InitializedImpl implements _Initialized {
     TResult? Function()? initialized,
     TResult? Function()? processing,
     TResult? Function(String message)? success,
+    TResult? Function()? showDialog,
   }) {
     return initialized?.call();
   }
@@ -464,6 +484,7 @@ class _$InitializedImpl implements _Initialized {
     TResult Function()? initialized,
     TResult Function()? processing,
     TResult Function(String message)? success,
+    TResult Function()? showDialog,
     required TResult orElse(),
   }) {
     if (initialized != null) {
@@ -480,6 +501,7 @@ class _$InitializedImpl implements _Initialized {
     required TResult Function(_Initialized value) initialized,
     required TResult Function(_Processing value) processing,
     required TResult Function(_Success value) success,
+    required TResult Function(_ShowDialog value) showDialog,
   }) {
     return initialized(this);
   }
@@ -492,6 +514,7 @@ class _$InitializedImpl implements _Initialized {
     TResult? Function(_Initialized value)? initialized,
     TResult? Function(_Processing value)? processing,
     TResult? Function(_Success value)? success,
+    TResult? Function(_ShowDialog value)? showDialog,
   }) {
     return initialized?.call(this);
   }
@@ -504,6 +527,7 @@ class _$InitializedImpl implements _Initialized {
     TResult Function(_Initialized value)? initialized,
     TResult Function(_Processing value)? processing,
     TResult Function(_Success value)? success,
+    TResult Function(_ShowDialog value)? showDialog,
     required TResult orElse(),
   }) {
     if (initialized != null) {
@@ -560,6 +584,7 @@ class _$ProcessingImpl implements _Processing {
     required TResult Function() initialized,
     required TResult Function() processing,
     required TResult Function(String message) success,
+    required TResult Function() showDialog,
   }) {
     return processing();
   }
@@ -572,6 +597,7 @@ class _$ProcessingImpl implements _Processing {
     TResult? Function()? initialized,
     TResult? Function()? processing,
     TResult? Function(String message)? success,
+    TResult? Function()? showDialog,
   }) {
     return processing?.call();
   }
@@ -584,6 +610,7 @@ class _$ProcessingImpl implements _Processing {
     TResult Function()? initialized,
     TResult Function()? processing,
     TResult Function(String message)? success,
+    TResult Function()? showDialog,
     required TResult orElse(),
   }) {
     if (processing != null) {
@@ -600,6 +627,7 @@ class _$ProcessingImpl implements _Processing {
     required TResult Function(_Initialized value) initialized,
     required TResult Function(_Processing value) processing,
     required TResult Function(_Success value) success,
+    required TResult Function(_ShowDialog value) showDialog,
   }) {
     return processing(this);
   }
@@ -612,6 +640,7 @@ class _$ProcessingImpl implements _Processing {
     TResult? Function(_Initialized value)? initialized,
     TResult? Function(_Processing value)? processing,
     TResult? Function(_Success value)? success,
+    TResult? Function(_ShowDialog value)? showDialog,
   }) {
     return processing?.call(this);
   }
@@ -624,6 +653,7 @@ class _$ProcessingImpl implements _Processing {
     TResult Function(_Initialized value)? initialized,
     TResult Function(_Processing value)? processing,
     TResult Function(_Success value)? success,
+    TResult Function(_ShowDialog value)? showDialog,
     required TResult orElse(),
   }) {
     if (processing != null) {
@@ -706,6 +736,7 @@ class _$SuccessImpl implements _Success {
     required TResult Function() initialized,
     required TResult Function() processing,
     required TResult Function(String message) success,
+    required TResult Function() showDialog,
   }) {
     return success(message);
   }
@@ -718,6 +749,7 @@ class _$SuccessImpl implements _Success {
     TResult? Function()? initialized,
     TResult? Function()? processing,
     TResult? Function(String message)? success,
+    TResult? Function()? showDialog,
   }) {
     return success?.call(message);
   }
@@ -730,6 +762,7 @@ class _$SuccessImpl implements _Success {
     TResult Function()? initialized,
     TResult Function()? processing,
     TResult Function(String message)? success,
+    TResult Function()? showDialog,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -746,6 +779,7 @@ class _$SuccessImpl implements _Success {
     required TResult Function(_Initialized value) initialized,
     required TResult Function(_Processing value) processing,
     required TResult Function(_Success value) success,
+    required TResult Function(_ShowDialog value) showDialog,
   }) {
     return success(this);
   }
@@ -758,6 +792,7 @@ class _$SuccessImpl implements _Success {
     TResult? Function(_Initialized value)? initialized,
     TResult? Function(_Processing value)? processing,
     TResult? Function(_Success value)? success,
+    TResult? Function(_ShowDialog value)? showDialog,
   }) {
     return success?.call(this);
   }
@@ -770,6 +805,7 @@ class _$SuccessImpl implements _Success {
     TResult Function(_Initialized value)? initialized,
     TResult Function(_Processing value)? processing,
     TResult Function(_Success value)? success,
+    TResult Function(_ShowDialog value)? showDialog,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -786,6 +822,132 @@ abstract class _Success implements TransactionState {
   @JsonKey(ignore: true)
   _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ShowDialogImplCopyWith<$Res> {
+  factory _$$ShowDialogImplCopyWith(
+          _$ShowDialogImpl value, $Res Function(_$ShowDialogImpl) then) =
+      __$$ShowDialogImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ShowDialogImplCopyWithImpl<$Res>
+    extends _$TransactionStateCopyWithImpl<$Res, _$ShowDialogImpl>
+    implements _$$ShowDialogImplCopyWith<$Res> {
+  __$$ShowDialogImplCopyWithImpl(
+      _$ShowDialogImpl _value, $Res Function(_$ShowDialogImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$ShowDialogImpl implements _ShowDialog {
+  const _$ShowDialogImpl();
+
+  @override
+  String toString() {
+    return 'TransactionState.showDialog()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$ShowDialogImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) failed,
+    required TResult Function(AppException exception) failedWithException,
+    required TResult Function() initialized,
+    required TResult Function() processing,
+    required TResult Function(String message) success,
+    required TResult Function() showDialog,
+  }) {
+    return showDialog();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String message)? failed,
+    TResult? Function(AppException exception)? failedWithException,
+    TResult? Function()? initialized,
+    TResult? Function()? processing,
+    TResult? Function(String message)? success,
+    TResult? Function()? showDialog,
+  }) {
+    return showDialog?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message)? failed,
+    TResult Function(AppException exception)? failedWithException,
+    TResult Function()? initialized,
+    TResult Function()? processing,
+    TResult Function(String message)? success,
+    TResult Function()? showDialog,
+    required TResult orElse(),
+  }) {
+    if (showDialog != null) {
+      return showDialog();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Failed value) failed,
+    required TResult Function(_FailedWithException value) failedWithException,
+    required TResult Function(_Initialized value) initialized,
+    required TResult Function(_Processing value) processing,
+    required TResult Function(_Success value) success,
+    required TResult Function(_ShowDialog value) showDialog,
+  }) {
+    return showDialog(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Failed value)? failed,
+    TResult? Function(_FailedWithException value)? failedWithException,
+    TResult? Function(_Initialized value)? initialized,
+    TResult? Function(_Processing value)? processing,
+    TResult? Function(_Success value)? success,
+    TResult? Function(_ShowDialog value)? showDialog,
+  }) {
+    return showDialog?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Failed value)? failed,
+    TResult Function(_FailedWithException value)? failedWithException,
+    TResult Function(_Initialized value)? initialized,
+    TResult Function(_Processing value)? processing,
+    TResult Function(_Success value)? success,
+    TResult Function(_ShowDialog value)? showDialog,
+    required TResult orElse(),
+  }) {
+    if (showDialog != null) {
+      return showDialog(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ShowDialog implements TransactionState {
+  const factory _ShowDialog() = _$ShowDialogImpl;
 }
 
 /// @nodoc

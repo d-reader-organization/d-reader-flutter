@@ -63,7 +63,7 @@ class MintButton extends ConsumerWidget {
             context: context,
             path: RoutePath.mintLoadingAnimation,
           ),
-          verificationNeeded: () => triggerVerificationDialog(context, ref),
+          showDialog: () => triggerVerificationDialog(context, ref),
           failedWithException: (exception) {
             if (exception is NoWalletFoundException) {
               _showWalkthroughDialog(context: context, ref: ref);

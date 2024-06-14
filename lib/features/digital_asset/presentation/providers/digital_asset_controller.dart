@@ -1,11 +1,9 @@
-import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
-import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_transaction_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:flutter/animation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,24 +18,6 @@ const String failedTransactionMessage =
 class DigitalAssetController extends _$DigitalAssetController {
   @override
   void build() {}
-
-  Future<void> openDigitalAsset({
-    required DigitalAssetModel digitalAsset,
-    required void Function(String result) onOpen,
-    required void Function(Object exception) onException,
-  }) async {
-    try {
-      final useMintResult =
-          await ref.read(mwaTransactionNotifierProvider.notifier).useMint(
-                digitalAssetAddress: digitalAsset.address,
-                ownerAddress: digitalAsset.ownerAddress,
-              );
-      useMintResult.fold(
-          (exception) => onException(exception), (result) => onOpen(result));
-    } catch (exception) {
-      onException(exception);
-    }
-  }
 
   mintLoadingListener({
     required VideoPlayerController videoPlayerController,
@@ -148,6 +128,7 @@ class DigitalAssetController extends _$DigitalAssetController {
     ref
         .read(globalNotifierProvider.notifier)
         .update(isLoading: false, newMessage: '');
+    ref.invalidate(digitalAssetProvider);
     ref.read(digitalAssetProvider(digitalAssetAddress).future).then(
       (value) {
         if (value != null) {
@@ -155,23 +136,5 @@ class DigitalAssetController extends _$DigitalAssetController {
         }
       },
     );
-  }
-
-  handleDigitalAssetUnwrap({
-    required String digitalAssetAddress,
-    required String ownerAddress,
-    required Function() onSuccess,
-    required Function(String message) onFail,
-  }) async {
-    final useMintResult =
-        await ref.read(mwaTransactionNotifierProvider.notifier).useMint(
-              digitalAssetAddress: digitalAssetAddress,
-              ownerAddress: ownerAddress,
-            );
-    useMintResult.fold((exception) => onFail(exception.message), (result) {
-      if (result == successResult) {
-        onSuccess();
-      }
-    });
   }
 }

@@ -67,8 +67,7 @@ class UnwrapButton extends ConsumerWidget {
                       digitalAssetAddress: digitalAsset.address,
                       ownerAddress: digitalAsset.ownerAddress,
                       ignoreDialog: true,
-                    )
-                    .then((value) => context.pop());
+                    );
               },
               title: 'Comic unwraping',
               subtitle:

@@ -6,20 +6,6 @@ import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart'
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:solana/solana.dart';
 
-SolanaClient createSolanaClient({required String rpcUrl}) {
-  return SolanaClient(
-    rpcUrl: Uri.parse(
-      rpcUrl,
-    ),
-    websocketUrl: Uri.parse(
-      rpcUrl.replaceAll(
-        'https',
-        'ws',
-      ),
-    ),
-  );
-}
-
 Future<String?> requestAirdrop(String publicKey) async {
   try {
     final client = SolanaClient(

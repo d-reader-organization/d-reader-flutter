@@ -3,6 +3,7 @@ import 'package:d_reader_flutter/features/authentication/domain/providers/auth_p
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/domain/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
@@ -89,6 +90,9 @@ class WalletController extends _$WalletController {
     envState.walletAuthTokenMap?.removeWhere((key, value) => key == address);
     if (ref.read(environmentProvider).publicKey?.toBase58() == address) {
       ref.read(environmentProvider.notifier).clearPublicKey();
+    }
+    if (address == ref.read(localWalletNotifierProvider).value?.address) {
+      await ref.read(localWalletNotifierProvider.notifier).deleteWallet();
     }
     ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);

@@ -160,8 +160,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                             backgroundColor: Colors.transparent,
                             onPressed: () {
                               ref
-                                  .read(selectedWalletProvider.notifier)
-                                  .update((state) => widget.address);
+                                  .read(environmentProvider.notifier)
+                                  .updatePublicKeyFromBase58(widget.address);
                               showSnackBar(
                                 context: context,
                                 milisecondsDuration: 1800,

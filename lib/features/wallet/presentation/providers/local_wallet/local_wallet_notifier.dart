@@ -5,8 +5,8 @@ import 'package:d_reader_flutter/features/authentication/domain/providers/auth_p
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/local_wallet/local_wallet.dart';
 import 'package:d_reader_flutter/features/wallet/domain/utils/utils.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/data/local/secure_store.dart';
+import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -51,7 +51,9 @@ class LocalWalletNotifier extends _$LocalWalletNotifier
     ]);
     state = AsyncValue.data(wallet);
     ref.invalidate(userWalletsProvider);
-    ref.read(selectedWalletProvider.notifier).update((state) => wallet.address);
+    ref
+        .read(environmentProvider.notifier)
+        .updatePublicKeyFromBase58(wallet.address);
     return wallet;
   }
 

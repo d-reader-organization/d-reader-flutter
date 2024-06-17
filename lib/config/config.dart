@@ -35,8 +35,9 @@ abstract class Config {
   static const String tokenKey = 'dReader-token';
   static const String settingsAssetsPath = 'assets/icons/settings_screen';
   static const String introAssetsPath = 'assets/icons/intro';
+  static const String dReaderIdentityUrl = 'https://dreader.io/';
+  static const String dReaderIdentityName = 'dReader';
   static const String faviconPath = 'assets/icons/favicon.ico';
-  static const String hasSeenInitialKey = 'hasSeenInitial';
   static const String helpCenterLink =
       "https://docs.google.com/forms/d/e/1FAIpQLSefq-KgefpgmINtOUxJIKEBppcMQL4W7F8RLXreaLdHnFOZsg/viewform";
   static const String privacyPolicyUrl = "https://dreader.app/privacy-policy";

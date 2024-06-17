@@ -62,8 +62,7 @@ class WalletController extends _$WalletController {
       await ref
           .read(mwaNotifierProvider.notifier)
           .authorizeIfNeededWithOnComplete();
-      ref.read(selectedWalletProvider.notifier).update((state) =>
-          ref.read(environmentProvider).publicKey?.toBase58() ?? address);
+
       ref.invalidate(userWalletsProvider);
       return true;
     }
@@ -75,9 +74,7 @@ class WalletController extends _$WalletController {
             authToken: walletAuthToken,
           ),
         );
-    ref.read(selectedWalletProvider.notifier).update(
-          (state) => address,
-        );
+
     return true;
   }
 

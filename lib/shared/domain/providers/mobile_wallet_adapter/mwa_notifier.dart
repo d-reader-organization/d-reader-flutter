@@ -33,8 +33,8 @@ class MwaNotifier extends _$MwaNotifier {
     required String cluster,
   }) {
     return client.authorize(
-      identityUri: Uri.parse('https://dreader.io/'),
-      identityName: 'dReader',
+      identityUri: Uri.parse(Config.dReaderIdentityUrl),
+      identityName: Config.dReaderIdentityName,
       cluster: cluster,
       iconUri: Uri.file(Config.faviconPath),
     );
@@ -58,14 +58,14 @@ class MwaNotifier extends _$MwaNotifier {
       return await _authorizeAndStore(client: client);
     }
     var result = await client.reauthorize(
-      identityUri: Uri.parse('https://dreader.io/'),
-      identityName: 'dReader',
+      identityUri: Uri.parse(Config.dReaderIdentityUrl),
+      identityName: Config.dReaderIdentityName,
       authToken: authToken,
       iconUri: Uri.file(Config.faviconPath),
     );
     result ??= await client.authorize(
-      identityUri: Uri.parse('https://dreader.io/'),
-      identityName: 'dReader',
+      identityUri: Uri.parse(Config.dReaderIdentityUrl),
+      identityName: Config.dReaderIdentityName,
       cluster: envState.solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
@@ -75,9 +75,6 @@ class MwaNotifier extends _$MwaNotifier {
     final publicKey = Ed25519HDPublicKey(result.publicKey);
     final address = publicKey.toBase58();
     final walletsMap = envState.walletAuthTokenMap;
-    ref.read(selectedWalletProvider.notifier).update(
-          (state) => address,
-        );
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
@@ -138,15 +135,14 @@ class MwaNotifier extends _$MwaNotifier {
     if (result == null) {
       return false;
     }
-    final currentWalletAddress =
-        Ed25519HDPublicKey(result.publicKey).toBase58();
+    final publicKey = Ed25519HDPublicKey(result.publicKey);
+    final currentWalletAddress = publicKey.toBase58();
     final walletsMap = envState.walletAuthTokenMap;
-    ref.read(selectedWalletProvider.notifier).update(
-          (state) => currentWalletAddress,
-        );
+
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
+            publicKey: publicKey,
             walletAuthTokenMap: {
               ...?walletsMap,
               currentWalletAddress: result.authToken,

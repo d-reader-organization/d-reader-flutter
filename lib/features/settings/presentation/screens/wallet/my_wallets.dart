@@ -147,10 +147,11 @@ class MyWalletsScreen extends ConsumerWidget {
                                 .read(environmentProvider)
                                 .walletAuthTokenMap?[wallet.address] ??
                             '';
+                        final bool isSelected =
+                            ref.watch(selectedWalletProvider) == wallet.address;
                         return GestureDetector(
                           onTap: () {
-                            if (ref.read(selectedWalletProvider) ==
-                                wallet.address) {
+                            if (isSelected) {
                               return;
                             }
                             ref
@@ -191,8 +192,7 @@ class MyWalletsScreen extends ConsumerWidget {
                                 8,
                               ),
                               border: Border.all(
-                                color: ref.watch(selectedWalletProvider) ==
-                                        wallet.address
+                                color: isSelected
                                     ? ColorPalette.dReaderYellow100
                                     : ColorPalette.greyscale400,
                               ),
@@ -346,7 +346,6 @@ class MyWalletsScreen extends ConsumerWidget {
                               text: 'Wallet has been connected',
                               backgroundColor: ColorPalette.dReaderGreen,
                             );
-                            ref.invalidate(selectedWalletProvider);
                             ref.invalidate(userWalletsProvider);
                             ref.invalidate(ownedComicsProvider);
                           },

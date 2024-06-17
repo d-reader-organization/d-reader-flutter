@@ -1,6 +1,8 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:d_reader_flutter/shared/data/local/secure_store.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
@@ -179,6 +181,47 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                           ),
                   ],
                 ),
+          const SizedBox(
+            height: 16,
+          ),
+          if (widget.address ==
+              ref.read(localWalletNotifierProvider).value?.address) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomTextButton(
+                  onPressed: () async {
+                    final storage = ref.read(secureStorageProvider);
+                    storage.read(key: Config.mnemonicKey).then(
+                      (value) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            contentPadding: const EdgeInsets.all(8),
+                            backgroundColor: ColorPalette.greyscale400,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            content: Text(
+                              value ?? '',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  size: const Size(0, 50),
+                  child: Text(
+                    'Export seed phrase',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Colors.black,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(
             height: 32,
           ),

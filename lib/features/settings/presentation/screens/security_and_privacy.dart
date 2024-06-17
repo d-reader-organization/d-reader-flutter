@@ -4,10 +4,10 @@ import 'package:d_reader_flutter/features/user/domain/models/user_privacy_consen
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/utils/url_utils.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/shared/widgets/switch/custom_switch.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/carrot_error_widget.dart';
 import 'package:flutter/material.dart';
@@ -185,20 +185,12 @@ class SecurityAndPrivacyScreen extends ConsumerWidget {
                             .updateUserConsents(
                               data: data,
                               triggerDialog: () async {
-                                return await showDialog<bool>(
-                                      context: context,
-                                      builder: (context) {
-                                        return ConfirmationDialog(
-                                          title:
-                                              'Revoking this consent might lead to degradation of services or limited access to app features',
-                                          subtitle: '',
-                                          onTap: () async {
-                                            return true;
-                                          },
-                                        );
-                                      },
-                                    ) ??
-                                    false;
+                                return await triggerConfirmationDialog(
+                                  context: context,
+                                  title:
+                                      'Revoking this consent might lead to degradation of services or limited access to app features',
+                                  subtitle: '',
+                                );
                               },
                               onSuccess: () {
                                 showSnackBar(

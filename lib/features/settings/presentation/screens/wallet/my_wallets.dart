@@ -15,7 +15,6 @@ import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/widgets/why_need_wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -159,17 +158,12 @@ class MyWalletsScreen extends ConsumerWidget {
                                 .handleWalletSelect(
                                   address: wallet.address,
                                   onAuthorizeNeeded: () async {
-                                    return await showDialog<bool>(
-                                          context: context,
-                                          builder: (context) {
-                                            return ConfirmationDialog(
-                                              title: '',
-                                              subtitle:
-                                                  'Wallet ${Formatter.formatAddress(wallet.address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
-                                            );
-                                          },
-                                        ) ??
-                                        false;
+                                    return await triggerConfirmationDialog(
+                                      context: context,
+                                      title: '',
+                                      subtitle:
+                                          'Wallet ${Formatter.formatAddress(wallet.address, 3)} is not authorized on the dReader mobile app. Would you like to grant dReader the rights to communicate with your mobile wallet?',
+                                    );
                                   },
                                 )
                                 .then((value) {

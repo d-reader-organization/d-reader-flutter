@@ -6,12 +6,12 @@ import 'package:d_reader_flutter/shared/data/local/secure_store.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
+import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/shared/widgets/textfields/text_field.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/list_tile.dart';
 import 'package:flutter/material.dart';
@@ -343,16 +343,11 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             overrideColor: ColorPalette.dReaderRed,
             overrideFontSize: 16,
             onTap: () async {
-              final bool shouldDisconnect = await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const ConfirmationDialog(
-                        title: 'Disconnect Wallet',
-                        subtitle: 'Are you sure you want to disconnect wallet?',
-                      );
-                    },
-                  ) ??
-                  false;
+              final bool shouldDisconnect = await triggerConfirmationDialog(
+                context: context,
+                title: 'Disconnect Wallet',
+                subtitle: 'Are you sure you want to disconnect wallet?',
+              );
               if (!shouldDisconnect) {
                 return;
               }

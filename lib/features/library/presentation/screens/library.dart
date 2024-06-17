@@ -6,7 +6,7 @@ import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/favo
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
+import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/slivers/custom_sliver_tab_bar.dart';
 import 'package:d_reader_flutter/features/library/presentation/widgets/tabs/owned/owned.dart';
 import 'package:flutter/material.dart';
@@ -234,26 +234,20 @@ class CreatorTabHeader extends ConsumerWidget {
           onTap: ref.watch(selectedCreatorSlugs).isNotEmpty &&
                   !ref.watch(privateLoadingProvider)
               ? () async {
-                  await showDialog<bool>(
-                        context: context,
-                        builder: (context) {
-                          return ConfirmationDialog(
-                            title:
-                                'Are you sure you want to unfollow creator(s)?',
-                            subtitle: '',
-                            onTap: () async {
-                              await ref.read(
-                                unfollowCreatorsProvider(
-                                  ref.read(
-                                    selectedCreatorSlugs,
-                                  ),
-                                ).future,
-                              );
-                            },
-                          );
-                        },
-                      ) ??
-                      false;
+                  await triggerConfirmationDialog(
+                    context: context,
+                    title: 'Are you sure you want to unfollow creator(s)?',
+                    subtitle: '',
+                    onTap: () async {
+                      await ref.read(
+                        unfollowCreatorsProvider(
+                          ref.read(
+                            selectedCreatorSlugs,
+                          ),
+                        ).future,
+                      );
+                    },
+                  );
                 }
               : null,
           child: Text(

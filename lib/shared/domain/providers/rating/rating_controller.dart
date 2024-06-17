@@ -10,7 +10,6 @@ import 'package:d_reader_flutter/shared/presentations/providers/common/selected_
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rating/rating_stars.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -39,36 +38,31 @@ class RatingController extends _$RatingController {
     required BuildContext context,
     int? issueId,
     String? comicSlug,
-  }) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return ConfirmationDialog(
-          title: issueId != null ? 'Rate the episode' : 'Rate the comic',
-          subtitle: 'Tap a star to give ratings!',
-          onTap: () {
-            final int rating = ref.read(selectedRatingStarIndex) + 1;
-            return issueId != null && rating > 0
-                ? ref
-                    .read(comicIssueRepositoryProvider)
-                    .rateIssue(id: issueId, rating: rating)
-                : ref.read(
-                    rateComicProvider(
-                      {
-                        'slug': comicSlug,
-                        'rating': rating,
-                      },
-                    ).future,
-                  );
-          },
-          additionalChild: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
-            child: RatingStars(),
-          ),
-        );
-      },
-    );
-  }
+  }) =>
+      triggerConfirmationDialog(
+        context: context,
+        title: issueId != null ? 'Rate the episode' : 'Rate the comic',
+        subtitle: 'Tap a star to give ratings!',
+        onTap: () {
+          final int rating = ref.read(selectedRatingStarIndex) + 1;
+          return issueId != null && rating > 0
+              ? ref
+                  .read(comicIssueRepositoryProvider)
+                  .rateIssue(id: issueId, rating: rating)
+              : ref.read(
+                  rateComicProvider(
+                    {
+                      'slug': comicSlug,
+                      'rating': rating,
+                    },
+                  ).future,
+                );
+        },
+        additionalChild: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
+          child: RatingStars(),
+        ),
+      );
 
   void _showVerificationWalkthroughDialog({
     required BuildContext context,

@@ -48,7 +48,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         return Left(
           AppException(
             message: 'Failed to sign transactions',
-            identifier: 'SolanaTransactionNotifier._signAndSendMint',
+            identifier: 'MwaTransactionNotifier._signAndSendMint',
             statusCode: 500,
           ),
         );
@@ -82,7 +82,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         return Left(
           AppException(
             message: exception.message,
-            identifier: 'SolanaTransactionNotifier._signAndSendMint',
+            identifier: 'MwaTransactionNotifier._signAndSendMint',
             statusCode: 500,
           ),
         );
@@ -92,7 +92,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         AppException(
           message:
               'Unknown error occurred and report has been sent to our development team.',
-          identifier: 'SolanaTransactionNotifier._signAndSendMint',
+          identifier: 'MwaTransactionNotifier._signAndSendMint',
           statusCode: 500,
         ),
       );
@@ -109,17 +109,16 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
   Future<Either<AppException, String>> mint(
     List<Uint8List> transactions,
   ) async {
-    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
+    final mwaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
-      return await solanaNotifier.authorizeIfNeededWithOnComplete(
+      return await mwaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
-          final bool isReauthorized =
-              await solanaNotifier.doReauthorize(client);
+          final bool isReauthorized = await mwaNotifier.doReauthorize(client);
           if (!isReauthorized) {
             await session.close();
             return Left(
               AppException(
-                identifier: 'SolanaTransactionNotifier.mint',
+                identifier: 'MwaTransactionNotifier.mint',
                 message: 'Failed to reauthorize wallet',
                 statusCode: 403,
               ),
@@ -130,7 +129,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
             // have to keep it inside MWA session.
             return Left(
               AppException(
-                identifier: 'SolanaTransactionNotifier.mint',
+                identifier: 'MwaTransactionNotifier.mint',
                 message: _noEligibilityMessage(),
                 statusCode: 401,
               ),
@@ -156,7 +155,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
       );
       return Left(
         AppException(
-          identifier: 'SolanaTransactionNotifier.mint.catchBlock',
+          identifier: 'MwaTransactionNotifier.mint.catchBlock',
           message: 'Failed to mint',
           statusCode: 500,
         ),
@@ -234,9 +233,9 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
   Future<Either<AppException, String>> signAndSendWithWrapper(
     List<Uint8List> transactions,
   ) async {
-    final solanaNotifier = ref.read(mwaNotifierProvider.notifier);
+    final mwaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
-      return await solanaNotifier.authorizeIfNeededWithOnComplete(
+      return await mwaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
           return await _signAndSendTransactions(
             client: client,
@@ -252,7 +251,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
 
       return Left(
         AppException(
-          identifier: 'SolanaTransactionNotifier.signAndSendWithWrapper',
+          identifier: 'MwaTransactionNotifier.signAndSendWithWrapper',
           statusCode: 500,
           message: 'Failed to sign and send transactions.',
         ),

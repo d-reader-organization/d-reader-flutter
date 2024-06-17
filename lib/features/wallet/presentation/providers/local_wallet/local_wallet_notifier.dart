@@ -32,12 +32,12 @@ class LocalWalletNotifier extends _$LocalWalletNotifier
     _storage = ref.read(secureStorageProvider);
     final existingPhrase = await _storage.read(key: _mnemonicKey) ?? '';
 
-    if (existingPhrase.isNotEmpty) {
-      final LocalWallet wallet =
-          await createLocalWallet(mnemonic: existingPhrase);
-      return wallet;
+    if (existingPhrase.isEmpty) {
+      return null;
     }
-    return null;
+    final LocalWallet wallet =
+        await createLocalWallet(mnemonic: existingPhrase);
+    return wallet;
   }
 
   @override
@@ -60,7 +60,8 @@ class LocalWalletNotifier extends _$LocalWalletNotifier
   @override
   Future<void> deleteWallet() async {
     state = const AsyncValue.loading();
-    await ref.read(secureStorageProvider).deleteAll();
+    await ref.read(secureStorageProvider).delete(key: _mnemonicKey);
+    ref.read(environmentProvider.notifier).clearPublicKey();
     state = const AsyncValue.data(null);
   }
 

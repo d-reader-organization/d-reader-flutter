@@ -2,7 +2,10 @@ import 'dart:convert' show base64Decode;
 
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
+import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
@@ -58,14 +61,27 @@ class UnwrapNotifier extends _$UnwrapNotifier {
             ref.read(localWalletNotifierProvider).value?.address;
         final decodedTransactions = [base64Decode(data)];
 
-        isLocalWallet
-            ? _localWalletSignAndSend(decodedTransactions)
-            : _mwaSignAndSend(decodedTransactions);
+        (isLocalWallet
+                ? _localWalletSignAndSend(decodedTransactions)
+                : _mwaSignAndSend(decodedTransactions))
+            .then(
+          (value) => _invalidateDataAfterUnwrap(),
+        );
       },
       error: (message) {
         state = TransactionState.failed(message);
       },
     );
+  }
+
+  void _invalidateDataAfterUnwrap() {
+    ref.invalidate(lastProcessedAssetProvider);
+    ref.invalidate(digitalAssetsProvider);
+    ref.invalidate(digitalAssetProvider);
+    ref.invalidate(ownedComicsProvider);
+    ref.invalidate(ownedIssuesAsyncProvider);
+    ref.invalidate(comicIssuePagesProvider);
+    ref.invalidate(comicIssueDetailsProvider);
   }
 
   Future<TransactionApiResponse<String>> _getUnwrapTransaction({

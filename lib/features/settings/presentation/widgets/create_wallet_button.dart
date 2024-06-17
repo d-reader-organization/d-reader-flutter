@@ -15,31 +15,15 @@ class CreateAWalletButton extends ConsumerWidget {
     return ref.watch(localWalletNotifierProvider).when(
       data: (data) {
         return data == null
-            ? CustomTextButton(
-                padding: const EdgeInsets.all(16),
-                size: const Size(double.infinity, 50),
+            ? _CreateWallet(
+                text: createWallet,
                 onPressed:
                     ref.read(localWalletNotifierProvider.notifier).createWallet,
-                child: const Text(
-                  createWallet,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
               )
-            : CustomTextButton(
-                padding: const EdgeInsets.all(16),
-                size: const Size(double.infinity, 50),
+            : _CreateWallet(
+                text: deleteWallet,
                 onPressed:
                     ref.read(localWalletNotifierProvider.notifier).deleteWallet,
-                child: const Text(
-                  deleteWallet,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
               );
       },
       error: (Object error, StackTrace stackTrace) {
@@ -49,15 +33,34 @@ class CreateAWalletButton extends ConsumerWidget {
         return CustomTextButton(
           padding: const EdgeInsets.all(16),
           size: const Size(double.infinity, 50),
-          onPressed:
-              ref.read(localWalletNotifierProvider.notifier).deleteWallet,
+          onPressed: () {},
           isLoading: true,
           loadingColor: ColorPalette.appBackgroundColor,
-          child: const Text(
-            deleteWallet,
-          ),
+          child: const SizedBox(),
         );
       },
+    );
+  }
+}
+
+class _CreateWallet extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+  const _CreateWallet({required this.text, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextButton(
+      padding: const EdgeInsets.all(16),
+      size: const Size(double.infinity, 50),
+      onPressed: onPressed,
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
 }

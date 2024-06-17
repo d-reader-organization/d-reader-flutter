@@ -52,6 +52,12 @@ class WalletController extends _$WalletController {
     required String address,
     required Future<bool> Function() onAuthorizeNeeded,
   }) async {
+    // first check is local wallet
+    if (address == ref.read(localWalletNotifierProvider).value?.address) {
+      ref.read(environmentProvider.notifier).updatePublicKeyFromBase58(address);
+      return true;
+    }
+
     final walletAuthToken =
         ref.read(environmentProvider).walletAuthTokenMap?[address];
     if (walletAuthToken == null) {

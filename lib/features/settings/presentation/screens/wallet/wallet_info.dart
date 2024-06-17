@@ -46,6 +46,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
   Widget build(BuildContext context) {
     final globalHook = useGlobalState();
     final textTheme = Theme.of(context).textTheme;
+    final isLocalWallet =
+        ref.read(localWalletNotifierProvider).value?.address == widget.address;
     final shouldConnectWallet =
         ref.read(environmentProvider).walletAuthTokenMap?[widget.address] ==
             null;
@@ -89,7 +91,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           const SizedBox(
             height: 16,
           ),
-          shouldConnectWallet
+          shouldConnectWallet && !isLocalWallet
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

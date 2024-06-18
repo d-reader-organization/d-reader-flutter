@@ -5,12 +5,12 @@ import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.da
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/socket_provider.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/dto.dart';
 import 'package:solana/solana.dart';
+import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 part 'wallet_providers.g.dart';
 
@@ -27,7 +27,7 @@ final registerWalletToSocketEvents = Provider(
 
     socket.connect();
     final String address =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+        ref.watch(environmentProvider).publicKey?.toBase58() ?? '';
     if (address.isEmpty) {
       return;
     }
@@ -59,17 +59,15 @@ Future<AccountResult> accountInfo(
 }
 
 @riverpod
-Future<bool> isWalletAvailable(Ref ref) {
-  return isWalletAppAvailable();
-}
+Future<bool> isWalletAvailable(Ref ref) =>
+    LocalAssociationScenario.isAvailable();
 
 final selectedWalletProvider = StateProvider.autoDispose<String>(
   (ref) {
-    final latestWallet =
-        ref.read(environmentProvider).publicKey?.toBase58() ?? '';
-    return latestWallet;
+    return ref.watch(environmentProvider).publicKey?.toBase58() ?? '';
   },
 );
+
 final walletNameProvider = StateProvider.autoDispose<String>((ref) {
   return '';
 });

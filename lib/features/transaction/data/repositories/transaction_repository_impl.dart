@@ -51,7 +51,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<Either<AppException, String?>> useComicIssueAssetTransaction({
+  Future<Either<AppException, String>> useComicIssueAssetTransaction({
     required String digitalAssetAddress,
     required String ownerAddress,
   }) {

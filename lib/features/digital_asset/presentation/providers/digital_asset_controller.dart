@@ -1,17 +1,12 @@
-import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/owned_issues_notifier.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_transaction_notifier.dart';
-import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:flutter/animation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:solana/solana.dart' show lamportsPerSol;
 import 'package:video_player/video_player.dart';
 
 part 'digital_asset_controller.g.dart';
@@ -23,100 +18,6 @@ const String failedTransactionMessage =
 class DigitalAssetController extends _$DigitalAssetController {
   @override
   void build() {}
-
-  Future<void> delist({
-    required String digitalAssetAddress,
-    required void Function() callback,
-    required void Function(Object exception) onException,
-  }) async {
-    try {
-      final delistResult = await ref
-          .read(solanaTransactionNotifierProvider.notifier)
-          .delist(digitalAssetAddress: digitalAssetAddress);
-
-      delistResult.fold((exception) {
-        ref.read(privateLoadingProvider.notifier).update((state) => false);
-        onException(exception);
-      }, (result) async {
-        if (result != successResult) {
-          ref.read(privateLoadingProvider.notifier).update((state) => false);
-          return onException(
-            AppException(
-              message: result,
-              statusCode: 500,
-              identifier: 'DigitalAssetController.delist',
-            ),
-          );
-        }
-        await Future.delayed(
-          const Duration(milliseconds: 1200),
-          () {
-            ref.invalidate(digitalAssetProvider);
-            ref.read(privateLoadingProvider.notifier).update((state) => false);
-            callback();
-          },
-        );
-      });
-    } catch (exception) {
-      ref.read(privateLoadingProvider.notifier).update((state) => false);
-      onException(exception);
-    }
-  }
-
-  Future<void> openDigitalAsset({
-    required DigitalAssetModel digitalAsset,
-    required void Function(String result) onOpen,
-    required void Function(Object exception) onException,
-  }) async {
-    try {
-      final useMintResult =
-          await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
-                digitalAssetAddress: digitalAsset.address,
-                ownerAddress: digitalAsset.ownerAddress,
-              );
-      useMintResult.fold(
-          (exception) => onException(exception), (result) => onOpen(result));
-    } catch (exception) {
-      onException(exception);
-    }
-  }
-
-  Future<void> listDigitalAsset({
-    required String sellerAddress,
-    required String mintAccount,
-    required double price,
-    required void Function(String result) callback,
-  }) async {
-    try {
-      final response =
-          await ref.read(solanaTransactionNotifierProvider.notifier).list(
-                sellerAddress: sellerAddress,
-                mintAccount: mintAccount,
-                price: (price * lamportsPerSol).round(),
-              );
-      response.fold(
-        (exception) {
-          ref.read(privateLoadingProvider.notifier).update((state) => false);
-          callback(exception.message);
-        },
-        (result) async {
-          await Future.delayed(
-            const Duration(milliseconds: 1200),
-            () {
-              ref.invalidate(digitalAssetProvider);
-              ref
-                  .read(privateLoadingProvider.notifier)
-                  .update((state) => false);
-              callback(result);
-            },
-          );
-        },
-      );
-    } catch (exception) {
-      ref.read(privateLoadingProvider.notifier).update((state) => false);
-      rethrow;
-    }
-  }
 
   mintLoadingListener({
     required VideoPlayerController videoPlayerController,
@@ -227,6 +128,7 @@ class DigitalAssetController extends _$DigitalAssetController {
     ref
         .read(globalNotifierProvider.notifier)
         .update(isLoading: false, newMessage: '');
+    ref.invalidate(digitalAssetProvider);
     ref.read(digitalAssetProvider(digitalAssetAddress).future).then(
       (value) {
         if (value != null) {
@@ -234,23 +136,5 @@ class DigitalAssetController extends _$DigitalAssetController {
         }
       },
     );
-  }
-
-  handleDigitalAssetUnwrap({
-    required String digitalAssetAddress,
-    required String ownerAddress,
-    required Function() onSuccess,
-    required Function(String message) onFail,
-  }) async {
-    final useMintResult =
-        await ref.read(solanaTransactionNotifierProvider.notifier).useMint(
-              digitalAssetAddress: digitalAssetAddress,
-              ownerAddress: ownerAddress,
-            );
-    useMintResult.fold((exception) => onFail(exception.message), (result) {
-      if (result == successResult) {
-        onSuccess();
-      }
-    });
   }
 }

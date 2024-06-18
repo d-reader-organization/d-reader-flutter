@@ -8,8 +8,6 @@ class EnvironmentState {
   final UserModel? user;
   final String solanaCluster;
   final String? authToken, jwtToken, refreshToken;
-  @Deprecated('walletAuthTokenMap should be used')
-  final Map<String, WalletData>? wallets;
   final Map<String, String>? walletAuthTokenMap;
   Ed25519HDPublicKey? publicKey;
 
@@ -20,7 +18,6 @@ class EnvironmentState {
     this.jwtToken,
     this.refreshToken,
     this.publicKey,
-    this.wallets,
     this.walletAuthTokenMap,
   });
 
@@ -35,7 +32,6 @@ class EnvironmentState {
     String? refreshToken,
     String? solanaCluster,
     Ed25519HDPublicKey? publicKey,
-    Map<String, WalletData>? wallets,
     Map<String, String>? walletAuthTokenMap,
   }) {
     return EnvironmentState(
@@ -45,7 +41,6 @@ class EnvironmentState {
       refreshToken: refreshToken ?? this.refreshToken,
       solanaCluster: solanaCluster ?? this.solanaCluster,
       publicKey: publicKey ?? this.publicKey,
-      wallets: wallets ?? this.wallets,
       walletAuthTokenMap: walletAuthTokenMap ?? this.walletAuthTokenMap,
     );
   }
@@ -57,7 +52,6 @@ class EnvironmentState {
     String? refreshToken,
     required String solanaCluster,
     Ed25519HDPublicKey? publicKey,
-    Map<String, WalletData>? wallets,
     Map<String, String>? walletAuthTokenMap,
   }) {
     return EnvironmentState(
@@ -67,7 +61,6 @@ class EnvironmentState {
       refreshToken: refreshToken,
       solanaCluster: solanaCluster,
       publicKey: publicKey,
-      wallets: wallets,
       walletAuthTokenMap: walletAuthTokenMap,
     );
   }
@@ -80,7 +73,6 @@ class EnvironmentState {
     data['solanaCluster'] = solanaCluster;
     data['publicKey'] = publicKey?.toBase58();
     data['user'] = user != null ? jsonEncode(user) : null;
-    data['wallets'] = wallets != null ? jsonEncode(wallets) : null;
     data['walletAuthTokenMap'] =
         walletAuthTokenMap != null ? jsonEncode(walletAuthTokenMap) : null;
     return data;
@@ -91,7 +83,6 @@ class EnvironmentStateUpdateInput {
   final UserModel? user;
   final String? apiUrl, authToken, jwtToken, refreshToken, solanaCluster;
   final Ed25519HDPublicKey? publicKey;
-  Map<String, WalletData>? wallets;
   Map<String, String>? walletAuthTokenMap;
 
   EnvironmentStateUpdateInput({
@@ -102,13 +93,11 @@ class EnvironmentStateUpdateInput {
     this.refreshToken,
     this.solanaCluster,
     this.publicKey,
-    this.wallets,
     this.walletAuthTokenMap,
   });
 
   factory EnvironmentStateUpdateInput.fromDynamic(dynamic data) {
     final dynamic json = jsonDecode(data);
-    Map<String, WalletData>? wallets = walletsMapFromDynamic(json);
     return EnvironmentStateUpdateInput(
       apiUrl: json['apiUrl'],
       authToken: json['authToken'],
@@ -118,7 +107,6 @@ class EnvironmentStateUpdateInput {
           ? Ed25519HDPublicKey.fromBase58(json['publicKey'])
           : null,
       solanaCluster: json['solanaCluster'],
-      wallets: wallets,
       user: json['user'] != null
           ? UserModel.fromJson(
               jsonDecode(
@@ -130,38 +118,5 @@ class EnvironmentStateUpdateInput {
           ? jsonDecode('walletAuthTokenMap')
           : null,
     );
-  }
-}
-
-Map<String, WalletData>? walletsMapFromDynamic(dynamic json) {
-  Map<String, dynamic>? storedWallets =
-      json['wallets'] != null ? jsonDecode(json['wallets']) : null;
-  return storedWallets?.map(
-    (key, value) => MapEntry(
-      key,
-      WalletData.fromJson(
-        value,
-      ),
-    ),
-  );
-}
-
-class WalletData {
-  final String authToken;
-
-  WalletData({
-    required this.authToken,
-  });
-
-  factory WalletData.fromJson(dynamic json) {
-    return WalletData(
-      authToken: json['authToken'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['authToken'] = authToken;
-    return data;
   }
 }

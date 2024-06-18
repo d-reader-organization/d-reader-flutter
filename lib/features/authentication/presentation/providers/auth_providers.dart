@@ -1,8 +1,6 @@
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/presentation/providers/sign_up/sign_up_data_notifier.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
-import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/common/tab_bar_provider.dart';
@@ -14,10 +12,7 @@ final logoutProvider = FutureProvider.autoDispose((ref) async {
   ref.invalidate(scaffoldNavigationIndexProvider);
   ref.invalidate(tabBarProvider);
   ref.invalidate(signUpDataNotifierProvider);
-  await Future.wait([
-    GoogleSignIn().signOut(),
-    LocalStore.instance.delete(Config.hasSeenInitialKey),
-  ]);
+  await GoogleSignIn().signOut();
   ref.read(environmentProvider.notifier).onLogout();
   ref.read(authRouteProvider).logout();
 });

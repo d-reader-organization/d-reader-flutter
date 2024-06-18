@@ -1,34 +1,23 @@
-import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
-import 'package:d_reader_flutter/features/auction_house/presentation/providers/auction_house_providers.dart';
-import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/domain/models/comic_issue.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/providers/controller/comic_issue_controller.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/buttons/buy_button.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/buttons/mint_button.dart';
+import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/buttons/read_button.dart';
 import 'package:d_reader_flutter/features/creator/presentation/utils/utils.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
-import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
-import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/render_carrot_error.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
-import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/about.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/listings/listings.dart';
-import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/mint_price_widget.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ComicIssueDetails extends ConsumerStatefulWidget {
@@ -85,7 +74,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
             extendBodyBehindAppBar: true,
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: BottomNavigation(
+              child: _BottomNavigation(
                 issue: issue,
               ),
             ),
@@ -433,46 +422,14 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
   }
 }
 
-class BottomNavigation extends ConsumerWidget {
+class _BottomNavigation extends ConsumerWidget {
   final ComicIssueModel issue;
-  const BottomNavigation({
-    super.key,
+  const _BottomNavigation({
     required this.issue,
   });
 
-  void _showWalkthroughDialog({
-    required BuildContext context,
-    required WidgetRef ref,
-  }) {
-    triggerWalkthroughDialog(
-      context: context,
-      bottomWidget: GestureDetector(
-        onTap: () {
-          context.pop();
-        },
-        child: Text(
-          'Cancel',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                decoration: TextDecoration.underline,
-              ),
-        ),
-      ),
-      onSubmit: () {
-        context.pop();
-        triggerInstallWalletBottomSheet(context);
-      },
-      assetPath: '$walkthroughAssetsPath/install_wallet.jpg',
-      title: 'Install a wallet',
-      subtitle:
-          'To buy a digital asset you need to have a digital wallet installed first. Click “Next” to set up a wallet!',
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (isMintActive, isEnded) = ref.watch(mintStatusesProvider);
-    final shouldDisableMintButton = !isMintActive && !isEnded;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -483,212 +440,16 @@ class BottomNavigation extends ConsumerWidget {
         ),
         issue.activeCandyMachineAddress != null
             ? Expanded(
-                child: TransactionButton(
-                  isLoading: ref.watch(globalNotifierProvider).isLoading,
-                  isDisabled: shouldDisableMintButton,
-                  onPressed: ref.watch(isOpeningSessionProvider)
-                      ? null
-                      : () async {
-                          await ref
-                              .read(comicIssueControllerProvider.notifier)
-                              .handleMint(
-                            displaySnackbar: ({
-                              required String text,
-                              bool isError = false,
-                            }) {
-                              showSnackBar(
-                                context: context,
-                                text: text,
-                                backgroundColor: isError
-                                    ? ColorPalette.dReaderRed
-                                    : ColorPalette.greyscale300,
-                              );
-                            },
-                            triggerVerificationDialog: () {
-                              return triggerVerificationDialog(context, ref);
-                            },
-                            onSuccessMint: () {
-                              nextScreenPush(
-                                context: context,
-                                path: RoutePath.mintLoadingAnimation,
-                              );
-                            },
-                            onException: (exception) {
-                              if (exception is NoWalletFoundException) {
-                                return _showWalkthroughDialog(
-                                    context: context, ref: ref);
-                              } else if (exception is LowPowerModeException) {
-                                return triggerLowPowerModeDialog(context);
-                              }
-                              showSnackBar(
-                                context: context,
-                                text: exception is BadRequestException
-                                    ? exception.cause
-                                    : exception.toString(),
-                                backgroundColor: ColorPalette.dReaderRed,
-                              );
-                            },
-                          );
-                        },
-                  text: 'Mint',
-                  price: ref.watch(selectedCandyMachineGroup)?.mintPrice ?? 0,
-                  isMultiGroup:
-                      (ref.watch(candyMachineStateProvider)?.groups.length ??
-                              0) >
-                          1,
+                child: MintButton(
+                  activeCandyMachineAddress: issue.activeCandyMachineAddress!,
                 ),
               )
             : issue.isSecondarySaleActive
-                ? Expanded(
-                    child: TransactionButton(
-                      isLoading: ref.watch(globalNotifierProvider).isLoading,
-                      onPressed: ref
-                                  .read(selectedListingsProvider)
-                                  .isNotEmpty &&
-                              !ref.watch(isOpeningSessionProvider)
-                          ? () async {
-                              await ref
-                                  .read(comicIssueControllerProvider.notifier)
-                                  .handleBuy(
-                                displaySnackBar: ({
-                                  required String text,
-                                  required bool isSuccess,
-                                }) {
-                                  showSnackBar(
-                                    context: context,
-                                    text: text,
-                                    backgroundColor: isSuccess
-                                        ? ColorPalette.dReaderGreen
-                                        : ColorPalette.dReaderRed,
-                                  );
-                                },
-                                onException: (exception) {
-                                  triggerLowPowerOrNoWallet(
-                                    context,
-                                    exception,
-                                  );
-                                },
-                              );
-                            }
-                          : null,
-                      text: 'Buy',
-                      price: ref.watch(selectedListingsPrice),
-                      isListing: true,
-                    ),
+                ? const Expanded(
+                    child: BuyButton(),
                   )
                 : const SizedBox(),
       ],
-    );
-  }
-}
-
-class TransactionButton extends ConsumerWidget {
-  final bool isListing, isLoading, isMultiGroup, isDisabled;
-  final Function()? onPressed;
-  final String text;
-  final int? price;
-  const TransactionButton({
-    super.key,
-    required this.isLoading,
-    this.onPressed,
-    required this.text,
-    this.price,
-    this.isListing = false,
-    this.isMultiGroup = false,
-    this.isDisabled = false,
-  });
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return CustomTextButton(
-      size: const Size(150, 50),
-      isLoading: isLoading,
-      fontSize: 16,
-      isDisabled: isDisabled,
-      borderRadius: const BorderRadius.all(
-        Radius.circular(
-          8,
-        ),
-      ),
-      onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            text,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Colors.black,
-                ),
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          isListing && price == null
-              ? Image.asset(
-                  Config.solanaLogoPath,
-                  width: 14,
-                  height: 10,
-                )
-              : isMultiGroup
-                  ? const MintPriceWidget(
-                      priceColor: Colors.black,
-                    )
-                  : SolanaPrice(
-                      price: price != null && price! > 0
-                          ? Formatter.formatPriceByCurrency(
-                              mintPrice: price!,
-                              splToken: ref.watch(activeSplToken))
-                          : null,
-                      textColor: Colors.black,
-                    ),
-        ],
-      ),
-    );
-  }
-}
-
-class ReadButton extends ConsumerWidget {
-  final ComicIssueModel issue;
-  const ReadButton({
-    super.key,
-    required this.issue,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return CustomTextButton(
-      size: const Size(150, 50),
-      backgroundColor: Colors.transparent,
-      borderColor: ColorPalette.greyscale50,
-      textColor: ColorPalette.greyscale50,
-      fontSize: 16,
-      borderRadius: const BorderRadius.all(
-        Radius.circular(
-          8,
-        ),
-      ),
-      onPressed: () {
-        nextScreenPush(
-          context: context,
-          path: '${RoutePath.eReader}/${issue.id}',
-        );
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            FontAwesomeIcons.glasses,
-            size: 14,
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
-            'Read',
-            style: Theme.of(context).textTheme.titleSmall,
-          )
-        ],
-      ),
     );
   }
 }

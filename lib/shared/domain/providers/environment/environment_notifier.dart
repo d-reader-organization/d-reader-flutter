@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/shared/data/local/local_store.dart';
 import 'package:d_reader_flutter/features/user/domain/models/user.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
@@ -27,6 +28,7 @@ class Environment extends _$Environment {
   @override
   EnvironmentState build() {
     state = EnvironmentState.empty();
+    ref.read(localWalletNotifierProvider);
     final localStore = LocalStore.instance;
     const bool isProd = appFlavor != null && appFlavor == 'prod';
     final String selectedNetwork =
@@ -45,7 +47,6 @@ class Environment extends _$Environment {
     }
 
     var networkData = jsonDecode(localStoreData);
-    Map<String, WalletData>? wallets = walletsMapFromDynamic(networkData);
     Map<String, dynamic>? parsedWalletAuthTokens =
         networkData['walletAuthTokenMap'] != null
             ? jsonDecode(networkData['walletAuthTokenMap'])
@@ -61,54 +62,41 @@ class Environment extends _$Environment {
       user: networkData['user'] != null
           ? UserModel.fromJson(jsonDecode(networkData['user']))
           : null,
-      wallets: wallets,
-      walletAuthTokenMap: parsedWalletAuthTokens != null
-          ? parsedWalletAuthTokens.map(
-              (key, value) => MapEntry(key, value),
-            )
-          : wallets?.map(
-              (key, value) => MapEntry(
-                key,
-                value.authToken,
-              ),
-            ),
+      walletAuthTokenMap: parsedWalletAuthTokens?.map(
+        (key, value) => MapEntry(key, value),
+      ),
     );
   }
 
   bool updateEnvironmentState(EnvironmentStateUpdateInput input) {
-    final localStore = LocalStore.instance;
-
     state = state.copyWith(
       authToken: input.authToken,
       jwtToken: input.jwtToken,
       refreshToken: input.refreshToken,
       solanaCluster: input.solanaCluster,
       publicKey: input.publicKey,
-      wallets: input.wallets,
       user: input.user,
       walletAuthTokenMap: input.walletAuthTokenMap,
     );
 
-    if (input.jwtToken != null) {
-      localStore.put(Config.tokenKey, input.jwtToken);
-    }
     putStateIntoLocalStore();
     return true;
   }
 
+  void updatePublicKeyFromBase58(String address) {
+    state = state.copyWith(publicKey: Ed25519HDPublicKey.fromBase58(address));
+  }
+
   void putStateIntoLocalStore() {
     final bool isDevnet = state.solanaCluster == SolanaCluster.devnet.value;
-    LocalStore.instance.put(
+    final localStore = LocalStore.instance;
+    localStore.put(
       isDevnet ? 'dev-network' : 'prod-network',
       jsonEncode(
         state.toJson(),
       ),
     );
-    updateLastSelectedNetwork(state.solanaCluster);
-  }
-
-  void updateLastSelectedNetwork(String selectedNetwork) {
-    LocalStore.instance.put('last-network', selectedNetwork);
+    localStore.put('last-network', state.solanaCluster);
   }
 
   void updateForChangeNetwork({
@@ -131,17 +119,11 @@ class Environment extends _$Environment {
       publicKey: null,
       refreshToken: null,
       user: null,
-      wallets: null,
     );
     putStateIntoLocalStore();
   }
 
   void clearPublicKey() {
     state.publicKey = null;
-  }
-
-  void clearTokenFromLocalStore() {
-    final localStore = LocalStore.instance;
-    localStore.delete(Config.tokenKey);
   }
 }

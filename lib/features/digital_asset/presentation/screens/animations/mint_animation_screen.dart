@@ -5,7 +5,6 @@ import 'package:d_reader_flutter/features/digital_asset/presentation/utils/exten
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/twitter/domain/providers/twitter_provider.dart';
-import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
@@ -190,28 +189,6 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
     super.dispose();
   }
 
-  _handleUnwrap({required WidgetRef ref}) async {
-    await ref
-        .read(digitalAssetControllerProvider.notifier)
-        .handleDigitalAssetUnwrap(
-            digitalAssetAddress: widget.digitalAsset.address,
-            ownerAddress: widget.digitalAsset.ownerAddress,
-            onSuccess: () {
-              nextScreenReplace(
-                context: context,
-                path: RoutePath.openDigitalAssetAnimation,
-                homeSubRoute: true,
-              );
-            },
-            onFail: (String message) {
-              showSnackBar(
-                context: context,
-                text: message,
-                backgroundColor: ColorPalette.dReaderRed,
-              );
-            });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -386,18 +363,8 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                       ),
                     ),
                     Expanded(
-                      child: Consumer(
-                        builder: (context, ref, child) {
-                          final bool isLoading =
-                              ref.watch(globalNotifierProvider).isLoading;
-                          return UnwrapButton(
-                            isLoading: isLoading,
-                            digitalAsset: widget.digitalAsset,
-                            onPressed: () async {
-                              await _handleUnwrap(ref: ref);
-                            },
-                          );
-                        },
+                      child: UnwrapButton(
+                        digitalAsset: widget.digitalAsset,
                       ),
                     ),
                   ],

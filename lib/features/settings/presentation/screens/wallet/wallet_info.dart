@@ -1,15 +1,17 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:d_reader_flutter/shared/data/local/secure_store.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
+import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
-import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/shared/widgets/textfields/text_field.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/list_tile.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +46,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
   Widget build(BuildContext context) {
     final globalHook = useGlobalState();
     final textTheme = Theme.of(context).textTheme;
+    final isLocalWallet =
+        ref.read(localWalletNotifierProvider).value?.address == widget.address;
     final shouldConnectWallet =
         ref.read(environmentProvider).walletAuthTokenMap?[widget.address] ==
             null;
@@ -87,7 +91,7 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
           const SizedBox(
             height: 16,
           ),
-          shouldConnectWallet
+          shouldConnectWallet && !isLocalWallet
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -158,8 +162,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                             backgroundColor: Colors.transparent,
                             onPressed: () {
                               ref
-                                  .read(selectedWalletProvider.notifier)
-                                  .update((state) => widget.address);
+                                  .read(environmentProvider.notifier)
+                                  .updatePublicKeyFromBase58(widget.address);
                               showSnackBar(
                                 context: context,
                                 milisecondsDuration: 1800,
@@ -179,6 +183,47 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                           ),
                   ],
                 ),
+          const SizedBox(
+            height: 16,
+          ),
+          if (widget.address ==
+              ref.read(localWalletNotifierProvider).value?.address) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomTextButton(
+                  onPressed: () async {
+                    final storage = ref.read(secureStorageProvider);
+                    storage.read(key: Config.mnemonicKey).then(
+                      (value) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            contentPadding: const EdgeInsets.all(8),
+                            backgroundColor: ColorPalette.greyscale400,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            content: Text(
+                              value ?? '',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  size: const Size(0, 50),
+                  child: Text(
+                    'Export seed phrase',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Colors.black,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(
             height: 32,
           ),
@@ -298,16 +343,11 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
             overrideColor: ColorPalette.dReaderRed,
             overrideFontSize: 16,
             onTap: () async {
-              final bool shouldDisconnect = await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const ConfirmationDialog(
-                        title: 'Disconnect Wallet',
-                        subtitle: 'Are you sure you want to disconnect wallet?',
-                      );
-                    },
-                  ) ??
-                  false;
+              final bool shouldDisconnect = await triggerConfirmationDialog(
+                context: context,
+                title: 'Disconnect Wallet',
+                subtitle: 'Are you sure you want to disconnect wallet?',
+              );
               if (!shouldDisconnect) {
                 return;
               }

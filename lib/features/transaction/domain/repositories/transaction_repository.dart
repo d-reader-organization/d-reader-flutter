@@ -7,7 +7,7 @@ abstract class TransactionRepository {
     required String minterAddress,
     String? label,
   });
-  Future<Either<AppException, String?>> useComicIssueAssetTransaction({
+  Future<Either<AppException, String>> useComicIssueAssetTransaction({
     required String digitalAssetAddress,
     required String ownerAddress,
   });

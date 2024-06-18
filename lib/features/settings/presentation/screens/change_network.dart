@@ -3,9 +3,9 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/settings/presentation/providers/change_network.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
-import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/network_list_tile.dart';
 import 'package:d_reader_flutter/features/settings/presentation/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
@@ -25,18 +25,15 @@ class ChangeNetworkView extends ConsumerWidget {
         .handleNetworkChange(
           cluster: cluster,
           dialogText: dialogText,
-          showConfirmDialog: (
-              {required String cluster, required String subtitle}) async {
-            return await showDialog<bool>(
-                  context: context,
-                  builder: (context) {
-                    return ConfirmationDialog(
-                      title: 'Warning, switching to $cluster',
-                      subtitle: subtitle,
-                    );
-                  },
-                ) ??
-                false;
+          showConfirmDialog: ({
+            required String cluster,
+            required String subtitle,
+          }) async {
+            return await triggerConfirmationDialog(
+              context: context,
+              title: 'Warning, switching to $cluster',
+              subtitle: subtitle,
+            );
           },
           triggerChangeDialog: (
               {required bool isSuccess, required String text}) {

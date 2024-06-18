@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/widgets/install_wallet_bottom_sheet.dart';
+import 'package:d_reader_flutter/shared/widgets/dialogs/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
@@ -79,24 +80,23 @@ void triggerLowPowerModeDialog(BuildContext context) {
   );
 }
 
-void triggerVerificationDialog(BuildContext context, WidgetRef ref) {
-  return triggerWalkthroughDialog(
-    context: context,
-    title: 'Verify your email',
-    subtitle:
-        'This sale is currently only available for new verified users. To become eligible make sure to verify your email. Don\'t forget to check your spam!',
-    assetPath: '$walkthroughAssetsPath/verify_email.jpg',
-    onSubmit: () {
-      ref.read(userRepositoryProvider).requestEmailVerification();
-      context.pop();
-      showSnackBar(
-        context: context,
-        text: 'Verification email has been sent.',
-        backgroundColor: ColorPalette.dReaderGreen,
-      );
-    },
-  );
-}
+void triggerVerificationDialog(BuildContext context, WidgetRef ref) =>
+    triggerWalkthroughDialog(
+      context: context,
+      title: 'Verify your email',
+      subtitle:
+          'This sale is currently only available for new verified users. To become eligible make sure to verify your email. Don\'t forget to check your spam!',
+      assetPath: '$walkthroughAssetsPath/verify_email.jpg',
+      onSubmit: () {
+        ref.read(userRepositoryProvider).requestEmailVerification();
+        context.pop();
+        showSnackBar(
+          context: context,
+          text: 'Verification email has been sent.',
+          backgroundColor: ColorPalette.dReaderGreen,
+        );
+      },
+    );
 
 triggerInstallWalletBottomSheet(BuildContext context) {
   return showModalBottomSheet(
@@ -124,3 +124,23 @@ triggerLowPowerOrNoWallet(BuildContext context, dynamic exception) {
     return triggerInstallWalletBottomSheet(context);
   }
 }
+
+Future<bool> triggerConfirmationDialog({
+  required BuildContext context,
+  required String title,
+  required String subtitle,
+  Future Function()? onTap,
+  Widget? additionalChild,
+}) async =>
+    await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return ConfirmationDialog(
+          additionalChild: additionalChild,
+          title: title,
+          subtitle: subtitle,
+          onTap: onTap,
+        );
+      },
+    ) ??
+    false;

@@ -12,7 +12,7 @@ import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_p
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_providers.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:power/power.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,10 +21,10 @@ import 'package:solana/base58.dart';
 import 'package:solana/solana.dart';
 import 'package:solana_mobile_client/solana_mobile_client.dart';
 
-part 'solana_notifier.g.dart';
+part 'mwa_notifier.g.dart';
 
 @riverpod
-class SolanaNotifier extends _$SolanaNotifier {
+class MwaNotifier extends _$MwaNotifier {
   @override
   void build() {}
 
@@ -33,8 +33,8 @@ class SolanaNotifier extends _$SolanaNotifier {
     required String cluster,
   }) {
     return client.authorize(
-      identityUri: Uri.parse('https://dreader.io/'),
-      identityName: 'dReader',
+      identityUri: Uri.parse(Config.dReaderIdentityUrl),
+      identityName: Config.dReaderIdentityName,
       cluster: cluster,
       iconUri: Uri.file(Config.faviconPath),
     );
@@ -58,14 +58,14 @@ class SolanaNotifier extends _$SolanaNotifier {
       return await _authorizeAndStore(client: client);
     }
     var result = await client.reauthorize(
-      identityUri: Uri.parse('https://dreader.io/'),
-      identityName: 'dReader',
+      identityUri: Uri.parse(Config.dReaderIdentityUrl),
+      identityName: Config.dReaderIdentityName,
       authToken: authToken,
       iconUri: Uri.file(Config.faviconPath),
     );
     result ??= await client.authorize(
-      identityUri: Uri.parse('https://dreader.io/'),
-      identityName: 'dReader',
+      identityUri: Uri.parse(Config.dReaderIdentityUrl),
+      identityName: Config.dReaderIdentityName,
       cluster: envState.solanaCluster,
       iconUri: Uri.file(Config.faviconPath),
     );
@@ -75,9 +75,6 @@ class SolanaNotifier extends _$SolanaNotifier {
     final publicKey = Ed25519HDPublicKey(result.publicKey);
     final address = publicKey.toBase58();
     final walletsMap = envState.walletAuthTokenMap;
-    ref.read(selectedWalletProvider.notifier).update(
-          (state) => address,
-        );
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
@@ -98,14 +95,11 @@ class SolanaNotifier extends _$SolanaNotifier {
     required Ed25519HDPublicKey signer,
     required String overrideAuthToken,
     required String apiUrl,
-    required String jwtToken,
   }) async {
     if (await doReauthorize(client, overrideAuthToken, signer.toBase58())) {
       final response =
           await ref.read(authRepositoryProvider).getOneTimePassword(
                 address: signer.toBase58(),
-                apiUrl: apiUrl,
-                jwtToken: jwtToken,
               );
       return response.fold((failure) {
         return const Left('Failed to sign message');
@@ -141,15 +135,14 @@ class SolanaNotifier extends _$SolanaNotifier {
     if (result == null) {
       return false;
     }
-    final currentWalletAddress =
-        Ed25519HDPublicKey(result.publicKey).toBase58();
+    final publicKey = Ed25519HDPublicKey(result.publicKey);
+    final currentWalletAddress = publicKey.toBase58();
     final walletsMap = envState.walletAuthTokenMap;
-    ref.read(selectedWalletProvider.notifier).update(
-          (state) => currentWalletAddress,
-        );
+
     ref.read(environmentProvider.notifier).updateEnvironmentState(
           EnvironmentStateUpdateInput(
             authToken: result.authToken,
+            publicKey: publicKey,
             walletAuthTokenMap: {
               ...?walletsMap,
               currentWalletAddress: result.authToken,
@@ -297,7 +290,6 @@ class SolanaNotifier extends _$SolanaNotifier {
         client: client,
         signer: publicKey,
         authToken: result.authToken,
-        jwtToken: ref.read(environmentProvider).jwtToken ?? '',
         apiUrl: Config.apiUrl,
       );
     }
@@ -311,14 +303,12 @@ class SolanaNotifier extends _$SolanaNotifier {
     required final Ed25519HDPublicKey signer,
     required final String authToken,
     required final String apiUrl,
-    required final String jwtToken,
   }) async {
     final signMessageResponse = await _signMessage(
       client: client,
       signer: signer,
       overrideAuthToken: authToken,
       apiUrl: apiUrl,
-      jwtToken: jwtToken,
     );
     return await signMessageResponse.fold((failMessage) {
       return failMessage;
@@ -326,8 +316,6 @@ class SolanaNotifier extends _$SolanaNotifier {
       final connectWalletResult = await _connectWallet(
         signedMessage: signedMessage.signatures.first,
         publicKey: signer,
-        apiUrl: apiUrl,
-        jwtToken: jwtToken,
       );
       return connectWalletResult.fold((failure) {
         return failure.message;
@@ -342,8 +330,6 @@ class SolanaNotifier extends _$SolanaNotifier {
   Future<Either<AppException, String>> _connectWallet({
     required Uint8List signedMessage,
     required Ed25519HDPublicKey publicKey,
-    required String apiUrl,
-    required String jwtToken,
   }) async {
     try {
       await ref.read(authRepositoryProvider).connectWallet(
@@ -354,8 +340,6 @@ class SolanaNotifier extends _$SolanaNotifier {
                 signedMessage.length,
               ),
             ),
-            apiUrl: apiUrl,
-            jwtToken: jwtToken,
           );
       return const Right(successResult);
     } catch (exception) {

@@ -3,12 +3,13 @@ import 'package:d_reader_flutter/features/authentication/domain/providers/auth_p
 import 'package:d_reader_flutter/features/user/domain/providers/user_provider.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/domain/providers/wallet_provider.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/domain/providers/solana/solana_notifier.dart';
+import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart';
 
@@ -25,7 +26,7 @@ class WalletController extends _$WalletController {
     required Function(Object exception) onException,
   }) async {
     final authorizeResult = await ref
-        .read(solanaNotifierProvider.notifier)
+        .read(mwaNotifierProvider.notifier)
         .authorizeIfNeededWithOnComplete(
             isConnectOnly: true,
             onStart: () {
@@ -51,6 +52,12 @@ class WalletController extends _$WalletController {
     required String address,
     required Future<bool> Function() onAuthorizeNeeded,
   }) async {
+    // first check is local wallet
+    if (address == ref.read(localWalletNotifierProvider).value?.address) {
+      ref.read(environmentProvider.notifier).updatePublicKeyFromBase58(address);
+      return true;
+    }
+
     final walletAuthToken =
         ref.read(environmentProvider).walletAuthTokenMap?[address];
     if (walletAuthToken == null) {
@@ -60,10 +67,9 @@ class WalletController extends _$WalletController {
       }
 
       await ref
-          .read(solanaNotifierProvider.notifier)
+          .read(mwaNotifierProvider.notifier)
           .authorizeIfNeededWithOnComplete();
-      ref.read(selectedWalletProvider.notifier).update((state) =>
-          ref.read(environmentProvider).publicKey?.toBase58() ?? address);
+
       ref.invalidate(userWalletsProvider);
       return true;
     }
@@ -75,9 +81,7 @@ class WalletController extends _$WalletController {
             authToken: walletAuthToken,
           ),
         );
-    ref.read(selectedWalletProvider.notifier).update(
-          (state) => address,
-        );
+
     return true;
   }
 
@@ -92,6 +96,9 @@ class WalletController extends _$WalletController {
     envState.walletAuthTokenMap?.removeWhere((key, value) => key == address);
     if (ref.read(environmentProvider).publicKey?.toBase58() == address) {
       ref.read(environmentProvider.notifier).clearPublicKey();
+    }
+    if (address == ref.read(localWalletNotifierProvider).value?.address) {
+      await ref.read(localWalletNotifierProvider.notifier).deleteWallet();
     }
     ref.read(environmentProvider.notifier).putStateIntoLocalStore();
     ref.invalidate(userWalletsProvider);

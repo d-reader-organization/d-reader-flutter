@@ -309,71 +309,73 @@ class MyWalletsScreen extends ConsumerWidget {
                     ),
                   ),
           ),
-          bottomNavigationBar: Wrap(
-            children: [
-              // const CreateAWalletButton(),
-              CustomTextButton(
-                borderRadius: BorderRadius.circular(8),
-                onPressed: ref.watch(isOpeningSessionProvider)
-                    ? null
-                    : () async {
-                        if (data.isNotEmpty) {
-                          await triggerWalkthroughDialogIfNeeded(
-                            context: context,
-                            key: WalkthroughKeys.multipleWallet.name,
-                            title: 'Multiple wallets',
-                            subtitle:
-                                "When 2 or more wallets are connected to dReader, one will always be selected as 'active'. To switch the active wallet, click on any of the wallets listed on this screen",
-                            assetPath:
-                                '$walkthroughAssetsPath/multiple_wallet.jpg',
-                            onSubmit: () {
-                              context.pop();
+          bottomNavigationBar: SafeArea(
+            child: Wrap(
+              children: [
+                // const CreateAWalletButton(),
+                CustomTextButton(
+                  borderRadius: BorderRadius.circular(8),
+                  onPressed: ref.watch(isOpeningSessionProvider)
+                      ? null
+                      : () async {
+                          if (data.isNotEmpty) {
+                            await triggerWalkthroughDialogIfNeeded(
+                              context: context,
+                              key: WalkthroughKeys.multipleWallet.name,
+                              title: 'Multiple wallets',
+                              subtitle:
+                                  "When 2 or more wallets are connected to dReader, one will always be selected as 'active'. To switch the active wallet, click on any of the wallets listed on this screen",
+                              assetPath:
+                                  '$walkthroughAssetsPath/multiple_wallet.jpg',
+                              onSubmit: () {
+                                context.pop();
+                              },
+                            );
+                          }
+                          await ref
+                              .read(walletControllerProvider.notifier)
+                              .connectWallet(
+                            onSuccess: () {
+                              showSnackBar(
+                                context: context,
+                                text: 'Wallet has been connected',
+                                backgroundColor: ColorPalette.dReaderGreen,
+                              );
+                              ref.invalidate(userWalletsProvider);
+                              ref.invalidate(ownedComicsProvider);
+                            },
+                            onFail: (String result) {
+                              showSnackBar(
+                                context: context,
+                                text: result,
+                                backgroundColor: ColorPalette.dReaderRed,
+                              );
+                            },
+                            onException: (exception) {
+                              triggerLowPowerOrNoWallet(context, exception);
                             },
                           );
-                        }
-                        await ref
-                            .read(walletControllerProvider.notifier)
-                            .connectWallet(
-                          onSuccess: () {
-                            showSnackBar(
-                              context: context,
-                              text: 'Wallet has been connected',
-                              backgroundColor: ColorPalette.dReaderGreen,
-                            );
-                            ref.invalidate(userWalletsProvider);
-                            ref.invalidate(ownedComicsProvider);
-                          },
-                          onFail: (String result) {
-                            showSnackBar(
-                              context: context,
-                              text: result,
-                              backgroundColor: ColorPalette.dReaderRed,
-                            );
-                          },
-                          onException: (exception) {
-                            triggerLowPowerOrNoWallet(context, exception);
-                          },
-                        );
+                        },
+                  size: const Size(double.infinity, 50),
+                  isLoading: ref.watch(globalNotifierProvider).isLoading,
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    ref.watch(isWalletAvailableProvider).maybeWhen(
+                      data: (data) {
+                        return data ? 'Add / Connect Wallet' : 'Install wallet';
                       },
-                size: const Size(double.infinity, 50),
-                isLoading: ref.watch(globalNotifierProvider).isLoading,
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  ref.watch(isWalletAvailableProvider).maybeWhen(
-                    data: (data) {
-                      return data ? 'Add / Connect Wallet' : 'Install wallet';
-                    },
-                    orElse: () {
-                      return '';
-                    },
-                  ),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                      orElse: () {
+                        return '';
+                      },
+                    ),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

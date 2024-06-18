@@ -13,10 +13,12 @@ import 'package:d_reader_flutter/shared/utils/render_carrot_error.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/about.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/listings/listings.dart';
+import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/skeleton_row.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -421,7 +423,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
       error: (err, stack) {
         return renderCarrotErrorWidget(ref);
       },
-      loading: () => const SizedBox(),
+      loading: () => const _ComicIssueDetailsSkeleton(),
     );
   }
 }
@@ -434,26 +436,80 @@ class _BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: ReadButton(
-            issue: issue,
+    return SafeArea(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ReadButton(
+              issue: issue,
+            ),
           ),
-        ),
-        issue.activeCandyMachineAddress != null
-            ? Expanded(
-                child: MintButton(
-                  activeCandyMachineAddress: issue.activeCandyMachineAddress!,
-                ),
-              )
-            : issue.isSecondarySaleActive
-                ? const Expanded(
-                    child: BuyButton(),
-                  )
-                : const SizedBox(),
-      ],
+          issue.activeCandyMachineAddress != null
+              ? Expanded(
+                  child: MintButton(
+                    activeCandyMachineAddress: issue.activeCandyMachineAddress!,
+                  ),
+                )
+              : issue.isSecondarySaleActive
+                  ? const Expanded(
+                      child: BuyButton(),
+                    )
+                  : const SizedBox(),
+        ],
+      ),
+    );
+  }
+}
+
+class _ComicIssueDetailsSkeleton extends StatelessWidget {
+  const _ComicIssueDetailsSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ColorPalette.appBackgroundColor,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      bottomNavigationBar: const SafeArea(
+        child: SkeletonRow(),
+      ),
+      body: ListView(
+        children: [
+          SkeletonCard(
+            width: double.infinity,
+            height: MediaQuery.sizeOf(context).height > 780 ? 431 : 460,
+            gradient: LinearGradient(
+              colors: [
+                ColorPalette.appBackgroundColor,
+                const Color(0xff181a20).withOpacity(.8),
+                ColorPalette.appBackgroundColor,
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              stops: const [0.0, .6406, 1],
+            ),
+          ),
+          const SkeletonRow(
+            margin: EdgeInsets.only(top: 16, bottom: 8),
+          ),
+          const SkeletonRow(
+            margin: EdgeInsets.only(bottom: 16),
+          ),
+          const SkeletonRow(
+            margin: EdgeInsets.only(bottom: 8),
+          ),
+          const Divider(
+            thickness: 1,
+            color: ColorPalette.greyscale400,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+        ],
+      ),
     );
   }
 }

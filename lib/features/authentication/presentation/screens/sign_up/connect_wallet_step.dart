@@ -149,57 +149,59 @@ class SignUpConnectWalletStep extends ConsumerWidget {
               ),
             ],
           ),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextButton(
-                  backgroundColor: Colors.transparent,
-                  textColor: Colors.white,
-                  borderColor: ColorPalette.greyscale300,
-                  size: const Size(
-                    0,
-                    50,
-                  ),
-                  onPressed: () {
-                    nextScreenCloseOthers(
-                      context: context,
-                      path: RoutePath.home,
-                    );
-                  },
-                  child: Text(
-                    'Skip',
-                    style: textTheme.titleSmall,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: CustomTextButton(
-                  isLoading: ref.watch(globalNotifierProvider).isLoading,
-                  backgroundColor: ColorPalette.dReaderYellow100,
-                  textColor: Colors.black,
-                  size: const Size(
-                    0,
-                    50,
-                  ),
-                  onPressed: () async {
-                    await _handleConnectWallet(ref, context);
-                  },
-                  child: Text(
-                    ref.watch(isWalletAvailableProvider).maybeWhen(
-                      data: (data) {
-                        return data ? 'Connect' : 'Install';
-                      },
-                      orElse: () {
-                        return 'Connect';
-                      },
+          SafeArea(
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomTextButton(
+                    backgroundColor: Colors.transparent,
+                    textColor: Colors.white,
+                    borderColor: ColorPalette.greyscale300,
+                    size: const Size(
+                      0,
+                      50,
                     ),
-                    style: textTheme.titleSmall?.copyWith(
-                      color: Colors.black,
+                    onPressed: () {
+                      nextScreenCloseOthers(
+                        context: context,
+                        path: RoutePath.home,
+                      );
+                    },
+                    child: Text(
+                      'Skip',
+                      style: textTheme.titleSmall,
                     ),
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: CustomTextButton(
+                    isLoading: ref.watch(globalNotifierProvider).isLoading,
+                    backgroundColor: ColorPalette.dReaderYellow100,
+                    textColor: Colors.black,
+                    size: const Size(
+                      0,
+                      50,
+                    ),
+                    onPressed: () async {
+                      await _handleConnectWallet(ref, context);
+                    },
+                    child: Text(
+                      ref.watch(isWalletAvailableProvider).maybeWhen(
+                        data: (data) {
+                          return data ? 'Connect' : 'Install';
+                        },
+                        orElse: () {
+                          return 'Connect';
+                        },
+                      ),
+                      style: textTheme.titleSmall?.copyWith(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -2,7 +2,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/enums.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
-import 'package:d_reader_flutter/features/settings/presentation/widgets/create_wallet_button.dart';
+// import 'package:d_reader_flutter/features/settings/presentation/widgets/create_wallet_button.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
@@ -311,7 +311,7 @@ class MyWalletsScreen extends ConsumerWidget {
           ),
           bottomNavigationBar: Wrap(
             children: [
-              const CreateAWalletButton(),
+              // const CreateAWalletButton(),
               CustomTextButton(
                 borderRadius: BorderRadius.circular(8),
                 onPressed: ref.watch(isOpeningSessionProvider)

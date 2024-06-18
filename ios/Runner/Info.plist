@@ -27,11 +27,9 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>io.app.dreader</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>appscheme</string>
+				<string>com.googleusercontent.apps.369137099255-hc0716e6f837jgecjjm325mj75tnii29</string>
 			</array>
 		</dict>
 	</array>
@@ -41,6 +39,8 @@
 	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>GIDClientID</key>
+	<string>369137099255-hc0716e6f837jgecjjm325mj75tnii29.apps.googleusercontent.com</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

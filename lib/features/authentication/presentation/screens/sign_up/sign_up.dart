@@ -28,26 +28,24 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(
-            56,
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(top: 16),
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-            ),
-            child: const _Heading(),
-          ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(
+          56,
         ),
-        body: ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
-            ? _GoogleSignUpForm(pageController: _pageController)
-            : _RegularSignUpForm(pageController: _pageController),
+        child: Container(
+          margin: const EdgeInsets.only(top: 16),
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+          ),
+          child: const _Heading(),
+        ),
       ),
+      body: ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
+          ? _GoogleSignUpForm(pageController: _pageController)
+          : _RegularSignUpForm(pageController: _pageController),
     );
   }
 }

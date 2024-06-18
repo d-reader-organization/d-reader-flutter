@@ -59,7 +59,7 @@ class DevDefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDjjvINnoSJ4KySqp7T0r9NG8Uh01iOWIc',
-    appId: '1:369137099255:ios:eb2d9704546db8e6460ef2',
+    appId: '1:369137099255:ios:50658b824c46f9ce460ef2',
     messagingSenderId: '369137099255',
     projectId: 'dreader-dev',
     storageBucket: 'dreader-dev.appspot.com',

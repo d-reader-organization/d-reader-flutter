@@ -70,6 +70,14 @@ class ComicModel {
       audienceType: json['audienceType'],
     );
   }
+
+  @override
+  int get hashCode => Object.hash(slug, title);
+
+  @override
+  bool operator ==(Object other) {
+    return other is ComicModel && other.slug == slug;
+  }
 }
 
 class ComicStats {

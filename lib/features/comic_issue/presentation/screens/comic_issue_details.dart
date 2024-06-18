@@ -78,336 +78,340 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                 issue: issue,
               ),
             ),
-            body: NotificationListener(
-              onNotification: (notification) {
-                // if (notification is UserScrollNotification) {
-                //   if (notification.direction == ScrollDirection.forward) {
-                //     _controller.reverse();
-                //   } else if (notification.direction ==
-                //       ScrollDirection.reverse) {
-                //     _controller.forward();
-                //   }
-                // }
-                if (notification is ScrollEndNotification) {
-                  if (notification.metrics.pixels > 70) {
-                    _controller.forward();
-                  } else if (notification.metrics.pixels < 70) {
-                    _controller.reverse();
+            body: SafeArea(
+              child: NotificationListener(
+                onNotification: (notification) {
+                  // if (notification is UserScrollNotification) {
+                  //   if (notification.direction == ScrollDirection.forward) {
+                  //     _controller.reverse();
+                  //   } else if (notification.direction ==
+                  //       ScrollDirection.reverse) {
+                  //     _controller.forward();
+                  //   }
+                  // }
+                  if (notification is ScrollEndNotification) {
+                    if (notification.metrics.pixels > 70) {
+                      _controller.forward();
+                    } else if (notification.metrics.pixels < 70) {
+                      _controller.reverse();
+                    }
                   }
-                }
-                return true;
-              },
-              child: NestedScrollView(
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return [
-                    AnimatedBuilder(
-                      animation: _animation,
-                      builder: (BuildContext context, Widget? child) {
-                        return SliverOverlapAbsorber(
-                          handle:
-                              NestedScrollView.sliverOverlapAbsorberHandleFor(
-                            context,
-                          ),
-                          sliver: SliverAppBar(
-                            pinned: true,
-                            backgroundColor: _animation.value,
-                            shadowColor: Colors.transparent,
-                            surfaceTintColor: _animation.value,
-                            centerTitle: true,
-                            title: GestureDetector(
-                              onTap: () {
-                                nextScreenPush(
-                                  context: context,
-                                  path:
-                                      '${RoutePath.comicDetails}/${issue.comicSlug}',
-                                );
-                              },
-                              child: Text(
-                                '${issue.comic?.title}',
-                                style: textTheme.headlineMedium,
+                  return true;
+                },
+                child: NestedScrollView(
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      AnimatedBuilder(
+                        animation: _animation,
+                        builder: (BuildContext context, Widget? child) {
+                          return SliverOverlapAbsorber(
+                            handle:
+                                NestedScrollView.sliverOverlapAbsorberHandleFor(
+                              context,
+                            ),
+                            sliver: SliverAppBar(
+                              pinned: true,
+                              backgroundColor: _animation.value,
+                              shadowColor: Colors.transparent,
+                              surfaceTintColor: _animation.value,
+                              centerTitle: true,
+                              title: GestureDetector(
+                                onTap: () {
+                                  nextScreenPush(
+                                    context: context,
+                                    path:
+                                        '${RoutePath.comicDetails}/${issue.comicSlug}',
+                                  );
+                                },
+                                child: Text(
+                                  '${issue.comic?.title}',
+                                  style: textTheme.headlineMedium,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    SliverToBoxAdapter(
-                      child: Stack(
-                        children: [
-                          CachedImageBgPlaceholder(
-                            height: MediaQuery.sizeOf(context).height > 780
-                                ? 431
-                                : 460,
-                            imageUrl: issue.cover,
-                            cacheHeight:
-                                (MediaQuery.sizeOf(context).height > 780
-                                        ? 431
-                                        : 460)
-                                    .cacheSize(context),
-                            overrideBorderRadius: BorderRadius.circular(0),
-                            foregroundDecoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  ColorPalette.appBackgroundColor,
-                                  const Color(0xff181a20).withOpacity(.8),
-                                  ColorPalette.appBackgroundColor,
-                                ],
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                stops: const [0.0, .6406, 1],
-                              ),
-                            ),
-                          ),
-                          Positioned.fill(
-                            child: GestureDetector(
-                              onTap: () {
-                                nextScreenPush(
-                                  context: context,
-                                  path: RoutePath.comicIssueCover,
-                                  extra: issue.cover,
-                                );
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                      top: 32,
-                                      bottom: 16,
-                                    ),
-                                    constraints: const BoxConstraints(
-                                      maxWidth: 220,
-                                    ),
-                                    child: AspectRatio(
-                                      aspectRatio: comicIssueAspectRatio,
-                                      child: LayoutBuilder(
-                                          builder: (context, constraints) {
-                                        return CachedImageBgPlaceholder(
-                                          imageUrl: issue.cover,
-                                          cacheWidth: constraints.maxWidth
-                                              .cacheSize(context),
-                                          cacheHeight: constraints.maxHeight
-                                              .cacheSize(context),
-                                        );
-                                      }),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    ),
-                    SliverPadding(
-                      padding: const EdgeInsets.all(16),
-                      sliver: SliverList(
-                        delegate: SliverChildListDelegate(
-                          [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'EPISODE  ',
-                                  style: textTheme.bodyMedium?.copyWith(
-                                    color: ColorPalette.greyscale100,
-                                  ),
-                                ),
-                                Text(
-                                  '${issue.number}',
-                                  style: textTheme.titleMedium,
-                                ),
-                                Text(
-                                  ' / ${issue.stats?.totalIssuesCount}',
-                                  style: textTheme.titleMedium?.copyWith(
-                                    color: ColorPalette.greyscale100,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              issue.title,
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: textTheme.headlineLarge,
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    RatingIcon(
-                                      initialRating:
-                                          issue.stats?.averageRating ?? 0,
-                                      isRatedByMe:
-                                          issue.myStats?.rating != null,
-                                      issueId: issue.id,
-                                      isContainerWidget: true,
-                                    ),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    FavoriteIconCount(
-                                      favouritesCount:
-                                          issue.stats?.favouritesCount ?? 0,
-                                      isFavourite:
-                                          issue.myStats?.isFavourite ?? false,
-                                      issueId: issue.id,
-                                      isContainerWidget: true,
-                                    ),
+                      SliverToBoxAdapter(
+                        child: Stack(
+                          children: [
+                            CachedImageBgPlaceholder(
+                              height: MediaQuery.sizeOf(context).height > 780
+                                  ? 431
+                                  : 460,
+                              imageUrl: issue.cover,
+                              cacheHeight:
+                                  (MediaQuery.sizeOf(context).height > 780
+                                          ? 431
+                                          : 460)
+                                      .cacheSize(context),
+                              overrideBorderRadius: BorderRadius.circular(0),
+                              foregroundDecoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    ColorPalette.appBackgroundColor,
+                                    const Color(0xff181a20).withOpacity(.8),
+                                    ColorPalette.appBackgroundColor,
                                   ],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  stops: const [0.0, .6406, 1],
                                 ),
-                                Row(
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: GestureDetector(
+                                onTap: () {
+                                  nextScreenPush(
+                                    context: context,
+                                    path: RoutePath.comicIssueCover,
+                                    extra: issue.cover,
+                                  );
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      '${issue.stats?.totalPagesCount} ',
-                                      style: textTheme.bodyMedium,
-                                    ),
-                                    Text(
-                                      'pages',
-                                      style: textTheme.bodyMedium?.copyWith(
-                                        color: ColorPalette.greyscale100,
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                        bottom: 32,
+                                      ),
+                                      constraints: const BoxConstraints(
+                                        maxWidth: 220,
+                                      ),
+                                      child: AspectRatio(
+                                        aspectRatio: comicIssueAspectRatio,
+                                        child: LayoutBuilder(
+                                            builder: (context, constraints) {
+                                          return CachedImageBgPlaceholder(
+                                            imageUrl: issue.cover,
+                                            cacheWidth: constraints.maxWidth
+                                                .cacheSize(context),
+                                            cacheHeight: constraints.maxHeight
+                                                .cacheSize(context),
+                                          );
+                                        }),
                                       ),
                                     ),
                                   ],
                                 ),
-                                MatureAudience(
-                                  audienceType: issue.comic?.audienceType ?? '',
-                                ),
-                              ],
+                              ),
                             ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            const Divider(
-                              thickness: 1,
-                              color: ColorPalette.greyscale400,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      nextScreenPush(
-                                        context: context,
-                                        path:
-                                            '${RoutePath.creatorDetails}/${issue.creator.slug}',
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        renderAvatar(
-                                          context: context,
-                                          creator: issue.creator,
-                                          height: 24,
-                                          width: 24,
-                                        ),
-                                        // CreatorAvatar(
-                                        //   avatar: issue.creator.avatar,
-                                        //   radius: 24,
-                                        //   height: 32,
-                                        //   width: 32,
-                                        // ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
-                                          child: Text(
-                                            issue.creator.name,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: textTheme.titleMedium,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    Formatter.formatDateFull(issue.releaseDate),
-                                    textAlign: TextAlign.end,
+                          ],
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.all(16),
+                        sliver: SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'EPISODE  ',
                                     style: textTheme.bodyMedium?.copyWith(
                                       color: ColorPalette.greyscale100,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  Text(
+                                    '${issue.number}',
+                                    style: textTheme.titleMedium,
+                                  ),
+                                  Text(
+                                    ' / ${issue.stats?.totalIssuesCount}',
+                                    style: textTheme.titleMedium?.copyWith(
+                                      color: ColorPalette.greyscale100,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                issue.title,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: textTheme.headlineLarge,
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      RatingIcon(
+                                        initialRating:
+                                            issue.stats?.averageRating ?? 0,
+                                        isRatedByMe:
+                                            issue.myStats?.rating != null,
+                                        issueId: issue.id,
+                                        isContainerWidget: true,
+                                      ),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      FavoriteIconCount(
+                                        favouritesCount:
+                                            issue.stats?.favouritesCount ?? 0,
+                                        isFavourite:
+                                            issue.myStats?.isFavourite ?? false,
+                                        issueId: issue.id,
+                                        isContainerWidget: true,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${issue.stats?.totalPagesCount} ',
+                                        style: textTheme.bodyMedium,
+                                      ),
+                                      Text(
+                                        'pages',
+                                        style: textTheme.bodyMedium?.copyWith(
+                                          color: ColorPalette.greyscale100,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  MatureAudience(
+                                    audienceType:
+                                        issue.comic?.audienceType ?? '',
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              const Divider(
+                                thickness: 1,
+                                color: ColorPalette.greyscale400,
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        nextScreenPush(
+                                          context: context,
+                                          path:
+                                              '${RoutePath.creatorDetails}/${issue.creator.slug}',
+                                        );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          renderAvatar(
+                                            context: context,
+                                            creator: issue.creator,
+                                            height: 24,
+                                            width: 24,
+                                          ),
+                                          // CreatorAvatar(
+                                          //   avatar: issue.creator.avatar,
+                                          //   radius: 24,
+                                          //   height: 32,
+                                          //   width: 32,
+                                          // ),
+                                          const SizedBox(width: 12),
+                                          Expanded(
+                                            child: Text(
+                                              issue.creator.name,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: textTheme.titleMedium,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      Formatter.formatDateFull(
+                                          issue.releaseDate),
+                                      textAlign: TextAlign.end,
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        color: ColorPalette.greyscale100,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                          left: 16,
-                          right: 16,
-                        ),
-                        child: Stack(
-                          fit: StackFit.passthrough,
-                          alignment: Alignment.bottomCenter,
-                          children: <Widget>[
-                            Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: ColorPalette.greyscale400,
-                                    width: 2.0,
+                      SliverToBoxAdapter(
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                          ),
+                          child: Stack(
+                            fit: StackFit.passthrough,
+                            alignment: Alignment.bottomCenter,
+                            children: <Widget>[
+                              Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: ColorPalette.greyscale400,
+                                      width: 2.0,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            issue.isSecondarySaleActive &&
-                                    issue.activeCandyMachineAddress == null
-                                ? TabBar(
-                                    onTap: (value) {
-                                      ref
-                                          .read(lastSelectedTabIndex.notifier)
-                                          .update((state) => value);
-                                    },
-                                    tabs: const [
-                                      Tab(
-                                        text: 'About',
-                                      ),
-                                      Tab(
-                                        text: 'Listings',
-                                      ),
-                                    ],
-                                  )
-                                : const SizedBox(),
-                          ],
+                              issue.isSecondarySaleActive &&
+                                      issue.activeCandyMachineAddress == null
+                                  ? TabBar(
+                                      onTap: (value) {
+                                        ref
+                                            .read(lastSelectedTabIndex.notifier)
+                                            .update((state) => value);
+                                      },
+                                      tabs: const [
+                                        Tab(
+                                          text: 'About',
+                                        ),
+                                        Tab(
+                                          text: 'Listings',
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
                         ),
                       ),
+                    ];
+                  },
+                  body: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
                     ),
-                  ];
-                },
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16,
+                    child: issue.isSecondarySaleActive
+                        ? TabBarView(
+                            children: [
+                              IssueAbout(issue: issue),
+                              IssueListings(
+                                issue: issue,
+                              ),
+                            ],
+                          )
+                        : IssueAbout(issue: issue),
                   ),
-                  child: issue.isSecondarySaleActive
-                      ? TabBarView(
-                          children: [
-                            IssueAbout(issue: issue),
-                            IssueListings(
-                              issue: issue,
-                            ),
-                          ],
-                        )
-                      : IssueAbout(issue: issue),
                 ),
               ),
             ),

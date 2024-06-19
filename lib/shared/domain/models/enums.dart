@@ -1,6 +1,11 @@
 enum FilterId {
   free,
-  popular,
+  popular;
+
+  String displayText() => switch (this) {
+        FilterId.free => 'Free to read',
+        FilterId.popular => 'Popular',
+      };
 }
 
 enum SortByEnum {
@@ -11,7 +16,18 @@ enum SortByEnum {
   viewers,
   followers,
   name,
-  published,
+  published;
+
+  String displayText() => switch (this) {
+        SortByEnum.latest => 'New',
+        SortByEnum.rating => 'Rating',
+        SortByEnum.likes => 'Likes',
+        SortByEnum.readers => 'Readers',
+        SortByEnum.viewers => 'Viewers',
+        SortByEnum.followers => 'Followers',
+        SortByEnum.name => 'Name',
+        SortByEnum.published => 'Published',
+      };
 }
 
 enum SortDirection { asc, desc }

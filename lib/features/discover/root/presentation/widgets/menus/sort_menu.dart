@@ -92,42 +92,40 @@ class SortMenu extends ConsumerWidget {
         const SizedBox(
           height: 16,
         ),
-        if (ref.watch(tabBarProvider) == 0)
-          const ComicSortMenu()
-        else if (ref.watch(tabBarProvider) == 1)
-          const IssueSortMenu()
-        else if (ref.watch(tabBarProvider) == 2)
-          const CreatorSortMenu(),
+        if (ref.watch(tabBarProvider) == 2)
+          const _CreatorSortMenu()
+        else
+          const _DefaultSortMenu()
       ],
     );
   }
 }
 
-class ComicSortMenu extends StatelessWidget {
-  const ComicSortMenu({super.key});
+class _DefaultSortMenu extends StatelessWidget {
+  const _DefaultSortMenu();
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        FilterRadioButton(
-          title: 'New',
+        CustomRadioButton(
+          title: SortByEnum.latest.displayText(),
           value: SortByEnum.latest,
         ),
-        FilterRadioButton(
-          title: 'Rating',
+        CustomRadioButton(
+          title: SortByEnum.rating.displayText(),
           value: SortByEnum.rating,
         ),
-        FilterRadioButton(
-          title: 'Likes',
+        CustomRadioButton(
+          title: SortByEnum.likes.displayText(),
           value: SortByEnum.likes,
         ),
-        FilterRadioButton(
-          title: 'Readers',
+        CustomRadioButton(
+          title: SortByEnum.readers.displayText(),
           value: SortByEnum.readers,
         ),
-        FilterRadioButton(
-          title: 'Viewers',
+        CustomRadioButton(
+          title: SortByEnum.viewers.displayText(),
           value: SortByEnum.viewers,
         ),
       ],
@@ -135,51 +133,19 @@ class ComicSortMenu extends StatelessWidget {
   }
 }
 
-class IssueSortMenu extends StatelessWidget {
-  const IssueSortMenu({super.key});
+class _CreatorSortMenu extends StatelessWidget {
+  const _CreatorSortMenu();
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        FilterRadioButton(
-          title: 'New',
-          value: SortByEnum.latest,
-        ),
-        FilterRadioButton(
-          title: 'Rating',
-          value: SortByEnum.rating,
-        ),
-        FilterRadioButton(
-          title: 'Likes',
-          value: SortByEnum.likes,
-        ),
-        FilterRadioButton(
-          title: 'Readers',
-          value: SortByEnum.readers,
-        ),
-        FilterRadioButton(
-          title: 'Viewers',
-          value: SortByEnum.viewers,
-        ),
-      ],
-    );
-  }
-}
-
-class CreatorSortMenu extends StatelessWidget {
-  const CreatorSortMenu({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        FilterRadioButton(
-          title: 'Name',
+        CustomRadioButton(
+          title: SortByEnum.name.displayText(),
           value: SortByEnum.name,
         ),
-        FilterRadioButton(
-          title: 'Followers',
+        CustomRadioButton(
+          title: SortByEnum.followers.displayText(),
           value: SortByEnum.followers,
         ),
       ],

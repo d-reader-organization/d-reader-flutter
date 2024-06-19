@@ -25,7 +25,7 @@ class FilterBottomSheet extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
           child: AppBar(
-            backgroundColor: ColorPalette.appBackgroundColor,
+            backgroundColor: Colors.transparent,
             elevation: 0,
             leading: Text(
               'Filter',
@@ -49,36 +49,36 @@ class FilterBottomSheet extends ConsumerWidget {
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [
+            // dont show on creators tab
             ref.watch(tabBarProvider) != 2
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SectionTitle(
-                        title: ref.watch(tabBarProvider) == 0
-                            ? 'Show comics'
-                            : 'Show issues',
-                      ),
+                      const SectionTitle(title: 'Show editions'),
                       const SizedBox(
                         height: 16,
                       ),
+                      // for comics we have popular filter only
                       ref.watch(tabBarProvider) == 0
-                          ? const FilterContainer(
-                              id: FilterId.popular, text: 'Popular')
-                          : const Row(
+                          ? FilterContainer(
+                              id: FilterId.popular,
+                              text: FilterId.popular.displayText(),
+                            )
+                          : Row(
                               children: [
                                 Expanded(
                                   child: FilterContainer(
                                     id: FilterId.free,
-                                    text: 'Free to read',
+                                    text: FilterId.free.displayText(),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Expanded(
                                   child: FilterContainer(
                                     id: FilterId.popular,
-                                    text: 'Popular',
+                                    text: FilterId.popular.displayText(),
                                   ),
                                 ),
                               ],

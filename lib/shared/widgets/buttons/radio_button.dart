@@ -4,10 +4,10 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FilterRadioButton extends ConsumerWidget {
+class CustomRadioButton extends ConsumerWidget {
   final String title;
   final SortByEnum value;
-  const FilterRadioButton({
+  const CustomRadioButton({
     super.key,
     required this.title,
     required this.value,

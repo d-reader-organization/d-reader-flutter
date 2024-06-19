@@ -31,7 +31,7 @@ class ChangeNetworkView extends ConsumerWidget {
           }) async {
             return await triggerConfirmationDialog(
               context: context,
-              title: 'Warning, switching to $cluster',
+              title: 'Change Network',
               subtitle: subtitle,
             );
           },

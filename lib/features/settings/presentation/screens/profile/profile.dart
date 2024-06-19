@@ -267,7 +267,7 @@ class ProfileView extends HookConsumerWidget {
                       onTap: () async {
                         final result = await triggerConfirmationDialog(
                           context: context,
-                          title: '',
+                          title: 'Logout',
                           subtitle: 'Are you sure you want logout?',
                         );
                         if (result) {

@@ -37,10 +37,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FlutterDeepLinkingEnabled</key>
 	<true/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>GIDClientID</key>
 	<string>369137099255-hc0716e6f837jgecjjm325mj75tnii29.apps.googleusercontent.com</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

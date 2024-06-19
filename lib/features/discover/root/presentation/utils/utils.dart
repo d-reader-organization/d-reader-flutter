@@ -5,81 +5,75 @@ import 'package:d_reader_flutter/shared/presentations/providers/common/search_pr
 import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-String _getSortByQueryString(SortByEnum selected, ScrollListType type) {
-  if (type == ScrollListType.comicList) {
-    if (selected == SortByEnum.likes) {
-      return 'sortTag=likes';
-    } else if (selected == SortByEnum.rating) {
-      return 'sortTag=rating';
-    } else if (selected == SortByEnum.readers) {
-      return 'sortTag=readers';
-    } else if (selected == SortByEnum.viewers) {
-      return 'sortTag=viewers';
-    } else if (selected == SortByEnum.published) {
-      return 'sortTag=published';
-    }
-  } else if (type == ScrollListType.issueList) {
-    if (selected == SortByEnum.latest) {
-      return 'sortTag=latest';
-    } else if (selected == SortByEnum.likes) {
-      return 'sortTag=likes';
-    } else if (selected == SortByEnum.rating) {
-      return 'sortTag=rating';
-    } else if (selected == SortByEnum.readers) {
-      return 'sortTag=readers';
-    } else if (selected == SortByEnum.viewers) {
-      return 'sortTag=viewers';
-    }
-  } else if (type == ScrollListType.creatorList) {
-    if (selected == SortByEnum.followers) {
-      return 'sortTag=followers';
-    }
+const String _genreSlugsKey = 'genreSlugs[]';
+const String _nameSubstringKey = 'nameSubstring';
+const String _sortOrderKey = 'sortOrder';
+const String _sortTagKey = 'sortTag';
+const String _filterTagKey = 'filterTag';
+const String _titleSubstringKey = 'titleSubstring';
+
+String _prependQueryWithKey({required String key, required String value}) =>
+    value.isNotEmpty ? '$key=$value' : '';
+
+bool _isCreatorTagOnly(SortByEnum selected) =>
+    selected == SortByEnum.followers || selected == SortByEnum.name;
+
+String _getSortTagValue(SortByEnum selected, ScrollListType type) {
+  final bool isCreatorListType = type == ScrollListType.creatorList;
+
+  if (_isCreatorTagOnly(selected)) {
+    return isCreatorListType ? selected.value() : '';
   }
 
-  return '';
+  if (isCreatorListType) {
+    return '';
+  }
+
+  // special handling for comic filters when latest/published is selected
+  if (type == ScrollListType.comicList && selected == SortByEnum.latest) {
+    return SortByEnum.published.value();
+  }
+  return selected.value();
 }
 
 String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   String search = ref.watch(searchProvider).search;
   final String genreTags = ref
       .read(selectedGenresProvider)
-      .map((genreSlug) => 'genreSlugs[]=$genreSlug')
+      .map((genreSlug) => '$_genreSlugsKey=$genreSlug')
       .join('&');
   final FilterId? selectedFilter = ref.read(selectedFilterProvider);
   final SortByEnum? selectedSortBy = ref.read(selectedSortByProvider);
   final SortDirection selectedSortDirection = ref.read(sortDirectionProvider);
-  final String tagFilter = _filterPerType(
-    scrollListType: scrollListType,
-    selectedFilter: selectedFilter,
+  final String filterBy = _prependQueryWithKey(
+    key: _filterTagKey,
+    value: _filterPerType(
+      scrollListType: scrollListType,
+      selectedFilter: selectedFilter,
+    ),
   );
   final String sortByFilter = selectedSortBy != null
-      ? _getSortByQueryString(
-          selectedSortBy,
-          scrollListType,
+      ? _prependQueryWithKey(
+          key: _sortTagKey,
+          value: _getSortTagValue(
+            selectedSortBy,
+            scrollListType,
+          ),
         )
       : '';
   final String sortDirection = getSortDirection(selectedSortDirection);
   final String common =
-      'sortOrder=$sortDirection&${_adjustQueryString(genreTags)}${_adjustQueryString(sortByFilter)}${_adjustQueryString(tagFilter)}';
+      '$_sortOrderKey=$sortDirection&${_adjustQueryString(genreTags)}${_adjustQueryString(sortByFilter)}${_adjustQueryString(filterBy)}';
   final String query = scrollListType == ScrollListType.creatorList
-      ? '$common${'nameSubstring=$search'}'
-      : '$common${'titleSubstring=$search'}';
+      ? '$common${'$_nameSubstringKey=$search'}'
+      : '$common${'$_titleSubstringKey=$search'}';
   return query;
 }
 
 String _filterPerType({
   required ScrollListType scrollListType,
   FilterId? selectedFilter,
-}) {
-  if (selectedFilter == null) {
-    return '';
-  }
-  if (scrollListType == ScrollListType.issueList) {
-    return selectedFilter == FilterId.free
-        ? 'filterTag=free'
-        : 'filterTag=popular';
-  }
-  return selectedFilter == FilterId.popular ? 'filterTag=popular' : '';
-}
+}) =>
+    selectedFilter == null ? '' : selectedFilter.value();
 
 String _adjustQueryString(String query) => query.isNotEmpty ? '$query&' : '';

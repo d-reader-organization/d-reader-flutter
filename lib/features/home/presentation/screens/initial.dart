@@ -47,163 +47,166 @@ class InitialIntroScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Consumer(builder: (context, ref, child) {
-        return ref.watch(globalNotifierProvider).isLoading
-            ? const SizedBox(
-                height: 222,
-                width: 100,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomTextButton(
-                    backgroundColor: ColorPalette.dReaderYellow100,
-                    textColor: Colors.black,
-                    size: const Size(
-                      double.infinity,
-                      50,
+      bottomNavigationBar: SafeArea(
+        child: Consumer(builder: (context, ref, child) {
+          return ref.watch(globalNotifierProvider).isLoading
+              ? const SizedBox(
+                  height: 222,
+                  width: 100,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomTextButton(
+                      backgroundColor: ColorPalette.dReaderYellow100,
+                      textColor: Colors.black,
+                      size: const Size(
+                        double.infinity,
+                        50,
+                      ),
+                      onPressed: () {
+                        nextScreenPush(
+                          context: context,
+                          path: RoutePath.signUp,
+                          homeSubRoute: false,
+                        );
+                      },
+                      child: Text(
+                        'Sign up',
+                        style: textTheme.titleSmall?.copyWith(
+                          letterSpacing: .2,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
-                    onPressed: () {
-                      nextScreenPush(
-                        context: context,
-                        path: RoutePath.signUp,
-                        homeSubRoute: false,
-                      );
-                    },
-                    child: Text(
-                      'Sign up',
-                      style: textTheme.titleSmall?.copyWith(
-                        letterSpacing: .2,
-                        color: Colors.black,
-                      ),
+                    const SizedBox(
+                      height: 12,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Expanded(
-                        flex: 2,
-                        child: Divider(
-                          thickness: 1,
-                          indent: 12,
-                          color: ColorPalette.greyscale200,
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'or with',
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: ColorPalette.greyscale200,
-                                  ),
-                        ),
-                      ),
-                      const Expanded(
-                        flex: 2,
-                        child: Divider(
-                          thickness: 1,
-                          endIndent: 12,
-                          color: ColorPalette.greyscale200,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SocialButton(
-                          icon: 'assets/icons/google_logo.svg',
-                          title: 'Google',
-                          onPressed: () {
-                            ref
-                                .read(signInControllerProvider.notifier)
-                                .googleSignIn(
-                              onSuccess: (bool isRegistered) {
-                                nextScreenCloseOthers(
-                                  context: context,
-                                  path: isRegistered
-                                      ? RoutePath.home
-                                      : RoutePath.signUp,
-                                );
-                              },
-                              onFail: (String message) {
-                                showSnackBar(
-                                  context: context,
-                                  text: message,
-                                  backgroundColor: ColorPalette.dReaderRed,
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      if (Platform.isIOS) ...[
-                        Expanded(
-                          child: SocialButton(
-                            icon: 'assets/icons/apple_logo.svg',
-                            title: 'Apple',
-                            onPressed: () {
-                              // handle apple login
-                            },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Divider(
+                            thickness: 1,
+                            indent: 12,
+                            color: ColorPalette.greyscale200,
                           ),
                         ),
-                      ]
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          nextScreenPush(
-                            context: context,
-                            path: RoutePath.signIn,
-                            homeSubRoute: false,
-                          );
-                        },
-                      text: 'Already have account? ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: ColorPalette.greyscale200),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Log in',
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              nextScreenPush(
-                                context: context,
-                                path: RoutePath.signIn,
-                                homeSubRoute: false,
-                              );
-                            },
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(color: ColorPalette.dReaderYellow100),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            'or with',
+                            textAlign: TextAlign.center,
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: ColorPalette.greyscale200,
+                                    ),
+                          ),
+                        ),
+                        const Expanded(
+                          flex: 2,
+                          child: Divider(
+                            thickness: 1,
+                            endIndent: 12,
+                            color: ColorPalette.greyscale200,
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                ],
-              );
-      }),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SocialButton(
+                            icon: 'assets/icons/google_logo.svg',
+                            title: 'Google',
+                            onPressed: () {
+                              ref
+                                  .read(signInControllerProvider.notifier)
+                                  .googleSignIn(
+                                onSuccess: (bool isRegistered) {
+                                  nextScreenCloseOthers(
+                                    context: context,
+                                    path: isRegistered
+                                        ? RoutePath.home
+                                        : RoutePath.signUp,
+                                  );
+                                },
+                                onFail: (String message) {
+                                  showSnackBar(
+                                    context: context,
+                                    text: message,
+                                    backgroundColor: ColorPalette.dReaderRed,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        if (Platform.isIOS) ...[
+                          Expanded(
+                            child: SocialButton(
+                              icon: 'assets/icons/apple_logo.svg',
+                              title: 'Apple',
+                              onPressed: () {
+                                // handle apple login
+                              },
+                            ),
+                          ),
+                        ]
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            nextScreenPush(
+                              context: context,
+                              path: RoutePath.signIn,
+                              homeSubRoute: false,
+                            );
+                          },
+                        text: 'Already have account? ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: ColorPalette.greyscale200),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Log in',
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                nextScreenPush(
+                                  context: context,
+                                  path: RoutePath.signIn,
+                                  homeSubRoute: false,
+                                );
+                              },
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    color: ColorPalette.dReaderYellow100),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                );
+        }),
+      ),
     );
   }
 }

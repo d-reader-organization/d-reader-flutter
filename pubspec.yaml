@@ -81,6 +81,7 @@ dev_dependencies:
 
 flutter_icons:
   android: "launcher_icon"
+  ios: true
   image_path: "assets/images/d_reader_logo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -106,7 +107,10 @@ flutter:
     - .env
     - path: assets/icons/google_logo.svg
       transformers:
-        - package: vector_graphics_compiler        
+        - package: vector_graphics_compiler
+    - path: assets/icons/apple_logo.svg
+      transformers:
+        - package: vector_graphics_compiler          
     - path: assets/icons/intro/welcome.svg
       transformers:
         - package: vector_graphics_compiler

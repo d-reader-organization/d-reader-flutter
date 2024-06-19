@@ -22,64 +22,61 @@ class CreatorDetailsView extends ConsumerWidget {
     AsyncValue<CreatorModel?> creator = ref.watch(creatorProvider(slug));
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
-      body: SafeArea(
-        child: creator.when(
-          data: (creator) {
-            if (creator == null) {
-              return const SizedBox();
-            }
-            return DefaultTabController(
-              length: 2,
-              child: NestedScrollView(
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return [
-                    CreatorDetailsHeaderSliverList(creator: creator),
-                    StatsDescriptionWidget(creator: creator),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 8,
-                      ),
+      extendBodyBehindAppBar: true,
+      body: creator.when(
+        data: (creator) {
+          if (creator == null) {
+            return const SizedBox();
+          }
+          return DefaultTabController(
+            length: 2,
+            child: NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return [
+                  CreatorDetailsHeaderSliverList(creator: creator),
+                  StatsDescriptionWidget(creator: creator),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 8,
                     ),
-                    const CustomSliverTabPersistentHeader(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                      ),
-                      tabs: [
-                        Tab(
-                          text: 'Comics',
-                        ),
-                        Tab(
-                          text: 'Collectibles',
-                        ),
-                      ],
-                    ),
-                  ];
-                },
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
                   ),
-                  child: TabBarView(
-                    children: [
-                      CreatorComicsTab(
-                        creatorSlug: creator.slug,
+                  const CustomSliverTabPersistentHeader(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                    ),
+                    tabs: [
+                      Tab(
+                        text: 'Comics',
                       ),
-                      const CreatorCollectiblesTab(),
+                      Tab(
+                        text: 'Collectibles',
+                      ),
                     ],
                   ),
+                ];
+              },
+              body: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                child: TabBarView(
+                  children: [
+                    CreatorComicsTab(
+                      creatorSlug: creator.slug,
+                    ),
+                    const CreatorCollectiblesTab(),
+                  ],
                 ),
               ),
-            );
-          },
-          error: (err, stack) {
-            return renderCarrotErrorWidget(ref);
-          },
-          loading: () => const Center(
-            child: SizedBox(),
-          ),
-        ),
+            ),
+          );
+        },
+        error: (err, stack) {
+          return renderCarrotErrorWidget(ref);
+        },
+        loading: () => const SizedBox(),
       ),
     );
   }

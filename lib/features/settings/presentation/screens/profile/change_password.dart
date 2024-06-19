@@ -71,25 +71,27 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
   Widget build(BuildContext context) {
     return SettingsScaffold(
       appBarTitle: '',
-      bottomNavigationBar: AnimatedOpacity(
-        opacity: ref.watch(oldPasswordProvider).trim().isNotEmpty &&
-                ref.watch(newPasswordProvider).trim().isNotEmpty
-            ? 1.0
-            : 0.0,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CustomTextButton(
-            size: const Size(double.infinity, 50),
-            isLoading: ref.watch(globalNotifierProvider).isLoading,
-            onPressed: () async {
-              if (_changePasswordFormKey.currentState!.validate()) {
-                await _handlePasswordChange();
-              }
-            },
-            borderRadius: BorderRadius.circular(8),
-            child: const Text('Submit'),
+      bottomNavigationBar: SafeArea(
+        child: AnimatedOpacity(
+          opacity: ref.watch(oldPasswordProvider).trim().isNotEmpty &&
+                  ref.watch(newPasswordProvider).trim().isNotEmpty
+              ? 1.0
+              : 0.0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomTextButton(
+              size: const Size(double.infinity, 50),
+              isLoading: ref.watch(globalNotifierProvider).isLoading,
+              onPressed: () async {
+                if (_changePasswordFormKey.currentState!.validate()) {
+                  await _handlePasswordChange();
+                }
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: const Text('Submit'),
+            ),
           ),
         ),
       ),

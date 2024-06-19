@@ -87,7 +87,7 @@ class ComicDetails extends ConsumerWidget {
       error: (err, stack) {
         return renderCarrotErrorWidget(ref);
       },
-      loading: () => const SizedBox(),
+      loading: () => const ComicDetailsSkeleton(),
     );
   }
 }

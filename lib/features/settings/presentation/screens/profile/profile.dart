@@ -11,6 +11,7 @@ import 'package:d_reader_flutter/shared/domain/providers/environment/environment
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_providers.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
+import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/utils/validation.dart';
@@ -31,70 +32,73 @@ class ProfileView extends HookConsumerWidget {
     final provider = ref.watch(myUserProvider);
     return SettingsScaffold(
       appBarTitle: 'My Profile',
-      bottomNavigationBar: Consumer(
-        builder: (context, ref, child) {
-          final String username = ref.watch(usernameTextProvider);
-          return AnimatedOpacity(
-            opacity:
-                username.isNotEmpty && username.trim() != provider.value?.name
-                    ? 1.0
-                    : 0.0,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomTextButton(
-                      size: const Size(double.infinity, 40),
-                      onPressed: () {
-                        final String username = ref.read(usernameTextProvider);
-                        if (username.isNotEmpty) {
-                          ref.read(usernameTextProvider.notifier).state = '';
-                        }
-                        context.pop();
-                      },
-                      borderRadius: BorderRadius.circular(8),
-                      backgroundColor: Colors.transparent,
-                      textColor: ColorPalette.greyscale50,
-                      borderColor: ColorPalette.greyscale50,
-                      child: const Text('Cancel'),
+      bottomNavigationBar: SafeArea(
+        child: Consumer(
+          builder: (context, ref, child) {
+            final String username = ref.watch(usernameTextProvider);
+            return AnimatedOpacity(
+              opacity:
+                  username.isNotEmpty && username.trim() != provider.value?.name
+                      ? 1.0
+                      : 0.0,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextButton(
+                        size: const Size(double.infinity, 40),
+                        onPressed: () {
+                          final String username =
+                              ref.read(usernameTextProvider);
+                          if (username.isNotEmpty) {
+                            ref.read(usernameTextProvider.notifier).state = '';
+                          }
+                          context.pop();
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        backgroundColor: Colors.transparent,
+                        textColor: ColorPalette.greyscale50,
+                        borderColor: ColorPalette.greyscale50,
+                        child: const Text('Cancel'),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: CustomTextButton(
-                      isLoading: ref.watch(globalNotifierProvider).isLoading,
-                      size: const Size(double.infinity, 40),
-                      onPressed: () async {
-                        if (provider.value != null) {
-                          await ref
-                              .read(profileControllerProvider.notifier)
-                              .changeUsername(
-                                user: provider.value!,
-                                callback: (result) {
-                                  showSnackBar(
-                                    context: context,
-                                    backgroundColor: result is String
-                                        ? ColorPalette.dReaderRed
-                                        : ColorPalette.dReaderGreen,
-                                    text: result is String
-                                        ? result
-                                        : 'Your username has been updated.',
-                                  );
-                                },
-                              );
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(8),
-                      child: const Text('Save'),
+                    Expanded(
+                      child: CustomTextButton(
+                        isLoading: ref.watch(globalNotifierProvider).isLoading,
+                        size: const Size(double.infinity, 40),
+                        onPressed: () async {
+                          if (provider.value != null) {
+                            await ref
+                                .read(profileControllerProvider.notifier)
+                                .changeUsername(
+                                  user: provider.value!,
+                                  callback: (result) {
+                                    showSnackBar(
+                                      context: context,
+                                      backgroundColor: result is String
+                                          ? ColorPalette.dReaderRed
+                                          : ColorPalette.dReaderGreen,
+                                      text: result is String
+                                          ? result
+                                          : 'Your username has been updated.',
+                                    );
+                                  },
+                                );
+                          }
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: const Text('Save'),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       body: provider.when(
         data: (user) {
@@ -261,104 +265,12 @@ class ProfileView extends HookConsumerWidget {
                           '${Config.settingsAssetsPath}/light/logout.svg',
                       overrideColor: ColorPalette.dReaderRed,
                       onTap: () async {
-                        final result = await showDialog<bool>(
+                        final result = await triggerConfirmationDialog(
                           context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              backgroundColor: ColorPalette.greyscale400,
-                              contentPadding: EdgeInsets.zero,
-                              content: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 16,
-                                    ),
-                                    child: Text(
-                                      'Are you sure you want to log out?',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 16,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            return context.pop(
-                                              false,
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(12),
-                                            decoration: const BoxDecoration(
-                                              border: Border(
-                                                right: BorderSide(
-                                                  color:
-                                                      ColorPalette.greyscale500,
-                                                  width: 1,
-                                                ),
-                                                top: BorderSide(
-                                                  color:
-                                                      ColorPalette.greyscale500,
-                                                  width: 1,
-                                                ),
-                                              ),
-                                            ),
-                                            child: const Text(
-                                              'No',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            return context.pop(true);
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(12),
-                                            decoration: const BoxDecoration(
-                                              border: Border(
-                                                top: BorderSide(
-                                                  color:
-                                                      ColorPalette.greyscale500,
-                                                  width: 1,
-                                                ),
-                                              ),
-                                            ),
-                                            child: const Text(
-                                              'Yes',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            );
-                          },
+                          title: '',
+                          subtitle: 'Are you sure you want logout?',
                         );
-                        if (result != null && result) {
+                        if (result) {
                           await ref.read(logoutProvider.future);
                           if (context.mounted) {
                             nextScreenCloseOthers(

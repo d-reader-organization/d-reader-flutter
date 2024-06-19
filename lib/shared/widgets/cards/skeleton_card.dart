@@ -7,6 +7,7 @@ class SkeletonCard extends StatelessWidget {
   final double width;
   final EdgeInsets? margin;
   final bool withBorderRadius;
+  final LinearGradient gradient;
 
   const SkeletonCard({
     super.key,
@@ -14,6 +15,15 @@ class SkeletonCard extends StatelessWidget {
     this.width = 180,
     this.margin,
     this.withBorderRadius = true,
+    this.gradient = const LinearGradient(
+      colors: [
+        ColorPalette.greyscale500,
+        Colors.transparent,
+      ],
+      begin: Alignment.bottomCenter,
+      end: Alignment.topCenter,
+      stops: [0, 0.8],
+    ),
   });
 
   @override
@@ -32,16 +42,8 @@ class SkeletonCard extends StatelessWidget {
                 )
               : null,
         ),
-        foregroundDecoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              ColorPalette.greyscale500,
-              Colors.transparent,
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            stops: [0, 0.8],
-          ),
+        foregroundDecoration: BoxDecoration(
+          gradient: gradient,
         ),
       ),
     );

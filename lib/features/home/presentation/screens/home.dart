@@ -26,6 +26,7 @@ class HomeView extends ConsumerWidget {
         SliverAppBar(
           stretch: true,
           backgroundColor: ColorPalette.appBackgroundColor,
+          centerTitle: false,
           title: SvgPicture.asset(
             Config.whiteLogoPath,
             colorFilter: const ColorFilter.mode(

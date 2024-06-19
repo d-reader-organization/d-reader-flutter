@@ -19,35 +19,37 @@ class SettingsButtonsBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: CustomTextButton(
-              size: const Size(double.infinity, 40),
-              onPressed: onCancel,
-              borderRadius: BorderRadius.circular(8),
-              backgroundColor: Colors.transparent,
-              textColor: ColorPalette.greyscale50,
-              borderColor: ColorPalette.greyscale50,
-              child: Text(cancelText),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomTextButton(
+                size: const Size(double.infinity, 40),
+                onPressed: onCancel,
+                borderRadius: BorderRadius.circular(8),
+                backgroundColor: Colors.transparent,
+                textColor: ColorPalette.greyscale50,
+                borderColor: ColorPalette.greyscale50,
+                child: Text(cancelText),
+              ),
             ),
-          ),
-          Consumer(
-            builder: (context, ref, child) {
-              return Expanded(
-                child: CustomTextButton(
-                  isLoading: isLoading,
-                  size: const Size(double.infinity, 40),
-                  onPressed: onSave,
-                  borderRadius: BorderRadius.circular(8),
-                  child: Text(confirmText),
-                ),
-              );
-            },
-          )
-        ],
+            Consumer(
+              builder: (context, ref, child) {
+                return Expanded(
+                  child: CustomTextButton(
+                    isLoading: isLoading,
+                    size: const Size(double.infinity, 40),
+                    onPressed: onSave,
+                    borderRadius: BorderRadius.circular(8),
+                    child: Text(confirmText),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
       ),
     );
   }

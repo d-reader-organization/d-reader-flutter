@@ -65,36 +65,38 @@ class _ChangeEmailViewState extends ConsumerState<ChangeEmailView> {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CustomTextButton(
-          size: const Size(double.infinity, 50),
-          isLoading: ref.watch(globalNotifierProvider).isLoading,
-          onPressed: () async {
-            if (!_newEmailFormKey.currentState!.validate()) {
-              return;
-            }
-            await ref.read(profileControllerProvider.notifier).changeEmail(
-                  newEmail: _newEmailController.text.trim(),
-                  onSuccess: () {
-                    showSnackBar(
-                      context: context,
-                      text:
-                          'Verification mail sent to your new email address. Please check spam',
-                      backgroundColor: ColorPalette.dReaderGreen,
-                    );
-                  },
-                  onBadRequestException: (cause) {
-                    showSnackBar(
-                      context: context,
-                      text: cause,
-                      backgroundColor: ColorPalette.dReaderRed,
-                    );
-                  },
-                );
-          },
-          borderRadius: BorderRadius.circular(8),
-          child: const Text('Submit'),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CustomTextButton(
+            size: const Size(double.infinity, 50),
+            isLoading: ref.watch(globalNotifierProvider).isLoading,
+            onPressed: () async {
+              if (!_newEmailFormKey.currentState!.validate()) {
+                return;
+              }
+              await ref.read(profileControllerProvider.notifier).changeEmail(
+                    newEmail: _newEmailController.text.trim(),
+                    onSuccess: () {
+                      showSnackBar(
+                        context: context,
+                        text:
+                            'Verification mail sent to your new email address. Please check spam',
+                        backgroundColor: ColorPalette.dReaderGreen,
+                      );
+                    },
+                    onBadRequestException: (cause) {
+                      showSnackBar(
+                        context: context,
+                        text: cause,
+                        backgroundColor: ColorPalette.dReaderRed,
+                      );
+                    },
+                  );
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: const Text('Submit'),
+          ),
         ),
       ),
     );

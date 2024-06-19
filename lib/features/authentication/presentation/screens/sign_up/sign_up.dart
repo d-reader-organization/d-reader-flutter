@@ -7,6 +7,7 @@ import 'package:d_reader_flutter/features/authentication/presentation/screens/si
 import 'package:d_reader_flutter/features/authentication/presentation/screens/sign_up/connect_wallet_step.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,26 +29,40 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(
-            56,
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(top: 16),
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
+    return defaultTargetPlatform == TargetPlatform.iOS
+        ? _SignUpScaffold(pageController: _pageController)
+        : SafeArea(
+            child: _SignUpScaffold(
+              pageController: _pageController,
             ),
-            child: const _Heading(),
-          ),
+          );
+  }
+}
+
+class _SignUpScaffold extends ConsumerWidget {
+  final PageController pageController;
+  const _SignUpScaffold({required this.pageController});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(
+          56,
         ),
-        body: ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
-            ? _GoogleSignUpForm(pageController: _pageController)
-            : _RegularSignUpForm(pageController: _pageController),
+        child: Container(
+          margin: const EdgeInsets.only(top: 16),
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+          ),
+          child: const _Heading(),
+        ),
       ),
+      body: ref.watch(signUpDataNotifierProvider).googleAccessToken.isNotEmpty
+          ? _GoogleSignUpForm(pageController: pageController)
+          : _RegularSignUpForm(pageController: pageController),
     );
   }
 }

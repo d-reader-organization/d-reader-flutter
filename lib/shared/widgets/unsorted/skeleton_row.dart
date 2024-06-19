@@ -3,21 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class SkeletonRow extends StatelessWidget {
-  const SkeletonRow({super.key});
+  final double height;
+  final EdgeInsets margin;
+  final BorderRadiusGeometry borderRadius;
+  const SkeletonRow({
+    super.key,
+    this.height = 64,
+    this.margin = const EdgeInsets.only(top: 8),
+    this.borderRadius = const BorderRadius.all(
+      Radius.circular(8),
+    ),
+  });
 
   @override
   Widget build(BuildContext context) {
     return SkeletonAnimation(
       shimmerDuration: 1000,
+      borderRadius: borderRadius,
+      shimmerColor: ColorPalette.greyscale100,
       child: Container(
-        height: 64,
-        margin: const EdgeInsets.only(top: 8),
-        decoration: BoxDecoration(
-          color: ColorPalette.dReaderGrey,
-          borderRadius: BorderRadius.circular(
-            16,
-          ),
-        ),
+        height: height,
+        margin: margin,
       ),
     );
   }

@@ -7,12 +7,14 @@ import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/features/comic/presentation/widgets/details/sort_direction.dart';
 import 'package:d_reader_flutter/features/comic/presentation/widgets/details/view_mode_container.dart';
+import 'package:d_reader_flutter/shared/widgets/cards/skeleton_card.dart';
 import 'package:d_reader_flutter/shared/widgets/layout/animated_app_bar.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
 import 'package:d_reader_flutter/features/comic/presentation/widgets/icons/bookmark_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/skeleton_row.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/stats_info.dart';
 import 'package:d_reader_flutter/shared/widgets/texts/text_with_view_more.dart';
 import 'package:d_reader_flutter/features/creator/presentation/widgets/avatar.dart';
@@ -402,6 +404,67 @@ class _BodyFilters extends StatelessWidget {
                   ],
                 )
               : const ViewModeContainer(),
+        ],
+      ),
+    );
+  }
+}
+
+class ComicDetailsSkeleton extends StatelessWidget {
+  const ComicDetailsSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: ColorPalette.appBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        toolbarHeight: 64,
+      ),
+      extendBodyBehindAppBar: true,
+      body: ListView(
+        padding: const EdgeInsets.only(top: 0),
+        children: const [
+          AspectRatio(
+            aspectRatio: comicAspectRatio,
+            child: SkeletonCard(
+              width: double.infinity,
+              height: double.infinity,
+              gradient: LinearGradient(
+                colors: [
+                  ColorPalette.appBackgroundColor,
+                  Colors.transparent,
+                  ColorPalette.appBackgroundColor,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                stops: [0.0, .6406, 1],
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              right: 16,
+              left: 16,
+              top: 4,
+              bottom: 4,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SkeletonRow(
+                  margin: EdgeInsets.only(bottom: 16),
+                ),
+                SkeletonRow(
+                  margin: EdgeInsets.only(bottom: 16),
+                ),
+                SkeletonRow(),
+                _DividerLine(),
+                SkeletonRow(),
+                _DividerLine(),
+              ],
+            ),
+          ),
         ],
       ),
     );

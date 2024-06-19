@@ -154,66 +154,69 @@ class SecurityAndPrivacyScreen extends ConsumerWidget {
                   localUserConsentsData[ConsentType.marketing] ||
               data[ConsentType.dataAnalytics] !=
                   localUserConsentsData[ConsentType.dataAnalytics];
-          return AnimatedOpacity(
-            duration: const Duration(milliseconds: 500),
-            opacity: showUpdateButton ? 1 : 0,
-            curve: Curves.easeInOut,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomTextButton(
-                      size: const Size(double.infinity, 40),
-                      onPressed: () {
-                        ref.invalidate(userConsentsProvider);
-                      },
-                      borderRadius: BorderRadius.circular(8),
-                      backgroundColor: Colors.transparent,
-                      textColor: ColorPalette.greyscale50,
-                      borderColor: ColorPalette.greyscale50,
-                      child: const Text('Cancel'),
+          return SafeArea(
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              opacity: showUpdateButton ? 1 : 0,
+              curve: Curves.easeInOut,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextButton(
+                        size: const Size(double.infinity, 40),
+                        onPressed: () {
+                          ref.invalidate(userConsentsProvider);
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        backgroundColor: Colors.transparent,
+                        textColor: ColorPalette.greyscale50,
+                        borderColor: ColorPalette.greyscale50,
+                        child: const Text('Cancel'),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: CustomTextButton(
-                      isLoading: ref.watch(globalNotifierProvider).isLoading,
-                      size: const Size(double.infinity, 40),
-                      onPressed: () {
-                        ref
-                            .read(securityAndPrivacyControllerProvider.notifier)
-                            .updateUserConsents(
-                              data: data,
-                              triggerDialog: () async {
-                                return await triggerConfirmationDialog(
-                                  context: context,
-                                  title:
-                                      'Revoking this consent might lead to degradation of services or limited access to app features',
-                                  subtitle: '',
-                                );
-                              },
-                              onSuccess: () {
-                                showSnackBar(
-                                  context: context,
-                                  text:
-                                      'Your consents are updated successfully',
-                                  backgroundColor: ColorPalette.dReaderGreen,
-                                );
-                              },
-                              onFail: (message) {
-                                showSnackBar(
-                                  context: context,
-                                  text: message,
-                                  backgroundColor: ColorPalette.dReaderRed,
-                                );
-                              },
-                            );
-                      },
-                      borderRadius: BorderRadius.circular(8),
-                      child: const Text('Save'),
+                    Expanded(
+                      child: CustomTextButton(
+                        isLoading: ref.watch(globalNotifierProvider).isLoading,
+                        size: const Size(double.infinity, 40),
+                        onPressed: () {
+                          ref
+                              .read(
+                                  securityAndPrivacyControllerProvider.notifier)
+                              .updateUserConsents(
+                                data: data,
+                                triggerDialog: () async {
+                                  return await triggerConfirmationDialog(
+                                    context: context,
+                                    title:
+                                        'Revoking this consent might lead to degradation of services or limited access to app features',
+                                    subtitle: '',
+                                  );
+                                },
+                                onSuccess: () {
+                                  showSnackBar(
+                                    context: context,
+                                    text:
+                                        'Your consents are updated successfully',
+                                    backgroundColor: ColorPalette.dReaderGreen,
+                                  );
+                                },
+                                onFail: (message) {
+                                  showSnackBar(
+                                    context: context,
+                                    text: message,
+                                    backgroundColor: ColorPalette.dReaderRed,
+                                  );
+                                },
+                              );
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: const Text('Save'),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

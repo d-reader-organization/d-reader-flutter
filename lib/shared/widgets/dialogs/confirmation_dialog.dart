@@ -130,8 +130,8 @@ class ConfirmationDialog extends StatelessWidget {
                         child: ref.watch(privateLoadingProvider)
                             ? const Center(
                                 child: SizedBox(
-                                  height: 22,
-                                  width: 22,
+                                  height: 27,
+                                  width: 27,
                                   child: CircularProgressIndicator(
                                     color: ColorPalette.appBackgroundColor,
                                   ),

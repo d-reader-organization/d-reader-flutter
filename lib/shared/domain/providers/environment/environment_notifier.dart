@@ -85,6 +85,7 @@ class Environment extends _$Environment {
 
   void updatePublicKeyFromBase58(String address) {
     state = state.copyWith(publicKey: Ed25519HDPublicKey.fromBase58(address));
+    putStateIntoLocalStore();
   }
 
   void putStateIntoLocalStore() {

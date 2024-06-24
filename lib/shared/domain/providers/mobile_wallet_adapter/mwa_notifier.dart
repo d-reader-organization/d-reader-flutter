@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
-import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/ios_wallet/ios_wallet.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -154,87 +154,105 @@ class MwaNotifier extends _$MwaNotifier {
     return true;
   }
 
+  Future<Either<AppException, String>> _iosOnCompleteWrapper(
+    Future<Either<AppException, String>> Function()? onComplete,
+  ) async {
+    try {
+      if (onComplete != null) {
+        return await onComplete();
+      }
+      return const Right(successResult);
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: exception.toString(),
+          identifier: 'SolanaNotifier.onComplete',
+          statusCode: 500,
+        ),
+      );
+    }
+  }
+
+  Future<Either<AppException, String>> _iosHandling({
+    required bool runCompleteOnly,
+    Future<Either<AppException, String>> Function()? onComplete,
+  }) async {
+    if (!runCompleteOnly) {
+      final result =
+          await ref.read(iosWalletNotifierProvider.notifier).connect();
+      if (!result) {
+        return Left(
+          AppException(
+            identifier: '',
+            message: '',
+            statusCode: 500,
+          ),
+        );
+      }
+      if (ref.read(selectedCandyMachineGroup) != null) {
+        await _refetchCandyMachine();
+      }
+    }
+
+    return _iosOnCompleteWrapper(onComplete);
+  }
+
+  // try to make it compatible and more clearer for each approach (MWA v.s DEEPLINKS)
   Future<Either<AppException, String>> authorizeIfNeededWithOnComplete({
     bool isConnectOnly = false,
     String? overrideCluster,
-    Function()? onStart,
     Future<Either<AppException, String>> Function(
       MobileWalletAdapterClient client,
       LocalAssociationScenario session,
     )? onComplete,
   }) async {
+    String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
+    final bool runCompleteOnly = !isConnectOnly && walletAddress != null;
+
+    if (ref.read(isIOSProvider)) {
+      // TODO deeplink on complete
+      return await _iosHandling(runCompleteOnly: runCompleteOnly);
+    }
+
     late LocalAssociationScenario session;
     try {
       session = await _getSession();
     } catch (exception) {
-      if (exception is AppException) {
-        return Left(exception);
-      }
-
-      Sentry.captureException(exception);
       return Left(
-        AppException(
-          message: exception.toString(),
-          identifier: 'SolanaNotifier.getSession',
-          statusCode: 500,
-        ),
+        exception is AppException
+            ? exception
+            : AppException(
+                message: exception.toString(),
+                identifier: 'SolanaNotifier.getSession',
+                statusCode: 500,
+              ),
       );
     }
-    String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
-    if (!isConnectOnly && walletAddress != null) {
-      try {
-        if (onComplete != null) {
-          return await onComplete(await session.start(), session);
-        }
-        await session.close();
-        return const Right(successResult);
-      } catch (exception) {
+
+    final client = await session.start();
+    if (!runCompleteOnly) {
+      final result = await _authorizeAndSignIfNeeded(
+        client: client,
+        shouldSignMessage: isConnectOnly,
+      );
+
+      // Invalidate candy machine to refetch eligibility
+      if (ref.read(selectedCandyMachineGroup) != null) {
+        await _refetchCandyMachine();
+      }
+
+      if (result != successResult) {
         await session.close();
         return Left(
           AppException(
-            message: exception.toString(),
-            identifier: 'SolanaNotifier.onComplete',
+            message: result,
+            identifier: 'SolanaNotifier._authorizeAndSignIfNeeded',
             statusCode: 500,
           ),
         );
       }
     }
 
-    final client = await session.start();
-    final wallets = await ref.read(
-      userWalletsProvider(id: ref.read(environmentProvider).user?.id).future,
-    );
-    final result = await _authorizeAndSignIfNeeded(
-      client: client,
-      wallets: wallets,
-      shouldSignMessage: isConnectOnly,
-    );
-
-    // Invalidate candy machine to refetch eligibility
-    if (ref.read(selectedCandyMachineGroup) != null) {
-      final signerAddress = ref.read(environmentProvider).publicKey?.toBase58();
-      final currentCMAddress = ref.read(candyMachineStateProvider)?.address;
-      ref.invalidate(candyMachineProvider);
-      await ref.read(candyMachineProvider(
-              query:
-                  'candyMachineAddress=$currentCMAddress${'&walletAddress=$signerAddress'}')
-          .future);
-    }
-
-    if (result != successResult) {
-      await session.close();
-      return Left(
-        AppException(
-          message: result,
-          identifier: 'SolanaNotifier._authorizeAndSignIfNeeded',
-          statusCode: 500,
-        ),
-      );
-    }
-
-    if (onStart != null) {
-      onStart();
-    }
     try {
       if (onComplete != null) {
         return await onComplete(client, session);
@@ -253,9 +271,20 @@ class MwaNotifier extends _$MwaNotifier {
     }
   }
 
+  Future<void> _refetchCandyMachine() async {
+    final signerAddress = ref.read(environmentProvider).publicKey?.toBase58();
+    final currentCMAddress = ref.read(candyMachineStateProvider)?.address;
+    ref.invalidate(candyMachineProvider);
+    await ref.read(
+      candyMachineProvider(
+              query:
+                  'candyMachineAddress=$currentCMAddress${'&walletAddress=$signerAddress'}')
+          .future,
+    );
+  }
+
   Future<String> _authorizeAndSignIfNeeded({
     required MobileWalletAdapterClient client,
-    required List<WalletModel> wallets,
     bool shouldSignMessage = true,
     String? overrideCluster,
   }) async {
@@ -281,6 +310,9 @@ class MwaNotifier extends _$MwaNotifier {
           publicKey.toBase58(): result.authToken,
         },
       ),
+    );
+    final wallets = await ref.read(
+      userWalletsProvider(id: ref.read(environmentProvider).user?.id).future,
     );
     final isExistingWallet = wallets.firstWhereOrNull(
             (element) => element.address == publicKey.toBase58()) !=

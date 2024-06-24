@@ -204,6 +204,13 @@ List<GoRoute> generateHomeRoutes(ProviderRef ref) {
           },
         ),
         GoRoute(
+          path: RoutePath.iosWalletConnect,
+          builder: (context, state) {
+            final userId = '${ref.read(environmentProvider).user?.id}';
+            return MyWalletsScreen(userId: int.parse(userId));
+          },
+        ),
+        GoRoute(
           path: RoutePath.referrals,
           builder: (context, state) {
             return const ReferralsView();

@@ -4,6 +4,7 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 // import 'package:d_reader_flutter/features/settings/presentation/widgets/create_wallet_button.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/ios_wallet/ios_wallet.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -20,6 +21,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+const _addConnectWallet = 'Add / Connect Wallet';
+const _installWallet = 'Install wallet';
 
 class MyWalletsScreen extends ConsumerWidget {
   final int userId;
@@ -312,6 +316,12 @@ class MyWalletsScreen extends ConsumerWidget {
           bottomNavigationBar: SafeArea(
             child: Wrap(
               children: [
+                CustomTextButton(
+                  onPressed: ref
+                      .read(iosWalletNotifierProvider.notifier)
+                      .signAndSendTransaction,
+                  child: const Text('iOS Transaction'),
+                ),
                 // const CreateAWalletButton(),
                 CustomTextButton(
                   borderRadius: BorderRadius.circular(8),
@@ -362,10 +372,10 @@ class MyWalletsScreen extends ConsumerWidget {
                   child: Text(
                     ref.watch(isWalletAvailableProvider).maybeWhen(
                       data: (data) {
-                        return data ? 'Add / Connect Wallet' : 'Install wallet';
+                        return data ? _addConnectWallet : _installWallet;
                       },
                       orElse: () {
-                        return '';
+                        return _addConnectWallet;
                       },
                     ),
                     style: const TextStyle(

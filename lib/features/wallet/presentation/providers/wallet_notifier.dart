@@ -27,11 +27,7 @@ class WalletController extends _$WalletController {
   }) async {
     final authorizeResult = await ref
         .read(mwaNotifierProvider.notifier)
-        .authorizeIfNeededWithOnComplete(
-            isConnectOnly: true,
-            onStart: () {
-              ref.read(globalNotifierProvider.notifier).updateLoading(true);
-            });
+        .authorizeIfNeededWithOnComplete(isConnectOnly: true);
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
     authorizeResult.fold((exception) {
       if (exception is NoWalletFoundException) {

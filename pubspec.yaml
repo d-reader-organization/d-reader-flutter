@@ -56,6 +56,7 @@ dependencies:
   vector_graphics: ^1.1.11+1
   bip39: ^1.0.6
   flutter_secure_storage: ^9.2.2
+  ios_wallet_connect: ^0.2.1+1
 
 dev_dependencies:
   flutter_test:

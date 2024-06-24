@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/ios_wallet/ios_wallet.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/deep_links/deep_links.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -154,7 +154,7 @@ class MwaNotifier extends _$MwaNotifier {
     return true;
   }
 
-  Future<Either<AppException, String>> _iosOnCompleteWrapper(
+  Future<Either<AppException, String>> _deepLinksOnCompleteWrapper(
     Future<Either<AppException, String>> Function()? onComplete,
   ) async {
     try {
@@ -173,13 +173,13 @@ class MwaNotifier extends _$MwaNotifier {
     }
   }
 
-  Future<Either<AppException, String>> _iosHandling({
+  Future<Either<AppException, String>> _deepLinksHandling({
     required bool runCompleteOnly,
     Future<Either<AppException, String>> Function()? onComplete,
   }) async {
     if (!runCompleteOnly) {
       final result =
-          await ref.read(iosWalletNotifierProvider.notifier).connect();
+          await ref.read(deepLinksWalletNotifierProvider.notifier).connect();
       if (!result) {
         return Left(
           AppException(
@@ -194,7 +194,7 @@ class MwaNotifier extends _$MwaNotifier {
       }
     }
 
-    return _iosOnCompleteWrapper(onComplete);
+    return _deepLinksOnCompleteWrapper(onComplete);
   }
 
   // try to make it compatible and more clearer for each approach (MWA v.s DEEPLINKS)
@@ -205,13 +205,17 @@ class MwaNotifier extends _$MwaNotifier {
       MobileWalletAdapterClient client,
       LocalAssociationScenario session,
     )? onComplete,
+    Future<Either<AppException, String>> Function()? deepLinksOnComplete,
   }) async {
     String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
     final bool runCompleteOnly = !isConnectOnly && walletAddress != null;
 
     if (ref.read(isIOSProvider)) {
       // TODO deeplink on complete
-      return await _iosHandling(runCompleteOnly: runCompleteOnly);
+      return await _deepLinksHandling(
+        runCompleteOnly: runCompleteOnly,
+        onComplete: deepLinksOnComplete,
+      );
     }
 
     late LocalAssociationScenario session;

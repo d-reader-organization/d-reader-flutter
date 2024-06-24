@@ -13,7 +13,7 @@ import 'package:ios_wallet_connect/ios_wallet_connect.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart';
 
-part 'ios_wallet.g.dart';
+part 'deep_links.g.dart';
 
 class _PhantomConnectResponse {
   final String publicKeyBase58;
@@ -30,7 +30,7 @@ class _PhantomConnectResponse {
 }
 
 @riverpod
-class IosWalletNotifier extends _$IosWalletNotifier {
+class DeepLinksWalletNotifier extends _$DeepLinksWalletNotifier {
   late final IosWalletConnect _client;
   @override
   TransactionState build() {

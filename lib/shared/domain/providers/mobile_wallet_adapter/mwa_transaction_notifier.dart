@@ -146,6 +146,20 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
             (result) => Right(result),
           );
         },
+        deepLinksOnComplete: () async {
+          if (!hasEligibilityForMint(ref.read(selectedCandyMachineGroup))) {
+            // have to keep it inside MWA session.
+            return Left(
+              AppException(
+                identifier: 'MwaTransactionNotifier.mint',
+                message: _noEligibilityMessage(),
+                statusCode: 401,
+              ),
+            );
+          }
+          // deepLinksWallet.signAndSendTransactions
+          return const Right(successResult);
+        },
       );
     } catch (exception) {
       Sentry.captureException(

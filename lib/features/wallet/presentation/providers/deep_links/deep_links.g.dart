@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'ios_wallet.dart';
+part of 'deep_links.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$iosWalletNotifierHash() => r'c25336afb6a0dc51ae690d391ce851889f680339';
+String _$deepLinksWalletNotifierHash() =>
+    r'd6191af0e01bd3634a73387d1c240a87d3ca0bce';
 
-/// See also [IosWalletNotifier].
-@ProviderFor(IosWalletNotifier)
-final iosWalletNotifierProvider =
-    AutoDisposeNotifierProvider<IosWalletNotifier, TransactionState>.internal(
-  IosWalletNotifier.new,
-  name: r'iosWalletNotifierProvider',
+/// See also [DeepLinksWalletNotifier].
+@ProviderFor(DeepLinksWalletNotifier)
+final deepLinksWalletNotifierProvider = AutoDisposeNotifierProvider<
+    DeepLinksWalletNotifier, TransactionState>.internal(
+  DeepLinksWalletNotifier.new,
+  name: r'deepLinksWalletNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$iosWalletNotifierHash,
+      : _$deepLinksWalletNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$IosWalletNotifier = AutoDisposeNotifier<TransactionState>;
+typedef _$DeepLinksWalletNotifier = AutoDisposeNotifier<TransactionState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

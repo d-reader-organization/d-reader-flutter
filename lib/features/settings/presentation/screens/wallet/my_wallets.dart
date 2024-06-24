@@ -4,7 +4,6 @@ import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/library/presentation/providers/owned/owned_providers.dart';
 // import 'package:d_reader_flutter/features/settings/presentation/widgets/create_wallet_button.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/deep_links/deep_links.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -316,12 +315,6 @@ class MyWalletsScreen extends ConsumerWidget {
           bottomNavigationBar: SafeArea(
             child: Wrap(
               children: [
-                CustomTextButton(
-                  onPressed: ref
-                      .read(deepLinksWalletNotifierProvider.notifier)
-                      .signAndSendTransaction,
-                  child: const Text('iOS Transaction'),
-                ),
                 // const CreateAWalletButton(),
                 CustomTextButton(
                   borderRadius: BorderRadius.circular(8),

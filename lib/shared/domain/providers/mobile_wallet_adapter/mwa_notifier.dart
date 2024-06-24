@@ -158,10 +158,9 @@ class MwaNotifier extends _$MwaNotifier {
     Future<Either<AppException, String>> Function()? onComplete,
   ) async {
     try {
-      if (onComplete != null) {
-        return await onComplete();
-      }
-      return const Right(successResult);
+      return onComplete != null
+          ? await onComplete()
+          : const Right(successResult);
     } catch (exception) {
       return Left(
         AppException(
@@ -194,7 +193,7 @@ class MwaNotifier extends _$MwaNotifier {
       }
     }
 
-    return _deepLinksOnCompleteWrapper(onComplete);
+    return await _deepLinksOnCompleteWrapper(onComplete);
   }
 
   // try to make it compatible and more clearer for each approach (MWA v.s DEEPLINKS)

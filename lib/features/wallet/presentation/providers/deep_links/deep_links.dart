@@ -5,6 +5,7 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
+import 'package:d_reader_flutter/routing/router.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/state/environment_state.dart';
 import 'package:flutter/foundation.dart';
@@ -29,7 +30,16 @@ class _PhantomConnectResponse {
       );
 }
 
-@riverpod
+class _PhantomSignAndSendTransactionResponse {
+  final String signature;
+
+  _PhantomSignAndSendTransactionResponse(this.signature);
+
+  factory _PhantomSignAndSendTransactionResponse.fromJson(dynamic json) =>
+      _PhantomSignAndSendTransactionResponse(json['signature'] ?? '');
+}
+
+@Riverpod(keepAlive: true)
 class DeepLinksWalletNotifier extends _$DeepLinksWalletNotifier {
   late final IosWalletConnect _client;
   @override
@@ -37,7 +47,7 @@ class DeepLinksWalletNotifier extends _$DeepLinksWalletNotifier {
     _client = IosWalletConnect(
       appUrl: Config.dReaderIdentityUrl,
       deepLinkUrl: "dreader:",
-    );
+    )..init();
     return const TransactionState.initialized();
   }
 
@@ -53,13 +63,11 @@ class DeepLinksWalletNotifier extends _$DeepLinksWalletNotifier {
   */
 
   Future<bool> connect() async {
-    await _client.init();
-
     final result = await _client.connect(
       cluster: SolanaCluster.devnet.value,
     );
-    final parsed = _PhantomConnectResponse.fromJson(result);
-    final _PhantomConnectResponse(:publicKeyBase58, :session) = parsed;
+    final _PhantomConnectResponse(:publicKeyBase58, :session) =
+        _PhantomConnectResponse.fromJson(result);
     if (publicKeyBase58.isEmpty) {
       return false;
     }
@@ -115,12 +123,24 @@ class DeepLinksWalletNotifier extends _$DeepLinksWalletNotifier {
     );
   }
 
-  Future<void> signAndSendTransaction() async {
-    await _client.signAndSendTransaction(
-      transaction: Uint8List.fromList(
-        [1, 2, 3, 4, 5],
-      ),
+  Future<String> signAndSendTransaction(Uint8List transaction) async {
+    // create custom loading screen while redirecting
+    final router = ref.read(routerProvider);
+    final routerConfiguration = router.routerDelegate.currentConfiguration;
+    final currentRoute = routerConfiguration.last.matchedLocation;
+    // redirect to the current path
+    final result = await _client.signAndSendTransaction(
+      transaction: transaction,
+      redirect: currentRoute,
     );
+
+    if (result == null) {
+      return '';
+    }
+
+    final _PhantomSignAndSendTransactionResponse(:signature) =
+        _PhantomSignAndSendTransactionResponse.fromJson(result);
+    return signature;
   }
 }
 

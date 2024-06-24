@@ -2,6 +2,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/deep_links/deep_links.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
@@ -106,6 +107,18 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         : 'Wallet address ${Formatter.formatAddress(ref.read(selectedWalletProvider), 3)} is not eligible for minting';
   }
 
+// have to keep it inside MWA session.
+  AppException? _checkForMintEligibility() {
+    if (!hasEligibilityForMint(ref.read(selectedCandyMachineGroup))) {
+      return AppException(
+        identifier: 'MwaTransactionNotifier.mint',
+        message: _noEligibilityMessage(),
+        statusCode: 401,
+      );
+    }
+    return null;
+  }
+
   Future<Either<AppException, String>> mint(
     List<Uint8List> transactions,
   ) async {
@@ -124,16 +137,9 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
               ),
             );
           }
-
-          if (!hasEligibilityForMint(ref.read(selectedCandyMachineGroup))) {
-            // have to keep it inside MWA session.
-            return Left(
-              AppException(
-                identifier: 'MwaTransactionNotifier.mint',
-                message: _noEligibilityMessage(),
-                statusCode: 401,
-              ),
-            );
+          final eligiblityException = _checkForMintEligibility();
+          if (eligiblityException != null) {
+            return Left(eligiblityException);
           }
 
           final signAndSendMintResult = await _signAndSendMint(
@@ -147,17 +153,31 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
           );
         },
         deepLinksOnComplete: () async {
-          if (!hasEligibilityForMint(ref.read(selectedCandyMachineGroup))) {
-            // have to keep it inside MWA session.
+          final eligiblityException = _checkForMintEligibility();
+          if (eligiblityException != null) {
+            return Left(eligiblityException);
+          }
+          String transactionSignature = '';
+          for (var transaction in transactions) {
+            final result = await ref
+                .read(deepLinksWalletNotifierProvider.notifier)
+                .signAndSendTransaction(transaction);
+            transactionSignature = result;
+          }
+          if (transactionSignature.isEmpty) {
             return Left(
               AppException(
-                identifier: 'MwaTransactionNotifier.mint',
-                message: _noEligibilityMessage(),
-                statusCode: 401,
+                identifier: '',
+                message: failedToSignTransactionsMessage,
+                statusCode: 500,
               ),
             );
           }
-          // deepLinksWallet.signAndSendTransactions
+          ref.read(globalNotifierProvider.notifier).update(
+                isLoading: false,
+                newMessage: TransactionStatusMessage.waiting.getString(),
+              );
+          ref.read(transactionChainStatusProvider(transactionSignature));
           return const Right(successResult);
         },
       );

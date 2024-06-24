@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
-import 'package:d_reader_flutter/features/wallet/presentation/providers/deep_links/deep_links.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/providers/deep_links/wallet_deep_links_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
@@ -178,7 +178,7 @@ class MwaNotifier extends _$MwaNotifier {
   }) async {
     if (!runCompleteOnly) {
       final result =
-          await ref.read(deepLinksWalletNotifierProvider.notifier).connect();
+          await ref.read(walletDeepLinksNotifierProvider.notifier).connect();
       if (!result) {
         return Left(
           AppException(
@@ -210,7 +210,6 @@ class MwaNotifier extends _$MwaNotifier {
     final bool runCompleteOnly = !isConnectOnly && walletAddress != null;
 
     if (ref.read(isIOSProvider)) {
-      // TODO deeplink on complete
       return await _deepLinksHandling(
         runCompleteOnly: runCompleteOnly,
         onComplete: deepLinksOnComplete,

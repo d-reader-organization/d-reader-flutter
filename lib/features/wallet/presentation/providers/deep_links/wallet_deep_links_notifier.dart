@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
+import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
@@ -14,7 +16,7 @@ import 'package:ios_wallet_connect/ios_wallet_connect.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:solana/solana.dart';
 
-part 'deep_links.g.dart';
+part 'wallet_deep_links_notifier.g.dart';
 
 class _PhantomConnectResponse {
   final String publicKeyBase58;
@@ -40,8 +42,9 @@ class _PhantomSignAndSendTransactionResponse {
 }
 
 @Riverpod(keepAlive: true)
-class DeepLinksWalletNotifier extends _$DeepLinksWalletNotifier {
+class WalletDeepLinksNotifier extends _$WalletDeepLinksNotifier {
   late final IosWalletConnect _client;
+
   @override
   TransactionState build() {
     _client = IosWalletConnect(
@@ -123,24 +126,29 @@ class DeepLinksWalletNotifier extends _$DeepLinksWalletNotifier {
     );
   }
 
-  Future<String> signAndSendTransaction(Uint8List transaction) async {
-    // create custom loading screen while redirecting
+  Future<void> signAndSendTransaction(Uint8List transaction) async {
+    state = const TransactionState.processing();
     final router = ref.read(routerProvider);
     final routerConfiguration = router.routerDelegate.currentConfiguration;
     final currentRoute = routerConfiguration.last.matchedLocation;
-    // redirect to the current path
-    final result = await _client.signAndSendTransaction(
+    await _client.signAndSendTransaction(
       transaction: transaction,
-      redirect: currentRoute,
+      redirect: '/${RoutePath.transactionLoading}?from=$currentRoute',
     );
+  }
 
-    if (result == null) {
-      return '';
+  void decryptData(Map<String, String> query) {
+    if (query['data'] == null || query['nonce'] == null) {
+      return;
     }
-
+    final payload =
+        _client.decryptPayload(data: query['data']!, nonce: query['nonce']!);
     final _PhantomSignAndSendTransactionResponse(:signature) =
-        _PhantomSignAndSendTransactionResponse.fromJson(result);
-    return signature;
+        _PhantomSignAndSendTransactionResponse.fromJson(payload);
+
+    state = signature.isNotEmpty
+        ? const TransactionState.success(successResult)
+        : const TransactionState.failed('Failed to sign and send transaction');
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/features/library/presentation/providers/owned/o
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 import 'package:d_reader_flutter/features/settings/presentation/screens/security_and_privacy.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/screens/transaction_timeout.dart';
+import 'package:d_reader_flutter/features/transaction/presentation/screens/transaction_loading.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -252,6 +253,14 @@ List<GoRoute> generateHomeRoutes(ProviderRef ref) {
           path: RoutePath.transactionStatusTimeout,
           builder: (context, state) {
             return const TransactionTimeoutScreen();
+          },
+        ),
+        GoRoute(
+          path: RoutePath.transactionLoading,
+          builder: (context, state) {
+            return TransactionLoadingScreen(
+              query: state.uri.queryParameters,
+            );
           },
         ),
       ],

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
+import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
+import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/deep_links/wallet_deep_links_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
@@ -119,11 +123,55 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
     return null;
   }
 
-  Future<Either<AppException, String>> mint(
-    List<Uint8List> transactions,
-  ) async {
+  Future<TransactionApiResponse<List<String>>> _getMintTransactions(
+          String candyMachineAddress) =>
+      ref
+          .read(transactionRepositoryProvider)
+          .mintOneTransaction(
+            candyMachineAddress: candyMachineAddress,
+            minterAddress: ref.read(selectedWalletProvider),
+            label: ref.read(selectedCandyMachineGroup)!.label,
+          )
+          .then(mapApiResponse);
+
+  Future<Either<AppException, String>> mint(String candyMachineAddress) async {
     final mwaNotifier = ref.read(mwaNotifierProvider.notifier);
+
     try {
+      // split this to be more readable
+      if (ref.read(isIOSProvider)) {
+        return await mwaNotifier.deepLinksHandling(
+          runConnectOnly: ref.read(environmentProvider).publicKey == null,
+          onComplete: () async {
+            final eligiblityException = _checkForMintEligibility();
+            if (eligiblityException != null) {
+              return Left(eligiblityException);
+            }
+            final transactionsResponse =
+                await _getMintTransactions(candyMachineAddress);
+
+            return await transactionsResponse.when(
+              ok: (data) async {
+                final transactions = data.map(base64Decode).toList();
+                for (var transaction in transactions) {
+                  await ref
+                      .read(walletDeepLinksNotifierProvider.notifier)
+                      .signAndSendTransaction(transaction);
+                }
+                return const Right(successResult);
+              },
+              error: (message) => Left(
+                AppException(
+                  message: message,
+                  identifier: '',
+                  statusCode: 500,
+                ),
+              ),
+            );
+          },
+        );
+      }
+
       return await mwaNotifier.authorizeIfNeededWithOnComplete(
         onComplete: (client, session) async {
           final bool isReauthorized = await mwaNotifier.doReauthorize(client);
@@ -142,27 +190,29 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
             return Left(eligiblityException);
           }
 
-          final signAndSendMintResult = await _signAndSendMint(
-            transactions: transactions,
-            client: client,
-            session: session,
+          final transactionsResponse =
+              await _getMintTransactions(candyMachineAddress);
+
+          return await transactionsResponse.when(
+            ok: (data) async {
+              final signAndSendMintResult = await _signAndSendMint(
+                transactions: data.map(base64Decode).toList(),
+                client: client,
+                session: session,
+              );
+              return signAndSendMintResult.fold(
+                (exception) => Left(exception),
+                (result) => Right(result),
+              );
+            },
+            error: (message) => Left(
+              AppException(
+                message: message,
+                identifier: '',
+                statusCode: 500,
+              ),
+            ),
           );
-          return signAndSendMintResult.fold(
-            (exception) => Left(exception),
-            (result) => Right(result),
-          );
-        },
-        deepLinksOnComplete: () async {
-          final eligiblityException = _checkForMintEligibility();
-          if (eligiblityException != null) {
-            return Left(eligiblityException);
-          }
-          for (var transaction in transactions) {
-            await ref
-                .read(walletDeepLinksNotifierProvider.notifier)
-                .signAndSendTransaction(transaction);
-          }
-          return const Right(successResult);
         },
       );
     } catch (exception) {

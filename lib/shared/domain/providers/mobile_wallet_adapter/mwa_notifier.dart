@@ -172,25 +172,12 @@ class MwaNotifier extends _$MwaNotifier {
     }
   }
 
-  Future<Either<AppException, String>> _deepLinksHandling({
-    required bool runCompleteOnly,
+  Future<Either<AppException, String>> deepLinksHandling({
+    required bool runConnectOnly,
     Future<Either<AppException, String>> Function()? onComplete,
   }) async {
-    if (!runCompleteOnly) {
-      final result =
-          await ref.read(walletDeepLinksNotifierProvider.notifier).connect();
-      if (!result) {
-        return Left(
-          AppException(
-            identifier: '',
-            message: '',
-            statusCode: 500,
-          ),
-        );
-      }
-      if (ref.read(selectedCandyMachineGroup) != null) {
-        await _refetchCandyMachine();
-      }
+    if (runConnectOnly) {
+      await ref.read(walletDeepLinksNotifierProvider.notifier).connect();
     }
 
     return await _deepLinksOnCompleteWrapper(onComplete);
@@ -204,17 +191,9 @@ class MwaNotifier extends _$MwaNotifier {
       MobileWalletAdapterClient client,
       LocalAssociationScenario session,
     )? onComplete,
-    Future<Either<AppException, String>> Function()? deepLinksOnComplete,
   }) async {
     String? walletAddress = ref.read(environmentProvider).publicKey?.toBase58();
     final bool runCompleteOnly = !isConnectOnly && walletAddress != null;
-
-    if (ref.read(isIOSProvider)) {
-      return await _deepLinksHandling(
-        runCompleteOnly: runCompleteOnly,
-        onComplete: deepLinksOnComplete,
-      );
-    }
 
     late LocalAssociationScenario session;
     try {

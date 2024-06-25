@@ -7,6 +7,8 @@ import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_as
 import 'package:d_reader_flutter/features/settings/presentation/screens/security_and_privacy.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/screens/transaction_timeout.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/screens/transaction_loading.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/screens/connect_wallet.dart';
+import 'package:d_reader_flutter/features/wallet/presentation/screens/sign_message.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -205,10 +207,19 @@ List<GoRoute> generateHomeRoutes(ProviderRef ref) {
           },
         ),
         GoRoute(
-          path: RoutePath.iosWalletConnect,
+          path: RoutePath.connectWallet,
           builder: (context, state) {
-            final userId = '${ref.read(environmentProvider).user?.id}';
-            return MyWalletsScreen(userId: int.parse(userId));
+            return ConnectWalletScreen(
+              query: state.uri.queryParameters,
+            );
+          },
+        ),
+        GoRoute(
+          path: RoutePath.signMessage,
+          builder: (context, state) {
+            return SignMessageScreen(
+              query: state.uri.queryParameters,
+            );
           },
         ),
         GoRoute(

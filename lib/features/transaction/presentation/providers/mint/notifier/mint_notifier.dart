@@ -87,6 +87,14 @@ class MintNotifier extends _$MintNotifier {
       return;
     }
 
+    final bool isLocalWallet =
+        ref.read(localWalletNotifierProvider).value?.address ==
+            ref.read(selectedWalletProvider);
+
+    if (!isLocalWallet) {
+      return await _mwaSignAndSend(candyMachineAddress);
+    }
+
     final apiResponse = await _getMintTransactions(
       candyMachineAddress: candyMachineAddress,
       walletAddress: ref.read(selectedWalletProvider),
@@ -95,17 +103,10 @@ class MintNotifier extends _$MintNotifier {
 
     apiResponse.when(
       ok: (data) async {
-        final bool isLocalWallet =
-            ref.read(localWalletNotifierProvider).value?.address ==
-                ref.read(selectedWalletProvider);
         final transactions = data.map(base64Decode).toList();
-        if (isLocalWallet) {
-          if (_hasEligibility()) {
-            await _localWalletSignAndSend(transactions);
-          }
-          return;
+        if (_hasEligibility()) {
+          await _localWalletSignAndSend(transactions);
         }
-        await _mwaSignAndSend(transactions);
       },
       error: (message) {
         state = TransactionState.failed(message);
@@ -138,10 +139,10 @@ class MintNotifier extends _$MintNotifier {
         : const TransactionState.failed(failedToSignTransactionsMessage);
   }
 
-  Future<void> _mwaSignAndSend(List<Uint8List> transactions) async {
+  Future<void> _mwaSignAndSend(String candyMachineAddress) async {
     final response = await ref
         .read(mwaTransactionNotifierProvider.notifier)
-        .mint(transactions);
+        .mint(candyMachineAddress);
 
     response.fold(
       (exception) {

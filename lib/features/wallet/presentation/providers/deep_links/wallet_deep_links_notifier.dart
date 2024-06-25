@@ -18,27 +18,52 @@ import 'package:solana/solana.dart';
 
 part 'wallet_deep_links_notifier.g.dart';
 
-class _PhantomConnectResponse {
+/* 
+conclusion with deeplinks we cant have something like authorizeWithOnComplete wrapper because of redirect link.
+for phantom we can return result if we don't care about redirect link
+
+*/
+
+const String _walletApp = 'phantom.app'; // 'solflare.com';
+
+abstract class _RejectResponse {
+  final String errorCode, errorMessage;
+  _RejectResponse({required this.errorCode, required this.errorMessage});
+}
+
+class _ConnectResponse extends _RejectResponse {
   final String publicKeyBase58;
   final String session;
 
-  _PhantomConnectResponse(
-      {required this.publicKeyBase58, required this.session});
+  _ConnectResponse({
+    required this.publicKeyBase58,
+    required this.session,
+    required super.errorCode,
+    required super.errorMessage,
+  });
 
-  factory _PhantomConnectResponse.fromJson(dynamic json) =>
-      _PhantomConnectResponse(
+  factory _ConnectResponse.fromJson(dynamic json) => _ConnectResponse(
+        errorCode: json['errorCode'] ?? '',
+        errorMessage: json['errorMessage'] ?? '',
         publicKeyBase58: json['public_key'] ?? '',
         session: json['session'] ?? '',
       );
 }
 
-class _PhantomSignAndSendTransactionResponse {
+class _SignResponse extends _RejectResponse {
   final String signature;
 
-  _PhantomSignAndSendTransactionResponse(this.signature);
+  _SignResponse({
+    required super.errorCode,
+    required super.errorMessage,
+    required this.signature,
+  });
 
-  factory _PhantomSignAndSendTransactionResponse.fromJson(dynamic json) =>
-      _PhantomSignAndSendTransactionResponse(json['signature'] ?? '');
+  factory _SignResponse.fromJson(dynamic json) => _SignResponse(
+        errorCode: json['errorCode'] ?? '',
+        errorMessage: json['errorMessage'] ?? '',
+        signature: json['signature'] ?? '',
+      );
 }
 
 @Riverpod(keepAlive: true)
@@ -54,25 +79,29 @@ class WalletDeepLinksNotifier extends _$WalletDeepLinksNotifier {
     return const TransactionState.initialized();
   }
 
-  /* 
-  PHANTOM RESPONSE
-  {
-    phantom_encryption_public_key: 5qXTovVr6T4NCm76kWQZ95cYSVERkD8GYo97GX2aGUhX, 
-    nonce: Bn3ZaETtp68T4eLwpYvzCxWG75uPAVvst, 
-    data: XXDeapCvpHVE2URqdoQRdAp4AKk7Gtpj3D1ZjEPCpBdx66cabuUTiZiF3kYznDjXDfvPSzHo9p5AXFvC6uzwpM7kbgLSH3ET9EVuGwpy2mMmyUGB7WXU8Ygz599jEdLrTR9byH8oWyiE1iLZQoAhpqvv5HhxPVBPB1DocKjc1mJuHyrTYaDFwsFVAJMpJCpQ9VtLyxRvzGi8CB8z8BAqgPbF22qTsCbqBHHkpErpu4S6aJRngcTHDAyr62nfS6zXw4rRVGGtxAsUWgnU55p2ka4SVGz4Ft4gGDQJzyew1Zoby4AWNiXro8ate1VhXdVo6JN1gTR32rzaeV4H4dNropaB5fXQv4Pk9sd2cvMmVDJZ546HdGNsMGFwu7VgMu6GySvkjNzZLNxBGLDA2E4jVU78nniugTyBgP,
-    public_key: GWv6912hs3cvS39pZAXHAR9QExGkDNMVHujz8PWfcH8N, 
-    session: FvMNysU59EkpqfGJQBXJf7v7BgKSwwDYTVAddvXw8aZXF5FTAbMPwnnagYatrpwjFKjt2GTPqQi7NUtUmmPAmVe3yJLiFh55H8XCcUeYLDXoHAjJM1B1hUKZHwBC7cZ4LwtvqSJjRms19LUK8a1qASXgJPskmMuruG8KWKk9MzhACCmzQYo9XRYH6Ljd5uGRkvmEpZM2YcpoBf5GTj5pQaL4
-  }
-  */
-
-  Future<bool> connect() async {
-    final result = await _client.connect(
+  Future<void> connect() {
+    return _client.connect(
       cluster: SolanaCluster.devnet.value,
+      wallet: _walletApp,
+      redirect:
+          '/${RoutePath.connectWallet}?from=${_currentRoute()}', // /comic-issue/:id
     );
-    final _PhantomConnectResponse(:publicKeyBase58, :session) =
-        _PhantomConnectResponse.fromJson(result);
+  }
+
+  Future<void> afterConnect(Map<String, String> query) async {
+    final data =
+        _client.decryptPayload(data: query['data']!, nonce: query['nonce']!);
+    final _ConnectResponse(:errorMessage, :publicKeyBase58, :session) =
+        _ConnectResponse.fromJson(data);
+
+    if (errorMessage.isNotEmpty) {
+      state = TransactionState.failed(errorMessage);
+      return;
+    }
+
     if (publicKeyBase58.isEmpty) {
-      return false;
+      state = const TransactionState.failed('Failed to get wallet address');
+      return;
     }
 
     ref.read(environmentProvider.notifier).updateEnvironmentState(
@@ -85,33 +114,42 @@ class WalletDeepLinksNotifier extends _$WalletDeepLinksNotifier {
             },
           ),
         );
+
+    final isExistingWallet = await _isExistingWallet(publicKeyBase58);
+    if (isExistingWallet) {
+      state = const TransactionState.success(successResult);
+      return;
+    }
+
+    await _signMessage(publicKeyBase58, query['from']);
+  }
+
+  Future<bool> _isExistingWallet(String address) async {
     final wallets = await ref.read(
       userWalletsProvider(id: ref.read(environmentProvider).user?.id).future,
     );
-    final isExistingWallet = wallets.firstWhereOrNull(
-            (element) => element.address == publicKeyBase58) !=
+    return wallets.firstWhereOrNull((element) => element.address == address) !=
         null;
-    if (isExistingWallet) {
-      return true;
-    }
-    await _signMessage(publicKeyBase58);
-
-    // emit state Wallet connected or something like that
-    return true;
   }
 
-  Future<void> _signMessage(String address) async {
+  Future<void> _signMessage(String address, String? from) async {
     final String oneTimePassword = await _getOtp(address);
-    final signMessageResult = await _client.signMessage(
+    await _client.signMessage(
       message: utf8.encode(oneTimePassword),
+      wallet: _walletApp,
+      redirect: '/${RoutePath.signMessage}?from=${from ?? _currentRoute()}',
     );
-    final String signedMessage = signMessageResult?['signature'] ?? '';
+  }
+
+  Future<void> afterSignMessage(Map<String, String> query) async {
+    final String signedMessage = _getSignature(query);
     await ref.read(authRepositoryProvider).connectWallet(
-          address: address,
+          address: ref.read(environmentProvider).publicKey?.toBase58() ?? '',
           encoding: signedMessage,
         );
 
     ref.invalidate(userWalletsProvider);
+    state = const TransactionState.success(successResult);
   }
 
   Future _getOtp(String address) async {
@@ -128,27 +166,41 @@ class WalletDeepLinksNotifier extends _$WalletDeepLinksNotifier {
 
   Future<void> signAndSendTransaction(Uint8List transaction) async {
     state = const TransactionState.processing();
-    final router = ref.read(routerProvider);
-    final routerConfiguration = router.routerDelegate.currentConfiguration;
-    final currentRoute = routerConfiguration.last.matchedLocation;
     await _client.signAndSendTransaction(
+      redirect: '/${RoutePath.transactionLoading}?from=${_currentRoute()}',
       transaction: transaction,
-      redirect: '/${RoutePath.transactionLoading}?from=$currentRoute',
+      wallet: _walletApp,
     );
+  }
+
+  String _getSignature(Map<String, String> query) {
+    final payload =
+        _client.decryptPayload(data: query['data']!, nonce: query['nonce']!);
+    final _SignResponse(:errorMessage, :signature) =
+        _SignResponse.fromJson(payload);
+
+    if (errorMessage.isNotEmpty) {
+      state = TransactionState.failed(errorMessage);
+      return '';
+    }
+    return signature;
   }
 
   void decryptData(Map<String, String> query) {
     if (query['data'] == null || query['nonce'] == null) {
       return;
     }
-    final payload =
-        _client.decryptPayload(data: query['data']!, nonce: query['nonce']!);
-    final _PhantomSignAndSendTransactionResponse(:signature) =
-        _PhantomSignAndSendTransactionResponse.fromJson(payload);
+    final String signature = _getSignature(query);
 
     state = signature.isNotEmpty
         ? const TransactionState.success(successResult)
-        : const TransactionState.failed('Failed to sign and send transaction');
+        : const TransactionState.failed('Failed to sign and send');
+  }
+
+  String _currentRoute() {
+    final router = ref.read(routerProvider);
+    final routerConfiguration = router.routerDelegate.currentConfiguration;
+    return routerConfiguration.last.matchedLocation;
   }
 }
 

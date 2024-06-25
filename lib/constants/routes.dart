@@ -28,7 +28,8 @@ class RoutePath {
   static const whatIsAWallet = 'what-is-wallet';
   static const securityAndPrivacy = 'security-and-privacy';
   static const transactionStatusTimeout = 'status-timeout';
-  static const iosWalletConnect = 'iosWalletConnect';
+  static const connectWallet = 'connect-wallet';
+  static const signMessage = 'sign-message';
   static const transactionLoading = 'transaction-loading';
 
   static const doneMinting = 'animation/done-minting';

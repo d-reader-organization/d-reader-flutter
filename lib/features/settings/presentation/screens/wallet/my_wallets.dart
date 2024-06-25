@@ -21,6 +21,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+const _addConnectWallet = 'Add / Connect Wallet';
+const _installWallet = 'Install wallet';
+
 class MyWalletsScreen extends ConsumerWidget {
   final int userId;
   const MyWalletsScreen({
@@ -362,10 +365,10 @@ class MyWalletsScreen extends ConsumerWidget {
                   child: Text(
                     ref.watch(isWalletAvailableProvider).maybeWhen(
                       data: (data) {
-                        return data ? 'Add / Connect Wallet' : 'Install wallet';
+                        return data ? _addConnectWallet : _installWallet;
                       },
                       orElse: () {
-                        return '';
+                        return _addConnectWallet;
                       },
                     ),
                     style: const TextStyle(

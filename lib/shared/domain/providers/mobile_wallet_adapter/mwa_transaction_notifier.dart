@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
+import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
+import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
@@ -106,9 +110,18 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         : 'Wallet address ${Formatter.formatAddress(ref.read(selectedWalletProvider), 3)} is not eligible for minting';
   }
 
-  Future<Either<AppException, String>> mint(
-    List<Uint8List> transactions,
-  ) async {
+  Future<TransactionApiResponse<List<String>>> _getMintTransactions(
+          String candyMachineAddress) =>
+      ref
+          .read(transactionRepositoryProvider)
+          .mintOneTransaction(
+            candyMachineAddress: candyMachineAddress,
+            minterAddress: ref.read(selectedWalletProvider),
+            label: ref.read(selectedCandyMachineGroup)!.label,
+          )
+          .then(mapApiResponse);
+
+  Future<Either<AppException, String>> mint(String candyMachineAddress) async {
     final mwaNotifier = ref.read(mwaNotifierProvider.notifier);
     try {
       return await mwaNotifier.authorizeIfNeededWithOnComplete(
@@ -136,14 +149,28 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
             );
           }
 
-          final signAndSendMintResult = await _signAndSendMint(
-            transactions: transactions,
-            client: client,
-            session: session,
-          );
-          return signAndSendMintResult.fold(
-            (exception) => Left(exception),
-            (result) => Right(result),
+          final transactionsResponse =
+              await _getMintTransactions(candyMachineAddress);
+
+          return transactionsResponse.when(
+            ok: (data) async {
+              final signAndSendMintResult = await _signAndSendMint(
+                transactions: data.map(base64Decode).toList(),
+                client: client,
+                session: session,
+              );
+              return signAndSendMintResult.fold(
+                (exception) => Left(exception),
+                (result) => Right(result),
+              );
+            },
+            error: (message) => Left(
+              AppException(
+                message: message,
+                identifier: '',
+                statusCode: 500,
+              ),
+            ),
           );
         },
       );

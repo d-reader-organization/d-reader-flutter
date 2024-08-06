@@ -56,7 +56,6 @@ final comicIssuesProvider =
         .getComicIssues(queryString: queryString);
 
     return response.fold((exception) {
-      // TODO think about this
       return [];
     }, (result) => result);
   },

@@ -27,10 +27,14 @@ final comicsProvider = FutureProvider.family<List<ComicModel>, String?>(
     return ref
         .read(comicRepositoryProvider)
         .getComics(queryString: queryString)
-        .then((result) => result.fold((exception) {
-              // TODO think about
+        .then(
+          (result) => result.fold(
+            (exception) {
               return [];
-            }, (data) => data));
+            },
+            (data) => data,
+          ),
+        );
   },
 );
 

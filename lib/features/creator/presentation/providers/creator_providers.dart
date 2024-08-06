@@ -13,7 +13,6 @@ final creatorsProvider = FutureProvider.autoDispose
 
   return response.fold(
     (exception) {
-      // TODO think about this
       return [];
     },
     (result) => result,

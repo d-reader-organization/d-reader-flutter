@@ -11,7 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-const double previewImageHeight = 290;
+const double previewImageHeight = 320;
 
 class PreviewImage extends StatelessWidget {
   final bool canRead, isFullyUploaded;

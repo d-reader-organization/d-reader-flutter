@@ -259,12 +259,19 @@ class _EReaderViewState extends ConsumerState<EReaderView>
                             children: [
                               for (int row = 0; row < totalPagesCount; ++row)
                                 row == pages.length
-                                    ? PreviewImage(
-                                        canRead: canRead,
-                                        isFullyUploaded: isFullyUploaded,
-                                        issueId: widget.issueId,
-                                        issueNumber:
-                                            issueProvider.value!.number,
+                                    ? Container(
+                                        padding: const EdgeInsets.all(12),
+                                        width: constraints.maxWidth,
+                                        margin: pages.isEmpty
+                                            ? const EdgeInsets.only(top: 48)
+                                            : null,
+                                        child: PreviewImage(
+                                          canRead: canRead,
+                                          isFullyUploaded: isFullyUploaded,
+                                          issueId: widget.issueId,
+                                          issueNumber:
+                                              issueProvider.value!.number,
+                                        ),
                                       )
                                     : _isCellVisible(
                                         row,

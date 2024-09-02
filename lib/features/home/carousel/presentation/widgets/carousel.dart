@@ -69,25 +69,29 @@ class Carousel extends ConsumerWidget {
                           ),
                           Positioned.fill(
                             bottom: 20,
-                            left: 16,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  carouselItem.title,
-                                  textAlign: TextAlign.center,
-                                  style: textTheme.headlineLarge,
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  carouselItem.subtitle,
-                                  textAlign: TextAlign.center,
-                                  style: textTheme.bodySmall,
-                                ),
-                              ],
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    carouselItem.title,
+                                    textAlign: TextAlign.center,
+                                    style: textTheme.headlineLarge,
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    carouselItem.subtitle,
+                                    textAlign: TextAlign.center,
+                                    style: textTheme.bodySmall,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

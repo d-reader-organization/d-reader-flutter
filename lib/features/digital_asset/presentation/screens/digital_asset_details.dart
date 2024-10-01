@@ -6,6 +6,7 @@ import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/utils.dart';
+import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/widgets/digital_asset_card.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/unwrap_button.dart';
@@ -237,16 +238,15 @@ class DigitalAssetDetails extends ConsumerWidget {
                                     ClipboardData(
                                       text: digitalAsset.ownerAddress,
                                     ),
-                                  ).then(
-                                    (value) => ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Owner address copied to clipboard",
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                                  ).then((value) {
+                                    if (context.mounted) {
+                                      showSnackBar(
+                                        context: context,
+                                        text:
+                                            "Owner address copied to clipboard",
+                                      );
+                                    }
+                                  });
                                 },
                               ),
                             ],
@@ -282,16 +282,15 @@ class DigitalAssetDetails extends ConsumerWidget {
                                     ClipboardData(
                                       text: digitalAsset.address,
                                     ),
-                                  ).then(
-                                    (value) => ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Token address copied to clipboard",
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                                  ).then((value) {
+                                    if (context.mounted) {
+                                      showSnackBar(
+                                        context: context,
+                                        text:
+                                            "Token address copied to clipboard",
+                                      );
+                                    }
+                                  });
                                 },
                               ),
                             ],

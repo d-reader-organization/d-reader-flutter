@@ -27,17 +27,19 @@ triggerWalkthroughDialogIfNeeded({
     return Future.delayed(
       Duration(milliseconds: durationInMiliseconds),
       () {
-        return triggerWalkthroughDialog(
-          context: context,
-          title: title,
-          subtitle: subtitle,
-          assetPath: assetPath,
-          bottomWidget: bottomWidget,
-          onSubmit: () {
-            localStore.put(key, true);
-            onSubmit();
-          },
-        );
+        if (context.mounted) {
+          return triggerWalkthroughDialog(
+            context: context,
+            title: title,
+            subtitle: subtitle,
+            assetPath: assetPath,
+            bottomWidget: bottomWidget,
+            onSubmit: () {
+              localStore.put(key, true);
+              onSubmit();
+            },
+          );
+        }
       },
     );
   }

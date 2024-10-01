@@ -171,12 +171,14 @@ class MyWalletsScreen extends ConsumerWidget {
                                 )
                                 .then((value) {
                               if (value) {
-                                showSnackBar(
-                                  context: context,
-                                  milisecondsDuration: 1800,
-                                  text:
-                                      'Wallet with ${Formatter.formatAddress(wallet.address, 4)} is selected as active',
-                                );
+                                if (context.mounted) {
+                                  showSnackBar(
+                                    context: context,
+                                    milisecondsDuration: 1800,
+                                    text:
+                                        'Wallet with ${Formatter.formatAddress(wallet.address, 4)} is selected as active',
+                                  );
+                                }
                               }
                             });
                           },

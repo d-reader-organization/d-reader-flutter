@@ -135,7 +135,11 @@ class SubmitButton extends ConsumerWidget {
                     sellerAddress: digitalAsset.ownerAddress,
                     price: price!,
                   )
-                  .then((value) => context.pop());
+                  .then((value) {
+                if (context.mounted) {
+                  context.pop();
+                }
+              });
             }
           : null,
       size: const Size(double.infinity, 50),

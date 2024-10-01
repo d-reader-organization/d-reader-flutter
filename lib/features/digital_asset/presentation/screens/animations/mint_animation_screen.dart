@@ -58,12 +58,14 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
               await Future.delayed(
                 const Duration(milliseconds: 1000),
                 () {
-                  nextScreenReplace(
-                    context: context,
-                    path: RoutePath.doneMinting,
-                    homeSubRoute: true,
-                    extra: digitalAsset,
-                  );
+                  if (mounted) {
+                    nextScreenReplace(
+                      context: context,
+                      path: RoutePath.doneMinting,
+                      homeSubRoute: true,
+                      extra: digitalAsset,
+                    );
+                  }
                 },
               );
             },

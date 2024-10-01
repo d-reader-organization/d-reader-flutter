@@ -17,9 +17,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  solana: ^0.30.4
+  solana: ^0.31.0
   solana_mobile_client: ^0.1.1
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   skeleton_text: ^3.0.0
   font_awesome_flutter: ^10.4.0
   flutter_svg: ^2.0.10
@@ -41,12 +41,11 @@ dependencies:
   device_info_plus: ^10.1.0
   video_player: ^2.7.0
   expandable_text: 2.3.0
-  email_validator: ^2.1.17
+  email_validator: ^3.0.0
   power: ^0.5.0
-  collection: ^1.17.2
-  upgrader: ^10.1.0
-  firebase_messaging: ^14.7.10
-  firebase_core: ^2.24.2
+  upgrader: ^11.2.0
+  firebase_messaging: ^15.1.3
+  firebase_core: ^3.6.0
   flutter_local_notifications: ^17.0.0
   go_router: ^14.1.1
   google_sign_in: ^6.2.1
@@ -64,8 +63,8 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.1
   build_runner: ^2.4.8
   freezed: ^2.4.7
   logger: ^2.0.1

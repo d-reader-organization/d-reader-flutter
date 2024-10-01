@@ -196,20 +196,22 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                     final storage = ref.read(secureStorageProvider);
                     storage.read(key: Config.mnemonicKey).then(
                       (value) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            contentPadding: const EdgeInsets.all(8),
-                            backgroundColor: ColorPalette.greyscale400,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              contentPadding: const EdgeInsets.all(8),
+                              backgroundColor: ColorPalette.greyscale400,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              content: Text(
+                                value ?? '',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
                             ),
-                            content: Text(
-                              value ?? '',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ),
-                        );
+                          );
+                        }
                       },
                     );
                   },
@@ -246,10 +248,12 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                   ),
                 ).then(
                   (value) {
-                    showSnackBar(
-                      context: context,
-                      text: "Wallet address copied to clipboard",
-                    );
+                    if (context.mounted) {
+                      showSnackBar(
+                        context: context,
+                        text: "Wallet address copied to clipboard",
+                      );
+                    }
                   },
                 );
               },

@@ -59,7 +59,9 @@ class _ChangePasswordViewState extends ConsumerState<ChangePasswordView> {
               Future.delayed(
                 const Duration(seconds: 1),
                 () {
-                  context.pop();
+                  if (mounted) {
+                    context.pop();
+                  }
                 },
               );
             }

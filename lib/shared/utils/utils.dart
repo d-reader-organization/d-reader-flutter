@@ -1,9 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
 import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
+import 'package:d_reader_flutter/shared/utils/extensions.dart';
 import 'package:solana/solana.dart';
 
 Future<String?> requestAirdrop(String publicKey) async {

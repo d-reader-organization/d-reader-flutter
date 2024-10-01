@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
-import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_coupon.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/notifiers/candy_machine_notifier.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/tabs/about/group_with_currency.dart';
 import 'package:d_reader_flutter/features/settings/presentation/providers/spl_tokens.dart';
@@ -20,12 +21,12 @@ String _myMintSupplyText({required int itemsMinted, int? supply}) {
   return 'You minted: $itemsMinted/${supply ?? '∞'}';
 }
 
-(bool, bool) getMintStatuses(CandyMachineGroupModel candyMachineGroup) {
-  bool isActive = candyMachineGroup.startDate == null ||
-      candyMachineGroup.startDate!
+(bool, bool) getMintStatuses(CandyMachineCoupon candyMachineCoupon) {
+  bool isActive = candyMachineCoupon.startsAt == null ||
+      candyMachineCoupon.startsAt!
           .isBefore(DateTime.now().add(const Duration(seconds: 1)));
-  bool isEnded = candyMachineGroup.endDate != null &&
-      candyMachineGroup.endDate!.isBefore(DateTime.now());
+  bool isEnded = candyMachineCoupon.expiresAt != null &&
+      candyMachineCoupon.expiresAt!.isBefore(DateTime.now());
 
   return (isActive, isEnded);
 }
@@ -39,11 +40,11 @@ bool _shouldInitTicker(DateTime mintStartDate) {
 }
 
 class MintInfoContainer extends ConsumerStatefulWidget {
-  final List<CandyMachineGroupModel> candyMachineGroups;
+  final List<CandyMachineCoupon> candyMachineCoupons;
   final int totalSupply;
   const MintInfoContainer({
     super.key,
-    required this.candyMachineGroups,
+    required this.candyMachineCoupons,
     required this.totalSupply,
   });
 
@@ -59,9 +60,10 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
   @override
   void initState() {
     super.initState();
-    final candyMachineGroup = ref.read(selectedCandyMachineGroup);
-    if (candyMachineGroup?.startDate != null &&
-        _shouldInitTicker(candyMachineGroup!.startDate!)) {
+    final candyMachineCoupon =
+        ref.read(candyMachineNotifierProvider).selectedCoupon;
+    if (candyMachineCoupon?.startsAt != null &&
+        _shouldInitTicker(candyMachineCoupon!.startsAt!)) {
       _initTicker();
     }
   }
@@ -69,7 +71,8 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
   void _initTicker() {
     _ticker = createTicker(
       (elapsed) {
-        final candyMachineGroup = ref.read(selectedCandyMachineGroup)!;
+        final candyMachineGroup =
+            ref.read(candyMachineNotifierProvider).selectedCoupon!;
         final (isActive, isEnded) = getMintStatuses(candyMachineGroup);
 
         ref.read(mintStatusesProvider.notifier).update(
@@ -77,7 +80,7 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
             );
         ref.read(timeUntilMintStarts.notifier).update(
               (state) =>
-                  Formatter.formatDateInRelative(candyMachineGroup.startDate),
+                  Formatter.formatDateInRelative(candyMachineGroup.startsAt),
             );
         if (isActive) {
           _ticker?.stop();
@@ -95,16 +98,19 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
 
   @override
   Widget build(BuildContext context) {
-    final candyMachineGroup = ref.watch(selectedCandyMachineGroup);
-    if (candyMachineGroup == null) {
+    final selectedCandyMachineCoupon =
+        ref.watch(candyMachineNotifierProvider).selectedCoupon;
+    if (selectedCandyMachineCoupon == null) {
       return const SizedBox();
     }
     final candyMachineState = ref.watch(candyMachineStateProvider);
     final splTokens = ref.watch(splTokensProvider);
-    final displayDropdown = widget.candyMachineGroups.length > 1 &&
+    final displayDropdown = widget.candyMachineCoupons.length > 1 &&
         splTokens.value != null &&
         splTokens.value!.isNotEmpty;
     final bool isMintActive = ref.watch(mintStatusesProvider).$1;
+    final mintPrice =
+        ref.watch(candyMachineNotifierProvider.notifier).getMintPrice();
     return _DecoratedContainer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,19 +125,22 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
                     collapsedIconColor: Colors.white,
                     childrenPadding: EdgeInsets.zero,
                     title: _HeadingRow(
-                      candyMachineGroup: candyMachineGroup,
+                      candyMachineCoupon: selectedCandyMachineCoupon,
                       suffix: const MintPriceWidget(),
                     ),
-                    children: widget.candyMachineGroups.map((group) {
+                    children: widget.candyMachineCoupons.map((coupon) {
+                      final selectedCurrency = ref
+                          .read(candyMachineNotifierProvider)
+                          .selectedCurrency;
                       final splToken = splTokens.value?.firstWhere((element) =>
-                          element.address == group.splTokenAddress);
+                          element.address == selectedCurrency?.splTokenAddress);
                       if (splToken == null) {
                         return const SizedBox();
                       }
-                      return GroupWithCurrencyRow(
+                      return CouponWithCurrencyRow(
                         splToken: splToken,
-                        mintPrice: group.mintPrice,
-                        groups: widget.candyMachineGroups,
+                        mintPrice: mintPrice,
+                        coupons: widget.candyMachineCoupons,
                       );
                     }).toList(),
                   ),
@@ -139,11 +148,11 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
               : Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: _HeadingRow(
-                    candyMachineGroup: candyMachineGroup,
+                    candyMachineCoupon: selectedCandyMachineCoupon,
                     suffix: SolanaPrice(
-                      price: candyMachineGroup.mintPrice > 0
+                      price: mintPrice > 0
                           ? Formatter.formatPriceByCurrency(
-                              mintPrice: candyMachineGroup.mintPrice,
+                              mintPrice: mintPrice,
                               splToken: ref.watch(activeSplToken),
                             )
                           : null,
@@ -169,7 +178,7 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
           ],
           _MintStatus(
             candyMachine: candyMachineState,
-            candyMachineGroup: candyMachineGroup,
+            candyMachineCoupon: selectedCandyMachineCoupon,
           ),
           const SizedBox(
             height: 16,
@@ -182,10 +191,10 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
 }
 
 class _HeadingRow extends ConsumerWidget {
-  final CandyMachineGroupModel candyMachineGroup;
+  final CandyMachineCoupon candyMachineCoupon;
   final Widget suffix;
   const _HeadingRow({
-    required this.candyMachineGroup,
+    required this.candyMachineCoupon,
     required this.suffix,
   });
 
@@ -243,10 +252,10 @@ class _HeadingRow extends ConsumerWidget {
 
 class _MintStatus extends StatelessWidget {
   final CandyMachineModel? candyMachine;
-  final CandyMachineGroupModel candyMachineGroup;
+  final CandyMachineCoupon candyMachineCoupon;
   const _MintStatus({
     required this.candyMachine,
-    required this.candyMachineGroup,
+    required this.candyMachineCoupon,
   });
 
   @override
@@ -258,11 +267,8 @@ class _MintStatus extends StatelessWidget {
       children: [
         Text(
           _myMintSupplyText(
-            itemsMinted: candyMachineGroup.user?.itemsMinted ??
-                candyMachineGroup.wallet?.itemsMinted ??
-                0,
-            supply: candyMachineGroup.user?.supply ??
-                candyMachineGroup.wallet?.supply,
+            itemsMinted: candyMachineCoupon.stats.itemsMinted,
+            supply: candyMachineCoupon.numberOfRedemptions,
           ),
           style: textTheme.bodySmall?.copyWith(
             color: ColorPalette.greyscale100,

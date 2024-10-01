@@ -6,7 +6,7 @@ part of 'candy_machine_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$candyMachineHash() => r'e4d5dd23ef8e66c169facf8a85e505e5f9b6b253';
+String _$candyMachineHash() => r'39bbd926fb4ad452bb3d2fc6952253e15fe94527';
 
 /// Copied from Dart SDK
 class _SystemHash {

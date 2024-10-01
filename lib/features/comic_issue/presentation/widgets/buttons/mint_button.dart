@@ -1,5 +1,6 @@
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/notifiers/candy_machine_notifier.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/buttons/transaction_button.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/mint/notifier/mint_notifier.dart';
@@ -116,9 +117,9 @@ class _MintButton extends ConsumerWidget {
                   .mint(activeCandyMachineAddress);
             },
       text: _buttonText,
-      price: ref.watch(selectedCandyMachineGroup)?.mintPrice ?? 0,
+      price: ref.watch(candyMachineNotifierProvider.notifier).getMintPrice(),
       isMultiGroup:
-          (ref.watch(candyMachineStateProvider)?.groups.length ?? 0) > 1,
+          (ref.watch(candyMachineStateProvider)?.coupons.length ?? 0) > 1,
     );
   }
 }

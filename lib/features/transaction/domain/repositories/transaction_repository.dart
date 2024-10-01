@@ -2,7 +2,9 @@ import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 abstract class TransactionRepository {
-  Future<Either<AppException, List<String>>> mintOneTransaction({
+  Future<Either<AppException, List<String>>> mintTransaction({
+    required int couponId,
+    required int numberOfItems,
     required String candyMachineAddress,
     required String minterAddress,
     String? label,
@@ -20,5 +22,10 @@ abstract class TransactionRepository {
       Map<String, dynamic> query);
   Future<Either<AppException, String>> cancelListingTransaction({
     required String digitalAssetAddress,
+  });
+
+  Future<Either<AppException, String>> sendMintTransaction({
+    required String walletAddress,
+    required List<String> transactions,
   });
 }

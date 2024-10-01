@@ -45,7 +45,7 @@ class IssueAbout extends ConsumerWidget {
                       currentCandyMachine.address ==
                           issue.activeCandyMachineAddress) {
                     return MintInfoContainer(
-                      candyMachineGroups: currentCandyMachine.groups,
+                      candyMachineCoupons: currentCandyMachine.coupons,
                       totalSupply: currentCandyMachine.supply,
                     );
                   }
@@ -55,7 +55,7 @@ class IssueAbout extends ConsumerWidget {
                   return const SizedBox();
                 }
                 return MintInfoContainer(
-                  candyMachineGroups: snapshot.data?.groups ?? [],
+                  candyMachineCoupons: snapshot.data?.coupons ?? [],
                   totalSupply: snapshot.data?.supply ?? 0,
                 );
               },

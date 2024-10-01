@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
-import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_coupon.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/notifiers/candy_machine_notifier.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
+import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/models/either.dart';
@@ -14,7 +15,6 @@ import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/m
 import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/presentations/providers/global/global_notifier.dart';
-import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -24,20 +24,17 @@ import 'package:solana_mobile_client/solana_mobile_client.dart';
 
 part 'mwa_transaction_notifier.g.dart';
 
-bool hasEligibilityForMint(CandyMachineGroupModel? group) {
-  if (group == null) {
-    return false;
-  }
-  if (group.user != null) {
-    return group.user!.isEligible;
-  }
-  return group.wallet != null && group.wallet!.isEligible;
+bool hasEligibilityForMint(CandyMachineCoupon? coupon) {
+  return coupon != null && coupon.stats.isEligible;
 }
 
 @riverpod
 class MwaTransactionNotifier extends _$MwaTransactionNotifier {
+  late final TransactionRepository _transactionRepository;
   @override
-  void build() {}
+  void build() {
+    _transactionRepository = ref.read(transactionRepositoryProvider);
+  }
 
   Future<Either<AppException, String>> _signAndSendMint({
     required List<Uint8List> transactions,
@@ -57,24 +54,24 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
           ),
         );
       }
-      final solanaClient = ref.read(solanaClientProvider);
-      String sendTransactionResult = '';
-      for (final signedPayload in response.signedPayloads) {
-        final signedTx = SignedTx.fromBytes(
-          signedPayload.toList(),
-        );
-        sendTransactionResult = await solanaClient.rpcClient.sendTransaction(
-          signedTx.encode(),
-          skipPreflight: true,
-        );
-      }
-      ref.read(globalNotifierProvider.notifier).update(
-          isLoading: false,
-          newMessage: TransactionStatusMessage.waiting.getString());
+      final encodedTransactions = response.signedPayloads
+          .map((signedPayload) => SignedTx.fromBytes(signedPayload.toList()))
+          .map((item) => item.encode())
+          .toList();
 
-      ref.read(transactionChainStatusProvider(sendTransactionResult));
-      await session.close();
-      return const Right(successResult);
+      final walletAddress =
+          ref.read(environmentProvider).publicKey?.toBase58() ?? '';
+      final result = await _transactionRepository.sendMintTransaction(
+        walletAddress: walletAddress,
+        transactions: encodedTransactions,
+      );
+      return result.fold(
+        (exception) => Left(exception),
+        (data) async {
+          await session.close();
+          return const Right(successResult);
+        },
+      );
     } catch (exception) {
       await session.close();
       Sentry.captureException(
@@ -104,22 +101,23 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
   }
 
   String _noEligibilityMessage() {
-    final isUser = ref.read(selectedCandyMachineGroup)?.user != null;
-    return isUser
-        ? 'User ${ref.read(environmentProvider).user?.email} is not eligible for minting'
-        : 'Wallet address ${Formatter.formatAddress(ref.read(selectedWalletProvider), 3)} is not eligible for minting';
+    return 'User ${ref.read(environmentProvider).user?.email} is not eligible for minting';
   }
 
   Future<TransactionApiResponse<List<String>>> _getMintTransactions(
-          String candyMachineAddress) =>
-      ref
-          .read(transactionRepositoryProvider)
-          .mintOneTransaction(
-            candyMachineAddress: candyMachineAddress,
-            minterAddress: ref.read(selectedWalletProvider),
-            label: ref.read(selectedCandyMachineGroup)!.label,
-          )
-          .then(mapApiResponse);
+      String candyMachineAddress) async {
+    final data = ref.read(candyMachineNotifierProvider);
+    return ref
+        .read(transactionRepositoryProvider)
+        .mintTransaction(
+          couponId: data.selectedCoupon?.id ?? 1,
+          numberOfItems: data.numberOfItems,
+          candyMachineAddress: candyMachineAddress,
+          minterAddress: ref.read(selectedWalletProvider),
+          label: data.selectedCurrency?.label,
+        )
+        .then(mapApiResponse);
+  }
 
   Future<Either<AppException, String>> mint(String candyMachineAddress) async {
     final mwaNotifier = ref.read(mwaNotifierProvider.notifier);
@@ -138,7 +136,8 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
             );
           }
 
-          if (!hasEligibilityForMint(ref.read(selectedCandyMachineGroup))) {
+          if (!hasEligibilityForMint(
+              ref.read(candyMachineNotifierProvider).selectedCoupon)) {
             // have to keep it inside MWA session.
             return Left(
               AppException(

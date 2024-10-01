@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/authentication/domain/providers/auth_provider.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/notifiers/candy_machine_notifier.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/domain/models/wallet.dart';
@@ -211,7 +212,7 @@ class MwaNotifier extends _$MwaNotifier {
     );
 
     // Invalidate candy machine to refetch eligibility
-    if (ref.read(selectedCandyMachineGroup) != null) {
+    if (ref.read(candyMachineNotifierProvider).selectedCoupon != null) {
       final signerAddress = ref.read(environmentProvider).publicKey?.toBase58();
       final currentCMAddress = ref.read(candyMachineStateProvider)?.address;
       ref.invalidate(candyMachineProvider);

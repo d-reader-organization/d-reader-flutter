@@ -7,7 +7,7 @@ part of 'mwa_transaction_notifier.dart';
 // **************************************************************************
 
 String _$mwaTransactionNotifierHash() =>
-    r'b9a5d2d50eb61ee40b74bbda4fc03685f555daed';
+    r'ff70b48ece258f60cbf65d4da3c49986718c1595';
 
 /// See also [MwaTransactionNotifier].
 @ProviderFor(MwaTransactionNotifier)

@@ -96,6 +96,9 @@ class _$TransactionStateCopyWithImpl<$Res, $Val extends TransactionState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -115,6 +118,8 @@ class __$$FailedImplCopyWithImpl<$Res>
       _$FailedImpl _value, $Res Function(_$FailedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -153,7 +158,9 @@ class _$FailedImpl implements _Failed {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FailedImplCopyWith<_$FailedImpl> get copyWith =>
@@ -250,7 +257,10 @@ abstract class _Failed implements TransactionState {
   const factory _Failed(final String message) = _$FailedImpl;
 
   String get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FailedImplCopyWith<_$FailedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -272,6 +282,8 @@ class __$$FailedWithExceptionImplCopyWithImpl<$Res>
       $Res Function(_$FailedWithExceptionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -311,7 +323,9 @@ class _$FailedWithExceptionImpl implements _FailedWithException {
   @override
   int get hashCode => Object.hash(runtimeType, exception);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FailedWithExceptionImplCopyWith<_$FailedWithExceptionImpl> get copyWith =>
@@ -410,7 +424,10 @@ abstract class _FailedWithException implements TransactionState {
       _$FailedWithExceptionImpl;
 
   AppException get exception;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FailedWithExceptionImplCopyWith<_$FailedWithExceptionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -429,6 +446,9 @@ class __$$InitializedImplCopyWithImpl<$Res>
   __$$InitializedImplCopyWithImpl(
       _$InitializedImpl _value, $Res Function(_$InitializedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -555,6 +575,9 @@ class __$$ProcessingImplCopyWithImpl<$Res>
   __$$ProcessingImplCopyWithImpl(
       _$ProcessingImpl _value, $Res Function(_$ProcessingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -684,6 +707,8 @@ class __$$SuccessImplCopyWithImpl<$Res>
       _$SuccessImpl _value, $Res Function(_$SuccessImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -722,7 +747,9 @@ class _$SuccessImpl implements _Success {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
@@ -819,7 +846,10 @@ abstract class _Success implements TransactionState {
   const factory _Success(final String message) = _$SuccessImpl;
 
   String get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -838,6 +868,9 @@ class __$$ShowDialogImplCopyWithImpl<$Res>
   __$$ShowDialogImplCopyWithImpl(
       _$ShowDialogImpl _value, $Res Function(_$ShowDialogImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TransactionState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1009,6 +1042,9 @@ class _$TransactionApiResponseCopyWithImpl<T, $Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of TransactionApiResponse
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1027,6 +1063,8 @@ class __$$OkImplCopyWithImpl<T, $Res>
   __$$OkImplCopyWithImpl(_$OkImpl<T> _value, $Res Function(_$OkImpl<T>) _then)
       : super(_value, _then);
 
+  /// Create a copy of TransactionApiResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1066,7 +1104,9 @@ class _$OkImpl<T> implements _Ok<T> {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(data));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TransactionApiResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OkImplCopyWith<T, _$OkImpl<T>> get copyWith =>
@@ -1139,7 +1179,10 @@ abstract class _Ok<T> implements TransactionApiResponse<T> {
   const factory _Ok(final T data) = _$OkImpl<T>;
 
   T get data;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TransactionApiResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OkImplCopyWith<T, _$OkImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1161,6 +1204,8 @@ class __$$ErrorImplCopyWithImpl<T, $Res>
       _$ErrorImpl<T> _value, $Res Function(_$ErrorImpl<T>) _then)
       : super(_value, _then);
 
+  /// Create a copy of TransactionApiResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1199,7 +1244,9 @@ class _$ErrorImpl<T> implements _Error<T> {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TransactionApiResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorImplCopyWith<T, _$ErrorImpl<T>> get copyWith =>
@@ -1272,7 +1319,10 @@ abstract class _Error<T> implements TransactionApiResponse<T> {
   const factory _Error(final String message) = _$ErrorImpl<T>;
 
   String get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TransactionApiResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorImplCopyWith<T, _$ErrorImpl<T>> get copyWith =>
       throw _privateConstructorUsedError;
 }

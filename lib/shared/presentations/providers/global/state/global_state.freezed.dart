@@ -19,7 +19,9 @@ mixin _$GlobalState {
   bool get isLoading => throw _privateConstructorUsedError;
   String get signatureMessage => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GlobalState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GlobalStateCopyWith<GlobalState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,6 +45,8 @@ class _$GlobalStateCopyWithImpl<$Res, $Val extends GlobalState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GlobalState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,6 +85,8 @@ class __$$GlobalStateImplCopyWithImpl<$Res>
       _$GlobalStateImpl _value, $Res Function(_$GlobalStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GlobalState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -131,7 +137,9 @@ class _$GlobalStateImpl implements _GlobalState {
   @override
   int get hashCode => Object.hash(runtimeType, isLoading, signatureMessage);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GlobalState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GlobalStateImplCopyWith<_$GlobalStateImpl> get copyWith =>
@@ -147,8 +155,11 @@ abstract class _GlobalState implements GlobalState {
   bool get isLoading;
   @override
   String get signatureMessage;
+
+  /// Create a copy of GlobalState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GlobalStateImplCopyWith<_$GlobalStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

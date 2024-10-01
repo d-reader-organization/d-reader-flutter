@@ -6,7 +6,7 @@ part of 'owned_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ownedControllerHash() => r'8c20b83db75f4f9cf76816339c34f5aed9695ee7';
+String _$ownedControllerHash() => r'94d0dba5536f74f527f74c2cc12d91865b943337';
 
 /// See also [OwnedController].
 @ProviderFor(OwnedController)

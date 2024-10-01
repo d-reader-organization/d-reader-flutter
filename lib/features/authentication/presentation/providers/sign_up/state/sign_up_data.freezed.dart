@@ -22,7 +22,9 @@ mixin _$SignUpData {
   String get googleAccessToken => throw _privateConstructorUsedError;
   bool get isSuccess => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignUpData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SignUpDataCopyWith<SignUpData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -51,6 +53,8 @@ class _$SignUpDataCopyWithImpl<$Res, $Val extends SignUpData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SignUpData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -109,6 +113,8 @@ class __$$SignUpDataImplCopyWithImpl<$Res>
       _$SignUpDataImpl _value, $Res Function(_$SignUpDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignUpData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -194,7 +200,9 @@ class _$SignUpDataImpl implements _SignUpData {
   int get hashCode => Object.hash(
       runtimeType, email, password, username, googleAccessToken, isSuccess);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignUpData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SignUpDataImplCopyWith<_$SignUpDataImpl> get copyWith =>
@@ -219,8 +227,11 @@ abstract class _SignUpData implements SignUpData {
   String get googleAccessToken;
   @override
   bool get isSuccess;
+
+  /// Create a copy of SignUpData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SignUpDataImplCopyWith<_$SignUpDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

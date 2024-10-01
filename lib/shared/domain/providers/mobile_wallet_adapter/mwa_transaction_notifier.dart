@@ -46,6 +46,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         transactions: transactions,
       );
       if (response.signedPayloads.isEmpty) {
+        await session.close();
         return Left(
           AppException(
             message: 'Failed to sign transactions',
@@ -65,10 +66,10 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         walletAddress: walletAddress,
         transactions: encodedTransactions,
       );
+      await session.close();
       return result.fold(
         (exception) => Left(exception),
-        (data) async {
-          await session.close();
+        (data) {
           return const Right(successResult);
         },
       );
@@ -163,13 +164,16 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
                 (result) => Right(result),
               );
             },
-            error: (message) => Left(
-              AppException(
-                message: message,
-                identifier: '',
-                statusCode: 500,
-              ),
-            ),
+            error: (message) async {
+              await session.close();
+              return Left(
+                AppException(
+                  message: message,
+                  identifier: '',
+                  statusCode: 500,
+                ),
+              );
+            },
           );
         },
       );

@@ -5,19 +5,18 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
-import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CouponWithCurrencyRow extends ConsumerWidget {
   final SplToken splToken;
   final int mintPrice;
-  final List<CandyMachineCoupon> coupons;
+  final List<CouponCurrencySetting> prices;
   const CouponWithCurrencyRow({
     super.key,
     required this.splToken,
     required this.mintPrice,
-    required this.coupons,
+    required this.prices,
   });
 
   @override
@@ -30,12 +29,11 @@ class CouponWithCurrencyRow extends ConsumerWidget {
         splToken.address;
     return GestureDetector(
       onTap: () {
+        final selectedCurrency = prices
+            .firstWhere((price) => price.splTokenAddress == splToken.address);
         ref
             .read(candyMachineNotifierProvider.notifier)
-            .updateSelectedCoupon(getActiveCoupon(
-              coupons: coupons,
-              selectedSplTokenAddress: splToken.address,
-            )!);
+            .updateSelectedCurrency(selectedCurrency);
         ref.read(activeSplToken.notifier).update((state) => splToken);
       },
       child: Container(
@@ -75,7 +73,9 @@ class CouponWithCurrencyRow extends ConsumerWidget {
             ),
             Text(
               Formatter.formatPriceByCurrency(
-                  mintPrice: mintPrice, splToken: splToken),
+                mintPrice: mintPrice,
+                splToken: splToken,
+              ),
               style: textTheme.bodySmall,
             ),
           ],

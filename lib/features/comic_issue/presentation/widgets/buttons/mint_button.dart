@@ -1,15 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/constants/routes.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/notifiers/candy_machine_notifier.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
-import 'package:d_reader_flutter/features/comic_issue/presentation/widgets/buttons/transaction_button.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/mint/notifier/mint_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/solana_providers.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/dialog_triggers.dart';
+import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
+import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -106,9 +108,23 @@ class _MintButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final (isMintActive, isEnded) = ref.watch(mintStatusesProvider);
     final shouldDisableMintButton = !isMintActive && !isEnded;
-    return TransactionButton(
+    final mintPrice = Formatter.formatPriceByCurrency(
+      mintPrice:
+          ref.watch(candyMachineNotifierProvider.notifier).getMintPrice(),
+      splToken: ref.watch(
+        activeSplToken,
+      ),
+    );
+    return CustomTextButton(
+      size: const Size(150, 50),
       isLoading: isLoading,
+      fontSize: 16,
       isDisabled: shouldDisableMintButton,
+      borderRadius: const BorderRadius.all(
+        Radius.circular(
+          8,
+        ),
+      ),
       onPressed: ref.watch(isOpeningSessionProvider)
           ? null
           : () {
@@ -116,10 +132,36 @@ class _MintButton extends ConsumerWidget {
                   .read(mintNotifierProvider.notifier)
                   .mint(activeCandyMachineAddress);
             },
-      text: _buttonText,
-      price: ref.watch(candyMachineNotifierProvider.notifier).getMintPrice(),
-      isMultiGroup:
-          (ref.watch(candyMachineStateProvider)?.coupons.length ?? 0) > 1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            _buttonText,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Colors.black,
+                ),
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          CachedNetworkImage(
+            imageUrl: ref.read(activeSplToken)?.icon ??
+                ref.read(activeSplToken)?.symbol ??
+                '',
+            width: 16,
+            height: 16,
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          Text(
+            mintPrice,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Colors.black,
+                ),
+          ),
+        ],
+      ),
     );
   }
 }

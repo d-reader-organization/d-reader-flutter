@@ -12,8 +12,8 @@
     },
     "./dReader.apk": {
       "path": "./dReader.apk",
-      "sha256": "rXVkxLHrcEumRcIVF2ojUf+a93F3vUKN6E0h6SLo0u0=",
-      "uri": "https://s3.us-east-1.amazonaws.com/d-reader-main-mainnet/W8WuKMfb0pezDZ8vwP0U"
+      "sha256": "GkcAkSlWBHx3nu03nmiH+fkXKExggAxXL0UHKny0PRM=",
+      "uri": "https://s3.us-east-1.amazonaws.com/d-reader-main-mainnet/lcU1kLPzAajQ3Tdt8CAe"
     },
     "./screenshots/1.png": {
       "path": "./screenshots/1.png",

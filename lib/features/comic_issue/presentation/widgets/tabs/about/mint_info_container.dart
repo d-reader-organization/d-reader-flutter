@@ -105,9 +105,7 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
     }
     final candyMachineState = ref.watch(candyMachineStateProvider);
     final splTokens = ref.watch(splTokensProvider);
-    final displayDropdown = widget.candyMachineCoupons.length > 1 &&
-        splTokens.value != null &&
-        splTokens.value!.isNotEmpty;
+    final displayDropdown = selectedCandyMachineCoupon.prices.length > 1;
     final bool isMintActive = ref.watch(mintStatusesProvider).$1;
     final mintPrice =
         ref.watch(candyMachineNotifierProvider.notifier).getMintPrice();
@@ -128,19 +126,16 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
                       candyMachineCoupon: selectedCandyMachineCoupon,
                       suffix: const MintPriceWidget(),
                     ),
-                    children: widget.candyMachineCoupons.map((coupon) {
-                      final selectedCurrency = ref
-                          .read(candyMachineNotifierProvider)
-                          .selectedCurrency;
+                    children: selectedCandyMachineCoupon.prices.map((price) {
                       final splToken = splTokens.value?.firstWhere((element) =>
-                          element.address == selectedCurrency?.splTokenAddress);
+                          element.address == price.splTokenAddress);
                       if (splToken == null) {
                         return const SizedBox();
                       }
                       return CouponWithCurrencyRow(
                         splToken: splToken,
-                        mintPrice: mintPrice,
-                        coupons: widget.candyMachineCoupons,
+                        mintPrice: price.mintPrice,
+                        prices: selectedCandyMachineCoupon.prices,
                       );
                     }).toList(),
                   ),

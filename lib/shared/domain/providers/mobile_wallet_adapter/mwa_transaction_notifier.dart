@@ -49,7 +49,7 @@ class MwaTransactionNotifier extends _$MwaTransactionNotifier {
         await session.close();
         return Left(
           AppException(
-            message: 'Failed to sign transactions',
+            message: failedToSignTransactionsMessage,
             identifier: 'MwaTransactionNotifier._signAndSendMint',
             statusCode: 500,
           ),

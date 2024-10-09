@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/config/config.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/asset_event.dart';
 import 'package:d_reader_flutter/features/comic_issue/presentation/providers/comic_issue_providers.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
-import 'package:d_reader_flutter/features/candy_machine/domain/models/receipt.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/socket_provider.dart';
@@ -39,11 +39,13 @@ final registerWalletToSocketEvents = Provider(
           .update((state) => data['address']);
     });
     socket.on('wallet/$address/item-minted', (data) async {
-      final newReceipt = Receipt.fromJson(data);
+      final AsssetMintedDataModel(:assets) =
+          AsssetMintedDataModel.fromJson(data);
+      final mintedAsset = assets.first;
       ref.invalidate(candyMachineProvider);
       ref
           .read(lastProcessedAssetProvider.notifier)
-          .update((state) => newReceipt.partialAsset.address);
+          .update((state) => mintedAsset.address);
       ref.invalidate(comicIssueDetailsProvider);
     });
   },

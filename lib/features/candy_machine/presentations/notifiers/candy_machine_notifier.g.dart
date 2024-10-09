@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'wallet_notifier.dart';
+part of 'candy_machine_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$walletControllerHash() => r'b2b85e661723bd6d4d338e4212dcef8bddafa9d1';
+String _$candyMachineNotifierHash() =>
+    r'b5e39f22b55aca8943e153d3e5b9a0333f798722';
 
-/// See also [WalletController].
-@ProviderFor(WalletController)
-final walletControllerProvider =
-    AutoDisposeNotifierProvider<WalletController, void>.internal(
-  WalletController.new,
-  name: r'walletControllerProvider',
+/// See also [CandyMachineNotifier].
+@ProviderFor(CandyMachineNotifier)
+final candyMachineNotifierProvider = AutoDisposeNotifierProvider<
+    CandyMachineNotifier, CandyMachineData>.internal(
+  CandyMachineNotifier.new,
+  name: r'candyMachineNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$walletControllerHash,
+      : _$candyMachineNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$WalletController = AutoDisposeNotifier<void>;
+typedef _$CandyMachineNotifier = AutoDisposeNotifier<CandyMachineData>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

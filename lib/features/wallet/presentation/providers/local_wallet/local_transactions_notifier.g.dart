@@ -7,7 +7,7 @@ part of 'local_transactions_notifier.dart';
 // **************************************************************************
 
 String _$localTransactionsNotifierHash() =>
-    r'5f05ac28544fb68659f6eb2be0c8467b51495752';
+    r'0a78e6529af0c29b196b1aaed83fd06951364ccf';
 
 /// See also [LocalTransactionsNotifier].
 @ProviderFor(LocalTransactionsNotifier)

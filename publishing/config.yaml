@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: 2QWD81KRPUSpbJs9mjzE4FxZ4C2GewfYRpGnh8ndfFP3
+  address: GFRybHsTyn4wsQXiLSz5Fe7CTjncZ6sqfCypg6AXSmQX
   media:
     - purpose: icon
       uri: ./512x512_rounded.png
@@ -41,14 +41,14 @@ release:
       name: dReader
       short_description: Digital comic book store
       long_description: Platform for discovering, trading, collecting, and reading digital graphic novels
-      new_in_version: Debounce search results and some cleanups
+      new_in_version: New mint flow
       saga_features: Exclusive early access, free/discounted collectible comics
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader
   testing_instructions: Run the app
 lastSubmittedVersionOnChain:
-  address: 2QWD81KRPUSpbJs9mjzE4FxZ4C2GewfYRpGnh8ndfFP3
-  version_code: 2050
-  apk_hash: zaNsHAslDuJychKVQvEpX+4+PdFqg4TKkFxe+P74wx8=
+  address: GFRybHsTyn4wsQXiLSz5Fe7CTjncZ6sqfCypg6AXSmQX
+  version_code: 2052
+  apk_hash: GkcAkSlWBHx3nu03nmiH+fkXKExggAxXL0UHKny0PRM=
 lastUpdatedVersionOnStore:
-  address: 2QWD81KRPUSpbJs9mjzE4FxZ4C2GewfYRpGnh8ndfFP3
+  address: GFRybHsTyn4wsQXiLSz5Fe7CTjncZ6sqfCypg6AXSmQX

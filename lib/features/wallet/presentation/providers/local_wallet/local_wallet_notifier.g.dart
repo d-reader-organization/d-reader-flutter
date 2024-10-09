@@ -7,7 +7,7 @@ part of 'local_wallet_notifier.dart';
 // **************************************************************************
 
 String _$localWalletNotifierHash() =>
-    r'4ff7f65c27089754875a765ca03580f3d3414350';
+    r'06cb19a13eac5cd4a142950c931538dfc03d3332';
 
 /// See also [LocalWalletNotifier].
 @ProviderFor(LocalWalletNotifier)

@@ -1,6 +1,6 @@
 import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/constants/constants.dart';
-import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_group.dart';
+import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_coupon.dart';
 import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart';
 import 'package:d_reader_flutter/shared/domain/models/enums.dart';
 import 'package:d_reader_flutter/shared/utils/extensions.dart';
@@ -35,15 +35,21 @@ Future<String?> requestAirdrop(String publicKey) async {
   }
 }
 
-CandyMachineGroupModel? getSelectedGroup({
-  required List<CandyMachineGroupModel> groups,
+CandyMachineCoupon? getActiveCoupon({
+  required List<CandyMachineCoupon> coupons,
   required String selectedSplTokenAddress,
 }) {
-  return groups.firstWhereOrNull(
-    (group) {
-      return group.splTokenAddress == selectedSplTokenAddress;
+  final userCoupon = coupons.firstWhereOrNull(
+    (coupon) {
+      return coupon.type == CouponType.registeredUser.getString();
     },
   );
+  return userCoupon ??
+      coupons.firstWhereOrNull(
+        (coupon) {
+          return coupon.type == CouponType.publicUser.getString();
+        },
+      );
 }
 
 SplToken getSplTokenWithHighestPriority(List<SplToken> splTokens) {

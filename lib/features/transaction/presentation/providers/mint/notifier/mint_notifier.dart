@@ -2,18 +2,17 @@ import 'dart:convert' show base64Decode;
 
 import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine.dart';
+import 'package:d_reader_flutter/features/candy_machine/presentations/notifiers/candy_machine_notifier.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
 import 'package:d_reader_flutter/features/transaction/presentation/providers/common/transaction_state.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/providers/digital_asset_providers.dart';
 import 'package:d_reader_flutter/features/transaction/domain/providers/transaction_provider.dart';
 import 'package:d_reader_flutter/features/transaction/domain/repositories/transaction_repository.dart';
-import 'package:d_reader_flutter/features/user/presentation/providers/user_providers.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_transactions_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/local_wallet/local_wallet_notifier.dart';
 import 'package:d_reader_flutter/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:d_reader_flutter/shared/domain/providers/environment/environment_notifier.dart';
 import 'package:d_reader_flutter/shared/domain/providers/mobile_wallet_adapter/mwa_transaction_notifier.dart';
-import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -29,43 +28,19 @@ class MintNotifier extends _$MintNotifier {
     return const TransactionState.initialized();
   }
 
-  _checkIsVerifiedEmail() async {
-    final envUser = ref.read(environmentProvider).user;
-
-    if (envUser != null && !envUser.isEmailVerified) {
-      final user = await ref.read(myUserProvider.future);
-      if (!user.isEmailVerified) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   Future<bool> _shouldProceedMint() async {
     CandyMachineModel? candyMachineState = ref.read(candyMachineStateProvider);
     if (candyMachineState == null) {
       state = const TransactionState.failed('Failed to find candy machine');
       return false;
     }
-    final activeGroup = ref.read(selectedCandyMachineGroup);
-    if (activeGroup == null) {
-      state = const TransactionState.failed('There is no active mint');
-      return false;
-    }
-    if (activeGroup.label == dFreeLabel) {
-      bool isVerified = await _checkIsVerifiedEmail();
-      if (!isVerified) {
-        state = const TransactionState.showDialog();
-        return false;
-      }
-    }
 
     return true;
   }
 
   bool _hasEligibility() {
-    final hasEligibility =
-        hasEligibilityForMint(ref.read(selectedCandyMachineGroup));
+    final hasEligibility = hasEligibilityForMint(
+        ref.read(candyMachineNotifierProvider).selectedCoupon);
     if (!hasEligibility) {
       state = TransactionState.failed(_noEligibilityMessage());
       return false;
@@ -74,10 +49,7 @@ class MintNotifier extends _$MintNotifier {
   }
 
   String _noEligibilityMessage() {
-    final isUser = ref.read(selectedCandyMachineGroup)?.user != null;
-    return isUser
-        ? 'User ${ref.read(environmentProvider).user?.email} is not eligible for minting'
-        : 'Wallet address ${Formatter.formatAddress(ref.read(selectedWalletProvider), 3)} is not eligible for minting';
+    return 'User ${ref.read(environmentProvider).user?.email} is not eligible for minting';
   }
 
   Future<void> mint(String candyMachineAddress) async {
@@ -97,7 +69,6 @@ class MintNotifier extends _$MintNotifier {
     final apiResponse = await _getMintTransactions(
       candyMachineAddress: candyMachineAddress,
       walletAddress: ref.read(selectedWalletProvider),
-      label: ref.read(selectedCandyMachineGroup)!.label,
     );
 
     apiResponse.when(
@@ -116,13 +87,15 @@ class MintNotifier extends _$MintNotifier {
   Future<TransactionApiResponse<List<String>>> _getMintTransactions({
     required String candyMachineAddress,
     required String walletAddress,
-    required String label,
   }) async {
+    final data = ref.read(candyMachineNotifierProvider);
     return _transactionRepository
-        .mintOneTransaction(
+        .mintTransaction(
+          couponId: data.selectedCoupon?.id ?? 1,
+          numberOfItems: data.numberOfItems,
           candyMachineAddress: candyMachineAddress,
           minterAddress: walletAddress,
-          label: label,
+          label: data.selectedCurrency?.label ?? '',
         )
         .then(mapApiResponse);
   }

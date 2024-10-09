@@ -38,14 +38,18 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
-  Future<Either<AppException, List<String>>> mintOneTransaction({
+  Future<Either<AppException, List<String>>> mintTransaction({
+    required int couponId,
+    required int numberOfItems,
     required String candyMachineAddress,
     required String minterAddress,
     String? label,
   }) {
-    return dataSource.mintOneTransaction(
+    return dataSource.mintTransaction(
+      couponId: couponId,
       candyMachineAddress: candyMachineAddress,
       minterAddress: minterAddress,
+      numberOfItems: numberOfItems,
       label: label,
     );
   }
@@ -57,5 +61,14 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }) {
     return dataSource.useComicIssueAssetTransaction(
         digitalAssetAddress: digitalAssetAddress, ownerAddress: ownerAddress);
+  }
+
+  @override
+  Future<Either<AppException, String>> sendMintTransaction(
+      {required String walletAddress, required List<String> transactions}) {
+    return dataSource.sendMintTransaction(
+      walletAddress: walletAddress,
+      transactions: transactions,
+    );
   }
 }

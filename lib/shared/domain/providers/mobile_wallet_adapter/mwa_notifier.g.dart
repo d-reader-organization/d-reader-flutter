@@ -6,7 +6,7 @@ part of 'mwa_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mwaNotifierHash() => r'eb4cf456a56f3279946fedce821290c4f00a975d';
+String _$mwaNotifierHash() => r'b358097a6619d71b43027378aa99df2253aa286c';
 
 /// See also [MwaNotifier].
 @ProviderFor(MwaNotifier)

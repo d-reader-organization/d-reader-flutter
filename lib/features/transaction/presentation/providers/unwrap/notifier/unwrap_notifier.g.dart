@@ -6,7 +6,7 @@ part of 'unwrap_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$unwrapNotifierHash() => r'a1c806104274a4015dca87e81f379fcbcea5aee5';
+String _$unwrapNotifierHash() => r'62e98b1f41adc4773fbae49b7c8575ccac239d61';
 
 /// Copied from Dart SDK
 class _SystemHash {

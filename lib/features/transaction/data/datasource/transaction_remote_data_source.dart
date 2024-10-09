@@ -3,9 +3,11 @@ import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 abstract class TransactionDataSource {
-  Future<Either<AppException, List<String>>> mintOneTransaction({
+  Future<Either<AppException, List<String>>> mintTransaction({
+    required int couponId,
     required String candyMachineAddress,
     required String minterAddress,
+    required int numberOfItems,
     String? label,
   });
   Future<Either<AppException, String>> useComicIssueAssetTransaction({
@@ -21,6 +23,10 @@ abstract class TransactionDataSource {
       Map<String, dynamic> query);
   Future<Either<AppException, String>> cancelListingTransaction({
     required String digitalAssetAddress,
+  });
+  Future<Either<AppException, String>> sendMintTransaction({
+    required String walletAddress,
+    required List<String> transactions,
   });
 }
 
@@ -105,14 +111,17 @@ class TransactionRemoteDataSource implements TransactionDataSource {
   }
 
   @override
-  Future<Either<AppException, List<String>>> mintOneTransaction({
+  Future<Either<AppException, List<String>>> mintTransaction({
+    required int couponId,
+    required int numberOfItems,
     required String candyMachineAddress,
     required String minterAddress,
     String? label,
   }) async {
     try {
       final response = await networkService.get(
-          '/transaction/mint-one?candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress&label=${label ?? 'public'}');
+        '/transaction/mint?couponId=$couponId&numberOfItems=$numberOfItems&candyMachineAddress=$candyMachineAddress&minterAddress=$minterAddress&label=${label ?? 'public'}',
+      );
       return response.fold(
         (exception) => Left(exception),
         (result) {
@@ -153,6 +162,33 @@ class TransactionRemoteDataSource implements TransactionDataSource {
           statusCode: 500,
           identifier:
               '${exception.toString()}-TransactionRemoteDataSource.useComicIssueAssetTransaction',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<AppException, String>> sendMintTransaction(
+      {required String walletAddress,
+      required List<String> transactions}) async {
+    try {
+      final response = await networkService
+          .post('/transaction/send-mint-transaction/$walletAddress', data: {
+        'transactions': transactions,
+      });
+      return response.fold(
+        (exception) => Left(exception),
+        (result) => Right(
+          result.data?.toString() ?? '',
+        ),
+      );
+    } catch (exception) {
+      return Left(
+        AppException(
+          message: 'Unknown exception occured',
+          statusCode: 500,
+          identifier:
+              '${exception.toString()}-TransactionRemoteDataSource.sendMintTransaction',
         ),
       );
     }

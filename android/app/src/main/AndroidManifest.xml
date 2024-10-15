@@ -36,7 +36,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="dreader.app" />
+                <data android:scheme="https" android:host="www.dreader.app" />
                 <data android:scheme="https" android:host="dev-devnet.dreader.app" />
                 <data android:path="/" />
                 <data android:pathPattern="/mint/.*" />

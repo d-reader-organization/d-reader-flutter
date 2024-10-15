@@ -153,6 +153,10 @@ class ComicIssueRemoteDataSource implements ComicIssueDataSource {
       data: {
         'rating': rating,
       },
+    ).then(
+      (value) {
+        return;
+      },
     );
   }
 }

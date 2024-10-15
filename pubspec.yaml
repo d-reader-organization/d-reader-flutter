@@ -3,7 +3,7 @@ description: dReader Flutter app.
 
 publish_to: 'none'
 
-version: 1.4.2+52 # # dappStore: 1.4.2+52 (next release: 1.4.3+53) google play: 1.4.3+83 (next release: 1.4.4+84)
+version: 1.4.4+84 # # dappStore: 1.4.2+52 (next release: 1.4.3+53) google play: 1.4.4+84 (next release: 1.4.5+85)
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

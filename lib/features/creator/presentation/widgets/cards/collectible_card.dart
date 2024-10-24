@@ -1,7 +1,7 @@
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/price_widget.dart';
 import 'package:flutter/material.dart';
 
 const String imageUrl =
@@ -95,7 +95,7 @@ class CollectibleCard extends StatelessWidget {
                                   style: textTheme.labelMedium
                                       ?.copyWith(fontSize: 11),
                                 ),
-                                const SolanaPrice(
+                                const PriceWidget(
                                   price: 0.965,
                                 ),
                               ],

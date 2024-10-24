@@ -9,7 +9,7 @@ import 'package:d_reader_flutter/shared/widgets/unsorted/date_widget.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/viewed_icon_count.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/price_widget.dart';
 import 'package:flutter/material.dart';
 
 class ComicIssueCardLarge extends StatelessWidget {
@@ -129,7 +129,7 @@ class ComicIssueCardLarge extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SolanaPrice(
+                          PriceWidget(
                             price: issue.stats?.price != null
                                 ? Formatter.formatPriceWithSignificant(
                                     issue.stats!.price!,

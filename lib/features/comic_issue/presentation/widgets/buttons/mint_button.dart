@@ -13,6 +13,7 @@ import 'package:d_reader_flutter/shared/utils/screen_navigation.dart';
 import 'package:d_reader_flutter/shared/utils/show_snackbar.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -115,6 +116,7 @@ class _MintButton extends ConsumerWidget {
         activeSplToken,
       ),
     );
+    final selectedSplToken = ref.watch(activeSplToken);
     return CustomTextButton(
       size: const Size(150, 50),
       isLoading: isLoading,
@@ -144,13 +146,20 @@ class _MintButton extends ConsumerWidget {
           const SizedBox(
             width: 4,
           ),
-          CachedNetworkImage(
-            imageUrl: ref.read(activeSplToken)?.icon ??
-                ref.read(activeSplToken)?.symbol ??
-                '',
-            width: 16,
-            height: 16,
-          ),
+          selectedSplToken != null &&
+                  selectedSplToken.icon.endsWith(svgExtension)
+              ? SvgPicture.network(
+                  selectedSplToken.icon,
+                  width: 12,
+                  height: 12,
+                )
+              : CachedNetworkImage(
+                  imageUrl: ref.read(activeSplToken)?.icon ??
+                      ref.read(activeSplToken)?.symbol ??
+                      '',
+                  width: 16,
+                  height: 16,
+                ),
           const SizedBox(
             width: 4,
           ),

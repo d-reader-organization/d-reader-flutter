@@ -2,13 +2,13 @@ import 'package:d_reader_flutter/config/config.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/material.dart';
 
-class SolanaPrice extends StatelessWidget {
+class PriceWidget extends StatelessWidget {
   final dynamic price;
   final MainAxisAlignment mainAxisAlignment;
   final TextDirection? textDirection;
   final Color? textColor;
   final int priceDecimals;
-  const SolanaPrice({
+  const PriceWidget({
     super.key,
     this.price,
     this.mainAxisAlignment = MainAxisAlignment.start,

@@ -3,7 +3,7 @@ import 'package:d_reader_flutter/features/candy_machine/presentations/providers/
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/widgets/buttons/custom_text_button.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mint_price_widget.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/price_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -59,7 +59,7 @@ class TransactionButton extends ConsumerWidget {
                   ? const MintPriceWidget(
                       priceColor: Colors.black,
                     )
-                  : SolanaPrice(
+                  : PriceWidget(
                       price: price != null && price! > 0
                           ? Formatter.formatPriceByCurrency(
                               mintPrice: price!,

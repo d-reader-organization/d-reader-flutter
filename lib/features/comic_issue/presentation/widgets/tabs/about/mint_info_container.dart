@@ -7,7 +7,7 @@ import 'package:d_reader_flutter/features/settings/presentation/providers/spl_to
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mint_price_widget.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/price_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -144,7 +144,7 @@ class _MintInfoContainerState extends ConsumerState<MintInfoContainer>
                   padding: const EdgeInsets.only(top: 16),
                   child: _HeadingRow(
                     candyMachineCoupon: selectedCandyMachineCoupon,
-                    suffix: SolanaPrice(
+                    suffix: PriceWidget(
                       price: mintPrice > 0
                           ? Formatter.formatPriceByCurrency(
                               mintPrice: mintPrice,

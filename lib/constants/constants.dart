@@ -31,3 +31,4 @@ const String failedToSignTransactionsMessage = 'Failed to sign transactions';
 
 const String dAuthCouponName = 'dAuth';
 const String solAddress = 'So11111111111111111111111111111111111111112';
+const String svgExtension = '.svg';

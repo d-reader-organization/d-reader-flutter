@@ -8,7 +8,7 @@ import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:d_reader_flutter/features/digital_asset/presentation/utils/utils.dart';
 import 'package:d_reader_flutter/shared/widgets/image_widgets/cached_image_bg_placeholder.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/rarity.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/price_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -123,7 +123,7 @@ class ListingItem extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                SolanaPrice(
+                PriceWidget(
                   price: listing.price / lamportsPerSol,
                   priceDecimals: 4,
                 ),

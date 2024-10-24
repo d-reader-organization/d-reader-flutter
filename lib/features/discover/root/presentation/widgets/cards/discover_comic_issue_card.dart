@@ -9,7 +9,7 @@ import 'package:d_reader_flutter/shared/widgets/unsorted/date_widget.dart';
 import 'package:d_reader_flutter/shared/widgets/unsorted/mature_audience.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/favorite_icon_count.dart';
 import 'package:d_reader_flutter/shared/widgets/icons/rating_icon.dart';
-import 'package:d_reader_flutter/shared/widgets/unsorted/solana_price.dart';
+import 'package:d_reader_flutter/shared/widgets/unsorted/price_widget.dart';
 import 'package:d_reader_flutter/features/discover/genre/presentation/widgets/genre_tags_default.dart';
 import 'package:flutter/material.dart';
 
@@ -110,7 +110,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 1,
-                        child: SolanaPrice(
+                        child: PriceWidget(
                           mainAxisAlignment: MainAxisAlignment.end,
                           price:
                               Formatter.formatLamportPrice(issue.stats?.price),

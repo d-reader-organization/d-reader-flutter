@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:d_reader_flutter/constants/constants.dart';
 import 'package:d_reader_flutter/features/candy_machine/domain/models/candy_machine_coupon.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/notifiers/candy_machine_notifier.dart';
 import 'package:d_reader_flutter/features/candy_machine/presentations/providers/candy_machine_providers.dart';
@@ -6,6 +7,7 @@ import 'package:d_reader_flutter/features/settings/domain/models/spl_token.dart'
 import 'package:d_reader_flutter/shared/theme/app_colors.dart';
 import 'package:d_reader_flutter/shared/utils/formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CouponWithCurrencyRow extends ConsumerWidget {
@@ -54,11 +56,17 @@ class CouponWithCurrencyRow extends ConsumerWidget {
           children: [
             Row(
               children: [
-                CachedNetworkImage(
-                  imageUrl: splToken.icon,
-                  width: 16,
-                  height: 16,
-                ),
+                splToken.icon.endsWith(svgExtension)
+                    ? SvgPicture.network(
+                        splToken.icon,
+                        height: 14,
+                        width: 14,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: splToken.icon,
+                        width: 16,
+                        height: 16,
+                      ),
                 const SizedBox(
                   width: 8,
                 ),

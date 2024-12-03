@@ -30,7 +30,8 @@ class ListingStats extends ConsumerWidget {
           ),
           StatsInfo(
             title: 'SUPPLY',
-            stats: issue.isSecondarySaleActive
+            stats: issue.collectibleInfo != null &&
+                    issue.collectibleInfo!.isSecondarySaleActive
                 ? '${collectionStats?.supply}'
                 : '--',
           ),

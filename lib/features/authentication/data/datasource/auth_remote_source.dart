@@ -148,7 +148,11 @@ class AuthRemoteDataSource implements AuthDataSource {
     required String encoding,
   }) async {
     try {
-      await networkService.patch('/auth/wallet/connect/$address/$encoding');
+      await networkService.patch('/auth/wallet/connect', data: {
+        'address': address,
+        'encoding': encoding,
+        'signedDataType': 'Message'
+      });
       return const Right(true);
     } catch (exception) {
       return Left(

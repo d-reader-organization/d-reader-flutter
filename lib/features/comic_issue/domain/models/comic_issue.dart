@@ -1,20 +1,20 @@
 import 'package:d_reader_flutter/features/creator/domain/models/creator.dart';
 import 'package:d_reader_flutter/shared/domain/models/collaborator.dart';
 import 'package:d_reader_flutter/features/discover/genre/domain/models/genre.dart';
+import 'package:d_reader_flutter/shared/domain/models/collectible_info.dart';
 import 'package:d_reader_flutter/shared/domain/models/stateful_cover.dart';
 import 'package:d_reader_flutter/shared/domain/models/stateless_cover.dart';
 
 class ComicIssueModel {
   final int id, number;
-  final String cover, description, slug, title, comicSlug, creatorAddress;
-  final bool isPopular, isFreeToRead, isFullyUploaded, isSecondarySaleActive;
-  final String? activeCandyMachineAddress;
-  final double sellerFee;
+  final String cover, description, slug, title, comicSlug;
+  final bool isPopular, isFreeToRead, isFullyUploaded;
   final DateTime releaseDate;
   final ComicIssueStats? stats;
   final ComicIssueMyStats? myStats;
   final ComicType? comic;
   final CreatorModel creator;
+  final CollectibleInfoModel? collectibleInfo;
   final List<Collaborator>? collaborators;
   final List<StatelessCover>? statelessCovers;
   final List<StatefulCover>? statefulCovers;
@@ -31,19 +31,16 @@ class ComicIssueModel {
     this.myStats,
     required this.comic,
     required this.creator,
+    this.collectibleInfo,
     required this.isPopular,
     required this.releaseDate,
     required this.isFreeToRead,
     required this.isFullyUploaded,
-    required this.sellerFee,
     required this.genres,
-    this.activeCandyMachineAddress,
     this.collaborators,
     this.statelessCovers,
     this.statefulCovers,
     required this.comicSlug,
-    required this.creatorAddress,
-    required this.isSecondarySaleActive,
   });
 
   factory ComicIssueModel.fromJson(dynamic json) {
@@ -62,15 +59,15 @@ class ComicIssueModel {
           : null,
       comic: json['comic'] != null ? ComicType.fromJson(json['comic']) : null,
       creator: CreatorModel.fromJson(json['creator']),
+      collectibleInfo: json['collectibleInfo'] != null
+          ? CollectibleInfoModel.fromJson(json['collectibleInfo'])
+          : null,
       isPopular: json['isPopular'],
       releaseDate: DateTime.parse(
         json['releaseDate'],
       ),
       isFreeToRead: json['isFreeToRead'],
       isFullyUploaded: json['isFullyUploaded'],
-      activeCandyMachineAddress: json['activeCandyMachineAddress'],
-      sellerFee:
-          json['sellerFee'] is int ? json['sellerFee'] + .0 : json['sellerFee'],
       collaborators: json['collaborators'] != null
           ? List<Collaborator>.from(
               json['collaborators'].map(
@@ -108,8 +105,6 @@ class ComicIssueModel {
             )
           : [],
       comicSlug: json['comicSlug'],
-      creatorAddress: json['creatorAddress'],
-      isSecondarySaleActive: json['isSecondarySaleActive'] ?? false,
     );
   }
 }

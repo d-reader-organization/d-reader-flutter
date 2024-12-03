@@ -28,12 +28,12 @@ class IssueAbout extends ConsumerWidget {
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
-          if (issue.activeCandyMachineAddress != null) ...[
+          if (issue.collectibleInfo?.activeCandyMachineAddress != null) ...[
             FutureBuilder(
               future: ref.read(
                 candyMachineProvider(
                         query:
-                            'candyMachineAddress=${issue.activeCandyMachineAddress}${walletAddress != null && walletAddress.isNotEmpty ? '&walletAddress=$walletAddress' : ''}')
+                            'candyMachineAddress=${issue.collectibleInfo!.activeCandyMachineAddress}${walletAddress != null && walletAddress.isNotEmpty ? '&walletAddress=$walletAddress' : ''}')
                     .future,
               ),
               builder: (context, snapshot) {
@@ -43,7 +43,7 @@ class IssueAbout extends ConsumerWidget {
 
                   if (currentCandyMachine != null &&
                       currentCandyMachine.address ==
-                          issue.activeCandyMachineAddress) {
+                          issue.collectibleInfo!.activeCandyMachineAddress) {
                     return MintInfoContainer(
                       candyMachineCoupons: currentCandyMachine.coupons,
                       totalSupply: currentCandyMachine.supply,

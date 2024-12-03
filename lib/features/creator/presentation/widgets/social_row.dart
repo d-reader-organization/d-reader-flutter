@@ -59,10 +59,10 @@ class SocialRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        creator.lynkfire.isNotEmpty
+        creator.linktree.isNotEmpty
             ? GestureDetector(
                 onTap: () {
-                  openUrl(creator.lynkfire);
+                  openUrl(creator.linktree);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(6),

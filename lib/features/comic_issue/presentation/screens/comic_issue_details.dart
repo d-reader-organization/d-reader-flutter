@@ -65,10 +65,12 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
     final textTheme = Theme.of(context).textTheme;
     return provider.when(
       data: (issue) {
+        final collectibleInfo = issue.collectibleInfo;
         return DefaultTabController(
           length: 2,
-          initialIndex: issue.isSecondarySaleActive &&
-                  issue.activeCandyMachineAddress == null
+          initialIndex: collectibleInfo != null &&
+                  collectibleInfo.isSecondarySaleActive &&
+                  collectibleInfo.activeCandyMachineAddress == null
               ? ref.read(lastSelectedTabIndex)
               : 0,
           child: Scaffold(
@@ -374,8 +376,11 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                   ),
                                 ),
                               ),
-                              issue.isSecondarySaleActive &&
-                                      issue.activeCandyMachineAddress == null
+                              collectibleInfo != null &&
+                                      collectibleInfo.isSecondarySaleActive &&
+                                      collectibleInfo
+                                              .activeCandyMachineAddress ==
+                                          null
                                   ? TabBar(
                                       onTap: (value) {
                                         ref
@@ -403,7 +408,8 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                       horizontal: 16,
                       vertical: 16,
                     ),
-                    child: issue.isSecondarySaleActive
+                    child: collectibleInfo != null &&
+                            collectibleInfo.isSecondarySaleActive
                         ? TabBarView(
                             children: [
                               IssueAbout(issue: issue),
@@ -436,6 +442,7 @@ class _BottomNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final collectibleInfo = issue.collectibleInfo;
     return SafeArea(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -445,13 +452,14 @@ class _BottomNavigation extends ConsumerWidget {
               issue: issue,
             ),
           ),
-          issue.activeCandyMachineAddress != null
+          collectibleInfo?.activeCandyMachineAddress != null
               ? Expanded(
                   child: MintButton(
-                    activeCandyMachineAddress: issue.activeCandyMachineAddress!,
+                    activeCandyMachineAddress:
+                        issue.collectibleInfo!.activeCandyMachineAddress!,
                   ),
                 )
-              : issue.isSecondarySaleActive
+              : collectibleInfo != null && collectibleInfo.isSecondarySaleActive
                   ? const Expanded(
                       child: BuyButton(),
                     )

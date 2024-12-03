@@ -6,11 +6,10 @@ import 'package:d_reader_flutter/shared/utils/utils.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 const String _genreSlugsKey = 'genreSlugs[]';
-const String _nameSubstringKey = 'nameSubstring';
 const String _sortOrderKey = 'sortOrder';
 const String _sortTagKey = 'sortTag';
 const String _filterTagKey = 'filterTag';
-const String _titleSubstringKey = 'titleSubstring';
+const String _searchKey = 'search';
 
 String _prependQueryWithKey({required String key, required String value}) =>
     value.isNotEmpty ? '$key=$value' : '';
@@ -64,9 +63,8 @@ String getFilterQueryString(WidgetRef ref, ScrollListType scrollListType) {
   final String sortDirection = getSortDirection(selectedSortDirection);
   final String common =
       '$_sortOrderKey=$sortDirection&${_adjustQueryString(genreTags)}${_adjustQueryString(sortByFilter)}${_adjustQueryString(filterBy)}';
-  final String query = scrollListType == ScrollListType.creatorList
-      ? '$common${'$_nameSubstringKey=$search'}'
-      : '$common${'$_titleSubstringKey=$search'}';
+  final String query =
+      '$common${search.isNotEmpty ? '$_searchKey=$search' : ''}';
   return query;
 }
 

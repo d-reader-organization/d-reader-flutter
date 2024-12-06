@@ -10,8 +10,8 @@ class Formatter {
   }
 
   static String formatDate(DateTime date) {
-    String day = '0${date.day}'.substring(0, 2);
-    String month = '0${date.month}'.substring(0, 2);
+    String day = DateFormat('dd').format(date);
+    String month = date.month.toString().padLeft(2, '0');
     return '$day/$month/${date.year}';
   }
 

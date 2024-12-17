@@ -28,9 +28,6 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
   @override
   void initState() {
     super.initState();
-    ref.read(
-      registerWalletToSocketEvents,
-    );
     _controller.addListener(() {
       ref.read(selectedTabIndex.notifier).update((state) => _controller.index);
     });
@@ -44,6 +41,9 @@ class NewLibraryViewState extends ConsumerState<NewLibraryView>
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(
+      registerWalletToSocketEvents,
+    );
     return DefaultTabController(
       length: 3,
       child: NestedScrollView(

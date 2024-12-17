@@ -29,7 +29,6 @@ class _OpenDigitalAssetAnimation
   @override
   void initState() {
     super.initState();
-    ref.read(registerWalletToSocketEvents);
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -75,6 +74,7 @@ class _OpenDigitalAssetAnimation
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(registerWalletToSocketEvents);
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       body: Center(

@@ -8,7 +8,6 @@ class CollectibleInfoModel {
   });
 
   factory CollectibleInfoModel.fromJson(dynamic json) {
-    print(json);
     return CollectibleInfoModel(
       isSecondarySaleActive: json['isSecondarySaleActive'],
       activeCandyMachineAddress: json['activeCandyMachineAddress'],

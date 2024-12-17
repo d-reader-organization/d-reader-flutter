@@ -19,7 +19,7 @@ app:
     - purpose: icon
       uri: ./512x512_rounded.png
 release:
-  address: 7Yksoshaa7rPKgLdvQ7Egp99QkwHKvdr3CoXc2x52EBp
+  address: 9Eo36m6iZya3mm1PiCQjXHNLPcLSiVVZUvCfagjQS7n3
   media:
     - purpose: icon
       uri: ./512x512_rounded.png
@@ -41,14 +41,14 @@ release:
       name: dReader
       short_description: Digital comic book store
       long_description: Platform for discovering, trading, collecting, and reading digital graphic novels
-      new_in_version: Update comic issue model, connect wallet endpoint and search query param
+      new_in_version: Update websocket connection
       saga_features: Exclusive early access, free/discounted collectible comics
 solana_mobile_dapp_publisher_portal:
   google_store_package: io.app.dreader
   testing_instructions: Run the app
 lastSubmittedVersionOnChain:
-  address: 7Yksoshaa7rPKgLdvQ7Egp99QkwHKvdr3CoXc2x52EBp
-  version_code: 2054
-  apk_hash: i4zrNVTTnu9d2SN3VCt/YDg83ijXSZKdM5ilkNJQnPs=
+  address: 9Eo36m6iZya3mm1PiCQjXHNLPcLSiVVZUvCfagjQS7n3
+  version_code: 2055
+  apk_hash: awYk3x4pdUKoho3e2PqKioCPuQItXhCoBZonPCn8U50=
 lastUpdatedVersionOnStore:
-  address: 7Yksoshaa7rPKgLdvQ7Egp99QkwHKvdr3CoXc2x52EBp
+  address: 9Eo36m6iZya3mm1PiCQjXHNLPcLSiVVZUvCfagjQS7n3

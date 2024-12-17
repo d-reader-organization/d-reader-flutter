@@ -42,7 +42,6 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
   @override
   void initState() {
     super.initState();
-    ref.read(registerWalletToSocketEvents);
     _controller = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -62,6 +61,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(comicIssueDetailsProvider(widget.id));
+    ref.watch(registerWalletToSocketEvents);
     final textTheme = Theme.of(context).textTheme;
     return provider.when(
       data: (issue) {

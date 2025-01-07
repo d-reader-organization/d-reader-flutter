@@ -50,18 +50,20 @@ class ProfileController extends _$ProfileController {
     });
   }
 
-  Future<void> changeUsername({
+  Future<void> updateUser({
     required UserModel user,
     required void Function(dynamic result) callback,
   }) async {
     final String username = ref.read(usernameTextProvider);
-    if (username.isNotEmpty) {
+    final String displayName = ref.read(displayNameTextProvider);
+    if (username.isNotEmpty || displayName.isNotEmpty) {
       ref.read(globalNotifierProvider.notifier).updateLoading(true);
       final updateResult = await ref.read(userRepositoryProvider).updateUser(
             UpdateUserPayload(
               id: user.id,
+              displayName: displayName.isEmpty ? user.displayName : displayName,
               email: user.email,
-              name: username,
+              username: username.isEmpty ? user.username : username,
             ),
           );
       ref.read(globalNotifierProvider.notifier).updateLoading(false);

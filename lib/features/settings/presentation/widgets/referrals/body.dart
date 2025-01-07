@@ -94,7 +94,7 @@ class ReferralBody extends ConsumerWidget {
                   Clipboard.setData(
                     ClipboardData(
                       text:
-                          'https://dreader.app/register?referrer=${user.name}',
+                          'https://dreader.app/register?referrer=${user.username}',
                     ),
                   ).then((value) {
                     if (context.mounted) {

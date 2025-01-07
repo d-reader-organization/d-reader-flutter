@@ -169,8 +169,10 @@ class UserRemoteDataSource implements UserDataSource {
       final response = await networkService.patch(
         '/user/update/${payload.id}',
         data: {
-          if (payload.name != null && payload.name!.isNotEmpty)
-            "name": payload.name,
+          if (payload.displayName != null && payload.displayName!.isNotEmpty)
+            "displayName": payload.displayName,
+          if (payload.username != null && payload.username!.isNotEmpty)
+            "username": payload.username,
           if (payload.email != null && payload.email!.isNotEmpty)
             "email": payload.email,
           if (payload.referrer != null && payload.referrer!.isNotEmpty)

@@ -63,9 +63,9 @@ class CreatorStats {
 
   factory CreatorStats.fromJson(dynamic json) {
     return CreatorStats(
-      comicIssuesCount: json['comicIssuesCount'],
-      followersCount: json['followersCount'],
-      totalVolume: json['totalVolume'],
+      comicIssuesCount: json['comicIssuesCount'] ?? 0,
+      followersCount: json['followersCount'] ?? 0,
+      totalVolume: json['totalVolume'] ?? 0,
       comicsCount: json['comicsCount'] ?? 0,
     );
   }
@@ -76,7 +76,9 @@ class CreatorMyStats {
 
   CreatorMyStats({this.isFollowing});
 
-  factory CreatorMyStats.fromJson(dynamic json) => CreatorMyStats(
-        isFollowing: json['isFollowing'],
-      );
+  factory CreatorMyStats.fromJson(dynamic json) {
+    return CreatorMyStats(
+      isFollowing: json['isFollowing'],
+    );
+  }
 }

@@ -47,6 +47,12 @@ final usernameTextProvider = StateProvider<String>(
   },
 );
 
+final displayNameTextProvider = StateProvider<String>(
+  (ref) {
+    return '';
+  },
+);
+
 final oldPasswordProvider = StateProvider.autoDispose<String>(
   (ref) {
     return '';

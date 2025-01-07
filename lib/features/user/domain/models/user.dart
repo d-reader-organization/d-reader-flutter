@@ -2,16 +2,17 @@ import 'dart:io' show File;
 
 class UserModel {
   final int id, referralsRemaining;
-  final String email, avatar, name, role;
+  final String avatar, displayName, email, role, username;
   final bool isEmailVerified, hasBetaAccess;
   final List<String> deviceTokens;
 
   UserModel({
     required this.id,
-    required this.email,
-    required this.name,
     required this.avatar,
+    required this.displayName,
+    required this.email,
     required this.role,
+    required this.username,
     required this.isEmailVerified,
     required this.hasBetaAccess,
     required this.referralsRemaining,
@@ -21,10 +22,11 @@ class UserModel {
   factory UserModel.fromJson(dynamic json) {
     return UserModel(
       id: json['id'],
-      email: json['email'],
       avatar: json['avatar'],
-      name: json['name'],
+      displayName: json['displayName'] ?? '',
+      email: json['email'],
       role: json['role'],
+      username: json['username'] ?? json['name'],
       isEmailVerified: json['isEmailVerified'],
       hasBetaAccess: json['hasBetaAccess'] ?? false,
       referralsRemaining: json['referralsRemaining'] ?? 0,
@@ -37,10 +39,11 @@ class UserModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['email'] = email;
-    data['name'] = name;
     data['avatar'] = avatar;
+    data['displayName'] = displayName;
+    data['email'] = email;
     data['role'] = role;
+    data['username'] = username;
     data['isEmailVerified'] = isEmailVerified;
     data['hasBetaAccess'] = hasBetaAccess;
     data['referralsRemaining'] = referralsRemaining;
@@ -78,12 +81,13 @@ class UpdateUserPayload {
   final int id;
 
   final File? avatar;
-  final String? email, name, referrer;
+  final String? displayName, email, referrer, username;
 
   UpdateUserPayload({
     required this.id,
+    this.displayName,
     this.email,
-    this.name,
+    this.username,
     this.avatar,
     this.referrer,
   });

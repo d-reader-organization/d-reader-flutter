@@ -35,12 +35,14 @@ class ProfileView extends HookConsumerWidget {
       bottomNavigationBar: SafeArea(
         child: Consumer(
           builder: (context, ref, child) {
+            final String displayName = ref.watch(displayNameTextProvider);
             final String username = ref.watch(usernameTextProvider);
+            final showBottomActions = (username.isNotEmpty &&
+                    username.trim() != provider.value?.username) ||
+                (displayName.isNotEmpty &&
+                    displayName.trim() != provider.value?.displayName);
             return AnimatedOpacity(
-              opacity:
-                  username.isNotEmpty && username.trim() != provider.value?.name
-                      ? 1.0
-                      : 0.0,
+              opacity: showBottomActions ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOut,
               child: Padding(
@@ -51,11 +53,9 @@ class ProfileView extends HookConsumerWidget {
                       child: CustomTextButton(
                         size: const Size(double.infinity, 40),
                         onPressed: () {
-                          final String username =
-                              ref.read(usernameTextProvider);
-                          if (username.isNotEmpty) {
-                            ref.read(usernameTextProvider.notifier).state = '';
-                          }
+                          ref.read(usernameTextProvider.notifier).state = '';
+                          ref.read(displayNameTextProvider.notifier).state = '';
+
                           context.pop();
                         },
                         borderRadius: BorderRadius.circular(8),
@@ -73,7 +73,7 @@ class ProfileView extends HookConsumerWidget {
                           if (provider.value != null) {
                             await ref
                                 .read(profileControllerProvider.notifier)
-                                .changeUsername(
+                                .updateUser(
                                   user: provider.value!,
                                   callback: (result) {
                                     showSnackBar(
@@ -83,7 +83,7 @@ class ProfileView extends HookConsumerWidget {
                                           : ColorPalette.dReaderGreen,
                                       text: result is String
                                           ? result
-                                          : 'Your username has been updated.',
+                                          : 'User has been updated.',
                                     );
                                   },
                                 );
@@ -149,9 +149,19 @@ class ProfileView extends HookConsumerWidget {
                             isReadOnly: true,
                           ),
                           CustomTextField(
+                            labelText: 'Display Name',
+                            defaultValue: user.displayName.isNotEmpty
+                                ? user.displayName
+                                : null,
+                            onChange: (String value) {
+                              ref.read(displayNameTextProvider.notifier).state =
+                                  value;
+                            },
+                          ),
+                          CustomTextField(
                             labelText: 'Username',
                             defaultValue:
-                                user.name.isNotEmpty ? user.name : null,
+                                user.username.isNotEmpty ? user.username : null,
                             onValidate: usernameValidation,
                             onChange: (String value) {
                               ref.read(usernameTextProvider.notifier).state =

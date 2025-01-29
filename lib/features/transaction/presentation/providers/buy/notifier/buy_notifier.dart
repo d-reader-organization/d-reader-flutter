@@ -60,7 +60,7 @@ class BuyNotifier extends _$BuyNotifier {
           (e) => BuyDigitalAsset(
             mintAccount: e.assetAddress,
             price: e.price,
-            sellerAddress: e.seller.address,
+            sellerAddress: e.sellerAddress,
             buyerAddress: buyerAddress,
           ),
         )

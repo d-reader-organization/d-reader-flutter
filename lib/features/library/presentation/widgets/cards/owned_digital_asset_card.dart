@@ -14,7 +14,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OwnedDigitalAssetCard extends ConsumerWidget {
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
 
   const OwnedDigitalAssetCard({
     super.key,

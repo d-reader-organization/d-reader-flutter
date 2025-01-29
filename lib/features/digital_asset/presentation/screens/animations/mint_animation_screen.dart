@@ -54,7 +54,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
           .mintLoadingListener(
             videoPlayerController: _controller,
             animationController: _animationController,
-            onSuccess: (DigitalAssetModel digitalAsset) async {
+            onSuccess: (CollectibleComicModel collectibleComic) async {
               await Future.delayed(
                 const Duration(milliseconds: 1000),
                 () {
@@ -63,7 +63,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
                       context: context,
                       path: RoutePath.doneMinting,
                       homeSubRoute: true,
-                      extra: digitalAsset,
+                      extra: collectibleComic,
                     );
                   }
                 },
@@ -134,7 +134,7 @@ class _MintLoadingAnimationState extends ConsumerState<MintLoadingAnimation>
 }
 
 class DoneMintingAnimation extends StatefulWidget {
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
   const DoneMintingAnimation({
     super.key,
     required this.digitalAsset,
@@ -237,7 +237,7 @@ class _DoneMintingAnimationState extends State<DoneMintingAnimation>
                         height: 8,
                       ),
                       Text(
-                        widget.digitalAsset.comicName,
+                        widget.digitalAsset.comicTitle,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,

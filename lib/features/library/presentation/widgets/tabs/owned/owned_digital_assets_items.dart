@@ -18,7 +18,7 @@ class OwnedDigitalAssetsItems extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(
-      digitalAssetsProvider(
+      digitalCollectiblesProvider(
         'comicIssueId=${issue.id}&userId=${ref.watch(environmentProvider).user?.id}',
       ),
     );

@@ -13,11 +13,11 @@ class OwnedController extends _$OwnedController {
   @override
   void build() {}
 
-  Future<List<DigitalAssetModel>> _fetchOwnedDigitalAssets(
+  Future<List<CollectibleComicModel>> _fetchOwnedDigitalAssets(
       int comicIssueId) async {
     ref.read(globalNotifierProvider.notifier).updateLoading(true);
 
-    final ownedDigitalAssets = await ref.read(digitalAssetsProvider(
+    final ownedDigitalAssets = await ref.read(digitalCollectiblesProvider(
       'comicIssueId=$comicIssueId&userId=${ref.read(environmentProvider).user?.id}',
     ).future);
     ref.read(globalNotifierProvider.notifier).updateLoading(false);
@@ -28,7 +28,7 @@ class OwnedController extends _$OwnedController {
     required int comicIssueId,
     required void Function(String digitalAssetAddress) goToDigitalAssetDetails,
   }) async {
-    final List<DigitalAssetModel> ownedDigitalAssets =
+    final List<CollectibleComicModel> ownedDigitalAssets =
         await _fetchOwnedDigitalAssets(comicIssueId);
 
     final int usedDigitalAssetIndex =

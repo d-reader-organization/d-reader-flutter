@@ -22,7 +22,7 @@ class DigitalAssetController extends _$DigitalAssetController {
   mintLoadingListener({
     required VideoPlayerController videoPlayerController,
     required AnimationController animationController,
-    required Future Function(DigitalAssetModel digitalAsset) onSuccess,
+    required Future Function(CollectibleComicModel collectibleComic) onSuccess,
     required Function() onTimeout,
     required Function([String message]) onFail,
   }) async {
@@ -58,7 +58,7 @@ class DigitalAssetController extends _$DigitalAssetController {
   _handleMintedCase({
     required VideoPlayerController videoPlayerController,
     required AnimationController animationController,
-    required Future Function(DigitalAssetModel digitalAsset) onSuccess,
+    required Future Function(CollectibleComicModel collectibleComic) onSuccess,
   }) async {
     videoPlayerController.pause();
     animationController.reverse(
@@ -77,7 +77,7 @@ class DigitalAssetController extends _$DigitalAssetController {
     ref.invalidate(lastProcessedAssetProvider);
     ref.invalidate(ownedComicsProvider);
     ref.invalidate(ownedIssuesAsyncProvider);
-    ref.invalidate(digitalAssetsProvider);
+    ref.invalidate(digitalCollectiblesProvider);
     ref
         .read(globalNotifierProvider.notifier)
         .update(isLoading: false, newMessage: '');
@@ -120,7 +120,7 @@ class DigitalAssetController extends _$DigitalAssetController {
       return;
     }
     ref.invalidate(lastProcessedAssetProvider);
-    ref.invalidate(digitalAssetsProvider);
+    ref.invalidate(digitalCollectiblesProvider);
     ref.invalidate(ownedComicsProvider);
     ref.invalidate(ownedIssuesAsyncProvider);
     ref.invalidate(comicIssuePagesProvider);

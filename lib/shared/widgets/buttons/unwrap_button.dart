@@ -16,7 +16,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 const _buttonText = 'Unwrap';
 
 class UnwrapButton extends ConsumerWidget {
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
   final Color backgroundColor, borderColor, loadingColor, textColor;
   final Size? size;
   final EdgeInsets padding;
@@ -131,7 +131,7 @@ class UnwrapButton extends ConsumerWidget {
 
 class _UnwrapButton extends ConsumerWidget {
   final bool isLoading;
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
   final Color backgroundColor, borderColor, loadingColor, textColor;
   final Size? size;
   final EdgeInsets padding;

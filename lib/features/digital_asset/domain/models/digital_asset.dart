@@ -1,9 +1,7 @@
-class DigitalAssetModel {
-  final List<DigitalAssetAttribute> attributes;
+class CollectibleComicModel {
   final String address,
-      comicName,
-      comicIssueName,
-      uri,
+      comicTitle,
+      comicIssueTitle,
       image,
       name,
       description,
@@ -13,10 +11,8 @@ class DigitalAssetModel {
   final bool isUsed, isSigned, isListed;
   final int comicIssueId;
 
-  DigitalAssetModel({
-    required this.attributes,
+  CollectibleComicModel({
     required this.address,
-    required this.uri,
     required this.image,
     required this.name,
     required this.description,
@@ -24,37 +20,27 @@ class DigitalAssetModel {
     required this.royalties,
     required this.isUsed,
     required this.isSigned,
-    required this.comicName,
-    required this.comicIssueName,
+    required this.comicTitle,
+    required this.comicIssueTitle,
     required this.comicIssueId,
     required this.isListed,
     required this.rarity,
   });
 
-  factory DigitalAssetModel.fromJson(dynamic json) {
-    return DigitalAssetModel(
-      attributes: json['attributes'] != null
-          ? List<DigitalAssetAttribute>.from(
-              json['attributes'].map(
-                (item) => DigitalAssetAttribute.fromJson(
-                  item,
-                ),
-              ),
-            )
-          : [],
+  factory CollectibleComicModel.fromJson(dynamic json) {
+    return CollectibleComicModel(
       address: json['address'],
-      uri: json['uri'],
       image: json['image'],
       name: json['name'],
-      description: json['description'],
+      description: json['description'] ?? '',
       ownerAddress: json['ownerAddress'],
       royalties: json['royalties'] is int
           ? json['royalties'].toDouble()
           : json['royalties'],
       isUsed: json['isUsed'],
       isSigned: json['isSigned'],
-      comicName: json['comicName'],
-      comicIssueName: json['comicIssueName'],
+      comicTitle: json['comicTitle'] ?? '',
+      comicIssueTitle: json['comicIssueTitle'] ?? '',
       comicIssueId: json['comicIssueId'],
       isListed: json['isListed'] ?? false,
       rarity: json['rarity'],

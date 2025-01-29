@@ -25,7 +25,7 @@ class PreviewImage extends StatelessWidget {
   });
 
   openModalBottomSheet(
-      BuildContext context, List<DigitalAssetModel> ownedDigitalAssets) {
+      BuildContext context, List<CollectibleComicModel> ownedDigitalAssets) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -98,7 +98,7 @@ class PreviewImage extends StatelessWidget {
                 Consumer(
                   builder: (context, ref, child) {
                     final ownedDigitalAssets = ref.watch(
-                      digitalAssetsProvider(
+                      digitalCollectiblesProvider(
                         'comicIssueId=$issueId&userId=${ref.read(environmentProvider).user?.id}',
                       ),
                     );

@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 
 class DigitalAssetCard extends StatelessWidget {
   final String imageUrl;
-  final String comicName;
-  final String issueName;
+  final String comicTitle;
+  final String issueTitle;
+
   const DigitalAssetCard({
     super.key,
     required this.imageUrl,
-    required this.comicName,
-    required this.issueName,
+    required this.comicTitle,
+    required this.issueTitle,
   });
 
   @override

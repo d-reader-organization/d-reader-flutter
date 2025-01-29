@@ -34,7 +34,7 @@ class ListingItem extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         final allowListingSelection = !(myWallets.value
-                ?.any((element) => element.address == listing.seller.address) ??
+                ?.any((element) => element.address == listing.sellerAddress) ??
             false);
         if (!allowListingSelection) {
           return;
@@ -110,10 +110,10 @@ class ListingItem extends ConsumerWidget {
                       width: 4,
                     ),
                     Text(
-                      listing.seller.name != null &&
-                              listing.seller.name!.isNotEmpty
-                          ? listing.seller.name!
-                          : Formatter.formatAddress(listing.seller.address, 4),
+                      listing.seller.username != null &&
+                              listing.seller.username!.isNotEmpty
+                          ? listing.seller.username!
+                          : Formatter.formatAddress(listing.sellerAddress, 4),
                       style: textTheme.bodySmall,
                     ),
                   ],

@@ -9,14 +9,14 @@ class DigitalAssetRepositoryImpl implements DigitalAssetRepository {
 
   DigitalAssetRepositoryImpl(this.dataSource);
   @override
-  Future<Either<AppException, DigitalAssetModel?>> getDigitalAsset(
+  Future<Either<AppException, CollectibleComicModel?>> getDigitalAsset(
       String address) {
     return dataSource.getDigitalAsset(address);
   }
 
   @override
-  Future<Either<AppException, List<DigitalAssetModel>>> getDigitalAssets(
-      String query) {
-    return dataSource.getDigitalAssets(query);
+  Future<Either<AppException, List<CollectibleComicModel>>>
+      getDigitalCollectibles(String query) {
+    return dataSource.getDigitalCollectibles(query);
   }
 }

@@ -1,12 +1,10 @@
 import 'package:d_reader_flutter/features/digital_asset/domain/models/digital_asset.dart';
 
 class ListingModel {
-  final int id;
-  final String assetAddress, name, cover, rarity;
+  final int id, price;
+  final String assetAddress, name, cover, rarity, sellerAddress, tokenAddress;
   final List<DigitalAssetAttribute> attributes;
   final Seller seller;
-  final String tokenAddress;
-  final int price;
   final bool isUsed;
   final bool isSigned;
 
@@ -16,8 +14,9 @@ class ListingModel {
     required this.name,
     required this.cover,
     required this.attributes,
-    required this.seller,
+    required this.sellerAddress,
     required this.tokenAddress,
+    required this.seller,
     required this.price,
     required this.isUsed,
     required this.isSigned,
@@ -34,6 +33,7 @@ class ListingModel {
           json['attributes'].map((x) => DigitalAssetAttribute.fromJson(x)),
         ),
         seller: Seller.fromJson(json['seller']),
+        sellerAddress: json['sellerAddress'],
         tokenAddress: json['tokenAddress'],
         price: json['price'],
         isUsed: json['isUsed'],
@@ -84,31 +84,30 @@ class Attribute {
 
 class Seller {
   final int? id;
-  final String? avatar, name;
-  final String address;
+  final String? avatar, displayName, username;
 
   Seller({
-    required this.address,
     this.id,
     this.avatar,
-    this.name,
+    this.displayName,
+    this.username,
   });
 
   factory Seller.fromJson(Map<String, dynamic> json) {
     return Seller(
       id: json['id'],
-      address: json['address'],
       avatar: json['avatar'],
-      name: json['name'],
+      displayName: json['displayName'],
+      username: json['username'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['address'] = address;
     data['avatar'] = avatar;
-    data['name'] = name;
+    data['displayName'] = displayName;
+    data['username'] = username;
     return data;
   }
 }

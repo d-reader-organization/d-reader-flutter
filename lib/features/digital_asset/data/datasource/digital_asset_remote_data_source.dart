@@ -6,10 +6,10 @@ import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 const String _controllerPath = 'asset';
 
 abstract class DigitalAssetDataSource {
-  Future<Either<AppException, DigitalAssetModel?>> getDigitalAsset(
+  Future<Either<AppException, CollectibleComicModel?>> getDigitalAsset(
       String address);
-  Future<Either<AppException, List<DigitalAssetModel>>> getDigitalAssets(
-      String query);
+  Future<Either<AppException, List<CollectibleComicModel>>>
+      getDigitalCollectibles(String query);
 }
 
 class DigitalAssetRemoteDataSource implements DigitalAssetDataSource {
@@ -18,14 +18,14 @@ class DigitalAssetRemoteDataSource implements DigitalAssetDataSource {
   DigitalAssetRemoteDataSource(this.networkService);
 
   @override
-  Future<Either<AppException, DigitalAssetModel?>> getDigitalAsset(
+  Future<Either<AppException, CollectibleComicModel?>> getDigitalAsset(
       String address) async {
     try {
       final response =
           await networkService.get('/$_controllerPath/get/$address');
       return response.fold((exception) => Left(exception), (result) {
         return Right(
-          DigitalAssetModel.fromJson(
+          CollectibleComicModel.fromJson(
             result.data,
           ),
         );
@@ -43,16 +43,17 @@ class DigitalAssetRemoteDataSource implements DigitalAssetDataSource {
   }
 
   @override
-  Future<Either<AppException, List<DigitalAssetModel>>> getDigitalAssets(
-      String query) async {
+  Future<Either<AppException, List<CollectibleComicModel>>>
+      getDigitalCollectibles(String query) async {
     try {
-      final response = await networkService.get('/$_controllerPath/get?$query');
+      final response = await networkService
+          .get('/$_controllerPath/get/collectible-comic?$query');
 
       return response.fold((exception) => Left(exception), (result) {
         return Right(
-          List<DigitalAssetModel>.from(
+          List<CollectibleComicModel>.from(
             result.data.map(
-              (item) => DigitalAssetModel.fromJson(
+              (item) => CollectibleComicModel.fromJson(
                 item,
               ),
             ),

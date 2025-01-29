@@ -76,7 +76,7 @@ class UnwrapNotifier extends _$UnwrapNotifier {
 
   void _invalidateDataAfterUnwrap() {
     ref.invalidate(lastProcessedAssetProvider);
-    ref.invalidate(digitalAssetsProvider);
+    ref.invalidate(digitalCollectiblesProvider);
     ref.invalidate(digitalAssetProvider);
     ref.invalidate(ownedComicsProvider);
     ref.invalidate(ownedIssuesAsyncProvider);

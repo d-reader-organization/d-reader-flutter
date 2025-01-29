@@ -14,7 +14,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ListOrDelistButton extends ConsumerWidget {
   final bool isListButton;
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
 
   const ListOrDelistButton({
     super.key,
@@ -78,7 +78,7 @@ class ListOrDelistButton extends ConsumerWidget {
 }
 
 class ReadButton extends ConsumerWidget {
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
   const ReadButton({
     super.key,
     required this.digitalAsset,
@@ -132,7 +132,7 @@ class _DelistButton extends StatelessWidget {
 
 class _ListButton extends StatelessWidget {
   final bool isLoading;
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
   const _ListButton({
     required this.isLoading,
     required this.digitalAsset,

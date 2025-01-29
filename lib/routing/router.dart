@@ -304,7 +304,7 @@ final List<GoRoute> animationRoutes = [
   GoRoute(
     path: RoutePath.doneMinting,
     builder: (context, state) {
-      final digitalAsset = state.extra as DigitalAssetModel;
+      final digitalAsset = state.extra as CollectibleComicModel;
       return DoneMintingAnimation(digitalAsset: digitalAsset);
     },
   ),

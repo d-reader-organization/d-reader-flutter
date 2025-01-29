@@ -3,8 +3,8 @@ import 'package:d_reader_flutter/shared/domain/models/either.dart';
 import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 
 abstract class DigitalAssetRepository {
-  Future<Either<AppException, DigitalAssetModel?>> getDigitalAsset(
+  Future<Either<AppException, CollectibleComicModel?>> getDigitalAsset(
       String address);
-  Future<Either<AppException, List<DigitalAssetModel>>> getDigitalAssets(
-      String query);
+  Future<Either<AppException, List<CollectibleComicModel>>>
+      getDigitalCollectibles(String query);
 }

@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DigitalAssetModalBottomSheet extends ConsumerStatefulWidget {
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
   const DigitalAssetModalBottomSheet({
     super.key,
     required this.digitalAsset,
@@ -52,7 +52,7 @@ class _DigitalAssetModalBottomSheetState
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               subtitle: Text(
-                widget.digitalAsset.comicName,
+                widget.digitalAsset.comicTitle,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               leading: Container(
@@ -114,7 +114,7 @@ class _DigitalAssetModalBottomSheetState
 }
 
 class SubmitButton extends ConsumerWidget {
-  final DigitalAssetModel digitalAsset;
+  final CollectibleComicModel digitalAsset;
   final double? price;
   const SubmitButton({
     super.key,

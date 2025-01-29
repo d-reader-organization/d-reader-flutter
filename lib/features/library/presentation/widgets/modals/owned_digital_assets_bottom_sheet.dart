@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class OwnedDigitalAssetsBottomSheet extends StatelessWidget {
-  final List<DigitalAssetModel> ownedDigitalAssets;
+  final List<CollectibleComicModel> ownedDigitalAssets;
   final int episodeNumber;
   const OwnedDigitalAssetsBottomSheet({
     super.key,

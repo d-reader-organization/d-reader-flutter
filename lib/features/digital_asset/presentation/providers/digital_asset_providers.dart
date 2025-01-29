@@ -11,7 +11,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:solana/solana.dart';
 
 final digitalAssetProvider = FutureProvider.autoDispose
-    .family<DigitalAssetModel?, String>((ref, address) async {
+    .family<CollectibleComicModel?, String>((ref, address) async {
   final response =
       await ref.read(digitalAssetRepositoryProvider).getDigitalAsset(address);
 
@@ -20,8 +20,9 @@ final digitalAssetProvider = FutureProvider.autoDispose
   }, (digitalAsset) => digitalAsset);
 });
 
-final digitalAssetsProvider =
-    FutureProvider.family<List<DigitalAssetModel>, String>((ref, query) async {
+final digitalCollectiblesProvider =
+    FutureProvider.family<List<CollectibleComicModel>, String>(
+        (ref, query) async {
   Timer? timer;
 
   ref.onDispose(() {
@@ -37,8 +38,9 @@ final digitalAssetsProvider =
   ref.onResume(() {
     timer?.cancel();
   });
-  final response =
-      await ref.read(digitalAssetRepositoryProvider).getDigitalAssets(query);
+  final response = await ref
+      .read(digitalAssetRepositoryProvider)
+      .getDigitalCollectibles(query);
   return response.fold((exception) => [], (digitalAssets) => digitalAssets);
 });
 

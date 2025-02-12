@@ -55,7 +55,7 @@ class CreatorListItem extends StatelessWidget {
       onTap: () {
         nextScreenPush(
           context: context,
-          path: '${RoutePath.creatorDetails}/${creator.slug}',
+          path: '${RoutePath.creatorDetails}/${creator.id}',
         );
       },
       child: Row(
@@ -70,7 +70,7 @@ class CreatorListItem extends StatelessWidget {
                 ),
                 Expanded(
                   child: AuthorVerified(
-                    authorName: creator.name,
+                    authorName: creator.displayName,
                     isVerified: creator.isVerified,
                     fontSize: 16,
                   ),

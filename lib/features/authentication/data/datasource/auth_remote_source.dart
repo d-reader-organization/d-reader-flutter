@@ -86,7 +86,7 @@ class AuthRemoteDataSource implements AuthDataSource {
           await networkService.post('/auth/user/register', data: {
         'email': email,
         'password': password,
-        'name': username,
+        'username': username,
       });
       return signUpResult.fold((exception) {
         return Left(exception);

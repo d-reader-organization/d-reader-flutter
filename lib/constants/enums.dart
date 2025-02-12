@@ -15,7 +15,7 @@ enum WalkthroughKeys {
 enum NotificationDataKey {
   comicIssueId,
   comicSlug,
-  creatorSlug,
+  creatorId,
   digitalAssetAddress,
   externalUrl,
 }
@@ -24,7 +24,7 @@ extension NotificationDataKeyString on NotificationDataKey {
   static const keyStringValues = {
     NotificationDataKey.comicIssueId: 'comicIssueId',
     NotificationDataKey.comicSlug: 'comicSlug',
-    NotificationDataKey.creatorSlug: 'creatorSlug',
+    NotificationDataKey.creatorId: 'creatorId',
     NotificationDataKey.digitalAssetAddress: 'digitalAssetAddress',
     NotificationDataKey.externalUrl: 'externalUrl'
   };

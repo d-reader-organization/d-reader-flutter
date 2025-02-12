@@ -14,8 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'comic_issue_providers.g.dart';
 
 @riverpod
-Future<ComicIssueModel> comicIssueDetails(
-    ComicIssueDetailsRef ref, String id) async {
+Future<ComicIssueModel> comicIssueDetails(Ref ref, String id) async {
   final response =
       await ref.read(comicIssueRepositoryProvider).getComicIssue(id);
   return response.fold((exception) {

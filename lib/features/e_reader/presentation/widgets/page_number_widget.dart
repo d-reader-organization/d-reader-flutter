@@ -19,7 +19,7 @@ class PageNumberWidget extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: ColorPalette.appBackgroundColor.withOpacity(0.9),
+          color: ColorPalette.appBackgroundColor.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(
             8,
           ),

@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-void logoutAndRedirectToInitial(ProviderRef ref) {
+void logoutAndRedirectToInitial(Ref ref) {
   ref.read(logoutProvider);
   routerNavigatorKey.currentState!.push(
     MaterialPageRoute(

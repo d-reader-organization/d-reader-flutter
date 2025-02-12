@@ -129,7 +129,7 @@ final List<GoRoute> authRoutes = [
   ),
 ];
 
-List<GoRoute> generateHomeRoutes(ProviderRef ref) {
+List<GoRoute> generateHomeRoutes(Ref ref) {
   return [
     GoRoute(
       path: RoutePath.home,
@@ -172,10 +172,10 @@ List<GoRoute> generateHomeRoutes(ProviderRef ref) {
           },
         ),
         GoRoute(
-          path: '${RoutePath.creatorDetails}/:slug',
+          path: '${RoutePath.creatorDetails}/:id',
           builder: (context, state) {
-            final slug = state.pathParameters['slug'] ?? '';
-            return CreatorDetailsView(slug: slug);
+            final id = state.pathParameters['id'] ?? '';
+            return CreatorDetailsView(id: int.tryParse(id) ?? 0);
           },
         ),
         GoRoute(

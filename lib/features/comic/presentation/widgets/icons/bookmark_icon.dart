@@ -37,7 +37,7 @@ class BookmarkIcon extends ConsumerWidget {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: ref.watch(bookmarkSelectedProvider(isBookmarked))
-              ? ColorPalette.dReaderGreen.withOpacity(.4)
+              ? ColorPalette.dReaderGreen.withValues(alpha: .4)
               : Colors.transparent,
           border: Border.all(
             color: ref.watch(bookmarkSelectedProvider(isBookmarked))

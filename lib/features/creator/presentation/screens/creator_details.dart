@@ -10,16 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CreatorDetailsView extends ConsumerWidget {
-  final String slug;
+  final int id;
 
   const CreatorDetailsView({
     super.key,
-    required this.slug,
+    required this.id,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<CreatorModel?> creator = ref.watch(creatorProvider(slug));
+    AsyncValue<CreatorModel?> creator = ref.watch(creatorProvider(id));
     return Scaffold(
       backgroundColor: ColorPalette.appBackgroundColor,
       extendBodyBehindAppBar: true,
@@ -64,7 +64,7 @@ class CreatorDetailsView extends ConsumerWidget {
                 child: TabBarView(
                   children: [
                     CreatorComicsTab(
-                      creatorSlug: creator.slug,
+                      creatorId: creator.id,
                     ),
                     const CreatorCollectiblesTab(),
                   ],

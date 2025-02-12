@@ -155,7 +155,9 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                 gradient: LinearGradient(
                                   colors: [
                                     ColorPalette.appBackgroundColor,
-                                    const Color(0xff181a20).withOpacity(.8),
+                                    const Color(0xff181a20).withValues(
+                                      alpha: 0.8,
+                                    ),
                                     ColorPalette.appBackgroundColor,
                                   ],
                                   begin: Alignment.bottomCenter,
@@ -309,7 +311,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                         nextScreenPush(
                                           context: context,
                                           path:
-                                              '${RoutePath.creatorDetails}/${issue.creator.slug}',
+                                              '${RoutePath.creatorDetails}/${issue.creator.id}',
                                         );
                                       },
                                       child: Row(
@@ -329,7 +331,7 @@ class _ComicIssueDetailsState extends ConsumerState<ComicIssueDetails>
                                           const SizedBox(width: 12),
                                           Expanded(
                                             child: Text(
-                                              issue.creator.name,
+                                              issue.creator.displayName,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               style: textTheme.titleMedium,
@@ -492,7 +494,7 @@ class _ComicIssueDetailsSkeleton extends StatelessWidget {
             gradient: LinearGradient(
               colors: [
                 ColorPalette.appBackgroundColor,
-                const Color(0xff181a20).withOpacity(.8),
+                const Color(0xff181a20).withValues(alpha: .8),
                 ColorPalette.appBackgroundColor,
               ],
               begin: Alignment.bottomCenter,

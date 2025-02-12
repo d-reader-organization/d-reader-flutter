@@ -25,10 +25,10 @@ final registerWalletToSocketEvents = Provider.autoDispose(
 
     final socket = SocketIOService(Config.apiUrl, address);
     ref.onDispose(() {
-      socket.emit(leaveRoomEvent, {'walletAddress': address});
+      socket.emit(leaveRoomEvent, {'roomId': address});
     });
 
-    socket.emit(joinRoomEvent, {'walletAddress': address});
+    socket.emit(joinRoomEvent, {'roomId': address});
 
     socket.on('wallet/$address/item-used', (data) {
       ref.invalidate(ownedIssuesProvider);
@@ -52,7 +52,7 @@ final registerWalletToSocketEvents = Provider.autoDispose(
 
 @riverpod
 Future<AccountResult> accountInfo(
-  AccountInfoRef ref, {
+  Ref ref, {
   required String address,
 }) {
   final client = ref.read(solanaClientProvider);

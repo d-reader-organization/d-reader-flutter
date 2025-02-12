@@ -6,7 +6,7 @@ part of 'unwrap_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$unwrapNotifierHash() => r'62e98b1f41adc4773fbae49b7c8575ccac239d61';
+String _$unwrapNotifierHash() => r'7ffa6f09dbb0426def380e9731f63b97f8dc5f9f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -157,6 +157,8 @@ class UnwrapNotifierProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin UnwrapNotifierRef on AutoDisposeNotifierProviderRef<TransactionState> {
   /// The parameter `address` of this provider.
   String? get address;
@@ -171,4 +173,4 @@ class _UnwrapNotifierProviderElement
   String? get address => (origin as UnwrapNotifierProvider).address;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

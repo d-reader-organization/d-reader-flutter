@@ -38,7 +38,7 @@ class RatingIcon extends ConsumerWidget {
               constraints: const BoxConstraints(minWidth: 64, minHeight: 42),
               decoration: BoxDecoration(
                 color: isRatedByMe
-                    ? ColorPalette.dReaderYellow100.withOpacity(.4)
+                    ? ColorPalette.dReaderYellow100.withValues(alpha: .4)
                     : ColorPalette.appBackgroundColor,
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(

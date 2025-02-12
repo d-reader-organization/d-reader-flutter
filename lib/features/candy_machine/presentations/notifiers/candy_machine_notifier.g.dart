@@ -7,7 +7,7 @@ part of 'candy_machine_notifier.dart';
 // **************************************************************************
 
 String _$candyMachineNotifierHash() =>
-    r'b5e39f22b55aca8943e153d3e5b9a0333f798722';
+    r'6591f06540670bb0f41c381b41b6f80c7ecb6317';
 
 /// See also [CandyMachineNotifier].
 @ProviderFor(CandyMachineNotifier)
@@ -24,4 +24,4 @@ final candyMachineNotifierProvider = AutoDisposeNotifierProvider<
 
 typedef _$CandyMachineNotifier = AutoDisposeNotifier<CandyMachineData>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

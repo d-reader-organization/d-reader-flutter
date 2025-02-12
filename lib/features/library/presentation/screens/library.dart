@@ -163,11 +163,11 @@ class CreatorTabHeader extends ConsumerWidget {
                     PopupMenuItem(
                       value: 'all',
                       onTap: () {
-                        ref.read(selectedCreatorSlugs.notifier).update(
-                            (state) => ref
+                        ref.read(selectedCreatorIds.notifier).update((state) =>
+                            ref
                                 .read(followedCreatorsProvider.notifier)
                                 .data
-                                .map((item) => item.slug)
+                                .map((item) => item.id)
                                 .toList());
                       },
                       child: Text(
@@ -182,7 +182,7 @@ class CreatorTabHeader extends ConsumerWidget {
                       value: 'none',
                       onTap: () {
                         ref
-                            .read(selectedCreatorSlugs.notifier)
+                            .read(selectedCreatorIds.notifier)
                             .update((state) => []);
                       },
                       child: Text(
@@ -231,7 +231,7 @@ class CreatorTabHeader extends ConsumerWidget {
           ],
         ),
         GestureDetector(
-          onTap: ref.watch(selectedCreatorSlugs).isNotEmpty &&
+          onTap: ref.watch(selectedCreatorIds).isNotEmpty &&
                   !ref.watch(privateLoadingProvider)
               ? () async {
                   await triggerConfirmationDialog(
@@ -242,7 +242,7 @@ class CreatorTabHeader extends ConsumerWidget {
                       await ref.read(
                         unfollowCreatorsProvider(
                           ref.read(
-                            selectedCreatorSlugs,
+                            selectedCreatorIds,
                           ),
                         ).future,
                       );
@@ -254,7 +254,7 @@ class CreatorTabHeader extends ConsumerWidget {
             'Delete',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   height: 1.2,
-                  color: ref.watch(selectedCreatorSlugs).isNotEmpty
+                  color: ref.watch(selectedCreatorIds).isNotEmpty
                       ? Colors.white
                       : ColorPalette.greyscale200,
                 ),

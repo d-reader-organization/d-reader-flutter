@@ -20,8 +20,8 @@ final creatorsProvider = FutureProvider.autoDispose
 });
 
 final creatorProvider =
-    FutureProvider.autoDispose.family<CreatorModel?, String>((ref, slug) async {
-  return await ref.read(creatorRepositoryProvider).getCreator(slug);
+    FutureProvider.autoDispose.family<CreatorModel?, int>((ref, id) async {
+  return await ref.read(creatorRepositoryProvider).getCreator(id);
 });
 
 final paginatedCreatorsProvider = StateNotifierProvider.family<
@@ -36,15 +36,15 @@ final paginatedCreatorsProvider = StateNotifierProvider.family<
 });
 
 final unfollowCreatorsProvider =
-    FutureProvider.autoDispose.family<bool, List<String>>(
-  (ref, creatorSlugs) async {
-    await Future.wait(creatorSlugs.map(
-      (slug) => ref.read(creatorRepositoryProvider).followCreator(
-            slug,
+    FutureProvider.autoDispose.family<bool, List<int>>(
+  (ref, creatorIds) async {
+    await Future.wait(creatorIds.map(
+      (id) => ref.read(creatorRepositoryProvider).followCreator(
+            id,
           ),
     ));
     ref.invalidate(followedCreatorsProvider);
-    ref.invalidate(selectedCreatorSlugs);
+    ref.invalidate(selectedCreatorIds);
     ref.invalidate(isDeleteInProgress);
     return true;
   },

@@ -54,7 +54,7 @@ class CreatorDetailsHeaderSliverList extends StatelessWidget {
                   radius: 64,
                 ),
                 Text(
-                  creator.name,
+                  creator.displayName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headlineLarge,
@@ -112,7 +112,7 @@ class StatsDescriptionWidget extends StatelessWidget {
                     FollowBox(
                       followersCount: creator.stats?.followersCount ?? 0,
                       isFollowing: creator.myStats?.isFollowing ?? false,
-                      slug: creator.slug,
+                      id: creator.id,
                     ),
                   ],
                 ),

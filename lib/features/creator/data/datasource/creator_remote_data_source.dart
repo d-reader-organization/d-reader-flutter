@@ -6,8 +6,8 @@ import 'package:d_reader_flutter/shared/exceptions/exceptions.dart';
 abstract class CreatorDataSource {
   Future<Either<AppException, List<CreatorModel>>> getCreators(
       {String? queryString});
-  Future<CreatorModel?> getCreator(String slug);
-  Future<void> followCreator(String slug);
+  Future<CreatorModel?> getCreator(int id);
+  Future<void> followCreator(int id);
   Future<Either<AppException, List<CreatorModel>>> getFollowedByUser(
       {required int userId, required String query});
 }
@@ -18,13 +18,13 @@ class CreatorRemoteDataSource implements CreatorDataSource {
   CreatorRemoteDataSource(this.networkService);
 
   @override
-  Future<void> followCreator(String slug) async {
-    await networkService.patch('/creator/follow/$slug');
+  Future<void> followCreator(int id) async {
+    await networkService.patch('/creator/follow/$id');
   }
 
   @override
-  Future<CreatorModel?> getCreator(String slug) async {
-    final response = await networkService.get('/creator/get/$slug');
+  Future<CreatorModel?> getCreator(int id) async {
+    final response = await networkService.get('/creator/get/$id');
 
     return response.fold(
       (exception) => null,

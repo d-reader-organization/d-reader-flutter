@@ -1,8 +1,8 @@
 class CarouselModel {
   final int id;
   final String image, title, subtitle;
-  final int? comicIssueId;
-  final String? comicSlug, creatorSlug, externalLink;
+  final int? comicIssueId, creatorId;
+  final String? comicSlug, externalLink;
 
   CarouselModel({
     required this.id,
@@ -12,7 +12,7 @@ class CarouselModel {
     this.externalLink,
     this.comicIssueId,
     this.comicSlug,
-    this.creatorSlug,
+    this.creatorId,
   });
 
   factory CarouselModel.fromJson(dynamic data) {
@@ -24,7 +24,7 @@ class CarouselModel {
       externalLink: data['externalLink'] ?? '',
       comicIssueId: data['comicIssueId'],
       comicSlug: data['comicSlug'],
-      creatorSlug: data['creatorSlug'],
+      creatorId: data['creatorId'],
     );
   }
 }

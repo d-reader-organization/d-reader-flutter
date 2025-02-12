@@ -100,7 +100,7 @@ class DiscoverComicIssueCard extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: Text(
-                          issue.creator.name,
+                          issue.creator.displayName,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: textTheme.bodySmall?.copyWith(

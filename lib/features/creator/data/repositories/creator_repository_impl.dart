@@ -10,13 +10,13 @@ class CreatorRepositoryImpl implements CreatorRepository {
   CreatorRepositoryImpl(this.dataSource);
 
   @override
-  Future<void> followCreator(String slug) {
-    return dataSource.followCreator(slug);
+  Future<void> followCreator(int id) {
+    return dataSource.followCreator(id);
   }
 
   @override
-  Future<CreatorModel?> getCreator(String slug) {
-    return dataSource.getCreator(slug);
+  Future<CreatorModel?> getCreator(int id) {
+    return dataSource.getCreator(id);
   }
 
   @override

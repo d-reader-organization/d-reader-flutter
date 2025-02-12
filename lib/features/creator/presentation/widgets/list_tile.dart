@@ -18,7 +18,7 @@ class CreatorListTile extends StatelessWidget {
       onTap: () {
         nextScreenPush(
           context: context,
-          path: '${RoutePath.creatorDetails}/${creator.slug}',
+          path: '${RoutePath.creatorDetails}/${creator.id}',
         );
       },
       leading: CreatorAvatar(
@@ -29,7 +29,7 @@ class CreatorListTile extends StatelessWidget {
       ),
       contentPadding: const EdgeInsets.all(4),
       title: Text(
-        creator.name,
+        creator.displayName,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
         style: textTheme.bodySmall,

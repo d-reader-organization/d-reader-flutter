@@ -37,7 +37,7 @@ final isDeleteInProgress = StateProvider.autoDispose<bool>((ref) {
   return false;
 });
 
-final selectedCreatorSlugs = StateProvider.autoDispose<List<String>>(
+final selectedCreatorIds = StateProvider.autoDispose<List<int>>(
   (ref) {
     return [];
   },

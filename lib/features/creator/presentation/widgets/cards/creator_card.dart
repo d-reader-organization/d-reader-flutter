@@ -22,7 +22,7 @@ class CreatorCard extends StatelessWidget {
       onTap: () {
         nextScreenPush(
           context: context,
-          path: '${RoutePath.creatorDetails}/${creator.slug}',
+          path: '${RoutePath.creatorDetails}/${creator.id}',
         );
       },
       child: Container(
@@ -75,7 +75,7 @@ class CreatorCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          creator.name,
+                          creator.displayName,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.titleMedium,

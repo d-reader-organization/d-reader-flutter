@@ -54,7 +54,7 @@ class FavoriteIconCount extends HookConsumerWidget {
               constraints: const BoxConstraints(minWidth: 64, minHeight: 42),
               decoration: BoxDecoration(
                 color: favoriteNotifier.value
-                    ? ColorPalette.dReaderRed.withOpacity(.4)
+                    ? ColorPalette.dReaderRed.withValues(alpha: .4)
                     : ColorPalette.appBackgroundColor,
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(

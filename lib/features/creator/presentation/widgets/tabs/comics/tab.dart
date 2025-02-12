@@ -4,10 +4,10 @@ import 'package:d_reader_flutter/features/creator/presentation/widgets/tabs/comm
 import 'package:flutter/material.dart';
 
 class CreatorComicsTab extends StatelessWidget {
-  final String creatorSlug;
+  final int creatorId;
   const CreatorComicsTab({
     super.key,
-    required this.creatorSlug,
+    required this.creatorId,
   });
 
   @override
@@ -16,7 +16,7 @@ class CreatorComicsTab extends StatelessWidget {
   ) {
     return CreatorNotificationListener(
       listenableProvider: paginatedComicsProvider,
-      query: 'creatorSlug=$creatorSlug',
+      query: 'creatorId=$creatorId',
       scrollListType: ScrollListType.comicList,
     );
   }

@@ -6,7 +6,7 @@ part of 'mwa_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mwaNotifierHash() => r'b358097a6619d71b43027378aa99df2253aa286c';
+String _$mwaNotifierHash() => r'f6f03e1017f943d147225dc58c017ae069c88791';
 
 /// See also [MwaNotifier].
 @ProviderFor(MwaNotifier)
@@ -22,4 +22,4 @@ final mwaNotifierProvider =
 
 typedef _$MwaNotifier = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

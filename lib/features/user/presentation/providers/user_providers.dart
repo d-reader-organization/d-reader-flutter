@@ -11,7 +11,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'user_providers.g.dart';
 
 @riverpod
-Future<UserModel> myUser(MyUserRef ref) async {
+Future<UserModel> myUser(Ref ref) async {
   final response = await ref.read(userRepositoryProvider).getMe();
   return response.fold((exception) {
     throw exception;
@@ -27,7 +27,7 @@ Future<UserModel> myUser(MyUserRef ref) async {
 
 @riverpod
 Future<List<WalletModel>> userWallets(
-  UserWalletsRef ref, {
+  Ref ref, {
   required int? id,
 }) async {
   if (id != null) {

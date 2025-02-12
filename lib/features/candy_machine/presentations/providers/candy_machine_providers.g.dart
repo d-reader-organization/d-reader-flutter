@@ -6,7 +6,7 @@ part of 'candy_machine_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$candyMachineHash() => r'39bbd926fb4ad452bb3d2fc6952253e15fe94527';
+String _$candyMachineHash() => r'0106f4f81cd8270e6e44638e6da7eaa2aeab66cb';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -143,6 +143,8 @@ class CandyMachineProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin CandyMachineRef on AutoDisposeFutureProviderRef<CandyMachineModel?> {
   /// The parameter `query` of this provider.
   String get query;
@@ -157,4 +159,4 @@ class _CandyMachineProviderElement
   String get query => (origin as CandyMachineProvider).query;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

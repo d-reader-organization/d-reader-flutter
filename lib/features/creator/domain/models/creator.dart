@@ -1,12 +1,12 @@
 class CreatorModel {
-  final int? id;
+  final int id;
   final String avatar,
       banner,
       description,
+      displayName,
       instagram,
       linktree,
-      name,
-      slug,
+      handle,
       twitter,
       website;
   final bool isVerified;
@@ -14,15 +14,15 @@ class CreatorModel {
   final CreatorMyStats? myStats;
 
   CreatorModel({
-    this.id,
+    required this.id,
     required this.avatar,
     required this.banner,
     required this.description,
+    required this.displayName,
     required this.instagram,
     required this.isVerified,
     required this.linktree,
-    required this.name,
-    required this.slug,
+    required this.handle,
     required this.twitter,
     required this.website,
     this.stats,
@@ -31,12 +31,12 @@ class CreatorModel {
 
   factory CreatorModel.fromJson(dynamic json) {
     return CreatorModel(
-      id: json['id'],
-      slug: json['slug'],
-      name: json['name'],
-      avatar: json['avatar'],
+      id: json['id'] ?? 0,
+      handle: json['handle'] ?? '',
+      avatar: json['avatar'] ?? '',
       banner: json['banner'] ?? '',
       description: json['description'] ?? '',
+      displayName: json['displayName'] ?? '',
       instagram: json['instagram'] ?? '',
       isVerified: json['isVerified'],
       linktree: json['linktree'] ?? '',

@@ -12,7 +12,7 @@ class ListingsPaginationNotifier
   final Future<Either<AppException, List<ListingModel>>> Function(
       {String? queryString}) fetch;
   final String? query;
-  final AutoDisposeStateNotifierProviderRef ref;
+  final Ref ref;
   final int comicIssueId;
 
   ListingsPaginationNotifier({

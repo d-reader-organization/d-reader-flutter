@@ -120,16 +120,16 @@ class CreatorsListViewBuilder extends ConsumerWidget {
                 if (!ref.watch(isDeleteInProgress)) {
                   return nextScreenPush(
                     context: context,
-                    path: '${RoutePath.creatorDetails}/${creator.slug}',
+                    path: '${RoutePath.creatorDetails}/${creator.id}',
                   );
                 }
-                ref.read(selectedCreatorSlugs.notifier).update((state) {
-                  if (state.contains(creator.slug)) {
+                ref.read(selectedCreatorIds.notifier).update((state) {
+                  if (state.contains(creator.id)) {
                     final items = [...state];
-                    items.remove(creator.slug);
+                    items.remove(creator.id);
                     return items;
                   }
-                  return [...state, creator.slug];
+                  return [...state, creator.id];
                 });
               },
               child: Padding(
@@ -152,7 +152,7 @@ class CreatorsListViewBuilder extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          creator.name,
+                          creator.displayName,
                           style: textTheme.titleMedium,
                         ),
                         const SizedBox(
@@ -220,10 +220,9 @@ class SelectableAvatar extends ConsumerWidget {
           left: 24,
           top: 24,
           child: CircleAvatar(
-            backgroundColor:
-                ref.watch(selectedCreatorSlugs).contains(creator.slug)
-                    ? ColorPalette.dReaderGreen
-                    : ColorPalette.greyscale100,
+            backgroundColor: ref.watch(selectedCreatorIds).contains(creator.id)
+                ? ColorPalette.dReaderGreen
+                : ColorPalette.greyscale100,
             child: SvgPicture.asset(
               'assets/icons/checkmark.svg',
               colorFilter: const ColorFilter.mode(

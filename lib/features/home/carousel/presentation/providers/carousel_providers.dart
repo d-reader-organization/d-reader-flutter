@@ -46,11 +46,10 @@ class CarouselController extends _$CarouselController {
         context: context,
         path: '${RoutePath.comicIssueDetails}/${carouselItem.comicIssueId}',
       );
-    } else if (carouselItem.creatorSlug != null &&
-        carouselItem.creatorSlug!.isNotEmpty) {
+    } else if (carouselItem.creatorId != null) {
       return nextScreenPush(
         context: context,
-        path: '${RoutePath.creatorDetails}/${carouselItem.creatorSlug}',
+        path: '${RoutePath.creatorDetails}/${carouselItem.creatorId}',
       );
     }
   }

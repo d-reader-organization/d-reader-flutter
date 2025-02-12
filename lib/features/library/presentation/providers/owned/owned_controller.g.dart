@@ -6,7 +6,7 @@ part of 'owned_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ownedControllerHash() => r'94d0dba5536f74f527f74c2cc12d91865b943337';
+String _$ownedControllerHash() => r'b30c0b791f819f97f5d3d8a27374033ad9766c83';
 
 /// See also [OwnedController].
 @ProviderFor(OwnedController)
@@ -23,4 +23,4 @@ final ownedControllerProvider =
 
 typedef _$OwnedController = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

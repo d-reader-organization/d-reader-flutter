@@ -254,7 +254,7 @@ class _BelowBannerContent extends StatelessWidget {
             onTap: () {
               nextScreenPush(
                 context: context,
-                path: '${RoutePath.creatorDetails}/${comic.creator?.slug}',
+                path: '${RoutePath.creatorDetails}/${comic.creator?.id}',
               );
             },
             child: Row(
@@ -268,7 +268,7 @@ class _BelowBannerContent extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    comic.creator?.name ?? '',
+                    comic.creator?.displayName ?? '',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),

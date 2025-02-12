@@ -134,7 +134,7 @@ class _ComicInfoContainer extends StatelessWidget {
             height: 4,
           ),
           AuthorVerified(
-            authorName: comic.creator?.name ?? '',
+            authorName: comic.creator?.displayName ?? '',
             isVerified: comic.creator?.isVerified ?? false,
             fontSize: 14,
             textColor: ColorPalette.greyscale100,

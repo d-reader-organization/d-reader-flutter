@@ -31,11 +31,11 @@ handleNotificationAction(Map payload) {
         ),
       ),
     );
-  } else if (payload.containsKey(NotificationDataKey.creatorSlug.stringValue)) {
+  } else if (payload.containsKey(NotificationDataKey.creatorId.stringValue)) {
     return routerNavigatorKey.currentState!.push(
       MaterialPageRoute(
         builder: (context) => CreatorDetailsView(
-          slug: payload[NotificationDataKey.creatorSlug.stringValue],
+          id: payload[NotificationDataKey.creatorId.stringValue],
         ),
       ),
     );

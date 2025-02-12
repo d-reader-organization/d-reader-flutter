@@ -9,12 +9,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class FollowBox extends HookConsumerWidget {
   final int followersCount;
   final bool isFollowing;
-  final String slug;
+  final int id;
   const FollowBox({
     super.key,
     required this.followersCount,
     required this.isFollowing,
-    required this.slug,
+    required this.id,
   });
 
   @override
@@ -28,7 +28,7 @@ class FollowBox extends HookConsumerWidget {
     );
     return GestureDetector(
       onTap: () {
-        ref.read(creatorRepositoryProvider).followCreator(slug);
+        ref.read(creatorRepositoryProvider).followCreator(id);
         ref.invalidate(followedCreatorsProvider);
         followingHook.value = followingHook.value.copyWith(
           count: followingHook.value.isSelected

@@ -6,7 +6,7 @@ part of 'buy_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$buyNotifierHash() => r'fb5bad064297fad397dbcd27f9100ab124f788f5';
+String _$buyNotifierHash() => r'03bc910d317d5bf13d5e7c9534c8a108f6bc9e3a';
 
 /// See also [BuyNotifier].
 @ProviderFor(BuyNotifier)
@@ -22,4 +22,4 @@ final buyNotifierProvider =
 
 typedef _$BuyNotifier = AutoDisposeNotifier<TransactionState>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

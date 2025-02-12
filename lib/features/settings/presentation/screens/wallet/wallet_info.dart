@@ -145,8 +145,8 @@ class _WalletInfoScreenState extends ConsumerState<WalletInfoScreen> {
                         ? CustomTextButton(
                             onPressed: null,
                             padding: EdgeInsets.zero,
-                            backgroundColor:
-                                ColorPalette.dReaderYellow100.withOpacity(.1),
+                            backgroundColor: ColorPalette.dReaderYellow100
+                                .withValues(alpha: .1),
                             child: Text(
                               'Active wallet',
                               style: Theme.of(context)

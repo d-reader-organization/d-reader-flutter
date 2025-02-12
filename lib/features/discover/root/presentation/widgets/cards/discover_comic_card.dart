@@ -84,7 +84,7 @@ class DiscoverComicCard extends StatelessWidget {
                         height: 4,
                       ),
                       Text(
-                        comic.creator?.name ?? '',
+                        comic.creator?.displayName ?? '',
                         style: textTheme.bodySmall?.copyWith(
                           color: ColorPalette.greyscale100,
                         ),

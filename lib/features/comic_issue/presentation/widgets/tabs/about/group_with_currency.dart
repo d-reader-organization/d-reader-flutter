@@ -48,7 +48,7 @@ class CouponWithCurrencyRow extends ConsumerWidget {
                   : ColorPalette.greyscale300),
           borderRadius: BorderRadius.circular(8),
           color: isSelected
-              ? const Color.fromARGB(255, 103, 96, 34).withOpacity(.1)
+              ? const Color.fromARGB(255, 103, 96, 34).withValues(alpha: .1)
               : ColorPalette.appBackgroundColor,
         ),
         child: Row(
